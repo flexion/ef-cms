@@ -23,3 +23,5 @@
 - Build distribution to be deployed
 
   `npm run dist`
+ 
+  
