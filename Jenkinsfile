@@ -21,6 +21,13 @@ pipeline {
         }
       }
     }
+    stage('trufflehog') {
+      steps {
+        script {
+          sh './run-trufflehog.sh'
+        }
+      }
+    }
     stage('components') {
       parallel {
         stage('web-client') {

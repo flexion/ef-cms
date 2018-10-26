@@ -16,8 +16,8 @@ const MOCK_RESPONSE = {
     "X-Amz-Credential": "b",
     "X-Amz-Date": "20181025T132750Z",
     "X-Amz-Security-Token": "c",
-    "Policy": "d",
-    "X-Amz-Signature": "e"
+    "Policy": "e",
+    "X-Amz-Signature": "f"
   }
 }
 
