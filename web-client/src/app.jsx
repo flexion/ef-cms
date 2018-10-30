@@ -19,11 +19,14 @@ const app = {
     mainModule.providers.router = {
       route,
     };
-    const debugTools = {
-      devtools: Devtools({
-        host: 'localhost:8585',
-      }),
-    };
+    let debugTools = null;
+    if (process.env.USTC_ENV === 'dev') {
+      debugTools = {
+        devtools: Devtools({
+          host: 'localhost:8585',
+        }),
+      };
+    }
     const cerebralApp = App(mainModule, debugTools);
     router.initialize(cerebralApp);
     ReactDOM.render(
