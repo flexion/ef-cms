@@ -1,10 +1,10 @@
 describe('File a petition ', function() {
   before(() => {
     // TODO: get logged in with a token and go directly to /file-a-petition
-    cy.visit('/log-in');
+    cy.visit('/login');
     cy.get('input#name').type('Test, Taxpayer');
     cy.get('input[type="submit"]').click();
-    cy.url().should('not.include', 'log-in');
+    cy.url().should('not.include', 'login');
     cy.get('a.usa-button').click();
   });
 

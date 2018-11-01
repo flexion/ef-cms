@@ -16,7 +16,7 @@ export default connect(
         <h1>Log in</h1>
         <ErrorNotification />
         <form
-          id="log-in"
+          id="login"
           noValidate
           onSubmit={e => {
             e.preventDefault();

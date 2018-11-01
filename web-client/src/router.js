@@ -9,7 +9,7 @@ const router = {
     page('/', () => {
       app.getSequence('gotoHome')();
     });
-    page('/log-in', () => {
+    page('/login', () => {
       app.getSequence('gotoLogIn')();
     });
     page('/file-a-petition', () => {
