@@ -51,20 +51,22 @@ describe('Main cerebral module', () => {
     mock.restore();
   });
 
-  describe('routing', () => {
-    it('Handles routing', async () => {
+  describe('Routing', () => {
+    it('Starts on home', async () => {
+      assert.equal(test.getState('currentPage'), 'Home');
+    });
+    it('Route to style guide', async () => {
       await test.runSequence('gotoStyleGuide');
       assert.equal(test.getState('currentPage'), 'StyleGuide');
+    });
+    it('Route to home', async () => {
       await test.runSequence('gotoHome');
       assert.equal(test.getState('currentPage'), 'Home');
     });
+  });
 
-    it('Handles routing to file petition', async () => {
-      await test.runSequence('gotoFilePetition');
-      assert.equal(test.getState('currentPage'), 'FilePetition');
-    });
-
-    it('Toggles USA Banner Content', async () => {
+  describe('Header', () => {
+    it('Toggle USA banner content', async () => {
       await test.runSequence('toggleUsaBannerDetails');
       assert.equal(test.getState('usaBanner.showDetails'), true);
       await test.runSequence('toggleUsaBannerDetails');
@@ -72,8 +74,8 @@ describe('Main cerebral module', () => {
     });
   });
 
-  describe('sequences', () => {
-    it('log in success', async () => {
+  describe('Log in', () => {
+    it('Log in success', async () => {
       await test.runSequence('gotoLogIn');
       assert.equal(test.getState('currentPage'), 'LogIn');
       await test.runSequence('updateFormValue', {
@@ -81,11 +83,11 @@ describe('Main cerebral module', () => {
         value: 'Test, Taxpayer',
       });
       assert.equal(test.getState('form.name'), 'Test, Taxpayer');
-      await test.runSequence('submitLogIn');
+      await test.runSequence('submitLogInForm');
       assert.equal(test.getState('user'), 'Test, Taxpayer');
     });
 
-    it('log in failure', async () => {
+    it('Log in failure', async () => {
       await test.runSequence('gotoLogIn');
       assert.equal(test.getState('currentPage'), 'LogIn');
       await test.runSequence('updateFormValue', {
@@ -93,29 +95,36 @@ describe('Main cerebral module', () => {
         value: 'Bad actor',
       });
       assert.equal(test.getState('form.name'), 'Bad actor');
-      await test.runSequence('submitLogIn');
+      await test.runSequence('submitLogInForm');
       assert.equal(test.getState('alertError.title'), 'User not found');
     });
+  });
 
-    it('document policy success', async () => {
-      mock.onGet(environment.getBaseUrl() + '/documents/policy').
-        reply(200, fakePolicy);
-      await test.runSequence('submitFilePetition');
+  describe('File a petition', () => {
+    it('Document policy success', async () => {
+      mock
+        .onGet(environment.getBaseUrl() + '/documents/policy')
+        .reply(200, fakePolicy);
+      await test.runSequence('gotoFilePetition');
+      assert.equal(test.getState('currentPage'), 'FilePetition');
+      await test.runSequence('submitFilePetitionForm');
       assert.deepEqual(test.getState('petition.policy'), fakePolicy);
     });
 
-    it('document policy error', async () => {
-      mock.onGet(environment.getBaseUrl() + '/documents/policy').
-        reply(403);
-
-      await test.runSequence('submitFilePetition');
+    it('Document policy error', async () => {
+      mock.onGet(environment.getBaseUrl() + '/documents/policy').reply(403);
+      await test.runSequence('gotoFilePetition');
+      assert.equal(test.getState('currentPage'), 'FilePetition');
+      await test.runSequence('submitFilePetitionForm');
       assert.equal(
         test.getState('alertError.message'),
         'Document policy retrieval failed',
       );
     });
 
-    it('documents upload success', async () => {
+    it('Documents upload success', async () => {
+      await test.runSequence('gotoFilePetition');
+      assert.equal(test.getState('currentPage'), 'FilePetition');
       test.setState('petition.petitionFile.file', new Blob(['blob']));
       test.setState('petition.requestForPlaceOfTrial.file', new Blob(['blob']));
       test.setState(
@@ -130,14 +139,15 @@ describe('Main cerebral module', () => {
         documentType: 'test',
       };
 
-      mock.onGet(environment.getBaseUrl() + '/documents/policy').
-        reply(200, fakePolicy);
-      mock.onPost(environment.getBaseUrl() + '/documents').
-        reply(200, fakeDocument);
-      mock.onPost(fakePolicy.url).
-        reply(204);
+      mock
+        .onGet(environment.getBaseUrl() + '/documents/policy')
+        .reply(200, fakePolicy);
+      mock
+        .onPost(environment.getBaseUrl() + '/documents')
+        .reply(200, fakeDocument);
+      mock.onPost(fakePolicy.url).reply(204);
 
-      await test.runSequence('submitFilePetition');
+      await test.runSequence('submitFilePetitionForm');
       assert.deepEqual(test.getState('petition.policy'), fakePolicy);
       assert.equal(
         test.getState('petition.petitionFile.documentId'),
@@ -163,7 +173,7 @@ describe('Main cerebral module', () => {
       );
     });
 
-    it('documents upload failure', async () => {
+    it('Documents upload failure', async () => {
       test.setState('petition.petitionFile.file', new Blob(['blob']));
       test.setState('petition.requestForPlaceOfTrial.file', new Blob(['blob']));
       test.setState(
@@ -171,21 +181,20 @@ describe('Main cerebral module', () => {
         new Blob(['blob']),
       );
 
-      mock.onGet(environment.getBaseUrl() + '/documents/policy').
-        reply(200, fakePolicy);
-      mock.onPost(environment.getBaseUrl() + '/documents').
-        reply(500);
-      mock.onPost(fakePolicy.url).
-        reply(204);
+      mock
+        .onGet(environment.getBaseUrl() + '/documents/policy')
+        .reply(200, fakePolicy);
+      mock.onPost(environment.getBaseUrl() + '/documents').reply(500);
+      mock.onPost(fakePolicy.url).reply(204);
 
-      await test.runSequence('submitFilePetition');
+      await test.runSequence('submitFilePetitionForm');
       assert.equal(
         test.getState('alertError.message'),
         'Fetching document ID failed',
       );
     });
 
-    it('documents upload failure', async () => {
+    it('Documents upload failure', async () => {
       const fakeDocument = {
         documentId: '691ca306-b30f-429c-b785-17754b8fd019',
         createdAt: '2018-10-26T22:13:31.830Z',
@@ -200,14 +209,15 @@ describe('Main cerebral module', () => {
         new Blob(['blob']),
       );
 
-      mock.onGet(environment.getBaseUrl() + '/documents/policy').
-        reply(200, fakePolicy);
-      mock.onPost(environment.getBaseUrl() + '/documents').
-        reply(200, fakeDocument);
-      mock.onPost(fakePolicy.url).
-        reply(500);
+      mock
+        .onGet(environment.getBaseUrl() + '/documents/policy')
+        .reply(200, fakePolicy);
+      mock
+        .onPost(environment.getBaseUrl() + '/documents')
+        .reply(200, fakeDocument);
+      mock.onPost(fakePolicy.url).reply(500);
 
-      await test.runSequence('submitFilePetition');
+      await test.runSequence('submitFilePetitionForm');
       assert.equal(
         test.getState('alertError.message'),
         'Uploading document failed',

@@ -8,9 +8,9 @@ export default connect(
   {
     form: state.form,
     updateFormValue: sequences.updateFormValue,
-    submitLogIn: sequences.submitLogIn,
+    submitLogInForm: sequences.submitLogInForm,
   },
-  function LogIn({ form, updateFormValue, submitLogIn }) {
+  function LogIn({ form, updateFormValue, submitLogInForm }) {
     return (
       <section className="usa-section usa-grid">
         <h1>Log in</h1>
@@ -20,7 +20,7 @@ export default connect(
           noValidate
           onSubmit={e => {
             e.preventDefault();
-            submitLogIn();
+            submitLogInForm();
           }}
         >
           <div className="usa-form-group">

@@ -6,13 +6,13 @@ import ErrorNotification from './ErrorNotification';
 
 export default connect(
   {
-    submitFilePetition: sequences.submitFilePetition,
+    submitFilePetitionForm: sequences.submitFilePetitionForm,
     updatePetitionValue: sequences.updatePetitionValue,
     submitting: state.submitting,
     petition: state.petition,
   },
   function FilePetition({
-    submitFilePetition,
+    submitFilePetitionForm,
     updatePetitionValue,
     submitting,
     petition,
@@ -28,7 +28,7 @@ export default connect(
           noValidate
           onSubmit={e => {
             e.preventDefault();
-            submitFilePetition();
+            submitFilePetitionForm();
           }}
         >
           <div role="list">

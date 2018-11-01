@@ -118,21 +118,13 @@ export const setAlertSuccess = ({ props, store }) => {
   store.set(state.alertSuccess, props.alertSuccess);
 };
 
-// export const clearAlertError = ({ store }) => {
-//   store.set(state.alertError, {});
-// };
-
-// export const clearAlertSuccess = ({ store }) => {
-//   store.set(state.alertSuccess, {});
-// };
-
 export const clearLoginForm = ({ store }) => {
   store.set(state.form, {
     name: '',
   });
 };
 
-export const clearPetition = ({ store }) => {
+export const clearPetitionForm = ({ store }) => {
   store.set(state.petition, {
     petitionFile: {
       file: undefined,
@@ -153,3 +145,11 @@ export const clearPetition = ({ store }) => {
 export const navigateHome = ({ router }) => {
   router.route('/');
 };
+
+// export const clearAlertError = ({ store }) => {
+//   store.set(state.alertError, {});
+// };
+
+// export const clearAlertSuccess = ({ store }) => {
+//   store.set(state.alertSuccess, {});
+// };
