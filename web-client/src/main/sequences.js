@@ -1,4 +1,4 @@
-import { set, toggle } from 'cerebral/factories';
+import { set, toggle, parallel } from 'cerebral/factories';
 import { state, props } from 'cerebral';
 import * as actions from './actions';
 
@@ -32,57 +32,47 @@ export const updatePetitionValue = [
 ];
 
 export const submitFilePetitionForm = [
-  // TODO: parallelize this
   set(state`petition.uploadsFinished`, 0),
   actions.setFormSubmitting,
   actions.getDocumentPolicy,
   {
-    error: [actions.setAlertError],
+    error: [actions.setAlertError, actions.unsetFormSubmitting],
     success: [
-      actions.getDocumentIdFactory('petitionFile'),
+      parallel([
+        actions.getDocumentIdFactory('petitionFile'),
+        actions.getDocumentIdFactory('requestForPlaceOfTrial'),
+        actions.getDocumentIdFactory('statementOfTaxpayerIdentificationNumber'),
+      ]),
+      actions.handleDocumentIdBatch,
       {
-        error: [actions.setAlertError],
+        error: [actions.setAlertError, actions.unsetFormSubmitting],
         success: [
           actions.setDocumentIdFactory('petitionFile'),
+          actions.setDocumentIdFactory('requestForPlaceOfTrial'),
+          actions.setDocumentIdFactory(
+            'statementOfTaxpayerIdentificationNumber',
+          ),
           actions.uploadDocumentToS3Factory('petitionFile'),
           {
-            error: [actions.setAlertError],
+            error: [actions.setAlertError, actions.unsetFormSubmitting],
             success: [
               set(state`petition.uploadsFinished`, 1),
-              actions.getDocumentIdFactory('requestForPlaceOfTrial'),
+              actions.uploadDocumentToS3Factory('requestForPlaceOfTrial'),
               {
-                error: [actions.setAlertError],
+                error: [actions.setAlertError, actions.unsetFormSubmitting],
                 success: [
-                  actions.setDocumentIdFactory('requestForPlaceOfTrial'),
-                  actions.uploadDocumentToS3Factory('requestForPlaceOfTrial'),
+                  set(state`petition.uploadsFinished`, 2),
+                  actions.uploadDocumentToS3Factory(
+                    'statementOfTaxpayerIdentificationNumber',
+                  ),
                   {
-                    error: [actions.setAlertError],
+                    error: [actions.setAlertError, actions.unsetFormSubmitting],
                     success: [
-                      set(state`petition.uploadsFinished`, 2),
-                      actions.getDocumentIdFactory(
-                        'statementOfTaxpayerIdentificationNumber',
-                      ),
-                      {
-                        error: [actions.setAlertError],
-                        success: [
-                          actions.setDocumentIdFactory(
-                            'statementOfTaxpayerIdentificationNumber',
-                          ),
-                          actions.uploadDocumentToS3Factory(
-                            'statementOfTaxpayerIdentificationNumber',
-                          ),
-                          {
-                            error: [actions.setAlertError],
-                            success: [
-                              set(state`petition.uploadsFinished`, 3),
-                              actions.unsetFormSubmitting,
-                              actions.getPetitionUploadAlertSuccess,
-                              actions.setAlertSuccess,
-                              actions.navigateHome,
-                            ],
-                          },
-                        ],
-                      },
+                      set(state`petition.uploadsFinished`, 3),
+                      actions.unsetFormSubmitting,
+                      actions.getPetitionUploadAlertSuccess,
+                      actions.setAlertSuccess,
+                      actions.navigateHome,
                     ],
                   },
                 ],
