@@ -34,28 +34,6 @@ export const getDocumentPolicy = async ({ api, environment, store, path }) => {
   }
 };
 
-// export const getDocumentIdFactory = documentType => {
-//   return async ({ api, environment, path, get }) => {
-//     try {
-//       const response = await api.getDocumentId(
-//         environment.getBaseUrl(),
-//         get(state.user),
-//         documentType,
-//       );
-//       const result = {};
-//       result[`${documentType}DocumentId`] = response.documentId;
-//       return path.success(result);
-//     } catch (error) {
-//       return path.error({
-//         alertError: {
-//           title: 'There was a problem',
-//           message: 'Fetching document ID failed',
-//         },
-//       });
-//     }
-//   };
-// };
-
 export const getDocumentIdFactory = documentType => {
   return async ({ api, environment, get }) => {
     try {
