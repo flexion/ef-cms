@@ -39,32 +39,38 @@ export const submitFilePetitionForm = [
   {
     error: [actions.setAlertError],
     success: [
-      actions.specifyPetitionFile,
-      actions.getDocumentId,
+      actions.getDocumentIdFactory('petitionFile'),
       {
         error: [actions.setAlertError],
         success: [
-          actions.uploadDocumentToS3,
+          actions.setDocumentIdFactory('petitionFile'),
+          actions.uploadDocumentToS3Factory('petitionFile'),
           {
             error: [actions.setAlertError],
             success: [
               set(state`petition.uploadsFinished`, 1),
-              actions.specifyRequestForPlaceOfTrial,
-              actions.getDocumentId,
+              actions.getDocumentIdFactory('requestForPlaceOfTrial'),
               {
                 error: [actions.setAlertError],
                 success: [
-                  actions.uploadDocumentToS3,
+                  actions.setDocumentIdFactory('requestForPlaceOfTrial'),
+                  actions.uploadDocumentToS3Factory('requestForPlaceOfTrial'),
                   {
                     error: [actions.setAlertError],
                     success: [
                       set(state`petition.uploadsFinished`, 2),
-                      actions.specifyStatementOfTaxpayerIdentificationNumber,
-                      actions.getDocumentId,
+                      actions.getDocumentIdFactory(
+                        'statementOfTaxpayerIdentificationNumber',
+                      ),
                       {
                         error: [actions.setAlertError],
                         success: [
-                          actions.uploadDocumentToS3,
+                          actions.setDocumentIdFactory(
+                            'statementOfTaxpayerIdentificationNumber',
+                          ),
+                          actions.uploadDocumentToS3Factory(
+                            'statementOfTaxpayerIdentificationNumber',
+                          ),
                           {
                             error: [actions.setAlertError],
                             success: [

@@ -14,21 +14,9 @@ export const getUser = async ({ api, path, get }) => {
   }
 };
 
-export const setUser = async ({ store, props }) => {
+export const setUser = ({ store, props }) => {
   store.set(state.user, props.user);
   return;
-};
-
-export const specifyPetitionFile = async () => {
-  return { documentType: 'petitionFile' };
-};
-
-export const specifyRequestForPlaceOfTrial = async () => {
-  return { documentType: 'requestForPlaceOfTrial' };
-};
-
-export const specifyStatementOfTaxpayerIdentificationNumber = async () => {
-  return { documentType: 'statementOfTaxpayerIdentificationNumber' };
 };
 
 export const getDocumentPolicy = async ({ api, environment, store, path }) => {
@@ -46,51 +34,56 @@ export const getDocumentPolicy = async ({ api, environment, store, path }) => {
   }
 };
 
-export const getDocumentId = async ({
-  api,
-  environment,
-  store,
-  path,
-  get,
-  props,
-}) => {
-  try {
-    const response = await api.getDocumentId(
-      environment.getBaseUrl(),
-      get(state.user),
-      get(props.documentType),
-    );
-    store.set(
-      state.petition[get(props.documentType)].documentId,
-      response.documentId,
-    );
-    return path.success();
-  } catch (error) {
-    return path.error({
-      alertError: {
-        title: 'There was a problem',
-        message: 'Fetching document ID failed',
-      },
-    });
-  }
+export const getDocumentIdFactory = documentType => {
+  return async ({ api, environment, path, get }) => {
+    try {
+      const response = await api.getDocumentId(
+        environment.getBaseUrl(),
+        get(state.user),
+        documentType,
+      );
+      const result = {};
+      result[`${documentType}DocumentId`] = response.documentId;
+      return path.success(result);
+    } catch (error) {
+      return path.error({
+        alertError: {
+          title: 'There was a problem',
+          message: 'Fetching document ID failed',
+        },
+      });
+    }
+  };
 };
 
-export const uploadDocumentToS3 = async ({ api, get, path, props }) => {
-  try {
-    await api.uploadDocumentToS3(
-      get(state.petition.policy),
-      get(state.petition[get(props.documentType)].documentId),
-      get(state.petition[get(props.documentType)].file),
+export const setDocumentIdFactory = documentType => {
+  return ({ store, props }) => {
+    store.set(
+      state.petition[documentType].documentId,
+      props[`${documentType}DocumentId`],
     );
-    return path.success();
-  } catch (error) {
-    return path.error({
-      alertError: {
-        title: 'There was a problem',
-        message: 'Uploading document failed',
-      },
-    });
-  }
+    return;
+  };
+};
+
+export const uploadDocumentToS3Factory = documentType => {
+  return async ({ api, get, path }) => {
+    try {
+      await api.uploadDocumentToS3(
+        get(state.petition.policy),
+        get(state.petition[documentType].documentId),
+        get(state.petition[documentType].file),
+      );
+      return path.success();
+    } catch (error) {
+      return path.error({
+        alertError: {
+          title: 'There was a problem',
+          message: 'Uploading document failed',
+        },
+      });
+    }
+  };
 };
 
 export const getPetitionUploadAlertSuccess = () => {
