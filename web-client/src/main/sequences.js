@@ -11,6 +11,11 @@ export const gotoFilePetition = [
   actions.clearPetition,
   set(state`currentPage`, 'FilePetition'),
 ];
+
+export const routeToFilePetition = [
+  actions.navigateToFilePetition
+];
+
 export const gotoStyleGuide = [set(state`currentPage`, 'StyleGuide')];
 
 export const toggleUsaBannerDetails = [toggle(state`usaBanner.showDetails`)];

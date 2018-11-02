@@ -153,3 +153,8 @@ export const clearPetition = ({ store }) => {
 export const navigateHome = ({ router }) => {
   router.route('/');
 };
+
+export const navigateToFilePetition = ({ router }) => {
+  router.route('/file-a-petition');
+};
+

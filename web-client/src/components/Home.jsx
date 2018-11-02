@@ -1,18 +1,26 @@
 import { connect } from '@cerebral/react';
+import { sequences } from 'cerebral'
 import React from 'react';
 
 import SuccessNotification from './SuccessNotification';
 
 export default connect(
-  {},
-  function Home() {
+  {
+    gotoFilePetition: sequences.routeToFilePetition
+  },
+  function Home({ gotoFilePetition }) {
     return (
       <section className="usa-section usa-grid">
         <SuccessNotification />
         <p>
-          <a className="usa-button" href="/file-a-petition">
+          <button type="button" className="usa-button"
+            onClick={e => {
+              e.preventDefault();
+              gotoFilePetition();
+            }}
+          >
             Start a case
-          </a>
+          </button>
         </p>
       </section>
     );
