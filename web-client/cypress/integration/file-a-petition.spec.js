@@ -5,7 +5,7 @@ describe('File a petition ', function() {
     cy.get('input#name').type('Test, Taxpayer');
     cy.get('input[type="submit"]').click();
     cy.url().should('not.include', 'log-in');
-    cy.get('a.usa-button').click();
+    cy.get('.usa-button').click();
   });
 
   it('has three file inputs', () => {
