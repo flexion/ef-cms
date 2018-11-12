@@ -1,20 +1,17 @@
 import { state } from 'cerebral';
 
 export const getUser = async ({ useCases, applicationContext, get, path }) => {
-  try {
-    const user = await useCases.getUser(
-      applicationContext.getPersistenceGateway(),
-      get(state.form.name),
-    );
-    return path.success({ user });
-  } catch (e) {
-    return path.error({
-      alertError: {
-        title: 'User not found',
-        message: 'Username or password are incorrect',
-      },
-    });
-  }
+  const user = await useCases.getUser(
+    applicationContext.getPersistenceGateway(),
+    get(state.form.name),
+  );
+  if (user) return path.success({ user });
+  return path.error({
+    alertError: {
+      title: 'User not found',
+      message: 'Username or password are incorrect',
+    },
+  });
 };
 
 export const getCaseDetail = async ({ store }) => {
@@ -82,9 +79,9 @@ export const clearLoginForm = ({ store }) => {
 
 export const clearPetition = ({ store }) => {
   store.set(state.petition, {
-    petitionFile: null,
-    requestForPlaceOfTrial: null,
-    statementOfTaxpayerIdentificationNumber: null,
+    petitionFile: '',
+    requestForPlaceOfTrial: '',
+    statementOfTaxpayerIdentificationNumber: '',
     uploadsFinished: 0,
   });
 };

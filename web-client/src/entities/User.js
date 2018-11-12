@@ -1,5 +1,5 @@
-function User(petition) {
-  this.name = petition.name;
+function User(rawUser) {
+  this.name = rawUser.name;
 }
 
 User.prototype.isValid = function isValid() {

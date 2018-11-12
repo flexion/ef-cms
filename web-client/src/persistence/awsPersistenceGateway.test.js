@@ -30,14 +30,11 @@ describe('AWS petition gateway', () => {
   describe('Get user', () => {
     it('Success', async () => {
       const user = awsPersistenceGateway.getUser('Test, Taxpayer');
-      assert.equal(user, 'Test, Taxpayer');
+      assert.equal(user.name, 'Test, Taxpayer');
     });
     it('Failure', async () => {
-      try {
-        awsPersistenceGateway.getUser('Bad actor');
-      } catch (e) {
-        assert.equal(e.message, 'Username is incorrect');
-      }
+      const user = awsPersistenceGateway.getUser('Bad actor');
+      assert.equal(user, undefined);
     });
   });
 

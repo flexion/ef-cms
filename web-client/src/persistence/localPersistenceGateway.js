@@ -1,3 +1,5 @@
+import User from '../entities/User';
+
 const filePdfPetition = async function filePdfPetition() {
   // user,
   // petition,
@@ -7,8 +9,8 @@ const filePdfPetition = async function filePdfPetition() {
 };
 
 const getUser = name => {
-  if (name !== 'Test, Taxpayer') throw new Error('Username is incorrect');
-  return name;
+  if (name !== 'Test, Taxpayer') return undefined;
+  return new User({ name: name });
 };
 
 const localPersistenceGateway = {

@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import User from '../entities/User';
+
 const getDocumentPolicy = async baseUrl => {
   const response = await axios.get(`${baseUrl}/documents/policy`);
   return response.data;
@@ -35,8 +37,8 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
 };
 
 const getUser = name => {
-  if (name !== 'Test, Taxpayer') throw new Error('Username is incorrect');
-  return name;
+  if (name !== 'Test, Taxpayer') return undefined;
+  return new User({ name });
 };
 
 const filePdfPetition = async function filePdfPetition(
@@ -78,6 +80,7 @@ const filePdfPetition = async function filePdfPetition(
 };
 
 const awsPersistenceGateway = {
+  // TODO: sound more database-ish like a CRUD operation like createPetition
   filePdfPetition,
   getUser,
 };

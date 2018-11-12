@@ -48,7 +48,7 @@ describe('Main cerebral module', () => {
       });
       assert.equal(test.getState('form.name'), 'Test, Taxpayer');
       await test.runSequence('submitLogIn');
-      assert.equal(test.getState('user'), 'Test, Taxpayer');
+      assert.equal(test.getState('user.name'), 'Test, Taxpayer');
     });
 
     it('log in failure', async () => {
