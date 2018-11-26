@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
-import Case from '../../../../business/src/entities/Case';
+import Case from 'ef-cms-shared/src/entities/Case';
 
 export default async ({ applicationContext, get }) => {
   const user = get(state.user);

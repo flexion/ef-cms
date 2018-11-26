@@ -1,14 +1,14 @@
-import awsPersistenceGateway from '../persistence/awsPersistenceGateway';
+import awsPersistenceGateway from 'ef-cms-shared/src/persistence/awsPersistenceGateway';
 
-import createCase from '../../../business/src/useCases/createCaseProxy';
-import createDocumentMetadata from '../../../business/src/useCases/createDocumentMetadataProxy';
-import getCase from '../../../business/src/useCases/getCaseProxy';
-import getCasesByStatus from '../../../business/src/useCases/getCasesByStatusProxy';
-import getCasesByUser from '../../../business/src/useCases/getCasesByUserProxy';
-import getDocumentPolicy from '../../../business/src/useCases/getDocumentPolicyProxy';
-import getUser from '../../../business/src/useCases/getUser';
-import updateCase from '../../../business/src/useCases/updateCaseProxy';
-import uploadToS3 from '../../../business/src/useCases/uploadToS3';
+import createCase from 'ef-cms-shared/src/useCases/createCaseProxy';
+import createDocumentMetadata from 'ef-cms-shared/src/useCases/createDocumentMetadata';
+import getCase from 'ef-cms-shared/src/useCases/getCaseProxy';
+import getCasesByStatus from 'ef-cms-shared/src/useCases/getCasesByStatusProxy';
+import getCasesByUser from 'ef-cms-shared/src/useCases/getCasesByUserProxy';
+import getDocumentPolicy from 'ef-cms-shared/src/useCases/getDownloadPolicyUrl';
+import getUser from 'ef-cms-shared/src/useCases/getUser';
+import updateCase from 'ef-cms-shared/src/useCases/updateCaseProxy';
+import uploadToS3 from 'ef-cms-shared/src/useCases/uploadCasePdfs';
 
 const API_URL = process.env.API_URL || 'http://localhost:8080';
 
