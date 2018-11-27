@@ -33,6 +33,11 @@ pipeline {
               sh 'npm i'
             }
           }
+          dir('business') {
+            runner.inside('-v /home/tomcat:/home/tomcat') {
+              sh 'npm i --production'
+            }
+          }
         }
       }
     }
