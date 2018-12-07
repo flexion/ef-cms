@@ -2,6 +2,13 @@
 
 An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS. Work began in October 2018, and can be seen [in the staging branch](https://github.com/ustaxcourt/ef-cms/tree/staging). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
 
+# Building Everything
+If you'd like to run the same checks that run in Jenkins (except Sonarqube at the moment...) locally using docker containers, run the following:
+
+`./build-all.sh`
+
+This will run the lint, shellcheck, audit, build, test, cypress, cerebral tests, pa11y, etc over all the components.
+
 # Running / Verifing the Project via Docker
 
 Assuming you have Docker installed, The following command will spin up a docker container with the UI, API, local S3, local Dynamo, etc all running inside it:

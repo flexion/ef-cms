@@ -1,7 +1,6 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
-import moment from 'moment';
 import React from 'react';
 
 import SuccessNotification from './SuccessNotification';
@@ -9,28 +8,28 @@ import ErrorNotification from './ErrorNotification';
 
 export default connect(
   {
-    baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
-    form: state.form,
     submitUpdateCase: sequences.submitUpdateCase,
+    submitSendToIRS: sequences.submitToIRS,
     toggleDocumentValidation: sequences.toggleDocumentValidation,
     updateCaseValue: sequences.updateCaseValue,
     updateFormValue: sequences.updateFormValue,
+    viewDocument: sequences.viewDocument,
   },
   function CaseDetail({
-    baseUrl,
     caseDetail,
-    form,
     submitUpdateCase,
+    submitSendToIRS,
     toggleDocumentValidation,
     updateCaseValue,
     updateFormValue,
+    viewDocument,
   }) {
     return (
       <React.Fragment>
         <div className="usa-grid">
           <a href="/" id="queue-nav">
-            Back to dashboard
+            <FontAwesomeIcon icon="caret-left" /> Back to dashboard
           </a>
         </div>
         <section className="usa-section usa-grid">
@@ -61,13 +60,13 @@ export default connect(
             <h2>Case Information</h2>
             <fieldset className="usa-fieldset-inputs usa-sans">
               <legend>Petition Fee</legend>
-              {caseDetail.payGovId && !form.paymentType && (
+              {caseDetail.showPaymentRecord && (
                 <React.Fragment>
                   <p>Paid by pay.gov</p>
                   <p>{caseDetail.payGovId}</p>
                 </React.Fragment>
               )}
-              {!(caseDetail.payGovId && !form.paymentType) && (
+              {caseDetail.showPaymentOptions && (
                 <ul className="usa-unstyled-list">
                   <li>
                     <input
@@ -83,7 +82,7 @@ export default connect(
                       }}
                     />
                     <label htmlFor="paygov">Paid by pay.gov</label>
-                    {form.paymentType == 'payGov' && (
+                    {caseDetail.showPayGovIdInput && (
                       <React.Fragment>
                         <label htmlFor="paygovid">Payment ID</label>
                         <input
@@ -109,66 +108,101 @@ export default connect(
           <table className="responsive-table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Filings and proceedings</th>
+                <th>Date filed</th>
+                <th>Title</th>
+                <th>Filed by</th>
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {caseDetail.documents.map((item, idx) => (
+              {caseDetail.documents.map((document, idx) => (
                 <tr key={idx}>
                   <td className="responsive-title">
                     <span className="responsive-label">Activity date</span>
-                    {moment(item.createdAt).format('LLL')}
+                    {document.createdAtFormatted}
                   </td>
                   <td>
-                    <span className="responsive-label">
-                      Filings and proceedings
-                    </span>
-                    <a
+                    <span className="responsive-label">Title</span>
+                    <button
                       className="pdf-link"
                       aria-label="View PDF"
-                      href={
-                        baseUrl +
-                        '/documents/' +
-                        item.documentId +
-                        '/downloadPolicy'
+                      onClick={() =>
+                        viewDocument({
+                          documentId: document.documentId,
+                        })
                       }
-                      rel="noopener noreferrer"
-                      target="_blank"
                     >
                       <FontAwesomeIcon icon="file-pdf" />
-                      {item.documentType}
-                    </a>
+                      {document.documentType}
+                    </button>
                   </td>
                   <td>
-                    <input
-                      id={item.documentId}
-                      type="checkbox"
-                      name={'validate-' + item.documentType}
-                      onChange={() => toggleDocumentValidation({ item })}
-                      checked={!!item.validated}
-                    />
-                    <label htmlFor={item.documentId}>Validate</label>
+                    <span className="responsive-label">Filed by</span>
+                    Petitioner
+                  </td>
+                  <td>
+                    <span className="responsive-label">Status</span>
+                    {caseDetail.showIrsServedDate && (
+                      <span>{caseDetail.datePetitionSentToIrsMessage}</span>
+                    )}
+                    {caseDetail.showDocumentStatus && (
+                      <span>{document.status}</span>
+                    )}
+                  </td>
+                  <td>
+                    {document.showValidationInput && (
+                      <span>
+                        <input
+                          id={document.documentId}
+                          type="checkbox"
+                          name={'validate-' + document.documentType}
+                          onChange={() =>
+                            toggleDocumentValidation({ document })
+                          }
+                          checked={!!document.validated}
+                        />
+                        <label htmlFor={document.documentId}>Validate</label>
+                      </span>
+                    )}
                   </td>
                 </tr>
               ))}
-              {caseDetail.payGovId && !form.paymentType && (
+              {caseDetail.showPaymentRecord && (
                 <tr>
-                  <td>{moment(caseDetail.payGovDate).format('LLL')}</td>
+                  <td>{caseDetail.payGovDateFormatted}</td>
                   <td>Filing fee paid</td>
+                  <td />
+                  <td />
                   <td />
                 </tr>
               )}
             </tbody>
           </table>
-          <button
-            className="float-right"
-            id="update-case"
-            onClick={() => submitUpdateCase()}
+          <div
+            className={
+              caseDetail.status == 'General Docket'
+                ? 'usa-grid-full hidden'
+                : 'usa-grid-full'
+            }
           >
-            Save updates
-          </button>
+            <div className="usa-width-full">
+              <button
+                className="float-right"
+                id="update-case-page-end"
+                onClick={() => submitUpdateCase()}
+              >
+                Save updates
+              </button>
+              <button
+                className="float-right"
+                id="send-to-irs"
+                onClick={() => submitSendToIRS()}
+              >
+                Send to IRS
+              </button>
+            </div>
+          </div>
         </section>
       </React.Fragment>
     );

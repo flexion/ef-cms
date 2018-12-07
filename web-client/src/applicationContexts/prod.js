@@ -1,12 +1,21 @@
-import awsPersistenceGateway from '../../../business/src/persistence/awsPersistenceGateway';
+const {
+  uploadPdf,
+  uploadPdfsForNewCase,
+  uploadDocument,
+  getDocument,
+} = require('../../../shared/src/persistence/awsS3Persistence');
 
-import createCase from '../../../business/src/useCases/createCaseProxy';
-import getCase from '../../../business/src/useCases/getCaseProxy';
-import getCasesByStatus from '../../../business/src/useCases/getCasesByStatusProxy';
-import getCasesByUser from '../../../business/src/useCases/getCasesByUserProxy';
-import getUser from '../../../business/src/useCases/getUser';
-import updateCase from '../../../business/src/useCases/updateCaseProxy';
-import uploadCasePdfs from '../../../business/src/useCases/uploadCasePdfs';
+import { createCase } from '../../../shared/src/proxies/createCaseProxy';
+import { getCase } from '../../../shared/src/proxies/getCaseProxy';
+import { getCasesByStatus } from '../../../shared/src/proxies/getCasesByStatusProxy';
+import { getCasesByUser } from '../../../shared/src/proxies/getCasesByUserProxy';
+import { getUser } from '../../../shared/src/business/useCases/getUser';
+import { sendPetitionToIRS } from '../../../shared/src/proxies/sendPetitionToIRSProxy';
+import { updateCase } from '../../../shared/src/proxies/updateCaseProxy';
+import { uploadCasePdfs } from '../../../shared/src/business/useCases/uploadCasePdfs';
+import { fileAnswer } from '../../../shared/src/business/useCases/respondent/fileAnswer';
+import { getCasesForRespondent } from '../../../shared/src/proxies/respondent/getCasesForRespondentProxy';
+import { downloadDocumentFile } from '../../../shared/src/business/useCases/downloadDocumentFile';
 
 /**
  * Context for the prod environment
@@ -16,7 +25,12 @@ const applicationContext = {
     return process.env.API_URL || 'http://localhost:8080';
   },
   getPersistenceGateway: () => {
-    return awsPersistenceGateway;
+    return {
+      uploadPdf,
+      getDocument,
+      uploadPdfsForNewCase,
+      uploadDocument,
+    };
   },
   getUseCases: () => {
     return {
@@ -25,8 +39,12 @@ const applicationContext = {
       getCasesByStatus,
       getCasesByUser,
       getUser,
+      sendPetitionToIRS,
       updateCase,
       uploadCasePdfs,
+      fileAnswer,
+      getCasesForRespondent,
+      downloadDocumentFile,
     };
   },
 };

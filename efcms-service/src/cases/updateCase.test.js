@@ -23,7 +23,7 @@ describe('Update case function', function() {
   ];
 
   const item = {
-    caseId: 'AAAAAAAA-AAAA-AAA-AAA-AAAAAAAAAAAA',
+    caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     userId: 'taxpayer',
     docketNumber: '00101-18',
     documents: documents,
@@ -32,11 +32,15 @@ describe('Update case function', function() {
 
   describe('success', function() {
     before(function() {
+      sinon.stub(client, 'get').resolves(item);
       sinon.stub(client, 'put').resolves(item);
+      sinon.stub(client, 'delete').resolves(item);
     });
 
     after(function() {
+      client.get.restore();
       client.put.restore();
+      client.delete.restore();
     });
 
     [
@@ -44,7 +48,7 @@ describe('Update case function', function() {
         httpMethod: 'PUT',
         body: JSON.stringify(item),
         pathParameters: {
-          caseId: 'AAAAAAAA-AAAA-AAA-AAA-AAAAAAAAAAAA',
+          caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         },
         headers: { Authorization: 'Bearer petitionsclerk' },
       },
