@@ -49,18 +49,9 @@ describe('fileAnswer', () => {
       },
       applicationContext,
     });
-    expect(updateCaseStub.getCall(0).args[0].caseDetails.respondent).toEqual({
-      userId: 'respondent',
-      firstName: 'John',
-      lastName: 'Doe',
-      middleName: 'Rick',
-      barNumber: '12345',
-      email: 'respondent@example.net',
-      phone: '111-111-1111',
-      title: 'mr',
-      isIRSAttorney: true,
-      address: '123',
-    });
+    expect(updateCaseStub.getCall(0).args[0].caseDetails.respondent).toEqual(
+      MOCK_USER,
+    );
   });
 
   it('throws an error is the entity returned from persistence is invalid', async () => {
