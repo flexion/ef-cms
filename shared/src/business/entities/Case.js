@@ -58,10 +58,18 @@ joiValidationDecorator(
       .string()
       .regex(docketNumberMatcher)
       .required(),
-    respondentId: joi.string().optional(),
-    respondentFirstName: joi.string().optional(),
-    respondentLastName: joi.string().optional(),
-    respondentBarNumber: joi.string().optional(),
+    respondent: joi.object().keys({
+      userId: joi.string().optional(),
+      firstName: joi.string().optional(),
+      lastName: joi.string().optional(),
+      middleName: joi.string().optional(),
+      title: joi.string().optional(),
+      email: joi.string().optional(),
+      address: joi.string().optional(),
+      isIRSAttorney: joi.boolean().optional(),
+      phone: joi.string().optional(),
+      barNumber: joi.string().optional(),
+    }),
     irsSendDate: joi
       .date()
       .iso()

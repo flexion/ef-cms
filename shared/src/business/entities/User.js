@@ -58,6 +58,12 @@ function User(user) {
     if (!this.lastName) {
       this.lastName = 'Attorney';
     }
+    if (!this.middleName) {
+      this.middleName = 'James';
+    }
+    if (!this.title) {
+      this.title = 'Mr';
+    }
     if (!this.role) {
       this.role = 'respondent';
     }
@@ -69,6 +75,18 @@ function User(user) {
     }
     if (!this.userId) {
       this.userId = 'respondent';
+    }
+    if (!this.email) {
+      this.email = 'respondent@exampe.com';
+    }
+    if (!this.address) {
+      this.address = '1341 Mesa Drive, Las Vegas, NV, 89119';
+    }
+    if (!this.isIRSAttorney) {
+      this.isIRSAttorney = true;
+    }
+    if (!this.phone) {
+      this.phone = '111-111-1111';
     }
   } else {
     throw new Error('invalid user');
