@@ -1,14 +1,8 @@
-const User = require('../entities/User');
-const { UnauthorizedError } = require('../../errors/errors');
 const Case = require('../entities/Case');
 
 exports.getCases = async ({ userId, status, applicationContext }) => {
-  let user;
-  try {
-    user = new User({ userId });
-  } catch (err) {
-    throw new UnauthorizedError('Unauthorized');
-  }
+  const user = await applicationContext.getUseCases().getUser(userId);
+
   let cases;
   switch (user.role) {
     case 'taxpayer':
@@ -30,7 +24,7 @@ exports.getCases = async ({ userId, status, applicationContext }) => {
         .getCasesByStatus({ status, userId, applicationContext });
       break;
     default:
-      return;
+      throw new Error('invalid user role');
   }
   return Case.validateRawCollection(cases);
 };

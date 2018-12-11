@@ -28,6 +28,7 @@ exports.fileAnswer = async ({
   const answerDocumentMetadata = {
     documentType: Case.documentTypes.answer,
     documentId: answerDocumentId,
+    filedBy: `${user.firstName} ${user.lastName}`,
     userId: userId,
     createdAt: new Date().toISOString(),
   };
@@ -54,6 +55,12 @@ exports.fileAnswer = async ({
   const updatedCase = await applicationContext.getUseCases().updateCase({
     caseId: caseWithAnswer.caseId,
     caseDetails: caseWithAnswer.toJSON(),
+    userId,
+    applicationContext,
+  });
+
+  await applicationContext.getUseCases().associateRespondentToCase({
+    caseId: caseToUpdate.caseId,
     userId,
     applicationContext,
   });

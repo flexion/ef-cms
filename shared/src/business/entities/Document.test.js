@@ -5,6 +5,7 @@ const Document = require('./Document');
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
   userId: 'taxpayer',
+  filedBy: 'John Doe',
 };
 
 describe('Document entity', () => {

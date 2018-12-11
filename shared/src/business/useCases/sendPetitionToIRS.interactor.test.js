@@ -14,6 +14,7 @@ describe('Send petition to IRS', () => {
     userId: 'userId',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     docketNumber: '45678-18',
+    petitionerName: 'John Doe',
     documents,
     createdAt: '',
   };

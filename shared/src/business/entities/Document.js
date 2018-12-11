@@ -47,6 +47,7 @@ joiValidationDecorator(
       .optional(),
     reviewUser: joi.string().optional(),
     status: joi.string().optional(),
+    filedBy: joi.string().required(),
     servedDate: joi
       .date()
       .iso()

@@ -50,25 +50,29 @@
     "caseId": "1a6fb0fb-5f93-479a-9235-7eba43005800",
     "createdAt": "2018-11-21T20:49:28.192Z",
     "userId": "taxpayer",
+    "petitionerName": "John Doe",
     "docketNumber": "101-18",
     "documents": [
       {
         "documentType": "Petition",
         "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "John Doe"
       },
       {
         "documentType": "Request for Place of Trial",
         "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "John Doe"
       },
       {
         "documentType": "Statement of Taxpayer Identification Number",
         "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "John Doe"
       }
     ],
     "status": "general"
@@ -79,25 +83,29 @@
     "caseId": "2a6fb0fb-5f93-479a-9235-7eba43005800",
     "createdAt": "2018-11-21T20:51:28.192Z",
     "userId": "taxpayer",
+    "petitionerName": "John Doe",
     "docketNumber": "102-18",
     "documents": [
       {
         "documentType": "Petition",
         "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "John Doe"
       },
       {
         "documentType": "Request for Place of Trial",
         "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "John Doe"
       },
       {
         "documentType": "Statement of Taxpayer Identification Number",
         "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "John Doe"
       }
     ],
     "status": "new"
@@ -108,25 +116,29 @@
     "caseId": "3a6fb0fb-5f93-479a-9235-7eba43005800",
     "createdAt": "2018-11-21T20:58:28.192Z",
     "userId": "taxpayer",
+    "petitionerName": "John Doe",
     "docketNumber": "103-18",
     "documents": [
       {
         "documentType": "Petition",
         "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "John Doe"
       },
       {
         "documentType": "Request for Place of Trial",
         "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "John Doe"
       },
       {
         "documentType": "Statement of Taxpayer Identification Number",
         "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "John Doe"
       }
     ],
     "status": "new"

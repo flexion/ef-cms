@@ -449,6 +449,14 @@ functions:
                 responseModels:
                   'application/json': 'unprocessableEntityError'
 
+  associateRespondentToCase:
+    handler: src/cases/associateRespondentToCase.associate
+    events:
+      - http:
+          path: v1/respondents/{userId}/cases
+          method: post
+          cors: true
+
   swagger:
     handler: src/swagger/swaggerLambda.handler
     events:

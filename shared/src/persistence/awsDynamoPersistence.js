@@ -104,6 +104,26 @@ exports.createCase = async ({ caseRecord, applicationContext }) => {
 };
 
 /**
+ * createCase
+ * @param caseRecord
+ * @param applicationContext
+ * @returns {*}
+ */
+exports.createRespondentCaseMapping = async ({
+  caseId,
+  respondentBarNumber,
+  applicationContext,
+}) => {
+  return client.put({
+    TableName: `efcms-${applicationContext.environment.stage}`,
+    Item: {
+      pk: `${respondentBarNumber}|activeCase`,
+      sk: caseId,
+    },
+  });
+};
+
+/**
  * createDocumentMetadata
  * @param documentToCreate
  * @param applicationContext

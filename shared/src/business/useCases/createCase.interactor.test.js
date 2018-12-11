@@ -30,6 +30,13 @@ describe('createCase', () => {
           createCase: createCaseStub,
         };
       },
+      getUseCases: () => ({
+        getUser: () => ({
+          role: 'taxpayer',
+          firstName: 'John',
+          lastName: 'Doe',
+        }),
+      }),
       environment: { stage: 'local' },
       docketNumberGenerator: {
         createDocketNumber: () => Promise.resolve(MOCK_DOCKET_NUMBER),
@@ -45,6 +52,7 @@ describe('createCase', () => {
     const expectedCaseRecordToPersist = {
       caseId: MOCK_CASE_ID,
       docketNumber: '00101-18',
+      petitionerName: 'John Doe',
       documents: [
         {
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -54,6 +62,7 @@ describe('createCase', () => {
           validated: true,
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
+          filedBy: 'John Doe',
         },
         {
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -63,6 +72,7 @@ describe('createCase', () => {
           validated: true,
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
+          filedBy: 'John Doe',
         },
         {
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -72,6 +82,7 @@ describe('createCase', () => {
           validated: true,
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
+          filedBy: 'John Doe',
         },
       ],
       createdAt: DATE,
@@ -91,6 +102,13 @@ describe('createCase', () => {
           createCase: () => Promise.reject(new Error('problem')),
         };
       },
+      getUseCases: () => ({
+        getUser: () => ({
+          role: 'taxpayer',
+          firstName: 'John',
+          lastName: 'Doe',
+        }),
+      }),
       environment: { stage: 'local' },
       docketNumberGenerator: {
         createDocketNumber: () => Promise.resolve('00101-00'),
@@ -98,7 +116,7 @@ describe('createCase', () => {
     };
     try {
       await createCase({
-        userid: 'petitionsclerk',
+        userId: 'petitionsclerk',
         documents: documents,
         applicationContext,
       });
@@ -118,6 +136,13 @@ describe('createCase', () => {
             }),
         };
       },
+      getUseCases: () => ({
+        getUser: () => ({
+          role: 'taxpayer',
+          firstName: 'John',
+          lastName: 'Doe',
+        }),
+      }),
       docketNumberGenerator: {
         createDocketNumber: () => Promise.resolve('00101-00'),
       },

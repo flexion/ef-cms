@@ -48,18 +48,12 @@ function User(user) {
     if (!this.token) {
       this.token = 'intakeclerk';
     }
-    if (!this.userId) {
-      this.userId = 'intakeclerk';
-    }
   } else if (this.userId === 'respondent') {
     if (!this.firstName) {
-      this.firstName = 'IRS';
+      this.firstName = 'Test';
     }
     if (!this.lastName) {
-      this.lastName = 'Attorney';
-    }
-    if (!this.middleName) {
-      this.middleName = 'James';
+      this.lastName = 'Respondent';
     }
     if (!this.title) {
       this.title = 'Mr';
@@ -72,9 +66,6 @@ function User(user) {
     }
     if (!this.token) {
       this.token = 'respondent';
-    }
-    if (!this.userId) {
-      this.userId = 'respondent';
     }
     if (!this.email) {
       this.email = 'respondent@exampe.com';
@@ -89,7 +80,7 @@ function User(user) {
       this.phone = '111-111-1111';
     }
   } else {
-    throw new Error('invalid user');
+    throw new Error('Username is incorrect');
   }
 }
 

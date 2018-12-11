@@ -8,6 +8,7 @@ const {
   getCasesByUser,
   getCasesForRespondent,
   getCasesByStatus,
+  createRespondentCaseMapping,
 } = require('ef-cms-shared/src/persistence/awsDynamoPersistence');
 
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/docketNumberGenerator');
@@ -25,6 +26,7 @@ const { getUser } = require('ef-cms-shared/src/business/useCases/getUser.interac
 const { sendPetitionToIRS } = require('ef-cms-shared/src/business/useCases/sendPetitionToIRS.interactor');
 const { updateCase } = require('ef-cms-shared/src/business/useCases/updateCase.interactor');
 const { uploadCasePdfs } = require('ef-cms-shared/src/business/useCases/uploadCasePdfs.interactor');
+const { associateRespondentToCase } = require('ef-cms-shared/src/business/useCases/respondent/associateRespondentToCase.interactor');
 const { getCasesForRespondent: getCasesForRespondentUC } = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondent.interactor');
 
 module.exports = {
@@ -43,6 +45,7 @@ module.exports = {
       uploadPdf,
       getUploadPolicy,
       getDownloadPolicyUrl,
+      createRespondentCaseMapping,
     }
   },
   docketNumberGenerator,
@@ -65,6 +68,7 @@ module.exports = {
       updateCase,
       uploadCasePdfs,
       getCasesForRespondent: getCasesForRespondentUC,
+      associateRespondentToCase,
     };
   },
 };

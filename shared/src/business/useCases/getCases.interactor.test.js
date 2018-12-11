@@ -29,13 +29,12 @@ describe('getCases', () => {
 
   it('throws an error is the entity returned from persistence is invalid', async () => {
     applicationContext = {
-      getUseCases: () => {
-        return {
-          getCasesByUser: () =>
-            Promise.resolve([omit(caseRecord, 'documents')]),
-        };
-      },
-      environment: { stage: 'local' },
+      getUseCases: () => ({
+        getUser: () => ({
+          role: 'taxpayer',
+        }),
+        getCasesByUser: () => Promise.resolve([omit(caseRecord, 'documents')]),
+      }),
     };
     let error;
     try {
@@ -52,13 +51,13 @@ describe('getCases', () => {
 
   it('throws an error is the entity returned from persistence is invalid', async () => {
     applicationContext = {
-      getUseCases: () => {
-        return {
-          getCasesForRespondent: () =>
-            Promise.resolve([omit(caseRecord, 'documents')]),
-        };
-      },
-      environment: { stage: 'local' },
+      getUseCases: () => ({
+        getUser: () => ({
+          role: 'respondent',
+        }),
+        getCasesForRespondent: () =>
+          Promise.resolve([omit(caseRecord, 'documents')]),
+      }),
     };
     let error;
     try {
@@ -75,13 +74,13 @@ describe('getCases', () => {
 
   it('throws an error is the entity returned from persistence is invalid', async () => {
     applicationContext = {
-      getUseCases: () => {
-        return {
-          getCasesByStatus: () =>
-            Promise.resolve([omit(caseRecord, 'documents')]),
-        };
-      },
-      environment: { stage: 'local' },
+      getUseCases: () => ({
+        getUser: () => ({
+          role: 'petitionsclerk',
+        }),
+        getCasesByStatus: () =>
+          Promise.resolve([omit(caseRecord, 'documents')]),
+      }),
     };
     let error;
     try {
@@ -98,13 +97,13 @@ describe('getCases', () => {
 
   it('throws an error is the entity returned from persistence is invalid', async () => {
     applicationContext = {
-      getUseCases: () => {
-        return {
-          getCasesByStatus: () =>
-            Promise.resolve([omit(caseRecord, 'documents')]),
-        };
-      },
-      environment: { stage: 'local' },
+      getUseCases: () => ({
+        getUser: () => ({
+          role: 'intakeclerk',
+        }),
+        getCasesByStatus: () =>
+          Promise.resolve([omit(caseRecord, 'documents')]),
+      }),
     };
     let error;
     try {
@@ -117,5 +116,28 @@ describe('getCases', () => {
       error = err;
     }
     expect(error.message).toContain('The entity was invalid');
+  });
+
+  it('throws an error is the entity returned from persistence is invalid', async () => {
+    applicationContext = {
+      getUseCases: () => ({
+        getUser: () => ({
+          role: 'nonexistingrole',
+        }),
+        getCasesByStatus: () =>
+          Promise.resolve([omit(caseRecord, 'documents')]),
+      }),
+    };
+    let error;
+    try {
+      await getCases({
+        userId: 'nonexistinguser',
+        status: 'new',
+        applicationContext,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toContain('invalid user role');
   });
 });

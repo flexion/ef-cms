@@ -5,6 +5,7 @@ const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 
 const A_VALID_CASE = {
   docketNumber: '00101-18',
+  petitionerName: 'John Doe',
   documents: MOCK_DOCUMENTS,
 };
 
@@ -21,6 +22,7 @@ describe('Case entity', () => {
         createdAt: '2018-11-21T20:58:28.192Z',
         status: 'new',
         docketNumber: '00101-18',
+        petitionerName: 'John Doe',
         documents: A_VALID_CASE.documents,
       };
       const myCase = new Case(previouslyCreatedCase);
@@ -34,6 +36,7 @@ describe('Case entity', () => {
         status: 'new',
         documents: A_VALID_CASE.documents,
         payGovId: '1234',
+        petitionerName: 'John Doe',
         docketNumber: '00101-18',
       };
       const myCase = new Case(previouslyCreatedCase);

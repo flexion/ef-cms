@@ -1,6 +1,7 @@
 exports.GET_CASES_BY_STATUS = 'getCasesByStatus';
 exports.UPDATE_CASE = 'updateCase';
 exports.GET_CASE = 'getCase';
+exports.FILE_ANSWER = 'fileAnswer';
 
 /**
  * isAuthorized
@@ -22,6 +23,7 @@ exports.isAuthorized = (user, action, owner) => {
       user === 'intakeclerk') &&
     (action === exports.GET_CASES_BY_STATUS ||
       action === exports.UPDATE_CASE ||
+      action === exports.FILE_ANSWER ||
       action === exports.GET_CASE)
   );
 };

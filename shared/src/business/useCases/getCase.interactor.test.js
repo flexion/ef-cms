@@ -17,6 +17,7 @@ describe('Get case', () => {
           getCaseByCaseId: () =>
             Promise.resolve({
               docketNumber: '00101-18',
+              petitionerName: 'John Doe',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
               documents,
             }),
@@ -58,6 +59,7 @@ describe('Get case', () => {
   it('success case by docket number', async () => {
     const getCaseByDocketNumberStub = sinon.stub().resolves({
       docketNumber: '00101-00',
+      petitionerName: 'John Doe',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documents,
     });

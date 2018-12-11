@@ -50,6 +50,7 @@ joiValidationDecorator(
       .string()
       // .uuid(uuidVersions)
       .optional(),
+    petitionerName: joi.string().required(),
     createdAt: joi
       .date()
       .iso()
