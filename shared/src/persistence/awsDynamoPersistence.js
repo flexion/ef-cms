@@ -296,3 +296,20 @@ exports.getCasesByStatus = async ({ status, applicationContext }) => {
     type: 'case-status',
   });
 };
+
+exports.associateAnswerToCase = async ({
+  caseToAssociate,
+  user,
+  applicationContext,
+}) => {
+  await exports.createRespondentCaseMapping({
+    caseId: caseToAssociate.caseId,
+    respondentId: user.barNumber,
+    applicationContext,
+  });
+
+  return exports.saveCase({
+    caseToSave: caseToAssociate,
+    applicationContext,
+  });
+};

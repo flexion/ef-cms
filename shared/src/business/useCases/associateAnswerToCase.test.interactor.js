@@ -1,12 +1,10 @@
-const {
-  associateRespondentToCase,
-} = require('./associateRespondentToCase.interactor');
+const { associateAnswerToCase } = require('./associateAnswerToCase.interactor');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const documents = MOCK_DOCUMENTS;
 const sinon = require('sinon');
 const DATE = '2018-11-21T20:49:28.192Z';
 
-describe('associateRespondentToCase', () => {
+describe('associateAnswerToCase', () => {
   let applicationContext;
 
   beforeEach(() => {
@@ -20,7 +18,7 @@ describe('associateRespondentToCase', () => {
   it('should throw an error if the user is not authorized', async () => {
     let error;
     try {
-      await associateRespondentToCase({
+      await associateAnswerToCase({
         userId: 'notavaliduser',
         caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         applicationContext: null,
@@ -54,7 +52,7 @@ describe('associateRespondentToCase', () => {
         createRespondentCaseMapping: () => null,
       }),
     };
-    const response = await associateRespondentToCase({
+    const response = await associateAnswerToCase({
       userId: 'respondent',
       caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       applicationContext,

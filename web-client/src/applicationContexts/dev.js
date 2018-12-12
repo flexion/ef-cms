@@ -16,7 +16,7 @@ import { uploadCasePdfs } from '../../../shared/src/business/useCases/uploadCase
 import { downloadDocumentFile } from '../../../shared/src/business/useCases/downloadDocumentFile.interactor';
 import { fileAnswer } from '../../../shared/src/business/useCases/respondent/fileAnswer.interactor';
 import { getCasesForRespondent } from '../../../shared/src/proxies/respondent/getCasesForRespondentProxy';
-import { associateRespondentToCase } from '../../../shared/src/proxies/respondent/associateRespondentToCaseProxy';
+import { associateAnswerToCase } from '../../../shared/src/proxies/associateAnswerToCaseProxy';
 
 /**
  * Context for the dev environment
@@ -46,7 +46,7 @@ const applicationContext = {
       fileAnswer,
       getCasesForRespondent,
       downloadDocumentFile,
-      associateRespondentToCase,
+      associateAnswerToCase,
     };
   },
 };

@@ -10,9 +10,10 @@ const applicationContext = require('../applicationContext');
  */
 exports.associate = event =>
   handle(() =>
-    applicationContext.getUseCases().associateRespondentToCase({
+    applicationContext.getUseCases().associateAnswerToCase({
       userId: getAuthHeader(event),
       caseId: event.pathParameters.caseId,
+      answer: JSON.parse(event.body),
       applicationContext,
     }),
   );
