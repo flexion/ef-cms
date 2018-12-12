@@ -11,22 +11,22 @@ export default connect(
   {
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
-    submitSendToIRS: sequences.submitToIRS,
-    submitUpdateCase: sequences.submitUpdateCase,
-    updateCaseValue: sequences.updateCaseValue,
-    updateCurrentTab: sequences.updateCurrentTab,
-    updateFormValue: sequences.updateFormValue,
-    viewDocument: sequences.viewDocument,
+    submitSendToIrsSequence: sequences.submitToIrsSequence,
+    submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
+    updateCaseValueSequence: sequences.updateCaseValueSequence,
+    updateCurrentTabSequence: sequences.updateCurrentTabSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    viewDocumentSequence: sequences.viewDocumentSequence,
   },
   function CaseDetail({
     caseDetail,
     currentTab,
-    submitUpdateCase,
-    submitSendToIRS,
-    updateCaseValue,
-    updateCurrentTab,
-    updateFormValue,
-    viewDocument,
+    submitUpdateCaseSequence,
+    submitSendToIrsSequence,
+    updateCaseValueSequence,
+    updateCurrentTabSequence,
+    updateFormValueSequence,
+    viewDocumentSequence,
   }) {
     return (
       <React.Fragment>
@@ -42,7 +42,9 @@ export default connect(
             {caseDetail.userId} v. Commissioner of Internal Revenue, Respondent
           </p>
           <p>
-            <span className="usa-label">{caseDetail.status}</span>
+            <span className="usa-label case-status-label">
+              {caseDetail.status}
+            </span>
           </p>
           <hr />
           <SuccessNotification />
@@ -56,7 +58,9 @@ export default connect(
                 <button
                   role="tab"
                   className="tab-link"
-                  onClick={() => updateCurrentTab({ value: 'Docket Record' })}
+                  onClick={() =>
+                    updateCurrentTabSequence({ value: 'Docket Record' })
+                  }
                   id="docket-record-tab"
                 >
                   Docket Record
@@ -68,7 +72,7 @@ export default connect(
                   className="tab-link"
                   id="case-info-tab"
                   onClick={() =>
-                    updateCurrentTab({ value: 'Case Information' })
+                    updateCurrentTabSequence({ value: 'Case Information' })
                   }
                 >
                   Case Information
@@ -78,9 +82,14 @@ export default connect(
           </nav>
           {currentTab == 'Docket Record' && (
             <div className="tab-content" role="tabpanel">
-              <button id="send-to-irs" onClick={() => submitSendToIRS()}>
-                Send to IRS
-              </button>
+              {!caseDetail.showIrsServedDate && (
+                <button
+                  id="send-to-irs"
+                  onClick={() => submitSendToIrsSequence()}
+                >
+                  Send to IRS
+                </button>
+              )}
               <table className="responsive-table">
                 <thead>
                   <tr>
@@ -103,7 +112,7 @@ export default connect(
                           className="pdf-link"
                           aria-label="View PDF"
                           onClick={() =>
-                            viewDocument({
+                            viewDocumentSequence({
                               documentId: document.documentId,
                               callback: openDocumentBlob,
                             })
@@ -159,7 +168,7 @@ export default connect(
                         name="paymentType"
                         value="payGov"
                         onChange={e => {
-                          updateFormValue({
+                          updateFormValueSequence({
                             key: e.target.name,
                             value: e.target.value,
                           });
@@ -175,7 +184,7 @@ export default connect(
                             name="payGovId"
                             value={caseDetail.payGovId || ''}
                             onChange={e => {
-                              updateCaseValue({
+                              updateCaseValueSequence({
                                 key: e.target.name,
                                 value: e.target.value,
                               });
@@ -183,7 +192,7 @@ export default connect(
                           />
                           <button
                             id="update-case-page-end"
-                            onClick={() => submitUpdateCase()}
+                            onClick={() => submitUpdateCaseSequence()}
                           >
                             Save updates
                           </button>
