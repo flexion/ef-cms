@@ -111,13 +111,13 @@ exports.createCase = async ({ caseRecord, applicationContext }) => {
  */
 exports.createRespondentCaseMapping = async ({
   caseId,
-  respondentBarNumber,
+  respondentId,
   applicationContext,
 }) => {
   return client.put({
     TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
-      pk: `${respondentBarNumber}|activeCase`,
+      pk: `${respondentId}|activeCase`,
       sk: caseId,
     },
   });

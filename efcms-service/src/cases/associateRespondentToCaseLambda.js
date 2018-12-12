@@ -12,7 +12,7 @@ exports.associate = event =>
   handle(() =>
     applicationContext.getUseCases().associateRespondentToCase({
       userId: getAuthHeader(event),
-      caseId: JSON.parse(event.body).caseId,
+      caseId: event.pathParameters.caseId,
       applicationContext,
     }),
   );

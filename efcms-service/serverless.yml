@@ -450,10 +450,10 @@ functions:
                   'application/json': 'unprocessableEntityError'
 
   associateRespondentToCase:
-    handler: src/cases/associateRespondentToCase.associate
+    handler: src/cases/associateRespondentToCaseLambda.associate
     events:
       - http:
-          path: v1/respondents/{userId}/cases
+          path: v1/cases/{caseId}/respondent
           method: post
           cors: true
 

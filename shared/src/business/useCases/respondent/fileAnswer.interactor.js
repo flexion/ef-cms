@@ -35,24 +35,12 @@ exports.fileAnswer = async ({
 
   const caseWithAnswer = new Case({
     ...caseToUpdate,
-    respondent: {
-      userId: user.userId,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      middleName: user.middleName,
-      title: user.title,
-      email: user.email,
-      address: user.address,
-      isIRSAttorney: user.isIRSAttorney,
-      phone: user.phone,
-      barNumber: user.barNumber,
-    },
     documents: [...caseToUpdate.documents, answerDocumentMetadata],
   });
 
   caseWithAnswer.validateWithError(new UnprocessableEntityError());
 
-  const updatedCase = await applicationContext.getUseCases().updateCase({
+  await applicationContext.getUseCases().updateCase({
     caseId: caseWithAnswer.caseId,
     caseDetails: caseWithAnswer.toJSON(),
     userId,
@@ -64,8 +52,6 @@ exports.fileAnswer = async ({
     userId,
     applicationContext,
   });
-
-  new Case(updatedCase).validate();
 
   return new Document(answerDocumentMetadata).validate().toJSON();
 };

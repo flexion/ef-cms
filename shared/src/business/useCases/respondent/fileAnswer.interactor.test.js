@@ -1,58 +1,9 @@
 const { fileAnswer } = require('./fileAnswer.interactor');
-const sinon = require('sinon');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
-
-const MOCK_USER = {
-  userId: 'respondent',
-  firstName: 'John',
-  lastName: 'Doe',
-  middleName: 'Rick',
-  barNumber: '12345',
-  email: 'respondent@example.net',
-  isIRSAttorney: true,
-  phone: '111-111-1111',
-  title: 'mr',
-  address: '123',
-};
 
 describe('fileAnswer', () => {
   let applicationContext;
   let documents = MOCK_DOCUMENTS;
-
-  it('should attach the respondent information to the case when calling updateCase', async () => {
-    const updateCaseStub = sinon.stub().resolves({
-      docketNumber: '00101-18',
-      petitionerName: 'John Doe',
-      caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documents,
-    });
-    applicationContext = {
-      getPersistenceGateway: () => ({
-        createRespondentCaseMapping: () => null,
-        uploadDocument: () =>
-          Promise.resolve('a6b81f4d-1e47-423a-8caf-6d2fdc3d3859'),
-      }),
-      getUseCases: () => ({
-        updateCase: updateCaseStub,
-        associateRespondentToCase: () => null,
-        getUser: () => Promise.resolve(MOCK_USER),
-      }),
-    };
-    await fileAnswer({
-      answerDocument: 'abc',
-      userId: 'respondent',
-      caseToUpdate: {
-        documents,
-        petitionerName: 'John Doe',
-        docketNumber: '00101-18',
-        caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      },
-      applicationContext,
-    });
-    expect(updateCaseStub.getCall(0).args[0].caseDetails.respondent).toEqual(
-      MOCK_USER,
-    );
-  });
 
   it('throws an error is the entity returned from persistence is invalid', async () => {
     applicationContext = {

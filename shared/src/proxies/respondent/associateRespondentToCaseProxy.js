@@ -8,9 +8,9 @@ exports.associateRespondentToCase = async ({
   const userToken = userId;
 
   const response = await axios.post(
-    `${applicationContext.getBaseUrl()}/respondents/${userId}/cases`,
+    `${applicationContext.getBaseUrl()}/cases/${caseId}/respondent`,
     {
-      caseId,
+      userId,
     },
     {
       headers: {
