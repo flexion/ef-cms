@@ -60,7 +60,7 @@ joiValidationDecorator(
       .regex(docketNumberMatcher)
       .required(),
     respondent: joi.object().keys({
-      userId: joi.string().optional(),
+      respondentId: joi.string().optional(),
       firstName: joi.string().optional(),
       lastName: joi.string().optional(),
       middleName: joi.string().optional(),

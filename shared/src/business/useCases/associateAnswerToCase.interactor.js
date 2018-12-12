@@ -24,7 +24,7 @@ exports.associateAnswerToCase = async ({
   const caseWithAnswerAndRespondent = new Case({
     ...caseToAssociate,
     respondent: {
-      userId: user.userId,
+      respondentId: user.userId,
       firstName: user.firstName,
       lastName: user.lastName,
       middleName: user.middleName,
