@@ -14,7 +14,7 @@ export default connect(
     submitForwardSequence: sequences.submitForwardSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     workItems: state.extractedWorkItems,
-    documentUrl: state.documentUrl,
+    documentUrl: state.documentDownloadUrl,
   },
   function DocumentDetail({
     caseDetail,
