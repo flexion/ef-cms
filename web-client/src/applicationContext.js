@@ -3,6 +3,7 @@ const {
   uploadDocument,
   uploadPdf,
   uploadPdfsForNewCase,
+  getDownloadPolicy,
 } = require('../../shared/src/persistence/awsS3Persistence');
 
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
@@ -21,6 +22,7 @@ import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdfs.interactor';
 import { associateRespondentDocumentToCase } from '../../shared/src/proxies/respondent/associateRespondentDocumentToCaseProxy';
+import { getDownloadDocumentUrl } from '../../shared/src/business/useCases/getDownloadDocumentUrl.interactor';
 
 import Case from '../../shared/src/business/entities/Case';
 
@@ -35,6 +37,7 @@ const applicationContext = {
       uploadDocument,
       uploadPdf,
       uploadPdfsForNewCase,
+      getDownloadPolicy,
     };
   },
   getUseCases: () => {
@@ -54,6 +57,7 @@ const applicationContext = {
       updateWorkItem,
       uploadCasePdfs,
       associateRespondentDocumentToCase,
+      getDownloadDocumentUrl,
     };
   },
   getUseCaseForDocumentUpload: (documentType, role) => {

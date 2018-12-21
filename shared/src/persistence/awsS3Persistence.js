@@ -47,6 +47,8 @@ const getDownloadPolicy = async ({ applicationContext, documentId }) => {
   return url;
 };
 
+exports.getDownloadPolicy = getDownloadPolicy;
+
 exports.getDocument = async ({ applicationContext, documentId }) => {
   const url = await getDownloadPolicy({ applicationContext, documentId });
   const { data: fileBlob } = await axios({

@@ -1,48 +1,30 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state, sequences } from 'cerebral';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
 import SuccessNotification from './SuccessNotification';
 
-class DocumentDetail extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { documentUrl: '' };
-  }
-
-  displayPdf(documentBlob) {
-    this.setState({
-      documentUrl: window.URL.createObjectURL(documentBlob, {
-        type: 'application/pdf',
-      }),
-    });
-  }
-
-  componentDidMount() {
-    this.props.viewDocumentSequence({
-      documentId: this.props.document.documentId,
-      callback: this.displayPdf.bind(this),
-    });
-  }
-
-  componentWillUnmount() {
-    window.URL.revokeObjectURL(this.state.documentUrl);
-  }
-
-  render() {
-    const {
-      caseDetail,
-      document,
-      form,
-      showForwardInputs,
-      submitForwardSequence,
-      updateFormValueSequence,
-      workItems,
-    } = this.props;
-
+export default connect(
+  {
+    caseDetail: state.formattedCaseDetail,
+    document: state.extractedDocument,
+    showForwardInputs: state.form.showForwardInputs,
+    submitForwardSequence: sequences.submitForwardSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    workItems: state.extractedWorkItems,
+    documentUrl: state.documentUrl,
+  },
+  function DocumentDetail({
+    caseDetail,
+    document,
+    showForwardInputs,
+    submitForwardSequence,
+    updateFormValueSequence,
+    workItems,
+    documentUrl,
+  }) {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -189,37 +171,12 @@ class DocumentDetail extends React.Component {
             <div className="usa-width-two-thirds">
               <iframe
                 title={`Document type: ${document.documentType}`}
-                src={this.state.documentUrl}
+                src={documentUrl}
               />
             </div>
           </div>
         </section>
       </React.Fragment>
     );
-  }
-}
-
-DocumentDetail.propTypes = {
-  caseDetail: PropTypes.object,
-  document: PropTypes.object,
-  form: PropTypes.object,
-  showForwardInputs: PropTypes.bool,
-  submitForwardSequence: PropTypes.func,
-  updateFormValueSequence: PropTypes.func,
-  workItems: PropTypes.array,
-  viewDocumentSequence: PropTypes.func,
-};
-
-export default connect(
-  {
-    caseDetail: state.formattedCaseDetail,
-    document: state.extractedDocument,
-    form: state.form,
-    showForwardInputs: state.form.showForwardInputs,
-    submitForwardSequence: sequences.submitForwardSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    workItems: state.extractedWorkItems,
-    viewDocumentSequence: sequences.viewDocumentSequence,
   },
-  DocumentDetail,
 );
