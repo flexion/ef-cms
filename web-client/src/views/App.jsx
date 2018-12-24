@@ -23,6 +23,7 @@ import Loading from './Loading';
 import LogIn from './LogIn';
 import StyleGuide from './StyleGuide';
 import UsaBanner from './UsaBanner';
+import StyleForm from './StyleForm';
 
 const pages = {
   CaseDetailInternal,
@@ -42,6 +43,7 @@ const pages = {
   Loading,
   LogIn,
   StyleGuide,
+  StyleForm,
 };
 
 /**
@@ -75,6 +77,7 @@ class App extends React.Component {
         </main>
         <Footer />
         <Loading />
+        <StyleForm />
       </React.Fragment>
     );
   }

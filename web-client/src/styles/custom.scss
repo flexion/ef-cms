@@ -268,6 +268,41 @@ iframe {
   }
 }
 
+#styles-form {
+  position: fixed;
+  top: 125px;
+  left: 20px;
+  overflow: hidden;
+  width: 50px;
+  height: 30px;
+  border: 2px solid gray;
+  border-radius: 4px;
+  background-color: #ccc;
+  box-shadow: 5px 10px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  div {
+    display: none;
+  }
+}
+#styles-form:hover {
+  width: 400px;
+  height: 320px;
+  padding: 5px;
+  div {
+    display: block;
+  }
+  label,
+  input,
+  select {
+    display: inline-block;
+    padding-left: 0.5rem;
+    width: 125px;
+  }
+}
+hr {
+  z-index: 0;
+}
+
 @media only screen and (max-width: $small-screen) {
   .responsive-table {
     thead {

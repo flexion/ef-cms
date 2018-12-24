@@ -21,6 +21,7 @@ import updateDocumentValueSequence from './sequences/updateDocumentValueSequence
 import updateFormValueSequence from './sequences/updateFormValueSequence';
 import updatePetitionValueSequence from './sequences/updatePetitionValueSequence';
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
+import updateStyleSequence from './sequences/updateStyleSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
 
 import state from './state';
@@ -54,6 +55,7 @@ export default {
     updateFormValueSequence,
     updatePetitionValueSequence,
     updateSearchTermSequence,
+    updateStyleSequence,
     viewDocumentSequence,
   },
   state,

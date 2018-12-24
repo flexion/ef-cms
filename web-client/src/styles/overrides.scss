@@ -60,6 +60,22 @@ p {
   padding-top: 0;
 }
 
+:root {
+  /* these were defaults from uswds styles */
+  --experiment-maxwidth: 1040px;
+  --experiment-margin: auto;
+  --experiment-padding: 3rem;
+}
+
+#app main#main-content .usa-section.usa-grid,
+#app header.usa-header div.usa-navbar {
+  max-width: var(--experiment-maxwidth);
+  margin-left: var(--experiment-margin);
+  margin-right: var(--experiment-margin);
+  padding-right: var(--experiment-padding);
+  padding-left: var(--experiment-padding);
+}
+
 hr {
   display: block;
   height: 1px;

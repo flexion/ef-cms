@@ -67,4 +67,12 @@ export default {
   formattedWorkQueue,
   extractedWorkItems,
   extractedDocument,
+  styles: {
+    margin: 'auto',
+    'margin-units': 'px',
+    padding: 3,
+    'padding-units': 'rem',
+    maxwidth: 1040,
+    'maxwidth-units': 'px',
+  },
 };
