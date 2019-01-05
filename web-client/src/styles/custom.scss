@@ -38,6 +38,31 @@ hr {
   color: $color-red-dark;
 }
 
+.history-card-entry {
+  padding: 1rem;
+  border-bottom: 1px solid $color-gray-lighter;
+}
+
+.history-card-entry:last-child {
+  border: none;
+}
+
+.history-card-entry-line {
+  padding-top: 0.3rem;
+  margin: 0.3rem;
+}
+
+.history-card-entry-message {
+  padding-top: 0.3rem;
+  margin: 0 0.8rem 0 0.3rem;
+}
+
+.card-container {
+  div {
+    padding: 0.3rem;
+  }
+}
+
 #paygov-link-container {
   padding-bottom: 2rem;
   text-align: center;

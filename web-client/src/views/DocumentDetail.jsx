@@ -72,20 +72,20 @@ class DocumentDetail extends React.Component {
                   aria-labelledby="messages-label"
                   key={idx}
                 >
-                  <div className="content-wrapper">
-                    <p>
+                  <div className="content-wrapper card-container">
+                    <div>
                       <span className="label-inline">To</span>
                       {workItem.currentMessage.sentTo}
-                    </p>
-                    <p>
+                    </div>
+                    <div>
                       <span className="label-inline">From</span>
                       {workItem.currentMessage.sentBy}
-                    </p>
-                    <p>
+                    </div>
+                    <div>
                       <span className="label-inline">Received</span>
                       {workItem.currentMessage.createdAtFormatted}
-                    </p>
-                    <p>{workItem.currentMessage.message}</p>
+                    </div>
+                    <div>{workItem.currentMessage.message}</div>
                   </div>
 
                   <div
@@ -230,20 +230,20 @@ class DocumentDetail extends React.Component {
                         aria-labelledby="history-tab"
                       >
                         {workItem.historyMessages.map((message, mIdx) => (
-                          <div key={mIdx}>
-                            <p>
+                          <div className="history-card-entry" key={mIdx}>
+                            <div className="history-card-entry-line">
                               <span className="label-inline">To</span>
                               {message.sentTo}
-                            </p>
-                            <p>
+                            </div>
+                            <div className="history-card-entry-line">
                               <span className="label-inline">From</span>
                               {message.sentBy}
-                            </p>
-                            <p>
+                            </div>
+                            <div className="history-card-entry-line">
                               <span className="label-inline">Received</span>
                               {message.createdAtFormatted}
-                            </p>
-                            <p>{message.message}</p>
+                            </div>
+                            <div className="history-card-entry-message">{message.message}</div>
                           </div>
                         ))}
                       </div>
@@ -288,6 +288,12 @@ class DocumentDetail extends React.Component {
                           <option value=""> -- Select -- </option>
                           <option value="seniorattorney">
                             Senior Attorney
+                          </option>
+                          <option value="docketclerk">
+                            Test Docketclerk
+                          </option>
+                          <option value="docketclerk1">
+                            Test Docketclerk1
                           </option>
                         </select>
                         <label htmlFor="forward-message">
