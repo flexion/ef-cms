@@ -156,11 +156,11 @@ describe('Case entity', () => {
 
   describe('attachDocument', () => {
     beforeEach(() => {
-      sinon.stub(window.Date.prototype, 'toISOString').returns(DATE);
+      sinon.stub(global.Date.prototype, 'toISOString').returns(DATE);
     });
 
     afterEach(() => {
-      window.Date.prototype.toISOString.restore();
+      global.Date.prototype.toISOString.restore();
     });
 
     it('should attach the document to the case', () => {
