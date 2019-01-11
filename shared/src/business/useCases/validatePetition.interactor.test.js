@@ -34,10 +34,10 @@ describe('validatePetition', () => {
       petition: {
         caseType: 'defined',
         procedureType: 'defined',
-        petitionFile: new File([], 'test.png'),
+        petitionFile: { filename: 'test.png' },
         preferredTrialCity: 'defined',
         irsNoticeDate: new Date().toISOString(),
-        irsNoticeFile: new File([], 'test.png'),
+        irsNoticeFile: { filename: 'test.png' },
       },
       applicationContext: {
         getEntityConstructors: () => ({
