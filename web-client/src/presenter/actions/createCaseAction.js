@@ -13,30 +13,37 @@ export default async ({ applicationContext, get, store }) => {
     );
   };
 
-  const {
-    petitionDocumentId,
-    requestForPlaceOfTrialDocumentId,
-    statementOfTaxpayerIdentificationNumberDocumentId,
-  } = await useCases.uploadCasePdfs({
-    applicationContext,
-    caseInitiator,
-    userId: user.userId,
-    fileHasUploaded,
-  });
+  const { petitionDocumentId, irsNoticeFileId } = await useCases.uploadCasePdfs(
+    {
+      applicationContext,
+      caseInitiator,
+      userId: user.userId,
+      fileHasUploaded,
+    },
+  );
+
+  const documents = [
+    { documentType: 'Petition', documentId: petitionDocumentId },
+  ];
+
+  if (irsNoticeFileId) {
+    documents.push({
+      documentType: 'IRS Notice',
+      documentId: irsNoticeFileId,
+    });
+  }
+
+  const form = omit(
+    {
+      ...get(state.form),
+      irsNoticeDate: get(state.startCaseHelper.irsNoticeDate),
+    },
+    ['year', 'month', 'day'],
+  );
 
   await useCases.createCase({
     applicationContext,
-    documents: [
-      { documentType: 'Petition', documentId: petitionDocumentId },
-      {
-        documentType: 'Request for Place of Trial',
-        documentId: requestForPlaceOfTrialDocumentId,
-      },
-      {
-        documentType: 'Statement of Taxpayer Identification Number',
-        documentId: statementOfTaxpayerIdentificationNumberDocumentId,
-      },
-    ],
-    userId: user.userId,
+    petition: form,
+    documents,
   });
 };

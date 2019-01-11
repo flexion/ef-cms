@@ -20,14 +20,11 @@ joiValidationDecorator(
       .string()
       .uuid(uuidVersions)
       .required(),
-    requestForPlaceOfTrialDocumentId: joi
+    irsNoticeFileId: joi
       .string()
       .uuid(uuidVersions)
-      .required(),
-    statementOfTaxpayerIdentificationNumberDocumentId: joi
-      .string()
-      .uuid(uuidVersions)
-      .required(),
+      .allow(null)
+      .optional(),
   }),
 );
 
@@ -37,7 +34,7 @@ joiValidationDecorator(
  * @param caseInitiator
  * @param user
  * @param fileHasUploaded
- * @returns {Promise<{petitionFileId, requestForPlaceOfTrialId, statementOfTaxpayerIdentificationNumberId}>}
+ * @returns {Promise<{petitionFileId}>}
  */
 exports.uploadCasePdfs = async ({
   applicationContext,

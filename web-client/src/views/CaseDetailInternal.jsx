@@ -5,6 +5,7 @@ import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
 import PartyInformation from './PartyInformation';
+import CaseInformationInternal from './CaseInformationInternal';
 import SuccessNotification from './SuccessNotification';
 
 export default connect(
@@ -206,7 +207,9 @@ export default connect(
           )}
           {currentTab == 'Case Information' && (
             <div className="tab-content" role="tabpanel">
+              <CaseInformationInternal />
               <PartyInformation />
+
               <div>
                 <fieldset className="usa-fieldset-inputs usa-sans">
                   <legend>Petition fee</legend>

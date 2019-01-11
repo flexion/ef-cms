@@ -3,9 +3,13 @@ import FormData from 'form-data';
 
 import applicationContext from '../applicationContext';
 import presenter from '../presenter';
+import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 
 import taxpayerLogin from './journey/taxpayerLogIn';
+import taxpayerCancelsCreateCase from './journey/taxpayerCancelsCreateCase';
+import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
+import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 
@@ -54,6 +58,10 @@ presenter.providers.router = {
         docketNumber: test.docketNumber,
       });
     }
+
+    if (url === '/') {
+      await test.runSequence('gotoDashboardSequence');
+    }
   },
 };
 
@@ -72,6 +80,10 @@ describe('Case journey', async () => {
   });
 
   taxpayerLogin(test);
+  taxpayerCancelsCreateCase(test);
+  taxpayerNavigatesToCreateCase(test);
+  taxpayerChoosesProcedureType(test);
+  taxpayerChoosesCaseType(test);
   taxpayerCreatesNewCase(test, fakeFile);
   taxpayerViewsDashboard(test);
   taxpayerViewsCaseDetail(test);

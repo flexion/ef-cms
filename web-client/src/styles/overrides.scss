@@ -6,6 +6,12 @@
   margin-bottom: 30px;
 }
 
+.usa-form-hint {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: $color-gray-dark;
+}
+
 .usa-header .usa-nav-secondary .usa-search {
   margin-top: -0.6rem;
 }
@@ -26,4 +32,9 @@
 
 .usa-section {
   padding-top: 0;
+}
+
+.usa-unstyled-list li {
+  display: inline-block;
+  margin-right: 30px;
 }

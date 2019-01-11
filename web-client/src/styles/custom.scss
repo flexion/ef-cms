@@ -19,7 +19,7 @@ hr {
 .label {
   display: block;
   margin-bottom: 0;
-  font-weight: $font-medium;
+  font-weight: $font-semibold;
 }
 
 .label-inline {
@@ -63,4 +63,38 @@ iframe {
 
 .subsection {
   margin-bottom: 50px;
+}
+
+.grey-container {
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: $color-gray-lightest;
+
+  *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.blue-container {
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: $color-primary-alt-lightest;
+
+  *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.are-you-ready {
+  .icon-wrapper {
+    float: left;
+  }
+
+  .upload-description {
+    margin: 0 0 10px 10px;
+  }
+}
+
+.required-statement {
+  font-weight: $font-semibold;
 }

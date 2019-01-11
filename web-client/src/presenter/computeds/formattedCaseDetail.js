@@ -23,6 +23,10 @@ const formatCase = caseDetail => {
   result.irsDateFormatted = moment(result.irsDate).format('L LT');
   result.payGovDateFormatted = moment(result.payGovDate).format('L');
 
+  result.irsNoticeDateFormatted = result.irsNoticeDate
+    ? moment(result.irsNoticeDate).format('L')
+    : 'No Date Provided';
+
   result.datePetitionSentToIrsMessage = `Respondent served ${
     result.irsDateFormatted
   }`;
