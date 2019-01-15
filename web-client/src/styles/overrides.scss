@@ -8,6 +8,10 @@
   label {
     margin: 0 0 5px;
   }
+
+  option:first-child {
+    font-weight: initial;
+  }
 }
 
 .usa-form-hint {
@@ -41,4 +45,11 @@
 .usa-unstyled-list li {
   display: inline-block;
   margin-right: 30px;
+}
+
+.usa-date-of-birth {
+  label {
+    margin: 0 0 10px;
+    font-weight: $font-normal;
+  }
 }

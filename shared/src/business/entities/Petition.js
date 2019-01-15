@@ -10,21 +10,25 @@ function Petition(rawPetition) {
 Petition.errorToMessageMap = {
   caseType: 'Case Type is a required field.',
   irsNoticeDate: 'IRS Notice Date is a required field.',
-  irsNoticeFile: 'The IRS Notice file was not selected.',
   petitionFile: 'The Petition file was not selected.',
   procedureType: 'Procedure Type is a required field.',
   preferredTrialCity: 'Preferred Trial City is a required field.',
+  signature: 'You must review the form before submitting.',
 };
 
 joiValidationDecorator(
   Petition,
   joi.object().keys({
     caseType: joi.string().required(),
-    irsNoticeDate: joi.string().required(),
-    irsNoticeFile: joi.object().required(),
+    irsNoticeDate: joi
+      .date()
+      .max('now')
+      .iso()
+      .required(),
     petitionFile: joi.object().required(),
     procedureType: joi.string().required(),
     preferredTrialCity: joi.string().required(),
+    signature: joi.boolean().required(),
   }),
 );
 

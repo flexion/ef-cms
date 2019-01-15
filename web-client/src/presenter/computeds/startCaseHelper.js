@@ -2,27 +2,24 @@ import { state } from 'cerebral';
 
 export default get => {
   const form = get(state.form);
+  const petition = get(state.petition);
   const trialCities = get(state.form.trialCities) || [];
-
+  const getTrialCityName = get(state.getTrialCityName);
   const states = {};
   trialCities.forEach(
     trialCity =>
       (states[trialCity.state] = [
         ...(states[trialCity.state] || []),
-        trialCity,
+        getTrialCityName(trialCity),
       ]),
   );
 
   return {
-    showIrsNoticeFileValid: !!form, // TODO: derive from state
-    showPetitionFileValid: !!form, // TODO: derive from state
-    uploadsFinished: 0, // TODO: derive from state
-    uploadPercentage: 0, // TODO: derive from state
-    trialCitiesByState: states,
+    showPetitionFileValid: petition.petitionFile,
+    showRegularTrialCitiesHint: form.procedureType === 'Regular',
+    showSelectTrial: !!form.procedureType,
+    showSmallTrialCitiesHint: form.procedureType === 'Small',
     trialCities: form.trialCities || [],
-    irsNoticeDate:
-      form.year && form.month && form.day
-        ? `${form.year}-${form.month}-${form.day}`
-        : null,
+    trialCitiesByState: states,
   };
 };
