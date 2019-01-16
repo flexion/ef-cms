@@ -27,7 +27,7 @@ describe('uploadPdf', () => {
         },
         url: 'http://test.com',
       },
-      file: new File([], 'abc'),
+      file: global.FakeFile([], 'abc'),
       applicationContext,
     });
     expect(postSpy.getCall(0).args[0]).toEqual('http://test.com');
@@ -127,7 +127,7 @@ describe('uploadPdfsForNewCase', () => {
     const result = await uploadPdfsForNewCase({
       applicationContext,
       caseInitiator: {
-        petitionFile: new File([], '1'),
+        petitionFile: global.FakeFile([], '1'),
       },
       fileHasUploaded: fileHasUploadedSpy,
     });

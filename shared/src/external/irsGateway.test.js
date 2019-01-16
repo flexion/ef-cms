@@ -3,11 +3,11 @@ const { sendToIRS } = require('./irsGateway');
 
 describe('irsGateway', () => {
   beforeEach(() => {
-    sinon.stub(window.Date.prototype, 'toISOString').returns('somedatestring');
+    sinon.stub(global.Date.prototype, 'toISOString').returns('somedatestring');
   });
 
   afterEach(() => {
-    window.Date.prototype.toISOString.restore();
+    global.Date.prototype.toISOString.restore();
   });
 
   it('returns a date', async () => {
