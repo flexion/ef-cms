@@ -7,6 +7,7 @@ import setAlertError from '../actions/setAlertErrorAction';
 import setFormSubmitting from '../actions/setFormSubmittingAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 import validatePetition from '../actions/validatePetitionAction';
+import clearForm from '../actions/clearFormAction';
 
 export default [
   clearAlerts,
@@ -15,10 +16,16 @@ export default [
     success: [
       setFormSubmitting,
       createCase,
+      {
+        success: [
+          getCreateCaseAlertSuccess,
+          setAlertSuccess,
+          navigateToDashboard,
+        ],
+        error: [setAlertError],
+      },
       unsetFormSubmitting,
-      getCreateCaseAlertSuccess,
-      setAlertSuccess,
-      navigateToDashboard,
+      clearForm,
     ],
     error: [setAlertError],
   },

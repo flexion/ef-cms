@@ -35,9 +35,6 @@ const {
   saveCase,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/saveCase');
 const {
-  createCase,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/createCase');
-const {
   getCaseByCaseId,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByCaseId');
 const {
@@ -65,7 +62,7 @@ const {
   getCasesByStatus: getCasesByStatusUC,
 } = require('ef-cms-shared/src/business/useCases/getCasesByStatus.interactor');
 const {
-  createCase: createCaseUC,
+  createCase,
 } = require('ef-cms-shared/src/business/useCases/createCase.interactor');
 const {
   getCasesByUser: getCasesByUserUC,
@@ -79,9 +76,6 @@ const {
 const {
   updateCase,
 } = require('ef-cms-shared/src/business/useCases/updateCase.interactor');
-const {
-  uploadCasePdfs,
-} = require('ef-cms-shared/src/business/useCases/uploadCasePdfs.interactor');
 const {
   getCasesForRespondent: getCasesForRespondentUC,
 } = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondent.interactor');
@@ -114,6 +108,7 @@ const {
 const {
   isAuthorized,
   WORKITEM,
+  CASE_METADATA,
 } = require('ef-cms-shared/src/authorization/authorizationClientService');
 
 const PetitionWithoutFiles = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
@@ -182,7 +177,6 @@ module.exports = ({ userId } = {}) => {
         getCasesByUser,
         getCasesForRespondent,
         saveCase,
-        createCase,
         getCaseByCaseId,
         getCaseByDocketNumber,
       };
@@ -201,7 +195,7 @@ module.exports = ({ userId } = {}) => {
     isAuthorizedForWorkItems: () => isAuthorized(userId, WORKITEM),
     getUseCases: () => {
       return {
-        createCase: createCaseUC,
+        createCase,
         getCase,
         getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,
@@ -209,7 +203,6 @@ module.exports = ({ userId } = {}) => {
         forwardWorkItem,
         sendPetitionToIRS,
         updateCase,
-        uploadCasePdfs,
         getCasesForRespondent: getCasesForRespondentUC,
         getWorkItem,
         getWorkItems,

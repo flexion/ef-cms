@@ -3,17 +3,16 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
-import { getTrialCityName } from './computeds/formattedTrialCity';
-
-import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { extractedDocument } from './computeds/extractDocument';
+import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
-import { showAction } from './computeds/documentDetailHelper';
+import { getTrialCityName } from './computeds/formattedTrialCity';
+import alertHelper from './computeds/alertHelper';
 import caseDetailHelper from './computeds/caseDetailHelper';
+import documentDetailHelper from './computeds/documentDetailHelper';
 import startCaseHelper from './computeds/startCaseHelper';
 import workQueueHelper from './computeds/workQueueHelper';
-import alertHelper from './computeds/alertHelper';
 
 export default {
   path: '/',
@@ -27,12 +26,6 @@ export default {
     isVisible: false,
   },
   showModal: false,
-  modal: {
-    title: 'Are you sure you want to cancel?',
-    message: 'If you cancel, your form selections will be lost.',
-    confirmLabel: 'Yes, cancel',
-    cancelLabel: 'No, continue',
-  },
   paymentInfo: {
     showDetails: false,
   },
@@ -80,10 +73,12 @@ export default {
   },
   caseDetail: {},
   cases: [],
-  workItemActions: {},
   completeForm: {},
+  workItemActions: {},
 
+  alertHelper,
   caseDetailHelper,
+  documentDetailHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   formattedCaseDetail,
@@ -91,8 +86,6 @@ export default {
   formattedSectionWorkQueue,
   formattedWorkQueue,
   getTrialCityName,
-  showAction,
   startCaseHelper,
   workQueueHelper,
-  alertHelper,
 };

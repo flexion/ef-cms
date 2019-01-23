@@ -26,16 +26,23 @@ const MOCK_WORK_ITEM = {
   workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
   assigneeId: null,
   docketNumber: '101-18',
+  docketNumberSuffix: 'S',
   sentBy: 'respondent',
   updatedAt: '2018-12-27T18:06:02.968Z',
 };
 
 describe('assignWorkItems', () => {
   it('unauthorized user tries to assign a work item', async () => {
+    const applicationContext = {
+      getCurrentUser: () => ({
+        userId: 'baduser',
+      }),
+      environment: { stage: 'local' },
+    };
     let error;
     try {
       await assignWorkItems({
-        userId: 'baduser',
+        applicationContext,
       });
     } catch (err) {
       error = err;

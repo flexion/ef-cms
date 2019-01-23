@@ -7,6 +7,8 @@ exports.FILE_ANSWER = 'fileAnswer';
 exports.GET_CASES_BY_DOCUMENT_ID = 'getCasesByDocumentId';
 exports.FILE_RESPONDENT_DOCUMENT = 'fileRespondentDocument';
 exports.PETITION = 'getPetitionOptions';
+exports.CASE_METADATA = 'caseMetadata';
+
 /**
  * isAuthorized
  *
@@ -27,14 +29,14 @@ exports.isAuthorized = (userId, action, owner) => {
 
   if (
     action === exports.WORKITEM ||
+    action === exports.CASE_METADATA ||
     action === exports.GET_CASES_BY_DOCUMENT_ID
   ) {
     return (
-      userId === 'petitionsclerk' ||
-      userId === 'intakeclerk' ||
-      userId === 'seniorattorney' ||
-      userId === 'docketclerk' ||
-      userId === 'docketclerk1'
+      userId.indexOf('petitionsclerk') > -1 ||
+      userId.indexOf('intakeclerk') > -1 ||
+      userId.indexOf('seniorattorney') > -1 ||
+      userId.indexOf('docketclerk') > -1
     );
   }
 
@@ -48,11 +50,10 @@ exports.isAuthorized = (userId, action, owner) => {
 
   return (
     (userId === 'respondent' ||
-      userId === 'petitionsclerk' ||
-      userId === 'intakeclerk' ||
-      userId === 'seniorattorney' ||
-      userId === 'docketclerk' ||
-      userId === 'docketclerk1') &&
+      userId.indexOf('petitionsclerk') > -1 ||
+      userId.indexOf('intakeclerk') > -1 ||
+      userId.indexOf('seniorattorney') > -1 ||
+      userId.indexOf('docketclerk') > -1) &&
     (action === exports.GET_CASES_BY_STATUS ||
       action === exports.UPDATE_CASE ||
       action === exports.GET_CASE ||

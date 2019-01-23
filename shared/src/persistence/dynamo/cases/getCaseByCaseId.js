@@ -17,9 +17,10 @@ exports.getCaseByCaseId = async ({ caseId, applicationContext }) => {
     TableName: TABLE,
     Key: {
       pk: caseId,
-      sk: caseId,
+      sk: '0',
     },
   });
+
   return stripWorkItems(
     stripInternalKeys(results),
     applicationContext.isAuthorizedForWorkItems(),

@@ -1,50 +1,32 @@
 const assert = require('assert');
 
 const Case = require('./Case');
-const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
+const { MOCK_CASE } = require('../../test/mockCase');
+
 const DATE = '2018-12-17T15:33:23.492Z';
 const sinon = require('sinon');
-
-const A_VALID_CASE = {
-  docketNumber: '101-18',
-  documents: MOCK_DOCUMENTS,
-};
 
 describe('Case entity', () => {
   describe('isValid', () => {
     it('Creates a valid case', () => {
-      const myCase = new Case(A_VALID_CASE);
+      const myCase = new Case(MOCK_CASE);
       assert.ok(myCase.isValid());
     });
 
     it('Creates a valid case from an already existing case json', () => {
-      const previouslyCreatedCase = {
-        caseId: '241edd00-1d94-40cd-9374-8d1bc7ae6d7b',
-        createdAt: '2018-11-21T20:58:28.192Z',
-        status: 'new',
-        docketNumber: '101-18',
-        documents: A_VALID_CASE.documents,
-      };
-      const myCase = new Case(previouslyCreatedCase);
+      const myCase = new Case(MOCK_CASE);
       assert.ok(myCase.isValid());
     });
 
     it('adds a paygov date to an already existing case json', () => {
-      const previouslyCreatedCase = {
-        caseId: '241edd00-1d94-40cd-9374-8d1bc7ae6d7b',
-        createdAt: '2018-11-21T20:58:28.192Z',
-        status: 'new',
-        documents: A_VALID_CASE.documents,
-        payGovId: '1234',
-        docketNumber: '101-18',
-      };
-      const myCase = new Case(previouslyCreatedCase);
+      const myCase = new Case({ payGovId: '1234', ...MOCK_CASE });
       assert.ok(myCase.isValid());
       assert.ok(myCase.payGovDate);
     });
 
-    it('Creates an invalid case', () => {
+    it('Creates an invalid case with a document', () => {
       const myCase = new Case({
+        petitioners: [{ name: 'Test Taxpayer' }],
         documents: [
           {
             documentId: '123',
@@ -55,16 +37,67 @@ describe('Case entity', () => {
       assert.ok(!myCase.isValid());
     });
 
-    it('Creates an invalid case', () => {
+    it('Creates an invalid case with no documents', () => {
       const myCase = new Case({
         documents: [],
       });
       assert.ok(!myCase.isValid());
     });
 
-    it('Creates an invalid case', () => {
+    it('Creates an invalid case with empty object', () => {
       const myCase = new Case({});
       assert.ok(!myCase.isValid());
+    });
+
+    it('Creates an invalid case with no petitioners', () => {
+      const myCase = new Case({
+        petitioners: [],
+      });
+      assert.ok(!myCase.isValid());
+    });
+
+    it('creates a case with year amounts', () => {
+      const myCase = new Case({
+        petitioners: [],
+        yearAmounts: [
+          { year: '2000', amount: '34.50' },
+          { year: '2001', amount: '34.50' },
+        ],
+      });
+      assert.ok(!myCase.isValid());
+    });
+
+    it('should not be valid because of duplicate years in yearAmounts', () => {
+      const isValid = new Case({
+        ...MOCK_CASE,
+        yearAmounts: [
+          {
+            year: '2000',
+            amount: '34.50',
+          },
+          {
+            year: '2000',
+            amount: '34.50',
+          },
+        ],
+      }).isValid();
+      expect(isValid).toBeFalsy();
+    });
+  });
+
+  describe('areYearsUnique', () => {
+    it('will fail validation when having two year amounts with the same year', () => {
+      const isValid = Case.areYearsUnique([
+        {
+          year: '2000',
+          amount: '34.50',
+        },
+        {
+          year: '2000',
+          amount: '34.50',
+        },
+      ]);
+      expect(isValid).toBeFalsy();
     });
   });
 
@@ -72,7 +105,7 @@ describe('Case entity', () => {
     it('should do nothing if valid', () => {
       let error = null;
       try {
-        new Case(A_VALID_CASE).validate();
+        new Case(MOCK_CASE).validate();
       } catch (err) {
         error = err;
       }
@@ -115,7 +148,7 @@ describe('Case entity', () => {
 
   describe('markAsSentToIRS', () => {
     it('sets irsSendDate', () => {
-      const caseRecord = new Case(A_VALID_CASE);
+      const caseRecord = new Case(MOCK_CASE);
       caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
       assert.ok(caseRecord.irsSendDate);
     });
@@ -123,7 +156,7 @@ describe('Case entity', () => {
 
   describe('markAsPaidByPayGov', () => {
     it('sets pay gov fields', () => {
-      const caseRecord = new Case(A_VALID_CASE);
+      const caseRecord = new Case(MOCK_CASE);
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
       assert.ok(caseRecord.payGovDate);
     });
@@ -144,7 +177,7 @@ describe('Case entity', () => {
 
     it('doesnt passes back an error passed in if valid', () => {
       let error = null;
-      const caseRecord = new Case(A_VALID_CASE);
+      const caseRecord = new Case(MOCK_CASE);
       try {
         caseRecord.validateWithError(new Error('Imarealerror'));
       } catch (e) {
@@ -225,8 +258,8 @@ describe('Case entity', () => {
       const procedureTypes = Case.getProcedureTypes();
       expect(procedureTypes).not.toBeNull();
       expect(procedureTypes.length).toEqual(2);
-      expect(procedureTypes[0]).toEqual('Small');
-      expect(procedureTypes[1]).toEqual('Regular');
+      expect(procedureTypes[0]).toEqual('Regular');
+      expect(procedureTypes[1]).toEqual('Small');
     });
   });
 

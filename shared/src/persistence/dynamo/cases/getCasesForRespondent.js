@@ -1,5 +1,6 @@
 const {
   stripWorkItems,
+  stripInternalKeys,
   getRecordsViaMapping,
 } = require('../../awsDynamoPersistence');
 
@@ -14,6 +15,11 @@ exports.getCasesForRespondent = async ({ userId, applicationContext }) => {
     applicationContext,
     key: userId,
     type: 'activeCase',
+    isVersioned: true,
   });
-  return stripWorkItems(cases, applicationContext.isAuthorizedForWorkItems());
+
+  return stripWorkItems(
+    stripInternalKeys(cases),
+    applicationContext.isAuthorizedForWorkItems(),
+  );
 };
