@@ -20,26 +20,12 @@
   "bugs": {
     "url": "https://github.com/ustaxcourt/ef-cms/issues"
   },
-  "jest": {
-    "collectCoverage": true,
-    "coverageDirectory": "./coverage",
-    "collectCoverageFrom": [
-      "src/**/*.js",
-      "!src/proxies/**/*.js"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 90,
-        "functions": 90,
-        "lines": 90,
-        "statements": 90
-      }
-    }
-  },
   "homepage": "https://github.com/ustaxcourt/ef-cms#readme",
   "dependencies": {
     "aws-sdk": "^2.392.0",
     "axios": "^0.18.0",
+    "blob-polyfill": "^3.0.20180112",
+    "file-api": "^0.10.4",
     "form-data": "^2.3.3",
     "joi-browser": "^13.4.0",
     "moment": "^2.24.0",

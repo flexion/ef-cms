@@ -56,7 +56,7 @@ describe('validatePetition', () => {
       petition: {
         caseType: 'defined',
         procedureType: 'defined',
-        petitionFile: global.FakeFile([], 'test.png'),
+        petitionFile: new File([], 'test.png'),
         preferredTrialCity: 'defined',
         irsNoticeDate: futureDate.toDate().toISOString(),
         signature: true,

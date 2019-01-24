@@ -24,11 +24,11 @@ describe('createDocument', () => {
 
   beforeEach(() => {
     sinon.stub(uuid, 'v4').returns(MOCK_CASE_ID);
-    sinon.stub(window.Date.prototype, 'toISOString').returns(DATE);
+    sinon.stub(global.Date.prototype, 'toISOString').returns(DATE);
   });
 
   afterEach(() => {
-    window.Date.prototype.toISOString.restore();
+    global.Date.prototype.toISOString.restore();
     uuid.v4.restore();
   });
 
