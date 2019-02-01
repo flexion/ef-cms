@@ -63,9 +63,9 @@ For instructions on how to build the DevOps pipeline and deploy the software to 
 
 Install the following for best results:
 
-- https://atom.io/packages/language-javascript-jsx
+- https://atom.io/packages/language-javascript-jsx 
 - https://atom.io/packages/language-groovy
-- https://atom.io/packages/linter-eslint 
+- https://atom.io/packages/linter-eslint
 - https://atom.io/packages/prettier-atom (enable ESLint and StyleLint integrations in settings)
 
 ## Using the application with Internet Explorer 11
