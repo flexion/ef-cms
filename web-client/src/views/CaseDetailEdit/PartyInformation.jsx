@@ -1,6 +1,6 @@
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 import { Contacts } from '../StartCase/Contacts';
@@ -16,11 +16,11 @@ export const PartyInformation = connect(
   },
   ({
     autoSaveCaseSequence,
-    caseDetail,
-    updateCasePartyTypeSequence,
-    caseDetailEditHelper,
     baseUrl,
+    caseDetail,
+    caseDetailEditHelper,
     token,
+    updateCasePartyTypeSequence,
   }) => {
     return (
       <div className="blue-container document-detail-one-third">
