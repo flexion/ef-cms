@@ -12,6 +12,15 @@ plugins:
   - serverless-parcel
 
 custom:
+  parcel:
+    options:
+      target: node
+      cache: false
+      watch: false
+      bundleNodeModules: true
+
+    entries: []
+
   prune:
     automatic: true
     number: 3
