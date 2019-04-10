@@ -37,8 +37,8 @@ jobs:
       #   name: Build Docker Image
       #   command: docker build -t efcms -f Dockerfile .
       - run:
-        name: Setup Env
-        command: echo 'export ENV=$(./get-env.sh develop)' >> $BASH_ENV # $CIRCLE_BRANCH
+          name: Setup Env
+          command: echo 'export ENV=$(./get-env.sh develop)' >> $BASH_ENV # $CIRCLE_BRANCH
       - run: echo $ENV
       # - run: 
       #   name: 'Web Client - Deploy - Terraform'
