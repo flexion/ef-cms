@@ -22,8 +22,6 @@ exports.addCoverToPDFDocument = async ({
   caseId,
   documentId,
 }) => {
-  applicationContext.logger.info('Start of addCoverToPDFDocument', caseId);
-
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
@@ -430,26 +428,14 @@ exports.addCoverToPDFDocument = async ({
 
   documentEntity.processingStatus = 'complete';
 
-  applicationContext.logger.info(
-    'Before Case update addCoverToPDFDocument',
-    caseId,
-  );
-
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
-  applicationContext.logger.info(
-    'Before Document update addCoverToPDFDocument',
-    caseId,
-  );
-
   await applicationContext
     .getPersistenceGateway()
     .saveDocument({ applicationContext, document: newPdfData, documentId });
-
-  applicationContext.logger.info('END addCoverToPDFDocument', caseId);
 
   return newPdfData;
 };
