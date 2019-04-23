@@ -76,9 +76,10 @@ exports.runBatchProcess = async ({ applicationContext }) => {
       });
     }
 
-    const caseEntity = new Case(caseToBatch).markAsSentToIRS(
-      new Date().toISOString(),
-    );
+    const caseEntity = new Case({
+      applicationContext,
+      rawCase: caseToBatch,
+    }).markAsSentToIRS(new Date().toISOString());
 
     const petitionDocument = caseEntity.documents.find(
       document => document.documentType === Case.documentTypes.petitionFile,

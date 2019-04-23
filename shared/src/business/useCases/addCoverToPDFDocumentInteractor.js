@@ -29,7 +29,7 @@ exports.addCoverToPDFDocument = async ({
       caseId,
     });
 
-  const caseEntity = new Case(caseRecord);
+  const caseEntity = new Case({ applicationContext, rawCase: caseRecord });
 
   const documentEntity = caseEntity.documents.find(
     document => document.documentId === documentId,

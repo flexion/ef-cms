@@ -1,13 +1,18 @@
 const assert = require('assert');
+const {
+  createTestApplicationContext,
+} = require('../test/createTestApplicationContext');
 const { Case } = require('./Case');
 const { DocketRecord } = require('./DocketRecord');
 const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
 const { WorkItem } = require('./WorkItem');
 
+const applicationContext = createTestApplicationContext();
+
 describe('Case entity', () => {
   it('defaults the orders to false', () => {
-    const myCase = new Case(MOCK_CASE);
+    const myCase = new Case({ applicationContext, rawCase: MOCK_CASE });
     expect(myCase).toMatchObject({
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
@@ -21,14 +26,17 @@ describe('Case entity', () => {
 
   it('sets the expected order booleans', () => {
     const myCase = new Case({
-      ...MOCK_CASE,
-      noticeOfAttachments: true,
-      orderForAmendedPetition: false,
-      orderForAmendedPetitionAndFilingFee: false,
-      orderForFilingFee: true,
-      orderForOds: false,
-      orderForRatification: false,
-      orderToShowCause: true,
+      applicationContext,
+      rawCase: {
+        ...MOCK_CASE,
+        noticeOfAttachments: true,
+        orderForAmendedPetition: false,
+        orderForAmendedPetitionAndFilingFee: false,
+        orderForFilingFee: true,
+        orderForOds: false,
+        orderForRatification: false,
+        orderToShowCause: true,
+      },
     });
     expect(myCase).toMatchObject({
       noticeOfAttachments: true,
@@ -43,76 +51,94 @@ describe('Case entity', () => {
 
   describe('isValid', () => {
     it('Creates a valid case', () => {
-      const myCase = new Case(MOCK_CASE);
+      const myCase = new Case({ applicationContext, rawCase: MOCK_CASE });
       assert.ok(myCase.isValid());
     });
 
     it('Creates a valid case from an already existing case json', () => {
-      const myCase = new Case(MOCK_CASE);
+      const myCase = new Case({ applicationContext, rawCase: MOCK_CASE });
       assert.ok(myCase.isValid());
     });
 
     it('adds a paygov date to an already existing case json', () => {
-      const myCase = new Case({ payGovId: '1234', ...MOCK_CASE });
+      const myCase = new Case({
+        applicationContext,
+        rawCase: { payGovId: '1234', ...MOCK_CASE },
+      });
       assert.ok(myCase.isValid());
     });
 
     it('Creates an invalid case with a document', () => {
       const myCase = new Case({
-        documents: [
-          {
-            documentId: '123',
-            documentType: 'testing',
-          },
-        ],
-        petitioners: [{ name: 'Test Taxpayer' }],
+        applicationContext,
+        rawCase: {
+          documents: [
+            {
+              documentId: '123',
+              documentType: 'testing',
+            },
+          ],
+          petitioners: [{ name: 'Test Taxpayer' }],
+        },
       });
       assert.ok(!myCase.isValid());
     });
 
     it('Creates an invalid case with no documents', () => {
       const myCase = new Case({
-        documents: [],
+        applicationContext,
+        rawCase: {
+          documents: [],
+        },
       });
       assert.ok(!myCase.isValid());
     });
 
     it('Creates an invalid case with empty object', () => {
-      const myCase = new Case({});
+      const myCase = new Case({ applicationContext, rawCase: {} });
       assert.ok(!myCase.isValid());
     });
 
     it('Creates an invalid case with no petitioners', () => {
       const myCase = new Case({
-        petitioners: [],
+        applicationContext,
+        rawCase: {
+          petitioners: [],
+        },
       });
       assert.ok(!myCase.isValid());
     });
 
     it('creates a case with year amounts', () => {
       const myCase = new Case({
-        petitioners: [],
-        yearAmounts: [
-          { amount: '34.50', year: '2000' },
-          { amount: '34.50', year: '2001' },
-        ],
+        applicationContext,
+        rawCase: {
+          petitioners: [],
+          yearAmounts: [
+            { amount: '34.50', year: '2000' },
+            { amount: '34.50', year: '2001' },
+          ],
+        },
       });
       assert.ok(!myCase.isValid());
     });
 
     it('should not be valid because of duplicate years in yearAmounts', () => {
       const isValid = new Case({
-        ...MOCK_CASE,
-        yearAmounts: [
-          {
-            amount: '34.50',
-            year: '2000',
-          },
-          {
-            amount: '100.50',
-            year: '2000',
-          },
-        ],
+        applicationContext,
+        rawCase: {
+          ...MOCK_CASE,
+          yearAmounts: [
+            {
+              amount: '34.50',
+              year: '2000',
+            },
+            {
+              amount: '100.50',
+              year: '2000',
+            },
+          ],
+        },
       }).isValid();
       expect(isValid).toBeFalsy();
     });
@@ -138,7 +164,7 @@ describe('Case entity', () => {
     it('should do nothing if valid', () => {
       let error = null;
       try {
-        new Case(MOCK_CASE).validate();
+        new Case({ applicationContext, rawCase: MOCK_CASE }).validate();
       } catch (err) {
         error = err;
       }
@@ -149,7 +175,7 @@ describe('Case entity', () => {
       it('and hasIrsNotice is true and all required fields are provided', () => {
         let error = null;
         try {
-          new Case(MOCK_CASE).validate();
+          new Case({ applicationContext, rawCase: MOCK_CASE }).validate();
         } catch (err) {
           error = err;
         }
@@ -163,7 +189,7 @@ describe('Case entity', () => {
           MOCK_CASE_WITHOUT_NOTICE,
         );
         try {
-          new Case(rawCase).validate();
+          new Case({ applicationContext, rawCase }).validate();
         } catch (err) {
           error = err;
         }
@@ -179,7 +205,7 @@ describe('Case entity', () => {
           MOCK_CASE_WITHOUT_NOTICE,
         );
         try {
-          new Case(rawCase).validate();
+          new Case({ applicationContext, rawCase }).validate();
         } catch (err) {
           error = err;
         }
@@ -193,7 +219,7 @@ describe('Case entity', () => {
           MOCK_CASE_WITHOUT_NOTICE,
         );
         try {
-          new Case(rawCase).validate();
+          new Case({ applicationContext, rawCase }).validate();
         } catch (err) {
           error = err;
         }
@@ -204,7 +230,7 @@ describe('Case entity', () => {
     it('should do nothing if valid', () => {
       let error = null;
       try {
-        new Case(MOCK_CASE).validate();
+        new Case({ applicationContext, rawCase: MOCK_CASE }).validate();
       } catch (err) {
         error = err;
       }
@@ -214,7 +240,7 @@ describe('Case entity', () => {
     it('should throw an error on invalid cases', () => {
       let error = null;
       try {
-        new Case({}).validate();
+        new Case({ applicationContext, rawCase: {} }).validate();
       } catch (err) {
         error = err;
       }
@@ -247,26 +273,29 @@ describe('Case entity', () => {
 
   describe('markAsSentToIRS', () => {
     it('sets irsSendDate', () => {
-      const caseRecord = new Case(MOCK_CASE);
+      const caseRecord = new Case({ applicationContext, rawCase: MOCK_CASE });
       caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
       assert.ok(caseRecord.irsSendDate);
     });
     it('updates docket record status on petition documents', () => {
       const caseRecord = new Case({
-        ...MOCK_CASE,
-        docketRecord: [
-          {
-            description: 'Petition',
-            documentId: '123',
-            filedBy: 'Test Petitioner',
-            filingDate: '2019-03-01T21:42:29.073Z',
-          },
-          {
-            description:
-              'Request for Place of Trial at Charleston, West Virginia',
-            filingDate: '2019-03-01T21:42:29.073Z',
-          },
-        ],
+        applicationContext,
+        rawCase: {
+          ...MOCK_CASE,
+          docketRecord: [
+            {
+              description: 'Petition',
+              documentId: '123',
+              filedBy: 'Test Petitioner',
+              filingDate: '2019-03-01T21:42:29.073Z',
+            },
+            {
+              description:
+                'Request for Place of Trial at Charleston, West Virginia',
+              filingDate: '2019-03-01T21:42:29.073Z',
+            },
+          ],
+        },
       });
       caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
       assert.ok(caseRecord.irsSendDate);
@@ -516,7 +545,7 @@ describe('Case entity', () => {
 
   describe('sendToIRSHoldingQueue', () => {
     it('sets status for irs batch', () => {
-      const caseRecord = new Case(MOCK_CASE);
+      const caseRecord = new Case({ applicationContext, rawCase: MOCK_CASE });
       caseRecord.sendToIRSHoldingQueue();
       expect(caseRecord.status).toEqual('Batched for IRS');
     });
@@ -524,13 +553,13 @@ describe('Case entity', () => {
 
   describe('markAsPaidByPayGov', () => {
     it('sets pay gov fields', () => {
-      const caseRecord = new Case(MOCK_CASE);
+      const caseRecord = new Case({ applicationContext, rawCase: MOCK_CASE });
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
       assert.ok(caseRecord.payGovDate);
     });
 
     it('should add item to docket record when paid', () => {
-      const caseRecord = new Case(MOCK_CASE);
+      const caseRecord = new Case({ applicationContext, rawCase: MOCK_CASE });
       const payGovDate = new Date().toISOString();
       const initialDocketLength =
         (caseRecord.docketRecord && caseRecord.docketRecord.length) || 0;
@@ -540,7 +569,7 @@ describe('Case entity', () => {
     });
 
     it('should only set docket record once per time paid', () => {
-      const caseRecord = new Case(MOCK_CASE);
+      const caseRecord = new Case({ applicationContext, rawCase: MOCK_CASE });
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
       const docketLength = caseRecord.docketRecord.length;
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
@@ -552,7 +581,7 @@ describe('Case entity', () => {
 
   describe('setRequestForTrialDocketRecord', () => {
     it('sets request for trial docket record when it does not already exist', () => {
-      const caseRecord = new Case(MOCK_CASE);
+      const caseRecord = new Case({ applicationContext, rawCase: MOCK_CASE });
       const preferredTrialCity = 'Mobile, Alabama';
       const initialDocketLength =
         (caseRecord.docketRecord && caseRecord.docketRecord.length) || 0;
@@ -562,7 +591,7 @@ describe('Case entity', () => {
     });
 
     it('should only set docket record once for request for trial', () => {
-      const caseRecord = new Case(MOCK_CASE);
+      const caseRecord = new Case({ applicationContext, rawCase: MOCK_CASE });
       const preferredTrialCity = 'Mobile, Alabama';
       caseRecord.setRequestForTrialDocketRecord(preferredTrialCity);
       const docketLength = caseRecord.docketRecord.length;
@@ -574,7 +603,7 @@ describe('Case entity', () => {
 
   describe('addDocketRecord', () => {
     it('adds a new docketrecord', () => {
-      const caseRecord = new Case(MOCK_CASE);
+      const caseRecord = new Case({ applicationContext, rawCase: MOCK_CASE });
       caseRecord.addDocketRecord(
         new DocketRecord({
           description: 'test',
@@ -597,7 +626,7 @@ describe('Case entity', () => {
       expect(caseRecord.docketRecord[1].index).toEqual(6);
     });
     it('validates the docketrecord', () => {
-      const caseRecord = new Case(MOCK_CASE);
+      const caseRecord = new Case({ applicationContext, rawCase: MOCK_CASE });
       caseRecord.addDocketRecord(new DocketRecord({ description: 'test' }));
       let error;
       try {
@@ -612,7 +641,7 @@ describe('Case entity', () => {
   describe('validateWithError', () => {
     it('passes back an error passed in if invalid', () => {
       let error = null;
-      const caseRecord = new Case({});
+      const caseRecord = new Case({ applicationContext, rawCase: {} });
       try {
         caseRecord.validateWithError(new Error('Imarealerror'));
       } catch (e) {
@@ -624,7 +653,7 @@ describe('Case entity', () => {
 
     it('does not pass back an error passed in if valid', () => {
       let error = null;
-      const caseRecord = new Case(MOCK_CASE);
+      const caseRecord = new Case({ applicationContext, rawCase: MOCK_CASE });
       try {
         caseRecord.validateWithError(new Error('Imarealerror'));
       } catch (e) {
@@ -649,7 +678,7 @@ describe('Case entity', () => {
 
   describe('attachRespondent', () => {
     it('adds the user to the respondents', () => {
-      const caseToVerify = new Case({});
+      const caseToVerify = new Case({ applicationContext, rawCase: {} });
       caseToVerify.attachRespondent({
         user: {
           userId: 'respondent',
@@ -662,7 +691,7 @@ describe('Case entity', () => {
 
   describe('addDocument', () => {
     it('attaches the document to the case', () => {
-      const caseToVerify = new Case({});
+      const caseToVerify = new Case({ applicationContext, rawCase: {} });
       caseToVerify.addDocument({
         documentId: '123',
         documentType: 'Answer',
@@ -719,24 +748,30 @@ describe('Case entity', () => {
 
   describe('docket record suffix changes', () => {
     it('should save initial docket record suffix', () => {
-      const caseToVerify = new Case({});
+      const caseToVerify = new Case({ applicationContext, rawCase: {} });
       expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
     });
 
     it('should not add a docket record item when the suffix updates from the initial suffix when the case is new', () => {
       const caseToVerify = new Case({
-        docketNumber: 'Bob',
-        initialDocketNumberSuffix: 'W',
-        status: 'New',
+        applicationContext,
+        rawCase: {
+          docketNumber: 'Bob',
+          initialDocketNumberSuffix: 'W',
+          status: 'New',
+        },
       });
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
     it('should add a docket record item when the suffix is different from the initial suffix and the case is not new', () => {
       const caseToVerify = new Case({
-        docketNumber: 'Bob',
-        initialDocketNumberSuffix: 'W',
-        status: 'Recalled',
+        applicationContext,
+        rawCase: {
+          docketNumber: 'Bob',
+          initialDocketNumberSuffix: 'W',
+          status: 'Recalled',
+        },
       });
       expect(caseToVerify.docketRecord[0].description).toEqual(
         "Docket Number is amended from 'BobW' to 'Bob'",
@@ -745,34 +780,40 @@ describe('Case entity', () => {
 
     it('should remove a docket record entry when the suffix updates back to the initial suffix', () => {
       const caseToVerify = new Case({
-        docketNumber: 'Bob',
-        docketRecord: [
-          {
-            description: 'Petition',
-          },
-          {
-            description: "Docket Number is amended from 'Bob' to 'BobW'",
-          },
-        ],
-        initialDocketNumberSuffix: '_',
-        status: 'Recalled',
+        applicationContext,
+        rawCase: {
+          docketNumber: 'Bob',
+          docketRecord: [
+            {
+              description: 'Petition',
+            },
+            {
+              description: "Docket Number is amended from 'Bob' to 'BobW'",
+            },
+          ],
+          initialDocketNumberSuffix: '_',
+          status: 'Recalled',
+        },
       });
       expect(caseToVerify.docketRecord.length).toEqual(1);
     });
 
     it('should not update a docket record entry when the suffix was changed earlier', () => {
       const caseToVerify = new Case({
-        docketNumber: 'Bob',
-        docketRecord: [
-          {
-            description: "Docket Number is amended from 'BobW' to 'Bob'",
-          },
-          {
-            description: 'Petition',
-          },
-        ],
-        initialDocketNumberSuffix: 'W',
-        status: 'Recalled',
+        applicationContext,
+        rawCase: {
+          docketNumber: 'Bob',
+          docketRecord: [
+            {
+              description: "Docket Number is amended from 'BobW' to 'Bob'",
+            },
+            {
+              description: 'Petition',
+            },
+          ],
+          initialDocketNumberSuffix: 'W',
+          status: 'Recalled',
+        },
       });
       expect(caseToVerify.docketRecord.length).toEqual(2);
       expect(caseToVerify.docketRecord[0].description).toEqual(
@@ -783,65 +824,87 @@ describe('Case entity', () => {
 
   describe('updateCaseTitleDocketRecord', () => {
     it('should not add to the docket record when the caption is not set', () => {
-      const caseToVerify = new Case({}).updateCaseTitleDocketRecord();
+      const caseToVerify = new Case({
+        applicationContext,
+        rawCase: {},
+      }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
     it('should not add to the docket record when the caption is initially being set', () => {
       const caseToVerify = new Case({
-        caseCaption: 'Caption',
+        applicationContext,
+        rawCase: {
+          caseCaption: 'Caption',
+        },
       }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
     it('should not add to the docket record when the caption is equivalent to the initial title', () => {
       const caseToVerify = new Case({
-        caseCaption: 'Caption',
-        initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
+        applicationContext,
+        rawCase: {
+          caseCaption: 'Caption',
+          initialTitle:
+            'Caption v. Commissioner of Internal Revenue, Respondent',
+        },
       }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
     it('should add to the docket record when the caption changes from the initial title', () => {
       const caseToVerify = new Case({
-        caseCaption: 'A New Caption',
-        initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
+        applicationContext,
+        rawCase: {
+          caseCaption: 'A New Caption',
+          initialTitle:
+            'Caption v. Commissioner of Internal Revenue, Respondent',
+        },
       }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(1);
     });
 
     it('should not add to the docket record when the caption is equivalent to the last updated title', () => {
       const caseToVerify = new Case({
-        caseCaption: 'A Very New Caption',
-        docketRecord: [
-          {
-            description:
-              "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
-          },
-          {
-            description:
-              "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
-          },
-        ],
-        initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
+        applicationContext,
+        rawCase: {
+          caseCaption: 'A Very New Caption',
+          docketRecord: [
+            {
+              description:
+                "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
+            },
+            {
+              description:
+                "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
+            },
+          ],
+          initialTitle:
+            'Caption v. Commissioner of Internal Revenue, Respondent',
+        },
       }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(2);
     });
 
     it('should add to the docket record when the caption changes from the last updated title', () => {
       const caseToVerify = new Case({
-        caseCaption: 'A Very Berry New Caption',
-        docketRecord: [
-          {
-            description:
-              "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
-          },
-          {
-            description:
-              "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
-          },
-        ],
-        initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
+        applicationContext,
+        rawCase: {
+          caseCaption: 'A Very Berry New Caption',
+          docketRecord: [
+            {
+              description:
+                "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
+            },
+            {
+              description:
+                "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
+            },
+          ],
+          initialTitle:
+            'Caption v. Commissioner of Internal Revenue, Respondent',
+        },
       }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(3);
     });
@@ -849,7 +912,7 @@ describe('Case entity', () => {
 
   describe('getWorkItems', () => {
     it('should get all the work items associated with the documents in the case', () => {
-      const myCase = new Case(MOCK_CASE);
+      const myCase = new Case({ applicationContext, rawCase: MOCK_CASE });
       myCase.addDocument({
         documentId: '123',
         documentType: 'Answer',

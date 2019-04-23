@@ -93,7 +93,9 @@ describe('Send petition to IRS Holding Queue', () => {
           getCaseByCaseId: () => Promise.resolve(mockCase),
           putWorkItemInOutbox: () => Promise.resolve(null),
           updateCase: ({ caseToUpdate }) =>
-            Promise.resolve(new Case(caseToUpdate)),
+            Promise.resolve(
+              new Case({ applicationContext, rawCase: caseToUpdate }),
+            ),
           updateWorkItem: () => Promise.resolve(null),
         };
       },
@@ -178,7 +180,9 @@ describe('Send petition to IRS Holding Queue', () => {
             Promise.resolve(omit(MOCK_CASE, 'docketNumber')),
           putWorkItemInOutbox: () => Promise.resolve(null),
           updateCase: ({ caseToUpdate }) =>
-            Promise.resolve(new Case(caseToUpdate)),
+            Promise.resolve(
+              new Case({ applicationContext, rawCase: caseToUpdate }),
+            ),
           updateWorkItem: () => Promise.resolve(null),
         };
       },

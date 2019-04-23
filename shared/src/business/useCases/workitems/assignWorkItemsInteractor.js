@@ -36,7 +36,7 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
         caseId: fullWorkItem.caseId,
       });
 
-    const caseToUpdate = new Case(caseObject);
+    const caseToUpdate = new Case({ applicationContext, rawCase: caseObject });
 
     const workItemEntity = new WorkItem(fullWorkItem);
 

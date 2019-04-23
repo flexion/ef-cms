@@ -1,7 +1,6 @@
 const documentMap = require('../../tools/externalFilingEvents.json');
 const joi = require('joi-browser');
 const moment = require('moment');
-const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -60,17 +59,17 @@ exports.CASE_CAPTION_POSTFIX =
 
 /**
  * Case
- * @param rawCase
+ * @param Object
  * @constructor
  */
-function Case(rawCase) {
+function Case({ rawCase, applicationContext }) {
   const { Document } = require('./Document');
 
   Object.assign(
     this,
     rawCase,
     {
-      caseId: rawCase.caseId || uuid.v4(),
+      caseId: rawCase.caseId || applicationContext.getUniqueId(),
       createdAt: rawCase.createdAt || new Date().toISOString(),
       status: rawCase.status || statusMap.new,
     },

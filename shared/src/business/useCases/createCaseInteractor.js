@@ -97,11 +97,14 @@ exports.createCase = async ({
   }
 
   const caseToAdd = new Case({
-    userId: user.userId,
-    practitioner,
-    ...petitionEntity.toRawObject(),
-    docketNumber,
-    isPaper: false,
+    applicationContext,
+    rawCase: {
+      userId: user.userId,
+      practitioner,
+      ...petitionEntity.toRawObject(),
+      docketNumber,
+      isPaper: false,
+    },
   });
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
@@ -155,5 +158,5 @@ exports.createCase = async ({
     workItem: newWorkItem.validate().toRawObject(),
   });
 
-  return new Case(caseToAdd).toRawObject();
+  return new Case({ applicationContext, rawCase: caseToAdd }).toRawObject();
 };

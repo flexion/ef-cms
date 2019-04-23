@@ -21,7 +21,7 @@ exports.createDocument = async ({ applicationContext, caseId, document }) => {
       caseId,
     });
 
-  const caseEntity = new Case(caseToUpdate);
+  const caseEntity = new Case({ applicationContext, rawCase: caseToUpdate });
 
   const workItem = new WorkItem({
     assigneeId: null,

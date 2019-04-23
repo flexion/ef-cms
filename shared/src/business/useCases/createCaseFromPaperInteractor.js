@@ -143,5 +143,5 @@ exports.createCaseFromPaper = async ({
     workItem: newWorkItem.validate().toRawObject(),
   });
 
-  return new Case(caseToAdd).toRawObject();
+  return new Case({ applicationContext, rawCase: caseToAdd }).toRawObject();
 };

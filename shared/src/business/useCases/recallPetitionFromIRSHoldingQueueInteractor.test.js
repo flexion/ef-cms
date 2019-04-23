@@ -72,7 +72,9 @@ describe('Recall petition from IRS Holding Queue', () => {
         return {
           getCaseByCaseId: () => Promise.resolve(mockCase),
           updateCase: ({ caseToUpdate }) =>
-            Promise.resolve(new Case(caseToUpdate)),
+            Promise.resolve(
+              new Case({ applicationContext, rawCase: caseToUpdate }),
+            ),
           updateWorkItem: async () => null,
         };
       },

@@ -5,10 +5,10 @@ const AWS =
     ? AWSXRay.captureAWS(require('aws-sdk'))
     : require('aws-sdk');
 
-const uuidv4 = require('uuid/v4');
-const { S3, DynamoDB } = AWS;
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
+const uuidv4 = require('uuid/v4');
+const { S3, DynamoDB } = AWS;
 const {
   addCoverToPDFDocument,
 } = require('ef-cms-shared/src/business/useCases/addCoverToPDFDocumentInteractor');
