@@ -93,8 +93,10 @@ const formatDocketRecordWithDocument = (
     return acc;
   }, {});
 
-  return docketRecords.map((record, index) => {
+  return docketRecords.map(record => {
     let document;
+
+    const index = record.index;
 
     if (record.documentId) {
       document = documentMap[record.documentId];
@@ -243,6 +245,5 @@ export const formattedCases = get => {
 export const formattedCaseDetail = get => {
   const caseDetail = get(state.caseDetail);
   const caseDetailErrors = get(state.caseDetailErrors);
-  const { DOCUMENT_TYPES_MAP } = get(state.constants);
-  return formatCase(caseDetail, caseDetailErrors, DOCUMENT_TYPES_MAP);
+  return formatCase(caseDetail, caseDetailErrors);
 };
