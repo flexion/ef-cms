@@ -1,11 +1,15 @@
 version: 2
 jobs:
   build:
-    machine:
-      docker_layer_caching: true
+    docker:
+        - image: circleci/node:lts-jessie
 
     steps:
       - checkout
+
+      - setup_remote_docker:
+          docker_layer_caching: true
+
       - run:
           name: Build Docker Image
           command: docker build -t efcms -f Dockerfile .
