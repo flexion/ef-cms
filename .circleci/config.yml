@@ -68,9 +68,10 @@ jobs:
           name: Cypress
           command: docker run --rm -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c 'cd efcms-service && npm run install:dynamodb && (npm start &) && ../wait-until.sh http://localhost:3000/v1/swagger && cd ../web-client && (npm run dev:cypress &) && ../wait-until.sh http://localhost:1234 && npm run cypress'
 
-  deploy:
+  deploy_ui:
     machine:
       docker_layer_caching: true
+
     steps:
       - checkout
       - run: 
@@ -85,15 +86,55 @@ jobs:
       - run:
           name: 'Deploy - Web Client - S3'
           command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "GIT_COMMIT=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "cd web-client && ./build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
+
+  deploy_terraform:
+    machine:
+      docker_layer_caching: true
+
+    steps:
+      - checkout
+      - run: 
+          name: Build Docker Image
+          command: docker build -t efcms -f Dockerfile .
       - run: 
           name: 'Deploy - API - Terraform'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd efcms-service/terraform/main && ../bin/deploy-app.sh ${ENV}"
+
+  deploy_east:
+    machine:
+      docker_layer_caching: true
+          
+    steps:
+      - checkout
+      - run: 
+          name: Build Docker Image
+          command: docker build -t efcms -f Dockerfile .
       - run: 
           name: 'Deploy - API - Serverless - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd shared && rm -rf node_modules && npm i --only=production && cd ../efcms-service && ./run-serverless.sh ${ENV} us-east-1"
+
+  deploy_west:
+    machine:
+      docker_layer_caching: true
+        
+    steps:
+      - checkout
+      - run: 
+          name: Build Docker Image
+          command: docker build -t efcms -f Dockerfile .
       - run: 
           name: 'Deploy - API - Serverless - us-west-1'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd shared && rm -rf node_modules && npm i --only=production && cd ../efcms-service && ./run-serverless.sh ${ENV} us-west-1"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd shared && rm -rf node_modules && npm i --only=production && cd ../efcms-service && ./run-serverless.sh ${ENV} us-east-1"
+
+  deploy_setup:
+    machine:
+      docker_layer_caching: true
+          
+    steps:
+      - checkout
+      - run: 
+          name: Build Docker Image
+          command: docker build -t efcms -f Dockerfile .
       - run: 
           name: 'Deploy - API - Route53'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd efcms-service && ./setup-regional-route53.sh ${ENV}"
@@ -121,7 +162,7 @@ workflows:
   build-and-deploy:
     jobs:
       - build
-      - deploy:
+      - deploy_ui:
           requires:
             - build
           filters:
@@ -130,3 +171,22 @@ workflows:
                 - develop
                 - staging
                 - master
+      - deploy_terraform:
+          requires:
+            - build
+          filters:
+            branches:
+              only: 
+                - develop
+                - staging
+                - master
+      - deploy_east:
+          requires:
+            - deploy_terraform
+      - deploy_west:
+          requires:
+            - deploy_terraform
+      - deploy_setup:
+          requires:
+            - deploy_east
+            - deploy_west
