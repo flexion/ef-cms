@@ -199,6 +199,10 @@ select[disabled] {
     .svg-inline--fa {
       margin-left: 0.5rem;
     }
+
+    &:hover {
+      color: color($theme-color-primary-dark);
+    }
   }
 
   .usa-accordion__button:hover {
