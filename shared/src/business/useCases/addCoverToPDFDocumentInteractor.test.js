@@ -82,6 +82,7 @@ describe('addCoverToPDFDocument', () => {
         fs.writeFile(
           testOutputPath + 'addCoverToPDFDocument_1.pdf',
           newPdfData,
+          () => {},
         );
       });
 
@@ -122,6 +123,7 @@ describe('addCoverToPDFDocument', () => {
         fs.writeFile(
           testOutputPath + 'addCoverToPDFDocument_2.pdf',
           newPdfData,
+          () => {},
         );
       });
 
