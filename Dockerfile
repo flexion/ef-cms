@@ -19,7 +19,8 @@ RUN apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 lib
     unzip wget jq shellcheck build-essential autoconf autogen
 
 RUN wget https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923/ghostscript-9.23.tar.gz && \
-    tar -xvzf ghostscript-9.23.tar.gz && cd ghostscript-9.23 && ./configure && make && make install
+    tar -xvzf ghostscript-9.23.tar.gz && cd ghostscript-9.23 && ./configure && make && make install && \
+    ln -s /usr/lib/libgs.so.9 /usr/lib/libgs.so
 
 ENV AWS_CLI_VERSION 1.16.31
 
