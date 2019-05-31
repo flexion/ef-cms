@@ -16,8 +16,10 @@ RUN apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 lib
     libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 \
     ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget \
     git bash openssh-client python python-dev python-pip python-setuptools ca-certificates groff less \
-    unzip wget jq shellcheck ghostscript libgs-dev
+    unzip wget jq shellcheck build-essential autoconf autogen
 
+RUN wget https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923/ghostscript-9.23.tar.gz && \
+    tar -xvzf ghostscript-9.23.tar.gz && cd ghostscript-9.23 && ./configure && make && make install
 
 ENV AWS_CLI_VERSION 1.16.31
 
