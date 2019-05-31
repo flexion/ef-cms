@@ -8,20 +8,26 @@ rm -rf bin
 rm -rf lib
 
 yum update -y
-amazon-linux-extras install epel -y
-yum install -y cpio yum-utils tar.x86_64 gzip
+yum install -y wget make gcc gcc-c++ g++ autoconf autogen tar.x86_64 gzip
 
-mkdir -p /tmp/build
-pushd /tmp/build
-yumdownloader -x \*i686 --archlist=x86_64 ghostscript groff
-rpm2cpio ghostscript*.rpm | cpio -vimd
-rpm2cpio groff*.rpm | cpio -vimd
-popd
+wget https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923/ghostscript-9.23.tar.gz
+tar -xvzf ghostscript-9.23.tar.gz
+rm ghostscript-9.23.tar.gz
 
-mkdir -p bin
+
 mkdir -p lib
+mkdir -p bin
 
-cp /tmp/build/usr/bin/ghostscript /tmp/build/usr/bin/gs bin/.
-cp -r /tmp/build/usr/lib64/* lib/.
+cd ghostscript-9.23
+./configure
+make
+make so
 
-tar -czf /opt/app/ghostscript_lambda_layer.tar.gz bin lib 
+cp -r bin/* ../bin
+cp -r sobin/* ../lib
+
+cd ..
+
+tar -czf ghostscript_lambda_layer.tar.gz bin lib
+
+rm -rf ghostscript-9.23
