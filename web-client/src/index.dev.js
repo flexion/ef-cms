@@ -1,4 +1,5 @@
-import '@babel/polyfill';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 import Devtools from 'cerebral/devtools';
 
 import { Case } from '../../shared/src/business/entities/Case';
