@@ -6,15 +6,15 @@ export default (test, fakeFile) => {
 
     await test.runSequence('reviewRequestAccessInformationSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Enter selection for Certificate of Service.',
-      documentTitleTemplate: 'Select a document.',
-      documentType: 'Select a document.',
-      eventCode: 'Select a document.',
-      primaryDocumentFile: 'A file was not selected.',
-      representingPrimary: 'Select a party.',
-      scenario: 'Select a document.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'certificateOfService',
+      'documentTitleTemplate',
+      'documentType',
+      'eventCode',
+      'primaryDocumentFile',
+      'representingPrimary',
+      'scenario',
+    ]);
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentType',
@@ -34,11 +34,11 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateCaseAssociationRequestSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Enter selection for Certificate of Service.',
-      primaryDocumentFile: 'A file was not selected.',
-      representingPrimary: 'Select a party.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'certificateOfService',
+      'primaryDocumentFile',
+      'representingPrimary',
+    ]);
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'primaryDocumentFile',
@@ -46,10 +46,10 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateCaseAssociationRequestSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Enter selection for Certificate of Service.',
-      representingPrimary: 'Select a party.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'certificateOfService',
+      'representingPrimary',
+    ]);
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'certificateOfService',
@@ -57,10 +57,13 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateCaseAssociationRequestSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate: 'Enter a Certificate of Service Date.',
-      representingPrimary: 'Select a party.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'certificateOfServiceDate',
+      'representingPrimary',
+    ]);
+    expect(test.getState('validationErrors.certificateOfServiceDate')).toEqual(
+      'Enter a Certificate of Service Date.',
+    );
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'certificateOfServiceMonth',
@@ -76,11 +79,13 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateCaseAssociationRequestSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate:
-        'Certificate of Service date is in the future. Please enter a valid date.',
-      representingPrimary: 'Select a party.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'certificateOfServiceDate',
+      'representingPrimary',
+    ]);
+    expect(test.getState('validationErrors.certificateOfServiceDate')).toEqual(
+      'Certificate of Service date is in the future. Please enter a valid date.',
+    );
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'certificateOfServiceYear',
@@ -88,9 +93,9 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateCaseAssociationRequestSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      representingPrimary: 'Select a party.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'representingPrimary',
+    ]);
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'representingSecondary',

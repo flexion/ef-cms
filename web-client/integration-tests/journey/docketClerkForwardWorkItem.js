@@ -24,7 +24,7 @@ export default test => {
 
     expect(
       test.getState(`validationErrors.${test.workItemId}.assigneeId`),
-    ).toEqual('Recipient is required.');
+    ).toBeDefined();
 
     await test.runSequence('updateForwardFormValueSequence', {
       form: `form.${test.workItemId}`,

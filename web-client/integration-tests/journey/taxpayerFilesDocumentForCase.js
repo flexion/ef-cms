@@ -10,10 +10,10 @@ export default (test, fakeFile) => {
 
     await test.runSequence('selectDocumentSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
-      category: 'Select a Category.',
-      documentType: 'Select a Document Type.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'category',
+      'documentType',
+    ]);
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'category',
@@ -21,9 +21,9 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateSelectDocumentTypeSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      documentType: 'Select a Document Type.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'documentType',
+    ]);
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'documentType',
@@ -51,9 +51,9 @@ export default (test, fakeFile) => {
 
     await test.runSequence('selectDocumentSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
-      documentType: 'Select a Document Type.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'documentType',
+    ]);
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'documentType',
@@ -66,12 +66,12 @@ export default (test, fakeFile) => {
 
     await test.runSequence('selectDocumentSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
-      secondaryDocument: {
-        category: 'Select a Category.',
-        documentType: 'Select a Document Type.',
-      },
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'secondaryDocument',
+    ]);
+    expect(
+      Object.keys(test.getState('validationErrors.secondaryDocument')).sort(),
+    ).toEqual(['category', 'documentType']);
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondaryDocument.category',
@@ -89,11 +89,12 @@ export default (test, fakeFile) => {
 
     await test.runSequence('selectDocumentSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
-      secondaryDocument: {
-        freeText: 'Provide an answer.',
-      },
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'secondaryDocument',
+    ]);
+    expect(
+      Object.keys(test.getState('validationErrors.secondaryDocument')).sort(),
+    ).toEqual(['freeText']);
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondaryDocument.freeText',
@@ -112,11 +113,11 @@ export default (test, fakeFile) => {
 
     await test.runSequence('reviewExternalDocumentInformationSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
-      objections: 'Enter selection for Objections.',
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'objections',
+      'primaryDocumentFile',
+      'secondaryDocumentFile',
+    ]);
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'certificateOfService',
@@ -128,18 +129,19 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateExternalDocumentInformationSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate: 'Enter date for Certificate of Service.',
-      objections: 'Enter selection for Objections.',
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
-      supportingDocuments: [
-        {
-          index: 0,
-          supportingDocument: 'Select a Document Type.',
-        },
-      ],
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'certificateOfServiceDate',
+      'objections',
+      'primaryDocumentFile',
+      'secondaryDocumentFile',
+      'supportingDocuments',
+    ]);
+    expect(test.getState('validationErrors.supportingDocuments')).toEqual([
+      {
+        index: 0,
+        supportingDocument: 'Select a Document Type.',
+      },
+    ]);
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'objections',
@@ -147,17 +149,23 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateExternalDocumentInformationSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate: 'Enter date for Certificate of Service.',
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
-      supportingDocuments: [
-        {
-          index: 0,
-          supportingDocument: 'Select a Document Type.',
-        },
-      ],
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'certificateOfServiceDate',
+      'primaryDocumentFile',
+      'secondaryDocumentFile',
+      'supportingDocuments',
+    ]);
+    expect(test.getState('validationErrors.certificateOfServiceDate')).toEqual(
+      'Enter date for Certificate of Service.',
+    );
+    expect(
+      Object.keys(
+        test.getState('validationErrors.supportingDocuments.0'),
+      ).sort(),
+    ).toEqual(['index', 'supportingDocument']);
+    expect(
+      test.getState('validationErrors.supportingDocuments.0.index'),
+    ).toEqual(0);
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'certificateOfServiceMonth',
@@ -173,18 +181,15 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateExternalDocumentInformationSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate:
-        'Certificate of Service date is in the future. Please enter a valid date.',
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
-      supportingDocuments: [
-        {
-          index: 0,
-          supportingDocument: 'Select a Document Type.',
-        },
-      ],
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'certificateOfServiceDate',
+      'primaryDocumentFile',
+      'secondaryDocumentFile',
+      'supportingDocuments',
+    ]);
+    expect(test.getState('validationErrors.certificateOfServiceDate')).toEqual(
+      'Certificate of Service date is in the future. Please enter a valid date.',
+    );
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'certificateOfServiceYear',
@@ -192,16 +197,11 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateExternalDocumentInformationSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
-      supportingDocuments: [
-        {
-          index: 0,
-          supportingDocument: 'Select a Document Type.',
-        },
-      ],
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'primaryDocumentFile',
+      'secondaryDocumentFile',
+      'supportingDocuments',
+    ]);
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocuments.0.supportingDocument',
@@ -209,17 +209,20 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateExternalDocumentInformationSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
-      supportingDocuments: [
-        {
-          index: 0,
-          supportingDocumentFile: 'Upload a document.',
-          supportingDocumentFreeText: 'Enter name.',
-        },
-      ],
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'primaryDocumentFile',
+      'secondaryDocumentFile',
+      'supportingDocuments',
+    ]);
+    expect(
+      Object.keys(
+        test.getState('validationErrors.supportingDocuments.0'),
+      ).sort(),
+    ).toEqual([
+      'index',
+      'supportingDocumentFile',
+      'supportingDocumentFreeText',
+    ]);
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocuments.0.supportingDocumentFreeText',
@@ -227,16 +230,19 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateExternalDocumentInformationSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
-      supportingDocuments: [
-        {
-          index: 0,
-          supportingDocumentFile: 'Upload a document.',
-        },
-      ],
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'primaryDocumentFile',
+      'secondaryDocumentFile',
+      'supportingDocuments',
+    ]);
+    expect(
+      Object.keys(
+        test.getState('validationErrors.supportingDocuments.0'),
+      ).sort(),
+    ).toEqual(['index', 'supportingDocumentFile']);
+    expect(
+      test.getState('validationErrors.supportingDocuments.0.index'),
+    ).toEqual(0);
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'primaryDocumentFile',
@@ -259,14 +265,14 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateExternalDocumentInformationSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      secondarySupportingDocuments: [
-        {
-          index: 0,
-          supportingDocument: 'Select a Document Type.',
-        },
-      ],
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'secondarySupportingDocuments',
+    ]);
+    expect(
+      Object.keys(
+        test.getState('validationErrors.secondarySupportingDocuments.0'),
+      ).sort(),
+    ).toEqual(['index', 'supportingDocument']);
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondarySupportingDocuments.0.supportingDocument',
@@ -274,15 +280,18 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateExternalDocumentInformationSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      secondarySupportingDocuments: [
-        {
-          index: 0,
-          supportingDocumentFile: 'Upload a document.',
-          supportingDocumentFreeText: 'Enter name.',
-        },
-      ],
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'secondarySupportingDocuments',
+    ]);
+    expect(
+      Object.keys(
+        test.getState('validationErrors.secondarySupportingDocuments.0'),
+      ).sort(),
+    ).toEqual([
+      'index',
+      'supportingDocumentFile',
+      'supportingDocumentFreeText',
+    ]);
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondarySupportingDocuments.0.supportingDocumentFile',

@@ -11,10 +11,10 @@ export default (test, overrides = {}) => {
 
     await test.runSequence('createCaseDeadlineSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
-      deadlineDate: 'Please enter a valid deadline date.',
-      description: 'Please enter a description.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'deadlineDate',
+      'description',
+    ]);
 
     await test.runSequence('updateFormValueSequence', {
       key: 'description',

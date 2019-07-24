@@ -6,15 +6,15 @@ export default (test, fakeFile) => {
 
     await test.runSequence('reviewRequestAccessInformationSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Enter selection for Certificate of Service.',
-      documentTitleTemplate: 'Select a document.',
-      documentType: 'Select a document.',
-      eventCode: 'Select a document.',
-      primaryDocumentFile: 'A file was not selected.',
-      representingPrimary: 'Select a party.',
-      scenario: 'Select a document.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'certificateOfService',
+      'documentTitleTemplate',
+      'documentType',
+      'eventCode',
+      'primaryDocumentFile',
+      'representingPrimary',
+      'scenario',
+    ]);
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentType',
@@ -34,15 +34,15 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateCaseAssociationRequestSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      attachments: 'Enter selection for Attachments.',
-      certificateOfService: 'Enter selection for Certificate of Service.',
-      exhibits: 'Enter selection for Exhibits.',
-      hasSupportingDocuments: 'Enter selection for Supporting Documents.',
-      objections: 'Enter selection for Objections.',
-      primaryDocumentFile: 'A file was not selected.',
-      representingPrimary: 'Select a party.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'attachments',
+      'certificateOfService',
+      'exhibits',
+      'hasSupportingDocuments',
+      'objections',
+      'primaryDocumentFile',
+      'representingPrimary',
+    ]);
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'certificateOfService',
@@ -80,9 +80,9 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateCaseAssociationRequestSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      supportingDocument: 'Enter selection for Supporting Document.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'supportingDocument',
+    ]);
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'supportingDocument',
@@ -100,10 +100,10 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateCaseAssociationRequestSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      supportingDocumentFile: 'A file was not selected.',
-      supportingDocumentFreeText: 'Please provide a value.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'supportingDocumentFile',
+      'supportingDocumentFreeText',
+    ]);
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'supportingDocumentFreeText',

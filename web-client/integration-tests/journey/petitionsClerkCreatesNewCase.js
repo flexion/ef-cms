@@ -7,17 +7,14 @@ export default (test, fakeFile) => {
       'Please correct the following errors on the page:',
     );
 
-    expect(test.getState('validationErrors.caseCaption')).toEqual(
-      'Case Caption is required.',
-    );
-
-    expect(test.getState('validationErrors.receivedAt')).toEqual(
-      'Please enter a valid Date Received.',
-    );
-
-    expect(test.getState('validationErrors.petitionFile')).toEqual(
-      'The Petition file was not selected.',
-    );
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'caseCaption',
+      'caseType',
+      'partyType',
+      'petitionFile',
+      'procedureType',
+      'receivedAt',
+    ]);
 
     await test.runSequence('updateFormValueSequence', {
       key: 'month',

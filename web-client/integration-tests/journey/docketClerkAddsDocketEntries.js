@@ -20,13 +20,13 @@ export default (test, fakeFile) => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('validationErrors')).toEqual({
-      dateReceived: 'Enter date received.',
-      documentType: 'Select a Document Type.',
-      eventCode: 'Select a document type.',
-      partyPrimary: 'Select a filing party.',
-      primaryDocumentFile: 'A file was not selected.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'dateReceived',
+      'documentType',
+      'eventCode',
+      'partyPrimary',
+      'primaryDocumentFile',
+    ]);
 
     //primary document
     await test.runSequence('updateDocketEntryFormValueSequence', {
@@ -70,11 +70,11 @@ export default (test, fakeFile) => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('validationErrors')).toEqual({
-      objections: 'Enter selection for Objections.',
-      secondaryDocument: 'Select a document.',
-      secondaryDocumentFile: 'A file was not selected.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'objections',
+      'secondaryDocument',
+      'secondaryDocumentFile',
+    ]);
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'objections',

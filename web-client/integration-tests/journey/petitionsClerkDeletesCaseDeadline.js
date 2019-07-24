@@ -1,7 +1,7 @@
 import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
 import { runCompute } from 'cerebral/test';
 
-export default (test, overrides = {}) => {
+export default test => {
   return it('Petitions clerk deletes a case deadline', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {

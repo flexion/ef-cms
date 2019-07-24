@@ -9,11 +9,11 @@ export default test => {
 
     await test.runSequence('createWorkItemSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
-      assigneeId: 'Recipient is required.',
-      message: 'Message is required.',
-      section: 'Section is required.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'assigneeId',
+      'message',
+      'section',
+    ]);
 
     await test.runSequence('updateFormValueSequence', {
       key: 'section',

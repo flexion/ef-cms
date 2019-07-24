@@ -4,11 +4,11 @@ export default test => {
 
     await test.runSequence('submitCreateOrderModalSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
-      documentTitle: 'Order title is required.',
-      documentType: 'Order type is required.',
-      eventCode: 'Order type is required.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'documentTitle',
+      'documentType',
+      'eventCode',
+    ]);
 
     await test.runSequence('updateCreateOrderModalFormValueSequence', {
       key: 'eventCode',

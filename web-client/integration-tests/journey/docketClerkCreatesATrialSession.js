@@ -6,14 +6,14 @@ export default (test, overrides = {}) => {
 
     await test.runSequence('submitTrialSessionSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
-      maxCases: 'Enter the maximum number of cases allowed for this session.',
-      sessionType: 'Session type is required.',
-      startDate: 'Date must be in correct format.',
-      term: 'Term session is not valid.',
-      termYear: 'Term year is required.',
-      trialLocation: 'Trial Location is required.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'maxCases',
+      'sessionType',
+      'startDate',
+      'term',
+      'termYear',
+      'trialLocation',
+    ]);
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'maxCases',
@@ -47,11 +47,17 @@ export default (test, overrides = {}) => {
 
     await test.runSequence('validateTrialSessionSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
-      startDate: 'Term session is not valid.',
-      term: 'Term session is not valid.',
-      trialLocation: 'Trial Location is required.',
-    });
+    expect(Object.keys(test.getState('validationErrors')).sort()).toEqual([
+      'startDate',
+      'term',
+      'trialLocation',
+    ]);
+    expect(test.getState('validationErrors').startDate).toEqual(
+      'Term session is not valid.',
+    );
+    expect(test.getState('validationErrors').term).toEqual(
+      'Term session is not valid.',
+    );
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'month',
