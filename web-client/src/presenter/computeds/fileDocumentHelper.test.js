@@ -12,6 +12,9 @@ const state = {
     PARTY_TYPES: ContactFactory.PARTY_TYPES,
   },
   form: {},
+  user: {
+    role: 'petitioner',
+  },
   validationErrors: {},
 };
 
@@ -210,7 +213,30 @@ describe('fileDocumentHelper', () => {
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
-  it('does not show practitioner option under Parties Filing if caseDetail contains undefined or empty practitioners array', () => {
+  it('does not show practitioner option under Parties Filing if logged in user is not a practitioner', () => {
+    state.user = {
+      name: 'Test Petitioner',
+      role: 'petitioner',
+      userId: '234',
+    };
+    let result = runCompute(fileDocumentHelper, { state });
+    expect(result.showPractitionerParty).toBeFalsy();
+
+    state.user = {
+      name: 'Test Respondent',
+      role: 'respondent',
+      userId: '456',
+    };
+    result = runCompute(fileDocumentHelper, { state });
+    expect(result.showPractitionerParty).toBeFalsy();
+  });
+
+  it('does not show practitioner option under Parties Filing if logged in user is a practitioner and caseDetail contains undefined or empty practitioners array', () => {
+    state.user = {
+      name: 'Test Practitioner',
+      role: 'practitioner',
+      userId: '123',
+    };
     let result = runCompute(fileDocumentHelper, { state });
     expect(result.showPractitionerParty).toBeFalsy();
 
@@ -219,12 +245,36 @@ describe('fileDocumentHelper', () => {
     expect(result.showPractitionerParty).toBeFalsy();
   });
 
-  it('shows practitioner option under Parties Filing if caseDetail contains practitioners', () => {
+  it('shows practitioner option as the logged in user under Parties Filing if caseDetail contains practitioners and that user is a practitioner on the case', () => {
     state.caseDetail.practitioners = [
-      { name: 'Test Practitioner', role: 'practitioner' },
+      { name: 'Test Practitioner', role: 'practitioner', userId: '123' },
     ];
+    state.user = {
+      name: 'Test Practitioner',
+      role: 'practitioner',
+      userId: '123',
+    };
     const result = runCompute(fileDocumentHelper, { state });
     expect(result.showPractitionerParty).toBeTruthy();
+    expect(result.practitionerToShow).toEqual({
+      name: 'Test Practitioner',
+      role: 'practitioner',
+      userId: '123',
+    });
+    expect(result.practitionerToShowIndex).toEqual(0);
+  });
+
+  it('does not show practitioner option if caseDetail contains practitioners and that user is not a practitioner on the case', () => {
+    state.caseDetail.practitioners = [
+      { name: 'Test Practitioner', role: 'practitioner', userId: '678' },
+    ];
+    state.user = {
+      name: 'Test Practitioner',
+      role: 'practitioner',
+      userId: '123',
+    };
+    const result = runCompute(fileDocumentHelper, { state });
+    expect(result.showPractitionerParty).toBeFalsy();
   });
 
   describe('supporting documents', () => {

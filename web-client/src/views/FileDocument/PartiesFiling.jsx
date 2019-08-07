@@ -82,41 +82,42 @@ export const PartiesFiling = connect(
                   </label>
                 </div>
               )}
-              {fileDocumentHelper.showPractitionerParty &&
-                caseDetail.practitioners.map((practitioner, idx) => {
-                  return (
-                    <div className="usa-checkbox" key={idx}>
-                      <input
-                        aria-describedby="who-legend"
-                        checked={
-                          (form.practitioner[idx] &&
-                            form.practitioner[idx].partyPractitioner) ||
-                          false
-                        }
-                        className="usa-checkbox__input"
-                        id={`party-practitioner-${idx}`}
-                        name={`practitioner.${idx}`}
-                        type="checkbox"
-                        onChange={e => {
-                          updateFileDocumentWizardFormValueSequence({
-                            key: e.target.name,
-                            value: {
-                              name: practitioner.name,
-                              partyPractitioner: e.target.checked,
-                            },
-                          });
-                          validateExternalDocumentInformationSequence();
-                        }}
-                      />
-                      <label
-                        className="usa-checkbox__label"
-                        htmlFor={`party-practitioner-${idx}`}
-                      >
-                        {practitioner.name}, Counsel
-                      </label>
-                    </div>
-                  );
-                })}
+              {fileDocumentHelper.showPractitionerParty && (
+                <div className="usa-checkbox">
+                  <input
+                    aria-describedby="who-legend"
+                    checked={
+                      (form.practitioner[
+                        fileDocumentHelper.practitionerToShowIndex
+                      ] &&
+                        form.practitioner[
+                          fileDocumentHelper.practitionerToShowIndex
+                        ].partyPractitioner) ||
+                      false
+                    }
+                    className="usa-checkbox__input"
+                    id={`party-practitioner-${fileDocumentHelper.practitionerToShowIndex}`}
+                    name={`practitioner.${fileDocumentHelper.practitionerToShowIndex}`}
+                    type="checkbox"
+                    onChange={e => {
+                      updateFileDocumentWizardFormValueSequence({
+                        key: e.target.name,
+                        value: {
+                          name: fileDocumentHelper.practitionerToShow.name,
+                          partyPractitioner: e.target.checked,
+                        },
+                      });
+                      validateExternalDocumentInformationSequence();
+                    }}
+                  />
+                  <label
+                    className="usa-checkbox__label"
+                    htmlFor={`party-practitioner-${fileDocumentHelper.practitionerToShowIndex}`}
+                  >
+                    {fileDocumentHelper.practitionerToShow.name}, Counsel
+                  </label>
+                </div>
+              )}
               <div className="usa-checkbox">
                 <input
                   aria-describedby="who-legend"

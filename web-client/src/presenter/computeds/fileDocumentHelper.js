@@ -8,6 +8,7 @@ export const supportingDocumentFreeTextTypes = [
 
 export const fileDocumentHelper = (get, applicationContext) => {
   const { CATEGORY_MAP, PARTY_TYPES } = get(state.constants);
+  const user = get(state.user);
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {};
@@ -17,8 +18,25 @@ export const fileDocumentHelper = (get, applicationContext) => {
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
-  const showPractitionerParty =
-    caseDetail.practitioners && caseDetail.practitioners.length > 0;
+
+  let showPractitionerParty = false;
+  let practitionerToShow;
+  let practitionerToShowIndex;
+
+  if (
+    user.role === 'practitioner' &&
+    caseDetail.practitioners &&
+    caseDetail.practitioners.length > 0
+  ) {
+    practitionerToShowIndex = caseDetail.practitioners.findIndex(
+      practitioner => practitioner.userId === user.userId,
+    );
+
+    if (practitionerToShowIndex >= 0) {
+      showPractitionerParty = true;
+      practitionerToShow = caseDetail.practitioners[practitionerToShowIndex];
+    }
+  }
 
   const supportingDocumentTypeList = CATEGORY_MAP['Supporting Document'].map(
     entry => {
@@ -93,6 +111,8 @@ export const fileDocumentHelper = (get, applicationContext) => {
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
+    practitionerToShow,
+    practitionerToShowIndex,
     primaryDocument: {
       showObjection: objectionDocumentTypes.includes(form.documentType),
     },
