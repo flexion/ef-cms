@@ -331,11 +331,8 @@ export const FileDocumentReview = connect(
                           </li>
                         )}
                         {form.practitioner &&
-                          form.practitioner.map(
-                            practitioner =>
-                              practitioner.partyPractitioner && (
-                                <li>{practitioner.name}, Counsel</li>
-                              ),
+                          form.practitioner.partyPractitioner && (
+                            <li>{form.practitioner.name}, Counsel</li>
                           )}
                         {form.partyRespondent && <li>Respondent</li>}
                       </ul>

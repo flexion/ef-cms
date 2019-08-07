@@ -360,11 +360,12 @@ describe('ExternalDocumentInformationFactory', () => {
       expect(errors().partyPrimary).toEqual(undefined);
     });
 
-    it('correctly validates practitioner array for partyPractitioner', () => {
+    it('correctly validates practitioner for partyPractitioner', () => {
       expect(errors().partyPrimary).toEqual('Select a filing party.');
-      baseDoc.practitioner = [
-        { name: 'Test Practitioner', partyPractitioner: true },
-      ];
+      baseDoc.practitioner = {
+        name: 'Test Practitioner',
+        partyPractitioner: true,
+      };
       expect(errors().partyPrimary).toEqual(undefined);
     });
   });

@@ -87,17 +87,13 @@ export const PartiesFiling = connect(
                   <input
                     aria-describedby="who-legend"
                     checked={
-                      (form.practitioner[
-                        fileDocumentHelper.practitionerToShowIndex
-                      ] &&
-                        form.practitioner[
-                          fileDocumentHelper.practitionerToShowIndex
-                        ].partyPractitioner) ||
+                      (form.practitioner &&
+                        form.practitioner.partyPractitioner) ||
                       false
                     }
                     className="usa-checkbox__input"
-                    id={`party-practitioner-${fileDocumentHelper.practitionerToShowIndex}`}
-                    name={`practitioner.${fileDocumentHelper.practitionerToShowIndex}`}
+                    id="party-practitioner"
+                    name="practitioner"
                     type="checkbox"
                     onChange={e => {
                       updateFileDocumentWizardFormValueSequence({
@@ -112,7 +108,7 @@ export const PartiesFiling = connect(
                   />
                   <label
                     className="usa-checkbox__label"
-                    htmlFor={`party-practitioner-${fileDocumentHelper.practitionerToShowIndex}`}
+                    htmlFor="party-practitioner"
                   >
                     {fileDocumentHelper.practitionerToShow.name}, Counsel
                   </label>

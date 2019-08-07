@@ -202,12 +202,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   }
 
   let partyPractitioner = false;
-  if (Array.isArray(documentMetadata.practitioner)) {
-    documentMetadata.practitioner.forEach(practitioner => {
-      if (practitioner.partyPractitioner) {
-        partyPractitioner = true;
-      }
-    });
+  if (documentMetadata.practitioner) {
+    if (documentMetadata.practitioner.partyPractitioner) {
+      partyPractitioner = true;
+    }
   }
 
   if (
