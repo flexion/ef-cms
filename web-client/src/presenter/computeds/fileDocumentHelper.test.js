@@ -261,7 +261,6 @@ describe('fileDocumentHelper', () => {
       role: 'practitioner',
       userId: '123',
     });
-    expect(result.practitionerToShowIndex).toEqual(0);
   });
 
   it('does not show practitioner option if caseDetail contains practitioners and that user is not a practitioner on the case', () => {

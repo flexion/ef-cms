@@ -21,21 +21,16 @@ export const fileDocumentHelper = (get, applicationContext) => {
 
   let showPractitionerParty = false;
   let practitionerToShow;
-  let practitionerToShowIndex;
 
   if (
     user.role === 'practitioner' &&
     caseDetail.practitioners &&
     caseDetail.practitioners.length > 0
   ) {
-    practitionerToShowIndex = caseDetail.practitioners.findIndex(
+    practitionerToShow = caseDetail.practitioners.find(
       practitioner => practitioner.userId === user.userId,
     );
-
-    if (practitionerToShowIndex >= 0) {
-      showPractitionerParty = true;
-      practitionerToShow = caseDetail.practitioners[practitionerToShowIndex];
-    }
+    showPractitionerParty = !!practitionerToShow;
   }
 
   const supportingDocumentTypeList = CATEGORY_MAP['Supporting Document'].map(
@@ -112,7 +107,6 @@ export const fileDocumentHelper = (get, applicationContext) => {
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
     practitionerToShow,
-    practitionerToShowIndex,
     primaryDocument: {
       showObjection: objectionDocumentTypes.includes(form.documentType),
     },
