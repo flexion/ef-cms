@@ -7,12 +7,17 @@ export const trialSessionHelper = (get, applicationContext) => {
   const assignedJudgeIsCurrentUser =
     trialSession.judgeId &&
     trialSession.judgeId == applicationContext.getCurrentUser().userId;
-  const showSwitchToSessionDetails = true;
-  const showSwitchToWorkingCopy = true;
+
+  const showSwitchToSessionDetail = 'TrialSessionWorkingCopy'.includes(
+    get(state.currentPage),
+  );
+  const showSwitchToWorkingCopy = 'TrialSessionDetail'.includes(
+    get(state.currentPage),
+  );
 
   const result = {
     assignedJudgeIsCurrentUser,
-    showSwitchToSessionDetails,
+    showSwitchToSessionDetail,
     showSwitchToWorkingCopy,
     title: 'Session Working Copy',
   };

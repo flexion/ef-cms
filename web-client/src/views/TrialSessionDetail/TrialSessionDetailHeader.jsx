@@ -1,15 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const TrialSessionDetailHeader = connect(
   {
     formattedTrialSession: state.formattedTrialSessionDetails,
-    navigateToPathSequence: sequences.navigateToPathSequence,
     trialSessionHelper: state.trialSessionHelper,
   },
-  ({ formattedTrialSession, navigateToPathSequence, trialSessionHelper }) => (
+  ({ formattedTrialSession, trialSessionHelper }) => (
     <>
       <div className="big-blue-header">
         <div className="grid-container">
@@ -25,28 +24,26 @@ export const TrialSessionDetailHeader = connect(
                 {formattedTrialSession.status}
               </span>
             </span>
-            {trialSessionHelper.showSwitchToWorkingCopy && (
-              <button
-                className="button-switch-box usa-button usa-button--unstyled"
-                onClick={() => {
-                  navigateToPathSequence();
-                }}
-              >
-                <FontAwesomeIcon icon={['far', 'clone']} />
-                Switch to Working Copy
-              </button>
-            )}
-            {trialSessionHelper.showSwitchToSessionDetail && (
-              <button
-                className="button-switch-box usa-button usa-button--unstyled"
-                onClick={() => {
-                  navigateToPathSequence();
-                }}
-              >
-                <FontAwesomeIcon icon={['far', 'clone']} />
-                Switch to Session Detail
-              </button>
-            )}
+            <span className="margin-left-205">
+              {trialSessionHelper.showSwitchToWorkingCopy && (
+                <a
+                  className="button-switch-box"
+                  href={`/trial-session-working-copy/${formattedTrialSession.trialSessionId}`}
+                >
+                  <FontAwesomeIcon icon={['far', 'clone']} />
+                  Switch to Working Copy
+                </a>
+              )}
+              {trialSessionHelper.showSwitchToSessionDetail && (
+                <a
+                  className="button-switch-box"
+                  href={`/trial-session-detail/${formattedTrialSession.trialSessionId}`}
+                >
+                  <FontAwesomeIcon icon={['far', 'clone']} />
+                  Switch to Session Detail
+                </a>
+              )}
+            </span>
           </div>
           <p className="margin-y-0" id="case-title">
             <span>{formattedTrialSession.formattedStartDate}</span>
