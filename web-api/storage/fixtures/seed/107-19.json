@@ -1,0 +1,1707 @@
+[
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "gsi1pk": "workitem-fc5636a8-66a9-4fb2-8b0d-cb006675c91e",
+    "document": {
+      "eventCode": "P",
+      "createdAt": "2019-08-12T18:10:03.299Z",
+      "processingStatus": "pending",
+      "documentType": "Petition",
+      "filedBy": "Veronica Obrien & Freya Nielsen",
+      "workItems": [],
+      "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+      "receivedAt": "2019-08-12T18:10:03.299Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "section": "petitions",
+    "workItemId": "fc5636a8-66a9-4fb2-8b0d-cb006675c91e",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isInternal": false,
+    "createdAt": "2019-08-12T18:10:03.299Z",
+    "assigneeName": null,
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "workitem-fc5636a8-66a9-4fb2-8b0d-cb006675c91e",
+    "messages": [
+      {
+        "createdAt": "2019-08-12T18:10:03.299Z",
+        "messageId": "9e4f6391-4ff7-456a-a546-a69f0b46d0c1",
+        "from": "Test Petitioner",
+        "message": "Petition filed by Veronica Obrien & Freya Nielsen is ready for review.",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "workitem-fc5636a8-66a9-4fb2-8b0d-cb006675c91e",
+    "docketNumber": "107-19",
+    "updatedAt": "2019-08-12T18:10:03.299Z"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "gsi1pk": "workitem-01eb816a-3148-4182-8e30-11fa861a50eb",
+    "document": {
+      "createdAt": "2019-08-12T18:10:03.299Z",
+      "documentType": "Petition",
+      "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+    },
+    "section": "armensChambers",
+    "workItemId": "01eb816a-3148-4182-8e30-11fa861a50eb",
+    "isInitializeCase": false,
+    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitionsclerk",
+    "sentBySection": "petitions",
+    "isInternal": true,
+    "createdAt": "2019-08-12T18:11:25.460Z",
+    "assigneeName": "Judge Armen",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "workitem-01eb816a-3148-4182-8e30-11fa861a50eb",
+    "messages": [
+      {
+        "createdAt": "2019-08-12T18:11:25.460Z",
+        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+        "messageId": "56681934-194a-440d-a8d9-40dd56065e7b",
+        "from": "Test Petitionsclerk",
+        "to": "Judge Armen",
+        "message": "This is a test message for Judge Armen.",
+        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "workitem-01eb816a-3148-4182-8e30-11fa861a50eb",
+    "docketNumber": "107-19",
+    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2019-08-12T18:11:25.460Z"
+  },
+  {
+    "sk": "docketNumberCounter-2019",
+    "id": 7,
+    "pk": "docketNumberCounter-2019"
+  },
+  {
+    "sk": "case-75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "pk": "catalog"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "gsi1pk": "workitem-94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "document": {
+      "createdAt": "2019-08-12T18:10:36.019Z",
+      "documentType": "Application for Waiver of Filing Fee and Affidavit",
+      "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+    },
+    "section": "armensChambers",
+    "workItemId": "94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "isInitializeCase": false,
+    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Docketclerk",
+    "sentBySection": "docket",
+    "isInternal": true,
+    "createdAt": "2019-08-12T18:12:20.123Z",
+    "assigneeName": "Judge Armen",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "2019-08-12T18:12:20.123Z",
+    "messages": [
+      {
+        "createdAt": "2019-08-12T18:12:20.123Z",
+        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "messageId": "8b749bb0-ee01-468e-baa1-88760cd1f13e",
+        "from": "Test Docketclerk",
+        "to": "Judge Armen",
+        "message": "What do you think?",
+        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "section-outbox-docket",
+    "docketNumber": "107-19",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2019-08-12T18:12:20.123Z"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "gsi1pk": "workitem-138bfaa0-9dd5-4009-8b39-36f473ffd7c1",
+    "document": {
+      "hasSupportingDocuments": false,
+      "attachments": false,
+      "serviceDate": "undefined-undefined-undefined",
+      "documentType": "Application for Waiver of Filing Fee and Affidavit",
+      "practitioner": [],
+      "partyPrimary": true,
+      "workItems": [],
+      "receivedAt": "2019-08-12T18:10:36.019Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "eventCode": "APPW",
+      "createdAt": "2019-08-12T18:10:36.019Z",
+      "processingStatus": "pending",
+      "scenario": "Standard",
+      "filedBy": "Petr. Veronica Obrien",
+      "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+      "certificateOfService": false,
+      "certificateOfServiceDate": null,
+      "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+      "category": "Application",
+      "documentTitle": "Application for Waiver of Filing Fee and Affidavit",
+      "relationship": "primaryDocument",
+      "docketNumber": "107-19"
+    },
+    "section": "docket",
+    "workItemId": "138bfaa0-9dd5-4009-8b39-36f473ffd7c1",
+    "assigneeId": null,
+    "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isInternal": false,
+    "createdAt": "2019-08-12T18:10:36.019Z",
+    "assigneeName": null,
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "workitem-138bfaa0-9dd5-4009-8b39-36f473ffd7c1",
+    "messages": [
+      {
+        "createdAt": "2019-08-12T18:10:36.020Z",
+        "messageId": "780eb9b7-05c7-4ee9-9d78-c70b7635da8b",
+        "from": "Test Petitioner",
+        "message": "Application for Waiver of Filing Fee and Affidavit filed by Petitioner is ready for review.",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "workitem-138bfaa0-9dd5-4009-8b39-36f473ffd7c1",
+    "docketNumber": "107-19",
+    "updatedAt": "2019-08-12T18:10:36.019Z"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "gsi1pk": "workitem-fc5636a8-66a9-4fb2-8b0d-cb006675c91e",
+    "document": {
+      "eventCode": "P",
+      "createdAt": "2019-08-12T18:10:03.299Z",
+      "processingStatus": "pending",
+      "documentType": "Petition",
+      "filedBy": "Veronica Obrien & Freya Nielsen",
+      "workItems": [],
+      "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+      "receivedAt": "2019-08-12T18:10:03.299Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "section": "petitions",
+    "workItemId": "fc5636a8-66a9-4fb2-8b0d-cb006675c91e",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isInternal": false,
+    "createdAt": "2019-08-12T18:10:03.299Z",
+    "assigneeName": null,
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "workitem-fc5636a8-66a9-4fb2-8b0d-cb006675c91e",
+    "messages": [
+      {
+        "createdAt": "2019-08-12T18:10:03.299Z",
+        "messageId": "9e4f6391-4ff7-456a-a546-a69f0b46d0c1",
+        "from": "Test Petitioner",
+        "message": "Petition filed by Veronica Obrien & Freya Nielsen is ready for review.",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "section-petitions",
+    "docketNumber": "107-19",
+    "updatedAt": "2019-08-12T18:10:03.299Z"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "gsi1pk": "workitem-01eb816a-3148-4182-8e30-11fa861a50eb",
+    "document": {
+      "createdAt": "2019-08-12T18:10:03.299Z",
+      "documentType": "Petition",
+      "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+    },
+    "section": "armensChambers",
+    "workItemId": "01eb816a-3148-4182-8e30-11fa861a50eb",
+    "isInitializeCase": false,
+    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitionsclerk",
+    "sentBySection": "petitions",
+    "isInternal": true,
+    "createdAt": "2019-08-12T18:11:25.460Z",
+    "assigneeName": "Judge Armen",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "2019-08-12T18:11:25.460Z",
+    "messages": [
+      {
+        "createdAt": "2019-08-12T18:11:25.460Z",
+        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+        "messageId": "56681934-194a-440d-a8d9-40dd56065e7b",
+        "from": "Test Petitionsclerk",
+        "to": "Judge Armen",
+        "message": "This is a test message for Judge Armen.",
+        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "section-outbox-petitions",
+    "docketNumber": "107-19",
+    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2019-08-12T18:11:25.460Z"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "gsi1pk": "workitem-01eb816a-3148-4182-8e30-11fa861a50eb",
+    "document": {
+      "createdAt": "2019-08-12T18:10:03.299Z",
+      "documentType": "Petition",
+      "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+    },
+    "section": "armensChambers",
+    "workItemId": "01eb816a-3148-4182-8e30-11fa861a50eb",
+    "isInitializeCase": false,
+    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitionsclerk",
+    "sentBySection": "petitions",
+    "isInternal": true,
+    "createdAt": "2019-08-12T18:11:25.460Z",
+    "assigneeName": "Judge Armen",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "workitem-01eb816a-3148-4182-8e30-11fa861a50eb",
+    "messages": [
+      {
+        "createdAt": "2019-08-12T18:11:25.460Z",
+        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+        "messageId": "56681934-194a-440d-a8d9-40dd56065e7b",
+        "from": "Test Petitionsclerk",
+        "to": "Judge Armen",
+        "message": "This is a test message for Judge Armen.",
+        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "user-dabbad00-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "107-19",
+    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2019-08-12T18:11:25.460Z"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "gsi1pk": "workitem-94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "document": {
+      "createdAt": "2019-08-12T18:10:36.019Z",
+      "documentType": "Application for Waiver of Filing Fee and Affidavit",
+      "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+    },
+    "section": "armensChambers",
+    "workItemId": "94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "isInitializeCase": false,
+    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Docketclerk",
+    "sentBySection": "docket",
+    "isInternal": true,
+    "createdAt": "2019-08-12T18:12:20.123Z",
+    "assigneeName": "Judge Armen",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "workitem-94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "messages": [
+      {
+        "createdAt": "2019-08-12T18:12:20.123Z",
+        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "messageId": "8b749bb0-ee01-468e-baa1-88760cd1f13e",
+        "from": "Test Docketclerk",
+        "to": "Judge Armen",
+        "message": "What do you think?",
+        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "user-dabbad00-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "107-19",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2019-08-12T18:12:20.123Z"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "gsi1pk": "workitem-01eb816a-3148-4182-8e30-11fa861a50eb",
+    "document": {
+      "createdAt": "2019-08-12T18:10:03.299Z",
+      "documentType": "Petition",
+      "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+    },
+    "section": "armensChambers",
+    "workItemId": "01eb816a-3148-4182-8e30-11fa861a50eb",
+    "isInitializeCase": false,
+    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitionsclerk",
+    "sentBySection": "petitions",
+    "isInternal": true,
+    "createdAt": "2019-08-12T18:11:25.460Z",
+    "assigneeName": "Judge Armen",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "2019-08-12T18:11:25.460Z",
+    "messages": [
+      {
+        "createdAt": "2019-08-12T18:11:25.460Z",
+        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+        "messageId": "56681934-194a-440d-a8d9-40dd56065e7b",
+        "from": "Test Petitionsclerk",
+        "to": "Judge Armen",
+        "message": "This is a test message for Judge Armen.",
+        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "user-outbox-3805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "107-19",
+    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2019-08-12T18:11:25.460Z"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "gsi1pk": "workitem-94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "document": {
+      "createdAt": "2019-08-12T18:10:36.019Z",
+      "documentType": "Application for Waiver of Filing Fee and Affidavit",
+      "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+    },
+    "section": "armensChambers",
+    "workItemId": "94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "isInitializeCase": false,
+    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Docketclerk",
+    "sentBySection": "docket",
+    "isInternal": true,
+    "createdAt": "2019-08-12T18:12:20.123Z",
+    "assigneeName": "Judge Armen",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "2019-08-12T18:12:20.123Z",
+    "messages": [
+      {
+        "createdAt": "2019-08-12T18:12:20.123Z",
+        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "messageId": "8b749bb0-ee01-468e-baa1-88760cd1f13e",
+        "from": "Test Docketclerk",
+        "to": "Judge Armen",
+        "message": "What do you think?",
+        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "user-outbox-1805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "107-19",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2019-08-12T18:12:20.123Z"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "gsi1pk": "workitem-01eb816a-3148-4182-8e30-11fa861a50eb",
+    "document": {
+      "createdAt": "2019-08-12T18:10:03.299Z",
+      "documentType": "Petition",
+      "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+    },
+    "section": "armensChambers",
+    "workItemId": "01eb816a-3148-4182-8e30-11fa861a50eb",
+    "isInitializeCase": false,
+    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitionsclerk",
+    "sentBySection": "petitions",
+    "isInternal": true,
+    "createdAt": "2019-08-12T18:11:25.460Z",
+    "assigneeName": "Judge Armen",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "workitem-01eb816a-3148-4182-8e30-11fa861a50eb",
+    "messages": [
+      {
+        "createdAt": "2019-08-12T18:11:25.460Z",
+        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+        "messageId": "56681934-194a-440d-a8d9-40dd56065e7b",
+        "from": "Test Petitionsclerk",
+        "to": "Judge Armen",
+        "message": "This is a test message for Judge Armen.",
+        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "section-armensChambers",
+    "docketNumber": "107-19",
+    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2019-08-12T18:11:25.460Z"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "gsi1pk": "workitem-94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "document": {
+      "createdAt": "2019-08-12T18:10:36.019Z",
+      "documentType": "Application for Waiver of Filing Fee and Affidavit",
+      "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+    },
+    "section": "armensChambers",
+    "workItemId": "94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "isInitializeCase": false,
+    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Docketclerk",
+    "sentBySection": "docket",
+    "isInternal": true,
+    "createdAt": "2019-08-12T18:12:20.123Z",
+    "assigneeName": "Judge Armen",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "workitem-94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "messages": [
+      {
+        "createdAt": "2019-08-12T18:12:20.123Z",
+        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "messageId": "8b749bb0-ee01-468e-baa1-88760cd1f13e",
+        "from": "Test Docketclerk",
+        "to": "Judge Armen",
+        "message": "What do you think?",
+        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "section-armensChambers",
+    "docketNumber": "107-19",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2019-08-12T18:12:20.123Z"
+  },
+  {
+    "sk": "01eb816a-3148-4182-8e30-11fa861a50eb",
+    "pk": "75f67592-a288-44fd-8d9c-7bcc9f1c0628|workItem"
+  },
+  {
+    "sk": "138bfaa0-9dd5-4009-8b39-36f473ffd7c1",
+    "pk": "75f67592-a288-44fd-8d9c-7bcc9f1c0628|workItem"
+  },
+  {
+    "sk": "94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "pk": "75f67592-a288-44fd-8d9c-7bcc9f1c0628|workItem"
+  },
+  {
+    "sk": "fc5636a8-66a9-4fb2-8b0d-cb006675c91e",
+    "pk": "75f67592-a288-44fd-8d9c-7bcc9f1c0628|workItem"
+  },
+  {
+    "procedureType": "Small",
+    "contactSecondary": {
+      "address3": "Ut aute animi commo",
+      "address2": "Cupiditate dolore ex",
+      "city": "Laborum nemo facilis",
+      "phone": "+1 (512) 346-6094",
+      "address1": "814 West Second Avenue",
+      "postalCode": "81857",
+      "name": "Freya Nielsen",
+      "state": "AA",
+      "countryType": "domestic"
+    },
+    "isPaper": false,
+    "initialTitle": "Veronica Obrien & Freya Nielsen, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "documents": [
+      {
+        "eventCode": "P",
+        "createdAt": "2019-08-12T18:10:03.299Z",
+        "processingStatus": "complete",
+        "documentType": "Petition",
+        "filedBy": "Veronica Obrien & Freya Nielsen",
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-08-12T18:10:03.299Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Veronica Obrien & Freya Nielsen",
+              "workItems": [],
+              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+              "receivedAt": "2019-08-12T18:10:03.299Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "section": "petitions",
+            "workItemId": "fc5636a8-66a9-4fb2-8b0d-cb006675c91e",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "isInternal": false,
+            "createdAt": "2019-08-12T18:10:03.299Z",
+            "assigneeName": null,
+            "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+            "messages": [
+              {
+                "createdAt": "2019-08-12T18:10:03.299Z",
+                "messageId": "9e4f6391-4ff7-456a-a546-a69f0b46d0c1",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Veronica Obrien & Freya Nielsen is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "107-19",
+            "updatedAt": "2019-08-12T18:10:03.299Z"
+          },
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "createdAt": "2019-08-12T18:10:03.299Z",
+              "documentType": "Petition",
+              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+            },
+            "section": "armensChambers",
+            "workItemId": "01eb816a-3148-4182-8e30-11fa861a50eb",
+            "isInitializeCase": false,
+            "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+            "sentBy": "Test Petitionsclerk",
+            "sentBySection": "petitions",
+            "isInternal": true,
+            "createdAt": "2019-08-12T18:11:25.460Z",
+            "assigneeName": "Judge Armen",
+            "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+            "messages": [
+              {
+                "createdAt": "2019-08-12T18:11:25.460Z",
+                "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+                "messageId": "56681934-194a-440d-a8d9-40dd56065e7b",
+                "from": "Test Petitionsclerk",
+                "to": "Judge Armen",
+                "message": "This is a test message for Judge Armen.",
+                "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "107-19",
+            "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+            "updatedAt": "2019-08-12T18:11:25.460Z"
+          }
+        ],
+        "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "receivedAt": "2019-08-12T18:10:03.299Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "eventCode": "STIN",
+        "createdAt": "2019-08-12T18:10:03.300Z",
+        "processingStatus": "complete",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Veronica Obrien & Freya Nielsen",
+        "workItems": [],
+        "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "receivedAt": "2019-08-12T18:10:03.300Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "hasSupportingDocuments": false,
+        "attachments": false,
+        "serviceDate": "undefined-undefined-undefined",
+        "documentType": "Application for Waiver of Filing Fee and Affidavit",
+        "practitioner": [],
+        "partyPrimary": true,
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "hasSupportingDocuments": false,
+              "attachments": false,
+              "serviceDate": "undefined-undefined-undefined",
+              "documentType": "Application for Waiver of Filing Fee and Affidavit",
+              "practitioner": [],
+              "partyPrimary": true,
+              "workItems": [],
+              "receivedAt": "2019-08-12T18:10:36.019Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+              "eventCode": "APPW",
+              "createdAt": "2019-08-12T18:10:36.019Z",
+              "processingStatus": "pending",
+              "scenario": "Standard",
+              "filedBy": "Petr. Veronica Obrien",
+              "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+              "certificateOfService": false,
+              "certificateOfServiceDate": null,
+              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+              "category": "Application",
+              "documentTitle": "Application for Waiver of Filing Fee and Affidavit",
+              "relationship": "primaryDocument",
+              "docketNumber": "107-19"
+            },
+            "section": "docket",
+            "workItemId": "138bfaa0-9dd5-4009-8b39-36f473ffd7c1",
+            "assigneeId": null,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "isInternal": false,
+            "createdAt": "2019-08-12T18:10:36.019Z",
+            "assigneeName": null,
+            "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+            "messages": [
+              {
+                "createdAt": "2019-08-12T18:10:36.020Z",
+                "messageId": "780eb9b7-05c7-4ee9-9d78-c70b7635da8b",
+                "from": "Test Petitioner",
+                "message": "Application for Waiver of Filing Fee and Affidavit filed by Petitioner is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "107-19",
+            "updatedAt": "2019-08-12T18:10:36.019Z"
+          },
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "createdAt": "2019-08-12T18:10:36.019Z",
+              "documentType": "Application for Waiver of Filing Fee and Affidavit",
+              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+            },
+            "section": "armensChambers",
+            "workItemId": "94a7d462-cf07-4a05-9280-f59273dfffdc",
+            "isInitializeCase": false,
+            "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+            "sentBy": "Test Docketclerk",
+            "sentBySection": "docket",
+            "isInternal": true,
+            "createdAt": "2019-08-12T18:12:20.123Z",
+            "assigneeName": "Judge Armen",
+            "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+            "messages": [
+              {
+                "createdAt": "2019-08-12T18:12:20.123Z",
+                "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+                "messageId": "8b749bb0-ee01-468e-baa1-88760cd1f13e",
+                "from": "Test Docketclerk",
+                "to": "Judge Armen",
+                "message": "What do you think?",
+                "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "107-19",
+            "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+            "updatedAt": "2019-08-12T18:12:20.123Z"
+          }
+        ],
+        "receivedAt": "2019-08-12T18:10:36.019Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "APPW",
+        "createdAt": "2019-08-12T18:10:36.019Z",
+        "processingStatus": "complete",
+        "scenario": "Standard",
+        "filedBy": "Petr. Veronica Obrien",
+        "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+        "certificateOfService": false,
+        "certificateOfServiceDate": null,
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "category": "Application",
+        "documentTitle": "Application for Waiver of Filing Fee and Affidavit",
+        "relationship": "primaryDocument",
+        "docketNumber": "107-19"
+      }
+    ],
+    "orderForFilingFee": false,
+    "partyType": "Petitioner & Spouse",
+    "caseType": "Innocent Spouse",
+    "yearAmounts": [],
+    "contactPrimary": {
+      "address3": "Quis sit quo quas u",
+      "address2": "Blanditiis nobis sus",
+      "city": "Quas irure asperiore",
+      "phone": "+1 (848) 752-3543",
+      "address1": "733 Milton Parkway",
+      "postalCode": "70360",
+      "name": "Veronica Obrien",
+      "state": "WY",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "createdAt": "2019-08-12T18:10:03.298Z",
+    "noticeOfAttachments": false,
+    "caseCaption": "Veronica Obrien & Freya Nielsen, Petitioners",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "0",
+    "filingType": "Myself and my spouse",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "S",
+    "docketNumberSuffix": "S",
+    "caseTitle": "Veronica Obrien & Freya Nielsen, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "currentVersion": "4",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Hartford, Connecticut",
+    "respondents": [],
+    "practitioners": [],
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "filingDate": "2019-08-12T18:10:03.299Z",
+        "filedBy": "Veronica Obrien & Freya Nielsen"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Hartford, Connecticut",
+        "index": 2,
+        "filingDate": "2019-08-12T18:10:03.298Z"
+      },
+      {
+        "description": "Application for Waiver of Filing Fee and Affidavit",
+        "index": 3,
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "filingDate": "2019-08-12T18:10:36.019Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "docketNumber": "107-19",
+    "status": "New"
+  },
+  {
+    "procedureType": "Small",
+    "contactSecondary": {
+      "address3": "Ut aute animi commo",
+      "address2": "Cupiditate dolore ex",
+      "city": "Laborum nemo facilis",
+      "phone": "+1 (512) 346-6094",
+      "address1": "814 West Second Avenue",
+      "postalCode": "81857",
+      "name": "Freya Nielsen",
+      "state": "AA",
+      "countryType": "domestic"
+    },
+    "isPaper": false,
+    "documents": [
+      {
+        "eventCode": "P",
+        "createdAt": "2019-08-12T18:10:03.299Z",
+        "processingStatus": "pending",
+        "documentType": "Petition",
+        "filedBy": "Veronica Obrien & Freya Nielsen",
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-08-12T18:10:03.299Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Veronica Obrien & Freya Nielsen",
+              "workItems": [],
+              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+              "receivedAt": "2019-08-12T18:10:03.299Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "section": "petitions",
+            "workItemId": "fc5636a8-66a9-4fb2-8b0d-cb006675c91e",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "isInternal": false,
+            "createdAt": "2019-08-12T18:10:03.299Z",
+            "assigneeName": null,
+            "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+            "messages": [
+              {
+                "createdAt": "2019-08-12T18:10:03.299Z",
+                "messageId": "9e4f6391-4ff7-456a-a546-a69f0b46d0c1",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Veronica Obrien & Freya Nielsen is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "107-19",
+            "updatedAt": "2019-08-12T18:10:03.299Z"
+          }
+        ],
+        "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "receivedAt": "2019-08-12T18:10:03.299Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "eventCode": "STIN",
+        "createdAt": "2019-08-12T18:10:03.300Z",
+        "processingStatus": "pending",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Veronica Obrien & Freya Nielsen",
+        "workItems": [],
+        "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "receivedAt": "2019-08-12T18:10:03.300Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "orderForFilingFee": false,
+    "partyType": "Petitioner & Spouse",
+    "caseType": "Innocent Spouse",
+    "yearAmounts": [],
+    "contactPrimary": {
+      "address3": "Quis sit quo quas u",
+      "address2": "Blanditiis nobis sus",
+      "city": "Quas irure asperiore",
+      "phone": "+1 (848) 752-3543",
+      "address1": "733 Milton Parkway",
+      "postalCode": "70360",
+      "name": "Veronica Obrien",
+      "state": "WY",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "createdAt": "2019-08-12T18:10:03.298Z",
+    "noticeOfAttachments": false,
+    "caseCaption": "Veronica Obrien & Freya Nielsen, Petitioners",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "1",
+    "filingType": "Myself and my spouse",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "S",
+    "docketNumberSuffix": "S",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "currentVersion": "1",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Hartford, Connecticut",
+    "respondents": [],
+    "practitioners": [],
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "filingDate": "2019-08-12T18:10:03.299Z",
+        "filedBy": "Veronica Obrien & Freya Nielsen"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Hartford, Connecticut",
+        "index": 2,
+        "filingDate": "2019-08-12T18:10:03.298Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "docketNumber": "107-19",
+    "status": "New"
+  },
+  {
+    "procedureType": "Small",
+    "contactSecondary": {
+      "address3": "Ut aute animi commo",
+      "address2": "Cupiditate dolore ex",
+      "city": "Laborum nemo facilis",
+      "phone": "+1 (512) 346-6094",
+      "address1": "814 West Second Avenue",
+      "postalCode": "81857",
+      "name": "Freya Nielsen",
+      "state": "AA",
+      "countryType": "domestic"
+    },
+    "isPaper": false,
+    "initialTitle": "Veronica Obrien & Freya Nielsen, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "documents": [
+      {
+        "eventCode": "P",
+        "createdAt": "2019-08-12T18:10:03.299Z",
+        "processingStatus": "complete",
+        "documentType": "Petition",
+        "filedBy": "Veronica Obrien & Freya Nielsen",
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-08-12T18:10:03.299Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Veronica Obrien & Freya Nielsen",
+              "workItems": [],
+              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+              "receivedAt": "2019-08-12T18:10:03.299Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "section": "petitions",
+            "workItemId": "fc5636a8-66a9-4fb2-8b0d-cb006675c91e",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "isInternal": false,
+            "createdAt": "2019-08-12T18:10:03.299Z",
+            "assigneeName": null,
+            "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+            "messages": [
+              {
+                "createdAt": "2019-08-12T18:10:03.299Z",
+                "messageId": "9e4f6391-4ff7-456a-a546-a69f0b46d0c1",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Veronica Obrien & Freya Nielsen is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "107-19",
+            "updatedAt": "2019-08-12T18:10:03.299Z"
+          }
+        ],
+        "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "receivedAt": "2019-08-12T18:10:03.299Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "eventCode": "STIN",
+        "createdAt": "2019-08-12T18:10:03.300Z",
+        "processingStatus": "complete",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Veronica Obrien & Freya Nielsen",
+        "workItems": [],
+        "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "receivedAt": "2019-08-12T18:10:03.300Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "hasSupportingDocuments": false,
+        "attachments": false,
+        "serviceDate": "undefined-undefined-undefined",
+        "documentType": "Application for Waiver of Filing Fee and Affidavit",
+        "practitioner": [],
+        "partyPrimary": true,
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "hasSupportingDocuments": false,
+              "attachments": false,
+              "serviceDate": "undefined-undefined-undefined",
+              "documentType": "Application for Waiver of Filing Fee and Affidavit",
+              "practitioner": [],
+              "partyPrimary": true,
+              "workItems": [],
+              "receivedAt": "2019-08-12T18:10:36.019Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+              "eventCode": "APPW",
+              "createdAt": "2019-08-12T18:10:36.019Z",
+              "processingStatus": "pending",
+              "scenario": "Standard",
+              "filedBy": "Petr. Veronica Obrien",
+              "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+              "certificateOfService": false,
+              "certificateOfServiceDate": null,
+              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+              "category": "Application",
+              "documentTitle": "Application for Waiver of Filing Fee and Affidavit",
+              "relationship": "primaryDocument",
+              "docketNumber": "107-19"
+            },
+            "section": "docket",
+            "workItemId": "138bfaa0-9dd5-4009-8b39-36f473ffd7c1",
+            "assigneeId": null,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "isInternal": false,
+            "createdAt": "2019-08-12T18:10:36.019Z",
+            "assigneeName": null,
+            "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+            "messages": [
+              {
+                "createdAt": "2019-08-12T18:10:36.020Z",
+                "messageId": "780eb9b7-05c7-4ee9-9d78-c70b7635da8b",
+                "from": "Test Petitioner",
+                "message": "Application for Waiver of Filing Fee and Affidavit filed by Petitioner is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "107-19",
+            "updatedAt": "2019-08-12T18:10:36.019Z"
+          }
+        ],
+        "receivedAt": "2019-08-12T18:10:36.019Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "APPW",
+        "createdAt": "2019-08-12T18:10:36.019Z",
+        "processingStatus": "pending",
+        "scenario": "Standard",
+        "filedBy": "Petr. Veronica Obrien",
+        "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+        "certificateOfService": false,
+        "certificateOfServiceDate": null,
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "category": "Application",
+        "documentTitle": "Application for Waiver of Filing Fee and Affidavit",
+        "relationship": "primaryDocument",
+        "docketNumber": "107-19"
+      }
+    ],
+    "orderForFilingFee": false,
+    "partyType": "Petitioner & Spouse",
+    "caseType": "Innocent Spouse",
+    "yearAmounts": [],
+    "contactPrimary": {
+      "address3": "Quis sit quo quas u",
+      "address2": "Blanditiis nobis sus",
+      "city": "Quas irure asperiore",
+      "phone": "+1 (848) 752-3543",
+      "address1": "733 Milton Parkway",
+      "postalCode": "70360",
+      "name": "Veronica Obrien",
+      "state": "WY",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "createdAt": "2019-08-12T18:10:03.298Z",
+    "noticeOfAttachments": false,
+    "caseCaption": "Veronica Obrien & Freya Nielsen, Petitioners",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "2",
+    "filingType": "Myself and my spouse",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "S",
+    "docketNumberSuffix": "S",
+    "caseTitle": "Veronica Obrien & Freya Nielsen, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "currentVersion": "2",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Hartford, Connecticut",
+    "respondents": [],
+    "practitioners": [],
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "filingDate": "2019-08-12T18:10:03.299Z",
+        "filedBy": "Veronica Obrien & Freya Nielsen"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Hartford, Connecticut",
+        "index": 2,
+        "filingDate": "2019-08-12T18:10:03.298Z"
+      },
+      {
+        "description": "Application for Waiver of Filing Fee and Affidavit",
+        "index": 3,
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "filingDate": "2019-08-12T18:10:36.019Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "docketNumber": "107-19",
+    "status": "New"
+  },
+  {
+    "procedureType": "Small",
+    "contactSecondary": {
+      "address3": "Ut aute animi commo",
+      "address2": "Cupiditate dolore ex",
+      "city": "Laborum nemo facilis",
+      "phone": "+1 (512) 346-6094",
+      "address1": "814 West Second Avenue",
+      "postalCode": "81857",
+      "name": "Freya Nielsen",
+      "state": "AA",
+      "countryType": "domestic"
+    },
+    "isPaper": false,
+    "initialTitle": "Veronica Obrien & Freya Nielsen, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "documents": [
+      {
+        "eventCode": "P",
+        "createdAt": "2019-08-12T18:10:03.299Z",
+        "processingStatus": "complete",
+        "documentType": "Petition",
+        "filedBy": "Veronica Obrien & Freya Nielsen",
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-08-12T18:10:03.299Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Veronica Obrien & Freya Nielsen",
+              "workItems": [],
+              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+              "receivedAt": "2019-08-12T18:10:03.299Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "section": "petitions",
+            "workItemId": "fc5636a8-66a9-4fb2-8b0d-cb006675c91e",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "isInternal": false,
+            "createdAt": "2019-08-12T18:10:03.299Z",
+            "assigneeName": null,
+            "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+            "messages": [
+              {
+                "createdAt": "2019-08-12T18:10:03.299Z",
+                "messageId": "9e4f6391-4ff7-456a-a546-a69f0b46d0c1",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Veronica Obrien & Freya Nielsen is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "107-19",
+            "updatedAt": "2019-08-12T18:10:03.299Z"
+          },
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "createdAt": "2019-08-12T18:10:03.299Z",
+              "documentType": "Petition",
+              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+            },
+            "section": "armensChambers",
+            "workItemId": "01eb816a-3148-4182-8e30-11fa861a50eb",
+            "isInitializeCase": false,
+            "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+            "sentBy": "Test Petitionsclerk",
+            "sentBySection": "petitions",
+            "isInternal": true,
+            "createdAt": "2019-08-12T18:11:25.460Z",
+            "assigneeName": "Judge Armen",
+            "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+            "messages": [
+              {
+                "createdAt": "2019-08-12T18:11:25.460Z",
+                "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+                "messageId": "56681934-194a-440d-a8d9-40dd56065e7b",
+                "from": "Test Petitionsclerk",
+                "to": "Judge Armen",
+                "message": "This is a test message for Judge Armen.",
+                "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "107-19",
+            "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+            "updatedAt": "2019-08-12T18:11:25.460Z"
+          }
+        ],
+        "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "receivedAt": "2019-08-12T18:10:03.299Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "eventCode": "STIN",
+        "createdAt": "2019-08-12T18:10:03.300Z",
+        "processingStatus": "complete",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Veronica Obrien & Freya Nielsen",
+        "workItems": [],
+        "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "receivedAt": "2019-08-12T18:10:03.300Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "hasSupportingDocuments": false,
+        "attachments": false,
+        "serviceDate": "undefined-undefined-undefined",
+        "documentType": "Application for Waiver of Filing Fee and Affidavit",
+        "practitioner": [],
+        "partyPrimary": true,
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "hasSupportingDocuments": false,
+              "attachments": false,
+              "serviceDate": "undefined-undefined-undefined",
+              "documentType": "Application for Waiver of Filing Fee and Affidavit",
+              "practitioner": [],
+              "partyPrimary": true,
+              "workItems": [],
+              "receivedAt": "2019-08-12T18:10:36.019Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+              "eventCode": "APPW",
+              "createdAt": "2019-08-12T18:10:36.019Z",
+              "processingStatus": "pending",
+              "scenario": "Standard",
+              "filedBy": "Petr. Veronica Obrien",
+              "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+              "certificateOfService": false,
+              "certificateOfServiceDate": null,
+              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+              "category": "Application",
+              "documentTitle": "Application for Waiver of Filing Fee and Affidavit",
+              "relationship": "primaryDocument",
+              "docketNumber": "107-19"
+            },
+            "section": "docket",
+            "workItemId": "138bfaa0-9dd5-4009-8b39-36f473ffd7c1",
+            "assigneeId": null,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "isInternal": false,
+            "createdAt": "2019-08-12T18:10:36.019Z",
+            "assigneeName": null,
+            "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+            "messages": [
+              {
+                "createdAt": "2019-08-12T18:10:36.020Z",
+                "messageId": "780eb9b7-05c7-4ee9-9d78-c70b7635da8b",
+                "from": "Test Petitioner",
+                "message": "Application for Waiver of Filing Fee and Affidavit filed by Petitioner is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "107-19",
+            "updatedAt": "2019-08-12T18:10:36.019Z"
+          }
+        ],
+        "receivedAt": "2019-08-12T18:10:36.019Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "APPW",
+        "createdAt": "2019-08-12T18:10:36.019Z",
+        "processingStatus": "complete",
+        "scenario": "Standard",
+        "filedBy": "Petr. Veronica Obrien",
+        "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+        "certificateOfService": false,
+        "certificateOfServiceDate": null,
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "category": "Application",
+        "documentTitle": "Application for Waiver of Filing Fee and Affidavit",
+        "relationship": "primaryDocument",
+        "docketNumber": "107-19"
+      }
+    ],
+    "orderForFilingFee": false,
+    "partyType": "Petitioner & Spouse",
+    "caseType": "Innocent Spouse",
+    "yearAmounts": [],
+    "contactPrimary": {
+      "address3": "Quis sit quo quas u",
+      "address2": "Blanditiis nobis sus",
+      "city": "Quas irure asperiore",
+      "phone": "+1 (848) 752-3543",
+      "address1": "733 Milton Parkway",
+      "postalCode": "70360",
+      "name": "Veronica Obrien",
+      "state": "WY",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "createdAt": "2019-08-12T18:10:03.298Z",
+    "noticeOfAttachments": false,
+    "caseCaption": "Veronica Obrien & Freya Nielsen, Petitioners",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "3",
+    "filingType": "Myself and my spouse",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "S",
+    "docketNumberSuffix": "S",
+    "caseTitle": "Veronica Obrien & Freya Nielsen, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "currentVersion": "3",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Hartford, Connecticut",
+    "respondents": [],
+    "practitioners": [],
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "filingDate": "2019-08-12T18:10:03.299Z",
+        "filedBy": "Veronica Obrien & Freya Nielsen"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Hartford, Connecticut",
+        "index": 2,
+        "filingDate": "2019-08-12T18:10:03.298Z"
+      },
+      {
+        "description": "Application for Waiver of Filing Fee and Affidavit",
+        "index": 3,
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "filingDate": "2019-08-12T18:10:36.019Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "docketNumber": "107-19",
+    "status": "New"
+  },
+  {
+    "procedureType": "Small",
+    "contactSecondary": {
+      "address3": "Ut aute animi commo",
+      "address2": "Cupiditate dolore ex",
+      "city": "Laborum nemo facilis",
+      "phone": "+1 (512) 346-6094",
+      "address1": "814 West Second Avenue",
+      "postalCode": "81857",
+      "name": "Freya Nielsen",
+      "state": "AA",
+      "countryType": "domestic"
+    },
+    "isPaper": false,
+    "initialTitle": "Veronica Obrien & Freya Nielsen, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "documents": [
+      {
+        "eventCode": "P",
+        "createdAt": "2019-08-12T18:10:03.299Z",
+        "processingStatus": "complete",
+        "documentType": "Petition",
+        "filedBy": "Veronica Obrien & Freya Nielsen",
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-08-12T18:10:03.299Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Veronica Obrien & Freya Nielsen",
+              "workItems": [],
+              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+              "receivedAt": "2019-08-12T18:10:03.299Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "section": "petitions",
+            "workItemId": "fc5636a8-66a9-4fb2-8b0d-cb006675c91e",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "isInternal": false,
+            "createdAt": "2019-08-12T18:10:03.299Z",
+            "assigneeName": null,
+            "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+            "messages": [
+              {
+                "createdAt": "2019-08-12T18:10:03.299Z",
+                "messageId": "9e4f6391-4ff7-456a-a546-a69f0b46d0c1",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Veronica Obrien & Freya Nielsen is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "107-19",
+            "updatedAt": "2019-08-12T18:10:03.299Z"
+          },
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "createdAt": "2019-08-12T18:10:03.299Z",
+              "documentType": "Petition",
+              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+            },
+            "section": "armensChambers",
+            "workItemId": "01eb816a-3148-4182-8e30-11fa861a50eb",
+            "isInitializeCase": false,
+            "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+            "sentBy": "Test Petitionsclerk",
+            "sentBySection": "petitions",
+            "isInternal": true,
+            "createdAt": "2019-08-12T18:11:25.460Z",
+            "assigneeName": "Judge Armen",
+            "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+            "messages": [
+              {
+                "createdAt": "2019-08-12T18:11:25.460Z",
+                "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+                "messageId": "56681934-194a-440d-a8d9-40dd56065e7b",
+                "from": "Test Petitionsclerk",
+                "to": "Judge Armen",
+                "message": "This is a test message for Judge Armen.",
+                "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "107-19",
+            "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+            "updatedAt": "2019-08-12T18:11:25.460Z"
+          }
+        ],
+        "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "receivedAt": "2019-08-12T18:10:03.299Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "eventCode": "STIN",
+        "createdAt": "2019-08-12T18:10:03.300Z",
+        "processingStatus": "complete",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Veronica Obrien & Freya Nielsen",
+        "workItems": [],
+        "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "receivedAt": "2019-08-12T18:10:03.300Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "hasSupportingDocuments": false,
+        "attachments": false,
+        "serviceDate": "undefined-undefined-undefined",
+        "documentType": "Application for Waiver of Filing Fee and Affidavit",
+        "practitioner": [],
+        "partyPrimary": true,
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "hasSupportingDocuments": false,
+              "attachments": false,
+              "serviceDate": "undefined-undefined-undefined",
+              "documentType": "Application for Waiver of Filing Fee and Affidavit",
+              "practitioner": [],
+              "partyPrimary": true,
+              "workItems": [],
+              "receivedAt": "2019-08-12T18:10:36.019Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+              "eventCode": "APPW",
+              "createdAt": "2019-08-12T18:10:36.019Z",
+              "processingStatus": "pending",
+              "scenario": "Standard",
+              "filedBy": "Petr. Veronica Obrien",
+              "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+              "certificateOfService": false,
+              "certificateOfServiceDate": null,
+              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+              "category": "Application",
+              "documentTitle": "Application for Waiver of Filing Fee and Affidavit",
+              "relationship": "primaryDocument",
+              "docketNumber": "107-19"
+            },
+            "section": "docket",
+            "workItemId": "138bfaa0-9dd5-4009-8b39-36f473ffd7c1",
+            "assigneeId": null,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "isInternal": false,
+            "createdAt": "2019-08-12T18:10:36.019Z",
+            "assigneeName": null,
+            "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+            "messages": [
+              {
+                "createdAt": "2019-08-12T18:10:36.020Z",
+                "messageId": "780eb9b7-05c7-4ee9-9d78-c70b7635da8b",
+                "from": "Test Petitioner",
+                "message": "Application for Waiver of Filing Fee and Affidavit filed by Petitioner is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "107-19",
+            "updatedAt": "2019-08-12T18:10:36.019Z"
+          },
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "createdAt": "2019-08-12T18:10:36.019Z",
+              "documentType": "Application for Waiver of Filing Fee and Affidavit",
+              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+            },
+            "section": "armensChambers",
+            "workItemId": "94a7d462-cf07-4a05-9280-f59273dfffdc",
+            "isInitializeCase": false,
+            "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+            "sentBy": "Test Docketclerk",
+            "sentBySection": "docket",
+            "isInternal": true,
+            "createdAt": "2019-08-12T18:12:20.123Z",
+            "assigneeName": "Judge Armen",
+            "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+            "messages": [
+              {
+                "createdAt": "2019-08-12T18:12:20.123Z",
+                "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+                "messageId": "8b749bb0-ee01-468e-baa1-88760cd1f13e",
+                "from": "Test Docketclerk",
+                "to": "Judge Armen",
+                "message": "What do you think?",
+                "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "107-19",
+            "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+            "updatedAt": "2019-08-12T18:12:20.123Z"
+          }
+        ],
+        "receivedAt": "2019-08-12T18:10:36.019Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "APPW",
+        "createdAt": "2019-08-12T18:10:36.019Z",
+        "processingStatus": "complete",
+        "scenario": "Standard",
+        "filedBy": "Petr. Veronica Obrien",
+        "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+        "certificateOfService": false,
+        "certificateOfServiceDate": null,
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "category": "Application",
+        "documentTitle": "Application for Waiver of Filing Fee and Affidavit",
+        "relationship": "primaryDocument",
+        "docketNumber": "107-19"
+      }
+    ],
+    "orderForFilingFee": false,
+    "partyType": "Petitioner & Spouse",
+    "caseType": "Innocent Spouse",
+    "yearAmounts": [],
+    "contactPrimary": {
+      "address3": "Quis sit quo quas u",
+      "address2": "Blanditiis nobis sus",
+      "city": "Quas irure asperiore",
+      "phone": "+1 (848) 752-3543",
+      "address1": "733 Milton Parkway",
+      "postalCode": "70360",
+      "name": "Veronica Obrien",
+      "state": "WY",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "createdAt": "2019-08-12T18:10:03.298Z",
+    "noticeOfAttachments": false,
+    "caseCaption": "Veronica Obrien & Freya Nielsen, Petitioners",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "4",
+    "filingType": "Myself and my spouse",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "S",
+    "docketNumberSuffix": "S",
+    "caseTitle": "Veronica Obrien & Freya Nielsen, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "currentVersion": "4",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Hartford, Connecticut",
+    "respondents": [],
+    "practitioners": [],
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "filingDate": "2019-08-12T18:10:03.299Z",
+        "filedBy": "Veronica Obrien & Freya Nielsen"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Hartford, Connecticut",
+        "index": 2,
+        "filingDate": "2019-08-12T18:10:03.298Z"
+      },
+      {
+        "description": "Application for Waiver of Filing Fee and Affidavit",
+        "index": 3,
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "filingDate": "2019-08-12T18:10:36.019Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "docketNumber": "107-19",
+    "status": "New"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "gsi1pk": "workitem-138bfaa0-9dd5-4009-8b39-36f473ffd7c1",
+    "document": {
+      "hasSupportingDocuments": false,
+      "attachments": false,
+      "serviceDate": "undefined-undefined-undefined",
+      "documentType": "Application for Waiver of Filing Fee and Affidavit",
+      "practitioner": [],
+      "partyPrimary": true,
+      "workItems": [],
+      "receivedAt": "2019-08-12T18:10:36.019Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "eventCode": "APPW",
+      "createdAt": "2019-08-12T18:10:36.019Z",
+      "processingStatus": "pending",
+      "scenario": "Standard",
+      "filedBy": "Petr. Veronica Obrien",
+      "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+      "certificateOfService": false,
+      "certificateOfServiceDate": null,
+      "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+      "category": "Application",
+      "documentTitle": "Application for Waiver of Filing Fee and Affidavit",
+      "relationship": "primaryDocument",
+      "docketNumber": "107-19"
+    },
+    "section": "docket",
+    "workItemId": "138bfaa0-9dd5-4009-8b39-36f473ffd7c1",
+    "assigneeId": null,
+    "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isInternal": false,
+    "createdAt": "2019-08-12T18:10:36.019Z",
+    "assigneeName": null,
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "workitem-138bfaa0-9dd5-4009-8b39-36f473ffd7c1",
+    "messages": [
+      {
+        "createdAt": "2019-08-12T18:10:36.020Z",
+        "messageId": "780eb9b7-05c7-4ee9-9d78-c70b7635da8b",
+        "from": "Test Petitioner",
+        "message": "Application for Waiver of Filing Fee and Affidavit filed by Petitioner is ready for review.",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "section-docket",
+    "docketNumber": "107-19",
+    "updatedAt": "2019-08-12T18:10:36.019Z"
+  },
+  {
+    "sk": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+  },
+  {
+    "sk": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "pk": "107-19|case"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "gsi1pk": "workitem-94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "document": {
+      "createdAt": "2019-08-12T18:10:36.019Z",
+      "documentType": "Application for Waiver of Filing Fee and Affidavit",
+      "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb"
+    },
+    "section": "armensChambers",
+    "workItemId": "94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "isInitializeCase": false,
+    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Docketclerk",
+    "sentBySection": "docket",
+    "isInternal": true,
+    "createdAt": "2019-08-12T18:12:20.123Z",
+    "assigneeName": "Judge Armen",
+    "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
+    "sk": "workitem-94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "messages": [
+      {
+        "createdAt": "2019-08-12T18:12:20.123Z",
+        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "messageId": "8b749bb0-ee01-468e-baa1-88760cd1f13e",
+        "from": "Test Docketclerk",
+        "to": "Judge Armen",
+        "message": "What do you think?",
+        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "workitem-94a7d462-cf07-4a05-9280-f59273dfffdc",
+    "docketNumber": "107-19",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2019-08-12T18:12:20.123Z"
+  }
+]
