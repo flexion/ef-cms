@@ -74,11 +74,6 @@
     "updatedAt": "2019-08-12T18:11:25.460Z"
   },
   {
-    "sk": "docketNumberCounter-2019",
-    "id": 7,
-    "pk": "docketNumberCounter-2019"
-  },
-  {
     "sk": "case-75f67592-a288-44fd-8d9c-7bcc9f1c0628",
     "caseId": "75f67592-a288-44fd-8d9c-7bcc9f1c0628",
     "pk": "catalog"
