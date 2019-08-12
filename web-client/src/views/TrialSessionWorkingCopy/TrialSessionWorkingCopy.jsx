@@ -6,7 +6,7 @@ import React from 'react';
 
 export const TrialSessionWorkingCopy = connect(
   {},
-  ({}) => {
+  () => {
     return (
       <>
         <TrialSessionDetailHeader />
