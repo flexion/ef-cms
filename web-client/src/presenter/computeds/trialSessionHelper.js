@@ -14,6 +14,7 @@ export const trialSessionHelper = (get, applicationContext) => {
     assignedJudgeIsCurrentUser,
     showSwitchToSessionDetails,
     showSwitchToWorkingCopy,
+    title: 'Session Working Copy',
   };
 
   return result;

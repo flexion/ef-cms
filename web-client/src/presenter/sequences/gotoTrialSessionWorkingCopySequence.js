@@ -30,10 +30,10 @@ const gotoTrialSessionDetails = [
       setCalendaredCasesOnTrialSessionAction,
     ],
   },
-  setCurrentPageAction('TrialSessionDetail'),
+  setCurrentPageAction('TrialSessionWorkingCopy'),
 ];
 
-export const gotoTrialSessionDetailSequence = [
+export const gotoTrialSessionWorkingCopySequence = [
   isLoggedInAction,
   {
     isLoggedIn: gotoTrialSessionDetails,
