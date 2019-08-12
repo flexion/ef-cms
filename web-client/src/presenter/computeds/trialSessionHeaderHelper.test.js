@@ -25,7 +25,7 @@ describe('trial session helper computed', () => {
       state: {
         currentPage: 'TrialSessionDetail',
         trialSession: {
-          judgeId: '98765',
+          judge: { userId: '98765' },
         },
       },
     });
@@ -41,7 +41,7 @@ describe('trial session helper computed', () => {
       state: {
         currentPage: 'TrialSessionWorkingCopy',
         trialSession: {
-          judgeId: '777',
+          judge: { userId: '777' },
         },
       },
     });
@@ -57,7 +57,7 @@ describe('trial session helper computed', () => {
       state: {
         currentPage: 'TrialSessionDetail',
         trialSession: {
-          judgeId: '777',
+          judge: { userId: '777' },
         },
       },
     });
