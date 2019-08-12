@@ -2,18 +2,18 @@ import { state } from 'cerebral';
 
 export const trialSessionHelper = (get, applicationContext) => {
   const trialSession = get(state.trialSession);
-  if (!trialSession) return undefined;
+  if (!trialSession) return {};
 
   const assignedJudgeIsCurrentUser =
     trialSession.judgeId &&
     trialSession.judgeId == applicationContext.getCurrentUser().userId;
 
-  const showSwitchToSessionDetail = 'TrialSessionWorkingCopy'.includes(
-    get(state.currentPage),
-  );
-  const showSwitchToWorkingCopy = 'TrialSessionDetail'.includes(
-    get(state.currentPage),
-  );
+  const showSwitchToSessionDetail =
+    assignedJudgeIsCurrentUser &&
+    'TrialSessionWorkingCopy'.includes(get(state.currentPage));
+  const showSwitchToWorkingCopy =
+    assignedJudgeIsCurrentUser &&
+    'TrialSessionDetail'.includes(get(state.currentPage));
 
   const result = {
     assignedJudgeIsCurrentUser,
