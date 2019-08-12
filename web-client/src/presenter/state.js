@@ -38,7 +38,7 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
-import { trialSessionHelper } from './computeds/trialSessionHelper';
+import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
@@ -143,7 +143,7 @@ export const state = {
   submitting: false,
   timeRemaining: Number.POSITIVE_INFINITY,
   trialCitiesHelper,
-  trialSessionHelper,
+  trialSessionHeaderHelper,
   usaBanner: {
     showDetails: false,
   },

@@ -6,9 +6,9 @@ import React from 'react';
 export const TrialSessionDetailHeader = connect(
   {
     formattedTrialSession: state.formattedTrialSessionDetails,
-    trialSessionHelper: state.trialSessionHelper,
+    trialSessionHeaderHelper: state.trialSessionHeaderHelper,
   },
-  ({ formattedTrialSession, trialSessionHelper }) => (
+  ({ formattedTrialSession, trialSessionHeaderHelper }) => (
     <>
       <div className="big-blue-header">
         <div className="grid-container">
@@ -25,7 +25,7 @@ export const TrialSessionDetailHeader = connect(
               </span>
             </span>
             <span className="margin-left-205">
-              {trialSessionHelper.showSwitchToWorkingCopy && (
+              {trialSessionHeaderHelper.showSwitchToWorkingCopy && (
                 <a
                   className="button-switch-box"
                   href={`/trial-session-working-copy/${formattedTrialSession.trialSessionId}`}
@@ -34,7 +34,7 @@ export const TrialSessionDetailHeader = connect(
                   Switch to Working Copy
                 </a>
               )}
-              {trialSessionHelper.showSwitchToSessionDetail && (
+              {trialSessionHeaderHelper.showSwitchToSessionDetail && (
                 <a
                   className="button-switch-box"
                   href={`/trial-session-detail/${formattedTrialSession.trialSessionId}`}

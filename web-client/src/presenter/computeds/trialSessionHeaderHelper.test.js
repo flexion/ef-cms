@@ -1,25 +1,27 @@
 import { runCompute } from 'cerebral/test';
-import { trialSessionHelper as trialSessionHelperComputed } from './trialSessionHelper';
+import { trialSessionHeaderHelper as trialSessionHeaderHelperComputed } from './trialSessionHeaderHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
 let currentUser = {
-  role: 'judgeArmen',
-  section: 'judge',
+  role: 'judge',
   userId: '777',
 };
 
-const trialSessionHelper = withAppContextDecorator(trialSessionHelperComputed, {
-  getCurrentUser: () => currentUser,
-});
+const trialSessionHeaderHelper = withAppContextDecorator(
+  trialSessionHeaderHelperComputed,
+  {
+    getCurrentUser: () => currentUser,
+  },
+);
 
 describe('trial session helper computed', () => {
   it('computes defaults with no data', () => {
-    const result = runCompute(trialSessionHelper, {});
+    const result = runCompute(trialSessionHeaderHelper, {});
     expect(result).toBeDefined();
   });
 
   it('does not show switch-links in header if not assigned judge', () => {
-    const result = runCompute(trialSessionHelper, {
+    const result = runCompute(trialSessionHeaderHelper, {
       state: {
         currentPage: 'TrialSessionDetail',
         trialSession: {
@@ -35,7 +37,7 @@ describe('trial session helper computed', () => {
   });
 
   it('shows "Switch to Session Detail" in header if viewing Working Copy and user is assigned judge', () => {
-    const result = runCompute(trialSessionHelper, {
+    const result = runCompute(trialSessionHeaderHelper, {
       state: {
         currentPage: 'TrialSessionWorkingCopy',
         trialSession: {
@@ -51,7 +53,7 @@ describe('trial session helper computed', () => {
   });
 
   it('shows "Switch to Session Working Copy" in header if viewing Session Detail and user is assigned judge', () => {
-    const result = runCompute(trialSessionHelper, {
+    const result = runCompute(trialSessionHeaderHelper, {
       state: {
         currentPage: 'TrialSessionDetail',
         trialSession: {
