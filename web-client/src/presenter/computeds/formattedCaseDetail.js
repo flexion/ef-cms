@@ -150,7 +150,28 @@ const formatDocketRecordWithDocument = (
           .formatDateString(document.certificateOfServiceDate, 'MMDDYY');
       }
 
-      record.filingsAndProceedings = getFilingsAndProceedings(document);
+      //filings and proceedings string
+      //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
+      const filingsAndProceedingsArray = [
+        `${
+          document.certificateOfService
+            ? `(C/S ${document.certificateOfServiceDateFormatted})`
+            : ''
+        }`,
+        `${document.exhibits ? '(Exhibit(s))' : ''}`,
+        `${document.attachments ? '(Attachment(s))' : ''}`,
+        `${
+          document.objections === 'Yes'
+            ? '(Objection)'
+            : document.objections === 'No'
+            ? '(No Objection)'
+            : ''
+        }`,
+        `${document.lodged ? '(Lodged)' : ''}`,
+      ];
+      record.filingsAndProceedings = filingsAndProceedingsArray
+        .filter(item => item !== '')
+        .join(' ');
 
       if (document.additionalInfo) {
         record.description += ` ${document.additionalInfo}`;
@@ -159,30 +180,6 @@ const formatDocketRecordWithDocument = (
 
     return { document, index, record };
   });
-};
-
-export const getFilingsAndProceedings = document => {
-  //filings and proceedings string
-  //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
-  const filingsAndProceedingsArray = [
-    `${
-      document.certificateOfService
-        ? `(C/S ${document.certificateOfServiceDateFormatted})`
-        : ''
-    }`,
-    `${document.exhibits ? '(Exhibit(s))' : ''}`,
-    `${document.attachments ? '(Attachment(s))' : ''}`,
-    `${
-      document.objections === 'Yes'
-        ? '(Objection)'
-        : document.objections === 'No'
-        ? '(No Objection)'
-        : ''
-    }`,
-    `${document.lodged ? '(Lodged)' : ''}`,
-  ];
-
-  return filingsAndProceedingsArray.filter(item => item !== '').join(' ');
 };
 
 const formatCaseDeadlines = (applicationContext, caseDeadlines = []) => {

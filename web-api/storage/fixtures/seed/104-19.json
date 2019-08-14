@@ -5,7 +5,6 @@
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
         "documentType": "Petition",
-        "documentTitle": "Petition",
         "filedBy": "Test Petitioner",
         "processingStatus": "complete",
         "workItems": [
@@ -15,7 +14,6 @@
             "document": {
               "createdAt": "2019-03-05T17:34:13.490Z",
               "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
-              "documentTitle": "Petition",
               "documentType": "Petition",
               "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
               "filedBy": "Test Petitioner",
@@ -163,7 +161,6 @@
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
       "documentType": "Petition",
-      "documentTitle": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "filedBy": "Test Petitioner",
       "workItems": []
@@ -200,7 +197,6 @@
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
       "documentType": "Petition",
-      "documentTitle": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "filedBy": "Test Petitioner",
       "workItems": []

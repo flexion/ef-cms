@@ -87,9 +87,8 @@ export const IndividualWorkQueueOutbox = connect(
                         e.stopPropagation();
                       }}
                     >
-                      {item.document.documentTitle}
-                    </a>{' '}
-                    {item.document.filingsAndProceedings}
+                      {item.document.documentType}
+                    </a>
                   </div>
                   {workQueueHelper.showMessageContent && (
                     <div
