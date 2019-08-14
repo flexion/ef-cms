@@ -6,70 +6,77 @@ var app = express();
 app.use(
   '/api',
   proxy({
+    logLevel: 'warn',
     pathRewrite: {
       '^/api': '',
     },
-    target: 'http://localhost:3001',
+    target: 'http://127.0.0.1:3001',
   }),
 );
 
 app.use(
   '/cases',
   proxy({
+    logLevel: 'warn',
     pathRewrite: {
       '^/cases': '',
     },
-    target: 'http://localhost:3002',
+    target: 'http://127.0.0.1:3002',
   }),
 );
 
 app.use(
   '/users',
   proxy({
+    logLevel: 'warn',
     pathRewrite: {
       '^/users': '',
     },
-    target: 'http://localhost:3003',
+    target: 'http://127.0.0.1:3003',
   }),
 );
 
 app.use(
   '/documents',
   proxy({
+    logLevel: 'warn',
     pathRewrite: {
       '^/documents': '',
     },
-    target: 'http://localhost:3004',
+    target: 'http://127.0.0.1:3004',
   }),
 );
 
 app.use(
   '/work-items',
   proxy({
+    logLevel: 'warn',
     pathRewrite: {
       '^/work-items': '',
     },
-    target: 'http://localhost:3005',
+    target: 'http://127.0.0.1:3005',
   }),
 );
 
 app.use(
   '/sections',
   proxy({
+    logLevel: 'warn',
     pathRewrite: {
       '^/sections': '',
     },
-    target: 'http://localhost:3006',
+    target: 'http://127.0.0.1:3006',
   }),
 );
 
 app.use(
   '/trial-sessions',
   proxy({
+    logLevel: 'warn',
     pathRewrite: {
       '^/trial-sessions': '',
     },
-    target: 'http://localhost:3007',
+    target: 'http://127.0.0.1:3007',
   }),
 );
 
