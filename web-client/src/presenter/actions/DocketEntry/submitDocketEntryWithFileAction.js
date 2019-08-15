@@ -2,21 +2,25 @@ import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * submit a new docket entry
+ * utility function used for drying up the code needed to upload a docket entry
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.props the cerebral props object
+ * @param {object} providers.caseId the uuid caseId
+ * @param {object} providers.docketNumber the docketNumber of the case
+ * @param {object} providers.documentId the uuid documentId
+ * @param {Function} providers.get the get function for fetching cerebral state
+ * @param {Function} providers.runInteractor the interactor to call
  * @returns {Promise} async action
  */
-export const submitDocketEntryWithFileAction = async ({
+export const handleDocketEntryUpload = async ({
   applicationContext,
+  caseId,
+  docketNumber,
+  documentId,
   get,
-  props,
+  runInteractor,
 }) => {
-  const { caseId, docketNumber } = get(state.caseDetail);
-  const { primaryDocumentFileId } = props;
-
   let documentMetadata = omit(
     {
       ...get(state.form),
@@ -36,35 +40,61 @@ export const submitDocketEntryWithFileAction = async ({
 
   await applicationContext.getUseCases().virusScanPdfInteractor({
     applicationContext,
-    documentId: primaryDocumentFileId,
+    documentId,
   });
 
   await applicationContext.getUseCases().validatePdfInteractor({
     applicationContext,
-    documentId: primaryDocumentFileId,
+    documentId,
   });
 
   await applicationContext.getUseCases().sanitizePdfInteractor({
     applicationContext,
-    documentId: primaryDocumentFileId,
+    documentId,
   });
 
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .fileDocketEntryInteractor({
-      applicationContext,
-      documentMetadata,
-      primaryDocumentFileId,
-    });
+  const caseDetail = await runInteractor({ documentMetadata });
 
   await applicationContext.getUseCases().createCoverSheetInteractor({
     applicationContext,
     caseId: caseDetail.caseId,
-    documentId: primaryDocumentFileId,
+    documentId,
   });
 
   return {
     caseDetail,
     caseId: docketNumber,
   };
+};
+
+/**
+ * submit a new docket entry
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.props the cerebral props object
+ * @returns {Promise} async action
+ */
+export const submitDocketEntryWithFileAction = async ({
+  applicationContext,
+  get,
+  props,
+}) => {
+  const { caseId, docketNumber } = get(state.caseDetail);
+  const { primaryDocumentFileId } = props;
+
+  return await handleDocketEntryUpload({
+    applicationContext,
+    caseId,
+    docketNumber,
+    documentId: primaryDocumentFileId,
+    get,
+    runInteractor: ({ documentMetadata }) => {
+      return applicationContext.getUseCases().fileDocketEntryInteractor({
+        applicationContext,
+        documentMetadata,
+        primaryDocumentFileId,
+      });
+    },
+  });
 };

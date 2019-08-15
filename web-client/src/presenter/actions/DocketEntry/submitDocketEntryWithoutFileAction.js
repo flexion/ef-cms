@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import { handleUpdateDocketEntry } from './updateDocketEntryWithoutFileAction';
 import { state } from 'cerebral';
 
 /**
@@ -15,33 +15,17 @@ export const submitDocketEntryWithoutFileAction = async ({
 }) => {
   const { caseId, docketNumber } = get(state.caseDetail);
 
-  let documentMetadata = omit(
-    {
-      ...get(state.form),
-    },
-    ['primaryDocumentFile'],
-  );
-
-  documentMetadata = {
-    ...documentMetadata,
-    isFileAttached: false,
-    isPaper: true,
-    docketNumber,
+  return handleUpdateDocketEntry({
+    applicationContext,
     caseId,
-    createdAt: applicationContext.getUtilities().createISODateString(),
-    receivedAt: documentMetadata.dateReceived,
-  };
-
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .fileDocketEntryInteractor({
-      applicationContext,
-      documentMetadata,
-      primaryDocumentFileId: applicationContext.getUniqueId(),
-    });
-
-  return {
-    caseDetail,
-    caseId: docketNumber,
-  };
+    docketNumber,
+    get,
+    runInteractor: ({ documentMetadata }) => {
+      return applicationContext.getUseCases().fileDocketEntryInteractor({
+        applicationContext,
+        documentMetadata,
+        primaryDocumentFileId: applicationContext.getUniqueId(),
+      });
+    },
+  });
 };

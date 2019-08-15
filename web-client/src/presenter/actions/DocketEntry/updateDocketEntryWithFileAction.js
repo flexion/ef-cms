@@ -1,5 +1,6 @@
-import { omit } from 'lodash';
 import { state } from 'cerebral';
+
+import { handleDocketEntryUpload } from './submitDocketEntryWithFileAction';
 
 /**
  * submit a new docket entry
@@ -16,54 +17,18 @@ export const updateDocketEntryWithFileAction = async ({
   const { caseId, docketNumber } = get(state.caseDetail);
   const documentId = get(state.documentId);
 
-  let documentMetadata = omit(
-    {
-      ...get(state.form),
-    },
-    ['primaryDocumentFile'],
-  );
-
-  documentMetadata = {
-    ...documentMetadata,
-    isFileAttached: true,
-    isPaper: true,
-    docketNumber,
+  return await handleDocketEntryUpload({
+    applicationContext,
     caseId,
-    createdAt: applicationContext.getUtilities().createISODateString(),
-    receivedAt: documentMetadata.dateReceived,
-  };
-
-  await applicationContext.getUseCases().virusScanPdfInteractor({
-    applicationContext,
+    docketNumber,
     documentId,
+    get,
+    runInteractor: ({ documentMetadata }) => {
+      return applicationContext.getUseCases().fileDocketEntryInteractor({
+        applicationContext,
+        documentMetadata,
+        primaryDocumentFileId: documentId,
+      });
+    },
   });
-
-  await applicationContext.getUseCases().validatePdfInteractor({
-    applicationContext,
-    documentId,
-  });
-
-  await applicationContext.getUseCases().sanitizePdfInteractor({
-    applicationContext,
-    documentId,
-  });
-
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .updateDocketEntryInteractor({
-      applicationContext,
-      documentMetadata,
-      primaryDocumentFileId: documentId,
-    });
-
-  await applicationContext.getUseCases().createCoverSheetInteractor({
-    applicationContext,
-    caseId: caseDetail.caseId,
-    documentId,
-  });
-
-  return {
-    caseDetail,
-    caseId: docketNumber,
-  };
 };
