@@ -70,8 +70,10 @@ export const IndividualWorkQueueBatched = connect(
                         e.stopPropagation();
                       }}
                     >
-                      {item.document.documentType}
-                    </a>
+                      {item.document.documentTitle ||
+                        item.document.documentType}
+                    </a>{' '}
+                    {item.document.filingsAndProceedings}
                   </div>
                   {workQueueHelper.showMessageContent && (
                     <div

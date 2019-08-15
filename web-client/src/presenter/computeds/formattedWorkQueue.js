@@ -4,6 +4,7 @@ import {
   IRS_BATCH_SYSTEM_SECTION,
   SENIOR_ATTORNEY_SECTION,
 } from '../../../../shared/src/business/entities/WorkQueue';
+import { getFilingsAndProceedings } from './formattedCaseDetail';
 import { state } from 'cerebral';
 import _ from 'lodash';
 import moment from 'moment';
@@ -138,6 +139,10 @@ export const formatWorkItem = (
       message => message.message == 'Petition batched for IRS',
     ).createdAtTimeFormatted;
   }
+
+  result.document.filingsAndProceedings = getFilingsAndProceedings(
+    result.document,
+  );
 
   return result;
 };
@@ -295,11 +300,13 @@ export const formattedWorkQueue = (get, applicationContext) => {
     documentQc: {
       my: {
         batched: 'batchedAt',
+        inProgress: 'receivedAt',
         inbox: 'receivedAt',
         outbox: user.role === 'petitionsclerk' ? 'completedAt' : 'receivedAt',
       },
       section: {
         batched: 'batchedAt',
+        inProgress: 'receivedAt',
         inbox: 'receivedAt',
         outbox: user.role === 'petitionsclerk' ? 'completedAt' : 'receivedAt',
       },
@@ -316,12 +323,44 @@ export const formattedWorkQueue = (get, applicationContext) => {
     },
   };
 
+  let sortDirections = {
+    documentQc: {
+      my: {
+        batched: 'desc',
+        inProgress: 'asc',
+        inbox: 'desc',
+        outbox: 'desc',
+      },
+      section: {
+        batched: 'desc',
+        inProgress: 'asc',
+        inbox: 'desc',
+        outbox: 'desc',
+      },
+    },
+    messages: {
+      my: {
+        inbox: 'desc',
+        outbox: 'desc',
+      },
+      section: {
+        inbox: 'desc',
+        outbox: 'desc',
+      },
+    },
+  };
+
   const sortField =
     sortFields[isInternal ? 'messages' : 'documentQc'][
       workQueueToDisplay.queue
     ][workQueueToDisplay.box];
 
-  workQueue = _.orderBy(workQueue, [sortField, 'docketNumber'], 'desc');
+  const sortDirection =
+    sortDirections[isInternal ? 'messages' : 'documentQc'][
+      workQueueToDisplay.queue
+    ][workQueueToDisplay.box];
+
+  workQueue = _.orderBy(workQueue, [sortField, 'docketNumber'], sortDirection);
 
   return workQueue;
 };

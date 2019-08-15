@@ -1,12 +1,29 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const WorkingCopySessionList = connect(
   {
+    autoSaveTrialSessionWorkingCopySequence:
+      sequences.autoSaveTrialSessionWorkingCopySequence,
     sessions: state.trialSessionWorkingCopyHelper.formattedSessions,
+    sort: state.trialSessionWorkingCopy.sort,
+    sortOrder: state.trialSessionWorkingCopy.sortOrder,
+    toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
+    trialSessionWorkingCopy: state.trialSessionWorkingCopy,
+    trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
   },
-  ({ sessions }) => {
+  ({
+    autoSaveTrialSessionWorkingCopySequence,
+    sessions,
+    sort,
+    sortOrder,
+    toggleWorkingCopySortSequence,
+    trialSessionWorkingCopy,
+    trialStatusOptions,
+  }) => {
     return (
       <div className="margin-top-4">
         <table
@@ -16,11 +33,43 @@ export const WorkingCopySessionList = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Docket Number">
-                <span className="padding-left-2px">Docket</span>
+              <th aria-label="Docket Number" className="padding-left-2px">
+                <span
+                  className={classNames(
+                    ' margin-right-105',
+                    sort === 'docket' && 'sortActive',
+                  )}
+                  onClick={() => {
+                    toggleWorkingCopySortSequence({
+                      sort: 'docket',
+                    });
+                  }}
+                >
+                  Docket
+                </span>
+                {(sort === 'docket' && sortOrder === 'desc' && (
+                  <FontAwesomeIcon icon="caret-up" />
+                )) || <FontAwesomeIcon icon="caret-down" />}
               </th>
               <th>Case Caption</th>
-              <th>Petitioner Counsel</th>
+              <th>
+                <span
+                  className={classNames(
+                    'margin-right-105',
+                    sort === 'practitioner' && 'sortActive',
+                  )}
+                  onClick={() => {
+                    toggleWorkingCopySortSequence({
+                      sort: 'practitioner',
+                    });
+                  }}
+                >
+                  Petitioner Counsel
+                </span>
+                {(sort === 'practitioner' && sortOrder === 'desc' && (
+                  <FontAwesomeIcon icon="caret-up" />
+                )) || <FontAwesomeIcon icon="caret-down" />}
+              </th>
               <th>Respondent Counsel</th>
               <th colSpan="2">Trial Status</th>
             </tr>
@@ -44,7 +93,35 @@ export const WorkingCopySessionList = connect(
                     <div key={idx}>{respondent.name}</div>
                   ))}
                 </td>
-                <td></td>
+                <td>
+                  <select
+                    aria-label="trial status"
+                    className="usa-select"
+                    id={`trialSessionWorkingCopy-${item.docketNumber}`}
+                    name={`caseMetadata.${item.docketNumber}.trialStatus`}
+                    value={
+                      (trialSessionWorkingCopy.caseMetadata[
+                        item.docketNumber
+                      ] &&
+                        trialSessionWorkingCopy.caseMetadata[item.docketNumber]
+                          .trialStatus) ||
+                      ''
+                    }
+                    onChange={e => {
+                      autoSaveTrialSessionWorkingCopySequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  >
+                    <option value="">-Trial Status-</option>
+                    {trialStatusOptions.map(({ key, value }) => (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    ))}
+                  </select>
+                </td>
               </tr>
             </tbody>
           ))}
