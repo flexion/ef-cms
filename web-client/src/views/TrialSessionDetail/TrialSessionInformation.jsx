@@ -19,6 +19,7 @@ export const TrialSessionInformation = connect(
             <div className="grid-col-2">
               {formattedTrialSession.isCalendared && (
                 <button
+                  aria-label="printable trial calendar"
                   className="usa-button usa-button--unstyled float-right margin-top-2"
                   onClick={() => {
                     printTrialCalendarSequence();

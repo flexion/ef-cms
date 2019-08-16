@@ -41,6 +41,7 @@ export const PrintableTrialCalendar = connect(
 
         <div className="grid-container print-docket-record">
           <button
+            aria-label="back to session information"
             className="usa-button usa-button--unstyled margin-bottom-3"
             onClick={() => {
               gotoTrialSessionDetailSequence({
