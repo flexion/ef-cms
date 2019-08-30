@@ -105,7 +105,7 @@ jobs:
             ./wait-until.sh http://localhost:3000/api/swagger 
             sleep 5
             # run --changedSince only on PRs
-            if [ -n ${CIRCLE_PR_NUMBER:-} ]; then
+            if [ "${CIRCLE_BRANCH}" != "develop" && "${CIRCLE_BRANCH}" != "staging" ]; then
               BASE_BRANCH=$(curl -fsSL https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$CIRCLE_PR_NUMBER | jq -r '.base.ref')
               npm run test:client --changedSince=${BASE_BRANCH}
             else
