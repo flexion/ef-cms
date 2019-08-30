@@ -57,7 +57,7 @@ fakeFile.name = 'fakeFile.pdf';
 test = CerebralTest(presenter);
 
 describe('Modify Petitioner Contact Information', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.setTimeout(30000);
     global.window = {
       localStorage: {

@@ -48,7 +48,7 @@ fakeFile.name = 'fakeFile.pdf';
 test = CerebralTest(presenter);
 
 describe('Docket Clerk Creates A Trial', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.setTimeout(30000);
     global.window = {
       localStorage: {

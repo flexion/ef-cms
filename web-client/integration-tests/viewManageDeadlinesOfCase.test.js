@@ -60,7 +60,7 @@ fakeFile.name = 'fakeFile.pdf';
 test = CerebralTest(presenter);
 
 describe('View and manage the deadlines of a case', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.setTimeout(30000);
     global.window = {
       localStorage: {

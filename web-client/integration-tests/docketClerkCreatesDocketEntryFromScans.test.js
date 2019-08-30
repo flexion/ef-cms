@@ -79,7 +79,7 @@ describe('Create Docket Entry From Scans', () => {
   let scannerSourceIndex = 0;
   let scannerSourceName = 'scanner A';
 
-  beforeEach(() => {
+  beforeAll(() => {
     jest.setTimeout(30000);
     global.alert = () => null;
     global.URL = {

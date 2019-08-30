@@ -68,7 +68,7 @@ presenter.state = mapValues(presenter.state, value => {
 test = CerebralTest(presenter);
 
 describe('Petitions Clerk Create Order Journey', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.setTimeout(30000);
     global.window = {
       DOMParser: () => {

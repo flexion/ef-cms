@@ -15,7 +15,7 @@ import {
 const test = setupTest();
 
 describe('Create a work item', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.setTimeout(30000);
   });
 

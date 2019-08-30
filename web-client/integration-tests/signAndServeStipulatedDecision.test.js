@@ -23,7 +23,7 @@ const test = setupTest({
 });
 
 describe('a user signs and serves a stipulated decision', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.setTimeout(30000);
 
     const fakeData =

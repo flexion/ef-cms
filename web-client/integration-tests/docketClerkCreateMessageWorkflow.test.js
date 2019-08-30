@@ -16,7 +16,7 @@ import {
 const test = setupTest();
 
 describe('a docketclerk user creates a new message for another docketclerk user', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.setTimeout(30000);
   });
 

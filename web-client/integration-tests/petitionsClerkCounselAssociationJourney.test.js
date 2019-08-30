@@ -50,7 +50,7 @@ presenter.state = mapValues(presenter.state, value => {
 test = CerebralTest(presenter);
 
 describe('Petitions Clerk Counsel Association Journey', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     global.window = {
       localStorage: {
         removeItem: () => null,
