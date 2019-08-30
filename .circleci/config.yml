@@ -106,7 +106,7 @@ jobs:
             sleep 5
             # run --changedSince only on PRs
             PR_NUMBER=${CIRCLE_PULL_REQUEST##*/}
-            if [ -e ${PR_NUMBER} ]; then
+            if [ -z "${PR_NUMBER}" ]; then
               BASE_BRANCH=$(curl -fsSL https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$CIRCLE_PR_NUMBER | jq -r '.base.ref')
               npm run test:client --changedSince=${BASE_BRANCH}
             else
