@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * downloadBatchOfTrialSessionAction
  *
@@ -9,6 +11,7 @@
 export const downloadBatchOfTrialSessionAction = async ({
   applicationContext,
   props,
+  store,
 }) => {
   const { caseDetails, trialSessionId } = props;
 
@@ -19,8 +22,8 @@ export const downloadBatchOfTrialSessionAction = async ({
       caseDetails,
       trialSessionId,
     });
-
-  const zipFile = new File([result], 'something.zip');
-  const resultBlobUrl = window.URL.createObjectURL(zipFile);
-  window.open(resultBlobUrl);
+  store.set(state.download, {
+    blob: result,
+    mimeType: 'application/zip',
+  });
 };

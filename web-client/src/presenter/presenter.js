@@ -19,6 +19,7 @@ import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearAlertSequence } from './sequences/clearAlertSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
+import { clearDownloadSequence } from './sequences/clearDownloadSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
@@ -268,6 +269,7 @@ export const presenter = {
     chooseWorkQueueSequence,
     clearAlertSequence,
     clearDocumentSequence,
+    clearDownloadSequence,
     clearModalFormSequence,
     clearModalSequence,
     clearPdfPreviewUrlSequence,

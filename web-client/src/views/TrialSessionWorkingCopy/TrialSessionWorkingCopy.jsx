@@ -2,6 +2,7 @@ import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
 import { AddEditSessionNoteModal } from './AddEditSessionNoteModal';
 import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
 import { DeleteSessionNoteConfirmModal } from './DeleteSessionNoteConfirmModal';
+import { Download } from '../../ustc-ui/Download/Download';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SessionNotes } from './SessionNotes';
@@ -14,12 +15,16 @@ import React from 'react';
 
 export const TrialSessionWorkingCopy = connect(
   {
+    clearDownloadSequence: sequences.clearDownloadSequence,
+    download: state.download,
     downloadBatchOfTrialSessionSequence:
       sequences.downloadBatchOfTrialSessionSequence,
     formattedTrialSession: state.formattedTrialSessionDetails,
     showModal: state.showModal,
   },
   ({
+    clearDownloadSequence,
+    download,
     downloadBatchOfTrialSessionSequence,
     formattedTrialSession,
     showModal,
@@ -44,6 +49,15 @@ export const TrialSessionWorkingCopy = connect(
                 <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />{' '}
                 Download All Cases
               </button>
+              {download && (
+                <Download
+                  blob={download.blob}
+                  fileName={download.fileName}
+                  mimeType="application/zip"
+                  url={download.url}
+                  onUnmount={() => clearDownloadSequence()}
+                />
+              )}
             </div>
           </div>
 
