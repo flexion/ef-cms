@@ -1,3 +1,5 @@
+const sanitize = require('sanitize-filename');
+
 /**
  * downloadBatchOfTrialSessionAction
  *
@@ -10,7 +12,7 @@ export const downloadBatchOfTrialSessionAction = async ({
   applicationContext,
   props,
 }) => {
-  const { caseDetails, trialSessionId } = props;
+  const { caseDetails, trialSession, trialSessionId } = props;
 
   const result = await applicationContext
     .getUseCases()
@@ -20,7 +22,22 @@ export const downloadBatchOfTrialSessionAction = async ({
       trialSessionId,
     });
 
-  const zipFile = new File([result], 'something.zip');
-  const resultBlobUrl = window.URL.createObjectURL(zipFile);
-  window.open(resultBlobUrl);
+  const trialDate = applicationContext
+    .getUtilities()
+    .formatDateString(trialSession.startDate, 'MMMM_D_YYYY');
+  const { trialLocation } = trialSession;
+  let zipName = sanitize(`${trialDate}-${trialLocation}.zip`)
+    .replace(/\s/g, '_')
+    .replace(/,/g, '');
+
+  var windowUrl = window.URL || window.webkitURL;
+  var url = windowUrl.createObjectURL(result);
+  var anchor = document.createElement('a');
+  anchor.style = 'display: none';
+  document.body.appendChild(anchor);
+  anchor.href = url;
+  anchor.download = zipName;
+  anchor.click();
+  anchor.parentNode.removeChild(anchor);
+  windowUrl.revokeObjectURL(url);
 };
