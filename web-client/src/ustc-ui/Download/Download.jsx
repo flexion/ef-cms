@@ -37,7 +37,6 @@ class DownloadComponent extends React.Component {
   }
 
   render() {
-    console.log('download-render');
     return (
       <a
         className="usa-sr-only"
