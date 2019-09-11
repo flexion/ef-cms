@@ -30,6 +30,7 @@ export const TrialSessionWorkingCopy = connect(
             </div>
             <div className="grid-col-3 text-right padding-top-2">
               <a
+                download
                 aria-label="Download batch of Trial Session"
                 href={`${baseUrl}/trial-sessions/${formattedTrialSession.trialSessionId}/batch-download?token=${token}`}
               >
