@@ -86,7 +86,6 @@ provider:
   apiGateway:
     binaryMediaTypes:
       - 'application/pdf'
-      - 'application/zip'
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
@@ -301,12 +300,6 @@ functions:
     timeout: 900
     events:
       - http:
-          contentHandling: CONVERT_TO_BINARY
           cors: true
-          integration: lambda
           method: get
           path: /{trialSessionId}/batch-download
-          response:
-            headers:
-              Content-Type: "'application/zip'"
-              Content-Disposition: "'attachment; filename=your-batch.zip'"

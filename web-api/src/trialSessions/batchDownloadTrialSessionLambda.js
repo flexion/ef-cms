@@ -1,5 +1,45 @@
 const createApplicationContext = require('../applicationContext');
 const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
+const {
+  headers,
+  sendError,
+  sendOk,
+} = require('../middleware/apiGatewayHelper');
+const {
+  NotFoundError,
+  UnauthorizedError,
+} = require('../../../shared/src/errors/errors');
+
+const customHandle = async (event, fun) => {
+  if (event.source === 'serverless-plugin-warmup') {
+    return sendOk('Lambda is warm!');
+  }
+  try {
+    const { zipBuffer, zipName } = await fun();
+    return {
+      body: zipBuffer.toString('base64'),
+      headers: {
+        ...headers,
+        'Content-Type': 'application/zip',
+        'Content-Disposition': `attachment; filename=${zipName}`,
+        'accept-ranges': 'bytes',
+      },
+      isBase64Encoded: true,
+      statusCode: 200,
+    };
+  } catch (err) {
+    console.error('err', err);
+    if (err instanceof NotFoundError) {
+      err.statusCode = 404;
+      return sendError(err);
+    } else if (err instanceof UnauthorizedError) {
+      err.statusCode = 403;
+      return sendError(err);
+    } else {
+      return sendError(err);
+    }
+  }
+};
 
 /**
  * batch download trial session
@@ -8,24 +48,26 @@ const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = async event => {
-  const user = getUserFromAuthHeader(event);
-  const applicationContext = createApplicationContext(user);
-  try {
-    const { trialSessionId } = event.path || {};
-    const {
-      zipBuffer,
-      zipName,
-    } = await applicationContext
-      .getUseCases()
-      .batchDownloadTrialSessionInteractor({
-        applicationContext,
-        trialSessionId,
-      });
-    applicationContext.logger.info('User', user);
-    applicationContext.logger.info('Results', zipName);
-    return zipBuffer.toString('base64');
-  } catch (e) {
-    applicationContext.logger.error(e);
-    throw e;
-  }
+  customHandle(event, async () => {
+    const user = getUserFromAuthHeader(event);
+    const applicationContext = createApplicationContext(user);
+    try {
+      const { trialSessionId } = event.path || {};
+      const {
+        zipBuffer,
+        zipName,
+      } = await applicationContext
+        .getUseCases()
+        .batchDownloadTrialSessionInteractor({
+          applicationContext,
+          trialSessionId,
+        });
+      applicationContext.logger.info('User', user);
+      applicationContext.logger.info('Results', zipName);
+      return { zipBuffer, zipName };
+    } catch (e) {
+      applicationContext.logger.error(e);
+      throw e;
+    }
+  });
 };
