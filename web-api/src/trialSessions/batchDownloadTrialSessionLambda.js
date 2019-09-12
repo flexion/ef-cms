@@ -1,5 +1,4 @@
 const createApplicationContext = require('../applicationContext');
-const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const {
   headers,
   sendError,
@@ -9,6 +8,7 @@ const {
   NotFoundError,
   UnauthorizedError,
 } = require('../../../shared/src/errors/errors');
+const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 
 const customHandle = async (event, fun) => {
   if (event.source === 'serverless-plugin-warmup') {
@@ -20,8 +20,8 @@ const customHandle = async (event, fun) => {
       body: zipBuffer.toString('base64'),
       headers: {
         ...headers,
-        'Content-Type': 'application/zip',
         'Content-Disposition': `attachment; filename=${zipName}`,
+        'Content-Type': 'application/zip',
         'accept-ranges': 'bytes',
       },
       isBase64Encoded: true,
@@ -47,27 +47,23 @@ const customHandle = async (event, fun) => {
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handler = async event => {
+exports.handler = event =>
   customHandle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
       const { trialSessionId } = event.pathParameters || {};
-      const {
-        zipBuffer,
-        zipName,
-      } = await applicationContext
+      const results = await applicationContext
         .getUseCases()
         .batchDownloadTrialSessionInteractor({
           applicationContext,
           trialSessionId,
         });
       applicationContext.logger.info('User', user);
-      applicationContext.logger.info('Results', zipName);
-      return { zipBuffer, zipName };
+      applicationContext.logger.info('Results', results.zipName);
+      return results;
     } catch (e) {
       applicationContext.logger.error(e);
       throw e;
     }
   });
-};
