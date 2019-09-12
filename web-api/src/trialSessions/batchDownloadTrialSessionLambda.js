@@ -52,7 +52,7 @@ exports.handler = async event => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const { trialSessionId } = event.path || {};
+      const { trialSessionId } = event.pathParameters || {};
       const {
         zipBuffer,
         zipName,
