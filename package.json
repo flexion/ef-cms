@@ -174,6 +174,8 @@
     "test:client": "CI=false npm run test:_client -- \"web-client/.*\\.test\\.js\"",
     "test:client:unit": "npm run test:_client -- \"web-client/src/.*\\.test\\.js\"",
     "test:pa11y": "pa11y-ci --config web-client/pa11y-ci.config.js",
+    "test:client:snapshot": "npm run test:_client -- \"web-client/snapshot-tests/.*\\.test\\.js\"",
+    "test:client:snapshot:update": "CI=false SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop FILE_UPLOAD_MODAL_TIMEOUT=1 jest -u --runInBand --config web-client/jest.config.js web-client/snapshot-tests/.*.test.js",
     "test:shared": "jest --maxWorkers=4 --config shared/jest.config.js \"shared/.*\\.test\\.js\"",
     "test:watch": "jest --watch .*test\\.js$",
     "watch": "nodemon -e yml --exec sls offline start"
