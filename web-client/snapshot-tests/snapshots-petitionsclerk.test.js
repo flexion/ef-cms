@@ -8,7 +8,7 @@ describe('Petitions clerk', () => {
   let page;
   const snapshotOptions = {
     blur: 1,
-    failureThreshold: 0.5,
+    failureThreshold: 0.1,
     failureThresholdType: 'percent',
   };
 
@@ -16,7 +16,7 @@ describe('Petitions clerk', () => {
     jest.setTimeout(30000);
     browser = await puppeteer.launch();
     page = await browser.newPage();
-    page.setViewport({ deviceScaleFactor: 0.5, height: 1000, width: 1350 });
+    page.setViewport({ deviceScaleFactor: 0.7, height: 1000, width: 1350 });
   });
 
   afterAll(async () => {
