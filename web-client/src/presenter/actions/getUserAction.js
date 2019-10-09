@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * gets the user based on the name provided.
  *
@@ -6,9 +8,12 @@
  * @param {Function} providers.props the cerebral props object used for getting the props.user
  * @returns {object} the user
  */
-export const getUserAction = async ({ applicationContext }) => {
-  const user = await applicationContext
-    .getUseCases()
-    .getUserInteractor({ applicationContext });
+export const getUserAction = async ({ applicationContext, get }) => {
+  let user = get(state.user);
+  if (!user) {
+    user = await applicationContext
+      .getUseCases()
+      .getUserInteractor({ applicationContext });
+  }
   return { user };
 };

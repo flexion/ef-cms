@@ -52,6 +52,7 @@ import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMess
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
 import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
+
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
@@ -128,6 +129,7 @@ import { printFromBrowserSequence } from './sequences/printFromBrowserSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
+import { refreshUserNotificationsSequence } from './sequences/refreshUserNotificationsSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeScannedPdfSequence } from './sequences/removeScannedPdfSequence';
 import { removeSecondarySupportingDocumentSequence } from './sequences/removeSecondarySupportingDocumentSequence';
@@ -399,6 +401,7 @@ export const presenter = {
     printTrialCalendarSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
+    refreshUserNotificationsSequence,
     removeBatchSequence,
     removeScannedPdfSequence,
     removeSecondarySupportingDocumentSequence,

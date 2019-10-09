@@ -39,6 +39,7 @@ import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
 import { connect } from '@cerebral/react';
+import { sequences } from 'cerebral';
 import { state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -91,6 +92,12 @@ class App extends React.Component {
     this.focusMain();
   }
 
+  componentDidMount() {
+    setInterval(() => {
+      this.props.refreshUserNotificationsSequence();
+    }, 30000);
+  }
+
   focusMain(e) {
     e && e.preventDefault();
     const header = document.querySelector('#main-content h1');
@@ -125,12 +132,15 @@ class App extends React.Component {
 App.propTypes = {
   currentPage: PropTypes.string,
   currentPageHeader: PropTypes.string,
+  refreshUserNotificationsSequence: PropTypes.func,
 };
 
 export const AppComponent = connect(
   {
     currentPage: state.currentPage,
     currentPageHeader: state.currentPageHeader,
+    refreshUserNotificationsSequence:
+      sequences.refreshUserNotificationsSequence,
   },
   App,
 );
