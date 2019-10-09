@@ -95,7 +95,7 @@ class App extends React.Component {
   componentDidMount() {
     setInterval(() => {
       this.props.refreshUserNotificationsSequence();
-    }, 30000);
+    }, 5000);
   }
 
   focusMain(e) {

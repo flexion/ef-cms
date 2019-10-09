@@ -3,7 +3,6 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getCasesByUserAction } from '../actions/getCasesByUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
-import { getUserAction } from '../actions/getUserAction';
 import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
@@ -13,14 +12,11 @@ import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
-import { setUserAction } from '../actions/setUserAction';
 import { state } from 'cerebral';
 
 const goToDashboard = [
   setCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
-  getUserAction,
-  setUserAction,
   set(state.selectedWorkItems, []),
   clearErrorAlertsAction,
   getUserRoleAction,

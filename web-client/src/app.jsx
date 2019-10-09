@@ -94,14 +94,6 @@ const app = {
       scannerSourceName,
     };
 
-    const user =
-      (await applicationContext
-        .getUseCases()
-        .getItemInteractor({ applicationContext, key: 'user' })) ||
-      presenter.state.user;
-    presenter.state.user = user;
-    applicationContext.setCurrentUser(user);
-
     // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
     presenter.state = mapValues(presenter.state, value => {
       if (isFunction(value)) {
@@ -110,6 +102,7 @@ const app = {
       return value;
     });
 
+    // first, fetch the token from local storage
     const token =
       (await applicationContext
         .getUseCases()
@@ -117,6 +110,18 @@ const app = {
       presenter.state.token;
     presenter.state.token = token;
     applicationContext.setCurrentUserToken(token);
+
+    // fetch the user if the token is set
+
+    if (token) {
+      try {
+        const user = await applicationContext
+          .getUseCases()
+          .getUserInteractor({ applicationContext });
+        presenter.state.user = user;
+        applicationContext.setCurrentUser(user);
+      } catch (err) {}
+    }
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 

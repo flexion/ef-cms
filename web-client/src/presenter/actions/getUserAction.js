@@ -8,12 +8,15 @@ import { state } from 'cerebral';
  * @param {Function} providers.props the cerebral props object used for getting the props.user
  * @returns {object} the user
  */
-export const getUserAction = async ({ applicationContext, get }) => {
+export const getUserAction = async ({ applicationContext, get, store }) => {
   let user = get(state.user);
-  if (!user) {
+  let forceLoadUser = get(state.forceLoadUser);
+
+  if (!user || forceLoadUser) {
     user = await applicationContext
       .getUseCases()
       .getUserInteractor({ applicationContext });
+    store.set(state.forceLoadUser, false);
   }
   return { user };
 };
