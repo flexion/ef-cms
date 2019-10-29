@@ -2,7 +2,6 @@ import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { If } from '../../ustc-ui/If/If';
 import { Text } from '../../ustc-ui/Text/Text';
 import { WorkingCopyFilterHeader } from './WorkingCopyFilterHeader';
 import { connect } from '@cerebral/react';
@@ -23,17 +22,21 @@ export const WorkingCopySessionList = connect(
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
+    trialSessionWorkingCopy: state.trialSessionWorkingCopy,
+    hasNotes: state.trialSessionWorkingCopyHelper.hasNotes,
     trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
   },
   ({
     autoSaveTrialSessionWorkingCopySequence,
     casesShownCount,
     formattedCases,
+    hasNotes,
     openAddEditCaseNoteModalFromListSequence,
     openDeleteCaseNoteConfirmModalSequence,
     sort,
     sortOrder,
     toggleWorkingCopySortSequence,
+    trialSessionWorkingCopy,
     trialStatusOptions,
   }) => {
     return (
@@ -149,10 +152,7 @@ export const WorkingCopySessionList = connect(
                     </BindedSelect>
                   </td>
                   <td className="no-wrap">
-                    <If
-                      not
-                      bind={`trialSessionWorkingCopy.caseNotes.${item.caseId}.notes`}
-                    >
+                    {!hasNotes(item.caseId) && (
                       <Button
                         link
                         className="margin-top-1"
@@ -165,12 +165,10 @@ export const WorkingCopySessionList = connect(
                       >
                         Add Note
                       </Button>
-                    </If>
+                    )}
                   </td>
                 </tr>
-                <If
-                  bind={`trialSessionWorkingCopy.caseNotes.${item.caseId}.notes`}
-                >
+                {hasNotes(item.caseId) && (
                   <tr className="notes-row">
                     <td className="text-right font-body-2xs">
                       <strong>Notes:</strong>
@@ -208,7 +206,7 @@ export const WorkingCopySessionList = connect(
                       </Button>
                     </td>
                   </tr>
-                </If>
+                )}{' '}
               </tbody>
             );
           })}

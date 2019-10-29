@@ -1,6 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { If } from '../../ustc-ui/If/If';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -40,11 +39,16 @@ const TrialInformation = ({ caseDetail }) => (
 
 export const CaseInformationPublic = connect(
   {
+    caseDetail: state.caseDetail,
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
   },
-  ({ formattedCaseDetail, navigateToPrintableCaseConfirmationSequence }) => {
+  ({
+    caseDetail,
+    formattedCaseDetail,
+    navigateToPrintableCaseConfirmationSequence,
+  }) => {
     return (
       <div className="petitions-details">
         <div className="grid-container padding-x-0">
@@ -55,7 +59,7 @@ export const CaseInformationPublic = connect(
                   <div className="content-wrapper">
                     <h3 className="underlined">
                       Petition Details
-                      <If bind="caseDetail.irsSendDate">
+                      {caseDetail.irsSendDate && (
                         <Button
                           link
                           className="margin-right-0 margin-top-1 padding-0 float-right"
@@ -72,7 +76,7 @@ export const CaseInformationPublic = connect(
                           />
                           Print receipt
                         </Button>
-                      </If>
+                      )}
                     </h3>
                     <PetitionDetails caseDetail={formattedCaseDetail} />
                   </div>
@@ -92,7 +96,7 @@ export const CaseInformationPublic = connect(
             <div className="margin-top-2">
               <div className="case-info-card">
                 <h3 className="underlined">Petition Details</h3>{' '}
-                <If bind="caseDetail.irsSendDate">
+                {caseDetail.irsSendDate && (
                   <Button
                     link
                     onClick={() => {
@@ -108,7 +112,7 @@ export const CaseInformationPublic = connect(
                     />
                     Print receipt
                   </Button>
-                </If>
+                )}
                 <PetitionDetails caseDetail={formattedCaseDetail} />
               </div>
             </div>

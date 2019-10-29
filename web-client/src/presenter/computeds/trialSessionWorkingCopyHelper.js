@@ -12,7 +12,8 @@ const compareCasesByPractitioner = (a, b) => {
 export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   const { STATUS_TYPES, TRIAL_STATUS_TYPES } = get(state.constants);
   const trialSession = get(state.trialSession) || {};
-  const { filters, sort, sortOrder } = get(state.trialSessionWorkingCopy) || {};
+  const { caseNotes, filters, sort, sortOrder } =
+    get(state.trialSessionWorkingCopy) || {};
   const caseMetadata = get(state.trialSessionWorkingCopy.caseMetadata) || {};
 
   //get an array of strings of the trial statuses that are set to true
@@ -63,6 +64,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     casesShownCount,
     formattedCases,
     formattedCasesByDocketRecord,
+    hasNotes: caseId => caseNotes[caseId] && caseNotes[caseId].notes,
     title: trialSession.title || 'Birmingham, Alabama',
     trialStatusOptions,
   };

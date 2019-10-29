@@ -1,6 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { If } from '../../ustc-ui/If/If';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import { state } from 'cerebral';
@@ -200,6 +199,7 @@ const TrialInformation = ({
 
 export const CaseInformationInternal = connect(
   {
+    caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence:
@@ -215,6 +215,7 @@ export const CaseInformationInternal = connect(
       sequences.openUnprioritizeCaseModalSequence,
   },
   ({
+    caseDetail,
     caseDetailHelper,
     formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence,
@@ -234,7 +235,7 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">
                     Petition Details
-                    <If bind="caseDetail.irsSendDate">
+                    {caseDetail.irsSendDate && (
                       <Button
                         link
                         className="margin-right-0 margin-top-1 padding-0 float-right"
@@ -251,7 +252,7 @@ export const CaseInformationInternal = connect(
                         />
                         Print confirmation
                       </Button>
-                    </If>
+                    )}
                   </h3>
 
                   <PetitionDetails
