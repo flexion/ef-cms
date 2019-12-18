@@ -1,12 +1,5 @@
 version: 2
 jobs:
-  set-env:
-    docker:
-      - image: circleci/node:jessie
-    steps:
-      - run:
-          name: Setup Env
-          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
   bundle:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
@@ -400,10 +393,7 @@ workflows:
                 - develop
   build-and-deploy:
     jobs:
-      - set-env
-      - bundle:
-          requires:
-            - set-env
+      - bundle
       - build-shared:
           requires:
             - bundle
