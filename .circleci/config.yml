@@ -144,15 +144,10 @@ jobs:
       - run:
           name: Pa11y
           command: |
-            free -m
             npm run build:all
-            free -m
-            SLS_DEBUG=* RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci &
-            free -m
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci
             ./wait-until-services.sh
-            free -m
             ./wait-until.sh http://localhost:3000/api/swagger
-            free -m
             sleep 5
             npm run test:pa11y
       - run:
