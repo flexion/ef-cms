@@ -3,6 +3,7 @@ import { getConsolidatedCasesByCaseInteractor } from './getConsolidatedCasesByCa
 describe('getConsolidatedCasesByCaseInteractor', () => {
   let applicationContext;
   let getCasesByLeadCaseIdStub;
+  let getUserMappingByConsolidatedCasesStub;
 
   beforeEach(() => {
     getCasesByLeadCaseIdStub = jest.fn().mockResolvedValue([
@@ -10,9 +11,16 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
       { caseCaption: 'Guy Fieri vs. Gordon Ramsay', caseId: 'def-321' },
     ]);
 
+    getUserMappingByConsolidatedCasesStub = jest
+      .fn()
+      .mockResolvedValue([
+        { caseCaption: 'Guy Fieri vs. Bobby Flay', sk: 'abc-123' },
+      ]);
+
     applicationContext = {
       getPersistenceGateway: () => ({
         getCasesByLeadCaseId: getCasesByLeadCaseIdStub,
+        getUserMappingByConsolidatedCases: getUserMappingByConsolidatedCasesStub,
       }),
     };
   });
@@ -25,8 +33,16 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
 
     expect(getCasesByLeadCaseIdStub).toHaveBeenCalled();
     expect(cases).toEqual([
-      { caseCaption: 'Guy Fieri vs. Bobby Flay', caseId: 'abc-123' },
-      { caseCaption: 'Guy Fieri vs. Gordon Ramsay', caseId: 'def-321' },
+      {
+        caseCaption: 'Guy Fieri vs. Bobby Flay',
+        caseId: 'abc-123',
+        isRequestingUserAssociated: true,
+      },
+      {
+        caseCaption: 'Guy Fieri vs. Gordon Ramsay',
+        caseId: 'def-321',
+        isRequestingUserAssociated: false,
+      },
     ]);
   });
 });
