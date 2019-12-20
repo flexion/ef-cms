@@ -10,8 +10,34 @@ exports.getConsolidatedCasesByCaseInteractor = async ({
   applicationContext,
   caseId,
 }) => {
-  return await applicationContext.getPersistenceGateway().getCasesByLeadCaseId({
-    applicationContext,
-    leadCaseId: caseId,
-  });
+  const consolidatedCases = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByLeadCaseId({
+      applicationContext,
+      leadCaseId: caseId,
+    });
+
+  const userMappings = await applicationContext
+    .getPersistenceGateway()
+    .getUserMappingByConsolidatedCases({
+      applicationContext,
+      consolidatedCases,
+    });
+
+  const isRequestingUserAssociatedMap = userMappings.reduce(
+    (acc, userMapping) => {
+      if (userMapping) {
+        acc[userMapping.sk] = true;
+      }
+      return acc;
+    },
+    {},
+  );
+
+  return consolidatedCases.map(consolidatedCase => ({
+    ...consolidatedCase,
+    isRequestingUserAssociated: !!isRequestingUserAssociatedMap[
+      consolidatedCase.caseId
+    ],
+  }));
 };

@@ -438,6 +438,9 @@ const {
   getUserInteractor,
 } = require('../../shared/src/business/useCases/getUserInteractor');
 const {
+  getUserMappingByConsolidatedCases,
+} = require('../../shared/src/persistence/dynamo/cases/getUserMappingByConsolidatedCases');
+const {
   getUsersBySearchKey,
 } = require('../../shared/src/persistence/dynamo/users/getUsersBySearchKey');
 const {
@@ -836,6 +839,7 @@ module.exports = (appContextUser = {}) => {
         getTrialSessions,
         getUploadPolicy,
         getUserById,
+        getUserMappingByConsolidatedCases,
         getUsersBySearchKey,
         getUsersInSection,
         getWebSocketConnectionByConnectionId,
