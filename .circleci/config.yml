@@ -2,34 +2,37 @@ version: 2
 jobs:
   bundle:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
+      # - restore_cache:
+      #     name: Source - Restoring Cache
+      #     keys:
+      #       - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+      #       - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+      #       - source-{{ .Environment.CACHE_VERSION }}-
       - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - restore_cache:
-          name: NPM - Restoring Cache
-          keys:
-            - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - npm-{{ .Environment.CACHE_VERSION }}-
+      # - save_cache:
+      #     name: Source - Saving Cache
+      #     key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+      #     paths:
+      #       - '.git'
+      # - restore_cache:
+      #     name: NPM - Restoring Cache
+      #     keys:
+      #       - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      #       - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+      #       - npm-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: NPM - Install
           command: npm i
-      - save_cache:
-          name: NPM - Save to Cache
-          paths:
-            - node_modules # location depends on npm version
-          key: npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      # - save_cache:
+      #     name: NPM - Save to Cache
+      #     paths:
+      #       - node_modules # location depends on npm version
+      #     key: npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - persist_to_workspace:
           root: ~/
           paths:
@@ -37,7 +40,10 @@ jobs:
 
   build-api:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - attach_workspace:
           at: ~/
@@ -56,7 +62,7 @@ jobs:
           name: Web API - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /tmp/sonar-scanner/bin/sonar-scanner \
+            /home/app/sonar_home/bin/sonar-scanner \
             -Dsonar.projectKey="${API_SONAR_KEY}" \
             -Dsonar.branch.name="${CIRCLE_BRANCH}" \
             -Dsonar.organization="${SONAR_ORG}" \
@@ -67,7 +73,10 @@ jobs:
 
   build-shared:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
     steps:
@@ -80,7 +89,7 @@ jobs:
           name: Shared - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /tmp/sonar-scanner/bin/sonar-scanner \
+            /home/app/sonar_home/bin/sonar-scanner \
             -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
             -Dsonar.branch.name="${CIRCLE_BRANCH}" \
             -Dsonar.organization="${SONAR_ORG}" \
@@ -91,7 +100,10 @@ jobs:
 
   build-client:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: large
@@ -108,7 +120,7 @@ jobs:
           name: Web Client - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /tmp/sonar-scanner/bin/sonar-scanner \
+            /home/app/sonar_home/bin/sonar-scanner \
             -Dsonar.projectKey="${UI_SONAR_KEY}" \
             -Dsonar.branch.name="${CIRCLE_BRANCH}" \
             -Dsonar.organization="${SONAR_ORG}" \
@@ -119,18 +131,22 @@ jobs:
 
   e2e-pa11y:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: ~/
       - run:
           name: Pa11y - Web Client 1
           command: |
-            npm run build:all &&
-            SLS_DEBUG=* RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /dev/null &
+            ls -la /root/project/web-client/
+            npm run build:all
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
@@ -150,13 +166,18 @@ jobs:
             AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public > /dev/null &
             sleep 5
             npm run test:pa11y:public
+      - store_artifacts:
+          path: /tmp/pa11y-server.txt
 
   e2e-cypress:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: ~/
