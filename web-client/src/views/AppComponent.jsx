@@ -45,6 +45,7 @@ import { StartCaseInternal } from './StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
+import { TrialSessionPdfPreview } from './TrialSessionDetail/TrialSessionPdfPreview';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
@@ -99,6 +100,7 @@ const pages = {
   StartCaseWizard,
   StyleGuide,
   TrialSessionDetail,
+  TrialSessionPdfPreview,
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,

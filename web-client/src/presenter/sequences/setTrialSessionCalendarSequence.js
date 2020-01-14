@@ -40,7 +40,7 @@ export const setTrialSessionCalendarSequence = [
             ...setPdfPreviewUrlSequence,
             setTrialSessionCalendarAlertWarningAction,
             setAlertWarningAction,
-            set(state.currentPage, 'SimplePdfPreviewPage'),
+            set(state.currentPage, 'TrialSessionPdfPreview'),
           ],
         },
       ],
