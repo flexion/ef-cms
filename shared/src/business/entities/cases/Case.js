@@ -761,7 +761,6 @@ Case.prototype.addDocument = function(document) {
       documentId: document.documentId,
       eventCode: document.eventCode,
       filedBy: document.filedBy,
-      filingDate: document.receivedAt || document.createdAt,
       status: document.status,
     }),
   );
@@ -828,7 +827,6 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
       new DocketRecord({
         description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
         eventCode: 'MINC',
-        filingDate: createISODateString(),
       }),
     );
   }
@@ -866,7 +864,6 @@ Case.prototype.updateDocketNumberRecord = function() {
       new DocketRecord({
         description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
         eventCode: 'MIND',
-        filingDate: createISODateString(),
       }),
     );
   }
@@ -918,7 +915,6 @@ Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
         description: `Request for Place of Trial at ${this.preferredTrialCity}`,
         eventCode:
           Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-        filingDate: this.receivedAt || this.createdAt,
       }),
     );
   }
