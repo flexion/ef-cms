@@ -1001,8 +1001,8 @@ describe('formattedCaseDetail', () => {
             documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
           },
           {
+            createdAt: '2019-06-19T17:29:13.120Z',
             description: 'Filing Fee Paid',
-            filingDate: '2019-06-19T17:29:13.120Z',
           },
         ],
         documents: [

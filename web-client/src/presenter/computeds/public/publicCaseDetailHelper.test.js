@@ -34,34 +34,34 @@ describe('publicCaseDetailHelper', () => {
     state.caseDetail.docketRecord = [
       {
         action: 'something',
+        createdAt: '2018-11-21T20:49:28.192Z',
         description: 'first record',
         documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-        filingDate: '2018-11-21T20:49:28.192Z',
         index: 4,
       },
       {
+        createdAt: '2018-10-21T20:49:28.192Z',
         description: 'second record',
         documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-        filingDate: '2018-10-21T20:49:28.192Z',
         index: 1,
       },
       {
+        createdAt: '2018-10-25T20:49:28.192Z',
         description: 'third record',
         documentId: '8675309b-28d0-43ec-bafb-654e83405413',
-        filingDate: '2018-10-25T20:49:28.192Z',
         index: 3,
       },
       {
+        createdAt: '2018-10-25T20:49:28.192Z',
         description: 'fourth record',
         documentId: '8675309b-28d0-43ec-bafb-654e83405414',
-        filingDate: '2018-10-25T20:49:28.192Z',
         index: 2,
         signatory: 'abc',
       },
       {
+        createdAt: '2018-12-25T20:49:28.192Z',
         description: 'fifth record',
         documentId: '8675309b-28d0-43ec-bafb-654e83405415',
-        filingDate: '2018-12-25T20:49:28.192Z',
         index: 5,
       },
     ];
@@ -72,6 +72,7 @@ describe('publicCaseDetailHelper', () => {
         documentTitle: 'Petition',
         documentType: 'Petition',
         eventCode: 'P',
+        filingDate: '2018-11-21T20:49:28.192Z',
         processingStatus: 'pending',
       },
       {
@@ -79,6 +80,7 @@ describe('publicCaseDetailHelper', () => {
         documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentTitle: 'Statement of Taxpayer Identification',
         documentType: 'Statement of Taxpayer Identification',
+        filingDate: '2018-11-21T20:49:28.192Z',
         processingStatus: 'pending',
       },
       {
@@ -91,6 +93,7 @@ describe('publicCaseDetailHelper', () => {
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Petrs. Dylan Fowler & Jaquelyn Estes',
+        filingDate: '2018-10-21T20:49:28.192Z',
         processingStatus: 'pending',
       },
       {
@@ -99,6 +102,7 @@ describe('publicCaseDetailHelper', () => {
         documentTitle: 'Order to do something',
         documentType: 'O - Order',
         eventCode: 'O',
+        filingDate: '2018-10-25T20:49:28.192Z',
         processingStatus: 'complete',
         servedAt: '2018-11-27T20:49:28.192Z',
         status: 'served',
@@ -109,6 +113,7 @@ describe('publicCaseDetailHelper', () => {
         documentTitle: 'Order to do something else',
         documentType: 'O - Order',
         eventCode: 'O',
+        filingDate: '2018-10-25T20:49:28.192Z',
         processingStatus: 'pending',
       },
       {
@@ -116,6 +121,7 @@ describe('publicCaseDetailHelper', () => {
         documentId: '8675309b-28d0-43ec-bafb-654e83405415',
         documentType: 'Request for Place of Trial',
         eventCode: 'RQT',
+        filingDate: '2018-12-25T20:49:28.192Z',
         processingStatus: 'complete',
       },
     ];
