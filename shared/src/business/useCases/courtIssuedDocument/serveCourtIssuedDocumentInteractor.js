@@ -87,10 +87,6 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     throw new NotFoundError(`Document ${documentId} was not found.`);
   }
 
-  const docketEntry = caseEntity.docketRecord.find(
-    entry => entry.documentId === documentId,
-  );
-
   // Serve on all parties
   const servedParties = aggregatePartiesForService(caseEntity);
 
