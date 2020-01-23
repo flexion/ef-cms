@@ -34,6 +34,9 @@
 
 ### filingDate
 
+
+The date the associated document is filed on this Docket Record.
+
 > `date` | required
 
 ### index

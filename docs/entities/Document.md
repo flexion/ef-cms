@@ -586,6 +586,9 @@ Otherwise, this field is `any` and is `optional`.
 
 ### receivedAt
 
+
+The date that this document (both paper and electronic) is received by the court.
+
 > `date` | optional
 
 ### relationship
