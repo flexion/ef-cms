@@ -429,12 +429,10 @@ describe('Case entity', () => {
               description: 'Petition',
               documentId: '123',
               filedBy: 'Test Petitioner',
-              filingDate: '2019-03-01T21:42:29.073Z',
             },
             {
               description:
                 'Request for Place of Trial at Charleston, West Virginia',
-              filingDate: '2019-03-01T21:42:29.073Z',
             },
           ],
         },
@@ -717,7 +715,6 @@ describe('Case entity', () => {
       caseRecord.addDocketRecord(
         new DocketRecord({
           description: 'test',
-          filingDate: new Date().toISOString(),
           index: 5,
         }),
       );
@@ -729,7 +726,6 @@ describe('Case entity', () => {
       caseRecord.addDocketRecord(
         new DocketRecord({
           description: 'some description',
-          filingDate: new Date().toISOString(),
         }),
       );
 
@@ -758,7 +754,6 @@ describe('Case entity', () => {
       const updatedDocketEntry = new DocketRecord({
         description: 'second record now updated',
         documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-        filingDate: '2018-03-02T22:22:00.000Z',
         index: 7,
       });
       caseRecord.updateDocketRecordEntry(updatedDocketEntry);
