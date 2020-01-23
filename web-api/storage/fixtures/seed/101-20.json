@@ -56,6 +56,7 @@
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "eventCode": "P",
         "createdAt": "2020-01-02T16:05:45.979Z",
+        "filingDate": "2020-01-02T16:05:45.979Z",
         "processingStatus": "complete",
         "filedBy": "Petr. Bill Burr",
         "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
@@ -69,6 +70,7 @@
         "workItems": [],
         "pending": false,
         "receivedAt": "2020-01-02T16:05:45.980Z",
+        "filingDate": "2020-01-02T16:05:45.980Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "eventCode": "STIN",
         "createdAt": "2020-01-02T16:05:45.980Z",
@@ -125,14 +127,14 @@
         "eventCode": "P",
         "index": 1,
         "documentId": "cb323daf-c541-4645-bb44-232255d03d40",
-        "filingDate": "2020-01-02T16:05:45.979Z",
+        "createdAt": "2020-01-02T16:05:45.979Z",
         "filedBy": "Petr. Bill Burr"
       },
       {
         "eventCode": "RQT",
         "description": "Request for Place of Trial at Houston, Texas",
         "index": 2,
-        "filingDate": "2020-01-02T16:05:45.978Z"
+        "createdAt": "2020-01-02T16:05:45.978Z"
       }
     ],
     "orderForAmendedPetitionAndFilingFee": false,

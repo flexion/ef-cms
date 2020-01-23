@@ -11,6 +11,7 @@
       "workItems": [],
       "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
       "receivedAt": "2019-07-12T17:09:41.026Z",
+      "filingDate": "2019-07-12T17:09:41.026Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "section": "petitions",
@@ -59,6 +60,7 @@
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
+      "filingDate": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
       "documentTitle": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
@@ -96,6 +98,7 @@
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
+      "filingDate": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
@@ -140,6 +143,7 @@
       "partyPrimary": true,
       "workItems": [],
       "receivedAt": "1990-10-10",
+      "filingDate": "1990-10-10",
       "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
       "eventCode": "PSDE",
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -194,6 +198,7 @@
       "partyPrimary": true,
       "workItems": [],
       "receivedAt": "1990-10-10",
+      "filingDate": "1990-10-10",
       "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
       "eventCode": "PSDE",
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -240,6 +245,7 @@
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
+      "filingDate": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
@@ -282,6 +288,7 @@
       "workItems": [],
       "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
       "receivedAt": "2019-07-12T17:09:41.026Z",
+      "filingDate": "2019-07-12T17:09:41.026Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "section": "petitions",
@@ -321,6 +328,7 @@
       "partyPrimary": true,
       "workItems": [],
       "receivedAt": "1990-10-10",
+      "filingDate": "1990-10-10",
       "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
       "eventCode": "PSDE",
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -367,6 +375,7 @@
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
+      "filingDate": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
@@ -403,6 +412,7 @@
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
+      "filingDate": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
@@ -439,6 +449,7 @@
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
+      "filingDate": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
       "documentTitle": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
@@ -521,6 +532,7 @@
         ],
         "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
         "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+        "filingDate": "2019-07-12T17:09:41.026Z",
         "receivedAt": "2019-07-12T17:09:41.026Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       },
@@ -533,6 +545,7 @@
         "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
         "documentId": "2da6d239-555a-40e8-af81-1949c8270cd7",
         "receivedAt": "2019-07-12T17:09:41.027Z",
+        "filingDate": "2019-07-12T17:09:41.027Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       },
       {
@@ -628,6 +641,7 @@
           }
         ],
         "receivedAt": "1990-10-10",
+        "filingDate": "1990-10-10",
         "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
         "eventCode": "PSDE",
         "createdAt": "2019-07-12T17:11:26.955Z",
@@ -683,12 +697,12 @@
         "eventCode": "P",
         "index": 1,
         "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
-        "filingDate": "2019-07-12T17:09:41.026Z",
+        "createdAt": "2019-07-12T17:09:41.026Z",
         "filedBy": "Denise Gould"
       },
       {
         "description": "Request for Place of Trial at Lubbock, Texas",
-        "filingDate": "2019-07-12T17:09:41.026Z",
+        "createdAt": "2019-07-12T17:09:41.026Z",
         "eventCode": "RQT",
         "index": 2
       },
@@ -697,7 +711,7 @@
         "eventCode": "PSDE",
         "index": 3,
         "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
-        "filingDate": "1990-10-10"
+        "createdAt": "1990-10-10"
       }
     ],
     "orderForAmendedPetitionAndFilingFee": false,
@@ -720,6 +734,7 @@
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
+      "filingDate": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
       "documentTitle": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
@@ -758,6 +773,7 @@
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
+      "filingDate": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
       "documentTitle": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
@@ -796,6 +812,7 @@
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
+      "filingDate": "2019-07-12T17:11:26.955Z",
       "documentTitle": "Proposed Stipulated Decision",
       "documentType": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
@@ -838,6 +855,7 @@
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
+      "filingDate": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
       "documentTitle": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"

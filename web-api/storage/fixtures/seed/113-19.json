@@ -50,7 +50,7 @@
           }
         ],
         "pending": false,
-        "receivedAt": "2019-12-11T16:02:31.174Z",
+        "filingDate": "2019-12-11T16:02:31.174Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "eventCode": "P",
         "createdAt": "2019-12-11T16:02:31.174Z",
@@ -65,7 +65,7 @@
         "partyPrimary": true,
         "workItems": [],
         "pending": false,
-        "receivedAt": "2019-12-11T16:02:31.176Z",
+        "filingDate": "2019-12-11T16:02:31.176Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "eventCode": "STIN",
         "createdAt": "2019-12-11T16:02:31.176Z",
@@ -118,14 +118,14 @@
         "eventCode": "P",
         "index": 1,
         "documentId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",
-        "filingDate": "2019-12-11T16:02:31.174Z",
+        "createdAt": "2019-12-11T16:02:31.174Z",
         "filedBy": "Petr. Letti Toretto"
       },
       {
         "eventCode": "RQT",
         "description": "Request for Place of Trial at Birmingham, Alabama",
         "index": 2,
-        "filingDate": "2019-12-11T16:02:31.173Z"
+        "createdAt": "2019-12-11T16:02:31.173Z"
       }
     ],
     "orderForAmendedPetitionAndFilingFee": false,
