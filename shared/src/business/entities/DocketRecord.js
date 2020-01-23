@@ -15,7 +15,6 @@ function DocketRecord(rawDocketRecord) {
   this.signatory = rawDocketRecord.signatory;
   this.documentId = rawDocketRecord.documentId;
   this.filedBy = rawDocketRecord.filedBy;
-  this.filingDate = rawDocketRecord.filingDate;
   this.index = rawDocketRecord.index;
   this.status = rawDocketRecord.status;
   this.eventCode = rawDocketRecord.eventCode;

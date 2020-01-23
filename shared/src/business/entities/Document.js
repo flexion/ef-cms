@@ -49,6 +49,7 @@ function Document(rawDocument, { applicationContext }) {
   this.eventCode = rawDocument.eventCode;
   this.exhibits = rawDocument.exhibits;
   this.filedBy = rawDocument.filedBy;
+  this.filingDate = rawDocument.filingDate || createISODateString();
   this.freeText = rawDocument.freeText;
   this.freeText2 = rawDocument.freeText2;
   this.hasSupportingDocuments = rawDocument.hasSupportingDocuments;
