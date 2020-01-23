@@ -2,43 +2,10 @@ const { DocketRecord } = require('./DocketRecord');
 
 describe('DocketRecord', () => {
   describe('validation', () => {
-    it('fails validation if a filingDate is in the future.', () => {
-      expect(
-        new DocketRecord({
-          description: 'Test Docket Record',
-          eventCode: 'O',
-          filingDate: new Date('9000-01-01').toISOString(),
-          index: 0,
-        }).isValid(),
-      ).toBeFalsy();
-    });
-
-    it('passes validation if a filingDate is not in the future', () => {
-      expect(
-        new DocketRecord({
-          description: 'Test Docket Record',
-          eventCode: 'O',
-          filingDate: new Date('2000-01-01').toISOString(),
-          index: 0,
-        }).isValid(),
-      ).toBeTruthy();
-    });
-
-    it('fails validation if a filingDate is omitted', () => {
-      expect(
-        new DocketRecord({
-          description: 'Test Docket Record',
-          eventCode: 'O',
-          index: 0,
-        }).isValid(),
-      ).toBeFalsy();
-    });
-
     it('fails validation if a description is omitted', () => {
       expect(
         new DocketRecord({
           eventCode: 'O',
-          filingDate: new Date('2000-01-01').toISOString(),
           index: 0,
         }).isValid(),
       ).toBeFalsy();
@@ -48,7 +15,6 @@ describe('DocketRecord', () => {
       expect(
         new DocketRecord({
           description: 'Test Docket Record',
-          filingDate: new Date('2000-01-01').toISOString(),
           index: 0,
         }).isValid(),
       ).toBeFalsy();
@@ -59,7 +25,6 @@ describe('DocketRecord', () => {
         new DocketRecord({
           description: 'Test Docket Record',
           eventCode: 'O',
-          filingDate: new Date('2000-01-01').toISOString(),
         }).isValid(),
       ).toBeFalsy();
     });
@@ -72,7 +37,6 @@ describe('DocketRecord', () => {
       expect(new DocketRecord({}).getFormattedValidationErrors()).toEqual({
         description: 'Enter a description',
         eventCode: 'Enter an event code',
-        filingDate: 'Enter a valid filing date',
         index: 'Enter an index',
       });
     });

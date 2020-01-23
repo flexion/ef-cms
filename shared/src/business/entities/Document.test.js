@@ -167,6 +167,42 @@ describe('Document entity', () => {
   });
 
   describe('validate', () => {
+    it('fails validation if a filingDate is in the future.', () => {
+      let error;
+      try {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            filingDate: new Date('2050-01-01').toISOString(),
+          },
+          { applicationContext },
+        );
+        document.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+        document.validate();
+      } catch (err) {
+        error = err;
+      }
+      expect(error).toBeDefined();
+    });
+
+    it('passes validation if a filingDate is not in the future', () => {
+      let error;
+      try {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            filingDate: new Date('2000-01-01').toISOString(),
+          },
+          { applicationContext },
+        );
+        document.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+        document.validate();
+      } catch (err) {
+        error = err;
+      }
+      expect(error).not.toBeDefined();
+    });
+
     it('should do nothing if valid', () => {
       let error;
       try {
