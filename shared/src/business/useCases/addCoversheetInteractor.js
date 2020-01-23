@@ -48,10 +48,10 @@ exports.addCoverToPdf = async ({
   }
 
   const dateFiledFormatted =
-    (documentEntity.createdAt &&
+    (documentEntity.filingDate &&
       applicationContext
         .getUtilities()
-        .formatDateString(documentEntity.createdAt, 'MMDDYYYY')) ||
+        .formatDateString(documentEntity.filingDate, 'MMDDYYYY')) ||
     null;
 
   const caseCaption = caseEntity.caseCaption || Case.getCaseCaption(caseEntity);
