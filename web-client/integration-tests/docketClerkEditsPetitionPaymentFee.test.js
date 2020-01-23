@@ -28,9 +28,9 @@ describe('docket clerk edits a petition payment fee', () => {
       Case.PAYMENT_STATUS.UNPAID,
     );
     expect(test.getState('caseDetail.docketRecord')).not.toContainEqual({
+      createdAt: '2001-01-01T05:00:00.000Z',
       description: 'Filing Fee Paid',
       eventCode: 'FEE',
-      filingDate: '2001-01-01T05:00:00.000Z',
       index: 3,
     });
 
@@ -77,9 +77,9 @@ describe('docket clerk edits a petition payment fee', () => {
     );
 
     expect(test.getState('caseDetail.docketRecord')).toContainEqual({
+      createdAt: '2001-01-01T05:00:00.000Z',
       description: 'Filing Fee Paid',
       eventCode: 'FEE',
-      filingDate: '2001-01-01T05:00:00.000Z',
       index: 3,
     });
   });

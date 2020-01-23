@@ -7,9 +7,9 @@ export default test => {
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
     expect(test.getState('caseDetail.docketRecord')).toContainEqual({
+      createdAt: '2018-12-24T05:00:00.000Z',
       description: 'Filing Fee Paid',
       eventCode: 'FEE',
-      filingDate: '2018-12-24T05:00:00.000Z',
       index: 6,
     });
   });
