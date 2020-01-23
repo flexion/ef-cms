@@ -249,7 +249,6 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           description: metadata.documentTitle,
           documentId: documentEntity.documentId,
           eventCode: documentEntity.eventCode,
-          filingDate: documentEntity.receivedAt,
         });
 
         caseEntity.addDocketRecord(docketRecordEntity);

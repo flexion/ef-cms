@@ -80,10 +80,7 @@ const batchDownloadTrialSessionInteractor = async ({
         aDocketRecord.documentId &&
         (myDoc = documentMap[aDocketRecord.documentId])
       ) {
-        const docDate = formatDateString(
-          aDocketRecord.filingDate,
-          'YYYY-MM-DD',
-        );
+        const docDate = formatDateString(myDoc.filingDate, 'YYYY-MM-DD');
         const docNum = padStart(`${aDocketRecord.index}`, 4, '0');
         const fileName = sanitize(
           `${docDate}_${docNum}_${aDocketRecord.description}.pdf`,

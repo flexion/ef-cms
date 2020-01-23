@@ -26,21 +26,19 @@ describe('generateDocketRecordPdfInteractor', () => {
         createdAt: '12/27/18',
         description: 'Test Description',
         documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-        filingDate: '12/27/18',
+
         index: '1',
       },
       {
         createdAt: '12/27/18',
         description: 'Test Description',
         documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
-        filingDate: '12/27/18',
         index: '2',
       },
       {
         createdAt: '12/27/18',
         description: 'Test Description',
         documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
-        filingDate: '12/27/18',
         filingsAndProceedings: 'Test F&P',
         index: '3',
       },
@@ -48,13 +46,16 @@ describe('generateDocketRecordPdfInteractor', () => {
     documents: [
       {
         documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+        filingDate: '12/27/18',
       },
       {
         documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+        filingDate: '12/27/18',
       },
       {
         additionalInfo2: 'Additional Info 2',
         documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+        filingDate: '12/27/18',
         isStatusServed: true,
         servedAtFormatted: '03/27/19',
       },

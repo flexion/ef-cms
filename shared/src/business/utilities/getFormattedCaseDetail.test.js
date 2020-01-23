@@ -680,31 +680,31 @@ describe('sortDocketRecords', () => {
         {
           index: '2',
           record: {
-            filingDate: '2019-07-08',
+            createdAt: '2019-07-08',
           },
         },
         {
           index: '1',
           record: {
-            filingDate: '2019-08-03T00:06:44.000Z',
+            createdAt: '2019-08-03T00:06:44.000Z',
           },
         },
         {
           index: '4',
           record: {
-            filingDate: '2019-07-08T00:01:19.000Z',
+            createdAt: '2019-07-08T00:01:19.000Z',
           },
         },
         {
           index: '3',
           record: {
-            filingDate: '2017-01-01T00:01:02.025Z',
+            createdAt: '2017-01-01T00:01:02.025Z',
           },
         },
         {
           index: '5',
           record: {
-            filingDate: '2017-01-01T00:01:12.025Z',
+            createdAt: '2017-01-01T00:01:12.025Z',
           },
         },
       ],

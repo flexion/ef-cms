@@ -166,10 +166,10 @@ exports.createCaseInteractor = async ({
 
   caseToAdd.addDocketRecord(
     new DocketRecord({
+      createdAt: caseToAdd.receivedAt || caseToAdd.createdAt,
       description: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
       eventCode:
         Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-      filingDate: caseToAdd.receivedAt || caseToAdd.createdAt,
     }),
   );
 
@@ -178,6 +178,7 @@ exports.createCaseInteractor = async ({
       documentId: stinFileId,
       documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
       eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
+      filingDate: caseToAdd.receivedAt || caseToAdd.createdAt,
       partyPrimary: true,
       partySecondary,
       practitioner: practitioners,

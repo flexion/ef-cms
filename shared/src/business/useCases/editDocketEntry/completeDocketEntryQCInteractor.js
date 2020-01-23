@@ -136,7 +136,6 @@ exports.completeDocketEntryQCInteractor = async ({
     documentId: updatedDocument.documentId,
     editState: '{}',
     eventCode: updatedDocument.eventCode,
-    filingDate: updatedDocument.receivedAt,
   });
 
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));

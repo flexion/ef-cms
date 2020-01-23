@@ -17,6 +17,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       {
         documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
         documentType: 'Order',
+        filingDate: '2019-01-01T00:01:00.000Z',
         servedAt: '2019-01-01T00:01:00.000Z',
         servedParties: ['Some Party'],
         userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
@@ -24,6 +25,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       {
         documentId: '111ba5a9-b37b-479d-9201-067ec6e33111',
         documentType: 'Order',
+        filingDate: '2019-01-01T00:01:00.000Z',
         servedAt: '2019-01-02T00:01:00.000Z',
         servedParties: ['Some Other Party'],
         userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
@@ -36,7 +38,6 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
         eventCode: 'TEST',
         filedBy: 'Test User',
-        filingDate: '2019-01-01T00:01:00.000Z',
         index: 0,
       },
       {
@@ -186,7 +187,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(updatedDocument.filedBy).toEqual('New Filer');
   });
 
-  it('should update the docket record filingDate', async () => {
+  it('should update the document filingDate', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
@@ -200,7 +201,11 @@ describe('updateDocketEntryMetaInteractor', () => {
       record => record.index === 0,
     );
 
-    expect(updatedDocketEntry.filingDate).toEqual('2020-01-01T00:01:00.000Z');
+    const updatedDocument = result.documents.find(
+      document => document.documentId === updatedDocketEntry.documentId,
+    );
+
+    expect(updatedDocument.filingDate).toEqual('2020-01-01T00:01:00.000Z');
   });
 
   it('should update the document servedAt', async () => {

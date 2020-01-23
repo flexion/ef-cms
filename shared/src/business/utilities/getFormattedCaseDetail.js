@@ -79,7 +79,7 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
   const result = cloneDeep(docketRecord);
   result.createdAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(result.filingDate, 'MMDDYY');
+    .formatDateString(result.createdAt, 'MMDDYY');
 
   return result;
 };
@@ -366,7 +366,7 @@ const formatCase = (applicationContext, caseDetail) => {
 const getDocketRecordSortFunc = sortBy => {
   const byIndex = (a, b) => a.index - b.index;
   const byDate = (a, b) =>
-    dateStringsCompared(a.record.filingDate, b.record.filingDate);
+    dateStringsCompared(a.record.createdAt, b.record.createdAt);
 
   switch (sortBy) {
     case 'byIndex': // fall-through

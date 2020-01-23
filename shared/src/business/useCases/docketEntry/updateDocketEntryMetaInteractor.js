@@ -59,7 +59,6 @@ exports.updateDocketEntryMetaInteractor = async ({
     action: action || docketRecordEntry.action,
     description: description || docketRecordEntry.description,
     filedBy: filedBy || docketRecordEntry.filedBy,
-    filingDate: filingDate || docketRecordEntry.filingDate,
   });
 
   if (servedAt || filedBy || filingDate) {
@@ -78,6 +77,7 @@ exports.updateDocketEntryMetaInteractor = async ({
           ...documentDetail,
           createdAt: filingDateUpdated ? null : documentDetail.createdAt, // setting to null will regenerate it for the coversheet
           filedBy: filedBy || documentDetail.filedBy,
+          filingDate: filingDate || documentDetail.filingDate,
           servedAt: servedAt || documentDetail.servedAt,
         },
         { applicationContext },

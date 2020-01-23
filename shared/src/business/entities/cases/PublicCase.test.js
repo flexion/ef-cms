@@ -32,7 +32,7 @@ describe('PublicCase', () => {
           createdAt: '2020-01-02T03:30:45.007Z',
           docketNumber: '111-12',
           docketNumberSuffix: 'S',
-          docketRecord: [{ any: 'thing' }],
+          docketRecord: [{ any: 'thing', createdAt: 'testing' }],
           documents: [{ any: 'thing' }],
           receivedAt: '2020-01-05T03:30:45.007Z',
           sealedDate: '2020-01-05T03:30:45.007Z',
@@ -67,14 +67,14 @@ describe('PublicCase', () => {
         createdAt: 'testing',
         docketNumber: 'testing',
         docketNumberSuffix: 'testing',
-        docketRecord: [{}],
+        docketRecord: [{ createdAt: 'testing' }],
         documents: [{}],
         receivedAt: 'testing',
       },
       {},
     );
 
-    expect(entity.toRawObject()).toEqual({
+    expect(entity.toRawObject()).toMatchObject({
       caseCaption: 'testing',
       caseId: 'testing',
       caseTitle: 'testing',
@@ -83,7 +83,7 @@ describe('PublicCase', () => {
       createdAt: 'testing',
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
-      docketRecord: [{}],
+      docketRecord: [{ createdAt: 'testing' }],
       documents: [{}],
       isSealed: false,
       receivedAt: 'testing',
@@ -135,7 +135,7 @@ describe('PublicCase', () => {
         createdAt: 'testing',
         docketNumber: 'testing',
         docketNumberSuffix: 'testing',
-        docketRecord: [{ documentId: '123' }],
+        docketRecord: [{ createdAt: 'testing', documentId: '123' }],
         documents: [
           {
             documentId: '123',
@@ -149,7 +149,7 @@ describe('PublicCase', () => {
       {},
     );
 
-    expect(entity.toRawObject()).toEqual({
+    expect(entity.toRawObject()).toMatchObject({
       caseCaption: 'testing',
       caseId: 'testing',
       caseTitle: 'testing',
@@ -158,7 +158,7 @@ describe('PublicCase', () => {
       createdAt: 'testing',
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
-      docketRecord: [{ documentId: '123' }],
+      docketRecord: [{ createdAt: 'testing', documentId: '123' }],
       documents: [
         {
           documentId: '123',

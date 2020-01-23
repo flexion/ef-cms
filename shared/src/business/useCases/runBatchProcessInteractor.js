@@ -51,9 +51,9 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
       caseEntity.addDocketRecord(
         new DocketRecord({
+          createdAt: caseEntity.petitionPaymentDate,
           description: 'Filing Fee Paid',
           eventCode: 'FEE',
-          filingDate: caseEntity.petitionPaymentDate,
         }),
       );
     } else if (
@@ -61,9 +61,9 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     ) {
       caseEntity.addDocketRecord(
         new DocketRecord({
+          createdAt: caseEntity.petitionPaymentWaivedDate,
           description: 'Filing Fee Waived',
           eventCode: 'FEEW',
-          filingDate: caseEntity.petitionPaymentWaivedDate,
         }),
       );
     }

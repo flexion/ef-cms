@@ -48,7 +48,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           description: 'first record',
           documentId: '8675309b-18d0-43ec-bafb-654e83405411',
           eventCode: 'P',
-          filingDate: '2018-03-01T00:01:00.000Z',
           index: 1,
         },
       ],
@@ -59,6 +58,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
+          filingDate: '2018-03-01T00:01:00.000Z',
           userId: 'respondent',
         },
         {
@@ -67,6 +67,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
+          filingDate: '2018-03-01T00:01:00.000Z',
           userId: 'respondent',
         },
         {
@@ -75,6 +76,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
+          filingDate: '2018-03-01T00:01:00.000Z',
           userId: 'respondent',
         },
         {

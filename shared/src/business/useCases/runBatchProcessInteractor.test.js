@@ -457,9 +457,9 @@ describe('zip petition documents and send to dummy S3 IRS repository', () => {
     expect(
       updateCaseStub.getCall(0).args[0].caseToUpdate.docketRecord,
     ).toContainEqual({
+      createdAt: '2018-12-27T00:00:00.000Z',
       description: 'Filing Fee Paid',
       eventCode: 'FEE',
-      filingDate: '2018-12-27T00:00:00.000Z',
       index: 4,
     });
   });
@@ -506,9 +506,9 @@ describe('zip petition documents and send to dummy S3 IRS repository', () => {
     expect(
       updateCaseStub.getCall(0).args[0].caseToUpdate.docketRecord,
     ).toContainEqual({
+      createdAt: '2018-12-27T00:00:00.000Z',
       description: 'Filing Fee Waived',
       eventCode: 'FEEW',
-      filingDate: '2018-12-27T00:00:00.000Z',
       index: 4,
     });
   });

@@ -67,7 +67,6 @@ exports.updateDocketEntryInteractor = async ({
     documentId: documentEntity.documentId,
     editState: JSON.stringify(documentMetadata),
     eventCode: documentEntity.eventCode,
-    filingDate: documentEntity.receivedAt,
   });
 
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));

@@ -109,12 +109,12 @@ describe('updatePetitionDetailsInteractor', () => {
       },
     });
     expect(result.docketRecord).toContainEqual({
+      createdAt: '2019-11-30T09:10:11.000Z',
       description: 'Filing Fee Waived',
       documentId: undefined,
       editState: undefined,
       eventCode: 'FEEW',
       filedBy: undefined,
-      filingDate: '2019-11-30T09:10:11.000Z',
       index: 4,
       signatory: undefined,
       status: undefined,
@@ -133,12 +133,12 @@ describe('updatePetitionDetailsInteractor', () => {
       },
     });
     expect(result.docketRecord).toContainEqual({
+      createdAt: '2019-11-30T09:10:11.000Z',
       description: 'Filing Fee Paid',
       documentId: undefined,
       editState: undefined,
       eventCode: 'FEE',
       filedBy: undefined,
-      filingDate: '2019-11-30T09:10:11.000Z',
       index: 4,
       signatory: undefined,
       status: undefined,

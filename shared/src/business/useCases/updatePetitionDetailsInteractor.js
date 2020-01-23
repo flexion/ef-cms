@@ -55,17 +55,17 @@ exports.updatePetitionDetailsInteractor = async ({
     if (isPaid) {
       newCase.addDocketRecord(
         new DocketRecord({
+          createdAt: newCase.petitionPaymentDate,
           description: 'Filing Fee Paid',
           eventCode: 'FEE',
-          filingDate: newCase.petitionPaymentDate,
         }),
       );
     } else if (isWaived) {
       newCase.addDocketRecord(
         new DocketRecord({
+          createdAt: newCase.petitionPaymentWaivedDate,
           description: 'Filing Fee Waived',
           eventCode: 'FEEW',
-          filingDate: newCase.petitionPaymentWaivedDate,
         }),
       );
     }
