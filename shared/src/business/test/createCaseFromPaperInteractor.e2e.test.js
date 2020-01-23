@@ -77,7 +77,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
         {
           description: 'Petition',
           filedBy: 'Petr. Bob Jones',
-          filingDate: RECEIVED_DATE,
           status: undefined,
         },
       ],
@@ -87,6 +86,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           documentType: 'Petition',
           eventCode: 'P',
           filedBy: 'Petr. Bob Jones',
+          filingDate: RECEIVED_DATE,
           receivedAt: RECEIVED_DATE,
           workItems: [
             {
@@ -148,6 +148,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           createdAt: RECEIVED_DATE,
           documentType: 'Petition',
           eventCode: 'P',
+          filingDate: RECEIVED_DATE,
         },
         isInitializeCase: true,
         messages: [
