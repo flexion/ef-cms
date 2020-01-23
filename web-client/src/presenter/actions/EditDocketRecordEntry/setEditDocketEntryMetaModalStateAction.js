@@ -36,5 +36,6 @@ export const setEditDocketEntryMetaModalStateAction = ({
     });
 
     store.set(state.modal.form.servedAt, documentEntity.servedAt);
+    store.set(state.modal.form.filingDate, documentEntity.filingDate);
   }
 };

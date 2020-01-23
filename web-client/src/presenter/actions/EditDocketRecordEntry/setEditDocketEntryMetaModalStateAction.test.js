@@ -41,6 +41,7 @@ describe('setEditDocketEntryMetaModalStateAction', () => {
           documents: [
             {
               documentId: 'abc-123',
+              filingDate: '2019-09-15',
               servedAt: '2019-09-30',
             },
           ],
@@ -49,5 +50,6 @@ describe('setEditDocketEntryMetaModalStateAction', () => {
     });
 
     expect(result.state.modal.form.servedAt).toEqual('2019-09-30');
+    expect(result.state.modal.form.filingDate).toEqual('2019-09-15');
   });
 });
