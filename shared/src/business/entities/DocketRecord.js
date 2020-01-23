@@ -28,7 +28,6 @@ DocketRecord.validationName = 'DocketRecord';
 DocketRecord.VALIDATION_ERROR_MESSAGES = {
   description: 'Enter a description',
   eventCode: 'Enter an event code',
-  filingDate: 'Enter a valid filing date',
   index: 'Enter an index',
 };
 
@@ -39,6 +38,11 @@ joiValidationDecorator(
       .string()
       .optional()
       .allow(null),
+    createdAt: joi
+      .date()
+      .iso()
+      .required()
+      .description('When the docket record was added to the system.'),
     description: joi.string().required(),
     documentId: joi
       .string()
