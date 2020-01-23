@@ -17,24 +17,24 @@ exports.MOCK_CASE = {
   docketNumber: '101-18',
   docketRecord: [
     {
+      createdAt: '2018-03-01T00:01:00.000Z',
       description: 'first record',
       documentId: '8675309b-18d0-43ec-bafb-654e83405411',
       eventCode: 'P',
-      filingDate: '2018-03-01T00:01:00.000Z',
       index: 1,
     },
     {
+      createdAt: '2018-03-01T00:02:00.000Z',
       description: 'second record',
       documentId: '8675309b-28d0-43ec-bafb-654e83405412',
       eventCode: 'PSDEC',
-      filingDate: '2018-03-01T00:02:00.000Z',
       index: 2,
     },
     {
+      createdAt: '2018-03-01T00:03:00.000Z',
       description: 'third record',
       documentId: '8675309b-28d0-43ec-bafb-654e83405413',
       eventCode: 'SDEC',
-      filingDate: '2018-03-01T00:03:00.000Z',
       index: 3,
     },
   ],
@@ -60,24 +60,24 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   docketNumber: '101-18',
   docketRecord: [
     {
+      createdAt: '2018-03-01T00:01:00.000Z',
       description: 'first record',
       documentId: '8675309b-18d0-43ec-bafb-654e83405411',
       eventCode: 'P',
-      filingDate: '2018-03-01T00:01:00.000Z',
       index: 1,
     },
     {
+      createdAt: '2018-03-01T00:02:00.000Z',
       description: 'second record',
       documentId: '8675309b-28d0-43ec-bafb-654e83405412',
       eventCode: 'PSDEC',
-      filingDate: '2018-03-01T00:02:00.000Z',
       index: 2,
     },
     {
+      createdAt: '2018-03-01T00:03:00.000Z',
       description: 'third record',
       documentId: '8675309b-28d0-43ec-bafb-654e83405413',
       eventCode: 'SDEC',
-      filingDate: '2018-03-01T00:03:00.000Z',
       index: 3,
     },
   ],
@@ -101,10 +101,10 @@ exports.MOCK_CASE_WITHOUT_NOTICE = {
   docketNumber: '101-18',
   docketRecord: [
     {
+      createdAt: '2018-03-01T00:01:00.000Z',
       description: 'first record',
       documentId: '8675309b-18d0-43ec-bafb-654e83405411',
       eventCode: 'P',
-      filingDate: '2018-03-01T00:01:00.000Z',
       index: 1,
     },
   ],
