@@ -15,10 +15,10 @@ describe('submitCaseAssociationRequest', () => {
     docketNumber: '123-19',
     docketRecord: [
       {
+        createdAt: '2018-03-01T00:01:00.000Z',
         description: 'first record',
         documentId: '8675309b-18d0-43ec-bafb-654e83405411',
         eventCode: 'P',
-        filingDate: '2018-03-01T00:01:00.000Z',
         index: 1,
       },
     ],
