@@ -15,7 +15,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
+const { Document } = require('../../entities/Document');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { PDFDocument } = require('pdf-lib');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
@@ -140,13 +140,16 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     workItemToUpdate,
   });
 
-  const updatedDocketRecordEntity = new DocketRecord({
-    ...docketEntry,
-    filingDate: createISODateString(),
-  });
-  updatedDocketRecordEntity.validate();
+  const updatedDocumentEntity = new Document(
+    {
+      ...courtIssuedDocument,
+      filingDate: createISODateString(),
+    },
+    { applicationContext },
+  );
+  updatedDocumentEntity.validate();
 
-  caseEntity.updateDocketRecordEntry(updatedDocketRecordEntity);
+  caseEntity.updateDocument(updatedDocumentEntity);
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)) {
     caseEntity.closeCase();
