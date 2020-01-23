@@ -79,9 +79,9 @@ describe('formattedCaseDetail', () => {
       caseCaption: 'Brett Osborne, Petitioner',
       docketRecord: [
         {
+          createdAt: '2019-02-28T21:14:39.488Z',
           description: 'Petition',
           filedBy: 'Jessica Frase Marine',
-          filingDate: '2019-02-28T21:14:39.488Z',
         },
       ],
       hasIrsNotice: false,
@@ -103,10 +103,10 @@ describe('formattedCaseDetail', () => {
       caseCaption: 'Brett Osborne, Petitioner',
       docketRecord: [
         {
+          createdAt: '2019-02-28T21:14:39.488Z',
           description: 'Petition',
           documentId: 'Petition',
           filedBy: 'Jessica Frase Marine',
-          filingDate: '2019-02-28T21:14:39.488Z',
         },
       ],
       documents: [
@@ -145,27 +145,27 @@ describe('formattedCaseDetail', () => {
       },
       docketRecord: [
         {
+          createdAt: '2019-04-19T17:29:13.120Z',
           description: 'Amended Petition',
           documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-          filingDate: '2019-04-19T17:29:13.120Z',
         },
         {
+          createdAt: '2019-04-19T17:31:09.515Z',
           description:
             'First Amended Unsworn Declaration under Penalty of Perjury in Support',
           documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
-          filingDate: '2019-04-19T17:31:09.515Z',
         },
         {
+          createdAt: '2019-04-19T17:39:10.476Z',
           description:
             'Motion for Leave to File Computation for Entry of Decision',
           documentId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
-          filingDate: '2019-04-19T17:39:10.476Z',
         },
         {
+          createdAt: '2019-04-19T17:42:13.122Z',
           description:
             'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
-          filingDate: '2019-04-19T17:42:13.122Z',
         },
       ],
       documents: [
@@ -355,19 +355,19 @@ describe('formattedCaseDetail', () => {
       },
       docketRecord: [
         {
+          createdAt: '2019-04-19T17:29:13.120Z',
           description: 'Order for Amended Petition',
           documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-          filingDate: '2019-04-19T17:29:13.120Z',
         },
         {
+          createdAt: '2019-05-19T17:29:13.120Z',
           description: 'Answer',
           documentId: '733d0ac4-5f7c-4024-93ae-b6d791d3c8bd',
-          filingDate: '2019-05-19T17:29:13.120Z',
         },
         {
+          createdAt: '2019-06-19T17:29:13.120Z',
           description: 'Motion to Dismiss for Lack of Jurisdiction',
           documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-          filingDate: '2019-06-19T17:29:13.120Z',
         },
       ],
       documents: [
@@ -433,31 +433,31 @@ describe('formattedCaseDetail', () => {
         caseId: 'abdc-1234-5678-xyz',
         docketRecord: [
           {
+            createdAt: '2019-01-28T21:10:55.488Z',
             description: 'Petition',
             documentId: 'Petition',
             filedBy: 'Jessica Frase Marine',
-            filingDate: '2019-01-28T21:10:55.488Z',
             index: 1,
           },
           {
+            createdAt: '2019-01-28T21:10:33.488Z',
             description: 'Request for Place of Trial',
             documentId: null,
             filedBy: 'Jessica Frase Marine',
-            filingDate: '2019-01-28T21:10:33.488Z',
             index: 2,
           },
           {
+            createdAt: '2019-03-28T21:14:39.488Z',
             description: 'Ownership Disclosure Statement',
             documentId: 'Ownership Disclosure Statement',
             filedBy: 'Jessica Frase Marine',
-            filingDate: '2019-03-28T21:14:39.488Z',
             index: 4,
           },
           {
+            createdAt: '2019-01-28',
             description: 'Other',
             documentId: 'Other',
             filedBy: 'Jessica Frase Marine',
-            filingDate: '2019-01-28',
             index: 3,
           },
         ],
@@ -466,6 +466,7 @@ describe('formattedCaseDetail', () => {
             createdAt: '2019-02-28T21:14:39.488Z',
             documentId: 'Petition',
             documentType: 'Petition',
+            filingDate: '2019-02-28T21:14:39.488Z',
             showValidationInput: '2019-02-28T21:14:39.488Z',
             status: 'served',
           },
@@ -473,6 +474,7 @@ describe('formattedCaseDetail', () => {
             createdAt: '2019-03-28T21:14:39.488Z',
             documentId: 'Ownership Disclosure Statement',
             documentType: 'Ownership Disclosure Statement',
+            filingDate: '2019-03-28T21:14:39.488Z',
             showValidationInput: '2019-03-28T21:14:39.488Z',
             status: 'served',
           },
@@ -480,6 +482,7 @@ describe('formattedCaseDetail', () => {
             createdAt: '2019-01-01T21:14:39.488Z',
             documentId: 'Other',
             documentType: 'Other',
+            filingDate: '2019-01-01T21:14:39.488Z',
             showValidationInput: '2019-01-01T21:14:39.488Z',
             status: 'served',
           },
@@ -849,10 +852,10 @@ describe('formattedCaseDetail', () => {
       caseCaption: 'Brett Osborne, Petitioner',
       docketRecord: [
         {
+          createdAt: '2019-02-28T21:14:39.488Z',
           description: 'Petition',
           documentId: 'Petition',
           filedBy: 'Jessica Frase Marine',
-          filingDate: '2019-02-28T21:14:39.488Z',
         },
       ],
       documents: [
@@ -860,6 +863,7 @@ describe('formattedCaseDetail', () => {
           createdAt: '2019-02-28T21:14:39.488Z',
           documentId: 'Petition',
           documentType: 'Petition',
+          filingDate: '2019-02-28T21:14:39.488Z',
           showValidationInput: '2019-02-28T21:14:39.488Z',
           status: 'served',
         },
@@ -869,6 +873,7 @@ describe('formattedCaseDetail', () => {
           documentId: 'd-1-2-3',
           documentTitle: 'Order to do something',
           documentType: 'Order',
+          filingDate: '2019-02-28T21:14:39.488Z',
         },
         {
           archived: false,
@@ -876,6 +881,7 @@ describe('formattedCaseDetail', () => {
           documentId: 'd-2-3-4',
           documentTitle: 'Stipulated Decision',
           documentType: 'Stipulated Decision',
+          filingDate: '2019-02-28T21:14:39.488Z',
         },
       ],
       hasIrsNotice: false,
@@ -990,9 +996,9 @@ describe('formattedCaseDetail', () => {
         },
         docketRecord: [
           {
+            createdAt: '2019-06-19T17:29:13.120Z',
             description: 'Motion to Dismiss for Lack of Jurisdiction',
             documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-            filingDate: '2019-06-19T17:29:13.120Z',
           },
         ],
         documents: [
@@ -1004,6 +1010,7 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
+            filingDate: '2019-06-19T17:29:13.120Z',
             workItems: [{ isQC: true }],
           },
         ],

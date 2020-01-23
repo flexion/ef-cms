@@ -16,9 +16,9 @@ describe('validateDocketRecordAction', () => {
     errorStub = sinon.stub();
 
     mockDocketRecord = {
+      createdAt: '1990-01-01T05:00:00.000Z',
       description: 'hello world',
       eventCode: 'HELLO',
-      filingDate: '1990-01-01T05:00:00.000Z',
       index: 1,
     };
 
