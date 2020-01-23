@@ -2,6 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { createISODateString } = require('../utilities/DateHandler');
 
 /**
  * DocketRecord constructor
@@ -19,6 +20,7 @@ function DocketRecord(rawDocketRecord) {
   this.status = rawDocketRecord.status;
   this.eventCode = rawDocketRecord.eventCode;
   this.editState = rawDocketRecord.editState;
+  this.createdAt = rawDocketRecord.createdAt || createISODateString();
 }
 
 DocketRecord.validationName = 'DocketRecord';
