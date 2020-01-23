@@ -261,6 +261,14 @@ joiValidationDecorator(
       .string()
       .allow('')
       .optional(),
+    filingDate: joi
+      .date()
+      .max('now')
+      .iso()
+      .required()
+      .description(
+        'The date that this document (electronic is automatically entered by the system) is filed by the court.',
+      ),
     freeText: joi.string().optional(),
     freeText2: joi.string().optional(),
     hasSupportingDocuments: joi.boolean().optional(),
@@ -288,7 +296,10 @@ joiValidationDecorator(
     receivedAt: joi
       .date()
       .iso()
-      .optional(),
+      .optional()
+      .description(
+        'The date that this document (electronic is automatically entered by the system) is received by the court.',
+      ),
     relationship: joi.string().optional(),
     scenario: joi.string().optional(),
     secondaryDocument: joi.object().optional(),

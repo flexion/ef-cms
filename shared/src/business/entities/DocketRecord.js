@@ -52,11 +52,6 @@ joiValidationDecorator(
       .string()
       .optional()
       .allow(null),
-    filingDate: joi
-      .date()
-      .max('now')
-      .iso()
-      .required(),
     index: joi
       .number()
       .integer()
