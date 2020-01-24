@@ -510,6 +510,13 @@ Otherwise, this field is `any` and is `optional`.
 
 ##### Can be .
 
+### filingDate
+
+
+The date that this document (electronic is automatically entered by the system) is filed by the court.
+
+> `date` | required
+
 ### freeText
 
 > `string` | optional
@@ -587,7 +594,7 @@ Otherwise, this field is `any` and is `optional`.
 ### receivedAt
 
 
-The date that this document (both paper and electronic) is received by the court.
+The date that this document (electronic is automatically entered by the system) is received by the court.
 
 > `date` | optional
 

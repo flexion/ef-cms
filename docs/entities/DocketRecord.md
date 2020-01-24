@@ -6,6 +6,13 @@
 
 ##### Can be null.
 
+### createdAt
+
+
+When the docket record was added to the system.
+
+> `date` | required
+
 ### description
 
 > `string` | required
@@ -31,13 +38,6 @@
 > `string` | optional
 
 ##### Can be null.
-
-### filingDate
-
-
-The date the associated document is filed on this Docket Record.
-
-> `date` | required
 
 ### index
 
