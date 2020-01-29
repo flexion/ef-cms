@@ -2,9 +2,6 @@
 
 ### action
 
-
-Action taken in response to this Docket Record item.
-
 > `string` | optional
 
 ##### Can be null.
@@ -398,17 +395,6 @@ ID of the user that filed this Docket Record item.
 > `string` | optional
 
 ##### Can be null.
-
-<<<<<<< HEAD
-### index
-=======
-### filingDate
-
->>>>>>> 199a79663dfd0005d7f1aea4cb284aecef90287d
-
-Date that this Docket Record item was filed.
-
-> `date` | required
 
 ### index
 
