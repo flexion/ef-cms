@@ -89,6 +89,9 @@ const {
   completeWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
+  ContactFactory,
+} = require('../../shared/src/business/entities/contacts/ContactFactory');
+const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
 const {
@@ -264,6 +267,18 @@ const {
 const {
   generatePrintablePendingReportInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
+const {
+  generateStandingPretrialNoticeInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialNoticeInteractor');
+const {
+  generateStandingPretrialNoticeTemplate,
+} = require('../../shared/src/business/useCaseHelper/standingPretrialNotice/generateStandingPretrialNoticeTemplate');
+const {
+  generateStandingPretrialOrderInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor');
+const {
+  generateStandingPretrialOrderTemplate,
+} = require('../../shared/src/business/useCaseHelper/standingPretrialOrder/generateStandingPretrialOrderTemplate');
 const {
   generateTrialCalendarPdfInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
@@ -611,6 +626,9 @@ const {
   submitPendingCaseAssociationRequestInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor');
 const {
+  TrialSession,
+} = require('../../shared/src/business/entities/trialSessions/TrialSession');
+const {
   unblockCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/unblockCaseFromTrialInteractor');
 const {
@@ -819,7 +837,10 @@ module.exports = (appContextUser = {}) => {
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
       CaseSearch,
+      ContactFactory,
       ExternalDocumentFactory,
+      TrialSession,
+      User,
     }),
     getMigrations: () => ({
       migrateCaseInteractor,
@@ -994,6 +1015,8 @@ module.exports = (appContextUser = {}) => {
         generateNoticeOfTrialIssuedTemplate,
         generatePrintableDocketRecordTemplate,
         generatePrintableFilingReceiptTemplate,
+        generateStandingPretrialNoticeTemplate,
+        generateStandingPretrialOrderTemplate,
         generateTrialCalendarTemplate,
         generateTrialSessionPlanningReportTemplate,
       };
@@ -1050,6 +1073,8 @@ module.exports = (appContextUser = {}) => {
         generatePdfFromHtmlInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
+        generateStandingPretrialNoticeInteractor,
+        generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
         getAllCaseDeadlinesInteractor,
         getBlockedCasesInteractor,

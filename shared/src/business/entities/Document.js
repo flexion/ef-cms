@@ -11,12 +11,12 @@ const { Order } = require('./orders/Order');
 const { TrialSession } = require('./trialSessions/TrialSession');
 const { WorkItem } = require('./WorkItem');
 
-Document.PETITION_DOCUMENT_TYPES = ['Petition'];
 Document.CATEGORIES = Object.keys(documentMapExternal);
 Document.CATEGORY_MAP = documentMapExternal;
+Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
-Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
+Document.PETITION_DOCUMENT_TYPES = ['Petition'];
 
 Document.validationName = 'Document';
 
@@ -36,7 +36,6 @@ function Document(rawDocument, { applicationContext }) {
   this.attachments = rawDocument.attachments;
   this.archived = rawDocument.archived;
   this.caseId = rawDocument.caseId;
-  this.category = rawDocument.category;
   this.certificateOfService = rawDocument.certificateOfService;
   this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
   this.createdAt = rawDocument.createdAt || createISODateString();
@@ -139,6 +138,18 @@ Document.NOTICE_OF_TRIAL = {
   eventCode: 'NDT',
 };
 
+Document.STANDING_PRETRIAL_NOTICE = {
+  documentTitle: 'Standing Pretrial Notice',
+  documentType: 'Standing Pretrial Notice',
+  eventCode: 'SPTN',
+};
+
+Document.STANDING_PRETRIAL_ORDER = {
+  documentTitle: 'Standing Pretrial Order',
+  documentType: 'Standing Pretrial Order',
+  eventCode: 'SPTO',
+};
+
 Document.SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
     documentType: 'Stipulated Decision',
@@ -208,10 +219,36 @@ Document.getDocumentTypes = () => {
     ...signedTypes,
     Document.NOTICE_OF_DOCKET_CHANGE.documentType,
     Document.NOTICE_OF_TRIAL.documentType,
+    Document.STANDING_PRETRIAL_ORDER.documentType,
+    Document.STANDING_PRETRIAL_NOTICE.documentType,
   ];
 
   return documentTypes;
 };
+
+/**
+ *
+ * @returns {Array} event codes defined in the Document entity
+ */
+Document.eventCodes = [
+  Document.INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
+  Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+  Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
+  Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+  Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
+  Document.NOTICE_OF_DOCKET_CHANGE.eventCode,
+  Document.NOTICE_OF_TRIAL.eventCode,
+  Document.NOTICE_OF_TRIAL.eventCode,
+  Document.STANDING_PRETRIAL_NOTICE.eventCode,
+  Document.STANDING_PRETRIAL_ORDER.eventCode,
+  // TODO: Move these constants
+  'MISL',
+  'FEE',
+  'FEEW',
+  'MGRTED',
+  'MIND',
+  'MINC',
+];
 
 /**
  *
@@ -229,7 +266,6 @@ joiValidationDecorator(
     additionalInfo2: joi.string().optional(),
     archived: joi.boolean().optional(),
     caseId: joi.string().optional(),
-    category: joi.string().optional(),
     certificateOfService: joi.boolean().optional(),
     certificateOfServiceDate: joi.when('certificateOfService', {
       is: true,
@@ -326,7 +362,10 @@ joiValidationDecorator(
       .string()
       .optional()
       .allow(null),
-    status: joi.string().optional(),
+    status: joi
+      .string()
+      .valid('served')
+      .optional(),
     supportingDocument: joi
       .string()
       .optional()
@@ -336,10 +375,7 @@ joiValidationDecorator(
       .try(
         joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
         joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
-        joi
-          .string()
-          .optional()
-          .allow(null),
+        joi.string().allow(null),
       )
       .optional(),
     userId: joi.string().required(),

@@ -160,8 +160,8 @@ describe('fileExternalDocumentInteractor', () => {
         documentMetadata: {
           caseId: caseRecord.caseId,
           docketNumber: '45678-18',
-          documentTitle: 'Amended Simultaneous Memoranda of Law',
-          documentType: 'Amended Simultaneous Memoranda of Law',
+          documentTitle: 'Simultaneous Memoranda of Law',
+          documentType: 'Simultaneous Memoranda of Law',
           eventCode: 'A',
         },
       });
@@ -186,8 +186,8 @@ describe('fileExternalDocumentInteractor', () => {
       documentMetadata: {
         caseId: caseRecord.caseId,
         docketNumber: '45678-18',
-        documentTitle: 'Amended Simultaneous Memoranda of Law',
-        documentType: 'Amended Simultaneous Memoranda of Law',
+        documentTitle: 'Simultaneous Memoranda of Law',
+        documentType: 'Simultaneous Memoranda of Law',
         eventCode: 'A',
       },
     });
@@ -208,8 +208,8 @@ describe('fileExternalDocumentInteractor', () => {
       documentMetadata: {
         caseId: caseRecord.caseId,
         docketNumber: '45678-18',
-        documentTitle: 'Amended Simultaneous Memoranda of Law',
-        documentType: 'Amended Simultaneous Memoranda of Law',
+        documentTitle: 'Simultaneous Memoranda of Law',
+        documentType: 'Simultaneous Memoranda of Law',
         eventCode: 'A',
       },
     });

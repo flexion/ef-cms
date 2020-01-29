@@ -75,9 +75,9 @@ describe('createCaseFromPaperInteractor integration test', () => {
       docketNumberSuffix: null,
       docketRecord: [
         {
+          createdAt: RECEIVED_DATE,
           description: 'Petition',
           filedBy: 'Petr. Bob Jones',
-          status: undefined,
         },
       ],
       documents: [

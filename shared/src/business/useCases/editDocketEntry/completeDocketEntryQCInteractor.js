@@ -68,7 +68,7 @@ exports.completeDocketEntryQCInteractor = async ({
   const updatedDocument = new Document(
     {
       ...entryMetadata,
-      createdAt: currentDocument.createdAt, // eslint-disable-line
+      createdAt: currentDocument.createdAt,
       documentId,
       documentType,
       relationship: 'primaryDocument',
@@ -193,6 +193,7 @@ exports.completeDocketEntryQCInteractor = async ({
 
   let servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;
+  let paperServiceDocumentTitle;
 
   if (
     Document.CONTACT_CHANGE_DOCUMENT_TYPES.includes(
@@ -246,6 +247,7 @@ exports.completeDocketEntryQCInteractor = async ({
         });
 
       paperServicePdfUrl = url;
+      paperServiceDocumentTitle = updatedDocument.documentTitle;
     }
   } else if (needsNoticeOfDocketChange) {
     const noticeDocumentId = await generateNoticeOfDocketChangePdf({
@@ -341,6 +343,7 @@ exports.completeDocketEntryQCInteractor = async ({
         });
 
       paperServicePdfUrl = url;
+      paperServiceDocumentTitle = noticeUpdatedDocument.documentTitle;
     }
   }
 
@@ -359,6 +362,7 @@ exports.completeDocketEntryQCInteractor = async ({
 
   return {
     caseDetail: caseEntity.toRawObject(),
+    paperServiceDocumentTitle,
     paperServiceParties: servedParties.paper,
     paperServicePdfUrl,
   };

@@ -85,7 +85,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
       documentMetadata: {
         attachments: false,
         caseId,
-        category: 'Motion',
         certificateOfService: false,
         certificateOfServiceDate: 'undefined-undefined-undefined',
         docketNumber: '201-19',
@@ -96,7 +95,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         partyPrimary: true,
         scenario: 'Nonstandard H',
         secondaryDocument: {
-          category: 'Supporting Document',
           documentTitle: 'Brief in Support of Petition',
           documentType: 'Brief in Support',
           eventCode: 'BRF',
@@ -106,7 +104,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         },
         secondarySupportingDocuments: [
           {
-            category: 'Supporting Document',
             documentTitle: 'Brief in Support of Amended Answer',
             documentType: 'Brief in Support',
             eventCode: 'BRF',
@@ -118,7 +115,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         supportingDocument: 'Brief in Support',
         supportingDocuments: [
           {
-            category: 'Supporting Document',
             documentTitle: 'Brief in Support of Amended Answer',
             documentType: 'Brief in Support',
             eventCode: 'BRF',
@@ -231,7 +227,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         {
           attachments: false,
           caseId,
-          category: 'Motion',
           certificateOfService: false,
           docketNumber: '201-19',
           documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
@@ -255,7 +250,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
               document: {
                 attachments: false,
                 caseId,
-                category: 'Motion',
                 certificateOfService: false,
                 certificateOfServiceDate: 'undefined-undefined-undefined',
                 docketNumber: '201-19',
@@ -284,7 +278,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         },
         {
           caseId,
-          category: 'Supporting Document',
           documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
@@ -302,7 +295,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
               docketNumber: '101-19',
               docketNumberSuffix: 'S',
               document: {
-                category: 'Supporting Document',
                 documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
                 documentTitle: 'Brief in Support of Amended Answer',
                 documentType: 'Brief in Support',
@@ -326,7 +318,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           ],
         },
         {
-          category: 'Supporting Document',
           documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Petition',
           documentType: 'Brief in Support',
@@ -344,7 +335,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
               docketNumber: '101-19',
               docketNumberSuffix: 'S',
               document: {
-                category: 'Supporting Document',
                 documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
                 documentTitle: 'Brief in Support of Petition',
                 documentType: 'Brief in Support',
@@ -369,7 +359,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           ],
         },
         {
-          category: 'Supporting Document',
           documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
@@ -387,7 +376,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
               docketNumber: '101-19',
               docketNumberSuffix: 'S',
               document: {
-                category: 'Supporting Document',
                 documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
                 documentTitle: 'Brief in Support of Amended Answer',
                 documentType: 'Brief in Support',
@@ -458,7 +446,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         document: {
           attachments: false,
           caseId,
-          category: 'Motion',
           certificateOfService: false,
           docketNumber: '201-19',
           documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
@@ -491,7 +478,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
         document: {
-          category: 'Supporting Document',
           documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
@@ -519,7 +505,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
         document: {
-          category: 'Supporting Document',
           documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Petition',
           documentType: 'Brief in Support',
@@ -548,7 +533,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
         document: {
-          category: 'Supporting Document',
           documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',

@@ -36,7 +36,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       {
         description: 'Test Entry 0',
         documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
-        eventCode: 'TEST',
+        eventCode: 'P',
         filedBy: 'Test User',
         index: 0,
       },

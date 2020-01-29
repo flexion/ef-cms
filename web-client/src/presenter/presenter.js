@@ -80,6 +80,7 @@ import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
 import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequence';
 import { gotoEditCourtIssuedDocketEntrySequence } from './sequences/gotoEditCourtIssuedDocketEntrySequence';
+import { gotoEditDocketEntryMetaSequence } from './sequences/gotoEditDocketEntryMetaSequence';
 import { gotoEditDocketEntrySequence } from './sequences/gotoEditDocketEntrySequence';
 import { gotoEditOrderSequence } from './sequences/gotoEditOrderSequence';
 import { gotoEditPetitionDetailsSequence } from './sequences/gotoEditPetitionDetailsSequence';
@@ -149,7 +150,6 @@ import { openDeleteCaseNoteConfirmModalSequence } from './sequences/openDeleteCa
 import { openDeleteJudgesCaseNoteConfirmModalSequence } from './sequences/openDeleteJudgesCaseNoteConfirmModalSequence';
 import { openDeleteSessionNoteConfirmModalSequence } from './sequences/openDeleteSessionNoteConfirmModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
-import { openEditDocketEntryMetaModalSequence } from './sequences/openEditDocketEntryMetaModalSequence';
 import { openEditPractitionersModalSequence } from './sequences/openEditPractitionersModalSequence';
 import { openEditRespondentsModalSequence } from './sequences/openEditRespondentsModalSequence';
 import { openEditSecondaryContactModalSequence } from './sequences/openEditSecondaryContactModalSequence';
@@ -163,7 +163,6 @@ import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTr
 import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeCaseModalSequence';
 import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
 import { printDocketRecordSequence } from './sequences/printDocketRecordSequence';
-import { printFromBrowserSequence } from './sequences/printFromBrowserSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
 import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
@@ -301,6 +300,7 @@ import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
 import { updateSessionMetadataSequence } from './sequences/updateSessionMetadataSequence';
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { updateStartCaseInternalPartyTypeSequence } from './sequences/updateStartCaseInternalPartyTypeSequence';
+import { updateStateSequence } from './sequences/updateStateSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
 import { updateUserContactValueSequence } from './sequences/updateUserContactValueSequence';
@@ -316,6 +316,7 @@ import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCour
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateDocketRecordSequence } from './sequences/validateDocketRecordSequence';
 import { validateEditPractitionersSequence } from './sequences/caseAssociation/validateEditPractitionersSequence';
+import { validateEditRespondentsSequence } from './sequences/caseAssociation/validateEditRespondentsSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateForwardMessageSequence } from './sequences/validateForwardMessageSequence';
 import { validateInitialWorkItemMessageInModalSequence } from './sequences/validateInitialWorkItemMessageInModalSequence';
@@ -426,6 +427,7 @@ export const presenter = {
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
     gotoEditCourtIssuedDocketEntrySequence,
+    gotoEditDocketEntryMetaSequence,
     gotoEditDocketEntrySequence,
     gotoEditOrderSequence,
     gotoEditPetitionDetailsSequence,
@@ -495,7 +497,6 @@ export const presenter = {
     openDeleteJudgesCaseNoteConfirmModalSequence,
     openDeleteSessionNoteConfirmModalSequence,
     openEditCaseDeadlineModalSequence,
-    openEditDocketEntryMetaModalSequence,
     openEditPractitionersModalSequence,
     openEditRespondentsModalSequence,
     openEditSecondaryContactModalSequence,
@@ -509,7 +510,6 @@ export const presenter = {
     openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence,
     printDocketRecordSequence,
-    printFromBrowserSequence,
     printTrialCalendarSequence,
     prioritizeCaseSequence,
     redirectToLoginSequence,
@@ -645,6 +645,7 @@ export const presenter = {
     updateSessionMetadataSequence,
     updateStartCaseFormValueSequence,
     updateStartCaseInternalPartyTypeSequence,
+    updateStateSequence,
     updateTrialSessionFormDataSequence,
     updateTrialSessionSequence,
     updateUserContactValueSequence,
@@ -660,6 +661,7 @@ export const presenter = {
     validateDocketEntrySequence,
     validateDocketRecordSequence,
     validateEditPractitionersSequence,
+    validateEditRespondentsSequence,
     validateExternalDocumentInformationSequence,
     validateForwardMessageSequence,
     validateInitialWorkItemMessageInModalSequence,

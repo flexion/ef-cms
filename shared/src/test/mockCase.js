@@ -28,7 +28,7 @@ exports.MOCK_CASE = {
       createdAt: '2018-03-01T00:02:00.000Z',
       description: 'second record',
       documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-      eventCode: 'PSDEC',
+      eventCode: 'PSDE',
       index: 2,
     },
     {
@@ -71,7 +71,7 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
       createdAt: '2018-03-01T00:02:00.000Z',
       description: 'second record',
       documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-      eventCode: 'PSDEC',
+      eventCode: 'PSDE',
       index: 2,
     },
     {

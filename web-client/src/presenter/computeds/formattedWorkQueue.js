@@ -49,12 +49,16 @@ export const formatWorkItem = ({
 }) => {
   const {
     COURT_ISSUED_EVENT_CODES,
+    ORDER_TYPES_MAP,
     STATUS_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
 
   const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
     courtIssuedDoc => courtIssuedDoc.documentType,
+  );
+  const orderDocumentTypes = ORDER_TYPES_MAP.map(
+    orderDoc => orderDoc.documentType,
   );
 
   const result = cloneDeep(workItem);
@@ -84,15 +88,15 @@ export const formatWorkItem = ({
     .formatDateString(result.completedAt, 'DATE_TIME_TZ');
   result.assigneeName = result.assigneeName || 'Unassigned';
 
-  result.showUnreadIndicators = !result.isRead;
-  result.showUnreadStatusIcon = !result.isRead;
-
-  result.showComplete = !result.isInitializeCase;
-  result.showSendTo = !result.isInitializeCase;
-
   if (result.highPriority) {
     result.showHighPriorityIcon = true;
   }
+
+  result.showUnreadIndicators = !result.isRead;
+  result.showUnreadStatusIcon = !result.isRead && !result.showHighPriorityIcon;
+
+  result.showComplete = !result.isInitializeCase;
+  result.showSendTo = !result.isInitializeCase;
 
   if (result.assigneeName === 'Unassigned' && !result.showHighPriorityIcon) {
     result.showUnassignedIcon = true;
@@ -156,6 +160,7 @@ export const formatWorkItem = ({
   result.isCourtIssuedDocument = !!courtIssuedDocumentTypes.includes(
     result.document.documentType,
   );
+  result.isOrder = !!orderDocumentTypes.includes(result.document.documentType);
 
   return result;
 };
@@ -204,6 +209,7 @@ export const getWorkItemDocumentLink = ({
       editLink = '/complete';
     } else if (
       !result.isCourtIssuedDocument &&
+      !result.isOrder &&
       !formattedDocument.isPetition &&
       qcWorkItemsUntouched
     ) {
@@ -211,8 +217,6 @@ export const getWorkItemDocumentLink = ({
     }
   }
   if (!editLink) {
-    const { USER_ROLES } = applicationContext.getConstants();
-    const user = applicationContext.getCurrentUser();
     const messageId = result.messages[0] && result.messages[0].messageId;
 
     const workItemIdToMarkAsRead = !result.isRead ? result.workItemId : null;
@@ -222,14 +226,7 @@ export const getWorkItemDocumentLink = ({
         ? `/mark/${workItemIdToMarkAsRead}`
         : '';
 
-    if (
-      messageId &&
-      (workQueueIsInternal ||
-        permissions.DOCKET_ENTRY ||
-        (!workQueueIsInternal &&
-          user.role === USER_ROLES.petitionsClerk &&
-          box === 'inbox'))
-    ) {
+    if (messageId && (workQueueIsInternal || permissions.DOCKET_ENTRY)) {
       editLink = `/messages/${messageId}${markReadPath}`;
     } else {
       editLink = `${markReadPath}`;

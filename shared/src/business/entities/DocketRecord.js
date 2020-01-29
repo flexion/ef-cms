@@ -3,6 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
+const { getAllEventCodes } = require('../../utilities/getAllEventCodes');
 
 /**
  * DocketRecord constructor
@@ -13,13 +14,11 @@ const { createISODateString } = require('../utilities/DateHandler');
 function DocketRecord(rawDocketRecord) {
   this.action = rawDocketRecord.action;
   this.description = rawDocketRecord.description;
-  this.signatory = rawDocketRecord.signatory;
   this.documentId = rawDocketRecord.documentId;
+  this.editState = rawDocketRecord.editState;
+  this.eventCode = rawDocketRecord.eventCode;
   this.filedBy = rawDocketRecord.filedBy;
   this.index = rawDocketRecord.index;
-  this.status = rawDocketRecord.status;
-  this.eventCode = rawDocketRecord.eventCode;
-  this.editState = rawDocketRecord.editState;
   this.createdAt = rawDocketRecord.createdAt || createISODateString();
 }
 
@@ -43,32 +42,39 @@ joiValidationDecorator(
       .iso()
       .required()
       .description('When the docket record was added to the system.'),
-    description: joi.string().required(),
+    description: joi
+      .string()
+      .required()
+      .description(
+        'Text that describes this Docket Record item, which may be part of the Filings and Proceedings value.',
+      ),
     documentId: joi
       .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
       .allow(null)
-      .optional(),
+      .optional()
+      .description('ID of the associated PDF document in the S3 bucket.'),
     editState: joi
       .string()
       .allow(null)
-      .optional(),
-    eventCode: joi.string().required(),
+      .optional()
+      .description('JSON representation of the in-progress edit of this item.'),
+    eventCode: joi
+      .string()
+      .valid(...getAllEventCodes())
+      .required(),
     filedBy: joi
       .string()
       .optional()
-      .allow(null),
+      .allow(null)
+      .description('ID of the user that filed this Docket Record item.'),
     index: joi
       .number()
       .integer()
-      .required(),
-    signatory: joi
-      .string()
-      .optional()
-      .allow(null),
-    status: joi
-      .string()
-      .allow(null)
-      .optional(),
+      .required()
+      .description('Index of this item in the Docket Record list.'),
   }),
   undefined,
   DocketRecord.VALIDATION_ERROR_MESSAGES,
