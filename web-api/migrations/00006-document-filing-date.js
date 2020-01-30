@@ -6,22 +6,29 @@ const up = async (documentClient, tableName) => {
     if (!isCaseRecord(item)) return;
 
     // Case.docketRecord[].filingDate -> Case.docketRecord[].createdAt
-    item.docketRecord.forEach(docketEntry => {
-      if (docketEntry.filingDate) {
-        docketEntry.createdAt = docketEntry.filingDate;
+    if (item.docketRecord) {
+      item.docketRecord.forEach(docketEntry => {
+        if (docketEntry.filingDate) {
+          docketEntry.createdAt = docketEntry.filingDate;
 
-        // Case.documents[].filingDate = Case.docketRecord[].filingDate
-        if (docketEntry.documentId) {
-          item.documents.forEach(document => {
-            if (docketEntry.documentId === document.documentId) {
-              document.filingDate = docketEntry.filingDate;
-            }
-          });
+          // Case.documents[].filingDate = Case.docketRecord[].filingDate
+          if (item.documents && docketEntry.documentId) {
+            item.documents.forEach(document => {
+              if (docketEntry.documentId === document.documentId) {
+                document.filingDate = docketEntry.filingDate;
+              }
+            });
+          }
+
+          docketEntry.filingDate = undefined;
         }
+      });
+    }
 
-        docketEntry.filingDate = undefined;
-      }
-    });
+    console.log('Documents', item.documents);
+    console.log('DocketRecord', item.docketRecord);
+
+    console.log('Filing Date');
 
     await documentClient
       .put({
