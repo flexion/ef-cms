@@ -320,13 +320,19 @@
   {
     "eventCode": "TRAN",
     "documentType": "TRAN - Transcript",
-    "documentTitle": "Transcript of [anything]",
-    "scenario": "Type A"
+    "documentTitle": "Transcript of [anything] on [date]",
+    "scenario": "Type D"
   },
   {
     "eventCode": "SPTO",
     "documentType": "SPTO - Standing Pre-Trial Order",
     "documentTitle": "Standing Pre-Trial Order",
     "scenario": "HOLD hold (dependent on if we get to automated logic)"
+  },
+  {
+    "eventCode": "MISC",
+    "documentType": "MISC - Miscellaneous",
+    "documentTitle": "",
+    "scenario": "Type A"
   }
 ]

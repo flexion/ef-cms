@@ -8,6 +8,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -18,6 +19,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -28,6 +30,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -38,6 +41,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -48,6 +52,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -58,6 +63,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -68,6 +74,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -78,6 +85,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -88,6 +96,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -98,6 +107,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -108,6 +118,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -120,16 +131,18 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Name",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion to Withdraw as Counsel",
-      "documentType": "Motion to Withdraw as Counsel",
+      "documentTitle": "Entry of Appearance",
+      "documentType": "Entry of Appearance",
       "category": "Appearance and Representation",
-      "eventCode": "M112",
+      "eventCode": "EA",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -140,10 +153,44 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Substitution of Counsel",
+      "documentType": "Substitution of Counsel",
+      "category": "Appearance and Representation",
+      "eventCode": "SOC",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
   "Application": [
+    {
+      "documentTitle": "Application [anything]",
+      "documentType": "Application",
+      "category": "Application",
+      "eventCode": "APPL",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What is this application for?",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Application for Examination Pursuant to Rule 73",
+      "documentType": "Application for Examination Pursuant to Rule 73",
+      "category": "Application",
+      "eventCode": "AFE",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
     {
       "documentTitle": "Application for Waiver of Filing Fee",
       "documentType": "Application for Waiver of Filing Fee",
@@ -152,6 +199,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -162,6 +210,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -172,6 +221,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Name",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -184,6 +234,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -194,6 +245,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -204,6 +256,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -214,6 +267,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -226,17 +280,19 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
-      "documentTitle": "[First, Second, etc.] Amended [Document Name]",
-      "documentType": "Amended",
+      "documentTitle": "[First, Second, etc. ] Amended [Document Name]",
+      "documentType": "Amended [Document Name]",
       "category": "Miscellaneous",
       "eventCode": "AMAT",
       "scenario": "Nonstandard F",
       "labelPreviousDocument": "Which document are you amending?",
       "labelFreeText": "",
-      "ordinalField": "What iteration is this filing?"
+      "labelFreeText2": "",
+      "ordinalField": "What Iteration Is this filing?"
     },
     {
       "documentTitle": "Amended Certificate of Service of [Document Name]",
@@ -245,7 +301,8 @@
       "eventCode": "AMDC",
       "scenario": "Nonstandard D",
       "labelPreviousDocument": "Which document is this Certificate of Service for?",
-      "labelFreeText": "Date of Service",
+      "labelFreeText": "Date of service",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -253,10 +310,44 @@
       "documentType": "Amendment [anything]",
       "category": "Miscellaneous",
       "eventCode": "ADMT",
-      "scenario": "Nonstandard F",
+      "scenario": "Nonstandard I",
       "labelPreviousDocument": "What is this amendment for?",
       "labelFreeText": "",
-      "ordinalField": "What iteration is this filing?"
+      "labelFreeText2": "",
+      "ordinalField": "What Iteration Is this filing?"
+    },
+    {
+      "documentTitle": "Appellate Filing Fee Received",
+      "documentType": "Appellate Filing Fee Received",
+      "category": "Miscellaneous",
+      "eventCode": "Standard",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Bond",
+      "documentType": "Bond",
+      "category": "Miscellaneous",
+      "eventCode": "BND",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Bounced Electronic Service",
+      "documentType": "Bounced Electronic Service",
+      "category": "Miscellaneous",
+      "eventCode": "ES",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Certificate as to the Genuineness of the Administrative Record",
@@ -266,6 +357,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -275,7 +367,8 @@
       "eventCode": "CS",
       "scenario": "Nonstandard D",
       "labelPreviousDocument": "Which document is this Certificate of Service for?",
-      "labelFreeText": "Date of Service",
+      "labelFreeText": "Date of service",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -286,6 +379,18 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Evidence",
+      "documentType": "Evidence",
+      "category": "Miscellaneous",
+      "eventCode": "EVID",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -296,6 +401,29 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Hearing Exhibits for [Anything]",
+      "documentType": "Hearing Exhibits",
+      "category": "Miscellaneous",
+      "eventCode": "HE",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "Description",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Letter [Anything]",
+      "documentType": "Letter",
+      "category": "Miscellaneous",
+      "eventCode": "LTR",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -306,6 +434,29 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Miscellaneous [anything]",
+      "documentType": "Miscellaneous",
+      "category": "Miscellaneous",
+      "eventCode": "MISC",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "Description",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Miscellaneous [anything] (Lodged)",
+      "documentType": "Miscellaneous (Lodged)",
+      "category": "Miscellaneous",
+      "eventCode": "MISCL",
+      "scenario": "Not in dropdown",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -316,6 +467,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -326,6 +478,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What are you ratifying?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -336,6 +489,18 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document are you redacting?",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Reference List of Redacted Information [anything]",
+      "documentType": "Reference List of Redacted Information",
+      "category": "Miscellaneous",
+      "eventCode": "RLRI",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "Redacted information details",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -346,6 +511,18 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Returned Mail",
+      "documentType": "Returned Mail",
+      "category": "Miscellaneous",
+      "eventCode": "RM",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -356,6 +533,29 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Trial Exhibits for [Anything]",
+      "documentType": "Trial Exhibits",
+      "category": "Miscellaneous",
+      "eventCode": "TE",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "Description",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "U.S.C.A. [Anything]",
+      "documentType": "U.S.C.A. [Anything]",
+      "category": "Miscellaneous",
+      "eventCode": "USCA",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "Description",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -368,6 +568,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -378,6 +579,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -388,6 +590,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -398,6 +601,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -408,6 +612,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -418,6 +623,18 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion [anything]",
+      "documentType": "Motion",
+      "category": "Motion",
+      "eventCode": "M000",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What is this motion for?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -428,6 +645,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -438,6 +656,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -448,6 +667,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -458,6 +678,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -468,6 +689,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -478,6 +700,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -488,6 +711,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -498,6 +722,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -508,6 +733,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -518,6 +744,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -528,6 +755,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -538,6 +766,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -548,6 +777,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -558,6 +788,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -568,6 +799,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -578,6 +810,7 @@
       "scenario": "Nonstandard H",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -588,6 +821,7 @@
       "scenario": "Nonstandard H",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -598,6 +832,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -608,6 +843,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -618,6 +854,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -628,6 +865,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -638,6 +876,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -648,6 +887,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -658,6 +898,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -668,6 +909,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -678,6 +920,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -688,6 +931,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -698,6 +942,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -708,6 +953,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -718,6 +964,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -728,6 +975,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -738,6 +986,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -748,6 +997,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -758,6 +1008,29 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion for Review By the Full Court",
+      "documentType": "Motion for Review By the Full Court",
+      "category": "Motion",
+      "eventCode": "M031",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion for Review En Banc",
+      "documentType": "Motion for Review En Banc",
+      "category": "Motion",
+      "eventCode": "M032",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -768,6 +1041,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -778,6 +1052,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -788,6 +1063,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -798,6 +1074,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -808,6 +1085,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -818,6 +1096,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -828,16 +1107,18 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion to Add Small Tax Case Designation",
+      "documentTitle": "Motion to Add Small Tax case Designation",
       "documentType": "Motion to Add Small Tax case Designation",
       "category": "Motion",
       "eventCode": "M042",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -848,6 +1129,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -858,6 +1140,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -868,6 +1151,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -878,6 +1162,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -888,6 +1173,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -898,6 +1184,18 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion to Be Exempt from E-Filing",
+      "documentType": "Motion to Be Exempt from E-Filing",
+      "category": "Motion",
+      "eventCode": "M048",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -908,6 +1206,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -918,6 +1217,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -928,6 +1228,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -937,7 +1238,8 @@
       "eventCode": "M052",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket Numbers (separate with a comma)",
+      "labelFreeText": "Docket numbers (separate with a comma)",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -948,6 +1250,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -958,6 +1261,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -968,6 +1272,18 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion to Change Place of Hearing of Disclosure Case To [place]",
+      "documentType": "Motion to Change Place of Hearing of Disclosure Case",
+      "category": "Motion",
+      "eventCode": "M057",
+      "scenario": "Nonstandard E",
+      "labelPreviousDocument": "",
+      "labelFreeText": "Requested location",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -977,7 +1293,8 @@
       "eventCode": "M058",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
-      "labelFreeText": "Requested Location",
+      "labelFreeText": "Requested location",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -987,7 +1304,8 @@
       "eventCode": "M059",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
-      "labelFreeText": "Requested Location",
+      "labelFreeText": "Requested location",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -998,6 +1316,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1008,6 +1327,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1018,6 +1338,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1028,6 +1349,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1038,6 +1360,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1048,6 +1371,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1058,6 +1382,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1068,6 +1393,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1077,7 +1403,8 @@
       "eventCode": "M067",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket Numbers to Be Consolidated (separate with a comma)",
+      "labelFreeText": "Docket numbers to be consolidated (separate with a comma)",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1088,6 +1415,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1098,6 +1426,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1108,6 +1437,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1118,6 +1448,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1128,6 +1459,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1138,6 +1470,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1148,6 +1481,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1158,6 +1492,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1167,7 +1502,8 @@
       "eventCode": "M126",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Person, Notice, or Year",
+      "labelFreeText": "Person, notice, or Year",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1178,6 +1514,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1188,6 +1525,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1198,6 +1536,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1208,6 +1547,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1218,6 +1558,18 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion to File Document Under Seal",
+      "documentType": "Motion to File Document Under Seal",
+      "category": "Motion",
+      "eventCode": "M079",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1228,6 +1580,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1238,6 +1591,18 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion to Intervene",
+      "documentType": "Motion to Intervene",
+      "category": "Motion",
+      "eventCode": "M082",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1248,6 +1613,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1258,6 +1624,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1268,6 +1635,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1278,6 +1646,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1288,6 +1657,18 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion to Proceed Anonymously",
+      "documentType": "Motion to Proceed Anonymously",
+      "category": "Motion",
+      "eventCode": "M086",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1298,6 +1679,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1308,6 +1690,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1318,6 +1701,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1328,6 +1712,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1338,6 +1723,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1348,6 +1734,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1358,6 +1745,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1368,6 +1756,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1378,6 +1767,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1388,6 +1778,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1398,6 +1789,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1408,6 +1800,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1418,6 +1811,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1428,6 +1822,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1438,6 +1833,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1448,6 +1844,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1458,6 +1855,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1468,6 +1866,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1478,6 +1877,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1488,6 +1888,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1498,6 +1899,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1508,6 +1910,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1518,6 +1921,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1528,6 +1932,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1538,6 +1943,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1548,6 +1954,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1558,6 +1965,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1568,6 +1976,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1578,6 +1987,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1588,6 +1998,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1598,6 +2009,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1608,10 +2020,22 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
   "Notice": [
+    {
+      "documentTitle": "Notice [anything]",
+      "documentType": "Notice",
+      "category": "Notice",
+      "eventCode": "NOT",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What is this notice for?",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
     {
       "documentTitle": "Notice of Abatement of Jeopardy Assessment",
       "documentType": "Notice of Abatement of Jeopardy Assessment",
@@ -1620,6 +2044,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1630,6 +2055,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1640,6 +2066,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1650,6 +2077,18 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Change of Counsel for Non-Party",
+      "documentType": "Notice of Change of Counsel for Non-Party",
+      "category": "Notice",
+      "eventCode": "NCNP",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1660,6 +2099,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1670,6 +2110,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1680,6 +2121,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1690,6 +2132,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1700,6 +2143,40 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Election to Intervene",
+      "documentType": "Notice of Election to Intervene",
+      "category": "Notice",
+      "eventCode": "NOEI",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Election to Participate",
+      "documentType": "Notice of Election to Participate",
+      "category": "Notice",
+      "eventCode": "NOEP",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Election to Participate",
+      "documentType": "Notice of Election to Participate",
+      "category": "Notice",
+      "eventCode": "NOEP",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1710,6 +2187,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1720,6 +2198,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1730,6 +2209,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1740,6 +2220,18 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What do you intend not to file?",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Intervention",
+      "documentType": "Notice of Intervention",
+      "category": "Notice",
+      "eventCode": "NOI",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1750,6 +2242,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1760,6 +2253,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1770,6 +2264,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1780,6 +2275,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document are you not objecting to?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1790,6 +2286,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document are you objecting to?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1800,6 +2297,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1810,6 +2308,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1820,6 +2319,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1830,6 +2330,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1840,6 +2341,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1850,6 +2352,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1860,6 +2363,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1870,6 +2374,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1880,10 +2385,33 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
   "Petition": [
+    {
+      "documentTitle": "Petition",
+      "documentType": "Petition",
+      "category": "Petition",
+      "eventCode": "P",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Ratification of Petition",
+      "documentType": "Ratification of Petition",
+      "category": "Petition",
+      "eventCode": "RAT",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
     {
       "documentTitle": "Redacted Petition Filed",
       "documentType": "Redacted Petition Filed",
@@ -1892,6 +2420,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -1904,6 +2433,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1914,6 +2444,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -1926,6 +2457,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document are you replying to?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1936,10 +2468,22 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document are you replying to?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
   "Request": [
+    {
+      "documentTitle": "Request [anything]",
+      "documentType": "Request",
+      "category": "Request",
+      "eventCode": "REQ",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What is this request for?",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
     {
       "documentTitle": "[First, Second, etc.] Request for Admissions",
       "documentType": "Request for Admissions",
@@ -1948,7 +2492,8 @@
       "scenario": "Nonstandard G",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": "What iteration is this filing?"
+      "labelFreeText2": "",
+      "ordinalField": "What Iteration Is this filing?"
     },
     {
       "documentTitle": "Request for Judicial Notice",
@@ -1958,6 +2503,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1967,7 +2513,8 @@
       "eventCode": "RQT",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
-      "labelFreeText": "Requested Location",
+      "labelFreeText": "Requested location",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1978,6 +2525,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -1990,6 +2538,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document are you not objecting to?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2000,6 +2549,18 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document are you objecting to?",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Objection [anything]",
+      "documentType": "Objection [anything]",
+      "category": "Response, Opposition or Objection",
+      "eventCode": "OBJ",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What Is being objected to?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2010,6 +2571,18 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document are you opposed to?",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Opposition [anything]",
+      "documentType": "Opposition [anything]",
+      "category": "Response, Opposition or Objection",
+      "eventCode": "OP",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What is being opposed?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2020,6 +2593,18 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document are you responding to?",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Response [anything]",
+      "documentType": "Response [anything]",
+      "category": "Response, Opposition or Objection",
+      "eventCode": "RESP",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What is this responding to?",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -2032,6 +2617,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2042,6 +2628,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2052,6 +2639,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2062,6 +2650,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2072,6 +2661,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2082,6 +2672,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2092,6 +2683,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2102,6 +2694,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -2114,6 +2707,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2124,6 +2718,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2134,6 +2729,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2144,6 +2740,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2154,6 +2751,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2164,6 +2762,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2174,6 +2773,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2184,6 +2784,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2194,6 +2795,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2204,6 +2806,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -2216,6 +2819,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2225,7 +2829,8 @@
       "eventCode": "STAT",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What is this Statement for?",
+      "labelFreeText": "What is this statement for?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2236,6 +2841,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2246,6 +2852,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2256,6 +2863,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -2268,6 +2876,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2277,7 +2886,8 @@
       "eventCode": "STP",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What is this Stipulation for?",
+      "labelFreeText": "What is this stipulation for?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2288,6 +2898,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2298,6 +2909,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2308,7 +2920,8 @@
       "scenario": "Nonstandard G",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": "What iteration is this filing?"
+      "labelFreeText2": "",
+      "ordinalField": "What Iteration Is this filing?"
     },
     {
       "documentTitle": "Stipulation of Pretrial Deadlines",
@@ -2318,6 +2931,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2328,6 +2942,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2338,6 +2953,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2347,7 +2963,8 @@
       "eventCode": "STBB",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket Number",
+      "labelFreeText": "Docket number",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2358,6 +2975,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Name",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -2370,7 +2988,19 @@
       "scenario": "Nonstandard F",
       "labelPreviousDocument": "Which document is this a supplement to?",
       "labelFreeText": "",
-      "ordinalField": "What iteration is this filing?"
+      "labelFreeText2": "",
+      "ordinalField": "What Iteration Is this filing?"
+    },
+    {
+      "documentTitle": "[First, Second, etc.] Supplement To [anything]",
+      "documentType": "Supplement To [anything]",
+      "category": "Supplement",
+      "eventCode": "SPMT",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What is this supplement for?",
+      "labelFreeText2": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "[First, Second, etc.] Supplemental [Document Name]",
@@ -2378,9 +3008,21 @@
       "category": "Supplement",
       "eventCode": "SPML",
       "scenario": "Nonstandard F",
-      "labelPreviousDocument": "What document is this supplemental for?",
+      "labelPreviousDocument": "Which document is this supplemental for?",
       "labelFreeText": "",
-      "ordinalField": "What iteration is this filing?"
+      "labelFreeText2": "",
+      "ordinalField": "What Iteration Is this filing?"
+    },
+    {
+      "documentTitle": "[First, Second, etc.] Supplemental [anything]",
+      "documentType": "Supplemental [anything]",
+      "category": "Supplement",
+      "eventCode": "SATL",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What is this supplemental for?",
+      "labelFreeText2": "",
+      "ordinalField": ""
     }
   ],
   "Supporting Document": [
@@ -2392,6 +3034,7 @@
       "scenario": "Nonstandard C",
       "labelPreviousDocument": "Which document is this affidavit in support of?",
       "labelFreeText": "Who signed this?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2402,6 +3045,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document is this brief in support of?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2412,6 +3056,7 @@
       "scenario": "Nonstandard C",
       "labelPreviousDocument": "Which document is this declaration in support of?",
       "labelFreeText": "Who signed this?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2422,6 +3067,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document is this memorandum in support of?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2432,6 +3078,7 @@
       "scenario": "Nonstandard C",
       "labelPreviousDocument": "Which document is this declaration in support of?",
       "labelFreeText": "Who signed this?",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ]
