@@ -3,6 +3,7 @@ export default (test, createdCases) => {
     await test.runSequence('gotoDashboardSequence');
     const petitionerNewCase = test.getState('cases.0');
     expect(petitionerNewCase).toBeDefined();
+    expect(petitionerNewCase).toEqual('a');
     expect(petitionerNewCase.documents[0].workItems[0]).toBeDefined();
     createdCases.push(petitionerNewCase);
   });
