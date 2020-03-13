@@ -1,4 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { wait } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -41,8 +42,11 @@ export default test => {
 
     await test.runSequence('navigateToReviewSavedPetitionSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
-    await test.runSequence('saveCaseAndServeToIrsSequence');
 
+    await test.runSequence('saveCaseAndServeToIrsSequence');
+    await wait(5000);
+
+    // wait here?
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
