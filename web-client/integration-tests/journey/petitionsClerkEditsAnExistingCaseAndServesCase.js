@@ -3,14 +3,23 @@ import { getFormattedDocumentQCSectionOutbox, wait } from '../helpers';
 
 export default test => {
   it('should allow edits to an in progress case', async () => {
+    const lastCreatedCase = await test.getState('caseDetail');
+
+    const { docketNumber } = lastCreatedCase;
+    const { caseId } = lastCreatedCase;
+    const { documentId } = lastCreatedCase.documents[0];
+    test.documentId = documentId;
+    test.docketNumber = docketNumber;
+    test.caseId = caseId;
+
     await test.runSequence('gotoDocumentDetailSequence', {
-      docketNumber: test.docketNumber,
-      documentId: test.documentId,
+      docketNumber,
+      documentId,
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'partyType',
-      value: 'Guardian',
+      key: 'caseCaption',
+      value: 'Something',
     });
 
     await test.runSequence('validatePetitionFromPaperSequence');
@@ -20,10 +29,9 @@ export default test => {
   });
 
   it('should save edits to an in progress case', async () => {
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('navigateToReviewSavedPetitionSequence');
 
-    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+    expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
 
     await test.runSequence('saveSavedCaseForLaterSequence');
     await wait(5000);
@@ -63,14 +71,17 @@ export default test => {
     expect(workQueueToDisplay.queue).toEqual('my');
     expect(workQueueToDisplay.box).toEqual('outbox');
 
-    const servedCase = test
+    const servedCaseWorkItem = test
       .getState('workQueue')
       .find(x => x.docketNumber === test.docketNumber);
 
-    expect(servedCase).toMatchObject({
-      caseTitle: 'Mona Schultz',
+    expect(servedCaseWorkItem).toMatchObject({
+      caseTitle:
+        'Ada Lovelace & Julius Lenhart, Deceased, Ada Lovelace, Surviving Spouse',
     });
-    expect(servedCase.caseStatus).toEqual(Case.STATUS_TYPES.generalDocket);
+    expect(servedCaseWorkItem.caseStatus).toEqual(
+      Case.STATUS_TYPES.generalDocket,
+    );
   });
 
   it('should add served case to section served queue', async () => {
@@ -89,14 +100,15 @@ export default test => {
       workQueueIsInternal: false,
     });
 
-    const sectionServedCase = test
+    const sectionServedCaseWorkItem = test
       .getState('workQueue')
       .find(x => x.docketNumber === test.docketNumber);
 
-    expect(sectionServedCase).toMatchObject({
-      caseTitle: 'Mona Schultz',
+    expect(sectionServedCaseWorkItem).toMatchObject({
+      caseTitle:
+        'Ada Lovelace & Julius Lenhart, Deceased, Ada Lovelace, Surviving Spouse',
     });
-    expect(sectionServedCase.caseStatus).toEqual(
+    expect(sectionServedCaseWorkItem.caseStatus).toEqual(
       Case.STATUS_TYPES.generalDocket,
     );
   });

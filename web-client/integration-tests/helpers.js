@@ -448,6 +448,13 @@ export const setupTest = ({ useCases = {} } = {}) => {
         case '/pdf-preview':
           await test.runSequence('gotoPdfPreviewSequence');
           break;
+        case `/case-detail/${test.docketNumber}/documents/${test.documentId}/review`:
+          await test.runSequence('gotoReviewSavedPetitionSequence', {
+            caseId: test.docketNumber,
+            docketNumber: test.docketNumber,
+            documentId: test.documentId,
+          });
+          break;
         case '/':
           await test.runSequence('gotoDashboardSequence');
           break;

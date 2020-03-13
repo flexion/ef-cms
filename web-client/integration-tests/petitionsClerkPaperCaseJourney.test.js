@@ -11,16 +11,5 @@ describe('Petitions clerk paper case flow', () => {
 
   loginAs(test, 'petitionsclerk');
   petitionsClerkCreatesNewCaseAndSavesForLater(test, fakeFile);
-
-  loginAs(test, 'petitioner');
-  it('Create case', async () => {
-    await uploadPetition(test);
-
-    test.docketNumber = test.getState('cases.0.docketNumber');
-    test.documentId = test.getState('cases.0.documents.0.documentId');
-    test.caseId = test.getState('cases.0.caseId');
-  });
-
-  loginAs(test, 'petitionsclerk');
   petitionsClerkEditsAnExistingCaseAndServesCase(test);
 });

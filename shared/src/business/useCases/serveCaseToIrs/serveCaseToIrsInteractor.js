@@ -163,31 +163,31 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     user: user,
   });
 
-  const casePromises = [
-    applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-      applicationContext,
-      section: PETITIONS_SECTION,
-      userId: user.userId,
-      workItem: initializeCaseWorkItem,
-    }),
-    applicationContext.getPersistenceGateway().updateWorkItem({
-      applicationContext,
-      workItemToUpdate: initializeCaseWorkItem,
-    }),
-    applicationContext.getPersistenceGateway().updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    }),
-    applicationContext.getUseCaseHelpers().generateCaseConfirmationPdf({
+  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+    applicationContext,
+    section: PETITIONS_SECTION,
+    userId: user.userId,
+    workItem: initializeCaseWorkItem,
+  });
+
+  await applicationContext.getPersistenceGateway().updateWorkItem({
+    applicationContext,
+    workItemToUpdate: initializeCaseWorkItem,
+  });
+
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
+
+  const pdfData = await applicationContext
+    .getUseCaseHelpers()
+    .generateCaseConfirmationPdf({
       applicationContext,
       caseEntity,
-    }),
-  ];
-
-  const results = await Promise.all(casePromises);
+    });
 
   if (caseEntity.isPaper) {
-    const pdfData = results[3];
     const noticeDoc = await PDFDocument.load(pdfData);
     const newPdfDoc = await PDFDocument.create();
 
