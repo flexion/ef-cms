@@ -6,7 +6,6 @@ export default (test, createdCases) => {
     expect(petitionerNewCase.documents).toBeDefined();
     expect(expect(petitionerNewCase.documents[0])).toBeDefined();
     expect(expect(petitionerNewCase.documents[0].workItems)).toBeDefined();
-    expect(JSON.stringify(petitionerNewCase)).toEqual('a');
     expect(petitionerNewCase.documents[0].workItems[0]).toBeDefined();
     createdCases.push(petitionerNewCase);
   });
