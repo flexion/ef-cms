@@ -26,7 +26,6 @@ export default test => {
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     await test.runSequence('saveSavedCaseForLaterSequence');
-    await wait(5000);
 
     expect(test.getState('currentPage')).toEqual('Messages');
   });
@@ -43,7 +42,6 @@ export default test => {
 
   it('should redirect to case detail after successfully serving to irs', async () => {
     await test.runSequence('saveCaseAndServeToIrsSequence');
-    await wait(5000);
 
     expect(test.currentRouteUrl).toEqual(`/case-detail/${test.caseId}`);
     expect(test.getState('showModal')).toEqual('PaperServiceConfirmModal');
@@ -55,7 +53,6 @@ export default test => {
       queue: 'my',
       workQueueIsInternal: false,
     });
-    await wait(5000);
 
     const workQueueToDisplay = test.getState('workQueueToDisplay');
 
@@ -79,7 +76,6 @@ export default test => {
       queue: 'section',
       workQueueIsInternal: false,
     });
-    await wait(5000);
 
     const sectionWorkQueueToDisplay = test.getState('workQueueToDisplay');
 

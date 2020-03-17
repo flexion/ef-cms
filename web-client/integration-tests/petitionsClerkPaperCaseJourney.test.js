@@ -1,4 +1,4 @@
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { fakeFile, loginAs, setupTest } from './helpers';
 import petitionsClerkCreatesNewCaseAndSavesForLater from './journey/petitionsClerkCreatesNewCaseAndSavesForLater';
 import petitionsClerkEditsAnExistingCaseAndServesCase from './journey/petitionsClerkEditsAnExistingCaseAndServesCase';
 
@@ -8,7 +8,6 @@ describe('Petitions clerk paper case flow', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
-
   loginAs(test, 'petitionsclerk');
   petitionsClerkCreatesNewCaseAndSavesForLater(test, fakeFile);
 

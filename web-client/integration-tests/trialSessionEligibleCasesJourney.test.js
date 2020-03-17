@@ -382,7 +382,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
 
       await test.runSequence('addCaseToTrialSessionSequence');
-      await wait(1000);
 
       expect(test.getState('validationErrors')).toEqual({
         trialSessionId: 'Select a Trial Session',
@@ -391,7 +390,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       test.setState('modal.trialSessionId', test.trialSessionId);
 
       await test.runSequence('addCaseToTrialSessionSequence');
-      await wait(1000); // we need to wait for some reason
 
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],

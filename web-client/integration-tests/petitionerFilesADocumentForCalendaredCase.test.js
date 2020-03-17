@@ -42,7 +42,6 @@ describe('petitioner files document', () => {
     });
 
     await test.runSequence('addCaseToTrialSessionSequence');
-    await wait(1000);
   });
 
   loginAs(test, 'petitioner');
