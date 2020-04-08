@@ -79,9 +79,22 @@ export const TextEditor = ({
             },
           });
           const html = converter.convert();
+
+          const plainTextBody = fullDelta.reduce((text, op) => {
+            if (typeof op.insert !== 'string') {
+              return (text || '') + ' ';
+            }
+
+            return (text || '') + op.insert;
+          });
+
           updateFormValueSequence({
             key: 'richText',
             value: html,
+          });
+          updateFormValueSequence({
+            key: 'plainTextBody',
+            value: plainTextBody,
           });
           updateScreenMetadataSequence({
             key: 'pristine',
