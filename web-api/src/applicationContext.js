@@ -777,7 +777,9 @@ const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
+const { Document } = require('../../shared/src/business/entities/Document');
 const { exec } = require('child_process');
+const { Message } = require('../../shared/src/business/entities/Message');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const { User } = require('../../shared/src/business/entities/User');
 const { v4: uuidv4 } = require('uuid');
@@ -901,11 +903,14 @@ module.exports = (appContextUser = {}) => {
     getEntityConstructors: () => ({
       Case,
       CaseExternal: CaseExternalIncomplete,
+      CaseExternalIncomplete,
       CaseInternal: CaseInternal,
       CaseSearch,
       ContactFactory,
       DocketRecord,
+      Document,
       ExternalDocumentFactory,
+      Message,
       TrialSession,
       User,
       WorkItem,
