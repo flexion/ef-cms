@@ -121,6 +121,7 @@ const { Document } = require('../entities/Document');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
+const { Message } = require('../entities/Message');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { setItem } = require('../../persistence/localStorage/setItem');
 const { TrialSession } = require('../entities/trialSessions/TrialSession');
@@ -379,11 +380,13 @@ const createTestApplicationContext = ({ user } = {}) => {
       Case,
       CaseAssociationRequestFactory,
       CaseExternal: CaseExternalIncomplete,
+      CaseExternalIncomplete,
       CaseInternal: CaseInternal,
       CourtIssuedDocumentFactory,
       DocketRecord,
       Document,
       ExternalDocumentFactory: ExternalDocumentFactory,
+      Message,
       TrialSession: TrialSession,
       User,
       WorkItem: WorkItem,

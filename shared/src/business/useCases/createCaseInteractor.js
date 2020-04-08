@@ -1,18 +1,9 @@
 const {
-  CaseExternalIncomplete,
-} = require('../entities/cases/CaseExternalIncomplete');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { DocketRecord } = require('../entities/DocketRecord');
-const { Document } = require('../entities/Document');
-const { Message } = require('../entities/Message');
 const { PETITIONS_SECTION } = require('../entities/WorkQueue');
 const { UnauthorizedError } = require('../../errors/errors');
-const { User } = require('../entities/User');
-const { WorkItem } = require('../entities/WorkItem');
 
 const addPetitionDocumentToCase = ({
   applicationContext,
@@ -20,6 +11,11 @@ const addPetitionDocumentToCase = ({
   documentEntity,
   user,
 }) => {
+  const {
+    Case,
+    Message,
+    WorkItem,
+  } = applicationContext.getEntityConstructors();
   const workItemEntity = new WorkItem(
     {
       assigneeId: null,
@@ -87,6 +83,14 @@ exports.createCaseInteractor = async ({
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const {
+    Case,
+    CaseExternalIncomplete,
+    DocketRecord,
+    Document,
+    User,
+  } = applicationContext.getEntityConstructors();
 
   const user = await applicationContext
     .getPersistenceGateway()
