@@ -100,6 +100,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.supportingDocument = rawDocument.supportingDocument;
   this.trialLocation = rawDocument.trialLocation; // TODO: look into this
   this.userId = rawDocument.userId; // TODO: restricted
+  this.plainTextBody = rawDocument.plainTextBody; // plain text document content for order documents
 
   this.generateFiledBy(rawDocument);
 }
