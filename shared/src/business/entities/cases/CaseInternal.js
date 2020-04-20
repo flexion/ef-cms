@@ -74,7 +74,7 @@ CaseInternal.VALIDATION_ERROR_MESSAGES = {
       contains: 'must be less than or equal to',
       message: 'Payment date cannot be in the future. Enter a valid date.',
     },
-    'Enter a payment date',
+    'Enter a valid date',
   ],
   petitionPaymentStatus: 'Select a filing fee option',
   preferredTrialCity: 'Select a preferred trial location',

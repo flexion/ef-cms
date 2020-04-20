@@ -185,7 +185,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
     },
     'Your Petition file size is empty',
   ],
-  petitionPaymentDate: 'Enter a payment date',
+  petitionPaymentDate: 'Enter a valid date',
   petitionPaymentMethod: 'Enter payment method',
   petitionPaymentStatus: 'Enter payment status',
   petitionPaymentWaivedDate: 'Enter date of waiver',
@@ -194,7 +194,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
   receivedAt: [
     {
       contains: 'must be less than or equal to',
-      message: 'Date received cannot be in the future. Enter a valid date.',
+      message: 'Received date can not be in the future. Enter a valid date.',
     },
     'Enter a valid date received',
   ],
