@@ -24,6 +24,9 @@ const {
   addCoversheetInteractor,
 } = require('../../shared/src/business/useCases/addCoversheetInteractor');
 const {
+  addCoversheetToDocument,
+} = require('../../shared/src/business/useCaseHelper/addCoversheetToDocument');
+const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
@@ -812,6 +815,7 @@ const {
 const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { Document } = require('../../shared/src/business/entities/Document');
 const { exec } = require('child_process');
+const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const { User } = require('../../shared/src/business/entities/User');
 
@@ -1008,6 +1012,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
+        getDocument,
         getDocumentQCInboxForSection,
         getDocumentQCInboxForUser,
         getDocumentQCServedForSection,
@@ -1135,6 +1140,7 @@ module.exports = (appContextUser = {}) => {
     getUniqueId,
     getUseCaseHelpers: () => {
       return {
+        addCoversheetToDocument,
         appendPaperServiceAddressPageToPdf,
         fetchPendingItems,
         generateCaseConfirmationPdf,

@@ -81,6 +81,9 @@ exports.genericHandler = (event, cb, options = {}) => {
 
       return returnResults;
     } catch (e) {
+      console.log('e', e);
+      console.log('e', e);
+      console.log('e', e);
       if (!e.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
         applicationContext.logger.error(e);

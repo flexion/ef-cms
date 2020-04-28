@@ -28,10 +28,12 @@ exports.getDocument = async ({
   if (protocol === 'S3') {
     // TODO: should this be in the persistence gateway?
     const S3 = applicationContext.getStorageClient();
-    return S3.getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: documentId,
-    });
+    return (
+      await S3.getObject({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: documentId,
+      }).promise()
+    ).Body;
   } else {
     const url = await getDownloadPolicy({
       applicationContext,

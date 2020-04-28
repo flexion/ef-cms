@@ -171,7 +171,7 @@ exports.updateDocketEntryMetaInteractor = async ({
 
       if (shouldGenerateCoversheet) {
         // servedAt or filingDate has changed, generate a new coversheet
-        await applicationContext.getUseCases().addCoversheetInteractor({
+        await applicationContext.getUseCaseHelpers().addCoversheetToDocument({
           applicationContext,
           caseId,
           documentId: documentDetail.documentId,

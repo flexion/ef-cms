@@ -547,6 +547,10 @@ Document.prototype.setAsProcessingStatusAsCompleted = function () {
   this.processingStatus = 'complete';
 };
 
+Document.prototype.isCoversheetAttached = function () {
+  return this.processingStatus === 'complete';
+};
+
 Document.prototype.getQCWorkItem = function () {
   return this.workItems.find(workItem => workItem.isQC === true);
 };
