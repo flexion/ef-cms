@@ -26,13 +26,13 @@ describe('generatePrintableFilingReceiptInteractor', () => {
         },
       );
     applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor.mockImplementation(({ contentHtml }) => {
+      .getUseCaseHelpers()
+      .generatePdfFromHtml.mockImplementation(({ contentHtml }) => {
         return contentHtml;
       });
   });
 
-  it('Calls generatePrintableFilingReceiptTemplate and generatePdfFromHtmlInteractor to build a PDF, then saveDocumentFromLambda and getDownloadPolicyUrl to store the PDF and return the link to it for a single primary document', async () => {
+  it('Calls generatePrintableFilingReceiptTemplate and generatePdfFromHtml to build a PDF, then saveDocumentFromLambda and getDownloadPolicyUrl to store the PDF and return the link to it for a single primary document', async () => {
     await generatePrintableFilingReceiptInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
@@ -46,7 +46,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
         .generatePrintableFilingReceiptTemplate,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      applicationContext.getUseCaseHelpers().generatePdfFromHtml,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -71,7 +71,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
 
     const {
       contentHtml,
-    } = applicationContext.getUseCases().generatePdfFromHtmlInteractor.mock.calls[0][0];
+    } = applicationContext.getUseCaseHelpers().generatePdfFromHtml.mock.calls[0][0];
 
     expect(contentHtml.indexOf('<!DOCTYPE html>')).toBe(0);
     expect(contentHtml.includes('Document Includes')).toBeTruthy();
@@ -92,7 +92,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
 
     const {
       contentHtml,
-    } = applicationContext.getUseCases().generatePdfFromHtmlInteractor.mock.calls[0][0];
+    } = applicationContext.getUseCaseHelpers().generatePdfFromHtml.mock.calls[0][0];
 
     expect(contentHtml.includes('Document Includes')).toBeFalsy();
     expect(contentHtml.includes('Objections')).toBeTruthy();
@@ -111,7 +111,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
 
     const {
       contentHtml,
-    } = applicationContext.getUseCases().generatePdfFromHtmlInteractor.mock.calls[0][0];
+    } = applicationContext.getUseCaseHelpers().generatePdfFromHtml.mock.calls[0][0];
 
     expect(contentHtml.includes('Document Includes')).toBeFalsy();
     expect(contentHtml.includes('No Objections')).toBeTruthy();
@@ -130,7 +130,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
 
     const {
       contentHtml,
-    } = applicationContext.getUseCases().generatePdfFromHtmlInteractor.mock.calls[0][0];
+    } = applicationContext.getUseCaseHelpers().generatePdfFromHtml.mock.calls[0][0];
 
     expect(contentHtml.includes('Document Includes')).toBeFalsy();
     expect(contentHtml.includes('Unknown Objections')).toBeTruthy();
@@ -157,7 +157,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
 
     const {
       contentHtml,
-    } = applicationContext.getUseCases().generatePdfFromHtmlInteractor.mock.calls[0][0];
+    } = applicationContext.getUseCaseHelpers().generatePdfFromHtml.mock.calls[0][0];
 
     expect(contentHtml.includes('Test Primary Document')).toBeTruthy();
     expect(contentHtml.includes('Test Supporting Document')).toBeTruthy();
@@ -182,7 +182,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
 
     const {
       contentHtml,
-    } = applicationContext.getUseCases().generatePdfFromHtmlInteractor.mock.calls[0][0];
+    } = applicationContext.getUseCaseHelpers().generatePdfFromHtml.mock.calls[0][0];
 
     expect(contentHtml.includes('Test Primary Document')).toBeTruthy();
     expect(contentHtml.includes('Test Secondary Document')).toBeTruthy();
@@ -213,7 +213,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
 
     const {
       contentHtml,
-    } = applicationContext.getUseCases().generatePdfFromHtmlInteractor.mock.calls[0][0];
+    } = applicationContext.getUseCaseHelpers().generatePdfFromHtml.mock.calls[0][0];
 
     expect(contentHtml.includes('Test Primary Document')).toBeTruthy();
     expect(
@@ -257,7 +257,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
 
     const {
       contentHtml,
-    } = applicationContext.getUseCases().generatePdfFromHtmlInteractor.mock.calls[0][0];
+    } = applicationContext.getUseCaseHelpers().generatePdfFromHtml.mock.calls[0][0];
 
     expect(contentHtml.includes('Test Primary Document')).toBeTruthy();
     expect(contentHtml.includes('Test Supporting Document')).toBeTruthy();

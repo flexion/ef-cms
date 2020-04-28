@@ -47,7 +47,7 @@ exports.generateStandingPretrialOrderInteractor = async ({
       },
     });
 
-  return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
+  return await applicationContext.getUseCaseHelpers().generatePdfFromHtml({
     applicationContext,
     contentHtml,
     headerHtml:

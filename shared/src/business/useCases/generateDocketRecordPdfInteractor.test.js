@@ -68,8 +68,8 @@ beforeAll(() => {
     .getPersistenceGateway()
     .getCaseByCaseId.mockReturnValue({ ...caseDetail });
   applicationContext
-    .getUseCases()
-    .generatePdfFromHtmlInteractor.mockImplementation(({ contentHtml }) => {
+    .getUseCaseHelpers()
+    .generatePdfFromHtml.mockImplementation(({ contentHtml }) => {
       return contentHtml;
     });
   applicationContext
@@ -82,7 +82,7 @@ beforeAll(() => {
 });
 
 describe('generateDocketRecordPdfInteractor', () => {
-  it('Calls generatePdfFromHtmlInteractor and generatePrintableDocketRecordTemplate to build a PDF', async () => {
+  it('Calls generatePdfFromHtml and generatePrintableDocketRecordTemplate to build a PDF', async () => {
     const result = await generateDocketRecordPdfInteractor({
       applicationContext,
       caseDetail,
@@ -95,7 +95,7 @@ describe('generateDocketRecordPdfInteractor', () => {
         .generatePrintableDocketRecordTemplate,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      applicationContext.getUseCaseHelpers().generatePdfFromHtml,
     ).toHaveBeenCalled();
   });
 

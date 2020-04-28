@@ -35,7 +35,7 @@ testPdfDoc = testPdfDocBytes();
 
 const updateCaseStub = jest.fn();
 const generateChangeOfAddressTemplateStub = jest.fn();
-const generatePdfFromHtmlInteractorStub = jest.fn();
+const generatePdfFromHtmlStub = jest.fn();
 const getAddressPhoneDiffStub = jest.fn();
 const saveDocumentFromLambdaStub = jest.fn();
 const generatePaperServiceAddressPagePdfMock = jest
@@ -54,10 +54,6 @@ let persistenceGateway = {
 };
 
 const useCases = {
-  generatePdfFromHtmlInteractor: () => {
-    generatePdfFromHtmlInteractorStub();
-    return fakeFile;
-  },
   userIsAssociated: () => true,
 };
 
@@ -94,6 +90,11 @@ const applicationContext = {
   getUniqueId: () => 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
   getUseCaseHelpers: () => ({
     generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,
+    generatePdfFromHtml: () => {
+      generatePdfFromHtmlStub();
+      return fakeFile;
+    },
+
     sendServedPartiesEmails: sendServedPartiesEmailsMock,
   }),
   getUseCases: () => useCases,
@@ -133,7 +134,7 @@ describe('update petitioner contact information on a case', () => {
       partyType: ContactFactory.PARTY_TYPES.petitioner,
     });
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
+    expect(generatePdfFromHtmlStub).not.toHaveBeenCalled();
     expect(updateCaseStub).toHaveBeenCalled();
   });
 
@@ -146,7 +147,7 @@ describe('update petitioner contact information on a case', () => {
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
+    expect(generatePdfFromHtmlStub).not.toHaveBeenCalled();
     expect(updateCaseStub).toHaveBeenCalled();
   });
 
@@ -168,7 +169,7 @@ describe('update petitioner contact information on a case', () => {
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).toHaveBeenCalled();
+    expect(generatePdfFromHtmlStub).toHaveBeenCalled();
     expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
   });
 
@@ -190,7 +191,7 @@ describe('update petitioner contact information on a case', () => {
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
+    expect(generatePdfFromHtmlStub).not.toHaveBeenCalled();
     expect(sendServedPartiesEmailsMock).not.toHaveBeenCalled();
   });
 
@@ -226,7 +227,7 @@ describe('update petitioner contact information on a case', () => {
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).toHaveBeenCalled();
+    expect(generatePdfFromHtmlStub).toHaveBeenCalled();
     expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('https://www.example.com');
   });
@@ -243,7 +244,7 @@ describe('update petitioner contact information on a case', () => {
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
+    expect(generatePdfFromHtmlStub).not.toHaveBeenCalled();
     expect(sendServedPartiesEmailsMock).not.toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toBeUndefined();
   });

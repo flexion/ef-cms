@@ -48,7 +48,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
         .mock.calls.length,
     ).toBe(1);
     expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor.mock.calls
+      applicationContext.getUseCaseHelpers().generatePdfFromHtml.mock.calls
         .length,
     ).toBe(1);
   });

@@ -35,8 +35,6 @@ exports.addCoversheetToDocument = async ({
     protocol: 'S3',
   });
 
-  console.log('pdfData', pdfData);
-
   const newPdfData = await addCoverToPdf({
     applicationContext,
     caseEntity,

@@ -166,13 +166,11 @@ exports.runTrialSessionPlanningReportInteractor = async ({
       },
     });
 
-  const pdf = await applicationContext
-    .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
-      contentHtml,
-      headerHtml: ' ',
-    });
+  const pdf = await applicationContext.getUseCaseHelpers().generatePdfFromHtml({
+    applicationContext,
+    contentHtml,
+    headerHtml: ' ',
+  });
 
   const trialSessionPlanningReportPdfId = applicationContext.getUniqueId();
 

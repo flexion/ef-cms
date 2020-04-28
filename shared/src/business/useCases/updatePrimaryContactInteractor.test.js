@@ -18,8 +18,8 @@ describe('update primary contact on a case', () => {
       .getCaseByCaseId.mockReturnValue(MOCK_CASE);
 
     applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor.mockReturnValue(fakeFile);
+      .getUseCaseHelpers()
+      .generatePdfFromHtml.mockReturnValue(fakeFile);
 
     applicationContext.getUseCases().userIsAssociated.mockReturnValue(true);
 
@@ -78,7 +78,7 @@ describe('update primary contact on a case', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      applicationContext.getUseCaseHelpers().generatePdfFromHtml,
     ).toHaveBeenCalled();
     expect(caseDetail.documents[4].servedAt).toBeDefined();
     expect(caseDetail.documents[4].servedParties).toEqual([
@@ -151,7 +151,7 @@ describe('update primary contact on a case', () => {
         .generateChangeOfAddressTemplate,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      applicationContext.getUseCaseHelpers().generatePdfFromHtml,
     ).not.toHaveBeenCalled();
   });
 });

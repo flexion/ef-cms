@@ -120,7 +120,7 @@ describe('serveCaseToIrsInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
+      applicationContext.getUseCaseHelpers().addCoversheetToDocument,
     ).toHaveBeenCalled();
   });
 

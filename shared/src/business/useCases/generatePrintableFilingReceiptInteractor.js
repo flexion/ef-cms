@@ -189,13 +189,11 @@ exports.generatePrintableFilingReceiptInteractor = async ({
     documents,
   });
 
-  const pdf = await applicationContext
-    .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
-      contentHtml,
-      docketNumber,
-    });
+  const pdf = await applicationContext.getUseCaseHelpers().generatePdfFromHtml({
+    applicationContext,
+    contentHtml,
+    docketNumber,
+  });
 
   const documentId = applicationContext.getUniqueId();
 

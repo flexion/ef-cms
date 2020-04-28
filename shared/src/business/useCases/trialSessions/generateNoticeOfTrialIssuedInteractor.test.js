@@ -39,10 +39,8 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       });
 
     applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor.mockImplementation(
-        ({ contentHtml }) => contentHtml,
-      );
+      .getUseCaseHelpers()
+      .generatePdfFromHtml.mockImplementation(({ contentHtml }) => contentHtml);
 
     applicationContext
       .getTemplateGenerators()
@@ -69,7 +67,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
         .generateNoticeOfTrialIssuedTemplate,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      applicationContext.getUseCaseHelpers().generatePdfFromHtml,
     ).toHaveBeenCalled();
     expect(result.indexOf('123-45')).toBeGreaterThan(-1);
   });
@@ -92,7 +90,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
         .generateNoticeOfTrialIssuedTemplate,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      applicationContext.getUseCaseHelpers().generatePdfFromHtml,
     ).toHaveBeenCalled();
     expect(result.indexOf('234-56S')).toBeGreaterThan(-1);
   });

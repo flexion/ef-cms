@@ -74,8 +74,8 @@ describe('run trial session planning report', () => {
       );
 
     applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor.mockImplementation(({ contentHtml }) => {
+      .getUseCaseHelpers()
+      .generatePdfFromHtml.mockImplementation(({ contentHtml }) => {
         return contentHtml;
       });
 
@@ -91,7 +91,7 @@ describe('run trial session planning report', () => {
         .generateTrialSessionPlanningReportTemplate,
     ).toBeCalled();
     expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      applicationContext.getUseCaseHelpers().generatePdfFromHtml,
     ).toBeCalled();
     expect(applicationContext.getUniqueId).toBeCalled();
     expect(

@@ -63,8 +63,8 @@ describe('updateUserContactInformationInteractor', () => {
       'a7d90c05-f6cd-442c-a168-202db587f16f',
     );
     applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor.mockReturnValue(fakeFile);
+      .getUseCaseHelpers()
+      .generatePdfFromHtml.mockReturnValue(fakeFile);
     applicationContext
       .getUtilities()
       .getDocumentTypeForAddressChange.mockReturnValue({

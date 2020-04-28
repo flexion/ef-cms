@@ -260,8 +260,8 @@ const {
   generatePaperServiceAddressPagePdf,
 } = require('../../shared/src/business/useCaseHelper/courtIssuedDocument/generatePaperServiceAddressPagePdf');
 const {
-  generatePdfFromHtmlInteractor,
-} = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
+  generatePdfFromHtml,
+} = require('../../shared/src/business/useCaseHelper/generatePdfFromHtml');
 const {
   generatePDFFromJPGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
@@ -1146,6 +1146,7 @@ module.exports = (appContextUser = {}) => {
         generateCaseConfirmationPdf,
         generateCaseInventoryReportPdf,
         generatePaperServiceAddressPagePdf,
+        generatePdfFromHtml,
         generatePendingReportPdf,
         getCaseInventoryReport,
         sendServedPartiesEmails,
@@ -1191,7 +1192,6 @@ module.exports = (appContextUser = {}) => {
         generateDocketRecordPdfInteractor,
         generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
-        generatePdfFromHtmlInteractor,
         generatePdfReportInteractor,
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,

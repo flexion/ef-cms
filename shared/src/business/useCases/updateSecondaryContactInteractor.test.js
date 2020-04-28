@@ -17,7 +17,7 @@ fakeFile.name = 'fakeFile.pdf';
 
 let updateCaseStub;
 let generateChangeOfAddressTemplateStub;
-let generatePdfFromHtmlInteractorStub;
+let generatePdfFromHtmlStub;
 let getAddressPhoneDiffStub;
 let getDocumentTypeForAddressChangeStub;
 let saveDocumentFromLambdaStub;
@@ -31,7 +31,7 @@ describe('update secondary contact on a case', () => {
   beforeEach(() => {
     updateCaseStub = jest.fn();
     generateChangeOfAddressTemplateStub = jest.fn();
-    generatePdfFromHtmlInteractorStub = jest.fn();
+    generatePdfFromHtmlStub = jest.fn();
     getAddressPhoneDiffStub = jest.fn();
     getDocumentTypeForAddressChangeStub = jest.fn();
     saveDocumentFromLambdaStub = jest.fn();
@@ -58,10 +58,6 @@ describe('update secondary contact on a case', () => {
     };
 
     useCases = {
-      generatePdfFromHtmlInteractor: () => {
-        generatePdfFromHtmlInteractorStub();
-        return fakeFile;
-      },
       userIsAssociated: () => true,
     };
 
@@ -98,6 +94,10 @@ describe('update secondary contact on a case', () => {
       },
       getUniqueId: () => 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       getUseCaseHelpers: () => ({
+        generatePdfFromHtml: () => {
+          generatePdfFromHtmlStub();
+          return fakeFile;
+        },
         sendServedPartiesEmails: sendServedPartiesEmailsStub,
       }),
       getUseCases: () => useCases,
@@ -150,7 +150,7 @@ describe('update secondary contact on a case', () => {
 
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).toHaveBeenCalled();
+    expect(generatePdfFromHtmlStub).toHaveBeenCalled();
     expect(caseDetail.documents[4].servedAt).toBeDefined();
     expect(caseDetail.documents[4].servedParties).toEqual([
       { email: 'petitioner@example.com', name: 'Test Petitioner' },
@@ -218,6 +218,6 @@ describe('update secondary contact on a case', () => {
 
     expect(updateCaseStub).not.toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
+    expect(generatePdfFromHtmlStub).not.toHaveBeenCalled();
   });
 });

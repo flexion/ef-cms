@@ -8,10 +8,8 @@ const {
 describe('generateStandingPretrialNoticeInteractor', () => {
   beforeEach(() => {
     applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor.mockImplementation(
-        ({ contentHtml }) => contentHtml,
-      );
+      .getUseCaseHelpers()
+      .generatePdfFromHtml.mockImplementation(({ contentHtml }) => contentHtml);
 
     applicationContext
       .getTemplateGenerators()
@@ -68,7 +66,7 @@ describe('generateStandingPretrialNoticeInteractor', () => {
         .generateStandingPretrialNoticeTemplate,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      applicationContext.getUseCaseHelpers().generatePdfFromHtml,
     ).toHaveBeenCalled();
     expect(result.indexOf('123-45')).toBeGreaterThan(-1);
   });
@@ -91,7 +89,7 @@ describe('generateStandingPretrialNoticeInteractor', () => {
         .generateStandingPretrialNoticeTemplate,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      applicationContext.getUseCaseHelpers().generatePdfFromHtml,
     ).toHaveBeenCalled();
     expect(result.indexOf('234-56S')).toBeGreaterThan(-1);
   });

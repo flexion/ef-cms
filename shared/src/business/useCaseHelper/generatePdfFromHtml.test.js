@@ -1,6 +1,4 @@
-const {
-  generatePdfFromHtmlInteractor,
-} = require('./generatePdfFromHtmlInteractor.js');
+const { generatePdfFromHtml } = require('./generatePdfFromHtml.js');
 
 const { applicationContext } = require('../test/createTestApplicationContext');
 
@@ -22,7 +20,7 @@ const pdfMock = jest.fn(
 
 let closeMock;
 
-describe('generatePdfFromHtmlInteractor', () => {
+describe('generatePdfFromHtml', () => {
   beforeEach(() => {
     closeMock = jest.fn();
 
@@ -56,7 +54,7 @@ describe('generatePdfFromHtmlInteractor', () => {
 
     let error;
     try {
-      await generatePdfFromHtmlInteractor(args);
+      await generatePdfFromHtml(args);
     } catch (err) {
       error = err;
     }
@@ -73,7 +71,7 @@ describe('generatePdfFromHtmlInteractor', () => {
       docketNumber: '123-45',
     };
 
-    await generatePdfFromHtmlInteractor(args);
+    await generatePdfFromHtml(args);
     expect(launchMock).toHaveBeenCalled();
     expect(newPageMock).toHaveBeenCalled();
     expect(setContentMock).toHaveBeenCalled();
@@ -89,7 +87,7 @@ describe('generatePdfFromHtmlInteractor', () => {
       docketNumber: '123-45',
     };
 
-    const result = await generatePdfFromHtmlInteractor(args);
+    const result = await generatePdfFromHtml(args);
     expect(result.indexOf('<span class="pageNumber"></span>')).toBeGreaterThan(
       -1,
     );
@@ -105,7 +103,7 @@ describe('generatePdfFromHtmlInteractor', () => {
       headerHtml: 'Test Header',
     };
 
-    const result = await generatePdfFromHtmlInteractor(args);
+    const result = await generatePdfFromHtml(args);
     expect(
       result.indexOf('Page <span class="pageNumber"></span>'),
     ).toBeGreaterThan(-1);
@@ -123,7 +121,7 @@ describe('generatePdfFromHtmlInteractor', () => {
 
     const defaultHeaderContent = 'Page <span class="pageNumber"></span>'; // This is in the header by default
 
-    const result = await generatePdfFromHtmlInteractor(args);
+    const result = await generatePdfFromHtml(args);
 
     expect(result.indexOf(defaultHeaderContent)).toEqual(-1);
   });
@@ -140,7 +138,7 @@ describe('generatePdfFromHtmlInteractor', () => {
 
     const defaultHeaderContent = 'Page <span class="pageNumber"></span>'; // This is in the header by default
 
-    const result = await generatePdfFromHtmlInteractor(args);
+    const result = await generatePdfFromHtml(args);
 
     expect(result.indexOf(defaultHeaderContent)).toEqual(-1);
     expect(result.indexOf('Test Header')).toBeGreaterThan(-1);
@@ -155,7 +153,7 @@ describe('generatePdfFromHtmlInteractor', () => {
       footerHtml: 'Test Footer',
     };
 
-    const result = await generatePdfFromHtmlInteractor(args);
+    const result = await generatePdfFromHtml(args);
     expect(result.indexOf('Test Footer')).toBeGreaterThan(-1);
   });
 
@@ -170,7 +168,7 @@ describe('generatePdfFromHtmlInteractor', () => {
 
     const defaultFooterContent = 'class="footer-default"'; // This is in the footer by default
 
-    const result = await generatePdfFromHtmlInteractor(args);
+    const result = await generatePdfFromHtml(args);
 
     expect(result.indexOf(defaultFooterContent)).toEqual(-1);
   });
@@ -187,7 +185,7 @@ describe('generatePdfFromHtmlInteractor', () => {
 
     const defaultFooterContent = 'class="footer-default"'; // This is in the footer by default
 
-    const result = await generatePdfFromHtmlInteractor(args);
+    const result = await generatePdfFromHtml(args);
 
     expect(result.indexOf(defaultFooterContent)).toEqual(-1);
     expect(result.indexOf('Test Footer')).toBeGreaterThan(-1);

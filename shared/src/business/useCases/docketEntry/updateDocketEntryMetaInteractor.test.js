@@ -211,7 +211,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
+      applicationContext.getUseCaseHelpers().addCoversheetToDocument,
     ).toHaveBeenCalled();
   });
 
@@ -226,7 +226,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
+      applicationContext.getUseCaseHelpers().addCoversheetToDocument,
     ).toHaveBeenCalled();
   });
 
@@ -242,7 +242,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
+      applicationContext.getUseCaseHelpers().addCoversheetToDocument,
     ).not.toHaveBeenCalled();
   });
 

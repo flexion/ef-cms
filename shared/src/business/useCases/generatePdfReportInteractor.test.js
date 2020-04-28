@@ -16,7 +16,7 @@ describe('generatePdfReportInteractor', () => {
         cb();
       });
 
-    applicationContext.getUseCases().generatePdfFromHtmlInteractor.mockReset();
+    applicationContext.getUseCaseHelpers().generatePdfFromHtml.mockReset();
 
     applicationContext.getUniqueId.mockReturnValue(mockUniqueId);
   });
@@ -28,7 +28,7 @@ describe('generatePdfReportInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      applicationContext.getUseCaseHelpers().generatePdfFromHtml,
     ).toHaveBeenCalled();
   });
 
@@ -36,8 +36,8 @@ describe('generatePdfReportInteractor', () => {
     let error;
 
     applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor.mockRejectedValue(new Error('Whoops'));
+      .getUseCaseHelpers()
+      .generatePdfFromHtml.mockRejectedValue(new Error('Whoops'));
 
     try {
       await generatePdfReportInteractor({

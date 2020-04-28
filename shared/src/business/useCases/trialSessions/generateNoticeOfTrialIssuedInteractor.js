@@ -64,7 +64,7 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
       },
     });
 
-  return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
+  return await applicationContext.getUseCaseHelpers().generatePdfFromHtml({
     applicationContext,
     contentHtml,
     footerHtml: `<h3 style="text-align:center; font-family: sans-serif; width: 100%;" class="text-bold served-date">Served ${footerDate}</h3>`,

@@ -6,10 +6,9 @@ import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = applicationContext;
 
-const {
-  addCoversheetInteractor,
-  filePetitionInteractor,
-} = applicationContext.getUseCases();
+const { filePetitionInteractor } = applicationContext.getUseCases();
+
+const { addCoversheetToDocument } = applicationContext.getUseCaseHelpers();
 
 applicationContext.getCurrentUser.mockReturnValue({
   email: 'petitioner1@example.com',
@@ -24,7 +23,7 @@ presenter.providers.path = {
 };
 
 describe('createCaseAction', () => {
-  it('should call filePetitionInteractor and addCoversheetInteractor with the petition metadata and files and call the success path when finished', async () => {
+  it('should call filePetitionInteractor and addCoversheetToDocument with the petition metadata and files and call the success path when finished', async () => {
     filePetitionInteractor.mockReturnValue(MOCK_CASE);
 
     await runAction(createCaseAction, {
@@ -51,7 +50,7 @@ describe('createCaseAction', () => {
       },
       stinFile: {},
     });
-    expect(addCoversheetInteractor).toBeCalled();
+    expect(addCoversheetToDocument).toBeCalled();
     expect(successStub).toBeCalled();
   });
 
@@ -84,7 +83,7 @@ describe('createCaseAction', () => {
       },
       stinFile: {},
     });
-    expect(addCoversheetInteractor).not.toBeCalled();
+    expect(addCoversheetToDocument).not.toBeCalled();
     expect(errorStub).toBeCalled();
   });
 });

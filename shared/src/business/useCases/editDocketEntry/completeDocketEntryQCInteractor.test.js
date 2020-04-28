@@ -235,7 +235,7 @@ describe('completeDocketEntryQCInteractor', () => {
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
+      applicationContext.getUseCaseHelpers().addCoversheetToDocument,
     ).toBeCalled();
   });
 
@@ -258,7 +258,7 @@ describe('completeDocketEntryQCInteractor', () => {
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
+      applicationContext.getUseCaseHelpers().addCoversheetToDocument,
     ).toBeCalled();
   });
 
@@ -277,7 +277,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
+      applicationContext.getUseCaseHelpers().addCoversheetToDocument,
     ).not.toBeCalled();
   });
 

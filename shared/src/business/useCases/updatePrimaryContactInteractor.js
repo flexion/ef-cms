@@ -1,7 +1,7 @@
 const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
-const { addCoverToPdf } = require('./addCoversheetInteractor');
+const { addCoverToPdf } = require('../useCaseHelper/addCoverToPdf');
 const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
 const { DOCKET_SECTION } = require('../entities/WorkQueue');
@@ -75,8 +75,8 @@ exports.updatePrimaryContactInteractor = async ({
       });
 
     const docketRecordPdf = await applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor({
+      .getUseCaseHelpers()
+      .generatePdfFromHtml({
         applicationContext,
         contentHtml: pdfContentHtml,
         displayHeaderFooter: false,

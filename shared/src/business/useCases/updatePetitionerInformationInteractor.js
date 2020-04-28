@@ -9,7 +9,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { addCoverToPdf } = require('./addCoversheetInteractor');
+const { addCoverToPdf } = require('../useCaseHelper/addCoverToPdf');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 const { PDFDocument } = require('pdf-lib');
@@ -118,8 +118,8 @@ exports.updatePetitionerInformationInteractor = async ({
     changeOfAddressDocument.setAsServed(servedParties.all);
 
     const changeOfAddressPdf = await applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor({
+      .getUseCaseHelpers()
+      .generatePdfFromHtml({
         applicationContext,
         contentHtml: pdfContentHtml,
         displayHeaderFooter: false,

@@ -1,5 +1,5 @@
 /**
- * generatePdfFromHtmlInteractor
+ * generatePdfFromHtml
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -8,7 +8,7 @@
  * @param {boolean} providers.displayHeaderFooter boolean to determine if the header and footer should be displayed
  * @returns {Buffer} the pdf as a binary buffer
  */
-exports.generatePdfFromHtmlInteractor = async ({
+exports.generatePdfFromHtml = async ({
   applicationContext,
   contentHtml,
   displayHeaderFooter = true,

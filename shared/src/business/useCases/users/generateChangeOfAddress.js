@@ -5,7 +5,7 @@ const {
   calculateISODate,
   createISODateString,
 } = require('../../utilities/DateHandler');
-const { addCoverToPdf } = require('../addCoversheetInteractor');
+const { addCoverToPdf } = require('../../useCaseHelper/addCoverToPdf');
 const { capitalize, clone } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
@@ -103,8 +103,8 @@ exports.generateChangeOfAddress = async ({
         });
 
       const docketRecordPdf = await applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor({
+        .getUseCaseHelpers()
+        .generatePdfFromHtml({
           applicationContext,
           contentHtml: pdfContentHtml,
           displayHeaderFooter: false,
