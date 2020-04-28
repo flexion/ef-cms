@@ -68,7 +68,7 @@ describe('addCoversheetToDocument', () => {
   };
 
   beforeAll(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(60000);
 
     applicationContext
       .getPersistenceGateway()

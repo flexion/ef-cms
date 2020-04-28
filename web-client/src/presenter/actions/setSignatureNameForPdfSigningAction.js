@@ -17,8 +17,8 @@ export const setSignatureNameForPdfSigningAction = async ({
 
   if (user.section.includes('Chambers')) {
     const judgeUser = await applicationContext
-      .getUseCases()
-      .getJudgeForUserChambersInteractor({
+      .getUtilities()
+      .getJudgeForUserChambers({
         applicationContext,
         user,
       });

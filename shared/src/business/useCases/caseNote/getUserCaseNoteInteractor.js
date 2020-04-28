@@ -20,8 +20,8 @@ exports.getUserCaseNoteInteractor = async ({ applicationContext, caseId }) => {
   }
 
   const judgeUser = await applicationContext
-    .getUseCases()
-    .getJudgeForUserChambersInteractor({ applicationContext, user });
+    .getUseCaseHelpers()
+    .getJudgeForUserChambers({ applicationContext, user });
 
   const caseNote = await applicationContext
     .getPersistenceGateway()

@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-import { getJudgeForUserChambersInteractor } from './getJudgeForUserChambersInteractor';
-const { User } = require('../../entities/User');
+const { applicationContext } = require('../test/createTestApplicationContext');
+import { getJudgeForUserChambers } from './getJudgeForUserChambers';
+const { User } = require('../entities/User');
 
 let currentUser;
 
@@ -43,7 +41,7 @@ const allUsers = [
   },
 ];
 
-describe('getJudgeForUserChambersInteractor', () => {
+describe('getJudgeForUserChambers', () => {
   beforeEach(() => {
     applicationContext.getCurrentUser.mockImplementation(() => currentUser);
     applicationContext
@@ -62,7 +60,7 @@ describe('getJudgeForUserChambersInteractor', () => {
   it('Fetches the judge associated with a given chambers user', async () => {
     currentUser = chambersUser;
 
-    const result = await getJudgeForUserChambersInteractor({
+    const result = await getJudgeForUserChambers({
       applicationContext,
       user: chambersUser,
     });
@@ -76,7 +74,7 @@ describe('getJudgeForUserChambersInteractor', () => {
   });
 
   it('Fetches the judge associated with a given chambers user when the user is a judge', async () => {
-    const result = await getJudgeForUserChambersInteractor({
+    const result = await getJudgeForUserChambers({
       applicationContext,
       user: judgeUser,
     });
@@ -95,7 +93,7 @@ describe('getJudgeForUserChambersInteractor', () => {
       userId: chambersUser.userId,
     };
 
-    const result = await getJudgeForUserChambersInteractor({
+    const result = await getJudgeForUserChambers({
       applicationContext,
       user: currentUser,
     });
@@ -114,7 +112,7 @@ describe('getJudgeForUserChambersInteractor', () => {
       userId: 'docketclerk1',
     };
 
-    const result = await getJudgeForUserChambersInteractor({
+    const result = await getJudgeForUserChambers({
       applicationContext,
       user: currentUser,
     });

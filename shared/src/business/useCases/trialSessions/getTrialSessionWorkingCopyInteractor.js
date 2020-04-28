@@ -25,8 +25,8 @@ exports.getTrialSessionWorkingCopyInteractor = async ({
   }
 
   const judgeUser = await applicationContext
-    .getUseCases()
-    .getJudgeForUserChambersInteractor({ applicationContext, user });
+    .getUseCaseHelpers()
+    .getJudgeForUserChambers({ applicationContext, user });
 
   const trialSessionWorkingCopy = await applicationContext
     .getPersistenceGateway()

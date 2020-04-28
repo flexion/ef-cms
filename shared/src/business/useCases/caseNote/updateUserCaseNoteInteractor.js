@@ -25,8 +25,8 @@ exports.updateUserCaseNoteInteractor = async ({
   }
 
   const judgeUser = await applicationContext
-    .getUseCases()
-    .getJudgeForUserChambersInteractor({ applicationContext, user });
+    .getUseCaseHelpers()
+    .getJudgeForUserChambers({ applicationContext, user });
 
   const caseNoteEntity = new UserCaseNote({
     caseId,

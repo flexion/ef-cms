@@ -1,7 +1,7 @@
-const { User } = require('../../entities/User');
+const { User } = require('../entities/User');
 
 /**
- * getJudgeForUserChambersInteractor - returns the judge user for a given user in a chambers section
+ * getJudgeForUserChambers - returns the judge user for a given user in a chambers section
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,10 +9,7 @@ const { User } = require('../../entities/User');
  * @returns {User} the judge user for the given chambers user
  */
 
-exports.getJudgeForUserChambersInteractor = async ({
-  applicationContext,
-  user,
-}) => {
+exports.getJudgeForUserChambers = async ({ applicationContext, user }) => {
   let judgeUser;
   if (user.role === User.ROLES.judge) {
     judgeUser = user;
