@@ -34,7 +34,7 @@ describe('submitDocketEntryWithFileAction', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().addCoversheetToDocument,
+      applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().fileDocketEntryInteractor,

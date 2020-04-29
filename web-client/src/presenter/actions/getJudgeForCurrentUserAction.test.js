@@ -18,7 +18,7 @@ describe('getJudgeForCurrentUserAction', () => {
       },
     });
     expect(
-      applicationContext.getUseCases().getJudgeForUserChambersInteractor,
+      applicationContext.getUtilities().getJudgeForUserChambers,
     ).toHaveBeenCalled();
   });
 });

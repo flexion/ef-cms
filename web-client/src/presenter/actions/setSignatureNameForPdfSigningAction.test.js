@@ -14,8 +14,8 @@ describe('setSignatureNameForPdfSigningAction', () => {
 
   beforeAll(() => {
     applicationContext
-      .getUseCases()
-      .getJudgeForUserChambersInteractor.mockReturnValue(judgeUser);
+      .getUtilities()
+      .getJudgeForUserChambers.mockReturnValue(judgeUser);
 
     applicationContext.getChiefJudgeNameForSigning.mockReturnValue(
       'Maurice B. Foley',

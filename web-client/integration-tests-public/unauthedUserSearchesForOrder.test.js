@@ -42,6 +42,8 @@ describe('Petitioner creates case', () => {
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
     test.docketNumber = caseDetail.docketNumber;
+
+    console.log('test.docketNumber', test.docketNumber);
     testClient.docketNumber = caseDetail.docketNumber;
   });
 });

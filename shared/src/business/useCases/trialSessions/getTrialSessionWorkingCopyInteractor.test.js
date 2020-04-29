@@ -31,8 +31,8 @@ describe('Get trial session working copy', () => {
       .getTrialSessionWorkingCopy.mockResolvedValue(MOCK_WORKING_COPY);
 
     applicationContext
-      .getUseCases()
-      .getJudgeForUserChambersInteractor.mockReturnValue({
+      .getUseCaseHelpers()
+      .getJudgeForUserChambers.mockReturnValue({
         role: User.ROLES.judge,
         userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
       });
@@ -95,8 +95,8 @@ describe('Get trial session working copy', () => {
       userId: 'a9ae05ba-d48a-43a6-9981-ee536a7601be',
     };
     applicationContext
-      .getUseCases()
-      .getJudgeForUserChambersInteractor.mockImplementation(() => {});
+      .getUseCaseHelpers()
+      .getJudgeForUserChambers.mockImplementation(() => {});
 
     const result = await getTrialSessionWorkingCopyInteractor({
       applicationContext,

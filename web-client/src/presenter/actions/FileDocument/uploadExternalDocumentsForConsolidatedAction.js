@@ -75,7 +75,7 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
   });
 
   const addCoversheet = document => {
-    return applicationContext.getUseCaseHelpers().addCoversheetToDocument({
+    return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
       caseId: document.caseId,
       documentId: document.documentId,

@@ -64,16 +64,13 @@ export const uploadExternalDocumentsAction = async ({
       document.processingStatus === 'pending' &&
       document.isFileAttached !== false,
   );
-  const addCoversheet = document => {
-    return applicationContext.getUseCaseHelpers().addCoversheetToDocument({
-      applicationContext,
-      caseId: caseDetail.caseId,
-      documentId: document.documentId,
-    });
-  };
 
   for (let pendingDocument of pendingDocuments) {
-    await addCoversheet(pendingDocument);
+    await applicationContext.getUseCases().addCoversheetInteractor({
+      applicationContext,
+      caseId: caseDetail.caseId,
+      documentId: pendingDocument.documentId,
+    });
   }
 
   return path.success({

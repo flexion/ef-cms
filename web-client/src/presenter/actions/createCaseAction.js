@@ -56,7 +56,7 @@ export const createCaseAction = async ({
   }
 
   const addCoversheet = document => {
-    return applicationContext.getUseCaseHelpers().addCoversheetToDocument({
+    return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
       documentId: document.documentId,
