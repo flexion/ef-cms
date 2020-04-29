@@ -1,5 +1,7 @@
+const { formatNow } = require('../utilities/DateHandler');
+
 /**
- * generateStandingPretrialNoticeInteractor
+ * generateNoticeOfTrialIssued
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -7,7 +9,7 @@
  * @param {string} providers.trialSessionId the id for the trial session
  * @returns {Uint8Array} notice of trial session pdf
  */
-exports.generateStandingPretrialNoticeInteractor = async ({
+exports.generateNoticeOfTrialIssued = async ({
   applicationContext,
   docketNumber,
   trialSessionId,
@@ -38,11 +40,12 @@ exports.generateStandingPretrialNoticeInteractor = async ({
     state,
   } = trialSession;
 
-  const { caseCaption, docketNumberSuffix, irsPractitioners } = caseDetail;
+  const { caseCaption, docketNumberSuffix } = caseDetail;
+  const footerDate = formatNow('MMDDYYYY');
 
   const contentHtml = await applicationContext
     .getTemplateGenerators()
-    .generateStandingPretrialNoticeTemplate({
+    .generateNoticeOfTrialIssuedTemplate({
       applicationContext,
       content: {
         caseCaption,
@@ -52,7 +55,6 @@ exports.generateStandingPretrialNoticeInteractor = async ({
           address2,
           city,
           courthouseName,
-          irsPractitioners,
           judge,
           postalCode,
           startDate,
@@ -65,8 +67,6 @@ exports.generateStandingPretrialNoticeInteractor = async ({
   return await applicationContext.getUseCaseHelpers().generatePdfFromHtml({
     applicationContext,
     contentHtml,
-    headerHtml:
-      '<div style="text-align:center;"><span class="pageNumber"></span></div>',
-    overwriteHeader: true,
+    footerHtml: `<h3 style="text-align:center; font-family: sans-serif; width: 100%;" class="text-bold served-date">Served ${footerDate}</h3>`,
   });
 };

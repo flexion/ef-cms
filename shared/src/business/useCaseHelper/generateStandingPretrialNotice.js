@@ -1,5 +1,5 @@
 /**
- * generateStandingPretrialOrderInteractor
+ * generateStandingPretrialNotice
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -7,7 +7,7 @@
  * @param {string} providers.trialSessionId the id for the trial session
  * @returns {Uint8Array} notice of trial session pdf
  */
-exports.generateStandingPretrialOrderInteractor = async ({
+exports.generateStandingPretrialNotice = async ({
   applicationContext,
   docketNumber,
   trialSessionId,
@@ -26,20 +26,35 @@ exports.generateStandingPretrialOrderInteractor = async ({
       docketNumber,
     });
 
-  const { city, judge, startDate, startTime, state } = trialSession;
+  const {
+    address1,
+    address2,
+    city,
+    courthouseName,
+    judge,
+    postalCode,
+    startDate,
+    startTime,
+    state,
+  } = trialSession;
 
-  const { caseCaption, docketNumberSuffix } = caseDetail;
+  const { caseCaption, docketNumberSuffix, irsPractitioners } = caseDetail;
 
   const contentHtml = await applicationContext
     .getTemplateGenerators()
-    .generateStandingPretrialOrderTemplate({
+    .generateStandingPretrialNoticeTemplate({
       applicationContext,
       content: {
         caseCaption,
         docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
         trialInfo: {
+          address1,
+          address2,
           city,
+          courthouseName,
+          irsPractitioners,
           judge,
+          postalCode,
           startDate,
           startTime,
           state,

@@ -251,11 +251,14 @@ const {
   generateTrialSessionPlanningReportTemplate,
 } = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
 const {
+  generateDocketRecordPdf,
+} = require('../../shared/src/business/useCaseHelper/generateDocketRecordPdf');
+const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
-  generateNoticeOfTrialIssuedInteractor,
-} = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor');
+  generateNoticeOfTrialIssued,
+} = require('../../shared/src/business/useCaseHelper/generateNoticeOfTrialIssued');
 const {
   generatePaperServiceAddressPagePdf,
 } = require('../../shared/src/business/useCaseHelper/courtIssuedDocument/generatePaperServiceAddressPagePdf');
@@ -281,14 +284,14 @@ const {
   generatePrintablePendingReportInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
 const {
-  generateStandingPretrialNoticeInteractor,
-} = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialNoticeInteractor');
+  generateStandingPretrialNotice,
+} = require('../../shared/src/business/useCaseHelper/generateStandingPretrialNotice');
 const {
   generateStandingPretrialNoticeTemplate,
 } = require('../../shared/src/business/useCaseHelper/standingPretrialNotice/generateStandingPretrialNoticeTemplate');
 const {
-  generateStandingPretrialOrderInteractor,
-} = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor');
+  generateStandingPretrialOrder,
+} = require('../../shared/src/business/useCaseHelper/generateStandingPretrialOrder');
 const {
   generateStandingPretrialOrderTemplate,
 } = require('../../shared/src/business/useCaseHelper/standingPretrialOrder/generateStandingPretrialOrderTemplate');
@@ -1145,9 +1148,13 @@ module.exports = (appContextUser = {}) => {
         fetchPendingItems,
         generateCaseConfirmationPdf,
         generateCaseInventoryReportPdf,
+        generateDocketRecordPdf,
+        generateNoticeOfTrialIssued,
         generatePaperServiceAddressPagePdf,
         generatePdfFromHtml,
         generatePendingReportPdf,
+        generateStandingPretrialNotice,
+        generateStandingPretrialOrder,
         getCaseInventoryReport,
         getJudgeForUserChambers,
         sendServedPartiesEmails,
@@ -1191,14 +1198,11 @@ module.exports = (appContextUser = {}) => {
         fileExternalDocumentInteractor,
         forwardWorkItemInteractor,
         generateDocketRecordPdfInteractor,
-        generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfReportInteractor,
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
-        generateStandingPretrialNoticeInteractor,
-        generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
         getAllCaseDeadlinesInteractor,
         getBlockedCasesInteractor,

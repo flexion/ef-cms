@@ -2,10 +2,10 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  generateStandingPretrialNoticeInteractor,
-} = require('./generateStandingPretrialNoticeInteractor');
+  generateStandingPretrialNotice,
+} = require('./generateStandingPretrialNotice');
 
-describe('generateStandingPretrialNoticeInteractor', () => {
+describe('generateStandingPretrialNotice', () => {
   beforeEach(() => {
     applicationContext
       .getUseCaseHelpers()
@@ -49,7 +49,7 @@ describe('generateStandingPretrialNoticeInteractor', () => {
       });
   });
   it('should generate a template with the case and trial information and call the pdf generator', async () => {
-    const result = await generateStandingPretrialNoticeInteractor({
+    const result = await generateStandingPretrialNotice({
       applicationContext,
       docketNumber: '123-45',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
@@ -72,7 +72,7 @@ describe('generateStandingPretrialNoticeInteractor', () => {
   });
 
   it('should append the docket number suffix if present on the caseDetail', async () => {
-    const result = await generateStandingPretrialNoticeInteractor({
+    const result = await generateStandingPretrialNotice({
       applicationContext,
       docketNumber: '234-56',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',

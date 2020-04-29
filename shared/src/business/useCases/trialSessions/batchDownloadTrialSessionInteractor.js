@@ -9,14 +9,14 @@ const { padStart } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * batchDownloadTrialSessionInteractor
+ * batchDownloadTrialSession
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id of the trial session
- * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
+ * @returns {Promise} the promise of the batchDownloadTrialSession call
  */
-const batchDownloadTrialSessionInteractor = async ({
+const batchDownloadTrialSession = async ({
   applicationContext,
   trialSessionId,
 }) => {
@@ -121,8 +121,8 @@ const batchDownloadTrialSessionInteractor = async ({
     let { caseId } = sessionCases[index];
     extraFiles.push(
       await applicationContext
-        .getUseCases()
-        .generateDocketRecordPdfInteractor({
+        .getUseCaseHelpers()
+        .generateDocketRecordPdf({
           applicationContext,
           caseId,
           includePartyDetail: true,
@@ -219,7 +219,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
   trialSessionId,
 }) => {
   try {
-    await batchDownloadTrialSessionInteractor({
+    await batchDownloadTrialSession({
       applicationContext,
       trialSessionId,
     });

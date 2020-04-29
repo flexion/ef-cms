@@ -1,11 +1,9 @@
 const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  generateNoticeOfTrialIssuedInteractor,
-} = require('./generateNoticeOfTrialIssuedInteractor');
+  generateNoticeOfTrialIssued,
+} = require('./generateNoticeOfTrialIssued');
+const { applicationContext } = require('../test/createTestApplicationContext');
 
-describe('generateNoticeOfTrialIssuedInteractor', () => {
+describe('generateNoticeOfTrialIssued', () => {
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
@@ -50,7 +48,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
   });
 
   it('should generate a template with the case and trial information and call the pdf generator', async () => {
-    const result = await generateNoticeOfTrialIssuedInteractor({
+    const result = await generateNoticeOfTrialIssued({
       applicationContext,
       docketNumber: '123-45',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
@@ -73,7 +71,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
   });
 
   it('should append the docket number suffix if present on the caseDetail', async () => {
-    const result = await generateNoticeOfTrialIssuedInteractor({
+    const result = await generateNoticeOfTrialIssued({
       applicationContext,
       docketNumber: '234-56',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',

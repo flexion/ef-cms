@@ -38,8 +38,8 @@ exports.getEligibleCasesForTrialSessionInteractor = async ({
   let calendaredCases = [];
   if (trialSession.isCalendared === false && trialSession.caseOrder) {
     calendaredCases = await applicationContext
-      .getUseCases()
-      .getCalendaredCasesForTrialSessionInteractor({
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession({
         applicationContext,
         trialSessionId,
       });

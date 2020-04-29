@@ -50,8 +50,8 @@ describe('batchDownloadTrialSessionInteractor', () => {
       });
 
     applicationContext
-      .getUseCases()
-      .generateDocketRecordPdfInteractor.mockResolvedValue({});
+      .getUseCaseHelpers()
+      .generateDocketRecordPdf.mockResolvedValue({});
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {

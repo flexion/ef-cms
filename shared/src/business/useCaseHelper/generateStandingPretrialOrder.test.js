@@ -2,10 +2,10 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  generateStandingPretrialOrderInteractor,
-} = require('./generateStandingPretrialOrderInteractor');
+  generateStandingPretrialOrder,
+} = require('./generateStandingPretrialOrder');
 
-describe('generateStandingPretrialOrderInteractor', () => {
+describe('generateStandingPretrialOrder', () => {
   beforeEach(() => {
     applicationContext
       .getUseCaseHelpers()
@@ -50,7 +50,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
   });
 
   it('should generate a template with the case and trial information and call the pdf generator', async () => {
-    const result = await generateStandingPretrialOrderInteractor({
+    const result = await generateStandingPretrialOrder({
       applicationContext,
       docketNumber: '123-45',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
@@ -73,7 +73,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
   });
 
   it('should append the docket number suffix if present on the caseDetail', async () => {
-    const result = await generateStandingPretrialOrderInteractor({
+    const result = await generateStandingPretrialOrder({
       applicationContext,
       docketNumber: '234-56',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',

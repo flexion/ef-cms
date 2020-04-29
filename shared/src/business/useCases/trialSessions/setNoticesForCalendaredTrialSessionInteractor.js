@@ -90,8 +90,8 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     // Notice of Trial Issued
     const noticeOfTrialIssuedFile = await applicationContext
-      .getUseCases()
-      .generateNoticeOfTrialIssuedInteractor({
+      .getUseCaseHelpers()
+      .generateNoticeOfTrialIssued({
         applicationContext,
         docketNumber: caseEntity.docketNumber,
         trialSessionId: trialSessionEntity.trialSessionId,
@@ -135,8 +135,8 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     if (procedureType === 'Small') {
       // Generate Standing Pretrial Notice
       standingPretrialFile = await applicationContext
-        .getUseCases()
-        .generateStandingPretrialNoticeInteractor({
+        .getUseCaseHelpers()
+        .generateStandingPretrialNotice({
           applicationContext,
           docketNumber: caseEntity.docketNumber,
           trialSessionId: trialSessionEntity.trialSessionId,
@@ -149,8 +149,8 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     } else {
       // Generate Standing Pretrial Order
       standingPretrialFile = await applicationContext
-        .getUseCases()
-        .generateStandingPretrialOrderInteractor({
+        .getUseCaseHelpers()
+        .generateStandingPretrialOrder({
           applicationContext,
           docketNumber: caseEntity.docketNumber,
           trialSessionId: trialSessionEntity.trialSessionId,

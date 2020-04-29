@@ -135,16 +135,15 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .generatePaperServiceAddressPagePdf.mockResolvedValue(testPdfDoc);
-
     applicationContext
-      .getUseCases()
-      .generateNoticeOfTrialIssuedInteractor.mockReturnValue(fakeFile);
+      .getUseCaseHelpers()
+      .generateNoticeOfTrialIssued.mockReturnValue(fakeFile);
     applicationContext
-      .getUseCases()
-      .generateStandingPretrialNoticeInteractor.mockReturnValue(fakeFile);
+      .getUseCaseHelpers()
+      .generateStandingPretrialNotice.mockReturnValue(fakeFile);
     applicationContext
-      .getUseCases()
-      .generateStandingPretrialOrderInteractor.mockReturnValue(fakeFile);
+      .getUseCaseHelpers()
+      .generateStandingPretrialOrder.mockReturnValue(fakeFile);
   });
 
   it('Should return an unauthorized error if the user does not have the TRIAL_SESSIONS permission', async () => {
@@ -179,7 +178,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+      applicationContext.getUseCaseHelpers().generateNoticeOfTrialIssued,
     ).not.toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -194,7 +193,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+      applicationContext.getUseCaseHelpers().generateNoticeOfTrialIssued,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -237,7 +236,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+      applicationContext.getUseCaseHelpers().generateNoticeOfTrialIssued,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -254,7 +253,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+      applicationContext.getUseCaseHelpers().generateNoticeOfTrialIssued,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -271,7 +270,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+      applicationContext.getUseCaseHelpers().generateNoticeOfTrialIssued,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -332,7 +331,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+      applicationContext.getUseCaseHelpers().generateNoticeOfTrialIssued,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -378,7 +377,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+      applicationContext.getUseCaseHelpers().generateNoticeOfTrialIssued,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -396,7 +395,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
+      applicationContext.getUseCaseHelpers().generateStandingPretrialOrder,
     ).toHaveBeenCalled();
   });
 
@@ -408,7 +407,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generateStandingPretrialNoticeInteractor,
+      applicationContext.getUseCaseHelpers().generateStandingPretrialNotice,
     ).toHaveBeenCalled();
   });
 
@@ -419,7 +418,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+      applicationContext.getUseCaseHelpers().generateNoticeOfTrialIssued,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -440,7 +439,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+      applicationContext.getUseCaseHelpers().generateNoticeOfTrialIssued,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -461,7 +460,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+      applicationContext.getUseCaseHelpers().generateNoticeOfTrialIssued,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,

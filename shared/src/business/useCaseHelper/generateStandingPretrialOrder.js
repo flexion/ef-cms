@@ -1,7 +1,5 @@
-const { formatNow } = require('../../utilities/DateHandler');
-
 /**
- * generateNoticeOfTrialIssuedInteractor
+ * generateStandingPretrialOrder
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,7 +7,7 @@ const { formatNow } = require('../../utilities/DateHandler');
  * @param {string} providers.trialSessionId the id for the trial session
  * @returns {Uint8Array} notice of trial session pdf
  */
-exports.generateNoticeOfTrialIssuedInteractor = async ({
+exports.generateStandingPretrialOrder = async ({
   applicationContext,
   docketNumber,
   trialSessionId,
@@ -28,35 +26,20 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
       docketNumber,
     });
 
-  const {
-    address1,
-    address2,
-    city,
-    courthouseName,
-    judge,
-    postalCode,
-    startDate,
-    startTime,
-    state,
-  } = trialSession;
+  const { city, judge, startDate, startTime, state } = trialSession;
 
   const { caseCaption, docketNumberSuffix } = caseDetail;
-  const footerDate = formatNow('MMDDYYYY');
 
   const contentHtml = await applicationContext
     .getTemplateGenerators()
-    .generateNoticeOfTrialIssuedTemplate({
+    .generateStandingPretrialOrderTemplate({
       applicationContext,
       content: {
         caseCaption,
         docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
         trialInfo: {
-          address1,
-          address2,
           city,
-          courthouseName,
           judge,
-          postalCode,
           startDate,
           startTime,
           state,
@@ -67,6 +50,8 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
   return await applicationContext.getUseCaseHelpers().generatePdfFromHtml({
     applicationContext,
     contentHtml,
-    footerHtml: `<h3 style="text-align:center; font-family: sans-serif; width: 100%;" class="text-bold served-date">Served ${footerDate}</h3>`,
+    headerHtml:
+      '<div style="text-align:center;"><span class="pageNumber"></span></div>',
+    overwriteHeader: true,
   });
 };

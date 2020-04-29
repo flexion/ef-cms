@@ -1,5 +1,5 @@
 import { ContactFactory } from '../entities/contacts/ContactFactory';
-import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
+import { generateDocketRecordPdf } from './generateDocketRecordPdf';
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
@@ -81,9 +81,9 @@ beforeAll(() => {
     );
 });
 
-describe('generateDocketRecordPdfInteractor', () => {
+describe('generateDocketRecordPdf', () => {
   it('Calls generatePdfFromHtml and generatePrintableDocketRecordTemplate to build a PDF', async () => {
-    const result = await generateDocketRecordPdfInteractor({
+    const result = await generateDocketRecordPdf({
       applicationContext,
       caseDetail,
       includePartyDetail: true,
@@ -118,7 +118,7 @@ describe('generateDocketRecordPdfInteractor', () => {
         partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
       }));
 
-    const result = await generateDocketRecordPdfInteractor({
+    const result = await generateDocketRecordPdf({
       applicationContext,
       caseId: 'ca123',
       includePartyDetail: true,
@@ -128,7 +128,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('displays no party information if "includePartyDetail" flag is undefined or falsy', async () => {
-    let result = await generateDocketRecordPdfInteractor({
+    let result = await generateDocketRecordPdf({
       applicationContext: {
         ...applicationContext,
         getPersistenceGateway: () => ({
@@ -152,7 +152,7 @@ describe('generateDocketRecordPdfInteractor', () => {
 
     expect(result.includes('Test Secondary')).toEqual(false);
 
-    result = await generateDocketRecordPdfInteractor({
+    result = await generateDocketRecordPdf({
       applicationContext: {
         ...applicationContext,
         getPersistenceGateway: () => ({
@@ -178,7 +178,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('Displays privatePractitioners associated with the case', async () => {
-    const result = await generateDocketRecordPdfInteractor({
+    const result = await generateDocketRecordPdf({
       applicationContext: {
         ...applicationContext,
         getPersistenceGateway: () => ({
@@ -223,7 +223,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('Displays irsPractitioners associated with the case', async () => {
-    const result = await generateDocketRecordPdfInteractor({
+    const result = await generateDocketRecordPdf({
       applicationContext: {
         ...applicationContext,
         getPersistenceGateway: () => ({
@@ -266,7 +266,7 @@ describe('generateDocketRecordPdfInteractor', () => {
         };
       });
 
-    const result = await generateDocketRecordPdfInteractor({
+    const result = await generateDocketRecordPdf({
       applicationContext,
       caseId: 'ca-123',
       includePartyDetail: true,
@@ -279,7 +279,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('Displays caseTitle instead of contactPrimary name when showCaseTitleForPrimary is set', async () => {
-    const result = await generateDocketRecordPdfInteractor({
+    const result = await generateDocketRecordPdf({
       applicationContext,
       caseDetail: { ...caseDetail },
       includePartyDetail: true,
