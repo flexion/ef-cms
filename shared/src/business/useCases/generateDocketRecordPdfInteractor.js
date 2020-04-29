@@ -1,6 +1,3 @@
-const { Case } = require('../entities/cases/Case');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
-
 /**
  * generateDocketRecordPdfInteractor
  *
