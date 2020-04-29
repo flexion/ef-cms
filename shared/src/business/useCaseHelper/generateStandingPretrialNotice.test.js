@@ -1,9 +1,7 @@
 const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
   generateStandingPretrialNotice,
 } = require('./generateStandingPretrialNotice');
+const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('generateStandingPretrialNotice', () => {
   beforeEach(() => {

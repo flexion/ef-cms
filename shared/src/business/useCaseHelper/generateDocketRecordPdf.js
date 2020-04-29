@@ -266,7 +266,7 @@ exports.generateDocketRecordPdf = async ({
       },
     });
 
-  return await applicationContext.getUseCases().generatePdfFromHtml({
+  return await applicationContext.getUseCaseHelpers().generatePdfFromHtml({
     applicationContext,
     contentHtml,
     docketNumber,

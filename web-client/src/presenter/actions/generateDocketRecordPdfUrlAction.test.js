@@ -44,7 +44,7 @@ describe('generateDocketRecordPdfUrlAction', () => {
       },
     });
     expect(
-      applicationContext.getUseCases().generateDocketRecordPdfInteractor,
+      applicationContext.getUseCaseHelpers().generateDocketRecordPdf,
     ).toHaveBeenCalled();
     expect(mockCreateObjectUrl).toHaveBeenCalled();
     expect(result.output).toHaveProperty('pdfUrl');
