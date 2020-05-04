@@ -1225,7 +1225,7 @@ Case.prototype.generateTrialSortTags = function () {
     caseId,
     caseType,
     highPriority,
-    preferredTrialCity,
+    preferredTrialCity='',
     procedureType,
     receivedAt,
   } = this;

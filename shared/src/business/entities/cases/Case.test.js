@@ -1409,6 +1409,25 @@ describe('Case entity', () => {
       });
     });
 
+    it('should generate sort tags for a regular case without preferredTrialCity', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          preferredTrialCity: undefined,
+          receivedAt: '2018-12-12T05:00:00.000Z',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.generateTrialSortTags()).toEqual({
+        hybrid:
+          '-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        nonHybrid:
+          '-R-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+    });
+
     it('should generate sort tags for a small case', () => {
       const myCase = new Case(
         {
