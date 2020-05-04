@@ -1421,10 +1421,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          '-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          '-R-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: '-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        nonHybrid: '-R-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
