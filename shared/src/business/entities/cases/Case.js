@@ -364,7 +364,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 Case.validationRules = {
   associatedJudge: joi
     .string()
-    .max(100)
+    .max(50)
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Judge assigned to this case. Defaults to Chief Judge.'),
@@ -406,6 +406,7 @@ Case.validationRules = {
       otherwise: joi.optional().allow(null),
       then: joi
         .string()
+        .max(250)
         .required()
         .description(
           'Open text field for describing reason for blocking this case from trial.',
@@ -414,6 +415,7 @@ Case.validationRules = {
     .meta({ tags: ['Restricted'] }),
   caseCaption: joi
     .string()
+    .max(500)
     .required()
     .description(
       'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
@@ -427,6 +429,7 @@ Case.validationRules = {
     .description('Unique case ID only used by the system.'),
   caseNote: joi
     .string()
+    .max(500)
     .optional()
     .meta({ tags: ['Restricted'] }),
   caseType: joi
