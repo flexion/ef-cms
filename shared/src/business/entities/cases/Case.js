@@ -364,7 +364,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 Case.validationRules = {
   associatedJudge: joi
     .string()
-    .max(50)
+    .max(100)
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Judge assigned to this case. Defaults to Chief Judge.'),
