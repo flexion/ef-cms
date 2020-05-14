@@ -29,9 +29,6 @@ describe('external users perform an advanced search for orders', () => {
   });
 
   describe('performing data entry', () => {
-    afterAll(async () => {
-      await refreshElasticsearchIndex();
-    });
     loginAs(test, 'petitioner');
     it('Create test case #1', async () => {
       const caseDetail = await uploadPetition(test);
@@ -56,6 +53,10 @@ describe('external users perform an advanced search for orders', () => {
   });
 
   describe('lots of users can search for this new order', () => {
+    beforeAll(async () => {
+      await refreshElasticsearchIndex();
+      await wait(5000);
+    });
     loginAs(test, 'privatePractitioner');
     associatedUserSearchesForServedOrder(test, {
       draftOrderIndex: 0,
