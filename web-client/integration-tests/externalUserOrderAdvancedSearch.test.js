@@ -86,7 +86,7 @@ describe('external users perform an advanced search for orders', () => {
       loginAs(test, 'docketclerk');
       docketClerkSealsCase(test);
       await refreshElasticsearchIndex();
-      await wait(5000);
+      await wait(10000);
     });
     loginAs(test, 'privatePractitioner');
     associatedUserSearchesForServedOrder(test, {
