@@ -1,5 +1,5 @@
 /* eslint-disable jest/no-export */
-import { CerebralTest } from 'cerebral/test';
+import { CerebralTest, runCompute } from 'cerebral/test';
 import { JSDOM } from 'jsdom';
 import { applicationContext } from '../src/applicationContext';
 import {
@@ -19,7 +19,6 @@ import {
 } from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
-import { runCompute } from 'cerebral/test';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
@@ -568,7 +567,7 @@ export const refreshElasticsearchIndex = async () => {
       await axios.post(`http://localhost:9200/${index}/_refresh`);
     }),
   );
-  return await wait(1500);
+  return await wait(3000);
 };
 
 export const base64ToUInt8Array = b64 => {
