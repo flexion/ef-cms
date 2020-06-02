@@ -1,15 +1,6 @@
 service: ef-cms-case-deadlines-${opt:stageColor}
-plugins:
-  - serverless-domain-manager
-  - serverless-plugin-bind-deployment-id
-  # - serverless-plugin-aws-alerts
-  - serverless-offline
-  - serverless-prune-plugin
-  - serverless-plugin-tracing
-  - serverless-latest-layer-version
-  - serverless-jetpack
-  - serverless-log-forwarding
-  # - serverless-plugin-warmup
+
+plugins: ${file(./web-api/serverless-config/plugins.yml)}
 
 custom:
   logForwarding:
@@ -96,7 +87,7 @@ provider:
       - 'application/pdf'
   clamavDefDir: /opt/var/lib/clamav
 
-  environment: ${file(./web-api/environment-variables.yml)}
+  environment: ${file(./web-api/serverless-config/environment-variables.yml)}
 
 package:
   exclude:
