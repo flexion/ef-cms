@@ -8,6 +8,9 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
+      - run:
+          name: Check for Changes
+          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js\|.jsx' || circleci step halt
       - restore_cache:
           name: Source - Restoring Cache
           keys:
