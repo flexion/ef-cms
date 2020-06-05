@@ -8,9 +8,6 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
-      - run:
-          name: Check for Changes
-          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js\|.jsx' || circleci step halt
       - restore_cache:
           name: Source - Restoring Cache
           keys:
@@ -106,6 +103,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - run:
+          name: Check for Changes
+          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js' || circleci step halt
       - run:
           name: Web Client - Unit Test
           command: npm run build:assets && CI=false npm run test:client:unit
