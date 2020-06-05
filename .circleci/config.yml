@@ -75,6 +75,9 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
+          name: Check for Changes
+          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js' || circleci step halt
+      - run:
           name: Shared - Test
           command: npm run test:shared
       - run:
@@ -130,6 +133,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - run:
+          name: Check for Changes
+          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js' || circleci step halt
       - run:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
@@ -202,6 +208,9 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
+          name: Check for Changes
+          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js\|.jsx' || circleci step halt
+      - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
       - run:
@@ -236,6 +245,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - run:
+          name: Check for Changes
+          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js\|.jsx' || circleci step halt
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -275,6 +287,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - run:
+          name: Check for Changes
+          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js\|.jsx' || circleci step halt
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
