@@ -15,6 +15,9 @@ jobs:
             - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
             - source-{{ .Environment.CACHE_VERSION }}-
       - checkout
+      - run:
+          name: Check for Changes
+          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js\|.jsx\|.json\|.yml\|.sh' || circleci step halt
       - save_cache:
           name: Source - Saving Cache
           key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
@@ -37,10 +40,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run:
-          name: Lint
-          command: |
-            npm run lint
       - run:
           name: Shellcheck
           command: |
@@ -75,9 +74,6 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Check for Changes
-          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js' || circleci step halt
-      - run:
           name: Shared - Test
           command: npm run test:shared
       - run:
@@ -107,9 +103,6 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Check for Changes
-          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js' || circleci step halt
-      - run:
           name: Web Client - Unit Test
           command: npm run build:assets && CI=false npm run test:client:unit
       - persist_to_workspace:
@@ -133,9 +126,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run:
-          name: Check for Changes
-          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js' || circleci step halt
       - run:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
@@ -208,9 +198,6 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Check for Changes
-          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js\|.jsx' || circleci step halt
-      - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
       - run:
@@ -245,9 +232,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run:
-          name: Check for Changes
-          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js\|.jsx' || circleci step halt
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -287,9 +271,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run:
-          name: Check for Changes
-          command: git show -m HEAD --name-only --pretty="" | egrep -q '.js\|.jsx' || circleci step halt
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
