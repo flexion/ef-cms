@@ -561,6 +561,11 @@
       flags: 
         presence: "optional"
         description: "The judge associated with the document."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - null
     lodged: 
@@ -586,7 +591,12 @@
     ordinalValue: 
       type: "string"
       flags: 
+        only: true
         presence: "optional"
+      allow: 
+        - "First"
+        - "Second"
+        - "Third"
     partyIrsPractitioner: 
       type: "boolean"
       flags: 
@@ -630,7 +640,11 @@
     processingStatus: 
       type: "string"
       flags: 
-        presence: "optional"
+        only: true
+        presence: "required"
+      allow: 
+        - "pending"
+        - "complete"
     qcAt: 
       type: "date"
       flags: 

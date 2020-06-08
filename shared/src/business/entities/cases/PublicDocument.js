@@ -3,8 +3,8 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
-
 const joiStrictTimestamp = getTimestampSchema();
+const { Document } = require('../Document');
 
 /**
  * PublicDocument
@@ -32,8 +32,8 @@ function PublicDocument(rawDocument) {
 joiValidationDecorator(
   PublicDocument,
   joi.object().keys({
-    additionalInfo: joi.string().optional(),
-    additionalInfo2: joi.string().optional(),
+    additionalInfo: joi.string().max(500).optional(),
+    additionalInfo2: joi.string().max(500).optional(),
     caseId: joi
       .string()
       .uuid({
@@ -47,15 +47,24 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
-    documentTitle: joi.string().optional(),
-    documentType: joi.string().optional(),
-    eventCode: joi.string().optional(),
-    filedBy: joi.string().optional(),
+    documentTitle: joi.string().max(500).optional(),
+    documentType: joi
+      .string()
+      .valid(...Document.getDocumentTypes())
+      .optional(),
+    eventCode: joi.string().optional(), // TODO add enumeration
+    filedBy: joi.string().max(100).optional(),
     isPaper: joi.boolean().optional(),
-    processingStatus: joi.string().optional(),
+    processingStatus: joi
+      .string()
+      .valid(...Document.PROCESSING_STATUSES)
+      .required(),
     receivedAt: joiStrictTimestamp.optional(),
     servedAt: joiStrictTimestamp.optional(),
-    servedParties: joi.array().optional(),
+    servedParties: joi
+      .array()
+      .items({ name: joi.string().max(500).required() })
+      .optional(),
   }),
   {},
 );

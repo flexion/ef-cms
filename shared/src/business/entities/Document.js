@@ -16,12 +16,14 @@ const joiStrictTimestamp = getTimestampSchema();
 
 Document.CATEGORIES = Object.keys(documentMapExternal);
 Document.CATEGORY_MAP = documentMapExternal;
-Document.NOTICE_EVENT_CODES = ['NOT'];
 Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
-Document.PETITION_DOCUMENT_TYPES = ['Petition'];
+Document.NOTICE_EVENT_CODES = ['NOT'];
 Document.OPINION_DOCUMENT_TYPES = ['MOP', 'SOP', 'TCOP'];
+Document.ORDINAL_VALUES = ['First', 'Second', 'Third'];
+Document.PETITION_DOCUMENT_TYPES = ['Petition'];
+Document.PROCESSING_STATUSES = ['pending', 'complete'];
 Document.ORDER_DOCUMENT_TYPES = [
   'O',
   'OAJ',
@@ -432,7 +434,7 @@ joiValidationDecorator(
       .description('The type of this document.'),
     draftState: joi.object().allow(null).optional(),
     entityName: joi.string().valid('Document').required(),
-    eventCode: joi.string().optional(),
+    eventCode: joi.string().optional(), // TODO add enumeration
     filedBy: joi.string().max(500).allow('').optional(),
     filingDate: joiStrictTimestamp
       .max('now')
@@ -445,6 +447,7 @@ joiValidationDecorator(
     isPaper: joi.boolean().optional(),
     judge: joi
       .string()
+      .max(100)
       .allow(null)
       .optional()
       .description('The judge associated with the document.'),
@@ -459,7 +462,10 @@ joiValidationDecorator(
       .string()
       .valid(...Document.OBJECTIONS_OPTIONS)
       .optional(),
-    ordinalValue: joi.string().optional(),
+    ordinalValue: joi
+      .string()
+      .valid(...Document.ORDINAL_VALUES)
+      .optional(),
     partyIrsPractitioner: joi.boolean().optional(),
     partyPrimary: joi
       .boolean()
@@ -478,7 +484,10 @@ joiValidationDecorator(
       .description(
         'Practitioner names to be used to compose the filedBy text.',
       ),
-    processingStatus: joi.string().optional(),
+    processingStatus: joi
+      .string()
+      .valid(...Document.PROCESSING_STATUSES)
+      .required(),
     qcAt: joiStrictTimestamp.optional(),
     qcByUserId: joi
       .string()
