@@ -58,7 +58,7 @@ joiValidationDecorator(
     processingStatus: joi
       .string()
       .valid(...Document.PROCESSING_STATUSES)
-      .required(),
+      .optional(),
     receivedAt: joiStrictTimestamp.optional(),
     servedAt: joiStrictTimestamp.optional(),
     servedParties: joi
