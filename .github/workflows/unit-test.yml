@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Node.js Unit Test
 
 on:
   push:
@@ -16,6 +16,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -35,7 +36,9 @@ jobs:
 
       - name: NPM Install
         run: npm ci --no-optional && npm rebuild node-sass
-      - name: Lint
-        run: npm run lint
-      - name: Shellcheck
-        run: ./run-shellcheck.sh
+
+      - name: Shared Unit Tests
+        run: npm run test:shared
+
+      - name: API Unit Tests
+        run: npm run test:api
