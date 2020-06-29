@@ -1,6 +1,18 @@
 import { queryStringDecoder } from './queryStringDecoder';
 
 describe('queryStringDecoder', () => {
+  beforeAll(() => {
+    global.window = Object.create(window);
+    const url =
+      'http://dummy.com/?code=CODE&token=TOKEN&path=BoulevardOfBrokenMemes';
+    Object.defineProperty(window, 'location', {
+      value: {
+        href: url,
+      },
+      writable: true,
+    });
+  });
+
   it('should return code, path, and token from hash', () => {
     global.location = {
       hash: '#id_token=ID_TOKEN',

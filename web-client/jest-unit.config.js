@@ -25,15 +25,6 @@ module.exports = {
       statements: 45,
     },
   },
-  globals: {
-    File: function () {},
-    FileReader: function () {},
-    atob: x => x,
-    presenter: { providers: { applicationContext: {} } },
-    window: { document: {} },
-  },
-  //this is to ignore imported html files
-  testEnvironment: 'node',
   transform: {
     '^.+\\.html?$': './htmlLoader.js',
     '^.+\\.js$': 'babel-jest',
