@@ -16,7 +16,7 @@ import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryRep
 import { CaseMessages } from './Messages/CaseMessages';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
-import { CreateOrder } from './CreateOrder/CreateOrder';
+import { CreateOrderFactory } from './CreateOrder/CreateOrderFactory';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
@@ -48,6 +48,7 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { MessageDetail } from './Messages/MessageDetail';
 import { Messages } from './Messages/Messages';
+import { OtherFilerInformation } from './CaseDetail/OtherFilerInformation';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
 import { PractitionerDetail } from './Practitioners/PractitionerDetail';
@@ -97,7 +98,12 @@ const pages = {
   CaseMessages,
   CaseSearchNoMatches,
   CourtIssuedDocketEntry,
-  CreateOrder,
+  CreateOrder: CreateOrderFactory({
+    submitSequence: 'submitCourtIssuedOrderSequence',
+  }),
+  CreateOrderForMessage: CreateOrderFactory({
+    submitSequence: 'submitCourtIssuedOrderForMessageSequence',
+  }),
   CreatePractitionerUser,
   DashboardChambers,
   DashboardInactive,
@@ -126,6 +132,7 @@ const pages = {
   LogIn,
   MessageDetail,
   Messages,
+  OtherFilerInformation,
   PendingReport,
   PetitionQc,
   PractitionerDetail,
