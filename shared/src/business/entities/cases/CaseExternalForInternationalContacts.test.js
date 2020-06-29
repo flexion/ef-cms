@@ -24,12 +24,12 @@ describe('CaseExternal', () => {
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
         partyType: PARTY_TYPES.petitioner,
-        petitionFile: {},
+        petitionFile: new File(['mockFileContents'], 'mockFileName.pdf'),
         petitionFileSize: 1,
         preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
         signature: true,
-        stinFile: {},
+        stinFile: new File(['mockFileContents'], 'mockFileName.pdf'),
         stinFileSize: 1,
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
@@ -55,12 +55,12 @@ describe('CaseExternal', () => {
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
         partyType: PARTY_TYPES.petitioner,
-        petitionFile: {},
+        petitionFile: new File(['mockFileContents'], 'mockFileName.pdf'),
         petitionFileSize: 1,
         preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
         signature: true,
-        stinFile: {},
+        stinFile: new File(['mockFileContents'], 'mockFileName.pdf'),
         stinFileSize: 1,
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual(null);

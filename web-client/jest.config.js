@@ -18,7 +18,6 @@ module.exports = {
   ],
   coverageDirectory: './coverage',
   globals: {
-    File: function () {},
     FileReader: () => {},
     atob: x => x,
   },

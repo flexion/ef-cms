@@ -101,7 +101,7 @@ CaseExternal.commonRequirements = {
     .string()
     .valid(...Object.values(PARTY_TYPES))
     .required(),
-  petitionFile: joi.object().required(), // TODO: object definition
+  petitionFile: joi.object().instance(File).required(),
   petitionFileSize: joi
     .number()
     .integer()
@@ -123,7 +123,7 @@ CaseExternal.commonRequirements = {
     .string()
     .valid(...PROCEDURE_TYPES)
     .required(),
-  stinFile: joi.object().required(), // TODO: object definition
+  stinFile: joi.object().instance(File).required(),
   stinFileSize: joi
     .number()
     .integer()
