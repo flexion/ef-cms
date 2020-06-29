@@ -1,5 +1,6 @@
 const joi = require('@hapi/joi');
 const {
+  BUSINESS_TYPES,
   FILING_TYPES,
   MAX_FILE_SIZE_BYTES,
   PARTY_TYPES,
@@ -60,7 +61,11 @@ CaseExternal.prototype.init = function (rawCase) {
 CaseExternal.VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
 
 CaseExternal.commonRequirements = {
-  businessType: joi.string().optional().allow(null), // TODO: enum
+  businessType: joi
+    .string()
+    .valid(...Object.values(BUSINESS_TYPES))
+    .optional()
+    .allow(null),
   caseType: joi.string().when('hasIrsNotice', {
     is: joi.exist(),
     otherwise: joi.optional().allow(null),
