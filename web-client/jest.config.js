@@ -17,11 +17,6 @@ module.exports = {
     '!src/index-public.prod.js',
   ],
   coverageDirectory: './coverage',
-  globals: {
-    FileReader: () => {},
-    atob: x => x,
-  },
-  testEnvironment: 'node',
   testTimeout: 30000,
   // this is to ignore imported html files
   transform: {
