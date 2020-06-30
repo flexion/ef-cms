@@ -4,7 +4,7 @@ describe('queryStringDecoder', () => {
   beforeAll(() => {
     global.window = Object.create(window);
     const url =
-      'http://dummy.com/?code=CODE&token=TOKEN&path=BoulevardOfBrokenMemes';
+      'http://example.com/?code=CODE&token=TOKEN&path=BoulevardOfBrokenMemes';
     Object.defineProperty(window, 'location', {
       value: {
         href: url,
