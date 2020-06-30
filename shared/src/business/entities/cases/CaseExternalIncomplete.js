@@ -1,9 +1,18 @@
 const joi = require('@hapi/joi');
 const {
+  BUSINESS_TYPES,
+  COUNTRY_TYPES,
+  FILING_TYPES,
+  PARTY_TYPES,
+  PROCEDURE_TYPES,
+  ROLES,
+  TRIAL_CITY_STRINGS,
+  TRIAL_LOCATION_MATCHER,
+} = require('../EntityConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
-const { CaseExternal } = require('./CaseExternal');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
 /**
@@ -43,16 +52,45 @@ CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES =
 joiValidationDecorator(
   CaseExternalIncomplete,
   joi.object().keys({
-    businessType: CaseExternal.commonRequirements.businessType,
-    caseType: CaseExternal.commonRequirements.caseType,
+    businessType: joi
+      .string()
+      .valid(...Object.values(BUSINESS_TYPES))
+      .optional()
+      .allow(null),
+    caseType: joi.string().when('hasIrsNotice', {
+      is: joi.exist(),
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }),
     contactPrimary: joi.object().optional(),
     contactSecondary: joi.object().optional(),
-    countryType: CaseExternal.commonRequirements.countryType,
-    filingType: CaseExternal.commonRequirements.filingType,
-    hasIrsNotice: CaseExternal.commonRequirements.hasIrsNotice,
-    partyType: CaseExternal.commonRequirements.partyType,
-    preferredTrialCity: CaseExternal.commonRequirements.preferredTrialCity,
-    procedureType: CaseExternal.commonRequirements.procedureType,
+    countryType: joi
+      .string()
+      .valid(COUNTRY_TYPES.DOMESTIC, COUNTRY_TYPES.INTERNATIONAL)
+      .optional(),
+    filingType: joi
+      .string()
+      .valid(
+        ...FILING_TYPES[ROLES.petitioner],
+        ...FILING_TYPES[ROLES.privatePractitioner],
+      )
+      .required(),
+    hasIrsNotice: joi.boolean().required(),
+    partyType: joi
+      .string()
+      .valid(...Object.values(PARTY_TYPES))
+      .required(),
+    preferredTrialCity: joi
+      .alternatives()
+      .try(
+        joi.string().valid(...TRIAL_CITY_STRINGS, null),
+        joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+      )
+      .required(),
+    procedureType: joi
+      .string()
+      .valid(...PROCEDURE_TYPES)
+      .required(),
   }),
   CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES,
 );

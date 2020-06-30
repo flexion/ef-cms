@@ -1,6 +1,7 @@
 const joi = require('@hapi/joi');
 const {
   BUSINESS_TYPES,
+  COUNTRY_TYPES,
   FILING_TYPES,
   MAX_FILE_SIZE_BYTES,
   PARTY_TYPES,
@@ -73,7 +74,10 @@ CaseExternal.commonRequirements = {
   }),
   contactPrimary: joi.object().optional(), // TODO: object definition
   contactSecondary: joi.object().optional(), // TODO: object definition
-  countryType: joi.string().optional(),
+  countryType: joi
+    .string()
+    .valid(COUNTRY_TYPES.DOMESTIC, COUNTRY_TYPES.INTERNATIONAL)
+    .optional(),
   filingType: joi
     .string()
     .valid(
