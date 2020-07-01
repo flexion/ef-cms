@@ -72,7 +72,7 @@
 ## Create Order/Notice From Message
 **On click of "Create Order"**
 * User selects the title of the order and continues
-* User enter/pastes Order text and saves
+* User enter/pastes Order text and saves.
 
 #### Apply Signature
 * On click of Save, app navigates to the Apply Signature screen for all Orders; for Notice, the app navigates back to the Message Detail (because the Clerk of the Court signature is automatically applied)
