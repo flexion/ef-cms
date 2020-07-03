@@ -10,6 +10,7 @@ const {
   PARTY_TYPES,
   PAYMENT_STATUS,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
 const {
@@ -178,7 +179,7 @@ describe('Case entity', () => {
           address1: '876 12th Ave',
           city: 'Nashville',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'someone@example.com',
           name: 'Jimmy Dean',
           phone: '1234567890',
@@ -190,7 +191,7 @@ describe('Case entity', () => {
           address1: '876 12th Ave',
           city: 'Nashville',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'someone@example.com',
           name: 'Jimmy Dean',
           phone: '1234567890',
@@ -220,7 +221,7 @@ describe('Case entity', () => {
           address1: '42 Lamb Sauce Blvd',
           city: 'Nashville',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'gordon@thelambsauce.com',
           name: 'Gordon Ramsay',
           otherFilerType: UNIQUE_OTHER_FILER_TYPE,
@@ -232,7 +233,7 @@ describe('Case entity', () => {
           address1: '1337 12th Ave',
           city: 'Flavortown',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'mayor@flavortown.com',
           name: 'Guy Fieri',
           otherFilerType: OTHER_FILER_TYPES[1],
@@ -261,7 +262,7 @@ describe('Case entity', () => {
           address1: '42 Lamb Sauce Blvd',
           city: 'Nashville',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'gordon@thelambsauce.com',
           name: 'Gordon Ramsay',
           otherFilerType: UNIQUE_OTHER_FILER_TYPE,
@@ -273,7 +274,7 @@ describe('Case entity', () => {
           address1: '1337 12th Ave',
           city: 'Flavortown',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'mayor@flavortown.com',
           name: 'Guy Fieri',
           otherFilerType: UNIQUE_OTHER_FILER_TYPE, // fails because there cannot be more than 1 filer with this type
@@ -305,7 +306,7 @@ describe('Case entity', () => {
           address1: '42 Lamb Sauce Blvd',
           city: 'Nashville',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'gordon@thelambsauce.com',
           name: 'Gordon Ramsay',
           otherFilerType: null,
@@ -317,7 +318,7 @@ describe('Case entity', () => {
           address1: '1337 12th Ave',
           city: 'Flavortown',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'mayor@flavortown.com',
           name: 'Guy Fieri',
           otherFilerType: UNIQUE_OTHER_FILER_TYPE,
@@ -452,12 +453,11 @@ describe('Case entity', () => {
               address2: 'Maxime dolorum quae ',
               address3: 'Ut numquam ducimus ',
               city: 'Placeat sed dolorum',
-              countryType: 'domestic',
-              name: 'Keelie Bruce',
+              countryType: COUNTRY_TYPES.DOMESTIC,
               phone: '+1 (785) 771-2329',
               postalCode: '17860',
               secondaryName: 'Logan Fields',
-              serviceIndicator: 'None',
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
               state: 'LA',
             },
           ],
@@ -752,7 +752,7 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           contactPrimary: {},
-          partyType: 'Petitioner & spouse',
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
         {
           applicationContext,
@@ -768,20 +768,6 @@ describe('Case entity', () => {
           name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
         },
       });
-    });
-  });
-
-  describe('isValidCaseId', () => {
-    it('returns true if a valid uuid', () => {
-      expect(
-        Case.isValidCaseId('c54ba5a9-b37b-479d-9201-067ec6e335bb'),
-      ).toBeTruthy();
-    });
-
-    it('returns false if a invalid uuid', () => {
-      expect(
-        Case.isValidCaseId('XXX54ba5a9-b37b-479d-9201-067ec6e335bb'),
-      ).toBeFalsy();
     });
   });
 
@@ -2618,7 +2604,7 @@ describe('Case entity', () => {
 
       beforeEach(() => {
         caseEntity = new Case(
-          { ...MOCK_CASE, status: 'Submitted' },
+          { ...MOCK_CASE, status: CASE_STATUS_TYPES.submitted },
           {
             applicationContext,
           },
@@ -2651,7 +2637,7 @@ describe('Case entity', () => {
         result = caseEntity.canConsolidate(otherCase);
         expect(result).toEqual(false);
 
-        otherCase.status = 'Submitted';
+        otherCase.status = CASE_STATUS_TYPES.submitted;
         result = caseEntity.canConsolidate(otherCase);
         expect(result).toEqual(true);
       });
@@ -2666,7 +2652,7 @@ describe('Case entity', () => {
           {
             ...MOCK_CASE,
             procedureType: 'Regular',
-            status: 'Submitted',
+            status: CASE_STATUS_TYPES.submitted,
           },
           { applicationContext },
         );
@@ -2676,14 +2662,14 @@ describe('Case entity', () => {
             ...MOCK_CASE,
             docketNumber: '102-19',
             procedureType: 'Regular',
-            status: 'Submitted',
+            status: CASE_STATUS_TYPES.submitted,
           },
           { applicationContext },
         );
       });
 
       it('should fail when case statuses are not the same', () => {
-        pendingCaseEntity.status = 'Calendared';
+        pendingCaseEntity.status = CASE_STATUS_TYPES.Calendared;
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -2736,8 +2722,8 @@ describe('Case entity', () => {
       });
 
       it('should fail when case statuses are both ineligible', () => {
-        leadCaseEntity.status = 'Closed';
-        pendingCaseEntity.status = 'Closed';
+        leadCaseEntity.status = CASE_STATUS_TYPES.closed;
+        pendingCaseEntity.status = CASE_STATUS_TYPES.closed;
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -2750,8 +2736,8 @@ describe('Case entity', () => {
       });
 
       it('should only return the ineligible failure if the pending case status is ineligible', () => {
-        leadCaseEntity.status = 'Submitted';
-        pendingCaseEntity.status = 'Closed';
+        leadCaseEntity.status = CASE_STATUS_TYPES.submitted;
+        pendingCaseEntity.status = CASE_STATUS_TYPES.closed;
         pendingCaseEntity.procedureType = 'small';
         pendingCaseEntity.trialLocation = 'Flavortown, AR';
         pendingCaseEntity.associatedJudge = 'Some judge';
@@ -2801,7 +2787,7 @@ describe('Case entity', () => {
             ...MOCK_CASE,
             preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'Regular',
-            status: 'Submitted',
+            status: CASE_STATUS_TYPES.submitted,
           },
           { applicationContext },
         );
@@ -2819,7 +2805,7 @@ describe('Case entity', () => {
             leadCaseId: 'd64ba5a9-b37b-479d-9201-067ec6e335cc',
             preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'Regular',
-            status: 'Submitted',
+            status: CASE_STATUS_TYPES.submitted,
           },
           { applicationContext },
         );

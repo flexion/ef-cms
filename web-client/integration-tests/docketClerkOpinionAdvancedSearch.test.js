@@ -1,5 +1,4 @@
 import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
-
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 
 const test = setupTest({
@@ -120,7 +119,7 @@ describe('docket clerk opinion advanced search', () => {
       test.setState('advancedSearchForm', {
         opinionSearch: {
           keyword: 'opinion',
-          opinionType: 'TCOP - T.C. Opinion',
+          opinionType: 'T.C. Opinion',
         },
       });
 

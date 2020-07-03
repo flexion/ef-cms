@@ -8,6 +8,7 @@ import { CaseMessagesInProgress } from './CaseMessagesInProgress';
 import { CaseNotes } from './CaseNotes';
 import { Correspondence } from '../Correspondence/Correspondence';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
+import { DocumentViewer } from '../DocketRecord/DocumentViewer';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
 import { EditPetitionDetails } from './EditPetitionDetails';
 import { ErrorNotification } from '../ErrorNotification';
@@ -47,13 +48,27 @@ export const CaseDetailInternal = connect(
         >
           <SuccessNotification />
           <ErrorNotification />
+
           {caseDetailInternalTabs.docketRecord && (
-            <>
-              <div className="title">
-                <h1>Docket Record</h1>
-              </div>
-              <DocketRecord />
-            </>
+            <Tabs
+              bind="currentViewMetadata.caseDetail.docketRecordTab"
+              className="classic-horizontal-header3 tab-border"
+            >
+              <Tab
+                id="tab-docket-sub-record"
+                tabName="docketRecord"
+                title="Docket Record"
+              >
+                <DocketRecord />
+              </Tab>
+              <Tab
+                id="tab-document-view"
+                tabName="documentView"
+                title="Document View"
+              >
+                <DocumentViewer />
+              </Tab>
+            </Tabs>
           )}
           {caseDetailInternalTabs.trackedItems && (
             <Tabs

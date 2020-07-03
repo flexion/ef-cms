@@ -23,13 +23,11 @@ import { presenter } from '../src/presenter/presenter';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
-import jwt from 'jsonwebtoken';
-
 import { withAppContextDecorator } from '../src/withAppContext';
-import axios from 'axios';
-
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormData from 'form-data';
+import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
@@ -361,6 +359,8 @@ export const uploadPetition = async (
     sub: userMap[loginUsername].userId,
   };
 
+  const { COUNTRY_TYPES } = applicationContext.getConstants();
+
   const petitionMetadata = {
     caseType: overrides.caseType || 'CDP (Lien/Levy)',
     contactPrimary: {
@@ -368,7 +368,7 @@ export const uploadPetition = async (
       address2: 'Cum aut velit volupt',
       address3: 'Et sunt veritatis ei',
       city: 'Et id aut est velit',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: user.email,
       name: 'Mona Schultz',
       phone: '+1 (884) 358-9729',
