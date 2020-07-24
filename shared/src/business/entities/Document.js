@@ -112,7 +112,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.secondaryDocument = rawDocument.secondaryDocument;
   this.servedAt = rawDocument.servedAt;
   this.numberOfPages = rawDocument.numberOfPages;
-  this.serviceDate = rawDocument.serviceDate;
   this.serviceStamp = rawDocument.serviceStamp;
   this.supportingDocument = rawDocument.supportingDocument;
   this.trialLocation = rawDocument.trialLocation;
@@ -370,7 +369,7 @@ joiValidationDecorator(
       .valid(...SCENARIOS)
       .optional(),
     secondaryDate: JoiValidationConstants.ISO_DATE.optional().description(
-      'A secondary date associated with the document, typically related to time-restricted availability.',
+      'A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents.',
     ),
     secondaryDocument: joi // TODO: limit keys
       .object()
@@ -426,10 +425,6 @@ joiValidationDecorator(
         then: joi.required(),
       })
       .description('The parties to whom the document has been served.'),
-    serviceDate: JoiValidationConstants.ISO_DATE.max('now')
-      .optional()
-      .allow(null)
-      .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
     signedAt: joi
       .string()

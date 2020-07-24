@@ -129,7 +129,7 @@ export const NonstandardForm = connect(
 
         {helper[level].showDateFields && (
           <DateInput
-            errorText={validationErrors?.serviceDate}
+            errorText={validationErrors?.certificateOfServiceDate}
             id="date-of-service"
             label="Service date"
             names={{

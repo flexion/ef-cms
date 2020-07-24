@@ -1530,7 +1530,7 @@
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
           - "YYYY-MM-DD"
         presence: "optional"
-        description: "A secondary date associated with the document, typically related to time-restricted availability."
+        description: "A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents."
     secondaryDocument: 
       type: "object"
       flags: 
@@ -2357,21 +2357,6 @@
                 - "petitionsclerk"
                 - "privatePractitioner"
                 - "trialclerk"
-    serviceDate: 
-      type: "date"
-      flags: 
-        format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
-        presence: "optional"
-        description: "Certificate of service date."
-      rules: 
-        - 
-          name: "max"
-          args: 
-            date: "now"
-      allow: 
-        - null
     serviceStamp: 
       type: "string"
       flags: 
