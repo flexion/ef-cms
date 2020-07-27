@@ -41,13 +41,14 @@ exports.handler = (event, context, callback) => {
     'base-uri resource://pdf.js',
     `connect-src ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrl} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${honeybadgerApiUrl}`,
     "default-src 'none'",
-    `form-action ${applicationUrl}`,
+    "manifest-src 'self'",
+    `form-action ${applicationUrl} ${subdomainsUrl}`,
     "object-src 'none'",
     `script-src 'self' 'unsafe-inline' ${dynamsoftUrl} resource://pdf.js`,
     `style-src 'self' 'unsafe-inline' ${dynamsoftUrl}`,
-    `img-src ${applicationUrl} data:`,
-    `font-src ${applicationUrl}`,
-    `frame-src ${s3Url}`,
+    `img-src ${applicationUrl} ${subdomainsUrl} data:`,
+    `font-src ${applicationUrl} ${subdomainsUrl}`,
+    `frame-src ${s3Url} blob:`,
     "frame-ancestors 'none'",
   ];
   headers['content-security-policy'] = [
