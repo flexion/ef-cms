@@ -372,7 +372,6 @@ const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
 const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
 const { validatePdfLambda } = require('./documents/validatePdfLambda');
-const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 
 /**
  * api
@@ -639,10 +638,6 @@ app.get(
 app.post(
   '/documents/filing-receipt-pdf',
   lambdaWrapper(generatePrintableFilingReceiptLambda),
-);
-app.post(
-  '/clamav/documents/:documentId/virus-scan',
-  lambdaWrapper(virusScanPdfLambda),
 );
 
 /**
