@@ -52,12 +52,12 @@ exports.archiveDraftDocumentInteractor = async ({
         }),
         applicationContext.getPersistenceGateway().deleteSectionOutboxRecord({
           applicationContext,
-          createdAt: workItem.createdAt,
+          completedAt: workItem.completedAt,
           section: workItem.sentBySection,
         }),
         applicationContext.getPersistenceGateway().deleteUserOutboxRecord({
           applicationContext,
-          createdAt: workItem.createdAt,
+          completedAt: workItem.completedAt,
           userId: workItem.sentByUserId,
         }),
       ]),

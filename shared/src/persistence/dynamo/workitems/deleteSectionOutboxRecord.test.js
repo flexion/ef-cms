@@ -12,13 +12,13 @@ describe('deleteSectionOutboxRecord', () => {
     });
   });
 
-  it('invokes the persistence layer with pk of section-outbox-${section} and sk of createdAt', async () => {
+  it('invokes the persistence layer with pk of section-outbox-${section} and sk of completedAt', async () => {
     applicationContext.getDocumentClient.mockReturnValue({
       delete: deleteStub,
     });
     await deleteSectionOutboxRecord({
       applicationContext,
-      createdAt: '2020-01-02T16:05:45.979Z',
+      completedAt: '2020-01-02T16:05:45.979Z',
       section: 'docket',
     });
     expect(deleteStub.mock.calls[0][0]).toMatchObject({
