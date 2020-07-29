@@ -30,16 +30,15 @@ export const SectionWorkQueueOutbox = connect(
               {workQueueHelper.showSentColumn && <th>Sent</th>}
               <th>Case title</th>
               <th>Document</th>
-              <th>Processed By</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               {!workQueueHelper.hideCaseStatusColumn && <th>Case Status</th>}
               {workQueueHelper.showMessagesSentFromColumn && <th>From</th>}
               {workQueueHelper.showAssignedToColumn && (
                 <th>{workQueueHelper.assigneeColumnTitle}</th>
               )}
-              {workQueueHelper.showProcessedByColumn && <th>QC’d By</th>}
+              <th>Processed By</th>
+              <th>Processed Date</th>
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
-              {workQueueHelper.showServedColumn && <th>Served</th>}
             </tr>
           </thead>
           {formattedWorkQueue.map((item, idx) => (
@@ -84,7 +83,6 @@ export const SectionWorkQueueOutbox = connect(
                     </div>
                   )}
                 </td>
-                <td className="message-queue-row">{item.completedBy}</td>
                 {!workQueueHelper.hideFiledByColumn && (
                   <td className="message-queue-row">{item.document.filedBy}</td>
                 )}
@@ -101,17 +99,13 @@ export const SectionWorkQueueOutbox = connect(
                     {item.currentMessage.to}
                   </td>
                 )}
-                {workQueueHelper.showProcessedByColumn && (
-                  <td className="message-queue-row">{item.completedBy}</td>
-                )}
+                <td className="message-queue-row">{item.completedBy}</td>
+                <td className="message-queue-row">
+                  {item.completedAtFormatted}
+                </td>
                 {!workQueueHelper.hideSectionColumn && (
                   <td className="message-queue-row">
                     {workQueueSectionHelper.sectionDisplay(item.section)}
-                  </td>
-                )}
-                {workQueueHelper.showServedColumn && (
-                  <td className="message-queue-row">
-                    {item.completedAtFormatted}
                   </td>
                 )}
               </tr>

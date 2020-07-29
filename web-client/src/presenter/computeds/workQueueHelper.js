@@ -94,7 +94,6 @@ export const workQueueHelper = (get, applicationContext) => {
     showSelectColumn: isDisplayingQC && permissions.ASSIGN_WORK_ITEM,
     showSendToBar: selectedWorkItems.length > 0,
     showSentColumn: !isDisplayingQC,
-    showServedColumn: userIsPetitionsClerk && isDisplayingQC,
     showStartPetitionButton,
     workQueueIsInternal,
     workQueueTitle,

@@ -41,11 +41,10 @@ export const IndividualWorkQueueOutbox = connect(
                   {workQueueHelper.assigneeColumnTitle}
                 </th>
               )}
-              <th>Processed By</th>
+              <th>Processed Date</th>
               {!workQueueHelper.hideSectionColumn && (
                 <th className="small">Section</th>
               )}
-              {workQueueHelper.showServedColumn && <th>Served</th>}
             </tr>
           </thead>
           {formattedWorkQueue.map((item, idx) => (
@@ -101,15 +100,12 @@ export const IndividualWorkQueueOutbox = connect(
                     {item.currentMessage.to}
                   </td>
                 )}
-                <td className="message-queue-row">{item.completedBy}</td>
+                <td className="message-queue-row">
+                  {item.completedAtFormatted}
+                </td>
                 {!workQueueHelper.hideSectionColumn && (
                   <td className="message-queue-row small">
                     {workQueueSectionHelper.sectionDisplay(item.section)}
-                  </td>
-                )}
-                {workQueueHelper.showServedColumn && (
-                  <td className="message-queue-row">
-                    {item.completedAtFormatted}
                   </td>
                 )}
               </tr>
