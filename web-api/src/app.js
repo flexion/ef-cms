@@ -372,7 +372,6 @@ const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
 const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
 const { validatePdfLambda } = require('./documents/validatePdfLambda');
-const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 
 /**
  * api
