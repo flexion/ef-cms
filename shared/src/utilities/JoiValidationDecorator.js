@@ -26,7 +26,23 @@ function toRawObject(entity) {
       obj[key] = value;
     }
   }
+  if (entity.blessed) {
+    bless(obj);
+  }
   return obj;
+}
+
+/**
+ * adds non-enumerable property 'blessed' to entity instances, objects, anything
+ *
+ * @param {object} the entity or object to be blessed
+ */
+function bless(obj) {
+  Object.defineProperty(obj, 'blessed', {
+    enumerable: false,
+    value: true,
+    writable: false,
+  });
 }
 
 /**
@@ -174,6 +190,7 @@ exports.joiValidationDecorator = function (
         JSON.stringify(stringifyTransform(this.getValidationErrors())),
       );
     }
+    bless(this);
     return this;
   };
 
@@ -201,9 +218,7 @@ exports.joiValidationDecorator = function (
   const toRawObjectPrototype = function () {
     return toRawObject(this);
   };
-
   entityConstructor.prototype.toRawObject = toRawObjectPrototype;
-
   entityConstructor.prototype.toRawObjectFromJoi = toRawObjectPrototype;
 
   entityConstructor.validateRawCollection = function (

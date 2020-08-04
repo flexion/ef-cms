@@ -2,6 +2,7 @@ const {
   InvalidEntityError,
   NotFoundError,
   UnauthorizedError,
+  UnblessedPersistenceError,
   UnknownUserError,
   UnprocessableEntityError,
   UnsanitizedEntityError,
@@ -68,6 +69,22 @@ describe('UnprocessableEntityError', () => {
 
   it('should set the message', () => {
     expect(error.message).toEqual('cannot process');
+  });
+});
+
+describe('UnblessedPersistenceError', () => {
+  let error;
+
+  beforeEach(() => {
+    error = new UnblessedPersistenceError();
+  });
+
+  it('should set a status code of 500', () => {
+    expect(error.statusCode).toEqual(500);
+  });
+
+  it('should set the message', () => {
+    expect(error.message).toEqual('Unblessed entity');
   });
 });
 

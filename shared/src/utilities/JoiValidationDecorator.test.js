@@ -90,6 +90,7 @@ describe('Joi Validation Decorator', () => {
         optionalThing: validNested,
       });
       expect(obj.isValid()).toBe(false);
+      expect(Object.hasOwnProperty(obj, 'blessed')).toBeFalsy();
       const errors = obj.getFormattedValidationErrors();
       expect(Object.keys(errors).length).not.toBe(0);
       const rawEntity = validNested.toRawObject();
@@ -161,6 +162,22 @@ describe('Joi Validation Decorator', () => {
     expect(error.message).toContain("'somethingId' is required");
     expect(error.message).toContain('"somethingId":"<undefined>"');
     expect(error.message).toContain('"docketNumber":"123-20"');
+  });
+
+  it('should add non-enumerable property "blessed" when `validate` succeeds, and persists through call to `toRawObject`', () => {
+    const obj1 = new MockCase({
+      docketNumber: '123-20',
+      somethingId: '23-skidoo',
+      title: 'some title',
+    });
+
+    obj1.validate();
+    expect(obj1.blessed).toBe(true);
+    expect(Object.keys(obj1)).not.toContain('blessed'); // not enumerable
+
+    const rawObj = obj1.toRawObject();
+    expect(rawObj.blessed).toBe(true);
+    expect(Object.keys(rawObj)).not.toContain('blessed'); // not enumerable
   });
 
   it('should have access to the schema without instantiating the entity', () => {

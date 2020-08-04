@@ -89,6 +89,24 @@ module.exports.UnsanitizedEntityError = class UnsanitizedEntityError extends Err
 };
 
 /**
+ * UnblessedPersistenceError error
+ *
+ * @type {module.UnblessedPersistenceError}
+ */
+module.exports.UnblessedPersistenceError = class UnblessedPersistenceError extends Error {
+  /**
+   * constructor
+   *
+   * @param {string} message the error message
+   */
+  constructor(message = 'Unblessed entity') {
+    super(message);
+
+    this.statusCode = 500;
+  }
+};
+
+/**
  * InvalidEntityError error
  *
  * @type {module.InvalidEntityError}

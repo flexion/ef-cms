@@ -22,6 +22,7 @@ const { Case } = require('../../../business/entities/cases/Case');
 const { differenceWith, isEqual } = require('lodash');
 const { getCaseByDocketNumber } = require('../cases/getCaseByDocketNumber');
 const { omit } = require('lodash');
+const { UnblessedPersistenceError } = require('../../../errors/errors');
 
 /**
  * updateCase
@@ -46,6 +47,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   );
 
   updatedDocketRecord.forEach(docketEntry => {
+    docketEntry.blessed || throw new UnblessedPersistenceError();
     requests.push(
       client.put({
         Item: {

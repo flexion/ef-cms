@@ -1,4 +1,5 @@
 const client = require('../../dynamodbClientService');
+const { UnblessedPersistenceError } = require('../../../errors/errors');
 
 exports.updateDocument = async ({
   applicationContext,
@@ -6,6 +7,7 @@ exports.updateDocument = async ({
   document,
   documentId,
 }) => {
+  document.blessed || throw new UnblessedPersistenceError();
   await client.put({
     Item: {
       pk: `case|${docketNumber}`,
