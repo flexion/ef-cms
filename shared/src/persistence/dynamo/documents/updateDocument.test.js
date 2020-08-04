@@ -7,6 +7,7 @@ const mockDocumentId = '9b52c605-edba-41d7-b045-d5f992a499d3';
 const mockDocketNumber = '101-20';
 
 const mockDocument = {
+  blessed: true,
   documentId: mockDocumentId,
   documentTitle: 'Title of le Document',
   filedBy: 'The one and only, Guy Fieri',

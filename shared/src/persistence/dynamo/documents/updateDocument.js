@@ -7,7 +7,9 @@ exports.updateDocument = async ({
   document,
   documentId,
 }) => {
-  document.blessed || throw new UnblessedPersistenceError();
+  if (!document.blessed) {
+    throw new UnblessedPersistenceError();
+  }
   await client.put({
     Item: {
       pk: `case|${docketNumber}`,

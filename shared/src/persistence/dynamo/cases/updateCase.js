@@ -33,6 +33,10 @@ const { UnblessedPersistenceError } = require('../../../errors/errors');
  * @returns {Promise} the promise of the persistence calls
  */
 exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
+  if (!caseToUpdate.blessed) {
+    throw new UnblessedPersistenceError();
+  }
+
   const oldCase = await getCaseByDocketNumber({
     applicationContext,
     docketNumber: caseToUpdate.docketNumber,
@@ -47,7 +51,9 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   );
 
   updatedDocketRecord.forEach(docketEntry => {
-    docketEntry.blessed || throw new UnblessedPersistenceError();
+    if (!docketEntry.blessed) {
+      throw new UnblessedPersistenceError();
+    }
     requests.push(
       client.put({
         Item: {
@@ -67,6 +73,9 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   );
 
   updatedDocuments.forEach(document => {
+    if (!document.blessed) {
+      throw new UnblessedPersistenceError();
+    }
     requests.push(
       client.put({
         Item: {

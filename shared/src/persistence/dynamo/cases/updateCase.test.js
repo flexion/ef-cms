@@ -8,6 +8,8 @@ const {
 } = require('../../../business/entities/EntityConstants');
 const { updateCase } = require('./updateCase');
 
+const blessed = true;
+
 describe('updateCase', () => {
   let firstQueryStub;
   let secondQueryStub;
@@ -76,6 +78,7 @@ describe('updateCase', () => {
     await updateCase({
       applicationContext,
       caseToUpdate: {
+        blessed,
         docketNumber: '101-18',
         docketNumberSuffix: null,
         status: CASE_STATUS_TYPES.generalDocket,
@@ -91,11 +94,26 @@ describe('updateCase', () => {
     });
   });
 
+  it('throws exception for an unblessed case entity', async () => {
+    await expect(
+      updateCase({
+        applicationContext,
+        caseToUpdate: {
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          status: CASE_STATUS_TYPES.generalDocket,
+          userId: 'petitioner',
+        },
+      }),
+    ).rejects.toThrow('Unblessed entity');
+  });
+
   it('updates fields on work items', async () => {
     await updateCase({
       applicationContext,
       caseToUpdate: {
         associatedJudge: 'Judge Buch',
+        blessed,
         caseCaption: 'Johnny Joe Jacobson, Petitioner',
         docketNumber: '101-18',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
@@ -161,6 +179,7 @@ describe('updateCase', () => {
       applicationContext,
       caseToUpdate: {
         associatedJudge: 'Judge Buch',
+        blessed,
         docketNumberSuffix: null,
         status: CASE_STATUS_TYPES.generalDocket,
       },
@@ -179,6 +198,7 @@ describe('updateCase', () => {
     await updateCase({
       applicationContext,
       caseToUpdate: {
+        blessed,
         docketNumber: '101-18',
         docketNumberSuffix: null,
         status: CASE_STATUS_TYPES.generalDocket,
@@ -199,6 +219,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
+          blessed,
           docketNumber: '101-18',
           docketNumberSuffix: null,
           irsPractitioners: [
@@ -225,6 +246,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
+          blessed,
           docketNumber: '101-18',
           docketNumberSuffix: null,
           irsPractitioners: [
@@ -269,6 +291,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
+          blessed,
           docketNumber: '101-18',
           docketNumberSuffix: null,
           irsPractitioners: [
@@ -313,6 +336,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
+          blessed,
           docketNumber: '101-18',
           docketNumberSuffix: null,
           irsPractitioners: [
@@ -343,6 +367,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
+          blessed,
           docketNumber: '101-18',
           docketNumberSuffix: null,
           privatePractitioners: [
@@ -371,6 +396,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
+          blessed,
           docketNumber: '101-18',
           docketNumberSuffix: null,
           privatePractitioners: [
@@ -404,6 +430,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
+          blessed,
           docketNumber: '101-18',
           docketNumberSuffix: null,
           privatePractitioners: [
@@ -438,6 +465,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
+          blessed,
           docketNumber: '101-18',
           docketNumberSuffix: null,
           privatePractitioners: [
@@ -476,6 +504,7 @@ describe('updateCase', () => {
         applicationContext,
         caseToUpdate: {
           associatedJudge: 'Judge Buch',
+          blessed,
           docketNumber: '101-18',
           docketNumberSuffix: null,
           inProgress: true,
@@ -500,6 +529,7 @@ describe('updateCase', () => {
         applicationContext,
         caseToUpdate: {
           associatedJudge: 'Judge Buch',
+          blessed,
           docketNumber: '101-18',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
           inProgress: true,
@@ -524,6 +554,7 @@ describe('updateCase', () => {
         applicationContext,
         caseToUpdate: {
           associatedJudge: 'Judge Buch',
+          blessed,
           caseCaption: 'Guy Fieri, Petitioner',
           docketNumber: '101-18',
           docketNumberSuffix: null,
@@ -549,6 +580,7 @@ describe('updateCase', () => {
         applicationContext,
         caseToUpdate: {
           associatedJudge: 'Judge Buch',
+          blessed,
           docketNumber: '101-18',
           docketNumberSuffix: null,
           inProgress: true,
