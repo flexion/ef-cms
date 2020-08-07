@@ -13,7 +13,7 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
-        date: 'Date must be in the future.',
+        date: 'Enter a valid future date.',
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
       });
     });
