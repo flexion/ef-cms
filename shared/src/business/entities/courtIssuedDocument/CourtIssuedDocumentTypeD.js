@@ -54,7 +54,7 @@ joiValidationDecorator(
   CourtIssuedDocumentTypeD.schema,
   {
     ...VALIDATION_ERROR_MESSAGES,
-    date: 'Enter a future date.',
+    date: 'Enter a valid future date.',
   },
 );
 

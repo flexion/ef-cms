@@ -13,7 +13,7 @@ describe('CourtIssuedDocumentTypeE', () => {
       });
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
-        date: 'Enter a future date.',
+        date: 'Enter a valid future date.',
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
       });
     });
@@ -34,7 +34,7 @@ describe('CourtIssuedDocumentTypeE', () => {
         scenario: 'Type E',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        date: 'Enter a future date.',
+        date: 'Enter a valid future date.',
       });
     });
 
