@@ -53,7 +53,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      date: VALIDATION_ERROR_MESSAGES.date[2],
+      date: 'Enter a valid future date.',
       trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
     });
 
@@ -67,7 +67,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'year',
-      value: '2002',
+      value: '2025',
     });
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
@@ -91,8 +91,8 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2002-01-01',
-      documentTitle: 'Notice of Trial on 01-01-2002 at Boise, Idaho',
+      date: '2025-01-01',
+      documentTitle: 'Notice of Trial on 01-01-2025 at Boise, Idaho',
       documentType: 'Notice of Trial',
       eventCode: 'NTD',
       trialLocation: 'Boise, Idaho',
@@ -104,15 +104,15 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
     });
 
     expect(test.getState('form')).toMatchObject({
-      date: '2002-01-01',
+      date: '2025-01-01',
       day: '1',
-      documentTitle: 'Notice of Trial on 01-01-2002 at Boise, Idaho',
+      documentTitle: 'Notice of Trial on 01-01-2025 at Boise, Idaho',
       documentType: 'Notice of Trial',
       eventCode: 'NTD',
-      generatedDocumentTitle: 'Notice of Trial on 01-01-2002 at Boise, Idaho',
+      generatedDocumentTitle: 'Notice of Trial on 01-01-2025 at Boise, Idaho',
       month: '1',
       trialLocation: 'Boise, Idaho',
-      year: '2002',
+      year: '2025',
     });
   });
 };

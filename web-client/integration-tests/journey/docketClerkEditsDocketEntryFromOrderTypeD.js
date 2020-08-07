@@ -70,7 +70,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      date: VALIDATION_ERROR_MESSAGES.date[0].message,
+      date: 'Enter a valid future date.',
     });
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
