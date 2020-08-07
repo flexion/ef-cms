@@ -1,14 +1,24 @@
 const joi = require('joi');
 const {
+  calculateISODate,
+  createISODateString,
+  formatDateString,
+  FORMATS,
+} = require('../../utilities/DateHandler');
+const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { formatDateString } = require('../../utilities/DateHandler');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
+const tomorrowMoment = calculateISODate({ howMuch: +1, unit: 'days' });
+const tomorrowFormatted = formatDateString(
+  createISODateString(tomorrowMoment),
+  FORMATS.MMDDYYYY,
+);
 /**
  *
  * @param {object} rawProps the raw document data
@@ -32,7 +42,7 @@ CourtIssuedDocumentTypeG.prototype.getDocumentTitle = function () {
 
 CourtIssuedDocumentTypeG.schema = {
   attachments: joi.boolean().required(),
-  date: JoiValidationConstants.ISO_DATE.required(),
+  date: JoiValidationConstants.ISO_DATE.min(tomorrowFormatted).required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   trialLocation: joi.string().required(),
@@ -41,7 +51,10 @@ CourtIssuedDocumentTypeG.schema = {
 joiValidationDecorator(
   CourtIssuedDocumentTypeG,
   CourtIssuedDocumentTypeG.schema,
-  VALIDATION_ERROR_MESSAGES,
+  {
+    ...VALIDATION_ERROR_MESSAGES,
+    date: 'Enter a valid future date.',
+  },
 );
 
 module.exports = { CourtIssuedDocumentTypeG };

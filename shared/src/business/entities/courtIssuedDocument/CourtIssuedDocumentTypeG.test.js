@@ -9,23 +9,23 @@ describe('CourtIssuedDocumentTypeG', () => {
       });
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
-        date: VALIDATION_ERROR_MESSAGES.date[2],
+        date: 'Enter a valid future date.',
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
         trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
       });
     });
 
-    it('should have error message for invalid formatted date', () => {
+    it('should have error message if date is not greater than today', () => {
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
-        date: '04/10/2025',
+        date: -5,
         documentTitle: 'Notice of Trial on [Date] at [Place]',
         documentType: 'Notice of Trial',
         scenario: 'Type G',
         trialLocation: 'Seattle, Washington',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        date: VALIDATION_ERROR_MESSAGES.date[2],
+        date: 'Enter a valid future date.',
       });
     });
 

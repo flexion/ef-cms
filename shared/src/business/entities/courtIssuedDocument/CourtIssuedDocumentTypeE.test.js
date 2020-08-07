@@ -13,12 +13,12 @@ describe('CourtIssuedDocumentTypeE', () => {
       });
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
-        date: VALIDATION_ERROR_MESSAGES.date[2],
+        date: 'Enter a future date.',
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
       });
     });
 
-    it('should have error message for past date', () => {
+    it('should have error message if date is not greater than today', () => {
       const date = calculateISODate({
         dateString: createISODateString(),
         howMuch: -5,
@@ -34,8 +34,26 @@ describe('CourtIssuedDocumentTypeE', () => {
         scenario: 'Type E',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        date: VALIDATION_ERROR_MESSAGES.date[0].message,
+        date: 'Enter a future date.',
       });
+    });
+
+    it('should be valid if date is not greater than today', () => {
+      const date = calculateISODate({
+        dateString: createISODateString(),
+        howMuch: +1,
+        unit: 'days',
+      });
+      const extDoc = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        date,
+        documentTitle:
+          'Order time is extended to [Date] for petr(s) to pay the filing fee',
+        documentType:
+          'Order time is extended for petr(s) to pay the filing fee',
+        scenario: 'Type E',
+      });
+      expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should be valid when all fields are present', () => {

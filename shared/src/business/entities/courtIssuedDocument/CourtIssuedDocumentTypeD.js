@@ -14,9 +14,9 @@ const {
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
-const yesterdayMoment = calculateISODate({ howMuch: -1, unit: 'days' });
-const yesterdayFormatted = formatDateString(
-  createISODateString(yesterdayMoment),
+const tomorrowMoment = calculateISODate({ howMuch: +1, unit: 'days' });
+const tomorrowFormatted = formatDateString(
+  createISODateString(tomorrowMoment),
   FORMATS.MMDDYYYY,
 );
 
@@ -43,7 +43,7 @@ CourtIssuedDocumentTypeD.prototype.getDocumentTitle = function () {
 
 CourtIssuedDocumentTypeD.schema = {
   attachments: joi.boolean().required(),
-  date: JoiValidationConstants.ISO_DATE.min(yesterdayFormatted).required(),
+  date: JoiValidationConstants.ISO_DATE.min(tomorrowFormatted).required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   freeText: joi.string().optional(),
@@ -52,7 +52,10 @@ CourtIssuedDocumentTypeD.schema = {
 joiValidationDecorator(
   CourtIssuedDocumentTypeD,
   CourtIssuedDocumentTypeD.schema,
-  VALIDATION_ERROR_MESSAGES,
+  {
+    ...VALIDATION_ERROR_MESSAGES,
+    date: 'Enter a future date.',
+  },
 );
 
 module.exports = { CourtIssuedDocumentTypeD };
