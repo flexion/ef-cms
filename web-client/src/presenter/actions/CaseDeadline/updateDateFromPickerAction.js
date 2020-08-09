@@ -29,7 +29,5 @@ export const updateDateFromPickerAction = ({
       .createISODateString(filterEndDate, 'YYYY-MM-DD');
 
     store.set(state.screenMetadata.filterEndDate, formattedFilterEndDate);
-  } else {
-    store.unset(state.screenMetadata.filterEndDate);
   }
 };
