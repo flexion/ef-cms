@@ -3,6 +3,20 @@
 ---
   type: "object"
   keys: 
+    email: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "email"
+          args: 
+            options: 
+              tlds: false
+        - 
+          name: "max"
+          args: 
+            limit: 100
     name: 
       type: "string"
       flags: 
@@ -33,67 +47,70 @@
         - "petitionsclerk"
         - "privatePractitioner"
         - "trialclerk"
-    judgeFullName: 
+    section: 
       type: "string"
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 100
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "role"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - "judge"
-          then: 
-            type: "any"
-            flags: 
-              presence: "optional"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
-    judgeTitle: 
+      flags: 
+        only: true
+        presence: "optional"
+      allow: 
+        - "adc"
+        - "admissions"
+        - "chambers"
+        - "clerkofcourt"
+        - "docket"
+        - "petitions"
+        - "trialClerks"
+        - "armensChambers"
+        - "ashfordsChambers"
+        - "buchsChambers"
+        - "carluzzosChambers"
+        - "cohensChambers"
+        - "colvinsChambers"
+        - "copelandsChambers"
+        - "foleysChambers"
+        - "galesChambers"
+        - "gerbersChambers"
+        - "goekesChambers"
+        - "gustafsonsChambers"
+        - "guysChambers"
+        - "halpernsChambers"
+        - "holmesChambers"
+        - "jacobsChambers"
+        - "jonesChambers"
+        - "kerrigansChambers"
+        - "laubersChambers"
+        - "leydensChambers"
+        - "marvelsChambers"
+        - "morrisonsChambers"
+        - "negasChambers"
+        - "panuthosChambers"
+        - "parisChambers"
+        - "pughsChambers"
+        - "ruwesChambers"
+        - "thorntonsChambers"
+        - "torosChambers"
+        - "urdasChambers"
+        - "vasquezsChambers"
+        - "wellsChambers"
+        - "admin"
+        - "admissionsclerk"
+        - "docketclerk"
+        - "floater"
+        - "inactivePractitioner"
+        - "irsPractitioner"
+        - "irsSuperuser"
+        - "judge"
+        - "petitioner"
+        - "petitionsclerk"
+        - "privatePractitioner"
+        - "trialclerk"
+    token: 
       type: "string"
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 100
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "role"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - "judge"
-          then: 
-            type: "any"
-            flags: 
-              presence: "optional"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
+      flags: 
+        presence: "optional"
+    userId: 
+      type: "any"
+      flags: 
+        presence: "forbidden"
 
  ```

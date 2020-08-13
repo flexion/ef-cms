@@ -2,7 +2,7 @@ const joi = require('joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { baseUserValidation: userValidation } = require('./User');
+const { baseUserValidation } = require('./User');
 const { ROLES } = require('./EntityConstants');
 
 PublicUser.validationName = 'PublicUser';
@@ -32,13 +32,11 @@ function PublicUser(rawUser) {
 
 joiValidationDecorator(
   PublicUser,
-  joi.object().keys(userValidation),
+  joi.object().keys({ ...baseUserValidation, userId: joi.any().forbidden() }),
   VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = {
   PublicUser,
   VALIDATION_ERROR_MESSAGES,
-  userDecorator,
-  userValidation,
 };

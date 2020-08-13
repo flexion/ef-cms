@@ -17,7 +17,6 @@ const {
 
 const userDecorator = (obj, rawObj) => {
   obj.entityName = 'User';
-  obj.barNumber = rawObj.barNumber;
   obj.email = rawObj.email;
   obj.name = rawObj.name;
   obj.role = rawObj.role || ROLES.petitioner;
@@ -44,31 +43,22 @@ const userDecorator = (obj, rawObj) => {
 };
 
 const baseUserValidation = {
-  judgeFullName: joi
-    .string()
-    .max(100)
-    .when('role', {
-      is: ROLES.judge,
-      otherwise: joi.optional().allow(null),
-      then: joi.optional(),
-    }),
-  judgeTitle: joi
-    .string()
-    .max(100)
-    .when('role', {
-      is: ROLES.judge,
-      otherwise: joi.optional().allow(null),
-      then: joi.optional(),
-    }),
+  email: JoiValidationConstants.EMAIL.optional(),
   name: joi.string().max(100).optional(),
   role: joi
     .string()
     .valid(...Object.values(ROLES))
     .required(),
+  section: joi
+    .string()
+    .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
+    .optional(),
+  token: joi.string().optional(),
+  userId: JoiValidationConstants.UUID.required(),
 };
 
 const userValidation = {
-  barNumber: joi.string().optional().allow(null),
+  ...baseUserValidation,
   contact: joi
     .object()
     .keys({
@@ -85,6 +75,22 @@ const userValidation = {
         .string()
         .valid(COUNTRY_TYPES.DOMESTIC, COUNTRY_TYPES.INTERNATIONAL)
         .required(),
+      judgeFullName: joi
+        .string()
+        .max(100)
+        .when('role', {
+          is: ROLES.judge,
+          otherwise: joi.optional().allow(null),
+          then: joi.optional(),
+        }),
+      judgeTitle: joi
+        .string()
+        .max(100)
+        .when('role', {
+          is: ROLES.judge,
+          otherwise: joi.optional().allow(null),
+          then: joi.optional(),
+        }),
       phone: joi.string().max(100).required(),
       postalCode: joi.when('countryType', {
         is: COUNTRY_TYPES.INTERNATIONAL,
@@ -105,15 +111,23 @@ const userValidation = {
         }),
     })
     .optional(),
-  email: JoiValidationConstants.EMAIL.optional(),
   entityName: joi.string().valid('User').required(),
-  section: joi
+  judgeFullName: joi
     .string()
-    .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
-    .optional(),
-  token: joi.string().optional(),
-  userId: JoiValidationConstants.UUID.required(),
-  ...baseUserValidation,
+    .max(100)
+    .when('role', {
+      is: ROLES.judge,
+      otherwise: joi.optional().allow(null),
+      then: joi.optional(),
+    }),
+  judgeTitle: joi
+    .string()
+    .max(100)
+    .when('role', {
+      is: ROLES.judge,
+      otherwise: joi.optional().allow(null),
+      then: joi.optional(),
+    }),
 };
 
 const VALIDATION_ERROR_MESSAGES = {
@@ -181,5 +195,4 @@ module.exports = {
   VALIDATION_ERROR_MESSAGES,
   baseUserValidation,
   userDecorator,
-  userValidation,
 };

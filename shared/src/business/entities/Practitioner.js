@@ -6,16 +6,16 @@ const {
   ROLES,
 } = require('./EntityConstants');
 const {
+  baseUserValidation,
+  userDecorator,
+  VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
+} = require('./User');
+const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const {
-  userDecorator,
-  userValidation,
-  VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
-} = require('./User');
 
 /**
  * constructor
@@ -36,6 +36,7 @@ const roleMap = {
 Practitioner.prototype.init = function (rawUser) {
   userDecorator(this, rawUser);
   this.entityName = 'Practitioner';
+  this.barNumber = rawUser.barNumber;
   this.name = Practitioner.getFullName(rawUser);
   this.firstName = rawUser.firstName;
   this.lastName = rawUser.lastName;
@@ -82,7 +83,7 @@ const VALIDATION_ERROR_MESSAGES = {
 };
 
 const practitionerValidation = {
-  ...userValidation,
+  ...baseUserValidation,
   additionalPhone: joi
     .string()
     .max(100)
@@ -171,6 +172,10 @@ const practitionerValidation = {
     .allow('')
     .description('The name suffix of the practitioner.'),
 };
+
+// practitioners shouldn't inherit fields for judges
+// delete practitionerValidation.judgeFullName;
+// delete practitionerValidation.judgeTitle;
 
 joiValidationDecorator(
   Practitioner,

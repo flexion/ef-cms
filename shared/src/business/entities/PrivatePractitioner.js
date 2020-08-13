@@ -5,9 +5,9 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { baseUserValidation, userDecorator } = require('./User');
 const { ROLES } = require('./EntityConstants');
 const { SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
-const { userDecorator, userValidation } = require('./User');
 
 /**
  * constructor
@@ -26,7 +26,7 @@ function PrivatePractitioner(rawUser) {
 }
 
 PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
-  ...userValidation,
+  ...baseUserValidation,
   entityName: joi.string().valid('PrivatePractitioner').required(),
   representing: joi
     .array()
