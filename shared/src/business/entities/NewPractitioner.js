@@ -12,6 +12,7 @@ const { Practitioner } = require('./Practitioner');
  */
 function NewPractitioner(rawUser) {
   Practitioner.prototype.init.call(this, rawUser);
+  this.barNumber = rawUser.barNumber;
   this.firstName = rawUser.firstName;
   this.lastName = rawUser.lastName;
 }
