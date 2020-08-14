@@ -18,6 +18,7 @@ const { SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
 function PrivatePractitioner(rawUser) {
   userDecorator(this, rawUser);
   this.entityName = 'PrivatePractitioner';
+  this.barNumber = rawUser.barNumber;
   this.representingPrimary = rawUser.representingPrimary;
   this.representingSecondary = rawUser.representingSecondary;
   this.representing = rawUser.representing || [];
