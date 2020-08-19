@@ -1,4 +1,25 @@
+
 # Flow: S3 -> Event Notification -> SQS -> EC2 Consumption & Scan -> tag
+
+
+resource "aws_s3_bucket" "clamav_s3_download" {
+  bucket = "${var.dns_domain}-monitor-script"
+  acl = "private"
+}
+
+resource "aws_s3_bucket_object" "clamav_worker_object" {
+  bucket = aws_s3_bucket.clamav_s3_download.id
+  key    = "worker.js"
+  source = "worker.js"
+}
+
+resource "aws_s3_bucket_public_access_block" "clamav" {
+  bucket = aws_s3_bucket.clamav_s3_download.id
+  block_public_acls = true
+  block_public_policy = true
+  ignore_public_acls = true
+  restrict_public_buckets = true
+}
 
 resource "aws_s3_bucket" "quarantine_bucket" {
   bucket = "${var.dns_domain}-quarantine"
