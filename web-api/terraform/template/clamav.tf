@@ -72,7 +72,7 @@ resource "aws_instance" "clamav_worker" {
 
   user_data = data.template_file.setup_clamav.rendered
 
-  iam_instance_profile = "clamav_s3_download_role_${var.environment}"
+  iam_instance_profile = "clamav_s3_download_instance_profile_${var.environment}"
 }
 
 data "template_file" "setup_clamav" {
