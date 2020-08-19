@@ -1,5 +1,18 @@
 #!/bin/bash
 
+
+ENVIRONMENT=$1
+
+if [ -z "$ENVIRONMENT" ]; then
+  echo "Please specify the environment"
+  exit 1
+fi
+
+if [ -z "$ZONE_NAME" ]; then
+  echo "Please export the ZONE_NAME variable in your shell"
+  exit 1
+fi
+
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="permissions-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock

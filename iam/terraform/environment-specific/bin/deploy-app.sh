@@ -12,6 +12,11 @@ if [ -z "$EFCMS_DOMAIN" ]; then
   exit 1
 fi
 
+if [ -z "$ZONE_NAME" ]; then
+  echo "Please export the ZONE_NAME variable in your shell"
+  exit 1
+fi
+
 # Each $ENV will have its own terraform deploy bucket (i.e. "exp1.ustc-case-mgmt.flexion.us")
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="permissions-${ENVIRONMENT}.tfstate"
@@ -36,4 +41,4 @@ fi
 set -eo pipefail
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform apply -auto-approve -var "environment=${ENVIRONMENT}"
+terraform apply -auto-approve -var "environment=${ENVIRONMENT}" -var "dns_domain=${EFCMS_DOMAIN}"
