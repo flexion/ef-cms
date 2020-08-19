@@ -1,6 +1,8 @@
 #!/bin/bash
 clamav_bucket=${clamav_bucket}
+clean_documents_bucket=${documents_bucket_name}
 sqs_queue=${sqs_queue}
+sqs_queue_url=${sqs_queue_url}
 environment=${environment}
 monitor_script_s3_path=${monitor_script_s3_path}
 

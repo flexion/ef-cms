@@ -36,7 +36,7 @@ resource "aws_sqs_queue" "clamav_event_queue" {
     {
       "Effect": "Allow",
       "Principal": "*",
-      "Action": "sqs:SendMessage",
+      "Action": ["sqs:SendMessage", "sqs:ReceiveMessage"],
       "Resource": "arn:aws:sqs:*:*:s3_clamav_event_${var.environment}",
       "Condition": {
         "ArnEquals": { "aws:SourceArn": "${aws_s3_bucket.quarantine_bucket.arn}" }
@@ -53,7 +53,6 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   queue {
     queue_arn     = aws_sqs_queue.clamav_event_queue.arn
     events        = ["s3:ObjectCreated:*"]
-    filter_suffix = ".log"
   }
 }
 
