@@ -206,6 +206,16 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/*"
       ]
     }
+    {
+      "Sid": "SQS",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:*"
+      ],
+      "Resource": [
+        "arn:aws:sqs::${data.aws_caller_identity.current.account_id}:s3_clamav_event_*"
+      ]
+    }
   ]
 }
 

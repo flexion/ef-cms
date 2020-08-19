@@ -27,7 +27,7 @@ POLICY
 }
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
-  bucket = aws_s3_bucket.bucket.id
+  bucket = aws_s3_bucket.quarantine_bucket.id
 
   queue {
     queue_arn     = aws_sqs_queue.clamav_event_queue.arn
@@ -41,7 +41,7 @@ resource "aws_instance" "clamav_worker" {
   ami           = "ami-0a313d6098716f372"
   instance_type = "t2.small"
 
-  availability_zone = var.availability_zones[0]
+  availability_zone = "us-east-1a"
   # security_groups   = [aws_security_group.clamav.name]
 
   tags = {
@@ -58,8 +58,8 @@ data "template_file" "setup_clamav" {
   template = file("setup_clamav_worker.sh")
 
   vars = {
-    clamav_bucket = aws_s3_bucket.quarantine_bucket.name
-    sqs_queue = aws_sqs_queue.clamav_event_queue.name
+    clamav_bucket = aws_s3_bucket.quarantine_bucket.id
+    sqs_queue = aws_sqs_queue.clamav_event_queue.id
     environment = var.environment
     monitor_script_s3_path = "${var.dns_domain}-monitor-script"
   }
