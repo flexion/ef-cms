@@ -205,7 +205,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_replication_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/*"
       ]
-    }
+    },
     {
       "Sid": "SQS",
       "Effect": "Allow",

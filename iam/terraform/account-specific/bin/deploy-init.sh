@@ -1,14 +1,12 @@
 #!/bin/bash
 
-ENVIRONMENT=$1
-
 BUCKET="${ZONE_NAME}.terraform.deploys"
-KEY="permissions-${ENVIRONMENT}.tfstate"
+KEY="permissions-account.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
 rm -rf .terraform
-echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
+echo "Initiating provisioning for account with ZONE_NAME ${ZONE_NAME}"
 sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
 
 echo "checking for the dynamodb lock table..."
