@@ -2,14 +2,28 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 const tmp = require('tmp');
 const util = require('util');
+const { exec } = require('child_process');
 
 AWS.config.update({ region: 'us-east-1' });
+if (process.env.AWS_ACCESS_KEY_ID) {
+  // is local
+  AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  });
+
+  console.log(
+    'id ',
+    process.env.AWS_ACCESS_KEY_ID,
+    ' key ',
+    process.env.AWS_SECRET_ACCESS_KEY,
+  );
+}
 
 // Create an SQS service object
 const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 
 const s3 = new AWS.S3({
-  endpoint: 'http://localhost:9000',
   region: 'us-east-1',
   s3ForcePathStyle: true,
 });
@@ -26,8 +40,9 @@ const params = {
   WaitTimeSeconds: 0,
 };
 
+const execPromise = util.promisify(exec);
 const runVirusScan = async ({ filePath }) => {
-  return util.promisify(
+  return execPromise(
     `clamscan ${
       process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
     } ${filePath}`,
@@ -38,8 +53,10 @@ sqs.receiveMessage(params, async (err, data) => {
   if (err) {
     console.log('Receive Error', err);
   } else if (data.Messages) {
-    const { body } = data.Messages[0];
-    const documentId = body.Records.s3.key;
+    const { Body: body } = data.Messages[0];
+    const parsedBody = JSON.parse(body);
+
+    const documentId = parsedBody.Records[0].s3.object.key;
 
     // fetch document from s3 quarantine bucket
     let { Body: pdfData } = await s3
@@ -60,7 +77,7 @@ sqs.receiveMessage(params, async (err, data) => {
       await s3
         .putObject({
           Body: pdfData,
-          Bucket: 'noop-documents-local-us-east-1',
+          Bucket: 'exp1.ustc-case-mgmt.flexion.us-documents-exp1-us-east-1',
           ContentType: 'application/pdf',
           Key: documentId,
         })
