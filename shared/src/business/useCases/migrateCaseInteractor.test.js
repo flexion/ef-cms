@@ -41,6 +41,9 @@ describe('migrateCaseInteractor', () => {
       ...adminUser,
       section: 'admin',
     });
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(undefined);
 
     applicationContext.getUseCases().getUserInteractor.mockReturnValue({
       name: 'john doe',
@@ -104,6 +107,18 @@ describe('migrateCaseInteractor', () => {
         },
       }),
     ).rejects.toThrow('Unauthorized');
+  });
+
+  it('throws an error case has a trial session id but it cannot be found in persistence', async () => {
+    await expect(
+      migrateCaseInteractor({
+        applicationContext,
+        caseMetadata: {
+          ...caseMetadata,
+          trialSessionId: 'cafebabe-b37b-479d-9201-067ec6e335bb',
+        },
+      }),
+    ).rejects.toThrow('Trial Session not found');
   });
 
   it('should pull the current user record from persistence', async () => {
@@ -386,5 +401,35 @@ describe('migrateCaseInteractor', () => {
       ).toHaveBeenCalled();
       expect(createdCases.length).toEqual(1);
     });
+  });
+
+  it("adds the case to a trial session's calendar if the case has a trialSessionId", async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue({
+        isCalendared: true,
+        maxCases: 100,
+        sessionType: 'Hybrid',
+        startDate: '2020-08-10',
+        term: 'Summer',
+        termYear: '2020',
+        trialLocation: 'Memphis, Tennessee',
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195fb',
+      });
+
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195fb',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionById,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).toHaveBeenCalled();
   });
 });

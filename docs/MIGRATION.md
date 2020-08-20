@@ -308,3 +308,18 @@ Valid Case object example:
     ]
 }
 ```
+
+Valid Trial Session object example:
+
+```
+{
+  "isCalendared": true,
+  "maxCases": 100,
+  "sessionType": "Hybrid",
+  "startDate": "2020-08-10",
+  "term": "Summer",
+  "termYear": "2020",
+  "trialLocation": "Memphis, Tennessee",
+  "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc"
+}
+```
