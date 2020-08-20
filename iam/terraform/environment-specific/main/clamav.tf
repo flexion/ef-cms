@@ -31,3 +31,8 @@ resource "aws_iam_role_policy_attachment" "allow_clamav_role_access_to_clamav_s3
   role = "${aws_iam_role.clamav_s3_download_role.name}"
   policy_arn = "${aws_iam_policy.access_clamav_s3_bucket.arn}"
 }
+
+resource "aws_iam_instance_profile" "clamav_instance_profile" {
+  name =  "clamav_s3_download_instance_profile_${var.environment}"
+  role = aws_iam_role.clamav_s3_download_role.name
+}
