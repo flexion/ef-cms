@@ -78,7 +78,7 @@ data "template_file" "setup_clamav" {
   template = file("setup_clamav_worker.sh")
 
   vars = {
-    clamav_bucket = aws_s3_bucket.quarantine_bucket.id
+    quarantine_bucket = aws_s3_bucket.quarantine_bucket.id
     sqs_queue = aws_sqs_queue.clamav_event_queue.id
     environment = var.environment
     monitor_script_s3_path = "${var.dns_domain}-monitor-script"

@@ -1,5 +1,5 @@
 #!/bin/bash
-clamav_bucket=${clamav_bucket}
+quarantine_bucket=${quarantine_bucket}
 clean_documents_bucket=${documents_bucket_name}
 sqs_queue=${sqs_queue}
 sqs_queue_url=${sqs_queue_url}
@@ -21,4 +21,4 @@ sudo aws s3 cp "${monitor_script_s3_path}" monitor.js
 npm i -g pm2
 
 # start monitoring
-sudo ENV=${environment} SQS_QUEUE=${sqs_queue} CLAMAV_BUCKET=${clamav_bucket} pm2 monitor.js
+sudo ENV=${environment} SQS_QUEUE=${sqs_queue} QUARANTINE_BUCKET=${quarantine_bucket} pm2 monitor.js
