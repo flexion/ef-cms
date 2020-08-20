@@ -21,7 +21,7 @@ const s3 = new AWS.S3({
   s3ForcePathStyle: true,
 });
 
-const queueURL = process.env.sqs_queue_url;
+const queueURL = process.env.SQS_QUEUE_URL;
 const params = {
   AttributeNames: ['SentTimestamp'],
   MaxNumberOfMessages: 10,
@@ -50,7 +50,7 @@ const receiveMessages = () =>
         // fetch document from s3 quarantine bucket
         let { Body: pdfData } = await s3
           .getObject({
-            Bucket: process.env.quarantine_bucket,
+            Bucket: process.env.QUARANTINE_BUCKET,
             Key: documentId,
           })
           .promise();
@@ -66,7 +66,7 @@ const receiveMessages = () =>
           await s3
             .putObject({
               Body: pdfData,
-              Bucket: process.env.clean_documents_bucket,
+              Bucket: process.env.CLEAN_DOCUMENTS_BUCKET,
               ContentType: 'application/pdf',
               Key: documentId,
             })
@@ -75,7 +75,7 @@ const receiveMessages = () =>
           // delete from quarantine bucket
           await s3
             .deleteObject({
-              Bucket: process.env.quarantine_bucket,
+              Bucket: process.env.QUARANTINE_BUCKET,
               Key: documentId,
             })
             .promise();
@@ -100,7 +100,7 @@ const receiveMessages = () =>
     } else {
       setTimeout(function () {
         receiveMessages();
-      }, 60 * 1000);
+      }, 10 * 1000);
     }
   });
 

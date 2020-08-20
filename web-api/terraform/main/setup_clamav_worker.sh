@@ -1,35 +1,40 @@
 #!/bin/bash
-quarantine_bucket=${quarantine_bucket}
-clean_documents_bucket=${documents_bucket_name}
-sqs_queue_url=${sqs_queue_url}
-environment=${environment}
-monitor_script_s3_path=${monitor_script_s3_path}
+export quarantine_bucket=${quarantine_bucket}
+export clean_documents_bucket=${documents_bucket_name}
+export sqs_queue_url=${sqs_queue_url}
+export environment=${environment}
+export monitor_script_s3_path=${monitor_script_s3_path}
+
+echo $quarantine_bucket
+echo $clean_documents_bucket
+echo $sqs_queue_url
+echo $environment
+echo $monitor_script_s3_path
 
 export DEBIAN_FRONTEND=noninteractive
 sudo apt update
-sudo apt install -y awscli nodejs clamav clamav-daemon
 
-sudo mkdir /var/run/clamav/
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+sudo DEBIAN_FRONTEND=noninteractive sh -c 'apt install -y nodejs'
 
-# TODO: config
-sudo mkdir /usr/local/etc/clamav
-sudo touch /usr/local/etc/clamav/freshclam.conf 
 sudo cat <<< '
 LocalSocket /tmp/clamd.socket
 LocalSocketMode 660
-' > /usr/local/etc/clamav/freshclam.conf
+' > /etc/clamav/clamd.conf
+sudo chown clamav:clamav /etc/clamav/clamd.conf
 
-sudo chmod 775 /usr/local/etc/clamav
+sudo apt install -y awscli
 
-sudo chown -R clamav:clamav /var/run/clamav/
+sudo apt install -y clamav
 
-sudo freshclam # update definitions
+sudo pkill freshclam
 
-sudo systemctl start clamav-daemon.service
+sudo freshclam
 
-sudo aws s3 cp "${monitor_script_s3_path}" monitor.js
+sudo apt install -y clamav-daemon
 
-npm i -g pm2
+sudo aws s3 cp "s3://${monitor_script_s3_path}/worker.js" worker.js
 
-# start monitoring
-sudo ENV=${environment} SQS_QUEUE_URL=${sqs_queue_url} QUARANTINE_BUCKET=${quarantine_bucket} pm2 monitor.js
+sudo npm i -g pm2
+
+sudo AWS_REGION="us-east-1" CLEAN_DOCUMENTS_BUCKET=${clean_documents_bucket} ENV=${environment} SQS_QUEUE_URL=${sqs_queue_url} QUARANTINE_BUCKET=${quarantine_bucket} pm2 start worker.js
