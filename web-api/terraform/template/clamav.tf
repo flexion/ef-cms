@@ -72,14 +72,17 @@ resource "aws_instance" "clamav_worker" {
   user_data = data.template_file.setup_clamav.rendered
 
   iam_instance_profile = "clamav_s3_download_instance_profile_${var.environment}"
+
+  key_name="whatever"
 }
 
 data "template_file" "setup_clamav" {
   template = file("setup_clamav_worker.sh")
 
   vars = {
+    documents_bucket_name=aws_s3_bucket.documents_us_east_1.id
+    sqs_queue_url=aws_sqs_queue.clamav_event_queue.id
     quarantine_bucket = aws_s3_bucket.quarantine_bucket.id
-    sqs_queue = aws_sqs_queue.clamav_event_queue.id
     environment = var.environment
     monitor_script_s3_path = "${var.dns_domain}-monitor-script"
   }

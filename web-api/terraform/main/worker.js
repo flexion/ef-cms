@@ -21,9 +21,7 @@ const s3 = new AWS.S3({
   s3ForcePathStyle: true,
 });
 
-//'https://sqs.us-east-1.amazonaws.com/515554424717/s3_clamav_event_exp1'
 const queueURL = process.env.sqs_queue_url;
-console.log(queueURL, ' *****');
 const params = {
   AttributeNames: ['SentTimestamp'],
   MaxNumberOfMessages: 10,
@@ -35,11 +33,7 @@ const params = {
 
 const execPromise = util.promisify(exec);
 const runVirusScan = async ({ filePath }) => {
-  return execPromise(
-    `clamdscan ${
-      process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
-    } ${filePath}`,
-  );
+  return execPromise(`clamdscan ${filePath}`);
 };
 
 const receiveMessages = () =>
@@ -50,8 +44,6 @@ const receiveMessages = () =>
       for (let i = 0; i < data.Messages.length; i++) {
         const { Body: body } = data.Messages[i];
         const parsedBody = JSON.parse(body);
-
-        console.log(parsedBody.Records[0].s3);
 
         const documentId = parsedBody.Records[0].s3.object.key;
 
