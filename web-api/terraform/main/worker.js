@@ -55,7 +55,10 @@ const receiveMessages = () =>
           })
           .promise();
 
-        const inputPdf = tmp.fileSync();
+        const inputPdf = tmp.fileSync({
+          mode: 0o755,
+          tmpdir: process.env.TMP_PATH,
+        });
         fs.writeSync(inputPdf.fd, Buffer.from(pdfData));
         fs.closeSync(inputPdf.fd);
 

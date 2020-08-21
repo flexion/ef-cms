@@ -37,4 +37,13 @@ sudo aws s3 cp "s3://${monitor_script_s3_path}/worker.js" worker.js
 
 sudo npm i -g pm2
 
-sudo AWS_REGION="us-east-1" CLEAN_DOCUMENTS_BUCKET=${clean_documents_bucket} ENV=${environment} SQS_QUEUE_URL=${sqs_queue_url} QUARANTINE_BUCKET=${quarantine_bucket} pm2 start worker.js
+sudo mkdir /home/clamav
+sudo chown clamav:clamav /home/clamav
+ # for some reason, even though we run pm2 with the clamav user, 
+ # pm2 (more specifically the tmp module in our worker.js script) 
+ # can't write to /home/clamav...
+sudo chmod 777 /home/clamav
+
+# we run this as the clamav user so that clamdscan have access to scan the file
+sudo -u clamav bash -c "AWS_REGION='us-east-1' CLEAN_DOCUMENTS_BUCKET=${documents_bucket_name} ENV=${environment} SQS_QUEUE_URL=${sqs_queue_url} QUARANTINE_BUCKET=${quarantine_bucket} pm2 start worker.js"
+

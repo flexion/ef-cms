@@ -11,7 +11,7 @@ resource "aws_s3_bucket_object" "clamav_worker_object" {
   bucket = aws_s3_bucket.clamav_s3_download.id
   key    = "worker.js"
   source = "worker.js"
-  etag = filemd5("worker.js")
+  etag   = filemd5("worker.js")
 }
 
 resource "aws_s3_bucket_public_access_block" "clamav" {
@@ -63,7 +63,6 @@ resource "aws_instance" "clamav_worker" {
   instance_type = "t2.large"
 
   availability_zone = "us-east-1a"
-  # security_groups   = [aws_security_group.clamav.name]
 
   tags = {
     Name        = "clamav-${var.environment}"
