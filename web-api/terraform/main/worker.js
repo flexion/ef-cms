@@ -41,9 +41,12 @@ const receiveMessages = () =>
     if (err) {
       console.log('Receive Error', err);
     } else if (data.Messages) {
+      console.log('we have messages ', data.Messages);
       for (let i = 0; i < data.Messages.length; i++) {
         const { Body: body } = data.Messages[i];
         const parsedBody = JSON.parse(body);
+
+        console.log('message body ', parsedBody);
 
         const documentId = parsedBody.Records[0].s3.object.key;
 
@@ -55,17 +58,25 @@ const receiveMessages = () =>
           })
           .promise();
 
+        console.log('pdf data ', pdfData);
+
         const inputPdf = tmp.fileSync({
           mode: 0o755,
           tmpdir: process.env.TMP_PATH,
         });
+        console.log('got the pdf ');
+
         fs.writeSync(inputPdf.fd, Buffer.from(pdfData));
         fs.closeSync(inputPdf.fd);
+
+        console.log('done writing the pdf to temp');
 
         try {
           // run virus scan
           await runVirusScan({ filePath: inputPdf.name });
           // file is clean - move to documents bucket
+          console.log('file is clean, moving to doc bucket');
+
           await s3
             .putObject({
               Body: pdfData,
@@ -74,6 +85,8 @@ const receiveMessages = () =>
               Key: documentId,
             })
             .promise();
+
+          console.log('about to remove from quarantine bucket');
 
           // delete from quarantine bucket
           await s3
@@ -87,13 +100,16 @@ const receiveMessages = () =>
             QueueUrl: queueURL,
             ReceiptHandle: data.Messages[i].ReceiptHandle,
           };
+          console.log('about to delete message');
 
           await sqs.deleteMessage(deleteParams).promise();
         } catch (e) {
           if (e.code === 1) {
             // infected
+            console.log('file is not clean ', e);
           } else {
             // error scanning
+            console.log('something bad happened ', e);
           }
           console.log(e);
         }
@@ -101,6 +117,7 @@ const receiveMessages = () =>
 
       receiveMessages();
     } else {
+      console.log('no messages, will try again soon');
       setTimeout(function () {
         receiveMessages();
       }, 10 * 1000);

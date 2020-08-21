@@ -33,9 +33,7 @@ sudo freshclam
 
 sudo apt install -y clamav-daemon
 
-sudo aws s3 cp "s3://${monitor_script_s3_path}/worker.js" worker.js
-
-sudo npm i -g pm2
+sudo npm i -g forever
 
 sudo mkdir /home/clamav
 sudo chown clamav:clamav /home/clamav
@@ -44,6 +42,11 @@ sudo chown clamav:clamav /home/clamav
  # can't write to /home/clamav...
 sudo chmod 777 /home/clamav
 
+cd /home/clamav
+sudo aws s3 cp "s3://${monitor_script_s3_path}/worker.js" /home/clamav/worker.js
+sudo npm init -y
+sudo npm i aws-sdk tmp --save
+
 # we run this as the clamav user so that clamdscan have access to scan the file
-sudo -u clamav bash -c "AWS_REGION='us-east-1' CLEAN_DOCUMENTS_BUCKET=${documents_bucket_name} ENV=${environment} SQS_QUEUE_URL=${sqs_queue_url} QUARANTINE_BUCKET=${quarantine_bucket} pm2 start worker.js"
+sudo AWS_REGION='us-east-1' CLEAN_DOCUMENTS_BUCKET=${documents_bucket_name} ENV=${environment} SQS_QUEUE_URL=${sqs_queue_url} QUARANTINE_BUCKET=${quarantine_bucket} forever start worker.js
 
