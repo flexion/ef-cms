@@ -102,13 +102,7 @@ const processMessage = async message => {
       })
       .promise();
 
-    const deleteParams = {
-      QueueUrl: queueURL,
-      ReceiptHandle: message.ReceiptHandle,
-    };
-    console.log('about to delete message');
-
-    await sqs.deleteMessage(deleteParams).promise();
+    await deleteMessage(message);
   } catch (e) {
     if (e.code === 1) {
       // infected
@@ -119,6 +113,16 @@ const processMessage = async message => {
     }
     console.log(e);
   }
+};
+
+const deleteMessage = message => {
+  const deleteParams = {
+    QueueUrl: queueURL,
+    ReceiptHandle: message.ReceiptHandle,
+  };
+  console.log('about to delete message', deleteParams);
+
+  return sqs.deleteMessage(deleteParams).promise();
 };
 
 const receiveMessages = () =>
@@ -132,7 +136,13 @@ const receiveMessages = () =>
         try {
           await processMessage(message);
         } catch (e) {
-          console.log('unable to process message', e, message);
+          console.log('unable to process message', e);
+          console.log(message);
+          if (e.message.contains('The specified key does not exist')) {
+            // delete the message
+            // TODO: this is failing, probably wrap in a try catch and print error
+            await deleteMessage(message);
+          }
         }
       }
 
