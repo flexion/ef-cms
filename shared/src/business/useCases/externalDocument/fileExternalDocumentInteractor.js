@@ -11,8 +11,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { DocketRecord } = require('../../entities/DocketRecord');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -114,10 +113,11 @@ exports.fileExternalDocumentInteractor = async ({
 
   for (let [documentId, metadata, relationship] of documentsToAdd) {
     if (documentId && metadata) {
-      const documentEntity = new Document(
+      const docketEntryEntity = new DocketEntry(
         {
           ...baseMetadata,
           ...metadata,
+          description: metadata.documentTitle,
           documentId,
           documentType: metadata.documentType,
           partyPrimary:
@@ -149,8 +149,8 @@ exports.fileExternalDocumentInteractor = async ({
           docketNumber: caseToUpdate.docketNumber,
           docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
           document: {
-            ...documentEntity.toRawObject(),
-            createdAt: documentEntity.createdAt,
+            ...docketEntryEntity.toRawObject(),
+            createdAt: docketEntryEntity.createdAt,
           },
           highPriority: highPriorityWorkItem,
           section: DOCKET_SECTION,
@@ -161,32 +161,21 @@ exports.fileExternalDocumentInteractor = async ({
         { applicationContext },
       );
 
-      documentEntity.setWorkItem(workItem);
+      docketEntryEntity.setWorkItem(workItem);
 
       workItems.push(workItem);
-      caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
-      const docketRecordEntity = new DocketRecord(
-        {
-          description: metadata.documentTitle,
-          documentId: documentEntity.documentId,
-          eventCode: documentEntity.eventCode,
-          filingDate: documentEntity.receivedAt,
-        },
-        { applicationContext },
-      );
+      const isAutoServed = docketEntryEntity.isAutoServed();
 
-      const isAutoServed = documentEntity.isAutoServed();
-
-      caseEntity.addDocketRecord(docketRecordEntity);
+      caseEntity.addDocketEntry(docketEntryEntity);
 
       if (isAutoServed) {
-        documentEntity.setAsServed(servedParties.all);
+        docketEntryEntity.setAsServed(servedParties.all);
 
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          documentEntity,
+          documentEntity: docketEntryEntity,
           servedParties,
         });
       }

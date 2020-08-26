@@ -20530,6 +20530,18 @@
                     options: 
                       version: 
                         - "uuidv4"
+            documentId: 
+              type: "string"
+              flags: 
+                presence: "optional"
+                description: "ID of the associated PDF document in the S3 bucket."
+              rules: 
+                - 
+                  name: "guid"
+                  args: 
+                    options: 
+                      version: 
+                        - "uuidv4"
             documentTitle: 
               type: "string"
               flags: 
@@ -23815,7 +23827,7 @@
     docketRecord: 
       type: "array"
       flags: 
-        presence: "required"
+        presence: "optional"
       rules: 
         - 
           name: "unique"
@@ -24349,7 +24361,7 @@
     documents: 
       type: "array"
       flags: 
-        presence: "required"
+        presence: "optional"
         description: "List of Document Entities for the case."
       items: 
         - 

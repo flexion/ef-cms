@@ -92,6 +92,7 @@ function DocketEntry(rawDocketEntry, { applicationContext, filtered = false }) {
     rawDocketEntry.docketEntryIdBeforeSignature;
   this.docketNumber = rawDocketEntry.docketNumber;
   this.docketNumbers = rawDocketEntry.docketNumbers;
+  this.documentId = rawDocketEntry.documentId;
   this.documentContentsId = rawDocketEntry.documentContentsId;
   this.documentTitle = rawDocketEntry.documentTitle;
   this.documentType = rawDocketEntry.documentType;
@@ -243,6 +244,9 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
     ),
   documentContentsId: JoiValidationConstants.UUID.optional().description(
     'The S3 ID containing the text contents of the document.',
+  ),
+  documentId: JoiValidationConstants.UUID.optional().description(
+    'ID of the associated PDF document in the S3 bucket.',
   ),
   documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
     'The title of this document.',

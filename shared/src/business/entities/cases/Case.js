@@ -439,11 +439,11 @@ Case.VALIDATION_RULES = {
     .description('Auto-generated from docket number and the suffix.'),
   docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
     DocketRecord.VALIDATION_RULES,
-  ).required(),
+  ).optional(),
   documents: joi
     .array()
     .items(Document.VALIDATION_RULES)
-    .required()
+    .optional()
     .description('List of Document Entities for the case.'),
   entityName: joi.string().valid('Case').required(),
   filingType: joi
@@ -781,7 +781,10 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
 };
 
 Case.prototype.doesHavePendingItems = function () {
-  return this.documents.some(document => document.pending);
+  // TODO 636
+  return [...this.documents, ...this.docketEntries].some(
+    document => document.pending,
+  );
 };
 
 /**
@@ -892,6 +895,23 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
     practitioner => practitioner.userId === practitionerToRemove.userId,
   );
   if (index > -1) this.privatePractitioners.splice(index, 1);
+};
+
+/**
+ *
+ * @param {DocketEntry} docketEntryEntity the docket entry to add to the case
+ */
+Case.prototype.addDocketEntry = function (docketEntryEntity) {
+  const updateIndex = shouldGenerateDocketRecordIndex({
+    caseDetail: this,
+    docketRecordEntry: docketEntryEntity,
+  });
+
+  if (updateIndex) {
+    docketEntryEntity.index = this.generateNextDocketRecordIndex();
+  }
+
+  this.docketEntries = [...this.docketEntries, docketEntryEntity];
 };
 
 /**

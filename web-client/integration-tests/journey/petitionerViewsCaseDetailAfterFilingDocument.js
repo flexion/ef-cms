@@ -3,10 +3,7 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const {
-  DOCKET_NUMBER_SUFFIXES,
-  INITIAL_DOCUMENT_TYPES,
-} = applicationContext.getConstants();
+const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
 export const petitionerViewsCaseDetailAfterFilingDocument = (
   test,
@@ -38,15 +35,11 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
     // verify that the user was given a link to their receipt
     expect(test.getState('alertSuccess.linkUrl')).toBeDefined();
 
-    expect(caseDetail.documents.length).toEqual(6);
+    expect(caseDetail.docketEntries.length).toEqual(4);
 
     //verify that the documents were added and served
-    expect(caseDetail.documents).toEqual(
+    expect(caseDetail.docketEntries).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ eventCode: 'P' }),
-        expect.objectContaining({
-          eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
-        }),
         expect.objectContaining({
           eventCode: 'M014',
           servedAt: expect.anything(),

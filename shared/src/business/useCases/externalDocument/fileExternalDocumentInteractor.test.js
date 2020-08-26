@@ -33,35 +33,20 @@ describe('fileExternalDocumentInteractor', () => {
         state: 'CA',
       },
       createdAt: '',
-      docketNumber: '45678-18',
-      docketRecord: [
+      docketEntries: [
         {
           description: 'first record',
           docketNumber: '45678-18',
           documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+          documentType: 'Petition',
           eventCode: 'P',
+          filedBy: 'Test Petitioner',
           filingDate: '2018-03-01T00:01:00.000Z',
           index: 1,
-        },
-      ],
-      documents: [
-        {
-          docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          documentType: 'Answer',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          userId: '15fac684-d333-45c2-b414-4af63a7f7613',
+          userId: 'eb693715-0399-4d4e-a85a-1e660a77f3d1',
         },
         {
-          docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          documentType: 'Answer',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          userId: '15fac684-d333-45c2-b414-4af63a7f7613',
-        },
-        {
+          description: 'Answer',
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
@@ -70,6 +55,7 @@ describe('fileExternalDocumentInteractor', () => {
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
       ],
+      docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
@@ -111,7 +97,7 @@ describe('fileExternalDocumentInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
+  it('should add docketEntries and workitems and auto-serve the docketEntries on the parties with an electronic service indicator', async () => {
     const updatedCase = await fileExternalDocumentInteractor({
       applicationContext,
       documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
@@ -134,7 +120,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
-    expect(updatedCase.documents[3].servedAt).toBeDefined();
+    expect(updatedCase.docketEntries[2].servedAt).toBeDefined();
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {
@@ -178,9 +164,8 @@ describe('fileExternalDocumentInteractor', () => {
       },
     });
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
-    expect(updatedCase.documents).toMatchObject([
-      {}, // first 3 docs were already on the case
-      {},
+    expect(updatedCase.docketEntries).toMatchObject([
+      {}, // first 2 docs were already on the case
       {},
       {
         eventCode: 'M115', // primary document
@@ -201,26 +186,19 @@ describe('fileExternalDocumentInteractor', () => {
     ]);
   });
 
-  it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
-    let error;
+  it('should add docketEntries and workitems but NOT auto-serve Simultaneous docketEntries on the parties', async () => {
+    const updatedCase = await fileExternalDocumentInteractor({
+      applicationContext,
+      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Simultaneous Memoranda of Law',
+        documentType: 'Simultaneous Memoranda of Law',
+        eventCode: 'A',
+        filedBy: 'Test Petitioner',
+      },
+    });
 
-    let updatedCase;
-    try {
-      updatedCase = await fileExternalDocumentInteractor({
-        applicationContext,
-        documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Simultaneous Memoranda of Law',
-          documentType: 'Simultaneous Memoranda of Law',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-        },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
@@ -231,8 +209,8 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
-    expect(updatedCase.documents[3].status).toBeUndefined();
-    expect(updatedCase.documents[3].servedAt).toBeUndefined();
+    expect(updatedCase.docketEntries[2].status).toBeUndefined();
+    expect(updatedCase.docketEntries[2].servedAt).toBeUndefined();
   });
 
   it('should create a high-priority work item if the case status is calendared', async () => {
