@@ -227,10 +227,16 @@ const TrialInformation = ({
                 {caseDetail.automaticBlockedDateFormatted}:{' '}
               </p>
               <p>{caseDetail.automaticBlockedReason}</p>
-              <Hint exclamation className="margin-bottom-0 block">
-                You must remove any pending item or due date to make this case
-                eligible for trial
-              </Hint>
+              <div
+                aria-live="polite"
+                className="usa-alert usa-alert--warning"
+                role="alert"
+              >
+                <div className="usa-alert__body">
+                  You must remove any pending item or due date to make this case
+                  eligible for trial
+                </div>
+              </div>
             </div>
           </div>
         )}
