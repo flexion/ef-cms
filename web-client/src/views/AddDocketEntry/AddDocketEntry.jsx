@@ -50,10 +50,16 @@ export const AddDocketEntry = connect(
 
             <div className="grid-col-7">
               {paperDocketEntryHelper.showAddDocumentWarning && (
-                <Hint exclamation fullWidth>
-                  This docket entry is incomplete. Add a document and save to
-                  complete this entry.
-                </Hint>
+                <div
+                  aria-live="polite"
+                  className="usa-alert usa-alert--warning"
+                  role="alert"
+                >
+                  <div className="usa-alert__body">
+                    This docket entry is incomplete. Add a document and save to
+                    complete this entry.
+                  </div>
+                </div>
               )}
             </div>
 

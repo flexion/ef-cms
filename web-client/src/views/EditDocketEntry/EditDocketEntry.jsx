@@ -34,10 +34,16 @@ export const EditDocketEntry = connect(
         <CaseDetailHeader />
         <section className="usa-section grid-container">
           {editDocketEntryHelper.showPaperServiceWarning && (
-            <Hint exclamation fullWidth>
-              This document was automatically generated and requires paper
-              service
-            </Hint>
+            <div
+              aria-live="polite"
+              className="usa-alert usa-alert--warning"
+              role="alert"
+            >
+              <div className="usa-alert__body">
+                This document was automatically generated and requires paper
+                service.
+              </div>
+            </div>
           )}
           <h2 className="heading-1">
             {editDocketEntryHelper.formattedDocument.documentTitle ||

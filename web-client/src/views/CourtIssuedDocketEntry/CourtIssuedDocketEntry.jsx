@@ -59,9 +59,15 @@ export const CourtIssuedDocketEntry = connect(
           <ErrorNotification />
 
           {isEditingDocketEntry && (
-            <Hint exclamation fullWidth>
-              This docket entry has not been served on the parties.
-            </Hint>
+            <div
+              aria-live="polite"
+              className="usa-alert usa-alert--warning"
+              role="alert"
+            >
+              <div className="usa-alert__body">
+                This docket entry has not been served on the parties.
+              </div>
+            </div>
           )}
 
           <div className="grid-row grid-gap">
