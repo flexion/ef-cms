@@ -1468,7 +1468,7 @@
             isFileAttached: 
               type: "boolean"
               flags: 
-                presence: "optional"
+                presence: "required"
                 description: "Has an associated PDF in S3."
             isLegacySealed: 
               type: "boolean"
@@ -5544,7 +5544,7 @@
             isFileAttached: 
               type: "boolean"
               flags: 
-                presence: "optional"
+                presence: "required"
                 description: "Has an associated PDF in S3."
             isLegacySealed: 
               type: "boolean"
