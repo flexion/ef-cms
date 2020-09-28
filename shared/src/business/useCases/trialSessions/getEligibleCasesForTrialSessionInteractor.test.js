@@ -40,7 +40,10 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
       .getTrialSessionById.mockImplementation(() => mockTrial);
     applicationContext
       .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockReturnValue([MOCK_CASE]);
+      .getEligibleCasesForTrialSession.mockReturnValue([
+        MOCK_CASE,
+        { ...MOCK_CASE, blocked: true }, // blocked case should never be returned by getEligibleCasesForTrialSession
+      ]);
     applicationContext
       .getUseCases()
       .getCalendaredCasesForTrialSessionInteractor.mockImplementation(() => [
