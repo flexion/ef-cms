@@ -22,4 +22,4 @@ USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcm
 ENV=${ENV} STAGE=${ENV} DEPLOYING_COLOR=${DEPLOYING_COLOR} REGION=${REGION} DYNAMODB_ENDPOINT=dynamodb.${REGION}.amazonaws.com \
 S3_ENDPOINT=s3.${REGION}.amazonaws.com DOCUMENTS_BUCKET_NAME=${EFCMS_DOMAIN}-documents-${ENV}-${REGION} \
 USER_POOL_ID=${USER_POOL_ID} \
-node ./bulkImportJudgeUsers.js ${FILE_NAME} >> bulk-import-log.txt
+node ./bulkImportJudgeUsers.js ${FILE_NAME}

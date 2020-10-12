@@ -640,13 +640,14 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "test" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] ; then
               docker run \
+               -v $(pwd)/web-api:/home/app/web-api
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                -e "CURRENT_COLOR=${CURRENT_COLOR}" \
                -e "DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}" \
                -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
                -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" \
-               --rm efcms /bin/sh -c "cd web-api && ./bulk-import-judge-users.sh ${ENV} judge_users.csv"
+               --rm efcms /bin/sh -c "cd web-api && ./bulk-import-judge-users.sh ${ENV} judge_users.csv >> bulk-import-judge-users-log.txt"
             else
               echo "skipping…"
             fi
@@ -722,7 +723,7 @@ jobs:
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
       - store_artifacts:
-          path: /home/app/web-api/bulk-import-log.txt
+          path: /home/app/web-api/bulk-import-judge-users-log.txt
 
   migrate:
     machine:
