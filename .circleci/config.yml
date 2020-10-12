@@ -636,6 +636,21 @@ jobs:
               echo "skipping…"
             fi
       - run:
+          name: 'Deploy - Web API - Import Judge Users'
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "test" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] ; then
+              docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "CURRENT_COLOR=${CURRENT_COLOR}" \
+               -e "DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}" \
+               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+               -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" \
+               --rm efcms /bin/sh -c "cd web-api && ./bulk-import-judge-users.sh ${ENV} judge_users.csv"
+            else
+              echo "skipping…"
+            fi
+      - run:
           name: 'Deploy - Web API - Cognito Create IRS User'
           command: |
             if [ "${CIRCLE_BRANCH}" == "irs" ]; then
@@ -706,6 +721,8 @@ jobs:
              --rm efcms /bin/sh -c "npm run verify-private-elasticsearch -- ${ENV}"
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
+      - store_artifacts:
+          path: /home/app/web-api/bulk-import-log.txt
 
   migrate:
     machine:
