@@ -1696,11 +1696,14 @@ module.exports = (appContextUser, requestId) => {
     },
     initHoneybadger,
     isAuthorized,
-    logger: {
-      debug: logger.debug.bind(logger),
-      error: logger.error.bind(logger),
-      info: logger.info.bind(logger),
-    },
+    logger:
+      environment.stage === 'local'
+        ? { debug: () => {}, error: () => {}, info: () => {} }
+        : {
+            debug: logger.debug.bind(logger),
+            error: logger.error.bind(logger),
+            info: logger.info.bind(logger),
+          },
     notifyHoneybadger: async (message, context) => {
       const honeybadger = initHoneybadger();
 
