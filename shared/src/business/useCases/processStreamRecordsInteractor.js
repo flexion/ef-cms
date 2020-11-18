@@ -328,15 +328,13 @@ exports.processStreamRecordsInteractor = async ({
     const OLD_TIME_KEY = 'dynamodb.OldImage.aws:rep:updatetime.N';
     const IS_DELETING_KEY = 'dynamodb.NewImage.aws:rep:deleting.BOOL';
 
-    const oldImage = get(record, 'dynamodb.OldImage');
-
-    console.log(
-      `${record.eventName}, ${isDeleting},  ${(oldImage.pk, oldImage.sk)}`,
-      (process.env.NODE_ENV !== 'production' ||
-        (newTime && newTime !== oldTime) ||
-        record.eventName === 'REMOVE') &&
-        !isDeleting,
-    );
+    // console.log(
+    //   `${record.eventName}, ${isDeleting},  ${(oldImage.pk, oldImage.sk)}`,
+    //   (process.env.NODE_ENV !== 'production' ||
+    //     (newTime && newTime !== oldTime) ||
+    //     record.eventName === 'REMOVE') &&
+    //     !isDeleting,
+    // );
 
     const newTime = get(record, NEW_TIME_KEY);
     const oldTime = get(record, OLD_TIME_KEY);
