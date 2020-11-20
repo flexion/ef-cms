@@ -87,6 +87,47 @@ describe('getCaseInventoryReport', () => {
     });
   });
 
+  it('calls search function with correct params when provided a judge that is not the chief judge', async () => {
+    searchSpy.mockResolvedValue({
+      hits: {
+        hits: [
+          {
+            _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
+          },
+          {
+            _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
+          },
+        ],
+        total: { value: '2' },
+      },
+    });
+
+    await getCaseInventoryReport({
+      applicationContext,
+      associatedJudge: 'Buch',
+    });
+
+    expect(searchSpy).toHaveBeenCalled();
+    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+      {
+        match: { 'entityName.S': 'Case' },
+      },
+      { match: { 'pk.S': 'case|' } },
+      { match: { 'sk.S': 'case|' } },
+      {
+        match_phrase: { 'associatedJudge.S': 'Buch' },
+      },
+    ]);
+    expect(searchSpy.mock.calls[0][0].body.query.bool.must_not).toEqual([
+      {
+        match: { 'status.S': 'Closed' },
+      },
+      {
+        match: { 'associatedJudge.S': 'Chief Judge' },
+      },
+    ]);
+  });
+
   it('calls search function with correct params when provided a status and returns records', async () => {
     searchSpy.mockResolvedValue({
       hits: {

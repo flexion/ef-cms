@@ -45,9 +45,7 @@ exports.getCaseInventoryReport = async ({
             { match: { 'pk.S': 'case|' } },
             { match: { 'sk.S': 'case|' } },
           ],
-          must_not: {
-            match: { 'status.S': 'Closed' },
-          },
+          must_not: [{ match: { 'status.S': 'Closed' } }],
         },
       },
       size,
@@ -61,6 +59,11 @@ exports.getCaseInventoryReport = async ({
     searchParameters.body.query.bool.must.push({
       match_phrase: { 'associatedJudge.S': associatedJudge },
     });
+    if (!associatedJudge.includes('Chief Judge')) {
+      searchParameters.body.query.bool.must_not.push({
+        match: { 'associatedJudge.S': 'Chief Judge' },
+      });
+    }
   }
 
   if (status) {
