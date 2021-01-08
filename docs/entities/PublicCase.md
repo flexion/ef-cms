@@ -287,13 +287,6 @@
             - "PW"
             - "VI"
             - "N/A"
-    createdAt: 
-      type: "date"
-      flags: 
-        format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
-        presence: "optional"
     docketEntries: 
       type: "array"
       flags: 

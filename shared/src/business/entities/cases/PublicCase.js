@@ -65,7 +65,6 @@ const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
   contactPrimary: PublicContact.VALIDATION_RULES.required(),
   contactSecondary: PublicContact.VALIDATION_RULES.optional().allow(null),
-  createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketEntries: joi
     .array()
     .items(PublicDocketEntry.VALIDATION_RULES)
