@@ -8,11 +8,15 @@ const {
   caseSealedFormatter,
 } = require('../utilities/caseFilter');
 const {
+  CaseExternalForIrsPractitioner,
+} = require('../entities/cases/CaseExternalForIrsPractitioner');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { NotFoundError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
+const { ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 const getDocumentContentsForDocuments = async ({
@@ -87,6 +91,7 @@ const getSealedCase = async ({
   applicationContext,
   caseRecord,
   isAssociatedWithCase,
+  isIrsPractitioner,
 }) => {
   const currentUser = applicationContext.getCurrentUser();
   let isAuthorizedToViewSealedCase = isAuthorized(
@@ -108,6 +113,12 @@ const getSealedCase = async ({
       applicationContext,
       caseRecord,
     });
+  } else if (isIrsPractitioner) {
+    return new CaseExternalForIrsPractitioner(caseRecord, {
+      applicationContext,
+    })
+      .validate()
+      .toRawObject();
   } else {
     caseRecord = caseSealedFormatter(caseRecord);
     return new PublicCase(caseRecord, {
@@ -123,9 +134,16 @@ const getCaseForExternalUser = async ({
   caseRecord,
   isAssociatedWithCase,
   isAuthorizedToGetCase,
+  isIrsPractitioner,
 }) => {
   if (isAuthorizedToGetCase && isAssociatedWithCase) {
     return await getCaseAndDocumentContents({ applicationContext, caseRecord });
+  } else if (isIrsPractitioner) {
+    return new CaseExternalForIrsPractitioner(caseRecord, {
+      applicationContext,
+    })
+      .validate()
+      .toRawObject();
   } else {
     return new PublicCase(caseRecord, {
       applicationContext,
@@ -164,6 +182,8 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
     caseRecord.contactPrimary.contactId,
   );
 
+  const isIrsPractitioner = currentUser.role === ROLES.irsPractitioner;
+
   // check secondary contact if existent
   isAuthorizedToGetCase = isAuthorizedForContact({
     contact: caseRecord.contactSecondary,
@@ -184,6 +204,7 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
       applicationContext,
       caseRecord,
       isAssociatedWithCase,
+      isIrsPractitioner,
     });
   } else {
     const { role: userRole } = currentUser;
@@ -200,6 +221,7 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
         caseRecord,
         isAssociatedWithCase,
         isAuthorizedToGetCase,
+        isIrsPractitioner,
       });
     }
   }
