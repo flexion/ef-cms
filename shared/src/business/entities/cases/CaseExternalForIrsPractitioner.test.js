@@ -11,6 +11,7 @@ const {
   ROLES,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
+const { omit } = require('lodash');
 
 describe('CaseExternalForIrsPractitioner', () => {
   const rawContactPrimary = {
@@ -153,6 +154,7 @@ describe('CaseExternalForIrsPractitioner', () => {
     isPaper: true,
     isSealed: false,
     otherFilers: rawOtherFilers,
+    otherPetitioners: rawOtherPetitioners,
     partyType: PARTY_TYPES.petitionerDeceasedSpouse,
     privatePractitioners: rawPrivatePractitioners,
     receivedAt: '2020-01-02T03:30:45.007Z',
@@ -178,16 +180,14 @@ describe('CaseExternalForIrsPractitioner', () => {
   });
 
   it('should only have expected fields', () => {
-    const entity = new CaseExternalForIrsPractitioner(
+    const rawEntity = new CaseExternalForIrsPractitioner(
       {
         ...rawCase,
       },
       { applicationContext },
-    );
+    ).toRawObject();
 
-    // HERE HERE HERE
-
-    expect(entity.toRawObject()).toEqual({
+    expect(rawEntity).toEqual({
       caseCaption: rawCase.caseCaption,
       contactPrimary: rawContactPrimary,
       contactSecondary: rawContactSecondary,
@@ -211,91 +211,34 @@ describe('CaseExternalForIrsPractitioner', () => {
       applicationContext,
     });
 
-    expect(entity.toRawObject()).toMatchObject({
-      ...rawCase,
-      caseCaption: 'testing',
-      contactPrimary: expect.objectContaining(rawContactPrimary),
-      docketEntries: [],
-      docketNumber: 'testing',
-      docketNumberSuffix: 'testing',
-      docketNumberWithSuffix: 'testingtesting',
-      hasIrsPractitioner: true,
-      isSealed: false,
-
-      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-      receivedAt: 'testing',
-    });
+    expect(entity.toRawObject()).toMatchObject(
+      omit(
+        {
+          ...rawCase,
+          caseCaption: 'testing',
+          contactPrimary: expect.objectContaining(rawContactPrimary),
+          docketEntries: [],
+          hasIrsPractitioner: true,
+          isSealed: false,
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+        },
+        ['createdAt', 'isPaper'],
+      ),
+    );
   });
 
   it('should show practitioner and other filer information even if the case is sealed', () => {
-    // const rawCase = {
-    //   caseCaption: 'testing',
-    //   docketEntries: [],
-    //   docketNumber: 'testing',
-    //   docketNumberSuffix: 'testing',
-    //   irsPractitioners: [
-    //     {
-    //       userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-    //     },
-    //   ],
-    //   isSealed: true,
-    //   otherFilers: [
-    //     {
-    //       contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-    //     },
-    //   ],
-    //   otherPetitioners: [
-    //     {
-    //       contactId: '9905d1ab-18d0-43ec-bafb-654e83405416',
-    //     },
-    //   ],
-    //   partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-    //   privatePractitioners: [
-    //     {
-    //       userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
-    //     },
-    //   ],
-    //   receivedAt: 'testing',
-    // };
-    const entity = new CaseExternalForIrsPractitioner(rawCase, {
-      applicationContext,
-    });
-
-    expect(entity.irsPractitioners).toBeUndefined();
-    expect(entity.otherFilers).toBeUndefined();
-    expect(entity.privatePractitioners).toBeUndefined();
-  });
-
-  it('should only have expected fields if docketEntries is null', () => {
     const entity = new CaseExternalForIrsPractitioner(
+      { ...rawCase, isSealed: true },
       {
-        caseCaption: 'testing',
-        contactPrimary: undefined,
-        contactSecondary: undefined,
-        createdAt: 'testing',
-        docketEntries: null,
-        docketNumber: 'testing',
-        docketNumberSuffix: 'testing',
-        irsPractitioners: [],
-        partyType: PARTY_TYPES.petitioner,
-        receivedAt: 'testing',
+        applicationContext,
       },
-      { applicationContext },
     );
 
-    expect(entity.toRawObject()).toEqual({
-      caseCaption: 'testing',
-      contactPrimary: undefined,
-      contactSecondary: undefined,
-      docketEntries: [],
-      docketNumber: 'testing',
-      docketNumberSuffix: 'testing',
-      docketNumberWithSuffix: 'testingtesting',
-      hasIrsPractitioner: false,
-      isSealed: false,
-      partyType: PARTY_TYPES.petitioner,
-      receivedAt: 'testing',
-    });
+    expect(entity.irsPractitioners).toBeDefined();
+    expect(entity.otherFilers).toBeDefined();
+    expect(entity.otherPetitioners).toBeDefined();
+    expect(entity.privatePractitioners).toBeDefined();
   });
 
   it('should filter draft docketEntries out of the docketEntries array', () => {
@@ -325,37 +268,25 @@ describe('CaseExternalForIrsPractitioner', () => {
       { applicationContext },
     );
 
-    expect(entity.toRawObject()).toEqual({
-      caseCaption: 'testing',
-      contactPrimary: undefined,
-      contactSecondary: undefined,
-      docketEntries: [
-        {
-          additionalInfo: undefined,
-          additionalInfo2: undefined,
-          docketEntryId: '123',
-          documentTitle: undefined,
-          documentType: 'Order that case is assigned',
-          eventCode: undefined,
-          filedBy: undefined,
-          isMinuteEntry: false,
-          isOnDocketRecord: true,
-          isPaper: undefined,
-          isSealed: false,
-          processingStatus: undefined,
-          receivedAt: undefined,
-          servedAt: undefined,
-          servedParties: undefined,
-        },
-      ],
-      docketNumber: 'testing',
-      docketNumberSuffix: 'testing',
-      docketNumberWithSuffix: 'testingtesting',
-      hasIrsPractitioner: false,
-      isSealed: false,
-      partyType: PARTY_TYPES.petitioner,
-      receivedAt: 'testing',
-    });
+    expect(entity.toRawObject().docketEntries).toEqual([
+      {
+        additionalInfo: undefined,
+        additionalInfo2: undefined,
+        docketEntryId: '123',
+        documentTitle: undefined,
+        documentType: 'Order that case is assigned',
+        eventCode: undefined,
+        filedBy: undefined,
+        isMinuteEntry: false,
+        isOnDocketRecord: true,
+        isPaper: undefined,
+        isSealed: false,
+        processingStatus: undefined,
+        receivedAt: undefined,
+        servedAt: undefined,
+        servedParties: undefined,
+      },
+    ]);
   });
 
   it('should compute docketNumberWithSuffix if it is not provided', () => {
@@ -3905,7 +3836,7 @@ describe('CaseExternalForIrsPractitioner', () => {
         orderToShowCause: false,
         otherFilers: [],
         otherPetitioners: [],
-        partyType: 'Petitioner & spouse',
+        partyType: PARTY_TYPES.petitionerSpouse,
         petitionPaymentDate: '1900-01-01',
         petitionPaymentMethod: 'N/A',
         petitionPaymentStatus: 'Paid',
@@ -3936,49 +3867,6 @@ describe('CaseExternalForIrsPractitioner', () => {
       error = err;
     }
     expect(error).not.toBeDefined();
-  });
-
-  it('should consider a public case to be sealed and valid when it has minimal information', () => {
-    const entity = new CaseExternalForIrsPractitioner(
-      {
-        docketNumber: '17000-15',
-        docketNumberSuffix: 'W',
-        sealedDate: 'some date',
-      },
-      { applicationContext },
-    );
-    expect(entity.isSealed).toBe(true);
-
-    let error;
-    try {
-      entity.validate();
-    } catch (err) {
-      error = err;
-    }
-    expect(error).not.toBeDefined();
-  });
-
-  it('should consider a public case to be sealed and not valid if there exists a sealed docket entry on the docket record', () => {
-    const entity = new CaseExternalForIrsPractitioner(
-      {
-        docketEntries: [{ isOnDocketRecord: true, isSealed: true }],
-        docketNumber: '17000-15',
-      },
-      { applicationContext },
-    );
-    expect(entity.isSealed).toBe(true);
-    expect(entity.docketEntries.length).toBe(1);
-
-    let error;
-    try {
-      entity.validate();
-    } catch (err) {
-      error = err;
-    }
-    expect(error.details).toMatchObject({
-      docketEntries: expect.anything(),
-      isSealed: expect.anything(),
-    });
   });
 
   it('an irsPractitioner should be able to see otherPetitioners and otherFilers', () => {
