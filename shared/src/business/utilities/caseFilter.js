@@ -7,8 +7,19 @@ const { isAssociatedUser, isSealedCase } = require('../entities/cases/Case');
 const CASE_ATTRIBUTE_WHITELIST = [
   'docketNumber',
   'docketNumberSuffix',
+  'entityName',
   'isSealed',
   'sealedDate',
+];
+
+const CASE_ATTRIBUTE_WHITE_LIST_IRS_PRACTITIONER = [
+  ...CASE_ATTRIBUTE_WHITELIST,
+  'contactPrimary',
+  'contactSecondary',
+  'irsPractitioners',
+  'otherFilers',
+  'otherPractitioners',
+  'privatePractitioners',
 ];
 
 const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
@@ -22,8 +33,11 @@ const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
   'title',
 ];
 
-const caseSealedFormatter = caseRaw => {
-  return pick(caseRaw, CASE_ATTRIBUTE_WHITELIST);
+const caseSealedFormatter = (caseRaw, isIrsPractitioner) => {
+  const attributes = isIrsPractitioner
+    ? CASE_ATTRIBUTE_WHITE_LIST_IRS_PRACTITIONER
+    : CASE_ATTRIBUTE_WHITELIST;
+  return pick(caseRaw, attributes);
 };
 
 /**

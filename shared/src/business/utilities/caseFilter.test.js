@@ -12,15 +12,52 @@ describe('caseFilter', () => {
   it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
     const result = caseSealedFormatter({
       baz: 'quux',
+      contactPrimary: {},
+      contactSecondary: {},
       docketNumber: '102-20',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       foo: 'bar',
+      irsPractitioners: [{}],
+      otherFilers: [{}],
+      otherPractitioners: [{}],
+      privatePractitioners: [{}],
       sealedDate: '2020-01-02T03:04:05.007Z',
     });
 
     expect(result).toEqual({
       docketNumber: '102-20',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+      sealedDate: '2020-01-02T03:04:05.007Z',
+    });
+  });
+
+  it('should format sealed cases to preserve associated user and contact fields when isIrsPractitioner is true', () => {
+    const result = caseSealedFormatter(
+      {
+        baz: 'quux',
+        contactPrimary: {},
+        contactSecondary: {},
+        docketNumber: '102-20',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+        foo: 'bar',
+        irsPractitioners: [{}],
+        otherFilers: [{}],
+        otherPractitioners: [{}],
+        privatePractitioners: [{}],
+        sealedDate: '2020-01-02T03:04:05.007Z',
+      },
+      true, // isIrsPractitioner
+    );
+
+    expect(result).toEqual({
+      contactPrimary: {},
+      contactSecondary: {},
+      docketNumber: '102-20',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+      irsPractitioners: [{}],
+      otherFilers: [{}],
+      otherPractitioners: [{}],
+      privatePractitioners: [{}],
       sealedDate: '2020-01-02T03:04:05.007Z',
     });
   });
