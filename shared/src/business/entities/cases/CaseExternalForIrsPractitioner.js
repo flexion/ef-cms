@@ -33,6 +33,7 @@ CaseExternalForIrsPractitioner.prototype.init = function init(
   this.docketNumberWithSuffix =
     rawCase.docketNumberWithSuffix ||
     `${this.docketNumber}${this.docketNumberSuffix || ''}`;
+  this.entityName = 'CaseExternalForIrsPractitioner';
   this.hasIrsPractitioner =
     !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
   this.partyType = rawCase.partyType;
@@ -80,7 +81,7 @@ CaseExternalForIrsPractitioner.prototype.init = function init(
 CaseExternalForIrsPractitioner.validationName =
   'CaseExternalForIrsPractitioner';
 
-const publicCaseSchema = {
+const caseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
   contactPrimary: PublicContact.VALIDATION_RULES.required(),
   contactSecondary: PublicContact.VALIDATION_RULES.optional().allow(null),
@@ -106,9 +107,47 @@ const publicCaseSchema = {
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
 };
 
+const sealedCaseSchemaRestricted = {
+  caseCaption: joi.any().forbidden(),
+  contactPrimary: PublicContact.VALIDATION_RULES.required(),
+  contactSecondary: PublicContact.VALIDATION_RULES.optional().allow(null),
+  createdAt: joi.any().forbidden(),
+  docketEntries: joi.array().max(0),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
+  docketNumberSuffix: JoiValidationConstants.STRING.valid(
+    ...Object.values(DOCKET_NUMBER_SUFFIXES),
+  ).optional(),
+  hasIrsPractitioner: joi.boolean(),
+  irsPractitioners: joi
+    .array()
+    .items(IrsPractitioner.VALIDATION_RULES)
+    .optional()
+    .allow(null),
+  isSealed: joi.boolean(),
+  otherFilers: joi
+    .array()
+    .items(PublicContact.VALIDATION_RULES)
+    .optional()
+    .allow(null),
+  otherPetitioners: joi
+    .array()
+    .items(PublicContact.VALIDATION_RULES)
+    .optional()
+    .allow(null),
+  partyType: joi.any().forbidden(),
+  privatePractitioners: joi
+    .array()
+    .items(PrivatePractitioner.VALIDATION_RULES)
+    .optional()
+    .allow(null),
+  receivedAt: joi.any().forbidden(),
+};
+
 joiValidationDecorator(
   CaseExternalForIrsPractitioner,
-  joi.object(publicCaseSchema),
+  joi.object(caseSchema).when(joi.object({ isSealed: true }).unknown(), {
+    then: joi.object(sealedCaseSchemaRestricted),
+  }),
   {},
 );
 

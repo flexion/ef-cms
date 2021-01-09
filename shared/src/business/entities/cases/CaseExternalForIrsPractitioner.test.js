@@ -15,6 +15,7 @@ const { omit } = require('lodash');
 
 describe('CaseExternalForIrsPractitioner', () => {
   const rawContactPrimary = {
+    additionalName: 'Garr',
     address1: '907 West Rocky Cowley Parkway',
     address2: '104 West 120th Street',
     address3: 'Nisi quisquam ea har',
@@ -23,16 +24,22 @@ describe('CaseExternalForIrsPractitioner', () => {
     country: 'USA',
     countryType: 'domestic',
     email: 'petitioner@example.com',
+    hasEAccess: true,
+    inCareOf: 'Karen',
     isAddressSealed: false,
     name: 'Garrett Carpenter',
+    otherFilerType: null,
     phone: '+1 (241) 924-9153',
     postalCode: '26371',
     sealedAndUnavailable: false,
     secondaryName: 'Leslie Bullock',
+    serviceIndicator: 'Electronic',
     state: 'MD',
+    title: 'Senor',
   };
 
   const rawContactSecondary = {
+    additionalName: '',
     address1: '907 West Rocky Cowley Parkway',
     address2: '104 West 120th Street',
     address3: 'Nisi quisquam ea har',
@@ -41,6 +48,7 @@ describe('CaseExternalForIrsPractitioner', () => {
     country: 'USA',
     countryType: 'domestic',
     email: 'petitioner@example.com',
+    hasEAccess: true,
     inCareOf: 'Karen',
     isAddressSealed: false,
     name: 'Barrett Carpenter',
@@ -48,7 +56,9 @@ describe('CaseExternalForIrsPractitioner', () => {
     postalCode: '26371',
     sealedAndUnavailable: false,
     secondaryName: 'Leslie Bullock',
+    serviceIndicator: 'Electronic',
     state: 'MD',
+    title: 'The Honorable',
   };
 
   const rawIrsPractitioners = [
@@ -67,15 +77,18 @@ describe('CaseExternalForIrsPractitioner', () => {
       },
       email: 'irsPractitioner@example.com',
       entityName: 'IrsPractitioner',
+      isUpdatingInformation: false,
       name: 'Test IRS Practitioner',
       role: 'irsPractitioner',
       serviceIndicator: 'Electronic',
+      token: '123',
       userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
     },
   ];
 
   const rawOtherFilers = [
     {
+      additionalName: '',
       address1: '907 West Rocky Cowley Parkway',
       address2: '104 West 120th Street',
       address3: 'Nisi quisquam ea har',
@@ -84,6 +97,8 @@ describe('CaseExternalForIrsPractitioner', () => {
       country: 'USA',
       countryType: 'domestic',
       email: 'petitioner@example.com',
+      hasEAccess: true,
+      inCareOf: 'Karen',
       isAddressSealed: false,
       name: 'Barrett Carpenter',
       otherFilerType: OTHER_FILER_TYPES[1],
@@ -91,6 +106,7 @@ describe('CaseExternalForIrsPractitioner', () => {
       postalCode: '26371',
       sealedAndUnavailable: false,
       secondaryName: 'Leslie Bullock',
+      serviceIndicator: 'Electronic',
       state: 'MD',
       title: 'Intervenor',
     },
@@ -195,6 +211,7 @@ describe('CaseExternalForIrsPractitioner', () => {
       docketNumber: rawCase.docketNumber,
       docketNumberSuffix: rawCase.docketNumberSuffix,
       docketNumberWithSuffix: expect.anything(),
+      entityName: 'CaseExternalForIrsPractitioner',
       hasIrsPractitioner: expect.anything(),
       irsPractitioners: rawIrsPractitioners,
       isSealed: rawCase.isSealed,
