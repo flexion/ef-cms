@@ -114,6 +114,7 @@ const getSealedCase = async ({
       caseRecord,
     });
   } else if (isIrsPractitioner) {
+    caseRecord = caseSealedFormatter(caseRecord, true);
     return new CaseExternalForIrsPractitioner(caseRecord, {
       applicationContext,
     })

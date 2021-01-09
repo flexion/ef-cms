@@ -310,7 +310,7 @@ describe('getCaseInteractor', () => {
         );
     });
 
-    it('should return a PublicCase entity when the current user is NOT authorized to view a sealed case and is NOT associated with the case', async () => {
+    it('should return a PublicCase entity when the current user is NOT an IRS Practitioner, NOT authorized to view a sealed case, and is NOT associated with the case', async () => {
       applicationContext.getCurrentUser.mockReturnValue({
         name: 'Tasha Yar',
         role: ROLES.privatePractitioner,
@@ -335,6 +335,21 @@ describe('getCaseInteractor', () => {
         partyType: undefined,
         receivedAt: undefined,
       });
+    });
+
+    it('should return a CaseExternalForIrsPractitioner entity when the current user is an IRS Practitioner, is NOT authorized to view a sealed case, and is NOT associated with the case', async () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        name: 'Tasha Yar',
+        role: ROLES.irsPractitioner,
+        userId: practitioner2Id,
+      });
+
+      const result = await getCaseInteractor({
+        applicationContext,
+        docketNumber: '101-18',
+      });
+
+      expect(result.entityName).toEqual('CaseExternalForIrsPractitioner');
     });
 
     it('should return a Case entity when the current user is authorized to view a sealed case and is NOT associated with the case', async () => {
@@ -405,7 +420,7 @@ describe('getCaseInteractor', () => {
       expect(result.contactPrimary.phone).toBeDefined();
     });
 
-    it('should return a PublicCase entity when the current user is an external user who is NOT associated with the case', async () => {
+    it('should return a PublicCase entity when the current user is an external user, not an IRS Practitioner, and  NOT associated with the case', async () => {
       applicationContext.getCurrentUser.mockReturnValue({
         name: 'Tasha Yar',
         role: ROLES.privatePractitioner,
@@ -419,6 +434,21 @@ describe('getCaseInteractor', () => {
 
       expect(result.contactPrimary.address1).toBeUndefined();
       expect(result.contactPrimary.phone).toBeUndefined();
+    });
+
+    it('should return a CaseExternalForIrsPractitioner entity when the current user is an IRS Practitioner user who is NOT associated with the case', async () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        name: 'Tasha Yar',
+        role: ROLES.irsPractitioner,
+        userId: practitionerId,
+      });
+
+      const result = await getCaseInteractor({
+        applicationContext,
+        docketNumber: '101-18',
+      });
+
+      expect(result.entityName).toEqual('CaseExternalForIrsPractitioner');
     });
 
     it('should return a Case entity when the current user is associated with the case', async () => {
