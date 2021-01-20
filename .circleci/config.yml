@@ -496,8 +496,10 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./get-environment.sh $CIRCLE_BRANCH >> $BASH_ENV
-            echo "export CIRCLE_BRANCH=$CIRCLE_BRANCH" >> $BASH_ENV
+            ./setup-environment.sh $CIRCLE_BRANCH
+      - run:
+          name: Setup Colors Env
+          command: |
             echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./get-current-color.sh $ENV)" >> $BASH_ENV
@@ -704,7 +706,10 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./get-environment.sh $CIRCLE_BRANCH >> $BASH_ENV
+            ./setup-environment.sh $CIRCLE_BRANCH
+      - run:
+          name: Setup Colors Env
+          command: |
             echo "export MIGRATE_FLAG=$(./get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./get-source-table.sh $ENV)" >> $BASH_ENV
@@ -773,7 +778,10 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./get-environment.sh $CIRCLE_BRANCH >> $BASH_ENV
+            ./setup-environment.sh $CIRCLE_BRANCH
+      - run:
+          name: Setup Colors Env
+          command: |
             echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: 'Cypress Smoke Tests'
@@ -805,7 +813,10 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ./get-environment.sh $CIRCLE_BRANCH >> $BASH_ENV
+            ./setup-environment.sh $CIRCLE_BRANCH
+      - run:
+          name: Setup Colors Env
+          command: |
             echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./get-current-color.sh $ENV)" >> $BASH_ENV
             echo "export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID >> $BASH_ENV"
