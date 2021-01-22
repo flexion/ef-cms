@@ -8,12 +8,15 @@ export const ConfirmEmailModal = connect(
   {
     clearModalSequence: sequences.clearModalSequence,
     form: state.form,
+    submitUpdateUserContactInformationSequence:
+      sequences.submitUpdateUserContactInformationSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
   function ConfirmEmailModal({
     clearModalSequence,
     form,
+    submitUpdateUserContactInformationSequence,
     updateFormValueSequence,
     validationErrors,
   }) {
@@ -23,7 +26,7 @@ export const ConfirmEmailModal = connect(
         cancelSequence={clearModalSequence}
         className=""
         confirmLabel="Continue"
-        // confirmSequence={}
+        confirmSequence={submitUpdateUserContactInformationSequence}
         title="Confirm Your Email Update"
       >
         <p>
