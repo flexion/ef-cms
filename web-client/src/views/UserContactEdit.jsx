@@ -1,4 +1,5 @@
 import { Button } from '../ustc-ui/Button/Button';
+import { ConfirmEmailModal } from './ConfirmEmailModal';
 import { ErrorNotification } from './ErrorNotification';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { UserContactEditForm } from './UserContactEditForm';
@@ -8,15 +9,17 @@ import React from 'react';
 
 export const UserContactEdit = connect(
   {
+    confirmUserEmailChangeOrSubmitSequence:
+      sequences.confirmUserEmailChangeOrSubmitSequence,
     form: state.form,
     navigateBackSequence: sequences.navigateBackSequence,
-    submitUpdateUserContactInformationSequence:
-      sequences.submitUpdateUserContactInformationSequence,
+    showModal: state.modal.showModal,
   },
   function UserContactEdit({
+    confirmUserEmailChangeOrSubmitSequence,
     form,
     navigateBackSequence,
-    submitUpdateUserContactInformationSequence,
+    showModal,
   }) {
     return (
       <>
@@ -56,7 +59,8 @@ export const UserContactEdit = connect(
           </div>
           <Button
             onClick={() => {
-              submitUpdateUserContactInformationSequence();
+              confirmUserEmailChangeOrSubmitSequence();
+              // submitUpdateUserContactInformationSequence();
             }}
           >
             Save
@@ -65,6 +69,8 @@ export const UserContactEdit = connect(
             Cancel
           </Button>
         </section>
+
+        {showModal === 'ConfirmEmailModal' && <ConfirmEmailModal />}
       </>
     );
   },

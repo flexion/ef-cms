@@ -97,10 +97,10 @@ export const UserContactEditForm = connect(
           </span>
           <input
             autoCapitalize="none"
-            className="usa-input max-width-200"
+            className="usa-input"
             id="email"
             name="email"
-            type="email"
+            type="text"
             value={form.email || ''}
             onBlur={() => {
               onBlurValidationSequence();

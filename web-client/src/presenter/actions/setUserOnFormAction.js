@@ -15,5 +15,6 @@ export const setUserOnFormAction = async ({ props, store }) => {
     contact: props.user.contact,
     email: props.user.email,
     name: props.user.name,
+    originalEmail: props.user.email,
   });
 };
