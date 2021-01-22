@@ -28,6 +28,7 @@ describe('setUserOnFormAction', () => {
       },
       email: 'testing@example.com',
       name: 'Test User',
+      originalEmail: 'testing@example.com',
     });
   });
 });
