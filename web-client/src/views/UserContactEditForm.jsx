@@ -94,7 +94,13 @@ export const UserContactEditForm = connect(
 
         {screenMetadata.isEditingEmail ? (
           <>
-            <FormGroup errorText={validationErrors && validationErrors.email}>
+            <FormGroup
+              errorText={
+                validationErrors &&
+                validationErrors.contact &&
+                validationErrors.contact.email
+              }
+            >
               <label className="usa-label margin-bottom-0" htmlFor="email">
                 Email address
               </label>
@@ -121,7 +127,11 @@ export const UserContactEditForm = connect(
               />
             </FormGroup>
             <FormGroup
-              errorText={validationErrors && validationErrors.confirmEmail}
+              errorText={
+                validationErrors &&
+                validationErrors.contact &&
+                validationErrors.contact.confirmEmail
+              }
             >
               <label className="usa-label" htmlFor="confirm-email">
                 Re-enter email address

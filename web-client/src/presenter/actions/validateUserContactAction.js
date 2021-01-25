@@ -45,7 +45,6 @@ export const validateUserContactAction = ({
         title: 'Errors were found. Please correct your form and resubmit.',
       },
       errors: {
-        ...errors,
         contact: errors,
       },
     });
