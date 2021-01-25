@@ -4,6 +4,7 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { shouldOpenConfirmEmailModalAction } from '../actions/shouldOpenConfirmEmailModalAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
@@ -23,10 +24,16 @@ export const submitUpdateUserContactInformationSequence = [
         error: [
           unsetWaitingForResponseAction,
           setShowModalFactoryAction('WebSocketErrorModal'),
+          // TODO: if user already exists, show a different modal?
         ],
         success: [
           setCurrentPageAction('Interstitial'),
           updateUserContactInformationAction,
+          shouldOpenConfirmEmailModalAction,
+          {
+            no: [],
+            yes: [setShowModalFactoryAction('ConfirmEmailModal')],
+          },
         ],
       },
     ],

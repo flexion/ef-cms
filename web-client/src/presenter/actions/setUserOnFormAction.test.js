@@ -26,6 +26,7 @@ describe('setUserOnFormAction', () => {
       contact: {
         address1: '123 Main St',
       },
+      email: 'testing@example.com',
       name: 'Test User',
       originalEmail: 'testing@example.com',
     });
