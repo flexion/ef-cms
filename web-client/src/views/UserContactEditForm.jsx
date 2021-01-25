@@ -130,7 +130,7 @@ export const UserContactEditForm = connect(
                 autoCapitalize="none"
                 className="usa-input"
                 id="confirm-email"
-                name="confirm-email"
+                name="confirmEmail"
                 type="text"
                 value={form.confirmEmail || ''}
                 onBlur={() => {

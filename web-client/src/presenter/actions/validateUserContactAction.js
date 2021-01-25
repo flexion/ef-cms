@@ -17,16 +17,25 @@ export const validateUserContactAction = ({
   const formContact = get(state.form);
   const currentUser = applicationContext.getCurrentUser();
 
-  const errors = applicationContext
-    .getUseCases()
-    .validateUserContactInteractor({
-      applicationContext,
-      user: {
-        ...currentUser,
-        contact: formContact.contact,
-        email: formContact.email,
-      },
-    });
+  let errors = applicationContext.getUseCases().validateUserContactInteractor({
+    applicationContext,
+    user: {
+      ...currentUser,
+      contact: formContact.contact,
+      email: formContact.email,
+    },
+  });
+
+  if (
+    formContact.originalEmail.toLowerCase() !==
+      formContact.email.toLowerCase() &&
+    formContact.confirmEmail !== formContact.email
+  ) {
+    if (!errors) {
+      errors = {};
+    }
+    errors.confirmEmail = 'Email addresses do not match';
+  }
 
   if (!errors) {
     return path.success();
@@ -36,8 +45,8 @@ export const validateUserContactAction = ({
         title: 'Errors were found. Please correct your form and resubmit.',
       },
       errors: {
+        ...errors,
         contact: errors,
-        email: errors.email,
       },
     });
   }
