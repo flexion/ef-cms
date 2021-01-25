@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @returns {object} the next path based on if validation was successful or error
  */
-export const shouldOpenConfirmEmailModalAction = ({ get, path }) => {
+export const shouldOpenVerifyEmailChangeModalAction = ({ get, path }) => {
   const { email, originalEmail } = get(state.form);
 
   if (originalEmail.toLowerCase() === email.toLowerCase()) {

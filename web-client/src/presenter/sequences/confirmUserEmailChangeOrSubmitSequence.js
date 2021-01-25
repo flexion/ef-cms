@@ -1,11 +1,11 @@
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
-import { shouldOpenConfirmEmailModalAction } from '../actions/shouldOpenConfirmEmailModalAction';
+import { shouldOpenVerifyEmailChangeModalAction } from '../actions/shouldOpenVerifyEmailChangeModalAction';
 import { submitUpdateUserContactInformationSequence } from './submitUpdateUserContactInformationSequence';
 
 export const confirmUserEmailChangeOrSubmitSequence = [
-  shouldOpenConfirmEmailModalAction,
+  shouldOpenVerifyEmailChangeModalAction,
   {
     no: [submitUpdateUserContactInformationSequence],
-    yes: [setShowModalFactoryAction('ConfirmEmailModal')],
+    yes: [setShowModalFactoryAction('VerifyEmailChangeModal')],
   },
 ];

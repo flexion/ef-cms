@@ -3,11 +3,11 @@ import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
 
-export const ConfirmEmailModal = connect(
+export const VerifyEmailChangeModal = connect(
   {
     clearModalSequence: sequences.clearModalSequence,
   },
-  function ConfirmEmailModal({ clearModalSequence }) {
+  function VerifyEmailChangeModal({ clearModalSequence }) {
     return (
       <ModalDialog
         className=""

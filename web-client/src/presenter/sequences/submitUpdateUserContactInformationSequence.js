@@ -4,7 +4,7 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { shouldOpenConfirmEmailModalAction } from '../actions/shouldOpenConfirmEmailModalAction';
+import { shouldOpenVerifyEmailChangeModalAction } from '../actions/shouldOpenVerifyEmailChangeModalAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
@@ -29,10 +29,10 @@ export const submitUpdateUserContactInformationSequence = [
         success: [
           setCurrentPageAction('Interstitial'),
           updateUserContactInformationAction,
-          shouldOpenConfirmEmailModalAction,
+          shouldOpenVerifyEmailChangeModalAction,
           {
             no: [],
-            yes: [setShowModalFactoryAction('ConfirmEmailModal')],
+            yes: [setShowModalFactoryAction('VerifyEmailChangeModal')],
           },
         ],
       },

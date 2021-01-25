@@ -1,8 +1,8 @@
 import { BigHeader } from '../BigHeader';
 import { CaseListPractitioner } from '../CaseListPractitioner';
-import { ConfirmEmailModal } from '../ConfirmEmailModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
+import { VerifyEmailChangeModal } from '../VerifyEmailChangeModal';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -21,7 +21,7 @@ export const DashboardPractitioner = connect(
           <ErrorNotification />
           <CaseListPractitioner />
         </section>
-        {showModal === 'ConfirmEmailModal' && <ConfirmEmailModal />}
+        {showModal === 'VerifyEmailChangeModal' && <VerifyEmailChangeModal />}
       </React.Fragment>
     );
   },

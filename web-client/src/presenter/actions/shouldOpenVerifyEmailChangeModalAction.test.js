@@ -1,8 +1,8 @@
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { shouldOpenConfirmEmailModalAction } from './shouldOpenConfirmEmailModalAction';
+import { shouldOpenVerifyEmailChangeModalAction } from './shouldOpenVerifyEmailChangeModalAction';
 
-describe('shouldOpenConfirmEmailModalAction', () => {
+describe('shouldOpenVerifyEmailChangeModalAction', () => {
   let pathYesStub;
   let pathNoStub;
 
@@ -17,7 +17,7 @@ describe('shouldOpenConfirmEmailModalAction', () => {
   });
 
   it('returns the no path if originalEmail and email are the same', async () => {
-    runAction(shouldOpenConfirmEmailModalAction, {
+    runAction(shouldOpenVerifyEmailChangeModalAction, {
       modules: {
         presenter,
       },
@@ -33,7 +33,7 @@ describe('shouldOpenConfirmEmailModalAction', () => {
   });
 
   it('returns the no path if originalEmail and email are the same when compared regardless of capitalization', async () => {
-    runAction(shouldOpenConfirmEmailModalAction, {
+    runAction(shouldOpenVerifyEmailChangeModalAction, {
       modules: {
         presenter,
       },
@@ -49,7 +49,7 @@ describe('shouldOpenConfirmEmailModalAction', () => {
   });
 
   it('returns the yes path if originalEmail and email are not the same', async () => {
-    runAction(shouldOpenConfirmEmailModalAction, {
+    runAction(shouldOpenVerifyEmailChangeModalAction, {
       modules: {
         presenter,
       },
