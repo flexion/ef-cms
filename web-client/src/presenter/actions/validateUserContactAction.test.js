@@ -7,6 +7,8 @@ const errorMock = jest.fn();
 const successMock = jest.fn();
 
 describe('validateUserContactAction', () => {
+  const mockEmail = 'test@example.com';
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
@@ -18,12 +20,16 @@ describe('validateUserContactAction', () => {
   it('should return the error path if user is invalid', async () => {
     applicationContext
       .getUseCases()
-      .validateUserContactInteractor.mockReturnValue('something went wrong');
-    runAction(validateUserContactAction, {
+      .validateUserContactInteractor.mockReturnValue({
+        postalCode: 'Enter a valid postal code',
+      });
+    await runAction(validateUserContactAction, {
       modules: {
         presenter,
       },
-      state: { form: { contact: {} } },
+      state: {
+        form: { contact: {}, email: mockEmail, originalEmail: mockEmail },
+      },
     });
     expect(errorMock).toHaveBeenCalled();
   });
@@ -32,11 +38,13 @@ describe('validateUserContactAction', () => {
     applicationContext
       .getUseCases()
       .validateUserContactInteractor.mockReturnValue(undefined);
-    runAction(validateUserContactAction, {
+    await runAction(validateUserContactAction, {
       modules: {
         presenter,
       },
-      state: { form: { contact: {} } },
+      state: {
+        form: { contact: {}, email: mockEmail, originalEmail: mockEmail },
+      },
     });
     expect(successMock).toHaveBeenCalled();
   });
@@ -48,16 +56,18 @@ describe('validateUserContactAction', () => {
         email: 'some email error',
       });
 
-    runAction(validateUserContactAction, {
+    await runAction(validateUserContactAction, {
       modules: {
         presenter,
       },
-      state: { form: { contact: {} } },
+      state: {
+        form: { contact: {}, email: mockEmail, originalEmail: mockEmail },
+      },
     });
 
     expect(errorMock.mock.calls[0][0]).toMatchObject({
       errors: {
-        email: 'some email error',
+        contact: { email: 'some email error' },
       },
     });
   });
