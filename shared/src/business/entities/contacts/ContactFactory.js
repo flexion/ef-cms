@@ -237,122 +237,80 @@ ContactFactory.getContactConstructors = ({ partyType }) => {
   const { getPetitionerTrustContact } = require('./PetitionerTrustContact');
   const { getSurvivingSpouseContact } = require('./SurvivingSpouseContact');
 
-  const partyConstructorFetch = partyTypeValue => {
+  const defaultPartyTypeConstructors = {
+    otherFilers: getOtherFilerContact,
+    otherPetitioners: getOtherPetitionerContact,
+    secondary: null,
+  };
+  const partySpecificConstructorFetch = partyTypeValue => {
     switch (partyTypeValue) {
       case PARTY_TYPES.donor: // fall through
       case PARTY_TYPES.transferee: // fall through
       case PARTY_TYPES.petitioner:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerPrimaryContact,
-          secondary: null,
         };
       case PARTY_TYPES.conservator:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerConservatorContact,
-          secondary: null,
         };
       case PARTY_TYPES.corporation:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerCorporationContact,
-          secondary: null,
         };
       case PARTY_TYPES.custodian:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerCustodianContact,
-          secondary: null,
         };
       case PARTY_TYPES.estate:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerEstateWithExecutorPrimaryContact,
-          secondary: null,
         };
       case PARTY_TYPES.estateWithoutExecutor:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerIntermediaryContact,
-          secondary: null,
         };
       case PARTY_TYPES.guardian:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerGuardianContact,
-          secondary: null,
         };
       case PARTY_TYPES.nextFriendForIncompetentPerson:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getNextFriendForIncompetentPersonContact,
-          secondary: null,
         };
       case PARTY_TYPES.nextFriendForMinor:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getNextFriendForMinorContact,
-          secondary: null,
         };
-
       case PARTY_TYPES.partnershipAsTaxMattersPartner:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPartnershipAsTaxMattersPartnerPrimaryContact,
-          secondary: null,
         };
       case PARTY_TYPES.partnershipBBA:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPartnershipBBAPrimaryContact,
-          secondary: null,
         };
       case PARTY_TYPES.partnershipOtherThanTaxMatters:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPartnershipOtherThanTaxMattersPrimaryContact,
-          secondary: null,
         };
       case PARTY_TYPES.petitionerDeceasedSpouse:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerPrimaryContact,
           secondary: getPetitionerDeceasedSpouseContact,
         };
       case PARTY_TYPES.petitionerSpouse:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerPrimaryContact,
           secondary: getPetitionerSpouseContact,
         };
       case PARTY_TYPES.survivingSpouse:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getSurvivingSpouseContact,
-          secondary: null,
         };
       case PARTY_TYPES.trust:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerTrustContact,
-          secondary: null,
         };
       default:
         if (partyTypeValue) {
@@ -361,8 +319,15 @@ ContactFactory.getContactConstructors = ({ partyType }) => {
         return {};
     }
   };
-
-  return partyConstructorFetch(partyType);
+  const partySpecificConstructors = partySpecificConstructorFetch(partyType);
+  if (Object.keys(partySpecificConstructors).length > 0) {
+    return {
+      ...defaultPartyTypeConstructors,
+      ...partySpecificConstructorFetch(partyType),
+    };
+  } else {
+    return {};
+  }
 };
 
 /**
