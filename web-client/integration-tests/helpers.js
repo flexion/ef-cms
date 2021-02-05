@@ -30,7 +30,7 @@ import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormDataHelper from 'form-data';
-import axios from 'axios';
+import axios from 'redaxios';
 import jwt from 'jsonwebtoken';
 import queryString from 'query-string';
 import riotRoute from 'riot-route';

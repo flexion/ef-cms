@@ -1,4 +1,4 @@
-const axios = require('axios');
+const axios = require('redaxios');
 const jwk = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
 const {

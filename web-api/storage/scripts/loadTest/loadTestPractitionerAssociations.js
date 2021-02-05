@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const axios = require('axios');
+const axios = require('redaxios');
 const { getUserToken } = require('./loadTestHelpers');
 
 const cognito = new AWS.CognitoIdentityServiceProvider({

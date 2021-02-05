@@ -1,4 +1,4 @@
-const axios = require('axios');
+const axios = require('redaxios');
 const axiosRetry = require('axios-retry');
 const migratedCase = require('./migratedCase');
 const { chunk, range } = require('lodash');

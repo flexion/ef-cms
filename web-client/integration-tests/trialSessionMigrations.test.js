@@ -1,7 +1,7 @@
 import { MOCK_CASE } from '../../shared/src/test/mockCase.js';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
-import axios from 'axios';
+import axios from 'redaxios';
 
 const test = setupTest();
 

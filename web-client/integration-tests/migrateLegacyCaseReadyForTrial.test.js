@@ -4,7 +4,7 @@ import { applicationContextForClient as applicationContext } from '../../shared/
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession.js';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList.js';
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
-import axios from 'axios';
+import axios from 'redaxios';
 
 const test = setupTest();
 

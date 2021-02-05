@@ -5,7 +5,7 @@ jest.mock('../../../../shared/src/utilities/createLogger', () => {
 const { createLogger: actualCreateLogger } = jest.requireActual(
   '../../../../shared/src/utilities/createLogger',
 );
-const axios = require('axios');
+const axios = require('redaxios');
 const fs = require('fs');
 const jwk = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');

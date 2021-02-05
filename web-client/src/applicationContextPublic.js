@@ -46,7 +46,7 @@ import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
-import axios from 'axios';
+import axios from 'redaxios';
 import deepFreeze from 'deep-freeze';
 
 const ADVANCED_SEARCH_TABS = {

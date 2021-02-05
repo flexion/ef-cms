@@ -8,9 +8,9 @@ jest.mock('./importHelpers', () => ({
   getToken: jest.fn().mockResolvedValue('mock-token-123'),
   readCsvFile: jest.fn(),
 }));
-jest.mock('axios');
+jest.mock('redaxios');
 
-const axios = require('axios');
+const axios = require('redaxios');
 const { readCsvFile } = require('./importHelpers');
 
 let mockLegacyJudge;

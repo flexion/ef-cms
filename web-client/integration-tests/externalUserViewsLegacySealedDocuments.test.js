@@ -5,7 +5,7 @@ import { loginAs, setupTest } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase.js';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase.js';
 import { unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument } from './journey/unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument';
-import axios from 'axios';
+import axios from 'redaxios';
 import faker from 'faker';
 
 describe('External user views legacy sealed documents', () => {

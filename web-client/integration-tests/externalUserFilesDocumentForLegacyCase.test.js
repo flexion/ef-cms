@@ -8,7 +8,7 @@ import {
   refreshElasticsearchIndex,
   setupTest,
 } from './helpers';
-import axios from 'axios';
+import axios from 'redaxios';
 
 const test = setupTest();
 

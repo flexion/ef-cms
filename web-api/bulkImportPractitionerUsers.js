@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const axios = require('axios');
+const axios = require('redaxios');
 const fs = require('fs');
 const parse = require('csv-parse');
 const {

@@ -1,6 +1,6 @@
 const assert = require('assert');
 const AWS = require('aws-sdk');
-const axios = require('axios');
+const axios = require('redaxios');
 
 const ENV = process.argv[2];
 const REGION = process.argv[3];

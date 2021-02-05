@@ -9,7 +9,7 @@ import {
   uploadPetition,
 } from './helpers';
 import { petitionsClerkViewsCaseWithSealedContact } from './journey/petitionsClerkViewsCaseWithSealedContact';
-import axios from 'axios';
+import axios from 'redaxios';
 
 const test = setupTest();
 test.draftOrders = [];

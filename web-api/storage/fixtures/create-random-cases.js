@@ -1,4 +1,4 @@
-const axios = require('axios');
+const axios = require('redaxios');
 const faker = require('faker');
 const jwt = require('jsonwebtoken');
 const {

@@ -1,4 +1,4 @@
-const axios = require('axios');
+const axios = require('redaxios');
 
 export const userNavigatesToCreateCaseConfirmation = test => {
   it('user sees the case confirmation pdf', async () => {

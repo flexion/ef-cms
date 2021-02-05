@@ -6,7 +6,7 @@ import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/prese
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
-import axios from 'axios';
+import axios from 'redaxios';
 
 const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,

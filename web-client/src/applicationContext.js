@@ -271,7 +271,7 @@ import { validateUpdateUserEmailInteractor } from '../../shared/src/business/use
 import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virusScanPdfProxy';
-import axios from 'axios';
+import axios from 'redaxios';
 import deepFreeze from 'deep-freeze';
 
 import { getConstants } from './getConstants';

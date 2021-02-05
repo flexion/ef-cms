@@ -1,5 +1,5 @@
 import { fakeFile1 } from '../helpers';
-import axios from 'axios';
+import axios from 'redaxios';
 
 export const userEditsCorrespondence = (test, user) =>
   it(`${user} edits the documentTitle for a correspondence`, async () => {

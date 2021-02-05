@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const axios = require('axios');
+const axios = require('redaxios');
 const createApplicationContext = require('../../../src/applicationContext');
 const {
   addCaseToTrialSession,

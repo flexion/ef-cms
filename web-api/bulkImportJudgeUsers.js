@@ -1,4 +1,4 @@
-const axios = require('axios');
+const axios = require('redaxios');
 const parse = require('csv-parse');
 const { gatherRecords, getCsvOptions } = require('../shared/src/tools/helpers');
 const { getServices, getToken, readCsvFile } = require('./importHelpers');
