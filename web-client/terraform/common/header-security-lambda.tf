@@ -14,5 +14,5 @@ resource "aws_lambda_function" "header_security_lambda" {
   source_code_hash = data.archive_file.zip_header_security_lambda.output_base64sha256
   publish          = true
 
-  runtime = "nodejs10.x"
+  runtime = "nodejs14.x"
 }

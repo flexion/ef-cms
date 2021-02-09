@@ -12,5 +12,5 @@ resource "aws_lambda_function" "strip_basepath_lambda" {
   source_code_hash = data.archive_file.zip_strip_basepath_lambda.output_base64sha256
   publish          = true
 
-  runtime = "nodejs10.x"
+  runtime = "nodejs14.x"
 }
