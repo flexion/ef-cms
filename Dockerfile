@@ -14,6 +14,8 @@ RUN unzip awscliv2.zip
 RUN ./aws/install
 RUN rm awscliv2.zip
 
+RUN apt-get install -yq python python-dev python-pip
+
 RUN pip install --upgrade pip
 
 RUN wget -q -O terraform_0.12.28_linux_amd64.zip https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip && \

@@ -511,7 +511,7 @@ jobs:
             echo "export MIGRATE_FLAG=$(./get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export BOUNCED_EMAIL_RECIPIENT=$(./get-bounced-email-recipient.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
-          name: Build Docker Image
+          name: Build Docker Image for Puppeteer
           command: |
             cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
             docker build -t efcms -f Dockerfile .
