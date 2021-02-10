@@ -115,13 +115,18 @@ resource "aws_acm_certificate_validation" "validate_api_gateway_cert_public" {
 }
 
 resource "aws_route53_record" "api_public_route53_record" {
-  name    = aws_acm_certificate.api_gateway_cert_public.domain_validation_options.0.resource_record_name
-  type    = aws_acm_certificate.api_gateway_cert_public.domain_validation_options.0.resource_record_type
+  for_each = {
+    for dvo in aws_acm_certificate.api_gateway_cert_public.domain_validation_options: dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+  name    = each.value.name
+  type    = each.value.type
   zone_id = var.zone_id
   count   = var.validate
-  records = [
-    aws_acm_certificate.api_gateway_cert_public.domain_validation_options.0.resource_record_value,
-  ]
+  records = [each.value.record]
   ttl = 60
 }
 
