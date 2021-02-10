@@ -14,7 +14,7 @@ RUN unzip awscliv2.zip
 RUN ./aws/install
 RUN rm awscliv2.zip
 
-RUN apt-get install -yq python python-dev python-pip
+RUN apt-get install -yq jq python python-dev python-pip less
 
 RUN pip install --upgrade pip
 

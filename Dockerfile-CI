@@ -14,6 +14,8 @@ RUN unzip awscliv2.zip
 RUN ./aws/install
 RUN rm awscliv2.zip
 
+RUN apt-get install -yq jq python python-dev python-pip less
+
 RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip
 RUN unzip sonar-scanner-cli-4.0.0.1744-linux.zip
 RUN rm sonar-scanner-cli-4.0.0.1744-linux.zip
