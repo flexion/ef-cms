@@ -147,7 +147,6 @@ resource "aws_route53_record" "websockets_route53" {
   name    = each.value.name
   records = [each.value.record]
   type    = each.value.type
-  count   = var.validate
   zone_id = var.zone_id
   ttl = 60
 }

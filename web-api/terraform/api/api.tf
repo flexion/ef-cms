@@ -293,7 +293,6 @@ resource "aws_route53_record" "api_route53_record" {
   name    = each.value.name
   type    = each.value.type
   zone_id = var.zone_id
-  count   = var.validate
   records = [each.value.record]
   ttl = 60
 }
