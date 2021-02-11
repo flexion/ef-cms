@@ -132,13 +132,13 @@ resource "aws_acm_certificate" "websockets" {
 
 resource "aws_acm_certificate_validation" "validate_websockets" {
   certificate_arn         = aws_acm_certificate.websockets.arn
-  validation_record_fqdns = [tolist(aws_route53_record.websockets_route53)[0].fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.websockets_route53 : record.fqdn]
   count                   = var.validate
 }
 
 resource "aws_route53_record" "websockets_route53" {
   for_each = {
-    for dvo in aws_acm_certificate.websockets.domain_validation_options: dvo.domain_name => {
+    for dvo in aws_acm_certificate.websockets.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
@@ -148,7 +148,7 @@ resource "aws_route53_record" "websockets_route53" {
   records = [each.value.record]
   type    = each.value.type
   zone_id = var.zone_id
-  ttl = 60
+  ttl     = 60
 }
 
 resource "aws_apigatewayv2_domain_name" "websockets_domain" {

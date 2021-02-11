@@ -110,13 +110,13 @@ resource "aws_acm_certificate" "api_gateway_cert_public" {
 
 resource "aws_acm_certificate_validation" "validate_api_gateway_cert_public" {
   certificate_arn         = aws_acm_certificate.api_gateway_cert_public.arn
-  validation_record_fqdns = [tolist(aws_route53_record.api_public_route53_record)[0].fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.api_public_route53_record : record.fqdn]
   count                   = var.validate
 }
 
 resource "aws_route53_record" "api_public_route53_record" {
   for_each = {
-    for dvo in aws_acm_certificate.api_gateway_cert_public.domain_validation_options: dvo.domain_name => {
+    for dvo in aws_acm_certificate.api_gateway_cert_public.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
@@ -126,7 +126,7 @@ resource "aws_route53_record" "api_public_route53_record" {
   type    = each.value.type
   zone_id = var.zone_id
   records = [each.value.record]
-  ttl = 60
+  ttl     = 60
 }
 
 resource "aws_api_gateway_domain_name" "api_public_custom" {
@@ -171,6 +171,6 @@ resource "aws_api_gateway_method_settings" "api_public_default" {
 
   settings {
     throttling_burst_limit = 5000
-    throttling_rate_limit = 10000
+    throttling_rate_limit  = 10000
   }
 }
