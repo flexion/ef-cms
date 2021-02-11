@@ -47,7 +47,6 @@ resource "aws_s3_bucket_public_access_block" "block_documents_east" {
 
 resource "aws_s3_bucket" "documents_us_west_1" {
   provider = aws.us-west-1
-  region   = "us-west-1"
   bucket   = "${var.dns_domain}-documents-${var.environment}-us-west-1"
   acl      = "private"
 
@@ -78,7 +77,6 @@ resource "aws_s3_bucket_public_access_block" "block_documents_west" {
 
 resource "aws_s3_bucket" "temp_documents_us_east_1" {
   provider = aws.us-east-1
-  region   = "us-east-1"
   bucket   = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
   acl      = "private"
 
@@ -117,7 +115,6 @@ resource "aws_s3_bucket_public_access_block" "block_temp_east" {
 
 resource "aws_s3_bucket" "temp_documents_us_west_1" {
   provider = aws.us-west-1
-  region   = "us-west-1"
   bucket   = "${var.dns_domain}-temp-documents-${var.environment}-us-west-1"
   acl      = "private"
 
