@@ -278,7 +278,7 @@ resource "aws_acm_certificate" "api_gateway_cert" {
 
 resource "aws_acm_certificate_validation" "validate_api_gateway_cert" {
   certificate_arn         = aws_acm_certificate.api_gateway_cert.arn
-  validation_record_fqdns = [aws_route53_record.api_route53_record.0.fqdn]
+  validation_record_fqdns = [tolist(aws_route53_record.api_route53_record)[0].fqdn]
   count                   = var.validate
 }
 

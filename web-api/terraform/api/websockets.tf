@@ -132,7 +132,7 @@ resource "aws_acm_certificate" "websockets" {
 
 resource "aws_acm_certificate_validation" "validate_websockets" {
   certificate_arn         = aws_acm_certificate.websockets.arn
-  validation_record_fqdns = [aws_route53_record.websockets_route53.0.fqdn]
+  validation_record_fqdns = [tolist(aws_route53_record.websockets_route53)[0].fqdn]
   count                   = var.validate
 }
 
