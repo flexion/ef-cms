@@ -1,0 +1,44 @@
+FROM debian:latest
+
+WORKDIR /home/app
+
+RUN apt-get update
+
+RUN apt-get install -yq \
+  curl \
+  unzip \
+  wget
+
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+RUN apt-get install -y nodejs
+
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.54.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
+RUN rm awscliv2.zip
+
+RUN wget -q -O terraform_0.12.28_linux_amd64.zip https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip && \
+  unzip -o terraform_0.12.28_linux_amd64.zip terraform && \
+  cp terraform /usr/local/bin/
+
+RUN chmod 777 /usr/local/bin/terraform
+
+COPY package.json /home/app/package.json
+COPY package-lock.json /home/app/package-lock.json
+RUN npm set progress=false && \
+  npm config set puppeteer_skip_chromium_download true && \
+  npm ci
+
+COPY . /home/app
+
+RUN terraform --version
+
+#RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
+
+RUN apt-get install -yq \ 
+  jq \
+  git
+
+RUN git --version
+
+CMD echo "🔥"

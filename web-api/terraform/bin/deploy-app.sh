@@ -66,7 +66,7 @@ pushd ../template/lambdas
 npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js legacy-documents-migration.js api-public.js api.js --target node --bundle-node-modules --no-minify --no-source-maps
 popd
 
-
+echo "1"
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
   BLUE_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
@@ -86,12 +86,16 @@ else
     BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-source-elasticsearch.sh $ENVIRONMENT)
   fi
 fi
+echo "2"
+
 
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
   SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/dynamic-web-twain-sdk-14.3.1"
 else
   SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/dynamic-web-twain-sdk-14.3.1"
 fi
+echo "3"
+
 
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_zone_name=$ZONE_NAME
@@ -112,6 +116,9 @@ export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
 export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
 export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
 
+echo "a"
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+echo "b"
 terraform plan
+echo "c"
 terraform apply --auto-approve
