@@ -2,16 +2,7 @@ const {
   applicationContext,
 } = require('../../../../web-client/src/applicationContext');
 const {
-  CASE_STATUS_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
-  OBJECTIONS_OPTIONS_MAP,
-  PAYMENT_STATUS,
-  ROLES,
-  SERVED_PARTIES_CODES,
-  STIPULATED_DECISION_EVENT_CODE,
-  TRANSCRIPT_EVENT_CODE,
-} = require('../entities/EntityConstants');
-const {
+  calculateDifferenceInDays,
   documentMeetsAgeRequirements,
   formatCase,
   formatCaseDeadlines,
@@ -21,6 +12,16 @@ const {
   sortDocketEntries,
   TRANSCRIPT_AGE_DAYS_MIN,
 } = require('./getFormattedCaseDetail');
+const {
+  CASE_STATUS_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+  OBJECTIONS_OPTIONS_MAP,
+  PAYMENT_STATUS,
+  ROLES,
+  SERVED_PARTIES_CODES,
+  STIPULATED_DECISION_EVENT_CODE,
+  TRANSCRIPT_EVENT_CODE,
+} = require('../entities/EntityConstants');
 const { calculateISODate, createISODateString } = require('./DateHandler');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
@@ -1236,21 +1237,107 @@ it('should format filing fee string for an unpaid petition fee', () => {
 });
 
 describe('sortDocketEntries', () => {
+  // storing dates without hh:mm:sss is disingenuous because
+  // it implies it is occurring "yesterday" according to EST.
+  // because midnight on the 15th GMT is still 7pm on the 14th EST
+
+  // using dates in July when difference between GMT and EDT is -4 hours.
+  // (November through March uses EST where difference is -5)
+  describe('calculateDifferenceInDays', () => {
+    it('calculates positive difference between two days', () => {
+      const result = calculateDifferenceInDays(
+        '2019-07-08T16:00:00.000Z', // July 8, 12pm EDT
+        '2019-07-01T16:00:00.000Z', // July 1, 12pm EDT
+      );
+      expect(result).toEqual(7);
+    });
+    it('calculates negative difference between two days', () => {
+      const result = calculateDifferenceInDays(
+        '2019-07-01T16:00:00.000Z', // July 1, 12pm EDT
+        '2019-07-08T16:00:00.000Z', // July 8, 12pm EDT
+      );
+      expect(result).toEqual(-7);
+    });
+    it('calculates difference between two dates which appear the same in GMT but are different in EDT', () => {
+      const result = calculateDifferenceInDays(
+        '2019-07-02T02:00:00.000Z', // July 1, 10pm EDT
+        '2019-07-02T12:00:00.000Z', // July 2, 8am EDT
+      );
+      expect(result).toEqual(-1);
+    });
+    it('calculates difference between two dates (one without HH:mm:ss.SSSSZ) which appear the same in GMT but are different in EDT', () => {
+      const result = calculateDifferenceInDays(
+        '2019-07-02', // implies July 2, 12am GMT === July 1, 8pm EDT
+        '2019-07-02T12:00:00.000Z', // July 2, 8am EDT
+      );
+      expect(result).toEqual(-1);
+    });
+    it('calculates difference between two dates (one without HH:mm:ss.SSSSZ) which appear different GMT but are the same in EDT', () => {
+      const result = calculateDifferenceInDays(
+        '2019-07-01T06:00:00.000Z', // July 1, 2am EDT
+        '2019-07-02', // implies July 2, 12am GMT === July 1, 8pm EDT
+      );
+      expect(result).toEqual(0);
+    });
+  });
+
+  it('should sort docket records while interpreting YYYY-MM-DD dates EST, falling back on sorting by index if calendar dates are equivalent', () => {
+    const result = sortDocketEntries([
+      {
+        filingDate: '2019-07-07T05:00:00.000Z', // July 7, 5am GMT === JULY 7, 1am EDT
+        index: 2,
+      },
+      {
+        filingDate: '2019-07-08', // (00:00:000z) implicit July 8, 12am GMT which is JULY 7, 8pm EDT
+        index: 1,
+      },
+      {
+        filingDate: '2019-07-08T23:00:00.000Z', // July 8, 11pm GMT === JULY 8, 7pm EDT
+        index: 4,
+      },
+      {
+        filingDate: '2019-07-08T03:00:00.000Z', // July 8, 3am GMT === JULY 7, 11pm  EDT
+        index: 3,
+      },
+    ]);
+
+    // although the GMT times of the first two entries indicate different calendar days, they are the SAME day EDT.
+    // hence, their sorting falls back to using the docket entry index
+    expect(result).toMatchObject([
+      {
+        filingDate: '2019-07-08', // (00:00:000z) implicit July 8, 12am GMT which is JULY 7, 8pm EDT
+        index: 1,
+      },
+      {
+        filingDate: '2019-07-07T05:00:00.000Z', // July 7, 5am GMT === JULY 7, 1am EDT
+        index: 2,
+      },
+      {
+        filingDate: '2019-07-08T03:00:00.000Z', // July 8, 3am GMT === JULY 7, 11pm  EDT
+        index: 3,
+      },
+      {
+        filingDate: '2019-07-08T23:00:00.000Z', // July 8, 11pm GMT === JULY 8, 7pm EDT
+        index: 4,
+      },
+    ]);
+  });
+
   it('should sort docket records by date by default', () => {
     // following dates selected to ensure test coverage of 'dateStringsCompared'
     const result = sortDocketEntries(
       [
         {
-          filingDate: '2019-07-08',
+          filingDate: '2019-07-08', // 00:00:000z
           index: 2,
+        },
+        {
+          filingDate: '2019-07-08T23:01:19.000Z',
+          index: 4,
         },
         {
           filingDate: '2019-08-03T00:06:44.000Z',
           index: 1,
-        },
-        {
-          filingDate: '2019-07-08T00:01:19.000Z',
-          index: 4,
         },
         {
           filingDate: '2017-01-01T00:01:02.025Z',

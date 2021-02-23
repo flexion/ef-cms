@@ -598,6 +598,7 @@ const getFormattedCaseDetail = ({
 
 module.exports = {
   TRANSCRIPT_AGE_DAYS_MIN,
+  calculateDifferenceInDays,
   documentMeetsAgeRequirements,
   formatCase,
   formatCaseDeadlines,
