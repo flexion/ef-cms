@@ -13,7 +13,7 @@ exports.createUserOutboxRecord = async ({
   userId,
   workItem,
 }) => {
-  const completedKey = workItem.completedAt ? 'completed' : 'incomplete';
+  const completedKey = workItem.completedAt ? 'complete' : 'incomplete';
 
   await put({
     Item: {

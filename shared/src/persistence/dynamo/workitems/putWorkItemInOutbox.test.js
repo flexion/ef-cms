@@ -44,7 +44,7 @@ describe('putWorkItemInOutbox', () => {
     });
     expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
-        pk: 'user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user-incomplete-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         workItemId: '123',
       },
     });

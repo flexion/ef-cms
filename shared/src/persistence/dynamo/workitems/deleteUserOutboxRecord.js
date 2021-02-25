@@ -6,7 +6,7 @@ exports.deleteUserOutboxRecord = ({
   createdAt,
   userId,
 }) => {
-  const completedKey = completedAt ? 'completed' : 'incomplete';
+  const completedKey = completedAt ? 'complete' : 'incomplete';
 
   return client.delete({
     applicationContext,

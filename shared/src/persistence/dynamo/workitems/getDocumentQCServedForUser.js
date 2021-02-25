@@ -17,7 +17,7 @@ exports.getDocumentQCServedForUser = async ({ applicationContext, userId }) => {
     },
     ExpressionAttributeValues: {
       ':afterDate': afterDate,
-      ':pk': `user-completed-outbox|${userId}`,
+      ':pk': `user-complete-outbox|${userId}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,

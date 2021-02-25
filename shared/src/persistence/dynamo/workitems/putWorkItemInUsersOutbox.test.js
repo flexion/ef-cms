@@ -27,7 +27,7 @@ describe('putWorkItemInUsersOutbox', () => {
     });
   });
 
-  it('invokes the persistence layer with pk of user-outbox|{userId} and section-outbox|{section} and other expected params', async () => {
+  it('invokes the persistence layer with pk of user-incomplete-outbox|{userId} and section-outbox|{section} and other expected params', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       section: DOCKET_SECTION,
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -46,7 +46,7 @@ describe('putWorkItemInUsersOutbox', () => {
     });
     expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
-        pk: 'user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user-incomplete-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         workItemId: '123',
       },
     });
