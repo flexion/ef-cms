@@ -5,6 +5,9 @@ const {
   DOCKET_SECTION,
 } = require('../../../business/entities/EntityConstants');
 const { getDocumentQCServedForUser } = require('./getDocumentQCServedForUser');
+const {
+  prepareDateFromString,
+} = require('../../../business/utilities/DateHandler');
 
 describe('getDocumentQCServedForUser', () => {
   let queryStub;
@@ -12,24 +15,20 @@ describe('getDocumentQCServedForUser', () => {
   beforeEach(() => {
     const itemsToReturn = [
       {
-        completedAt: 'today',
-        completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        section: DOCKET_SECTION,
-        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-      {
-        completedAt: 'today',
-        completedByUserId: 'bob',
-        section: DOCKET_SECTION,
-        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-      {
+        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         completedAt: 'today',
         section: DOCKET_SECTION,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
       {
-        completedAt: null,
+        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        completedAt: 'today',
+        section: DOCKET_SECTION,
+        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      {
+        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        completedAt: 'today',
         section: DOCKET_SECTION,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
@@ -37,12 +36,6 @@ describe('getDocumentQCServedForUser', () => {
 
     queryStub = jest
       .fn()
-      .mockReturnValueOnce({
-        promise: async () => ({
-          Items: itemsToReturn,
-          LastEvaluatedKey: 'last-evaluated-key',
-        }),
-      })
       .mockReturnValue({
         promise: async () => ({
           Items: itemsToReturn,
@@ -62,25 +55,35 @@ describe('getDocumentQCServedForUser', () => {
       applicationContext,
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    expect(
-      applicationContext.getDocumentClient().query.mock.calls[1][0],
-    ).toMatchObject({
-      ExclusiveStartKey: 'last-evaluated-key',
+
+    expect(queryStub.mock.calls[0][0].ExpressionAttributeValues).toEqual({
+      ':pk': 'user-complete-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+      ':afterDate': prepareDateFromString()
+              .startOf('day')
+              .subtract(7, 'd')
+              .utc()
+              .format(),
     });
-    expect(
-      applicationContext.getDocumentClient().query.mock.calls[0][0],
-    ).toMatchObject({
-      ExclusiveStartKey: null,
-    });
-    expect(items).toEqual(
-      expect.arrayContaining([
-        {
-          completedAt: 'today',
-          completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-          section: DOCKET_SECTION,
-          userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ]),
-    );
+
+    expect(items).toEqual([
+      {
+        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        completedAt: 'today',
+        section: "docket",
+        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      {
+        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        completedAt: 'today',
+        section: "docket",
+        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      {
+        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        completedAt: 'today',
+        section: "docket",
+        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    ]);
   });
 });
