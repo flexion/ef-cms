@@ -28,7 +28,7 @@ describe('createUserOutboxRecord', () => {
     ).toMatchObject({
       Item: {
         gsi1pk: 'work-item|work-item-id-123',
-        pk: 'user-outbox|i-am-guy-fieri',
+        pk: 'user-completed-outbox|i-am-guy-fieri',
         sk: mockWorkItem.completedAt,
       },
     });

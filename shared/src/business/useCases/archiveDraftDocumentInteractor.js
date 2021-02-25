@@ -55,6 +55,7 @@ exports.archiveDraftDocumentInteractor = async ({
       }),
       applicationContext.getPersistenceGateway().deleteUserOutboxRecord({
         applicationContext,
+        completedAt: workItem.completedAt,
         createdAt: workItem.createdAt,
         userId: workItem.sentByUserId,
       }),

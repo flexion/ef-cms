@@ -13,10 +13,12 @@ exports.createUserOutboxRecord = async ({
   userId,
   workItem,
 }) => {
+  const completedKey = workItem.completedAt ? 'completed' : 'incomplete';
+
   await put({
     Item: {
       gsi1pk: `work-item|${workItem.workItemId}`,
-      pk: `user-outbox|${userId}`,
+      pk: `user-${completedKey}-outbox|${userId}`,
       sk: workItem.completedAt ? workItem.completedAt : workItem.updatedAt,
       ...workItem,
     },
