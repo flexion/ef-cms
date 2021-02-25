@@ -32,7 +32,7 @@ describe('petitioner files document', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  const trialLocation = `Jacksonville, Florida, ${Date.now()}`;
+  const trialLocation = `Jacksonville, Florida, ${Math.random()}`;
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, { trialLocation });

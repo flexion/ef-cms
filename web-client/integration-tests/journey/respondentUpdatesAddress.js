@@ -13,7 +13,7 @@ export const respondentUpdatesAddress = test => {
       contact: { address1: expect.anything() },
     });
 
-    test.updatedRespondentAddress = `UPDATED ADDRESS ${Date.now()}`;
+    test.updatedRespondentAddress = `UPDATED ADDRESS ${Math.random()}`;
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.address1',

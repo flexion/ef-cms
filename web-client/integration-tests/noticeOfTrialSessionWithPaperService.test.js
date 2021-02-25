@@ -24,7 +24,7 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
   });
 
   const caseCount = 2;
-  const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
+  const trialLocation = `Albuquerque, New Mexico, ${Math.random()}`;
   const overrides = {
     contactSecondary: {
       address1: '123 Paper St.',

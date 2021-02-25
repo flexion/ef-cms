@@ -20,7 +20,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
     jest.setTimeout(30000);
   });
 
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  const trialLocation = `Boise, Idaho, ${Math.random()}`;
   const overrides = {
     maxCases: 3,
     preferredTrialCity: trialLocation,

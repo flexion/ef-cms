@@ -18,7 +18,7 @@ const test = setupTest();
 
 describe('petitions clerk sets a trial session calendar', () => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
-  const trialLocation = `Denver, Colorado, ${Date.now()}`;
+  const trialLocation = `Denver, Colorado, ${Math.random()}`;
   const overrides = {
     maxCases: 2,
     preferredTrialCity: trialLocation,

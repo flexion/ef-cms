@@ -19,7 +19,7 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
   });
 
   const caseCount = 2;
-  const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
+  const trialLocation = `Albuquerque, New Mexico, ${Math.random()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     procedureType: 'Regular', // should generate a Standing Pretrial Order

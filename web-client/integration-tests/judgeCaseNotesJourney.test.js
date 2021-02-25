@@ -22,7 +22,7 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   afterAll(() => {
     test.closeSocket();
   });
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  const trialLocation = `Boise, Idaho, ${Math.random()}`;
   const overrides = {
     maxCases: 3,
     preferredTrialCity: trialLocation,

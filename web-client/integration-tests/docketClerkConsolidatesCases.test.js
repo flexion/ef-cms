@@ -12,7 +12,8 @@ import { petitionerVerifiesUnconsolidatedCases } from './journey/petitionerVerif
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 const test = setupTest();
-const trialLocation = `Boise, Idaho, ${Date.now()}`;
+
+const trialLocation = `Boise, Idaho, ${Math.random()}`;
 
 const overrides = {
   preferredTrialCity: trialLocation,

@@ -64,7 +64,7 @@ export const docketClerkCompletesDocketEntryQcAndSendsMessage = test => {
       value: 'please sign this',
     });
 
-    test.testMessageSubject = `your message, ma'am ${Date.now()}`;
+    test.testMessageSubject = `your message, ma'am ${Math.random()}`;
 
     await test.runSequence('updateModalFormValueSequence', {
       key: 'subject',

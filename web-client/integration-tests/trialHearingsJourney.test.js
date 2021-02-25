@@ -21,14 +21,14 @@ describe('trial hearings journey', () => {
     test.closeSocket();
   });
 
-  const trialLocation1 = `Denver, Colorado, ${Date.now()}`;
+  const trialLocation1 = `Denver, Colorado, ${Math.random()}`;
   const overrides1 = {
     maxCases: 3,
     preferredTrialCity: trialLocation1,
     sessionType: 'Small',
     trialLocation: trialLocation1,
   };
-  const trialLocation2 = `Biloxi, Mississippi, ${Date.now()}`;
+  const trialLocation2 = `Biloxi, Mississippi, ${Math.random()}`;
   const overrides2 = {
     maxCases: 3,
     preferredTrialCity: trialLocation2,

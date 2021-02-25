@@ -25,8 +25,8 @@ describe('Schedule A Trial Session', () => {
   });
 
   const caseCount = 2;
-  const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
-  const trialLocation2 = `Boise, Idaho, ${Date.now()}`;
+  const trialLocation = `Albuquerque, New Mexico, ${Math.random()}`;
+  const trialLocation2 = `Boise, Idaho, ${Math.random()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     trialLocation,

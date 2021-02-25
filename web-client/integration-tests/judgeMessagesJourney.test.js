@@ -17,8 +17,8 @@ describe('Judge messages journey', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  const message1Subject = `message 1 ${Date.now()}`;
-  const message2Subject = `message 2 ${Date.now()}`;
+  const message1Subject = `message 1 ${Math.random()}`;
+  const message2Subject = `message 2 ${Math.random()}`;
 
   loginAs(test, 'petitionsclerk@example.com');
   userSendsMessageToJudge(test, message1Subject);

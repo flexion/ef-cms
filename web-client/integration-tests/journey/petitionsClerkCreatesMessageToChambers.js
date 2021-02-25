@@ -42,7 +42,7 @@ export const petitionsClerkCreatesMessageToChambers = test => {
       messageDocument.documentTitle || messageDocument.documentType,
     );
 
-    test.testMessageSubject = `hi chambers! ${Date.now()}`;
+    test.testMessageSubject = `hi chambers! ${Math.random()}`;
 
     await test.runSequence('updateModalFormValueSequence', {
       key: 'subject',

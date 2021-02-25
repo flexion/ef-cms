@@ -22,7 +22,7 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
   });
 
   const caseCount = 2;
-  const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
+  const trialLocation = `Albuquerque, New Mexico, ${Math.random()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     trialLocation,

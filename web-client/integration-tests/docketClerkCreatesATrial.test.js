@@ -18,7 +18,7 @@ describe('Docket Clerk Creates A Trial', () => {
   docketClerkViewsTrialSessionList(test);
   docketClerkEditsTrialSession(test);
 
-  const trialLocation = `San Diego, California, ${Date.now()}`;
+  const trialLocation = `San Diego, California, ${Math.random()}`;
   docketClerkCreatesARemoteTrialSession(test, {
     trialLocation,
   });

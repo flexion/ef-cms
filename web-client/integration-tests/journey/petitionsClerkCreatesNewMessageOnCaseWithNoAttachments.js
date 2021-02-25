@@ -21,7 +21,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithNoAttachments = test => {
       value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
     });
 
-    test.testMessageSubject = `someone poisoned the coffee ${Date.now()}`;
+    test.testMessageSubject = `someone poisoned the coffee ${Math.random()}`;
 
     await test.runSequence('updateModalFormValueSequence', {
       key: 'subject',

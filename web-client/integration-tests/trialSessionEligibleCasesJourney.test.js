@@ -24,7 +24,7 @@ describe('Trial Session Eligible Cases Journey', () => {
     test.closeSocket();
   });
 
-  const trialLocation = `Madison, Wisconsin, ${Date.now()}`;
+  const trialLocation = `Madison, Wisconsin, ${Math.random()}`;
   const overrides = {
     maxCases: 3,
     preferredTrialCity: trialLocation,

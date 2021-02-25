@@ -21,7 +21,7 @@ describe('Docket Clerk updates a hearing session', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  const trialLocation = `Hartford, Connecticut, ${Date.now()}`;
+  const trialLocation = `Hartford, Connecticut, ${Math.random()}`;
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, {
     sessionType: 'Motion/Hearing',

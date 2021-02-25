@@ -26,7 +26,7 @@ describe('case inventory report journey', () => {
   const initialCaseInventoryCounts = {};
   const createdDocketNumbers = [];
   // eslint-disable-next-line @miovision/disallow-date/no-static-date
-  const trialLocation = `Indianapolis, Indiana, ${Date.now()}`;
+  const trialLocation = `Indianapolis, Indiana, ${Math.random()}`;
 
   loginAs(test, 'docketclerk@example.com');
   it('cache the initial case inventory counts', async () => {

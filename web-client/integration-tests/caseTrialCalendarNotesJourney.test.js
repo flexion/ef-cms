@@ -20,7 +20,7 @@ describe('case trial calendar notes journey', () => {
   });
 
   // eslint-disable-next-line @miovision/disallow-date/no-static-date
-  const trialLocation1 = `Boulder, Colorado, ${Date.now()}`;
+  const trialLocation1 = `Boulder, Colorado, ${Math.random()}`;
   const overrides1 = {
     maxCases: 3,
     preferredTrialCity: trialLocation1,

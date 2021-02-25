@@ -44,7 +44,7 @@ export const createNewMessageOnCase = test => {
       messageDocument.documentTitle || messageDocument.documentType,
     );
 
-    test.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
+    test.testMessageSubject = `what kind of bear is best? ${Math.random()}`;
 
     await test.runSequence('updateModalFormValueSequence', {
       key: 'subject',

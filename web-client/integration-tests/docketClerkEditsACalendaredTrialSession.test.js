@@ -15,7 +15,7 @@ describe('Docket Clerk edits a calendared trial session', () => {
     jest.setTimeout(30000);
   });
 
-  const trialLocation = `Helena, Montana, ${Date.now()}`;
+  const trialLocation = `Helena, Montana, ${Math.random()}`;
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, {

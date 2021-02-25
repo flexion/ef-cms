@@ -10,7 +10,7 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 
 const test = setupTest();
 
-const trialLocation = `Boise, Idaho, ${Date.now()}`;
+const trialLocation = `Boise, Idaho, ${Math.random()}`;
 
 const overrides = {
   preferredTrialCity: trialLocation,

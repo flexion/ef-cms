@@ -19,7 +19,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   afterAll(() => {
     test.closeSocket();
   });
-  const trialLocation = `Despacito, Texas, ${Date.now()}`;
+  const trialLocation = `Despacito, Texas, ${Math.random()}`;
   const overrides = {
     maxCases: 2,
     preferredTrialCity: trialLocation,

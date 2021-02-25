@@ -31,7 +31,7 @@ describe('Blocking a Case', () => {
     test.closeSocket();
   });
 
-  const trialLocation = `Charleston, West Virginia, ${Date.now()}`;
+  const trialLocation = `Charleston, West Virginia, ${Math.random()}`;
   const overrides = {
     trialLocation,
   };
