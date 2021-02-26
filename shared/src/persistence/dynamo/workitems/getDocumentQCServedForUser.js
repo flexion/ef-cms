@@ -23,5 +23,8 @@ exports.getDocumentQCServedForUser = async ({ applicationContext, userId }) => {
     applicationContext,
   });
 
-  return workItems;
+  return workItems.filter(
+    workItem =>
+      workItem.completedByUserId && workItem.completedByUserId === userId,
+  );
 };

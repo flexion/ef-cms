@@ -16,21 +16,30 @@ describe('getDocumentQCServedForUser', () => {
     const itemsToReturn = [
       {
         completedAt: 'today',
-        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user-complete-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         section: DOCKET_SECTION,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
       {
         completedAt: 'today',
-        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user-complete-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         section: DOCKET_SECTION,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
       {
         completedAt: 'today',
-        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user-complete-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         section: DOCKET_SECTION,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      {
+        completedAt: 'today',
+        completedByUserId: 'f9ba126f-cb16-4035-985a-c3af4e72bdc1',
+        pk: 'user-complete-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        section: DOCKET_SECTION,
       },
     ];
 
@@ -66,19 +75,22 @@ describe('getDocumentQCServedForUser', () => {
     expect(items).toEqual([
       {
         completedAt: 'today',
-        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user-complete-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         section: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
       {
         completedAt: 'today',
-        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user-complete-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         section: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
       {
         completedAt: 'today',
-        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user-complete-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         section: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
