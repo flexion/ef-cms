@@ -4,10 +4,10 @@ const {
 const {
   DOCKET_SECTION,
 } = require('../../../business/entities/EntityConstants');
-const { getDocumentQCServedForUser } = require('./getDocumentQCServedForUser');
 const {
   prepareDateFromString,
 } = require('../../../business/utilities/DateHandler');
+const { getDocumentQCServedForUser } = require('./getDocumentQCServedForUser');
 
 describe('getDocumentQCServedForUser', () => {
   let queryStub;
@@ -15,32 +15,30 @@ describe('getDocumentQCServedForUser', () => {
   beforeEach(() => {
     const itemsToReturn = [
       {
-        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         completedAt: 'today',
+        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         section: DOCKET_SECTION,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
       {
-        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         completedAt: 'today',
+        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         section: DOCKET_SECTION,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
       {
-        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         completedAt: 'today',
+        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         section: DOCKET_SECTION,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ];
 
-    queryStub = jest
-      .fn()
-      .mockReturnValue({
-        promise: async () => ({
-          Items: itemsToReturn,
-        }),
-      });
+    queryStub = jest.fn().mockReturnValue({
+      promise: async () => ({
+        Items: itemsToReturn,
+      }),
+    });
   });
 
   it('should filter out the work items returned from persistence to only have served documents', async () => {
@@ -57,31 +55,31 @@ describe('getDocumentQCServedForUser', () => {
     });
 
     expect(queryStub.mock.calls[0][0].ExpressionAttributeValues).toEqual({
-      ':pk': 'user-complete-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
       ':afterDate': prepareDateFromString()
-              .startOf('day')
-              .subtract(7, 'd')
-              .utc()
-              .format(),
+        .startOf('day')
+        .subtract(7, 'd')
+        .utc()
+        .format(),
+      ':pk': 'user-complete-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     expect(items).toEqual([
       {
-        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         completedAt: 'today',
-        section: "docket",
+        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        section: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
       {
-        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         completedAt: 'today',
-        section: "docket",
+        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        section: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
       {
-        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         completedAt: 'today',
-        section: "docket",
+        pk: 'user-completed-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+        section: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ]);
