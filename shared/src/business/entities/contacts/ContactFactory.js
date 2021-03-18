@@ -425,9 +425,12 @@ ContactFactory.createContacts = ({
     otherFilers,
     otherPetitioners,
     primary: constructors.primary
-      ? new constructors.primary(contactInfo.primary || {}, {
-          applicationContext,
-        })
+      ? new constructors.primary(
+          { ...contactInfo.primary, isContactPrimary: true } || {},
+          {
+            applicationContext,
+          },
+        )
       : {},
     secondary: constructors.secondary
       ? new constructors.secondary(contactInfo.secondary || {}, {

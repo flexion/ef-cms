@@ -149,6 +149,7 @@ Case.prototype.init = function init(
   }
 
   this.entityName = 'Case';
+  this.petitioners = [];
 
   if (
     !filtered ||
@@ -317,7 +318,7 @@ Case.prototype.assignContacts = function assignContacts({
     contactInfo: {
       otherFilers: rawCase.otherFilers,
       otherPetitioners: rawCase.otherPetitioners,
-      primary: rawCase.contactPrimary,
+      primary: getContactPrimary(rawCase),
       secondary: rawCase.contactSecondary,
     },
     isPaper: rawCase.isPaper,
@@ -327,7 +328,31 @@ Case.prototype.assignContacts = function assignContacts({
   this.otherFilers = contacts.otherFilers;
   this.otherPetitioners = contacts.otherPetitioners;
 
-  this.contactPrimary = contacts.primary;
+  this.petitioners.push(contacts.primary);
+
+  // const that = this;
+
+  Object.defineProperty(this, 'contactPrimary', {
+    enumerable: true,
+    get() {
+      return contacts.primary;
+    },
+    // set(contact) {
+    //   // const contacts = ContactFactory.createContacts({
+    //   //   applicationContext,
+    //   //   contactInfo: {
+    //   //     primary: getContactPrimary(that),
+    //   //   },
+    //   //   isPaper: that.isPaper,
+    //   //   partyType: that.partyType,
+    //   // });
+    //   const primary = this.petitioners.find(
+    //     petitioner => petitioner.isContactPrimary,
+    //   );
+    //   Object.assign(primary, contact);
+    // },
+  });
+
   this.contactSecondary = contacts.secondary;
 };
 
@@ -647,6 +672,10 @@ Case.VALIDATION_RULES = {
       then: JoiValidationConstants.ISO_DATE.max('now').required(),
     },
   ).description('When the case fee was waived.'),
+  petitioners: joi
+    .array()
+    .items(ContactFactory.getValidationRules('primary'))
+    .required(),
   preferredTrialCity: joi
     .alternatives()
     .try(
@@ -1352,6 +1381,30 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
     this.status = CASE_STATUS_TYPES.calendared;
   }
   return this;
+};
+
+const getContactPrimary = function (rawCase) {
+  return rawCase.petitioners?.find(p => p.isContactPrimary);
+};
+
+// 7839 TODO - docs
+Case.prototype.getContactPrimary = function () {
+  return getContactPrimary(this);
+};
+
+const updatePetitioner = function (rawCase, updatedPetitioner) {
+  const foundPetitioner = rawCase.petitioners.find(
+    p => p.contactId === updatedPetitioner.contactId,
+  );
+
+  if (foundPetitioner) {
+    Object.assign(foundPetitioner, updatedPetitioner);
+  }
+};
+
+// 7839 TODO - docs
+Case.prototype.updatePetitioner = function (updatedPetitioner) {
+  return updatePetitioner(this, updatedPetitioner);
 };
 
 /**
