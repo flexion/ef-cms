@@ -325,8 +325,6 @@ Case.prototype.assignContacts = function assignContacts({
     partyType: rawCase.partyType,
   });
 
-  Object.assign(contacts.primary, { isContactPrimary: true });
-
   this.otherFilers = contacts.otherFilers;
   this.otherPetitioners = contacts.otherPetitioners;
 
