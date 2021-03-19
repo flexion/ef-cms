@@ -45,7 +45,10 @@ exports.fileExternalDocumentInteractor = async (
       docketNumber,
     });
 
+  console.log('caseToUpdate.petitioners', caseToUpdate.petitioners);
+  console.log('caseToUpdate.contactPrimary', caseToUpdate.contactPrimary);
   let caseEntity = new Case(caseToUpdate, { applicationContext });
+
   const workItems = [];
 
   const {

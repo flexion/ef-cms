@@ -149,7 +149,14 @@ Case.prototype.init = function init(
   }
 
   this.entityName = 'Case';
-  this.petitioners = [];
+  this.petitioners = rawCase.petitioners || [];
+
+  Object.defineProperty(this, 'contactPrimary', {
+    enumerable: true,
+    get() {
+      return this.petitioners.find(p => p.isContactPrimary);
+    },
+  });
 
   if (
     !filtered ||
@@ -318,7 +325,7 @@ Case.prototype.assignContacts = function assignContacts({
     contactInfo: {
       otherFilers: rawCase.otherFilers,
       otherPetitioners: rawCase.otherPetitioners,
-      primary: rawCase.contactPrimary,
+      primary: this.contactPrimary,
       secondary: rawCase.contactSecondary,
     },
     isPaper: rawCase.isPaper,
@@ -328,17 +335,7 @@ Case.prototype.assignContacts = function assignContacts({
   this.otherFilers = contacts.otherFilers;
   this.otherPetitioners = contacts.otherPetitioners;
 
-  this.petitioners.push(contacts.primary);
-
-  Object.defineProperty(this, 'contactPrimary', {
-    enumerable: true,
-    get() {
-      return contacts.primary;
-    },
-    set(contact) {
-      Object.assign(contacts.primary, contact);
-    },
-  });
+  // this.petitioners.push(contacts.primary);
 
   this.contactSecondary = contacts.secondary;
 };
@@ -841,6 +838,8 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
   if (processPendingItems) {
     result.hasPendingItems = this.doesHavePendingItems();
   }
+
+  delete result.contactPrimary;
 
   return result;
 };
@@ -1401,21 +1400,22 @@ Case.prototype.updateTrialSessionInformation = function (trialSessionEntity) {
  * @param {string} arguments.user the user account
  * @returns {boolean} if the case is associated
  */
-const isAssociatedUser = function ({ caseRaw, user }) {
+const isAssociatedUser = function ({ caseRaw, user }, { applicationContext }) {
+  const caseEntity = new module.exports.Case(caseRaw, { applicationContext });
   const isIrsPractitioner =
-    caseRaw.irsPractitioners &&
-    caseRaw.irsPractitioners.find(r => r.userId === user.userId);
+    caseEntity.irsPractitioners &&
+    caseEntity.irsPractitioners.find(r => r.userId === user.userId);
   const isPrivatePractitioner =
-    caseRaw.privatePractitioners &&
-    caseRaw.privatePractitioners.find(p => p.userId === user.userId);
-  const isPrimaryContact = caseRaw.contactPrimary.contactId === user.userId;
+    caseEntity.privatePractitioners &&
+    caseEntity.privatePractitioners.find(p => p.userId === user.userId);
+  const isPrimaryContact = caseEntity.contactPrimary.contactId === user.userId;
   const isSecondaryContact =
-    caseRaw.contactSecondary &&
-    caseRaw.contactSecondary.contactId === user.userId;
+    caseEntity.contactSecondary &&
+    caseEntity.contactSecondary.contactId === user.userId;
 
   const isIrsSuperuser = user.role === ROLES.irsSuperuser;
 
-  const petitionDocketEntry = (caseRaw.docketEntries || []).find(
+  const petitionDocketEntry = (caseEntity.docketEntries || []).find(
     doc => doc.documentType === 'Petition',
   );
 

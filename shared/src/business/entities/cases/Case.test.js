@@ -740,7 +740,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          contactPrimary: {},
+          petitioners: [],
         },
         {
           applicationContext,
@@ -1144,8 +1144,8 @@ describe('Case entity', () => {
       const testCase = new Case(
         {
           ...MOCK_CASE,
-          contactPrimary: {},
           partyType: PARTY_TYPES.petitionerSpouse,
+          petitioners: [],
         },
         {
           applicationContext,
@@ -1154,9 +1154,7 @@ describe('Case entity', () => {
 
       const errors = testCase.getFormattedValidationErrors();
       expect(errors).toMatchObject({
-        contactPrimary: {
-          name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
-        },
+        contactPrimary: expect.anything(),
         contactSecondary: {
           name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
         },
@@ -3916,10 +3914,6 @@ describe('Case entity', () => {
       caseEntity = new Case(
         {
           ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            contactId: CONTACT_PRIMARY_ID,
-          },
           contactSecondary: {
             ...MOCK_CASE.contactPrimary,
             contactId: CONTACT_SECONDARY_ID,
@@ -3928,6 +3922,12 @@ describe('Case entity', () => {
             { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
           ],
           partyType: PARTY_TYPES.petitionerSpouse,
+          petitioners: [
+            {
+              ...MOCK_CASE.contactPrimary,
+              contactId: CONTACT_PRIMARY_ID,
+            },
+          ],
           privatePractitioners: [
             { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
           ],
@@ -3939,31 +3939,46 @@ describe('Case entity', () => {
     });
 
     it('returns true if the user is an irsPractitioner on the case', () => {
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity.toRawObject(),
-        user: { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
-      });
+      const isAssociated = isAssociatedUser(
+        {
+          caseRaw: caseEntity.toRawObject(),
+          user: { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
+        },
+        {
+          applicationContext,
+        },
+      );
 
       expect(isAssociated).toBeTruthy();
     });
 
     it('returns true if the user is a privatePractitioner on the case', () => {
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity.toRawObject(),
-        user: { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
-      });
+      const isAssociated = isAssociatedUser(
+        {
+          caseRaw: caseEntity.toRawObject(),
+          user: { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
+        },
+        {
+          applicationContext,
+        },
+      );
 
       expect(isAssociated).toBeTruthy();
     });
 
     it('returns false if the user is an irs superuser but the petition document is not served', () => {
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity.toRawObject(),
-        user: {
-          role: ROLES.irsSuperuser,
-          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+      const isAssociated = isAssociatedUser(
+        {
+          caseRaw: caseEntity.toRawObject(),
+          user: {
+            role: ROLES.irsSuperuser,
+            userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+          },
         },
-      });
+        {
+          applicationContext,
+        },
+      );
 
       expect(isAssociated).toBeFalsy();
     });
@@ -3976,13 +3991,18 @@ describe('Case entity', () => {
         },
       ];
 
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity.toRawObject(),
-        user: {
-          role: ROLES.irsSuperuser,
-          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+      const isAssociated = isAssociatedUser(
+        {
+          caseRaw: caseEntity.toRawObject(),
+          user: {
+            role: ROLES.irsSuperuser,
+            userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+          },
         },
-      });
+        {
+          applicationContext,
+        },
+      );
 
       expect(isAssociated).toBeTruthy();
     });
@@ -3990,61 +4010,84 @@ describe('Case entity', () => {
     it('returns false if the user is an irs superuser and the case does not have docketEntries', () => {
       caseEntity.docketEntries = undefined;
 
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity,
-        user: {
-          role: ROLES.irsSuperuser,
-          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+      const isAssociated = isAssociatedUser(
+        {
+          caseRaw: caseEntity,
+          user: {
+            role: ROLES.irsSuperuser,
+            userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+          },
         },
-      });
+        {
+          applicationContext,
+        },
+      );
 
       expect(isAssociated).toBeFalsy();
     });
 
     it('returns false if the user is a not a privatePractitioner or irsPractitioner on the case and is not an irs superuser', () => {
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity.toRawObject(),
-        user: { userId: '4b32e14b-f583-4631-ba44-1439a093d6d0' },
-      });
+      const isAssociated = isAssociatedUser(
+        {
+          caseRaw: caseEntity.toRawObject(),
+          user: { userId: '4b32e14b-f583-4631-ba44-1439a093d6d0' },
+        },
+        {
+          applicationContext,
+        },
+      );
 
       expect(isAssociated).toBeFalsy();
     });
 
     it('returns true if the user is the primary contact on the case', () => {
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity.toRawObject(),
-        user: { userId: CONTACT_PRIMARY_ID },
-      });
+      const isAssociated = isAssociatedUser(
+        {
+          caseRaw: caseEntity.toRawObject(),
+          user: { userId: CONTACT_PRIMARY_ID },
+        },
+        {
+          applicationContext,
+        },
+      );
 
       expect(isAssociated).toBeTruthy();
     });
 
     it('returns true if the user is the secondary contact on the case', () => {
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity.toRawObject(),
-        user: { userId: CONTACT_SECONDARY_ID },
-      });
+      const isAssociated = isAssociatedUser(
+        {
+          caseRaw: caseEntity.toRawObject(),
+          user: { userId: CONTACT_SECONDARY_ID },
+        },
+        {
+          applicationContext,
+        },
+      );
 
       expect(isAssociated).toBeTruthy();
     });
 
     it('should return true when the petition docket entry has been served in the legacy system and the current user is an irs superuser', () => {
-      const isAssociated = isAssociatedUser({
-        caseRaw: {
-          ...caseEntity.toRawObject(),
-          docketEntries: [
-            {
-              documentTitle: 'Petition',
-              documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-              eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
-              isLegacyServed: true,
-              servedAt: undefined,
-              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            },
-          ],
+      const isAssociated = isAssociatedUser(
+        {
+          caseRaw: {
+            ...caseEntity.toRawObject(),
+            docketEntries: [
+              {
+                documentTitle: 'Petition',
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
+                isLegacyServed: true,
+                servedAt: undefined,
+                userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              },
+            ],
+          },
+          user: { role: ROLES.irsSuperuser },
         },
-        user: { role: ROLES.irsSuperuser },
-      });
+        { applicationContext },
+      );
 
       expect(isAssociated).toBeTruthy();
     });
@@ -4472,16 +4515,8 @@ describe('Case entity', () => {
 
   describe('hasPartyWithPaperService', () => {
     it('should return true if contactPrimary service indicator is paper', () => {
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        },
-        { applicationContext },
-      );
+      const myCase = new Case(MOCK_CASE, { applicationContext });
+      myCase.contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_PAPER;
 
       const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
 
@@ -4492,10 +4527,6 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          },
           contactSecondary: {
             ...MOCK_CASE.contactPrimary,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -4504,6 +4535,8 @@ describe('Case entity', () => {
         },
         { applicationContext },
       );
+      myCase.contactPrimary.serviceIndicator =
+        SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 
       const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
 
@@ -4643,6 +4676,20 @@ describe('Case entity', () => {
           docketEntries: [],
         }),
       ).toBeFalsy();
+    });
+  });
+
+  describe('toRawObject', () => {
+    it('removes contactPrimary from the case', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(caseToUpdate.toRawObject().contactPrimary).toBeUndefined();
     });
   });
 
