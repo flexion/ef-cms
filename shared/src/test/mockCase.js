@@ -10,6 +10,13 @@ exports.MOCK_CASE = {
   archivedDocketEntries: [],
   caseCaption: 'Test Petitioner, Petitioner',
   caseType: CASE_TYPES_MAP.other,
+  get contactPrimary() {
+    return this.petitioners.find(p => p.isContactPrimary);
+  },
+  set contactPrimary(contact) {
+    const primary = this.petitioners.find(p => p.isContactPrimary);
+    Object.assign(primary, contact);
+  },
   correspondence: [],
   createdAt: '2018-03-01T21:40:46.415Z',
   docketEntries: MOCK_DOCUMENTS,

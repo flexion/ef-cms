@@ -205,12 +205,10 @@ exports.joiValidationDecorator = function (
   };
 
   entityConstructor.prototype.getValidationErrors = function getValidationErrors() {
-    console.log(JSON.parse(JSON.stringify(this)));
-    const { error } = schema.validate(JSON.parse(JSON.stringify(this)), {
+    const { error } = schema.validate(this, {
       abortEarly: false,
       allowUnknown: true,
     });
-    console.log('error', error);
     if (!error) return null;
     const errors = {};
     error.details.forEach(detail => {

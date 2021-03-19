@@ -27,7 +27,9 @@ const addPetitionDocketEntryToCase = ({
       associatedJudge: caseToAdd.associatedJudge,
       caseIsInProgress: caseToAdd.inProgress,
       caseStatus: caseToAdd.status,
-      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
+      caseTitle: Case.getCaseTitle(
+        Case.getCaseCaption(caseToAdd, { applicationContext }),
+      ),
       docketEntry: {
         ...docketEntryEntity.toRawObject(),
         createdAt: docketEntryEntity.createdAt,
@@ -130,7 +132,9 @@ exports.createCaseInteractor = async (
     caseToAdd.contactPrimary.contactId = user.userId;
   }
 
-  caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
+  caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd, {
+    applicationContext,
+  });
   caseToAdd.initialCaption = caseToAdd.caseCaption;
 
   const petitionDocketEntryEntity = new DocketEntry(

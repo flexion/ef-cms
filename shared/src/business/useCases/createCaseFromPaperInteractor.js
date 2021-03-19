@@ -23,7 +23,9 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
       associatedJudge: caseToAdd.associatedJudge,
       caseIsInProgress: true,
       caseStatus: caseToAdd.status,
-      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
+      caseTitle: Case.getCaseTitle(
+        Case.getCaseCaption(caseToAdd, { applicationContext }),
+      ),
       docketEntry: {
         ...docketEntryEntity.toRawObject(),
         createdAt: docketEntryEntity.createdAt,

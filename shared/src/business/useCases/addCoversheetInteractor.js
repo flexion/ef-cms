@@ -60,7 +60,8 @@ exports.generateCoverSheetData = ({
     ? caseEntity.initialDocketNumberSuffix.replace('_', '')
     : caseEntity.docketNumberSuffix;
 
-  const caseCaption = caseCaptionToUse || Case.getCaseCaption(caseEntity);
+  const caseCaption =
+    caseCaptionToUse || Case.getCaseCaption(caseEntity, { applicationContext });
   let caseTitle = applicationContext.getCaseTitle(caseCaption);
   let caseCaptionExtension = '';
   if (caseTitle !== caseCaption) {

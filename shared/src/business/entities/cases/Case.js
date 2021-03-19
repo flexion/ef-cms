@@ -318,39 +318,28 @@ Case.prototype.assignContacts = function assignContacts({
     contactInfo: {
       otherFilers: rawCase.otherFilers,
       otherPetitioners: rawCase.otherPetitioners,
-      primary: getContactPrimary(rawCase),
+      primary: rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
     },
     isPaper: rawCase.isPaper,
     partyType: rawCase.partyType,
   });
 
+  Object.assign(contacts.primary, { isContactPrimary: true });
+
   this.otherFilers = contacts.otherFilers;
   this.otherPetitioners = contacts.otherPetitioners;
 
   this.petitioners.push(contacts.primary);
-
-  // const that = this;
 
   Object.defineProperty(this, 'contactPrimary', {
     enumerable: true,
     get() {
       return contacts.primary;
     },
-    // set(contact) {
-    //   // const contacts = ContactFactory.createContacts({
-    //   //   applicationContext,
-    //   //   contactInfo: {
-    //   //     primary: getContactPrimary(that),
-    //   //   },
-    //   //   isPaper: that.isPaper,
-    //   //   partyType: that.partyType,
-    //   // });
-    //   const primary = this.petitioners.find(
-    //     petitioner => petitioner.isContactPrimary,
-    //   );
-    //   Object.assign(primary, contact);
-    // },
+    set(contact) {
+      Object.assign(contacts.primary, contact);
+    },
   });
 
   this.contactSecondary = contacts.secondary;
@@ -788,60 +777,61 @@ joiValidationDecorator(
  * @param {object} rawCase the raw case data
  * @returns {string} the generated case caption
  */
-Case.getCaseCaption = function (rawCase) {
+Case.getCaseCaption = function (rawCase, { applicationContext }) {
+  const caseEntity = new module.exports.Case(rawCase, { applicationContext });
   let caseCaption;
-  switch (rawCase.partyType) {
+  switch (caseEntity.partyType) {
     case PARTY_TYPES.corporation:
     case PARTY_TYPES.petitioner:
-      caseCaption = `${rawCase.contactPrimary.name}, Petitioner`;
+      caseCaption = `${caseEntity.contactPrimary.name}, Petitioner`;
       break;
     case PARTY_TYPES.petitionerSpouse:
-      caseCaption = `${rawCase.contactPrimary.name} & ${rawCase.contactSecondary.name}, Petitioners`;
+      caseCaption = `${caseEntity.contactPrimary.name} & ${caseEntity.contactSecondary.name}, Petitioners`;
       break;
     case PARTY_TYPES.petitionerDeceasedSpouse:
-      caseCaption = `${rawCase.contactPrimary.name} & ${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, Surviving Spouse, Petitioners`;
+      caseCaption = `${caseEntity.contactPrimary.name} & ${caseEntity.contactSecondary.name}, Deceased, ${caseEntity.contactPrimary.name}, Surviving Spouse, Petitioners`;
       break;
     case PARTY_TYPES.estate:
-      caseCaption = `Estate of ${rawCase.contactPrimary.name}, Deceased, ${rawCase.contactPrimary.secondaryName}, ${rawCase.contactPrimary.title}, Petitioner(s)`;
+      caseCaption = `Estate of ${caseEntity.contactPrimary.name}, Deceased, ${caseEntity.contactPrimary.secondaryName}, ${caseEntity.contactPrimary.title}, Petitioner(s)`;
       break;
     case PARTY_TYPES.estateWithoutExecutor:
-      caseCaption = `Estate of ${rawCase.contactPrimary.name}, Deceased, Petitioner`;
+      caseCaption = `Estate of ${caseEntity.contactPrimary.name}, Deceased, Petitioner`;
       break;
     case PARTY_TYPES.trust:
-      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Trustee, Petitioner(s)`;
+      caseCaption = `${caseEntity.contactPrimary.name}, ${caseEntity.contactPrimary.secondaryName}, Trustee, Petitioner(s)`;
       break;
     case PARTY_TYPES.partnershipAsTaxMattersPartner:
-      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Tax Matters Partner, Petitioner`;
+      caseCaption = `${caseEntity.contactPrimary.name}, ${caseEntity.contactPrimary.secondaryName}, Tax Matters Partner, Petitioner`;
       break;
     case PARTY_TYPES.partnershipOtherThanTaxMatters:
-      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, A Partner Other Than the Tax Matters Partner, Petitioner`;
+      caseCaption = `${caseEntity.contactPrimary.name}, ${caseEntity.contactPrimary.secondaryName}, A Partner Other Than the Tax Matters Partner, Petitioner`;
       break;
     case PARTY_TYPES.partnershipBBA:
-      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Partnership Representative, Petitioner(s)`;
+      caseCaption = `${caseEntity.contactPrimary.name}, ${caseEntity.contactPrimary.secondaryName}, Partnership Representative, Petitioner(s)`;
       break;
     case PARTY_TYPES.conservator:
-      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Conservator, Petitioner`;
+      caseCaption = `${caseEntity.contactPrimary.name}, ${caseEntity.contactPrimary.secondaryName}, Conservator, Petitioner`;
       break;
     case PARTY_TYPES.guardian:
-      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Guardian, Petitioner`;
+      caseCaption = `${caseEntity.contactPrimary.name}, ${caseEntity.contactPrimary.secondaryName}, Guardian, Petitioner`;
       break;
     case PARTY_TYPES.custodian:
-      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Custodian, Petitioner`;
+      caseCaption = `${caseEntity.contactPrimary.name}, ${caseEntity.contactPrimary.secondaryName}, Custodian, Petitioner`;
       break;
     case PARTY_TYPES.nextFriendForMinor:
-      caseCaption = `${rawCase.contactPrimary.name}, Minor, ${rawCase.contactPrimary.secondaryName}, Next Friend, Petitioner`;
+      caseCaption = `${caseEntity.contactPrimary.name}, Minor, ${caseEntity.contactPrimary.secondaryName}, Next Friend, Petitioner`;
       break;
     case PARTY_TYPES.nextFriendForIncompetentPerson:
-      caseCaption = `${rawCase.contactPrimary.name}, Incompetent, ${rawCase.contactPrimary.secondaryName}, Next Friend, Petitioner`;
+      caseCaption = `${caseEntity.contactPrimary.name}, Incompetent, ${caseEntity.contactPrimary.secondaryName}, Next Friend, Petitioner`;
       break;
     case PARTY_TYPES.donor:
-      caseCaption = `${rawCase.contactPrimary.name}, Donor, Petitioner`;
+      caseCaption = `${caseEntity.contactPrimary.name}, Donor, Petitioner`;
       break;
     case PARTY_TYPES.transferee:
-      caseCaption = `${rawCase.contactPrimary.name}, Transferee, Petitioner`;
+      caseCaption = `${caseEntity.contactPrimary.name}, Transferee, Petitioner`;
       break;
     case PARTY_TYPES.survivingSpouse:
-      caseCaption = `${rawCase.contactPrimary.name}, Deceased, ${rawCase.contactPrimary.secondaryName}, Surviving Spouse, Petitioner`;
+      caseCaption = `${caseEntity.contactPrimary.name}, Deceased, ${caseEntity.contactPrimary.secondaryName}, Surviving Spouse, Petitioner`;
       break;
   }
   return caseCaption;
@@ -1381,30 +1371,6 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
     this.status = CASE_STATUS_TYPES.calendared;
   }
   return this;
-};
-
-const getContactPrimary = function (rawCase) {
-  return rawCase.petitioners?.find(p => p.isContactPrimary);
-};
-
-// 7839 TODO - docs
-Case.prototype.getContactPrimary = function () {
-  return getContactPrimary(this);
-};
-
-const updatePetitioner = function (rawCase, updatedPetitioner) {
-  const foundPetitioner = rawCase.petitioners.find(
-    p => p.contactId === updatedPetitioner.contactId,
-  );
-
-  if (foundPetitioner) {
-    Object.assign(foundPetitioner, updatedPetitioner);
-  }
-};
-
-// 7839 TODO - docs
-Case.prototype.updatePetitioner = function (updatedPetitioner) {
-  return updatePetitioner(this, updatedPetitioner);
 };
 
 /**

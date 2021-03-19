@@ -268,7 +268,11 @@ const generateAndServeDocketEntry = async ({
         associatedJudge: caseEntity.associatedJudge,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseEntity.status,
-        caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+        caseTitle: Case.getCaseTitle(
+          Case.getCaseCaption(caseEntity, {
+            applicationContext,
+          }),
+        ),
         docketEntry: {
           ...changeOfAddressDocketEntry.toRawObject(),
           createdAt: changeOfAddressDocketEntry.createdAt,
