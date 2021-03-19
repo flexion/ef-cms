@@ -42,12 +42,12 @@ describe('start a case computed', () => {
     expect(result.showPetitionFileValid).toBeTruthy();
   });
 
-  it('sets showOwnershipDisclosure when the party is business', () => {
+  it('sets showOwnershipDisclosure when the filing type is a business', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         form: {
           filingType: 'A business',
-          partyType: true,
+          partyType: PARTY_TYPES.petitioner,
           petitionFile: true,
         },
         getTrialCityName,
@@ -56,12 +56,12 @@ describe('start a case computed', () => {
     expect(result.showOwnershipDisclosure).toBeTruthy();
   });
 
-  it('clears showOwnershipDisclosure when the party is not business', () => {
+  it('clears showOwnershipDisclosure when the filing type is not business', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         form: {
           filingType: 'not A business',
-          partyType: true,
+          partyType: PARTY_TYPES.petitioner,
           petitionFile: true,
         },
         getTrialCityName,
