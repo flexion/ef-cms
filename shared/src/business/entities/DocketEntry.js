@@ -122,7 +122,7 @@ DocketEntry.prototype.init = function init(
   this.partyPrimary = rawDocketEntry.partyPrimary;
   this.partySecondary = rawDocketEntry.partySecondary;
   this.processingStatus = rawDocketEntry.processingStatus || 'pending';
-  this.receivedAt = rawDocketEntry.receivedAt || createISODateString();
+  this.receivedAt = createISODateString(rawDocketEntry.receivedAt);
   this.relationship = rawDocketEntry.relationship;
   this.scenario = rawDocketEntry.scenario;
   if (rawDocketEntry.scenario === 'Nonstandard H') {
