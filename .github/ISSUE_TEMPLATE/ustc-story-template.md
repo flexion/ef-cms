@@ -51,16 +51,17 @@ assignees: ''
  - [ ] Code refactored for clarity and to remove any known technical debt
  - [ ] Rebuild entity documentation
  - [ ] Acceptance criteria for the story has been met
- - [ ] Deployed to the dev environment
+ - [ ] Deployed to any Flexion environment
  - [ ] Deployed to the Court's migration environment
 
  **Review Steps**
  1. Finish all other DOD
- 2. Deploy to the dev environment
+ 2. Deploy to any Flexion environment
  3. Engineers add `Needs UX Review` label
- 4. UX Review on dev environment (if feedback, implement and go back to step 2)
+ 4. UX Review on any Flexion environment where code has been deployed (if feedback, implement and go back to step 2)
  5. UX add `Needs Migration Deploy` label
  6. Deploy to the Court's migration environment
  7. Engineers go through test scenarios on Court's migration environment
  8. Engineers add `Needs PO Review` label and move to Review/QA column
  9. PO review (if feedback, implement and go back to step 2)
+ 10. Engineers create PR to Court's staging environment
