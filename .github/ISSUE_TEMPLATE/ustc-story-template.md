@@ -46,7 +46,6 @@ assignees: ''
  - [ ] READMEs, other appropriate docs, JSDocs and swagger/APIs fully updated
  - [ ] UI should be touch optimized and responsive for external only (functions on supported mobile devices and optimized for screen sizes as required)
  - [ ] Module dependencies are up-to-date and are at the latest resolvable version (npm update)
- - [ ] Errors in Sonarcloud are fixed https://sonarcloud.io/organizations/flexion-github/projects
  - [ ] Lambdas include CloudWatch logging of users, inputs and outputs
  - [ ] Interactors should validate entities before calling persistence methods
  - [ ] Code refactored for clarity and to remove any known technical debt
