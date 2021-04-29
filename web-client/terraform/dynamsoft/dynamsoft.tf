@@ -36,6 +36,7 @@ resource "aws_security_group" "dynamsoft_load_balancer_security_group" {
     from_port   = "443"
     to_port     = "443"
     protocol    = "tcp"
+    #tfsec:ignore:AWS008
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -43,6 +44,7 @@ resource "aws_security_group" "dynamsoft_load_balancer_security_group" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
+    #tfsec:ignore:AWS009
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -66,12 +68,17 @@ resource "aws_security_group" "dynamsoft" {
   }
 }
 
+
+# This is used for a public ELB
+# tfsec:ignore:AWS018
 resource "aws_security_group_rule" "dynamsoft_egress" {
   type              = "egress"
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
+  #tfsec:ignore:AWS007
   cidr_blocks       = ["0.0.0.0/0"]
+  description = "egress rule for the dynamsoft elb"
   security_group_id = aws_security_group.dynamsoft.id
 }
 
@@ -82,8 +89,10 @@ resource "aws_security_group_rule" "dynamsoft_http_ingress" {
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.dynamsoft_load_balancer_security_group.id
   security_group_id        = aws_security_group.dynamsoft.id
+  description = "allowing public http access to the load balancer"
 }
 
+#tfsec:ignore:AWS005
 resource "aws_elb" "dynamsoft_elb" {
   name               = "dynamsoft-elb-${var.environment}"
   availability_zones = var.availability_zones

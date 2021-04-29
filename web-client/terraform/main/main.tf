@@ -238,3 +238,19 @@ resource "aws_route53_health_check" "status_health_check" {
   search_string      = "false"                                 # Search for any JSON property returning "false"
   regions            = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
 }
+
+# ignoring rule because the log bucket shouldn'tneed to log writes
+#tfsec:ignore:AWS002
+resource "aws_s3_bucket" "web_client_log_bucket" {
+  bucket = "${var.zone_name}-web-client-log-bucket"
+  acl    = "log-delivery-write"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+  
+}

@@ -6,6 +6,14 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
   domain_name           = "info"
   elasticsearch_version = "7.4"
 
+  node_to_node_encryption {
+    enabled = true
+  }
+
+  encrypt_at_rest {
+    enabled = true 
+  }
+
   cluster_config {
     instance_type  = var.es_logs_instance_type
     instance_count = var.es_logs_instance_count

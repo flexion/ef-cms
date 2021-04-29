@@ -2,6 +2,18 @@ resource "aws_s3_bucket" "api_lambdas_bucket_east" {
   bucket = "${var.dns_domain}.efcms.${var.environment}.us-east-1.lambdas"
   acl    = "private"
 
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+
+  logging {
+    target_bucket = "${var.zone_name}-web-api-log-bucket"
+    target_prefix = "api-lambdas-east/"
+  }
   tags = {
     environment = var.environment
   }

@@ -1,7 +1,15 @@
+
+
+#tfsec:ignore:AWS017
 resource "aws_s3_bucket" "frontend" {
   bucket = "app-${var.current_color}.${var.dns_domain}"
 
   policy = data.aws_iam_policy_document.allow_public.json
+
+  logging {
+    target_bucket = "${var.zone_name}-web-client-log-bucket"
+    target_prefix = "frontend/"
+  }
 
   website {
     index_document = "index.html"
@@ -13,8 +21,14 @@ resource "aws_s3_bucket" "frontend" {
   }
 }
 
+#tfsec:ignore:AWS017
 resource "aws_s3_bucket" "failover" {
   bucket = "app-failover-${var.current_color}.${var.dns_domain}"
+
+  logging {
+    target_bucket = "${var.zone_name}-web-client-log-bucket"
+    target_prefix = "failover/"
+  }
 
   policy = data.aws_iam_policy_document.allow_public_failover.json
 
@@ -307,6 +321,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   viewer_certificate {
     acm_certificate_arn = var.private_certificate.acm_certificate_arn
     ssl_support_method  = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2019"
   }
 }
 

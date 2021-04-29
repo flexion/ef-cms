@@ -6,6 +6,18 @@ resource "aws_s3_bucket" "api_lambdas_bucket_west" {
   tags = {
     environment = var.environment
   }
+  logging {
+    target_bucket = "${var.zone_name}-web-api-log-bucket"
+    target_prefix = "api-lambdas-west/"
+  }
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
 }
 
 

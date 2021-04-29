@@ -1,14 +1,32 @@
 data "aws_caller_identity" "current" {}
 
+# ignoring since this isn't used in the running system, but only a manual migration step
+#tfsec:ignore:AWS002
 resource "aws_s3_bucket" "job_scripts" {
   bucket_prefix = "aws-glue-efcms-scripts"
   force_destroy = true
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
 }
 
 
+# ignoring since this isn't used in the running system, but only a manual migration step
+#tfsec:ignore:AWS002
 resource "aws_s3_bucket" "job_temp_files" {
   bucket_prefix = "aws-glue-efcms-temp"
   force_destroy = true
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
 }
 
 resource "aws_iam_role" "glue_role" {

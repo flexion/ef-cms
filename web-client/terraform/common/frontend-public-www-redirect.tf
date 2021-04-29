@@ -7,6 +7,20 @@ resource "aws_s3_bucket" "public_redirect" {
     redirect_all_requests_to = "https://${var.dns_domain}"
   }
 
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+
+  logging {
+    target_bucket = "${var.zone_name}-web-client-log-bucket"
+    target_prefix = "public_redirect/"
+  }
+
+  
   tags = {
     environment = var.environment
   }
@@ -82,6 +96,7 @@ resource "aws_cloudfront_distribution" "public_distribution_www" {
   viewer_certificate {
     acm_certificate_arn = module.ui-public-certificate.acm_certificate_arn
     ssl_support_method  = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2019"
   }
 }
 

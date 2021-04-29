@@ -6,8 +6,14 @@ provider "aws" {
   alias = "us-west-1"
 }
 
+#tfsec:ignore:AWS017
 resource "aws_s3_bucket" "frontend_public" {
   bucket = "${var.current_color}.${var.dns_domain}"
+
+  logging {
+    target_bucket = "${var.zone_name}-web-client-log-bucket"
+    target_prefix = "frontend_public/"
+  }
 
   policy = data.aws_iam_policy_document.public_policy_bucket.json
 
@@ -21,8 +27,14 @@ resource "aws_s3_bucket" "frontend_public" {
   }
 }
 
+#tfsec:ignore:AWS017
 resource "aws_s3_bucket" "failover_public" {
   bucket = "failover-${var.current_color}.${var.dns_domain}"
+
+  logging {
+    target_bucket = "${var.zone_name}-web-client-log-bucket"
+    target_prefix = "failover_public/"
+  }
 
   policy = data.aws_iam_policy_document.public_policy_bucket_failover.json
 
@@ -210,6 +222,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
   viewer_certificate {
     acm_certificate_arn = var.public_certificate.acm_certificate_arn
     ssl_support_method  = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2019"
   }
 }
 

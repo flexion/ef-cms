@@ -5,6 +5,18 @@ resource "aws_s3_bucket" "documents_us_east_1" {
   bucket   = "${var.dns_domain}-documents-${var.environment}-us-east-1"
   acl      = "private"
 
+  logging {
+    target_bucket = "${var.zone_name}-web-api-log-bucket"
+    target_prefix = "documents-east/"
+  }
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
   cors_rule {
     allowed_headers = ["Authorization"]
     allowed_methods = ["GET", "POST"]
@@ -49,6 +61,18 @@ resource "aws_s3_bucket" "documents_us_west_1" {
   bucket   = "${var.dns_domain}-documents-${var.environment}-us-west-1"
   acl      = "private"
 
+  logging {
+    target_bucket = "${var.zone_name}-web-api-log-bucket"
+    target_prefix = "documents-west/"
+  }
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
   cors_rule {
     allowed_headers = ["Authorization"]
     allowed_methods = ["GET", "POST"]
@@ -79,6 +103,17 @@ resource "aws_s3_bucket" "temp_documents_us_east_1" {
   bucket   = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
   acl      = "private"
 
+  logging {
+    target_bucket = "${var.zone_name}-web-api-log-bucket"
+    target_prefix = "documents-temp-east/"
+  }
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
   cors_rule {
     allowed_headers = ["Authorization"]
     allowed_methods = ["GET", "POST"]
@@ -117,6 +152,17 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
   bucket   = "${var.dns_domain}-temp-documents-${var.environment}-us-west-1"
   acl      = "private"
 
+  logging {
+    target_bucket = "${var.zone_name}-web-api-log-bucket"
+    target_prefix = "documents-temp-west/"
+  }
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
   cors_rule {
     allowed_headers = ["Authorization"]
     allowed_methods = ["GET", "POST"]

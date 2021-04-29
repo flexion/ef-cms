@@ -24,6 +24,7 @@ terraform {
 data "aws_sns_topic" "system_health_alarms" {
   // account-level resource
   name = "system_health_alarms"
+  kms_master_key_id = "alias/aws/sns"
 }
 
 module "ef-cms_apis" {
@@ -48,4 +49,22 @@ module "ef-cms_apis" {
   bounced_email_recipient    = var.bounced_email_recipient
   scanner_resource_uri       = var.scanner_resource_uri
   cognito_table_name         = var.cognito_table_name
+}
+
+
+
+# ignoring rule because the log bucket shouldn'tneed to log writes
+#tfsec:ignore:AWS002
+resource "aws_s3_bucket" "web_api_log_bucket" {
+  bucket = "${var.zone_name}-web-api-log-bucket"
+  acl    = "log-delivery-write"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+  
 }
