@@ -24,7 +24,6 @@ terraform {
 data "aws_sns_topic" "system_health_alarms" {
   // account-level resource
   name = "system_health_alarms"
-  kms_master_key_id = "alias/aws/sns"
 }
 
 module "ef-cms_apis" {
