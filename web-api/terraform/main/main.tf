@@ -48,10 +48,7 @@ module "ef-cms_apis" {
   bounced_email_recipient    = var.bounced_email_recipient
   scanner_resource_uri       = var.scanner_resource_uri
   cognito_table_name         = var.cognito_table_name
-
-  depends_on = [
-    aws_s3_bucket.web_api_log_bucket
-  ]
+  log_bucket_id              = ws_s3_bucket.web_api_log_bucket.id
 }
 
 

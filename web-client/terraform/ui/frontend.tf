@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "frontend" {
   policy = data.aws_iam_policy_document.allow_public.json
 
   logging {
-    target_bucket = "${var.zone_name}-web-client-log-bucket"
+    target_bucket = var.log_bucket_id
     target_prefix = "frontend/"
   }
 
@@ -26,7 +26,7 @@ resource "aws_s3_bucket" "failover" {
   bucket = "app-failover-${var.current_color}.${var.dns_domain}"
 
   logging {
-    target_bucket = "${var.zone_name}-web-client-log-bucket"
+    target_bucket = var.log_bucket_id
     target_prefix = "failover/"
   }
 

@@ -42,6 +42,7 @@ module "ui-green" {
   strip_basepath_arn     = aws_lambda_function.strip_basepath_lambda.qualified_arn
   public_certificate     = module.ui-public-certificate
   private_certificate    = module.ui-certificate
+  log_bucket_id          = var.log_bucket_id
   providers = {
     aws.us-east-1 = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
@@ -60,7 +61,8 @@ module "ui-blue" {
   strip_basepath_arn     = aws_lambda_function.strip_basepath_lambda.qualified_arn
   public_certificate     = module.ui-public-certificate
   private_certificate    = module.ui-certificate
-  providers = {
+  log_bucket_id          = var.log_bucket_id
+    providers = {
     aws.us-east-1 = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
   }

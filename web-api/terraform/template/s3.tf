@@ -6,7 +6,7 @@ resource "aws_s3_bucket" "documents_us_east_1" {
   acl      = "private"
 
   logging {
-    target_bucket = "${var.zone_name}-web-api-log-bucket"
+    target_bucket = var.log_bucket_id
     target_prefix = "documents-east/"
   }
 
@@ -62,7 +62,7 @@ resource "aws_s3_bucket" "documents_us_west_1" {
   acl      = "private"
 
   logging {
-    target_bucket = "${var.zone_name}-web-api-log-bucket"
+    target_bucket = var.log_bucket_id
     target_prefix = "documents-west/"
   }
 
@@ -104,7 +104,7 @@ resource "aws_s3_bucket" "temp_documents_us_east_1" {
   acl      = "private"
 
   logging {
-    target_bucket = "${var.zone_name}-web-api-log-bucket"
+    target_bucket = var.log_bucket_id
     target_prefix = "documents-temp-east/"
   }
   server_side_encryption_configuration {
@@ -153,7 +153,7 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
   acl      = "private"
 
   logging {
-    target_bucket = "${var.zone_name}-web-api-log-bucket"
+    target_bucket = var.log_bucket_id
     target_prefix = "documents-temp-west/"
   }
   server_side_encryption_configuration {

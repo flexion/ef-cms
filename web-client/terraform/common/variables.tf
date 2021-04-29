@@ -16,6 +16,10 @@ variable "cloudfront_default_ttl" {
   default = "86400"
 }
 
+variable "log_bucket_id" {
+  type = string
+}
+
 variable "zone_name" {
   type = string
 }

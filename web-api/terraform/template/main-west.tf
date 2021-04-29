@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "api_lambdas_bucket_west" {
     environment = var.environment
   }
   logging {
-    target_bucket = "${var.zone_name}-web-api-log-bucket"
+    target_bucket = var.log_bucket_id
     target_prefix = "api-lambdas-west/"
   }
 

@@ -11,7 +11,7 @@ resource "aws_s3_bucket" "frontend_public" {
   bucket = "${var.current_color}.${var.dns_domain}"
 
   logging {
-    target_bucket = "${var.zone_name}-web-client-log-bucket"
+    target_bucket = var.log_bucket_id
     target_prefix = "frontend_public/"
   }
 
@@ -32,7 +32,7 @@ resource "aws_s3_bucket" "failover_public" {
   bucket = "failover-${var.current_color}.${var.dns_domain}"
 
   logging {
-    target_bucket = "${var.zone_name}-web-client-log-bucket"
+    target_bucket = var.log_bucket_id
     target_prefix = "failover_public/"
   }
 

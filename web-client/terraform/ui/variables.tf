@@ -28,6 +28,11 @@ variable "header_security_arn" {
   type = string
 }
 
+variable "log_bucket_id" {
+  type = string
+  
+}
+
 variable "strip_basepath_arn" {
   type = string
 }

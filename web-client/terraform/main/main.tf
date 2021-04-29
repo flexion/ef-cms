@@ -20,10 +20,7 @@ module "environment" {
   cloudfront_default_ttl = var.cloudfront_default_ttl
   cloudfront_max_ttl     = var.cloudfront_max_ttl
 
-  depends_on = [
-    aws_s3_bucket.web_client_log_bucket
-  ]
-
+  log_bucket_id          = aws_s3_bucket.web_client_log_bucket.id
   providers = {
     aws.us-east-1 = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
@@ -59,10 +56,6 @@ module "dynamsoft_us_east" {
   dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
   dynamsoft_url          = var.dynamsoft_url
   dynamsoft_product_keys = var.dynamsoft_product_keys
-
-  depends_on = [
-    aws_s3_bucket.web_client_log_bucket
-  ]
 }
 
 module "dynamsoft_us_west" {
@@ -80,11 +73,6 @@ module "dynamsoft_us_west" {
   dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
   dynamsoft_url          = var.dynamsoft_url
   dynamsoft_product_keys = var.dynamsoft_product_keys
-
-
-  depends_on = [
-    aws_s3_bucket.web_client_log_bucket
-  ]
 }
 
 
