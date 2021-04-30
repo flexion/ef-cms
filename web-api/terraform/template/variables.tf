@@ -22,6 +22,10 @@ variable "log_bucket_id" {
   type = string
 }
 
+variable "log_bucket_west_id" {
+  type = string
+}
+
 variable "email_dmarc_policy" {
   type = string
 }

@@ -49,6 +49,7 @@ module "ef-cms_apis" {
   scanner_resource_uri       = var.scanner_resource_uri
   cognito_table_name         = var.cognito_table_name
   log_bucket_id              = aws_s3_bucket.web_api_log_bucket.id
+  log_bucket_west_id         = aws_s3_bucket.web_api_log_bucket_west.id
 }
 
 
@@ -66,5 +67,18 @@ resource "aws_s3_bucket" "web_api_log_bucket" {
       }
     }
   }
-  
+}
+
+resource "aws_s3_bucket" "web_api_log_bucket_west" {
+  bucket = "${var.zone_name}-web-api-log-bucket-west"
+  acl    = "log-delivery-write"
+  provider = aws.us-west-1
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
 }
