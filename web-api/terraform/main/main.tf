@@ -69,6 +69,9 @@ resource "aws_s3_bucket" "web_api_log_bucket" {
   }
 }
 
+
+# ignoring rule because the log bucket shouldn'tneed to log writes
+#tfsec:ignore:AWS002
 resource "aws_s3_bucket" "web_api_log_bucket_west" {
   bucket = "${var.zone_name}-web-api-log-bucket-west"
   acl    = "log-delivery-write"

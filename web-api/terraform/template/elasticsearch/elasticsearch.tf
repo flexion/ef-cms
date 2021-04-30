@@ -26,6 +26,8 @@ resource "aws_cloudwatch_log_resource_policy" "allow_elasticsearch_to_write_logs
 CONFIG
 }
 
+# the risk is low, ignoring
+#tfsec:ignore:AWS031 tfsec:ignore:AWS032
 resource "aws_elasticsearch_domain" "efcms-search" {
   domain_name           = var.domain_name
   elasticsearch_version = "7.4"
@@ -33,14 +35,6 @@ resource "aws_elasticsearch_domain" "efcms-search" {
   domain_endpoint_options { 
     enforce_https = true
     tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
-  }
-
-  node_to_node_encryption {
-    enabled = true
-  }
-
-  encrypt_at_rest {
-    enabled = true 
   }
 
   cluster_config {
