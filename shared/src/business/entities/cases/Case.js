@@ -3,7 +3,6 @@ const {
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_DOCUMENT_CODES,
   AUTOMATIC_BLOCKED_REASONS,
-  CASE_CAPTION_POSTFIX,
   CASE_STATUS_TYPES,
   CASE_TYPES,
   CASE_TYPES_MAP,
@@ -23,6 +22,7 @@ const {
   TRIAL_LOCATION_MATCHER,
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
+const { CaseDocketEntries } = require('./Case.docketEntries');
 
 const {
   calculateDifferenceInDays,
@@ -49,9 +49,6 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const {
-  shouldGenerateDocketRecordIndex,
-} = require('../../utilities/shouldGenerateDocketRecordIndex');
 const { clone, compact, includes, isEmpty } = require('lodash');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
@@ -64,6 +61,7 @@ const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 
 Case.VALIDATION_ERROR_MESSAGES = {
+  ...CaseDocketEntries.validationMessages,
   applicationForWaiverOfFilingFeeFile:
     'Upload an Application for Waiver of Filing Fee',
   applicationForWaiverOfFilingFeeFileSize: [
@@ -75,7 +73,6 @@ Case.VALIDATION_ERROR_MESSAGES = {
   ],
   caseCaption: 'Enter a case caption',
   caseType: 'Select a case type',
-  docketEntries: 'At least one valid docket entry is required',
   docketNumber: 'Docket number is required',
   filingType: 'Select on whose behalf you are filing',
   hasIrsNotice: 'Indicate whether you received an IRS notice',
@@ -164,7 +161,12 @@ Case.prototype.init = function init(
     this.assignFieldsForInternalUsers({ applicationContext, rawCase });
   }
 
-  this.assignDocketEntries({ applicationContext, filtered, rawCase });
+  this.assignDocketEntries({
+    applicationContext,
+    filtered,
+    isSealedCase,
+    rawCase,
+  });
   this.assignHearings({ applicationContext, rawCase });
   this.assignPractitioners({ applicationContext, filtered, rawCase });
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
@@ -260,36 +262,7 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
 };
 
 Object.assign(Case.prototype, CaseCounsel.prototypes);
-
-Case.prototype.assignDocketEntries = function assignDocketEntries({
-  applicationContext,
-  filtered,
-  rawCase,
-}) {
-  if (Array.isArray(rawCase.docketEntries)) {
-    this.docketEntries = rawCase.docketEntries
-      .map(
-        docketEntry =>
-          new DocketEntry(docketEntry, { applicationContext, filtered }),
-      )
-      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
-
-    this.isSealed = isSealedCase(rawCase);
-
-    if (
-      filtered &&
-      applicationContext.getCurrentUser().role !== ROLES.irsSuperuser &&
-      (applicationContext.getCurrentUser().role !== ROLES.petitionsClerk ||
-        this.getIrsSendDate())
-    ) {
-      this.docketEntries = this.docketEntries.filter(
-        d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
-      );
-    }
-  } else {
-    this.docketEntries = [];
-  }
-};
+Object.assign(Case.prototype, CaseDocketEntries.prototypes);
 
 Case.prototype.assignHearings = function assignHearings({
   applicationContext,
@@ -386,6 +359,7 @@ Case.prototype.assignCorrespondences = function assignCorrespondences({
 
 Case.VALIDATION_RULES = {
   ...CaseCounsel.validation,
+  ...CaseDocketEntries.validation,
   archivedCorrespondences: joi
     .array()
     .items(Correspondence.VALIDATION_RULES)
@@ -475,11 +449,7 @@ Case.VALIDATION_RULES = {
     .optional()
     .allow(null)
     .description('Damages for the case.'),
-  docketEntries: joi
-    .array()
-    .items(DOCKET_ENTRY_VALIDATION_RULES)
-    .required()
-    .description('List of DocketEntry Entities for the case.'),
+
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
   ),
@@ -891,27 +861,6 @@ Case.prototype.archiveCorrespondence = function (
   });
 };
 
-/**
- *
- * @param {object} docketEntryEntity the docket entry to add to the case
- */
-Case.prototype.addDocketEntry = function (docketEntryEntity) {
-  docketEntryEntity.docketNumber = this.docketNumber;
-
-  if (docketEntryEntity.isOnDocketRecord) {
-    const updateIndex = shouldGenerateDocketRecordIndex({
-      caseDetail: this,
-      docketEntry: docketEntryEntity,
-    });
-
-    if (updateIndex) {
-      docketEntryEntity.index = this.generateNextDocketRecordIndex();
-    }
-  }
-
-  this.docketEntries = [...this.docketEntries, docketEntryEntity];
-};
-
 Case.prototype.closeCase = function () {
   this.closedDate = createISODateString();
   this.status = CASE_STATUS_TYPES.closed;
@@ -927,51 +876,6 @@ Case.prototype.closeCase = function () {
  */
 Case.prototype.markAsSentToIRS = function () {
   this.status = CASE_STATUS_TYPES.generalDocket;
-
-  return this;
-};
-
-/**
- *
- * @returns {Case} the updated case entity
- */
-Case.prototype.updateCaseCaptionDocketRecord = function ({
-  applicationContext,
-}) {
-  const caseCaptionRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
-  let lastCaption = this.initialCaption;
-
-  this.docketEntries.forEach(docketEntry => {
-    const result = caseCaptionRegex.exec(docketEntry.documentTitle);
-    if (result) {
-      const [, , changedCaption] = result;
-      lastCaption = changedCaption.replace(` ${CASE_CAPTION_POSTFIX}`, '');
-    }
-  });
-
-  const needsCaptionChangedRecord =
-    this.initialCaption && lastCaption !== this.caseCaption && !this.isPaper;
-
-  if (needsCaptionChangedRecord) {
-    const { userId } = applicationContext.getCurrentUser();
-
-    this.addDocketEntry(
-      new DocketEntry(
-        {
-          documentTitle: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
-          documentType: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.documentType,
-          eventCode: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.eventCode,
-          filingDate: createISODateString(),
-          isFileAttached: false,
-          isMinuteEntry: true,
-          isOnDocketRecord: true,
-          processingStatus: 'complete',
-          userId,
-        },
-        { applicationContext },
-      ),
-    );
-  }
 
   return this;
 };
@@ -1024,19 +928,6 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
   }
 
   return this;
-};
-
-/**
- * gets the docketEntry with id docketEntryId from the docketEntries array
- *
- * @params {object} params the params object
- * @params {string} params.docketEntryId the id of the docketEntry to retrieve
- * @returns {object} the retrieved docketEntry
- */
-Case.prototype.getDocketEntryById = function ({ docketEntryId }) {
-  return this.docketEntries.find(
-    docketEntry => docketEntry.docketEntryId === docketEntryId,
-  );
 };
 
 /**
@@ -1128,21 +1019,6 @@ Case.getAttachmentDocumentById = function ({
 };
 
 /**
- * deletes the docket entry with id docketEntryId from the docketEntries array
- *
- * @params {object} params the params object
- * @params {string} params.docketEntryId the id of the docket entry to remove from the docketEntries array
- * @returns {Case} the updated case entity
- */
-Case.prototype.deleteDocketEntryById = function ({ docketEntryId }) {
-  this.docketEntries = this.docketEntries.filter(
-    item => item.docketEntryId !== docketEntryId,
-  );
-
-  return this;
-};
-
-/**
  * deletes the correspondence with id correspondenceId from the correspondence array
  *
  * @params {object} params the params object
@@ -1173,48 +1049,6 @@ Case.prototype.getIrsSendDate = function () {
   if (petitionDocketEntry) {
     return petitionDocketEntry.servedAt;
   }
-};
-
-/**
- * gets the next possible (unused) index for the docket record
- *
- * @returns {number} the next docket record index
- */
-Case.prototype.generateNextDocketRecordIndex = function () {
-  const nextIndex =
-    this.docketEntries
-      .filter(d => d.isOnDocketRecord && d.index !== undefined)
-      .sort((a, b) => a.index - b.index).length + 1;
-  return nextIndex;
-};
-
-/**
- *
- * @param {DocketEntry} updatedDocketEntry the docket entry to update on the case
- * @returns {Case} the updated case entity
- */
-Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
-  const foundDocketEntryIndex = this.docketEntries.findIndex(
-    docketEntry =>
-      docketEntry.docketEntryId === updatedDocketEntry.docketEntryId,
-  );
-
-  if (foundDocketEntryIndex !== -1) {
-    this.docketEntries[foundDocketEntryIndex] = updatedDocketEntry;
-
-    if (updatedDocketEntry.isOnDocketRecord) {
-      const updateIndex = shouldGenerateDocketRecordIndex({
-        caseDetail: this,
-        docketEntry: updatedDocketEntry,
-      });
-
-      if (updateIndex) {
-        updatedDocketEntry.index = this.generateNextDocketRecordIndex();
-      }
-    }
-  }
-
-  return this;
 };
 
 /**

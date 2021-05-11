@@ -16,7 +16,6 @@ const getPractitionersRepresenting = (rawCase, petitionerContactId) => {
   );
 };
 
-// decorators
 const CaseCounsel = {
   prototypes: {
     assignPractitioners({ rawCase }) {
