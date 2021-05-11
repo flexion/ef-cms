@@ -1,8 +1,5 @@
 const joi = require('joi');
 const {
-  ANSWER_CUTOFF_AMOUNT_IN_DAYS,
-  ANSWER_DOCUMENT_CODES,
-  AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   CASE_TYPES,
   CASE_TYPES_MAP,
@@ -11,26 +8,16 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
-  LEGACY_TRIAL_CITY_STRINGS,
   MAX_FILE_SIZE_MB,
   MINUTE_ENTRIES_MAP,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
   ROLES,
-  TRIAL_CITY_STRINGS,
-  TRIAL_LOCATION_MATCHER,
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
 const { CaseDocketEntries } = require('./Case.docketEntries');
 
-const {
-  calculateDifferenceInDays,
-  createISODateString,
-  formatDateString,
-  PATTERNS,
-  prepareDateFromString,
-} = require('../../utilities/DateHandler');
 const {
   CaseCounsel,
   getPractitionersRepresenting,
@@ -49,19 +36,21 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { clone, compact, includes, isEmpty } = require('lodash');
+const { clone, compact } = require('lodash');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
+const { createISODateString } = require('../../utilities/DateHandler');
 const { DocketEntry } = require('../DocketEntry');
 const { isServed } = require('../DocketEntry');
 const { Petitioner } = require('../contacts/Petitioner');
 const { Statistic } = require('../Statistic');
-const { TrialSession } = require('../trialSessions/TrialSession');
+const { TrialsAndHearings } = require('./Case.trialsAndHearings');
 const { User } = require('../User');
 
 Case.VALIDATION_ERROR_MESSAGES = {
   ...CaseDocketEntries.validationMessages,
+  ...TrialsAndHearings.validationMessages,
   applicationForWaiverOfFilingFeeFile:
     'Upload an Application for Waiver of Filing Fee',
   applicationForWaiverOfFilingFeeFileSize: [
@@ -107,7 +96,6 @@ Case.VALIDATION_ERROR_MESSAGES = {
   petitionPaymentMethod: 'Enter payment method',
   petitionPaymentStatus: 'Enter payment status',
   petitionPaymentWaivedDate: 'Enter a valid date waived',
-  preferredTrialCity: 'Select a trial location',
   procedureType: 'Select a case procedure',
   receivedAt: [
     {
@@ -142,6 +130,10 @@ Case.VALIDATION_ERROR_MESSAGES = {
  * @constructor
  */
 function Case() {}
+
+Object.assign(Case.prototype, CaseCounsel.prototypes);
+Object.assign(Case.prototype, CaseDocketEntries.prototypes);
+Object.assign(Case.prototype, TrialsAndHearings.prototypes);
 
 Case.prototype.init = function init(
   rawCase,
@@ -261,22 +253,6 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
     this.docketNumber + (this.docketNumberSuffix || '');
 };
 
-Object.assign(Case.prototype, CaseCounsel.prototypes);
-Object.assign(Case.prototype, CaseDocketEntries.prototypes);
-
-Case.prototype.assignHearings = function assignHearings({
-  applicationContext,
-  rawCase,
-}) {
-  if (Array.isArray(rawCase.hearings)) {
-    this.hearings = rawCase.hearings
-      .map(hearing => new TrialSession(hearing, { applicationContext }))
-      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
-  } else {
-    this.hearings = [];
-  }
-};
-
 Case.prototype.assignArchivedDocketEntries = function assignArchivedDocketEntries({
   applicationContext,
   rawCase,
@@ -360,6 +336,7 @@ Case.prototype.assignCorrespondences = function assignCorrespondences({
 Case.VALIDATION_RULES = {
   ...CaseCounsel.validation,
   ...CaseDocketEntries.validation,
+  ...TrialsAndHearings.validation,
   archivedCorrespondences: joi
     .array()
     .items(Correspondence.VALIDATION_RULES)
@@ -372,58 +349,6 @@ Case.VALIDATION_RULES = {
     .description(
       'List of DocketEntry Entities that were archived instead of added to the docket record.',
     ),
-  associatedJudge: JoiValidationConstants.STRING.max(50)
-    .optional()
-    .meta({ tags: ['Restricted'] })
-    .description('Judge assigned to this case. Defaults to Chief Judge.'),
-  automaticBlocked: joi
-    .boolean()
-    .optional()
-    .description(
-      'Temporarily blocked from trial due to a pending item or due date.',
-    ),
-  automaticBlockedDate: JoiValidationConstants.ISO_DATE.when(
-    'automaticBlocked',
-    {
-      is: true,
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    },
-  ),
-  automaticBlockedReason: JoiValidationConstants.STRING.valid(
-    ...Object.values(AUTOMATIC_BLOCKED_REASONS),
-  )
-    .description('The reason the case was automatically blocked from trial.')
-    .when('automaticBlocked', {
-      is: true,
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    }),
-  blocked: joi
-    .boolean()
-    .optional()
-    .meta({ tags: ['Restricted'] })
-    .when('status', {
-      is: CASE_STATUS_TYPES.calendared,
-      otherwise: joi.optional(),
-      then: joi.invalid(true),
-    })
-    .description('Temporarily blocked from trial.'),
-  blockedDate: JoiValidationConstants.ISO_DATE.when('blocked', {
-    is: true,
-    otherwise: joi.optional().allow(null),
-    then: joi.required(),
-  }).meta({ tags: ['Restricted'] }),
-  blockedReason: JoiValidationConstants.STRING.max(250)
-    .description(
-      'Open text field for describing reason for blocking this case from trial.',
-    )
-    .when('blocked', {
-      is: true,
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    })
-    .meta({ tags: ['Restricted'] }),
   caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
     'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
   ),
@@ -472,17 +397,6 @@ Case.VALIDATION_RULES = {
     .description(
       'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
     ),
-  highPriority: joi
-    .boolean()
-    .optional()
-    .meta({ tags: ['Restricted'] }),
-  highPriorityReason: JoiValidationConstants.STRING.max(250)
-    .when('highPriority', {
-      is: true,
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    })
-    .meta({ tags: ['Restricted'] }),
   initialCaption: JoiValidationConstants.CASE_CAPTION.allow(null)
     .optional()
     .description('Case caption before modification.'),
@@ -499,9 +413,7 @@ Case.VALIDATION_RULES = {
     .description('Last date that the petitioner is allowed to file before.'),
   isPaper: joi.boolean().optional(),
   isSealed: joi.boolean().optional(),
-  judgeUserId: JoiValidationConstants.UUID.optional().description(
-    'Unique ID for the associated judge.',
-  ),
+
   leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
     'If this case is consolidated, this is the docket number of the lead case. It is the lowest docket number in the consolidated group.',
   ),
@@ -598,28 +510,9 @@ Case.VALIDATION_RULES = {
         b.otherFilerType === UNIQUE_OTHER_FILER_TYPE,
     )
     .required(),
-  preferredTrialCity: joi
-    .alternatives()
-    .try(
-      JoiValidationConstants.STRING.valid(
-        ...TRIAL_CITY_STRINGS,
-        ...LEGACY_TRIAL_CITY_STRINGS,
-        null,
-      ),
-      JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
-    )
-    .optional()
-    .description('Where the petitioner would prefer to hold the case trial.'),
   procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
     .required()
     .description('Procedure type of the case.'),
-  qcCompleteForTrial: joi
-    .object()
-    .optional()
-    .meta({ tags: ['Restricted'] })
-    .description(
-      'QC Checklist object that must be completed before the case can go to trial.',
-    ),
   receivedAt: JoiValidationConstants.ISO_DATE.required().description(
     'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
   ),
@@ -651,40 +544,6 @@ Case.VALIDATION_RULES = {
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
-  trialDate: joi
-    .alternatives()
-    .conditional('trialSessionId', {
-      is: joi.exist().not(null),
-      otherwise: JoiValidationConstants.ISO_DATE.optional().allow(null),
-      then: JoiValidationConstants.ISO_DATE.required(),
-    })
-    .description('When this case goes to trial.'),
-  trialLocation: joi
-    .alternatives()
-    .try(
-      JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
-      JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
-    )
-    .optional()
-    .description(
-      'Where this case goes to trial. This may be different that the preferred trial location.',
-    ),
-  trialSessionId: joi
-    .when('status', {
-      is: CASE_STATUS_TYPES.calendared,
-      otherwise: joi.when('trialDate', {
-        is: joi.exist().not(null),
-        otherwise: JoiValidationConstants.UUID.optional(),
-        then: JoiValidationConstants.UUID.required(),
-      }),
-      then: JoiValidationConstants.UUID.required(),
-    })
-    .description(
-      'The unique ID of the trial session associated with this case.',
-    ),
-  trialTime: JoiValidationConstants.STRING.pattern(PATTERNS['H:MM'])
-    .optional()
-    .description('Time of day when this case goes to trial.'),
   useSameAsPrimary: joi
     .boolean()
     .optional()
@@ -1052,42 +911,6 @@ Case.prototype.getIrsSendDate = function () {
 };
 
 /**
- * check a case to see whether it should change to ready for trial and update the
- * status to General Docket - Ready for Trial if so
- *
- * @returns {Case} the updated case entity
- */
-Case.prototype.checkForReadyForTrial = function () {
-  const currentDate = prepareDateFromString().toISOString();
-
-  const isCaseGeneralDocketNotAtIssue =
-    this.status === CASE_STATUS_TYPES.generalDocket;
-
-  if (isCaseGeneralDocketNotAtIssue) {
-    this.docketEntries.forEach(docketEntry => {
-      const isAnswerDocument = includes(
-        ANSWER_DOCUMENT_CODES,
-        docketEntry.eventCode,
-      );
-
-      const daysElapsedSinceDocumentWasFiled = calculateDifferenceInDays(
-        currentDate,
-        docketEntry.createdAt,
-      );
-
-      const requiredTimeElapsedSinceFiling =
-        daysElapsedSinceDocumentWasFiled > ANSWER_CUTOFF_AMOUNT_IN_DAYS;
-
-      if (isAnswerDocument && requiredTimeElapsedSinceFiling) {
-        this.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
-      }
-    });
-  }
-
-  return this;
-};
-
-/**
  * returns a sortable docket number using this.docketNumber in ${year}${index} format
  *
  * @returns {string} the sortable docket number
@@ -1110,95 +933,6 @@ Case.getSortableDocketNumber = function (docketNumber) {
   const docketNumberSplit = docketNumber.split('-');
   docketNumberSplit[0] = docketNumberSplit[0].padStart(6, '0');
   return parseInt(`${docketNumberSplit[1]}${docketNumberSplit[0]}`);
-};
-
-/**
- * generates sort tags used for sorting trials for calendaring
- *
- * @returns {object} the sort tags
- */
-Case.prototype.generateTrialSortTags = function () {
-  const {
-    caseType,
-    docketNumber,
-    highPriority,
-    preferredTrialCity,
-    procedureType,
-    receivedAt,
-  } = this;
-
-  const caseProcedureSymbol =
-    procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
-
-  let casePrioritySymbol = 'D';
-
-  if (highPriority === true) {
-    casePrioritySymbol = 'A';
-  } else if (caseType.toLowerCase() === 'cdp (lien/levy)') {
-    casePrioritySymbol = 'B';
-  } else if (caseType.toLowerCase() === 'passport') {
-    casePrioritySymbol = 'C';
-  }
-
-  const formattedFiledTime = formatDateString(receivedAt, 'YYYYMMDDHHmmss');
-  const formattedTrialCity = preferredTrialCity.replace(/[\s.,]/g, '');
-
-  const nonHybridSortKey = [
-    formattedTrialCity,
-    caseProcedureSymbol,
-    casePrioritySymbol,
-    formattedFiledTime,
-    docketNumber,
-  ].join('-');
-
-  const hybridSortKey = [
-    formattedTrialCity,
-    'H', // Hybrid Tag
-    casePrioritySymbol,
-    formattedFiledTime,
-    docketNumber,
-  ].join('-');
-
-  return {
-    hybrid: hybridSortKey,
-    nonHybrid: nonHybridSortKey,
-  };
-};
-
-/**
- * set as calendared
- *
- * @param {object} trialSessionEntity - the trial session that is associated with the case
- * @returns {Case} the updated case entity
- */
-Case.prototype.setAsCalendared = function (trialSessionEntity) {
-  this.updateTrialSessionInformation(trialSessionEntity);
-  if (trialSessionEntity.isCalendared === true) {
-    this.status = CASE_STATUS_TYPES.calendared;
-  }
-  return this;
-};
-
-/**
- * update trial session information
- *
- * @param {object} trialSessionEntity - the trial session that is associated with the case
- * @returns {Case} the updated case entity
- */
-Case.prototype.updateTrialSessionInformation = function (trialSessionEntity) {
-  if (
-    trialSessionEntity.isCalendared &&
-    trialSessionEntity.judge &&
-    trialSessionEntity.judge.name
-  ) {
-    this.associatedJudge = trialSessionEntity.judge.name;
-  }
-  this.trialSessionId = trialSessionEntity.trialSessionId;
-  this.trialDate = trialSessionEntity.startDate;
-  this.trialTime = trialSessionEntity.startTime;
-  this.trialLocation = trialSessionEntity.trialLocation;
-
-  return this;
 };
 
 /**
@@ -1405,179 +1139,6 @@ Case.prototype.isAssociatedUser = function ({ user }) {
 };
 
 /**
- * returns true if the case status is already calendared
- *
- * @returns {boolean} if the case is calendared
- */
-Case.prototype.isCalendared = function () {
-  return this.status === CASE_STATUS_TYPES.calendared;
-};
-
-/**
- * returns true if the case status is ready for trial
- *
- * @returns {boolean} if the case is calendared
- */
-Case.prototype.isReadyForTrial = function () {
-  return (
-    this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
-    this.preferredTrialCity &&
-    !this.blocked &&
-    !this.automaticBlocked
-  );
-};
-
-/**
- * set as blocked with a blockedReason
- *
- * @param {string} blockedReason - the reason the case was blocked
- * @returns {Case} the updated case entity
- */
-Case.prototype.setAsBlocked = function (blockedReason) {
-  this.blocked = true;
-  this.blockedReason = blockedReason;
-  this.blockedDate = createISODateString();
-  return this;
-};
-
-/**
- * unblock the case and remove the blockedReason
- *
- * @returns {Case} the updated case entity
- */
-Case.prototype.unsetAsBlocked = function () {
-  this.blocked = false;
-  this.blockedReason = undefined;
-  this.blockedDate = undefined;
-  return this;
-};
-
-/**
- * update as automaticBlocked with an automaticBlockedReason based on
- * provided case deadlines and pending items
- *
- * @param {object} caseDeadlines - the case deadlines
- * @returns {Case} the updated case entity
- */
-Case.prototype.updateAutomaticBlocked = function ({ caseDeadlines }) {
-  const hasPendingItems = this.doesHavePendingItems();
-  let automaticBlockedReason;
-  if (hasPendingItems && !isEmpty(caseDeadlines)) {
-    automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
-  } else if (hasPendingItems) {
-    automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
-  } else if (!isEmpty(caseDeadlines)) {
-    automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.dueDate;
-  }
-  if (automaticBlockedReason) {
-    this.automaticBlocked = true;
-    this.automaticBlockedDate = createISODateString();
-    this.automaticBlockedReason = automaticBlockedReason;
-  } else {
-    this.automaticBlocked = false;
-    this.automaticBlockedDate = undefined;
-    this.automaticBlockedReason = undefined;
-  }
-  return this;
-};
-
-/**
- * set as high priority with a highPriorityReason
- *
- * @param {string} highPriorityReason - the reason the case was set to high priority
- * @returns {Case} the updated case entity
- */
-Case.prototype.setAsHighPriority = function (highPriorityReason) {
-  this.highPriority = true;
-  this.highPriorityReason = highPriorityReason;
-  return this;
-};
-
-/**
- * unset as high priority and remove the highPriorityReason
- *
- * @returns {Case} the updated case entity
- */
-Case.prototype.unsetAsHighPriority = function () {
-  this.highPriority = false;
-  this.highPriorityReason = undefined;
-  return this;
-};
-
-/**
- * remove case from trial, setting case status to generalDocketReadyForTrial
- *
- * @param {string} caseStatus optional case status to set the case to
- * @param {string} associatedJudge optional associatedJudge to set on the case
- * @returns {Case} the updated case entity
- */
-Case.prototype.removeFromTrial = function (caseStatus, associatedJudge) {
-  this.setAssociatedJudge(associatedJudge || CHIEF_JUDGE);
-  this.setCaseStatus(
-    caseStatus || CASE_STATUS_TYPES.generalDocketReadyForTrial,
-  );
-  this.trialDate = undefined;
-  this.trialLocation = undefined;
-  this.trialSessionId = undefined;
-  this.trialTime = undefined;
-  return this;
-};
-
-/**
- * check to see if trialSessionId is a hearing
- *
- * @param {string} trialSessionId trial session id to check
- * @returns {boolean} whether or not the trial session id associated is a hearing or not
- */
-Case.prototype.isHearing = function (trialSessionId) {
-  return this.hearings.some(
-    trialSession => trialSession.trialSessionId === trialSessionId,
-  );
-};
-
-/**
- * removes a hearing from the case.hearings array
- *
- * @param {string} trialSessionId trial session id associated with hearing to remove
- */
-Case.prototype.removeFromHearing = function (trialSessionId) {
-  const removeIndex = this.hearings
-    .map(trialSession => trialSession.trialSessionId)
-    .indexOf(trialSessionId);
-
-  this.hearings.splice(removeIndex, 1);
-};
-
-/**
- * remove case from trial with optional associated judge
- *
- * @param {string} associatedJudge (optional) the associated judge for the case
- * @returns {Case} the updated case entity
- */
-Case.prototype.removeFromTrialWithAssociatedJudge = function (associatedJudge) {
-  if (associatedJudge) {
-    this.associatedJudge = associatedJudge;
-  }
-
-  this.trialDate = undefined;
-  this.trialLocation = undefined;
-  this.trialSessionId = undefined;
-  this.trialTime = undefined;
-  return this;
-};
-
-/**
- * set associated judge
- *
- * @param {string} associatedJudge the judge to associate with the case
- * @returns {Case} the updated case entity
- */
-Case.prototype.setAssociatedJudge = function (associatedJudge) {
-  this.associatedJudge = associatedJudge;
-  return this;
-};
-
-/**
  * set case status
  *
  * @param {string} caseStatus the case status to update
@@ -1741,32 +1302,6 @@ Case.formatDocketNumber = function formatDocketNumber(docketNumber) {
 };
 
 /**
- * sets the notice of trial date for a case
- *
- * @returns {Case} this case entity
- */
-Case.prototype.setNoticeOfTrialDate = function () {
-  this.noticeOfTrialDate = createISODateString();
-  return this;
-};
-
-/**
- * sets the qc complete for trial boolean for a case
- *
- * @param {object} providers the providers object
- * @param {boolean} providers.qcCompleteForTrial the value to set for qcCompleteForTrial
- * @param {string} providers.trialSessionId the id of the trial session to set qcCompleteForTrial for
- * @returns {Case} this case entity
- */
-Case.prototype.setQcCompleteForTrial = function ({
-  qcCompleteForTrial,
-  trialSessionId,
-}) {
-  this.qcCompleteForTrial[trialSessionId] = qcCompleteForTrial;
-  return this;
-};
-
-/**
  * sets the sealedDate on a case to the current date and time
  *
  * @returns {Case} this case entity
@@ -1776,6 +1311,7 @@ Case.prototype.setAsSealed = function () {
   this.isSealed = true;
   return this;
 };
+
 /**
  * generates the case confirmation pdf file name
  *

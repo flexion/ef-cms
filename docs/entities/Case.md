@@ -4195,6 +4195,427 @@
               type: "object"
               flags: 
                 presence: "optional"
+    associatedJudge: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "Judge assigned to this case. Defaults to Chief Judge."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 50
+      metas: 
+        - 
+          tags: 
+            - "Restricted"
+    automaticBlocked: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "Temporarily blocked from trial due to a pending item or due date."
+    automaticBlockedDate: 
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "automaticBlocked"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
+    automaticBlockedReason: 
+      type: "string"
+      flags: 
+        only: true
+        description: "The reason the case was automatically blocked from trial."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+      allow: 
+        - "Due Date"
+        - "Pending Item"
+        - "Pending Item and Due Date"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "automaticBlocked"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
+    highPriority: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+      metas: 
+        - 
+          tags: 
+            - "Restricted"
+    highPriorityReason: 
+      type: "string"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 250
+      metas: 
+        - 
+          tags: 
+            - "Restricted"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "highPriority"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
+    judgeUserId: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "Unique ID for the associated judge."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "guid"
+          args: 
+            options: 
+              version: 
+                - "uuidv4"
+    preferredTrialCity: 
+      type: "alternatives"
+      flags: 
+        presence: "optional"
+        description: "Where the petitioner would prefer to hold the case trial."
+      matches: 
+        - 
+          schema: 
+            type: "string"
+            flags: 
+              only: true
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
+            allow: 
+              - "Fresno, California"
+              - "Tallahassee, Florida"
+              - "Pocatello, Idaho"
+              - "Peoria, Illinois"
+              - "Wichita, Kansas"
+              - "Shreveport, Louisiana"
+              - "Portland, Maine"
+              - "Billings, Montana"
+              - "Albany, New York"
+              - "Syracuse, New York"
+              - "Bismarck, North Dakota"
+              - "Aberdeen, South Dakota"
+              - "Burlington, Vermont"
+              - "Roanoke, Virginia"
+              - "Cheyenne, Wyoming"
+              - "Birmingham, Alabama"
+              - "Mobile, Alabama"
+              - "Anchorage, Alaska"
+              - "Phoenix, Arizona"
+              - "Little Rock, Arkansas"
+              - "Los Angeles, California"
+              - "San Diego, California"
+              - "San Francisco, California"
+              - "Denver, Colorado"
+              - "Hartford, Connecticut"
+              - "Washington, District of Columbia"
+              - "Jacksonville, Florida"
+              - "Miami, Florida"
+              - "Tampa, Florida"
+              - "Atlanta, Georgia"
+              - "Honolulu, Hawaii"
+              - "Boise, Idaho"
+              - "Chicago, Illinois"
+              - "Indianapolis, Indiana"
+              - "Des Moines, Iowa"
+              - "Louisville, Kentucky"
+              - "New Orleans, Louisiana"
+              - "Baltimore, Maryland"
+              - "Boston, Massachusetts"
+              - "Detroit, Michigan"
+              - "St. Paul, Minnesota"
+              - "Jackson, Mississippi"
+              - "Kansas City, Missouri"
+              - "St. Louis, Missouri"
+              - "Helena, Montana"
+              - "Omaha, Nebraska"
+              - "Las Vegas, Nevada"
+              - "Reno, Nevada"
+              - "Albuquerque, New Mexico"
+              - "Buffalo, New York"
+              - "New York City, New York"
+              - "Winston-Salem, North Carolina"
+              - "Cincinnati, Ohio"
+              - "Cleveland, Ohio"
+              - "Columbus, Ohio"
+              - "Oklahoma City, Oklahoma"
+              - "Portland, Oregon"
+              - "Philadelphia, Pennsylvania"
+              - "Pittsburgh, Pennsylvania"
+              - "Columbia, South Carolina"
+              - "Knoxville, Tennessee"
+              - "Memphis, Tennessee"
+              - "Nashville, Tennessee"
+              - "Dallas, Texas"
+              - "El Paso, Texas"
+              - "Houston, Texas"
+              - "Lubbock, Texas"
+              - "San Antonio, Texas"
+              - "Salt Lake City, Utah"
+              - "Richmond, Virginia"
+              - "Seattle, Washington"
+              - "Spokane, Washington"
+              - "Charleston, West Virginia"
+              - "Milwaukee, Wisconsin"
+              - "Biloxi, Mississippi"
+              - "Huntington, West Virginia"
+              - "Maui, Hawaii"
+              - "Missoula, Montana"
+              - "Newark, New Jersey"
+              - "Pasadena, California"
+              - "Tulsa, Oklahoma"
+              - "Westbury, New York"
+              - null
+        - 
+          schema: 
+            type: "string"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
+              - 
+                name: "pattern"
+                args: 
+                  regex: "/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/"
+    qcCompleteForTrial: 
+      type: "object"
+      flags: 
+        presence: "optional"
+        description: "QC Checklist object that must be completed before the case can go to trial."
+      metas: 
+        - 
+          tags: 
+            - "Restricted"
+    trialDate: 
+      type: "alternatives"
+      flags: 
+        description: "When this case goes to trial."
+      matches: 
+        - 
+          ref: 
+            path: 
+              - "trialSessionId"
+          is: 
+            type: "any"
+            flags: 
+              presence: "required"
+            invalid: 
+              - null
+          then: 
+            type: "date"
+            flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+              presence: "required"
+          otherwise: 
+            type: "date"
+            flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+              presence: "optional"
+            allow: 
+              - null
+    trialLocation: 
+      type: "alternatives"
+      flags: 
+        presence: "optional"
+        description: "Where this case goes to trial. This may be different that the preferred trial location."
+      matches: 
+        - 
+          schema: 
+            type: "string"
+            flags: 
+              only: true
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
+            allow: 
+              - "Fresno, California"
+              - "Tallahassee, Florida"
+              - "Pocatello, Idaho"
+              - "Peoria, Illinois"
+              - "Wichita, Kansas"
+              - "Shreveport, Louisiana"
+              - "Portland, Maine"
+              - "Billings, Montana"
+              - "Albany, New York"
+              - "Syracuse, New York"
+              - "Bismarck, North Dakota"
+              - "Aberdeen, South Dakota"
+              - "Burlington, Vermont"
+              - "Roanoke, Virginia"
+              - "Cheyenne, Wyoming"
+              - "Birmingham, Alabama"
+              - "Mobile, Alabama"
+              - "Anchorage, Alaska"
+              - "Phoenix, Arizona"
+              - "Little Rock, Arkansas"
+              - "Los Angeles, California"
+              - "San Diego, California"
+              - "San Francisco, California"
+              - "Denver, Colorado"
+              - "Hartford, Connecticut"
+              - "Washington, District of Columbia"
+              - "Jacksonville, Florida"
+              - "Miami, Florida"
+              - "Tampa, Florida"
+              - "Atlanta, Georgia"
+              - "Honolulu, Hawaii"
+              - "Boise, Idaho"
+              - "Chicago, Illinois"
+              - "Indianapolis, Indiana"
+              - "Des Moines, Iowa"
+              - "Louisville, Kentucky"
+              - "New Orleans, Louisiana"
+              - "Baltimore, Maryland"
+              - "Boston, Massachusetts"
+              - "Detroit, Michigan"
+              - "St. Paul, Minnesota"
+              - "Jackson, Mississippi"
+              - "Kansas City, Missouri"
+              - "St. Louis, Missouri"
+              - "Helena, Montana"
+              - "Omaha, Nebraska"
+              - "Las Vegas, Nevada"
+              - "Reno, Nevada"
+              - "Albuquerque, New Mexico"
+              - "Buffalo, New York"
+              - "New York City, New York"
+              - "Winston-Salem, North Carolina"
+              - "Cincinnati, Ohio"
+              - "Cleveland, Ohio"
+              - "Columbus, Ohio"
+              - "Oklahoma City, Oklahoma"
+              - "Portland, Oregon"
+              - "Philadelphia, Pennsylvania"
+              - "Pittsburgh, Pennsylvania"
+              - "Columbia, South Carolina"
+              - "Knoxville, Tennessee"
+              - "Memphis, Tennessee"
+              - "Nashville, Tennessee"
+              - "Dallas, Texas"
+              - "El Paso, Texas"
+              - "Houston, Texas"
+              - "Lubbock, Texas"
+              - "San Antonio, Texas"
+              - "Salt Lake City, Utah"
+              - "Richmond, Virginia"
+              - "Seattle, Washington"
+              - "Spokane, Washington"
+              - "Charleston, West Virginia"
+              - "Milwaukee, Wisconsin"
+              - null
+        - 
+          schema: 
+            type: "string"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
+              - 
+                name: "pattern"
+                args: 
+                  regex: "/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/"
+    trialTime: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "Time of day when this case goes to trial."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "pattern"
+          args: 
+            regex: "/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/"
     archivedCorrespondences: 
       type: "array"
       flags: 
@@ -7690,96 +8111,6 @@
               type: "object"
               flags: 
                 presence: "optional"
-    associatedJudge: 
-      type: "string"
-      flags: 
-        presence: "optional"
-        description: "Judge assigned to this case. Defaults to Chief Judge."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "max"
-          args: 
-            limit: 50
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
-    automaticBlocked: 
-      type: "boolean"
-      flags: 
-        presence: "optional"
-        description: "Temporarily blocked from trial due to a pending item or due date."
-    automaticBlockedDate: 
-      type: "date"
-      flags: 
-        format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "automaticBlocked"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - true
-          then: 
-            type: "any"
-            flags: 
-              presence: "required"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
-    automaticBlockedReason: 
-      type: "string"
-      flags: 
-        only: true
-        description: "The reason the case was automatically blocked from trial."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-      allow: 
-        - "Due Date"
-        - "Pending Item"
-        - "Pending Item and Due Date"
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "automaticBlocked"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - true
-          then: 
-            type: "any"
-            flags: 
-              presence: "required"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
     caseCaption: 
       type: "string"
       flags: 
@@ -8018,53 +8349,6 @@
         description: "Whether the petitioner received an IRS notice, verified by the petitions clerk."
       allow: 
         - null
-    highPriority: 
-      type: "boolean"
-      flags: 
-        presence: "optional"
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
-    highPriorityReason: 
-      type: "string"
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "max"
-          args: 
-            limit: 250
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "highPriority"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - true
-          then: 
-            type: "any"
-            flags: 
-              presence: "required"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
     initialCaption: 
       type: "string"
       flags: 
@@ -8125,22 +8409,6 @@
       type: "boolean"
       flags: 
         presence: "optional"
-    judgeUserId: 
-      type: "string"
-      flags: 
-        presence: "optional"
-        description: "Unique ID for the associated judge."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
     leadDocketNumber: 
       type: "string"
       flags: 
@@ -8411,118 +8679,6 @@
           name: "unique"
           args: 
             comparator: [object Function]
-    preferredTrialCity: 
-      type: "alternatives"
-      flags: 
-        presence: "optional"
-        description: "Where the petitioner would prefer to hold the case trial."
-      matches: 
-        - 
-          schema: 
-            type: "string"
-            flags: 
-              only: true
-            rules: 
-              - 
-                name: "min"
-                args: 
-                  limit: 1
-            allow: 
-              - "Fresno, California"
-              - "Tallahassee, Florida"
-              - "Pocatello, Idaho"
-              - "Peoria, Illinois"
-              - "Wichita, Kansas"
-              - "Shreveport, Louisiana"
-              - "Portland, Maine"
-              - "Billings, Montana"
-              - "Albany, New York"
-              - "Syracuse, New York"
-              - "Bismarck, North Dakota"
-              - "Aberdeen, South Dakota"
-              - "Burlington, Vermont"
-              - "Roanoke, Virginia"
-              - "Cheyenne, Wyoming"
-              - "Birmingham, Alabama"
-              - "Mobile, Alabama"
-              - "Anchorage, Alaska"
-              - "Phoenix, Arizona"
-              - "Little Rock, Arkansas"
-              - "Los Angeles, California"
-              - "San Diego, California"
-              - "San Francisco, California"
-              - "Denver, Colorado"
-              - "Hartford, Connecticut"
-              - "Washington, District of Columbia"
-              - "Jacksonville, Florida"
-              - "Miami, Florida"
-              - "Tampa, Florida"
-              - "Atlanta, Georgia"
-              - "Honolulu, Hawaii"
-              - "Boise, Idaho"
-              - "Chicago, Illinois"
-              - "Indianapolis, Indiana"
-              - "Des Moines, Iowa"
-              - "Louisville, Kentucky"
-              - "New Orleans, Louisiana"
-              - "Baltimore, Maryland"
-              - "Boston, Massachusetts"
-              - "Detroit, Michigan"
-              - "St. Paul, Minnesota"
-              - "Jackson, Mississippi"
-              - "Kansas City, Missouri"
-              - "St. Louis, Missouri"
-              - "Helena, Montana"
-              - "Omaha, Nebraska"
-              - "Las Vegas, Nevada"
-              - "Reno, Nevada"
-              - "Albuquerque, New Mexico"
-              - "Buffalo, New York"
-              - "New York City, New York"
-              - "Winston-Salem, North Carolina"
-              - "Cincinnati, Ohio"
-              - "Cleveland, Ohio"
-              - "Columbus, Ohio"
-              - "Oklahoma City, Oklahoma"
-              - "Portland, Oregon"
-              - "Philadelphia, Pennsylvania"
-              - "Pittsburgh, Pennsylvania"
-              - "Columbia, South Carolina"
-              - "Knoxville, Tennessee"
-              - "Memphis, Tennessee"
-              - "Nashville, Tennessee"
-              - "Dallas, Texas"
-              - "El Paso, Texas"
-              - "Houston, Texas"
-              - "Lubbock, Texas"
-              - "San Antonio, Texas"
-              - "Salt Lake City, Utah"
-              - "Richmond, Virginia"
-              - "Seattle, Washington"
-              - "Spokane, Washington"
-              - "Charleston, West Virginia"
-              - "Milwaukee, Wisconsin"
-              - "Biloxi, Mississippi"
-              - "Huntington, West Virginia"
-              - "Maui, Hawaii"
-              - "Missoula, Montana"
-              - "Newark, New Jersey"
-              - "Pasadena, California"
-              - "Tulsa, Oklahoma"
-              - "Westbury, New York"
-              - null
-        - 
-          schema: 
-            type: "string"
-            rules: 
-              - 
-                name: "min"
-                args: 
-                  limit: 1
-              - 
-                name: "pattern"
-                args: 
-                  regex: "/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/"
     procedureType: 
       type: "string"
       flags: 
@@ -8537,15 +8693,6 @@
       allow: 
         - "Regular"
         - "Small"
-    qcCompleteForTrial: 
-      type: "object"
-      flags: 
-        presence: "optional"
-        description: "QC Checklist object that must be completed before the case can go to trial."
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
     receivedAt: 
       type: "date"
       flags: 
@@ -8931,168 +9078,6 @@
               presence: "optional"
             allow: 
               - null
-    closedDate: 
-      type: "date"
-      flags: 
-        format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "status"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - "Closed"
-          then: 
-            type: "any"
-            flags: 
-              presence: "required"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
-    trialDate: 
-      type: "alternatives"
-      flags: 
-        description: "When this case goes to trial."
-      matches: 
-        - 
-          ref: 
-            path: 
-              - "trialSessionId"
-          is: 
-            type: "any"
-            flags: 
-              presence: "required"
-            invalid: 
-              - null
-          then: 
-            type: "date"
-            flags: 
-              format: 
-                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-              presence: "required"
-          otherwise: 
-            type: "date"
-            flags: 
-              format: 
-                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-              presence: "optional"
-            allow: 
-              - null
-    trialLocation: 
-      type: "alternatives"
-      flags: 
-        presence: "optional"
-        description: "Where this case goes to trial. This may be different that the preferred trial location."
-      matches: 
-        - 
-          schema: 
-            type: "string"
-            flags: 
-              only: true
-            rules: 
-              - 
-                name: "min"
-                args: 
-                  limit: 1
-            allow: 
-              - "Fresno, California"
-              - "Tallahassee, Florida"
-              - "Pocatello, Idaho"
-              - "Peoria, Illinois"
-              - "Wichita, Kansas"
-              - "Shreveport, Louisiana"
-              - "Portland, Maine"
-              - "Billings, Montana"
-              - "Albany, New York"
-              - "Syracuse, New York"
-              - "Bismarck, North Dakota"
-              - "Aberdeen, South Dakota"
-              - "Burlington, Vermont"
-              - "Roanoke, Virginia"
-              - "Cheyenne, Wyoming"
-              - "Birmingham, Alabama"
-              - "Mobile, Alabama"
-              - "Anchorage, Alaska"
-              - "Phoenix, Arizona"
-              - "Little Rock, Arkansas"
-              - "Los Angeles, California"
-              - "San Diego, California"
-              - "San Francisco, California"
-              - "Denver, Colorado"
-              - "Hartford, Connecticut"
-              - "Washington, District of Columbia"
-              - "Jacksonville, Florida"
-              - "Miami, Florida"
-              - "Tampa, Florida"
-              - "Atlanta, Georgia"
-              - "Honolulu, Hawaii"
-              - "Boise, Idaho"
-              - "Chicago, Illinois"
-              - "Indianapolis, Indiana"
-              - "Des Moines, Iowa"
-              - "Louisville, Kentucky"
-              - "New Orleans, Louisiana"
-              - "Baltimore, Maryland"
-              - "Boston, Massachusetts"
-              - "Detroit, Michigan"
-              - "St. Paul, Minnesota"
-              - "Jackson, Mississippi"
-              - "Kansas City, Missouri"
-              - "St. Louis, Missouri"
-              - "Helena, Montana"
-              - "Omaha, Nebraska"
-              - "Las Vegas, Nevada"
-              - "Reno, Nevada"
-              - "Albuquerque, New Mexico"
-              - "Buffalo, New York"
-              - "New York City, New York"
-              - "Winston-Salem, North Carolina"
-              - "Cincinnati, Ohio"
-              - "Cleveland, Ohio"
-              - "Columbus, Ohio"
-              - "Oklahoma City, Oklahoma"
-              - "Portland, Oregon"
-              - "Philadelphia, Pennsylvania"
-              - "Pittsburgh, Pennsylvania"
-              - "Columbia, South Carolina"
-              - "Knoxville, Tennessee"
-              - "Memphis, Tennessee"
-              - "Nashville, Tennessee"
-              - "Dallas, Texas"
-              - "El Paso, Texas"
-              - "Houston, Texas"
-              - "Lubbock, Texas"
-              - "San Antonio, Texas"
-              - "Salt Lake City, Utah"
-              - "Richmond, Virginia"
-              - "Seattle, Washington"
-              - "Spokane, Washington"
-              - "Charleston, West Virginia"
-              - "Milwaukee, Wisconsin"
-              - null
-        - 
-          schema: 
-            type: "string"
-            rules: 
-              - 
-                name: "min"
-                args: 
-                  limit: 1
-              - 
-                name: "pattern"
-                args: 
-                  regex: "/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/"
     trialSessionId: 
       type: "any"
       flags: 
@@ -9169,20 +9154,35 @@
                         options: 
                           version: 
                             - "uuidv4"
-    trialTime: 
-      type: "string"
+    closedDate: 
+      type: "date"
       flags: 
-        presence: "optional"
-        description: "Time of day when this case goes to trial."
-      rules: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+      whens: 
         - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "pattern"
-          args: 
-            regex: "/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/"
+          ref: 
+            path: 
+              - "status"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - "Closed"
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
     useSameAsPrimary: 
       type: "boolean"
       flags: 
