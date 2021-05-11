@@ -19,11 +19,11 @@ const {
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
   ROLES,
-  SERVICE_INDICATOR_TYPES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
+
 const {
   calculateDifferenceInDays,
   createISODateString,
@@ -31,6 +31,11 @@ const {
   PATTERNS,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
+const {
+  CaseCounsel,
+  getPractitionersRepresenting,
+  isUserIdRepresentedByPrivatePractitioner,
+} = require('./Case.counsel');
 const {
   DOCKET_ENTRY_VALIDATION_RULES,
 } = require('../EntityValidationConstants');
@@ -51,10 +56,9 @@ const { clone, compact, includes, isEmpty } = require('lodash');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
-const { DocketEntry, isServed } = require('../DocketEntry');
-const { IrsPractitioner } = require('../IrsPractitioner');
+const { DocketEntry } = require('../DocketEntry');
+const { isServed } = require('../DocketEntry');
 const { Petitioner } = require('../contacts/Petitioner');
-const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
@@ -255,6 +259,8 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
     this.docketNumber + (this.docketNumberSuffix || '');
 };
 
+Object.assign(Case.prototype, CaseCounsel.prototypes);
+
 Case.prototype.assignDocketEntries = function assignDocketEntries({
   applicationContext,
   filtered,
@@ -311,10 +317,6 @@ Case.prototype.assignArchivedDocketEntries = function assignArchivedDocketEntrie
   }
 };
 
-Case.prototype.hasPrivatePractitioners = function hasPrivatePractitioners() {
-  return this.privatePractitioners.length > 0;
-};
-
 Case.prototype.assignContacts = function assignContacts({
   applicationContext,
   rawCase,
@@ -341,24 +343,6 @@ Case.prototype.assignContacts = function assignContacts({
 
       this.setAdditionalNameOnPetitioners();
     }
-  }
-};
-
-Case.prototype.assignPractitioners = function assignPractitioners({ rawCase }) {
-  if (Array.isArray(rawCase.privatePractitioners)) {
-    this.privatePractitioners = rawCase.privatePractitioners.map(
-      practitioner => new PrivatePractitioner(practitioner),
-    );
-  } else {
-    this.privatePractitioners = [];
-  }
-
-  if (Array.isArray(rawCase.irsPractitioners)) {
-    this.irsPractitioners = rawCase.irsPractitioners.map(
-      practitioner => new IrsPractitioner(practitioner),
-    );
-  } else {
-    this.irsPractitioners = [];
   }
 };
 
@@ -401,6 +385,7 @@ Case.prototype.assignCorrespondences = function assignCorrespondences({
 };
 
 Case.VALIDATION_RULES = {
+  ...CaseCounsel.validation,
   archivedCorrespondences: joi
     .array()
     .items(Correspondence.VALIDATION_RULES)
@@ -542,13 +527,6 @@ Case.VALIDATION_RULES = {
     .optional()
     .allow(null)
     .description('Last date that the petitioner is allowed to file before.'),
-  irsPractitioners: joi
-    .array()
-    .items(IrsPractitioner.VALIDATION_RULES)
-    .optional()
-    .description(
-      'List of IRS practitioners (also known as respondents) associated with the case.',
-    ),
   isPaper: joi.boolean().optional(),
   isSealed: joi.boolean().optional(),
   judgeUserId: JoiValidationConstants.UUID.optional().description(
@@ -662,11 +640,6 @@ Case.VALIDATION_RULES = {
     )
     .optional()
     .description('Where the petitioner would prefer to hold the case trial.'),
-  privatePractitioners: joi
-    .array()
-    .items(PrivatePractitioner.VALIDATION_RULES)
-    .optional()
-    .description('List of private practitioners associated with the case.'),
   procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
     .required()
     .description('Procedure type of the case.'),
@@ -881,15 +854,6 @@ Case.getCaseTitle = function (caseCaption) {
 };
 
 /**
- * attaches an IRS practitioner to the case
- *
- * @param {string} practitioner the irsPractitioner to add to the case
- */
-Case.prototype.attachIrsPractitioner = function (practitioner) {
-  this.irsPractitioners.push(practitioner);
-};
-
-/**
  * archives a docket entry and adds it to the archivedDocketEntries array on the case
  *
  * @param {string} docketEntry the docketEntry to archive
@@ -925,66 +889,6 @@ Case.prototype.archiveCorrespondence = function (
   this.deleteCorrespondenceById({
     correspondenceId: correspondenceToArchive.correspondenceId,
   });
-};
-
-/**
- * updates an IRS practitioner on the case
- *
- * @param {string} practitionerToUpdate the irsPractitioner user object with updated info
- * @returns {void} modifies the irsPractitioners array on the case
- */
-Case.prototype.updateIrsPractitioner = function (practitionerToUpdate) {
-  const foundPractitioner = this.irsPractitioners.find(
-    practitioner => practitioner.userId === practitionerToUpdate.userId,
-  );
-  if (foundPractitioner) Object.assign(foundPractitioner, practitionerToUpdate);
-};
-
-/**
- * removes the given IRS practitioner from the case
- *
- * @param {string} practitionerToRemove the irsPractitioner user object to remove from the case
- * @returns {Case} the modified case entity
- */
-Case.prototype.removeIrsPractitioner = function (practitionerToRemove) {
-  const index = this.irsPractitioners.findIndex(
-    practitioner => practitioner.userId === practitionerToRemove.userId,
-  );
-  if (index > -1) this.irsPractitioners.splice(index, 1);
-  return this;
-};
-
-/**
- * attaches a private practitioner to the case
- *
- * @param {string} practitioner the privatePractitioner to add to the case
- */
-Case.prototype.attachPrivatePractitioner = function (practitioner) {
-  this.privatePractitioners.push(practitioner);
-};
-
-/**
- * updates a private practitioner on the case
- *
- * @param {string} practitionerToUpdate the practitioner user object with updated info
- */
-Case.prototype.updatePrivatePractitioner = function (practitionerToUpdate) {
-  const foundPractitioner = this.privatePractitioners.find(
-    practitioner => practitioner.userId === practitionerToUpdate.userId,
-  );
-  if (foundPractitioner) Object.assign(foundPractitioner, practitionerToUpdate);
-};
-
-/**
- * removes the given private practitioner from the case
- *
- * @param {string} practitionerToRemove the practitioner user object to remove from the case
- */
-Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
-  const index = this.privatePractitioners.findIndex(
-    practitioner => practitioner.userId === practitionerToRemove.userId,
-  );
-  if (index > -1) this.privatePractitioners.splice(index, 1);
 };
 
 /**
@@ -1167,28 +1071,6 @@ Case.prototype.getPetitionerById = function (contactId) {
 Case.prototype.addPetitioner = function (petitioner) {
   this.petitioners.push(petitioner);
   return this;
-};
-
-/**
- * returns the practitioner representing a petitioner
- *
- * @params {string} petitionerContactId the id of the petitioner
- * @returns {Object} the practitioner
- */
-const getPractitionersRepresenting = function (rawCase, petitionerContactId) {
-  return rawCase.privatePractitioners.filter(practitioner =>
-    practitioner.representing.includes(petitionerContactId),
-  );
-};
-
-/**
- * returns the practitioner representing a petitioner
- *
- * @params {string} petitionerContactId the id of the petitioner
- * @returns {Object} the practitioner
- */
-Case.prototype.getPractitionersRepresenting = function (petitionerContactId) {
-  return getPractitionersRepresenting(this, petitionerContactId);
 };
 
 /**
@@ -1981,28 +1863,6 @@ Case.prototype.removeConsolidation = function () {
 };
 
 /**
- * checks all the practitioners on the case to see if there is a privatePractitioner associated with the userId
- *
- * @param {String} userId the id of the user
- * @returns {boolean} if the userId has a privatePractitioner associated with them
- */
-const isUserIdRepresentedByPrivatePractitioner = function (rawCase, userId) {
-  return !!rawCase.privatePractitioners?.find(practitioner =>
-    practitioner.representing.find(id => id === userId),
-  );
-};
-
-/**
- * checks all the practitioners on the case to see if there is a privatePractitioner associated with the userId
- *
- * @param {String} userId the id of the user
- * @returns {boolean} if the userId has a privatePractitioner associated with them
- */
-Case.prototype.isUserIdRepresentedByPrivatePractitioner = function (userId) {
-  return isUserIdRepresentedByPrivatePractitioner(this, userId);
-};
-
-/**
  * sorts the given array of cases by docket number
  *
  * @param {Array} cases the cases to check for lead case computation
@@ -2170,24 +2030,6 @@ Case.prototype.deleteStatistic = function (statisticId) {
   }
 
   return this;
-};
-
-Case.prototype.hasPartyWithPaperService = function () {
-  const contactSecondary = this.getContactSecondary();
-  return (
-    this.getContactPrimary().serviceIndicator ===
-      SERVICE_INDICATOR_TYPES.SI_PAPER ||
-    (contactSecondary &&
-      contactSecondary.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER) ||
-    (this.privatePractitioners &&
-      this.privatePractitioners.find(
-        pp => pp.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
-      )) ||
-    (this.irsPractitioners &&
-      this.irsPractitioners.find(
-        ip => ip.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
-      ))
-  );
 };
 
 const isSealedCase = rawCase => {
