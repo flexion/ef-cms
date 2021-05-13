@@ -9,7 +9,14 @@ const {
 const { FORMATS } = require('../business/utilities/DateHandler');
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
-const STRING = joi.string().min(1);
+const SSN_PATTERN = /\b\d{3}-\d{2}-\d{4}\b/;
+const STRING = joi
+  .string()
+  .regex(SSN_PATTERN, {
+    invert: true,
+    name: 'SSN',
+  })
+  .min(1);
 exports.JoiValidationConstants = deepFreeze({
   CASE_CAPTION: STRING.max(4700),
   DATE: joi.date().iso().format([FORMATS.YYYYMMDD]),

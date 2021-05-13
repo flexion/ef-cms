@@ -5,6 +5,29 @@ const {
 const { JoiValidationConstants } = require('./JoiValidationConstants');
 
 describe('JoiValidationConstants', () => {
+  describe('string validation', () => {
+    it('does not permit empty strings', () => {
+      const { error } = JoiValidationConstants.STRING.validate('');
+      expect(error).toBeTruthy();
+    });
+    it('does not permit things that look like SSN', () => {
+      const { error } = JoiValidationConstants.STRING.validate('000-00-0000');
+      expect(error).toBeTruthy();
+    });
+    it('does not permit things that look like SSN', () => {
+      const { error } = JoiValidationConstants.STRING.max(500).validate(
+        'This is a much, much longer thing with a prohibited pattern 000-00-0000',
+      );
+      expect(error).toBeTruthy();
+      expect(error.toString()).toMatch('matches the inverted SSN pattern');
+    });
+    it('continues to validate otherwise perfectly cromulent strings', () => {
+      const { error } = JoiValidationConstants.STRING.validate(
+        'Two All Beef Patties, Special Sauce, Lettuce, Cheese, Pickles, Onions on a Sesame Seed Bun.',
+      );
+      expect(error).toBeFalsy();
+    });
+  });
   describe('current year validation', () => {
     it('validates a recent year', () => {
       const { error } = JoiValidationConstants.YEAR_MAX_CURRENT.validate(2018);
