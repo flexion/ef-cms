@@ -39,10 +39,15 @@ const migrateItems = async (items, documentClient) => {
 
       const caseRecord = aggregateCaseItems(fullCase);
 
+      applicationContext.logger.error('is there a caserecord???', caseRecord);
+
       if (item.partyPrimary) {
         const contactPrimary = getContactPrimary(caseRecord);
         if (!contactPrimary) {
-          console.log('-------THIS IS THE CASE WITH NO PRIMARY', caseRecord);
+          applicationContext.logger.error(
+            '-------THIS IS THE CASE WITH NO PRIMARY',
+            caseRecord,
+          );
         } else {
           const contactPrimaryId = contactPrimary.contactId;
           filers.push(contactPrimaryId);
@@ -53,7 +58,10 @@ const migrateItems = async (items, documentClient) => {
       if (item.partySecondary) {
         const contactSecondary = getContactSecondary(caseRecord);
         if (!contactSecondary) {
-          console.log('-------THIS IS THE CASE WITH NO SECONDARY', caseRecord);
+          applicationContext.logger.error(
+            '-------THIS IS THE CASE WITH NO SECONDARY',
+            caseRecord,
+          );
         } else {
           const contactSecondaryId = contactSecondary.contactId;
           filers.push(contactSecondaryId);
