@@ -16,6 +16,7 @@ import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryRep
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
 import { Contact } from './Contact';
+import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
@@ -105,6 +106,7 @@ const pages = {
   CaseSearchNoMatches,
   ChangeLoginAndServiceEmail,
   Contact,
+  ContactEdit,
   CourtIssuedDocketEntry,
   CreateOrder,
   CreatePractitionerUser,

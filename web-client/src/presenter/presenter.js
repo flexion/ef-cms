@@ -65,6 +65,7 @@ import { completeMessageSequence } from './sequences/completeMessageSequence';
 import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
+import { contactCountryTypeChangeSequence } from './sequences/contactCountryTypeChangeSequence';
 import { contactPrimaryCountryTypeChangeSequence } from './sequences/contactPrimaryCountryTypeChangeSequence';
 import { contactSecondaryCountryTypeChangeSequence } from './sequences/contactSecondaryCountryTypeChangeSequence';
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
@@ -113,6 +114,7 @@ import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryReportSequence';
 import { gotoCaseSearchNoMatchesSequence } from './sequences/gotoCaseSearchNoMatchesSequence';
 import { gotoChangeLoginAndServiceEmailSequence } from './sequences/gotoChangeLoginAndServiceEmailSequence';
+import { gotoContactEditSequence } from './sequences/gotoContactEditSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoCreatePractitionerUserSequence } from './sequences/gotoCreatePractitionerUserSequence';
@@ -340,6 +342,7 @@ import { submitChangeLoginAndServiceEmailSequence } from './sequences/submitChan
 import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIssuedDocketEntrySequence';
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
+import { submitEditContactSequence } from './sequences/submitEditContactSequence';
 import { submitEditDeficiencyStatisticSequence } from './sequences/submitEditDeficiencyStatisticSequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
 import { submitEditOrderTitleModalSequence } from './sequences/submitEditOrderTitleModalSequence';
@@ -440,6 +443,7 @@ import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequen
 import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
 import { validateCaseInventoryReportModalSequence } from './sequences/validateCaseInventoryReportModalSequence';
 import { validateChangeLoginAndServiceEmailSequence } from './sequences/validateChangeLoginAndServiceEmailSequence';
+import { validateContactSequence } from './sequences/validateContactSequence';
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
@@ -550,6 +554,7 @@ export const presenter = {
     completePrintPaperPetitionReceiptSequence,
     completeStartCaseWizardStepSequence,
     confirmStayLoggedInSequence,
+    contactCountryTypeChangeSequence,
     contactPrimaryCountryTypeChangeSequence,
     contactSecondaryCountryTypeChangeSequence,
     convertHtml2PdfSequence,
@@ -598,6 +603,7 @@ export const presenter = {
     gotoCaseInventoryReportSequence,
     gotoCaseSearchNoMatchesSequence,
     gotoChangeLoginAndServiceEmailSequence,
+    gotoContactEditSequence,
     gotoContactSequence,
     gotoCreateOrderSequence,
     gotoCreatePractitionerUserSequence,
@@ -823,6 +829,7 @@ export const presenter = {
     submitCourtIssuedDocketEntrySequence,
     submitCourtIssuedOrderSequence,
     submitCreateOrderModalSequence,
+    submitEditContactSequence,
     submitEditDeficiencyStatisticSequence,
     submitEditDocketEntryMetaSequence,
     submitEditOrderTitleModalSequence,
@@ -923,6 +930,7 @@ export const presenter = {
     validateCaseDocketNumberSearchFormSequence,
     validateCaseInventoryReportModalSequence,
     validateChangeLoginAndServiceEmailSequence,
+    validateContactSequence,
     validateCourtIssuedDocketEntrySequence,
     validateCreateMessageInModalSequence,
     validateDocketEntrySequence,

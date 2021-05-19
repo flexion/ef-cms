@@ -483,6 +483,17 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/contacts/*/edit',
+      ifHasAccess({ app }, (docketNumber, contactId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit contact`);
+        return app.getSequence('gotoContactEditSequence')({
+          contactId,
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/create-order?..',
       ifHasAccess({ app }, docketNumber => {
         const { documentTitle, documentType, eventCode } = route.query();

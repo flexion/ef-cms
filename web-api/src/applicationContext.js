@@ -951,6 +951,9 @@ const {
   updateCaseTrialSortTagsInteractor,
 } = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
 const {
+  updateContactInteractor,
+} = require('../../shared/src/business/useCases/updateContactInteractor');
+const {
   updateCorrespondenceDocumentInteractor,
 } = require('../../shared/src/business/useCases/correspondence/updateCorrespondenceDocumentInteractor');
 const {
@@ -1755,6 +1758,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseTrialSortTagsInteractor,
+        updateContactInteractor,
         updateCorrespondenceDocumentInteractor,
         updateCounselOnCaseInteractor,
         updateCourtIssuedDocketEntryInteractor,
@@ -1774,6 +1778,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateUserContactInformationInteractor,
         updateUserPendingEmailInteractor,
         validatePdfInteractor,
+
         verifyPendingCaseForUserInteractor,
         verifyUserPendingEmailInteractor,
         virusScanPdfInteractor: args =>

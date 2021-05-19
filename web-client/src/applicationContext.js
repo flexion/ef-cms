@@ -95,6 +95,11 @@ import {
   formattedTrialSessionDetails,
   getTrialSessionStatus,
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+
+const {
+  validateContactInteractor,
+} = require('../../shared/src/business/useCases/validateContactInteractor');
+
 import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDocketEntry/completeDocketEntryQCProxy';
 import { completeMessageInteractor } from '../../shared/src/proxies/messages/completeMessageProxy';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
@@ -229,6 +234,7 @@ import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritiz
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
+import { updateContactInteractor } from '../../shared/src/proxies/updateContactProxy';
 import { updateCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/updateCorrespondenceDocumentProxy';
 import { updateCounselOnCaseInteractor } from '../../shared/src/proxies/caseAssociation/updateCounselOnCaseProxy';
 import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/updateCourtIssuedDocketEntryProxy';
@@ -455,6 +461,7 @@ const allUseCases = {
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseTrialSortTagsInteractor,
+  updateContactInteractor,
   updateCorrespondenceDocumentInteractor,
   updateCounselOnCaseInteractor,
   updateCourtIssuedDocketEntryInteractor,
@@ -488,6 +495,7 @@ const allUseCases = {
   validateCaseAssociationRequestInteractor,
   validateCaseDeadlineInteractor,
   validateCaseDetailInteractor,
+  validateContactInteractor,
   validateCourtIssuedDocketEntryInteractor,
   validateCreateMessageInteractor,
   validateDocketEntryInteractor,
