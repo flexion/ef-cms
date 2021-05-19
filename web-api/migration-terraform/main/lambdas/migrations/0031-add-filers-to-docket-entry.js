@@ -40,15 +40,25 @@ const migrateItems = async (items, documentClient) => {
       const caseRecord = aggregateCaseItems(fullCase);
 
       if (item.partyPrimary) {
-        const contactPrimaryId = getContactPrimary(caseRecord).contactId;
-        filers.push(contactPrimaryId);
-        item.partyPrimary = undefined;
+        const contactPrimary = getContactPrimary(caseRecord);
+        if (!contactPrimary) {
+          console.log('-------THIS IS THE CASE WITH NO PRIMARY', caseRecord);
+        } else {
+          const contactPrimaryId = contactPrimary.contactId;
+          filers.push(contactPrimaryId);
+          item.partyPrimary = undefined;
+        }
       }
 
       if (item.partySecondary) {
-        const contactSecondaryId = getContactSecondary(caseRecord).contactId;
-        filers.push(contactSecondaryId);
-        item.partySecondary = undefined;
+        const contactSecondary = getContactSecondary(caseRecord);
+        if (!contactSecondary) {
+          console.log('-------THIS IS THE CASE WITH NO SECONDARY', caseRecord);
+        } else {
+          const contactSecondaryId = contactSecondary.contactId;
+          filers.push(contactSecondaryId);
+          item.partySecondary = undefined;
+        }
       }
 
       item.filers = filers;
@@ -56,7 +66,7 @@ const migrateItems = async (items, documentClient) => {
       new DocketEntry(item, {
         applicationContext,
         petitioners: caseRecord.petitioners,
-      }).validate();
+      }).validateWithLogging();
 
       itemsAfter.push(item);
     } else {

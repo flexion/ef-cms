@@ -24,6 +24,7 @@ while true
 do
   
   total=$(get_total)
+  echo $total
 
   if [ "${total}" == 0 ]
   then
