@@ -105,6 +105,21 @@ describe('migrateItems', () => {
     expect(results[0].partySecondary).toBeUndefined();
   });
 
+  it('should not throw an error when partySecondary is true on the docketEntry and the case does NOT have a contactSecondary', async () => {
+    const items = [
+      { ...mockDocketEntry, partyPrimary: true, partySecondary: true },
+    ];
+    mockCaseItem.petitioners = [...MOCK_CASE.petitioners];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0].filers.length).toBe(1);
+    expect(results[0].filers[0]).toEqual(
+      getContactPrimary(mockCaseItem).contactId,
+    );
+    expect(results[0].partySecondary).toBeUndefined();
+  });
+
   it('should not add to the filers array if no partyPrimary or partySecondary', async () => {
     const items = [
       { ...mockDocketEntry, partyPrimary: false, partySecondary: false },

@@ -19,6 +19,14 @@ const migrateItems = async (items, documentClient) => {
       item.sk.startsWith('docket-entry|') &&
       !item.filers
     ) {
+      applicationContext.logger.info(
+        `0031: Updating case ${item.docketNumber} to move partyPrimary/partySecondary fields to filers.`,
+        {
+          pk: item.pk,
+          sk: item.sk,
+        },
+      );
+
       const filers = [];
 
       const fullCase = await documentClient
@@ -46,8 +54,20 @@ const migrateItems = async (items, documentClient) => {
       }
 
       if (item.partySecondary) {
-        const contactSecondaryId = getContactSecondary(caseRecord).contactId;
-        filers.push(contactSecondaryId);
+        const contactSecondary = getContactSecondary(caseRecord);
+
+        if (contactSecondary) {
+          filers.push(contactSecondary.contactId);
+        } else {
+          applicationContext.logger.info(
+            `0031: Docket entry ${item.docketEntryId} on Case ${item.docketNumber} had partySecondary true but no contact secondary.`,
+            {
+              pk: item.pk,
+              sk: item.sk,
+            },
+          );
+        }
+
         item.partySecondary = undefined;
       }
 
