@@ -42,7 +42,7 @@ exports.hoverOverSignatureWarning = () => {
 };
 
 exports.signDocumentAtCanvasCenter = () => {
-  return cy.get('#sign-pdf-canvas').click('bottom');
+  return cy.get('#sign-pdf-canvas').click('center');
 };
 
 exports.getSnapshot = area => {
