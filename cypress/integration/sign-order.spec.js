@@ -13,7 +13,7 @@ describe('Sign order', function () {
   });
 
   it('should display the signature warning banner on hover', () => {
-    hoverOverSignatureWarning().should('have.css', 'color', 'rgba(0, 0, 0, 0)');
+    hoverOverSignatureWarning().should('have.css', 'color', 'rgb(0, 0, 0)');
   });
 
   it("should place the signature to the top right of the point that's clicked", () => {
