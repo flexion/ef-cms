@@ -18,6 +18,7 @@ coverage/
 cypress-smoketests/screenshots
 cypress-smoketests/videos
 cypress/screenshots
+cypress/snapshots/*.spec.js/__diff_output__
 cypress/videos
 dist-public/
 dist/

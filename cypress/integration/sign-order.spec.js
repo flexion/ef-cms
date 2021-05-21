@@ -1,7 +1,9 @@
 const {
   createOrder,
+  getSnapshot,
   hoverOverSignatureWarning,
   navigateTo: navigateToCaseDetail,
+  signDocumentAtCanvasCenter,
 } = require('../support/pages/case-detail');
 
 describe('Sign order', function () {
@@ -11,6 +13,11 @@ describe('Sign order', function () {
   });
 
   it('should display the signature warning banner on hover', () => {
-    hoverOverSignatureWarning().should('have.css', 'color', 'rgb(0, 0, 0)');
+    hoverOverSignatureWarning().should('have.css', 'color', 'rgba(0, 0, 0, 0)');
+  });
+
+  it("should place the signature to the top right of the point that's clicked", () => {
+    signDocumentAtCanvasCenter();
+    getSnapshot('#sign-pdf-canvas');
   });
 });

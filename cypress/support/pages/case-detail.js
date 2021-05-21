@@ -27,10 +27,6 @@ exports.getCaseDetailTab = tabName => {
   return cy.get(`button#tab-${tabName}`);
 };
 
-exports.hoverOverSignatureWarning = () => {
-  return cy.get('#signature-warning').realHover();
-};
-
 exports.createOrder = docketNumber => {
   cy.goToRoute(
     `/case-detail/${docketNumber}/create-order?documentTitle=Order to Show Cause&documentType=Order to Show Cause&eventCode=OSC`,
@@ -39,4 +35,16 @@ exports.createOrder = docketNumber => {
   cy.get('.ql-editor').type('A created order!');
   cy.get('#save-order-button').click();
   cy.url().should('contain', '/sign');
+};
+
+exports.hoverOverSignatureWarning = () => {
+  return cy.get('#signature-warning').realHover();
+};
+
+exports.signDocumentAtCanvasCenter = () => {
+  return cy.get('#sign-pdf-canvas').click('bottom');
+};
+
+exports.getSnapshot = area => {
+  cy.get(area).matchImageSnapshot(area);
 };
