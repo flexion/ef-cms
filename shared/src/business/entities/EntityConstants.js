@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json');
 const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
@@ -26,7 +27,7 @@ const TRIAL_SESSION_PROCEEDING_TYPES = {
 };
 
 const PARTY_VIEW_TABS = {
-  participantsAndCounsel: 'Intervenor/Participants & Counsel',
+  participantsAndCounsel: 'Intervenor/Participant(s)',
   petitionersAndCounsel: 'Petitioner(s) & Counsel',
   respondentCounsel: 'Respondent Counsel',
 };
@@ -739,8 +740,20 @@ const OTHER_TYPES = {
 const CONTACT_TYPES = {
   primary: 'primary',
   secondary: 'secondary',
-  otherFiler: 'otherFilers',
-  otherPetitioner: 'otherPetitioners',
+  otherFiler: 'otherFilers', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
+  intervenor: 'intervenor',
+  participant: 'participant',
+  otherPetitioners: 'otherPetitioners', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
+  otherPetitioner: 'otherPetitioner',
+};
+
+const CONTACT_TYPE_TITLES = {
+  primary: 'Petitioner',
+  secondary: 'Petitioner',
+  otherFilers: 'Petitioner',
+  intervenor: 'Intervenor',
+  participant: 'Participant',
+  otherPetitioner: 'Petitioner',
 };
 
 const COMMON_CITIES = [
@@ -1030,6 +1043,7 @@ module.exports = deepFreeze({
   CLERK_OF_COURT_SECTION,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   CONTACT_TYPES,
+  CONTACT_TYPE_TITLES,
   COUNTRY_TYPES,
   COURT_ISSUED_DOCUMENT_TYPES,
   COURT_ISSUED_EVENT_CODES,

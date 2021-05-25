@@ -829,7 +829,10 @@
                 - "primary"
                 - "secondary"
                 - "otherFilers"
+                - "intervenor"
+                - "participant"
                 - "otherPetitioners"
+                - "otherPetitioner"
             name: 
               type: "string"
               flags: 

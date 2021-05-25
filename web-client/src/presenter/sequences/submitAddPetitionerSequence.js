@@ -3,6 +3,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setPartyViewTabAfterUpdatingPetitionersAction } from '../actions/setPartyViewTabAfterUpdatingPetitionersAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -18,6 +19,7 @@ export const submitAddPetitionerSequence = [
     error: [setValidationAlertErrorsAction, setValidationErrorsAction],
     success: showProgressSequenceDecorator([
       addPetitionerToCaseAction,
+      setPartyViewTabAfterUpdatingPetitionersAction,
       setSaveAlertsForNavigationAction,
       setAlertSuccessAction,
       setCurrentPageAction('Interstitial'),

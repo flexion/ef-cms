@@ -1,4 +1,5 @@
 const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
@@ -20,6 +21,7 @@ describe('validatePetitionerInteractor', () => {
       address3: 'Apt. #104',
       city: 'Jordan',
       confirmEmail: 'night@example.com',
+      contactType: CONTACT_TYPES.primary,
       countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Wilbur Rayou',
       phone: '1111111111',
@@ -110,6 +112,28 @@ describe('validatePetitionerInteractor', () => {
       email: UpdateUserEmail.VALIDATION_ERROR_MESSAGES.email,
       postalCode:
         ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.postalCode[0].message,
+    });
+  });
+
+  it('should return an error when second intervenor is added', async () => {
+    mockContact = {
+      ...mockContact,
+      contactType: CONTACT_TYPES.intervenor,
+    };
+    const mockExistingPetitioners = [
+      {
+        contactType: CONTACT_TYPES.intervenor,
+      },
+    ];
+
+    const errors = validatePetitionerInteractor(applicationContext, {
+      contactInfo: mockContact,
+      existingPetitioners: mockExistingPetitioners,
+    });
+
+    expect(errors).toEqual({
+      contactType:
+        Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor,
     });
   });
 });

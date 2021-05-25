@@ -18,11 +18,26 @@ describe('setDefaultCaseDetailTabAction', () => {
       caseInformationTab: 'overview',
       docketRecordTab: 'docketRecord',
       inProgressTab: 'draftDocuments',
+      partyViewTab: PARTY_VIEW_TABS.petitionersAndCounsel,
       primaryTab: 'docketRecord',
     });
-    expect(state.screenMetadata.partyViewTab).toEqual(
-      PARTY_VIEW_TABS.petitionersAndCounsel,
-    );
+  });
+
+  it('should set the partyViewTab based on the props.partiesTab provided', async () => {
+    const { state } = await runAction(setDefaultCaseDetailTabAction, {
+      modules: { presenter },
+      props: {
+        caseInformationTab: 'parties',
+        partiesTab: 'participantsAndCounsel',
+        primaryTab: 'caseInformation',
+      },
+    });
+
+    expect(state.currentViewMetadata.caseDetail).toMatchObject({
+      caseInformationTab: 'parties',
+      partyViewTab: PARTY_VIEW_TABS.participantsAndCounsel,
+      primaryTab: 'caseInformation',
+    });
   });
 
   it('should set the primaryTab to passed in prop value', async () => {

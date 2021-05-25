@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { forEach, set } from 'lodash';
 import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
@@ -67,7 +68,7 @@ const ifHasAccess = (
 
 const router = {
   initialize: (app, registerRoute) => {
-    setPageTitle('U.S. Tax Court', false);
+    setPageTitle('U.S. Tax Court');
     // expose route function on window for use with cypress
     // eslint-disable-next-line no-underscore-dangle
     window.__cy_route = path => route(path || '/');
@@ -168,12 +169,13 @@ const router = {
     registerRoute(
       '/case-detail/*/case-information?..',
       ifHasAccess({ app }, docketNumber => {
-        const { caseInformationTab } = route.query();
+        const { caseInformationTab, partiesTab } = route.query();
         window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
           caseInformationTab,
           docketNumber,
+          partiesTab,
           primaryTab: 'caseInformation',
         });
       }),

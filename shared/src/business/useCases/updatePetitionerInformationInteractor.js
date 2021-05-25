@@ -301,6 +301,7 @@ exports.updatePetitionerInformationInteractor = async (
       'address2',
       'address3',
       'city',
+      'contactType',
       'country',
       'countryType',
       'name',
@@ -334,7 +335,6 @@ exports.updatePetitionerInformationInteractor = async (
       email: oldCaseContact.email,
       hasEAccess: oldCaseContact.hasEAccess,
       isAddressSealed: oldCaseContact.isAddressSealed,
-      otherFilerType: oldCaseContact.otherFilerType,
       sealedAndUnavailable: oldCaseContact.sealedAndUnavailable,
       ...editableFields,
     });

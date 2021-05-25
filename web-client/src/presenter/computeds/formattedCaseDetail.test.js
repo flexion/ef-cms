@@ -326,7 +326,7 @@ describe('formattedCaseDetail', () => {
       otherPetitioners = [
         { ...baseContact, contactType: CONTACT_TYPES.otherPetitioner },
       ];
-      otherFilers = [{ ...baseContact, contactType: CONTACT_TYPES.otherFiler }];
+      otherFilers = [{ ...baseContact, contactType: CONTACT_TYPES.intervenor }];
 
       caseDetail = {
         ...MOCK_CASE,
@@ -869,6 +869,37 @@ describe('formattedCaseDetail', () => {
       addedToSessionAt: '2020-04-19T17:29:13.120Z',
       calendarNotes: 'THIRD',
       trialSessionId: '345',
+    });
+  });
+
+  it('should set contactTypeDisplay on a contact/petitioner', () => {
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        caseDetail: {
+          ...MOCK_CASE,
+          petitioners: [
+            {
+              address1: '123 Testing St',
+              city: 'Chicago',
+              contactId: '8f21988b-e1c8-413b-a503-e59fd935d481',
+              contactType: 'participant',
+              countryType: 'domestic',
+              entityName: 'Petitioner',
+              isAddressSealed: false,
+              name: 'John Johnson',
+              phone: '5555555555',
+              postalCode: '61234',
+              sealedAndUnavailable: false,
+              serviceIndicator: 'Paper',
+              state: 'IL',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.petitioners[0]).toMatchObject({
+      contactTypeDisplay: 'Participant',
     });
   });
 });

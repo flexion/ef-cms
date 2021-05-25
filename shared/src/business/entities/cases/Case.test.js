@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
@@ -135,53 +136,6 @@ describe('Case entity', () => {
     expect(myCase.petitioners[0].additionalName).toBeDefined();
   });
 
-  describe('archivedDocketEntries', () => {
-    let myCase;
-
-    beforeEach(() => {
-      myCase = new Case(
-        {
-          ...MOCK_CASE,
-        },
-        { applicationContext },
-      );
-    });
-
-    it('should not populate archivedDocketEntries when the user is an external user and filtered is true', () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
-      ); //petitioner user
-
-      myCase = new Case(
-        {
-          ...MOCK_CASE,
-          archivedDocketEntries: [...MOCK_DOCUMENTS],
-        },
-        { applicationContext, filtered: true },
-      );
-
-      expect(myCase.archivedDocketEntries).toBeUndefined();
-    });
-
-    it('should set archivedDocketEntries to the value provided when the user is an internal user', () => {
-      myCase = new Case(
-        {
-          ...MOCK_CASE,
-          archivedDocketEntries: [...MOCK_DOCUMENTS],
-        },
-        { applicationContext },
-      );
-
-      expect(myCase.archivedDocketEntries.length).toEqual(
-        MOCK_DOCUMENTS.length,
-      );
-    });
-
-    it('should set archivedDocketEntries to an empty list when a value is not provided and the user is an internal user', () => {
-      expect(myCase.archivedDocketEntries).toEqual([]);
-    });
-  });
-
   describe('hearings', () => {
     it('sets associated hearings on the case hearings array, and make sure they are sorted by created date', () => {
       const mockhearing1 = {
@@ -194,22 +148,14 @@ describe('Case entity', () => {
         trialLocation: 'Birmingham, Alabama',
       };
       const mockhearing2 = {
+        ...mockhearing1,
         createdAt: '2024-01-01T00:00:00.000Z',
-        maxCases: 100,
-        sessionType: 'Regular',
         startDate: '2025-01-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
       };
       const mockhearing3 = {
+        ...mockhearing1,
         createdAt: '2024-02-01T00:00:00.000Z',
-        maxCases: 100,
-        sessionType: 'Regular',
         startDate: '2025-02-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
       };
 
       const newCase = new Case(
@@ -244,7 +190,11 @@ describe('Case entity', () => {
       ); //petitioner user
 
       const myCase = new Case(
-        { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
+        {
+          ...MOCK_CASE,
+          archivedDocketEntries: [...MOCK_DOCUMENTS],
+          associatedJudge: CHIEF_JUDGE,
+        },
         {
           applicationContext,
           filtered: true,
@@ -252,6 +202,7 @@ describe('Case entity', () => {
       );
 
       expect(Object.keys(myCase)).not.toContain('associatedJudge');
+      expect(Object.keys(myCase)).not.toContain('archivedDocketEntries');
     });
 
     it('returns private data if filtered is true and the user is internal', () => {
@@ -260,7 +211,11 @@ describe('Case entity', () => {
       ); //docketclerk user
 
       const myCase = new Case(
-        { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
+        {
+          ...MOCK_CASE,
+          archivedDocketEntries: [...MOCK_DOCUMENTS],
+          associatedJudge: CHIEF_JUDGE,
+        },
         {
           applicationContext,
           filtered: true,
@@ -268,6 +223,7 @@ describe('Case entity', () => {
       );
 
       expect(Object.keys(myCase)).toContain('associatedJudge');
+      expect(Object.keys(myCase)).toContain('archivedDocketEntries');
     });
 
     it('returns private data if filtered is false and the user is external', () => {
@@ -427,12 +383,11 @@ describe('Case entity', () => {
         {
           address1: '42 Lamb Sauce Blvd',
           city: 'Nashville',
-          contactType: CONTACT_TYPES.otherFiler,
+          contactType: CONTACT_TYPES.intervenor,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'gordon@example.com',
           name: 'Gordon Ramsay',
-          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
           phone: '1234567890',
           postalCode: '05198',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -442,13 +397,12 @@ describe('Case entity', () => {
         {
           address1: '1337 12th Ave',
           city: 'Flavortown',
-          contactType: CONTACT_TYPES.otherFiler,
+          // fails because there cannot be more than 1 filer with this type
+          contactType: CONTACT_TYPES.intervenor,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'mayor@example.com',
           name: 'Guy Fieri',
-          // fails because there cannot be more than 1 filer with this type
-          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
           phone: '1234567890',
           postalCode: '05198',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -473,60 +427,6 @@ describe('Case entity', () => {
       expect(errors).toMatchObject({
         'petitioners[2]': '"petitioners[2]" contains a duplicate value',
       });
-    });
-
-    it('fails validation with an invalid otherFilerType', () => {
-      const mockOtherFilers = [
-        {
-          address1: '42 Lamb Sauce Blvd',
-          city: 'Nashville',
-          contactType: CONTACT_TYPES.otherFiler,
-          country: 'USA',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'gordon@example.com',
-          name: 'Gordon Ramsay',
-          otherFilerType: null,
-          phone: '1234567890',
-          postalCode: '05198',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          state: 'AK',
-          title: UNIQUE_OTHER_FILER_TYPE,
-        },
-        {
-          address1: '1337 12th Ave',
-          city: 'Flavortown',
-          contactType: CONTACT_TYPES.otherFiler,
-          country: 'USA',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'mayor@example.com',
-          name: 'Guy Fieri',
-          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
-          phone: '1234567890',
-          postalCode: '05198',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          state: 'AK',
-          title: UNIQUE_OTHER_FILER_TYPE,
-        },
-      ];
-
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          petitioners: [...MOCK_CASE.petitioners, ...mockOtherFilers],
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      const errors = myCase.getFormattedValidationErrors();
-      expect(errors.petitioners).toMatchObject([
-        {
-          index: 1,
-          otherFilerType: 'Select a filer type',
-        },
-      ]);
     });
   });
 
@@ -1002,32 +902,22 @@ describe('Case entity', () => {
 
   describe('validate', () => {
     it('should do nothing if valid', () => {
-      let error;
-
-      try {
+      expect(() =>
         new Case(MOCK_CASE, {
           applicationContext,
-        }).validate();
-      } catch (err) {
-        error = err;
-      }
-
-      expect(error).not.toBeDefined();
+        }).validate(),
+      ).not.toThrow();
     });
 
     it('should throw an error on invalid cases', () => {
-      let error;
-      try {
+      expect(() =>
         new Case(
           {},
           {
             applicationContext,
           },
-        ).validate();
-      } catch (err) {
-        error = err;
-      }
-      expect(error).toBeDefined();
+        ).validate(),
+      ).toThrow();
     });
 
     it('should throw an error on a case that is missing contacts', () => {
@@ -1103,7 +993,7 @@ describe('Case entity', () => {
 
   describe('trialDate and trialSessionId validation', () => {
     it('should fail validation when trialSessionId is defined and trialDate is undefined', () => {
-      let blockedCalendaredCase = {
+      const blockedCalendaredCase = {
         ...MOCK_CASE,
         trialSessionId: '0762e545-8cbc-4a18-ab7a-27d205c83f60',
       };
@@ -1114,7 +1004,7 @@ describe('Case entity', () => {
     });
 
     it('should fail validation when case status is calendared, trialDate is defined and trialSessionId is undefined', () => {
-      let blockedCalendaredCase = {
+      const blockedCalendaredCase = {
         ...MOCK_CASE,
         status: CASE_STATUS_TYPES.calendared,
         trialDate: '2019-03-01T21:40:46.415Z',
@@ -1126,7 +1016,7 @@ describe('Case entity', () => {
     });
 
     it('should pass validation when case status is not calendared, trialDate is undefined and trialSessionId is undefined', () => {
-      let blockedCalendaredCase = {
+      const blockedCalendaredCase = {
         ...MOCK_CASE,
         status: CASE_STATUS_TYPES.new,
         trialDate: undefined,
@@ -1137,7 +1027,7 @@ describe('Case entity', () => {
     });
 
     it('should pass validation when case status is calendared, trialDate is defined and trialSessionId is defined', () => {
-      let blockedCalendaredCase = {
+      const blockedCalendaredCase = {
         ...MOCK_CASE,
         status: CASE_STATUS_TYPES.calendared,
         trialDate: '2019-03-01T21:40:46.415Z',
