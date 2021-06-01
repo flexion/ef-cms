@@ -18,6 +18,10 @@ exports.getButton = buttonText => {
   return cy.contains('button', buttonText);
 };
 
+exports.getNonQCDocketRecord = () => {
+  return cy.get('tr.qc-untouched');
+};
+
 exports.getLink = linkText => {
   return cy.contains('a', linkText);
 };
@@ -50,7 +54,7 @@ exports.signDocumentAtCanvasCenter = () => {
 };
 
 exports.getSnapshot = area => {
-  cy.get(area).its('0.contentDocument.body').matchImageSnapshot(area);
+  cy.get(area).matchImageSnapshot(area);
 };
 
 exports.getEditPetitionerButton = () => {
@@ -71,4 +75,8 @@ exports.getCompleteQcButton = () => {
 
 exports.getPrintPaperServiceConfirmationButton = () => {
   return cy.get('button#confirm');
+};
+
+exports.getPdfPreviewUrl = () => {
+  return cy.get('#pdf-preview-iframe').invoke('attr', 'src');
 };

@@ -1,15 +1,20 @@
+const faker = require('faker');
 const {
   getAddress1InputField,
-  getButton,
   getCaseDetailTab,
   getCompleteQcButton,
   getEditPetitionerButton,
   getLink,
+  getNonQCDocketRecord,
+  getPdfPreviewUrl,
   getPrintPaperServiceConfirmationButton,
   getSnapshot,
   getSubmitEditPetitionerButton,
   navigateTo: navigateToCaseDetail,
 } = require('../support/pages/case-detail');
+
+// todo: break out into more readable tests
+// potentially: go to localhost of print NCA and snapshot there
 
 describe('Address Label on Paper Service', function () {
   before(() => {
@@ -17,19 +22,23 @@ describe('Address Label on Paper Service', function () {
     getCaseDetailTab('case-information').click();
     getCaseDetailTab('parties').click();
     getEditPetitionerButton().click();
-    getAddress1InputField().clear().type('123 Bubblegum Lane');
+    getAddress1InputField().clear().type(faker.address.streetAddress());
     getSubmitEditPetitionerButton().click();
     getCaseDetailTab('docket-record').click();
-    getButton('Notice of Change of Address for Stacy Russold').click();
+    const nonQCDocketRecord = getNonQCDocketRecord();
+    nonQCDocketRecord
+      .contains('Notice of Change of Address for Stacy Russold')
+      .click();
     getLink('Complete QC').click();
     getCompleteQcButton().click();
     getPrintPaperServiceConfirmationButton().click();
-    // go to the Notice of Change of address on the docket record
-    // qc complete
   });
 
   it('should display the address label on print', () => {
-    //view the address label page prepended to the docket entry pdf
+    // grab the pdf preview iframe's src (getAttribute?)
+    // navigate to that url
+    const url = getPdfPreviewUrl();
+    console.log('urla;sldkfjslkjf', url);
     getSnapshot('#pdf-preview-iframe');
   });
 });
