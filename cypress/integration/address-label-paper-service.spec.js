@@ -1,8 +1,9 @@
 const {
-  // getAddress1,
+  getAddress1InputField,
   getCaseDetailTab,
   getEditPetitionerButton,
   getSnapshot,
+  getSubmitEditPetitionerButton,
   navigateTo: navigateToCaseDetail,
 } = require('../support/pages/case-detail');
 
@@ -12,8 +13,8 @@ describe('Address Label on Paper Service', function () {
     getCaseDetailTab('case-information').click();
     getCaseDetailTab('parties').click();
     getEditPetitionerButton().click();
-    // getAddress1('');
-    // edit a petitioner's address
+    getAddress1InputField().clear().type('123 Bubblegum Lane');
+    getSubmitEditPetitionerButton().click();
     // go to the Notice of Change of address on the docket record
     // qc complete
   });

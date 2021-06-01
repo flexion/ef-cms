@@ -53,6 +53,10 @@ exports.getEditPetitionerButton = () => {
   return cy.get('a.edit-petitioner-button');
 };
 
-exports.getAddress1 = () => {
-  return cy.get('input#contact.address1');
+exports.getAddress1InputField = () => {
+  return cy.get('#contact.address1').scrollIntoView();
+};
+
+exports.getSubmitEditPetitionerButton = () => {
+  return cy.get('a.submit-edit-petitioner-information');
 };
