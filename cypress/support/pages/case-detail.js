@@ -48,3 +48,11 @@ exports.signDocumentAtCanvasCenter = () => {
 exports.getSnapshot = area => {
   cy.get(area).matchImageSnapshot(area);
 };
+
+exports.getEditPetitionerButton = () => {
+  return cy.get('a.edit-petitioner-button');
+};
+
+exports.getAddress1 = () => {
+  return cy.get('input#contact.address1');
+};
