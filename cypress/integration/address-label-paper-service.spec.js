@@ -38,6 +38,6 @@ describe('Address Label on Paper Service', function () {
     // grab the pdf preview iframe's src (getAttribute?)
     // navigate to that url
     getPdfPreviewUrl();
-    getSnapshot('#pdf-preview-iframe');
+    // getSnapshot('.print-docket-record');
   });
 });

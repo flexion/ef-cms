@@ -78,12 +78,21 @@ exports.getPrintPaperServiceConfirmationButton = () => {
 };
 
 exports.getPdfPreviewUrl = () => {
-  return cy
-    .get('#pdf-preview-iframe')
-    .invoke('attr', 'src')
-    .then($style1 => {
-      const pdfUrl = $style1;
-      console.log(pdfUrl);
-    });
+  // return cy
+  //   .get('#pdf-preview-iframe')
+  //   .invoke('attr', 'src')
+  //   .then($style1 => {
+  //     const pdfUrl = $style1;
+  //     console.log(pdfUrl);
+  //   });
+
+  return cy.get('#pdf-preview-iframe').then($iframe => {
+    const iframe = $iframe.contents();
+    console.log(iframe);
+    const myInput = iframe.find('.address-label');
+    return cy.get(myInput).matchImageSnapshot(myInput);
+
+    //you don't need to trigger events like keyup or change
+  });
   // return cy.get('#pdf-preview-iframe').attr('src');
 };
