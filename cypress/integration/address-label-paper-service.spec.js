@@ -1,7 +1,9 @@
 const {
   getAddress1InputField,
+  getButton,
   getCaseDetailTab,
   getEditPetitionerButton,
+  getLink,
   getSnapshot,
   getSubmitEditPetitionerButton,
   navigateTo: navigateToCaseDetail,
@@ -15,6 +17,9 @@ describe('Address Label on Paper Service', function () {
     getEditPetitionerButton().click();
     getAddress1InputField().clear().type('123 Bubblegum Lane');
     getSubmitEditPetitionerButton().click();
+    getCaseDetailTab('docket-record').click();
+    getButton('Notice of Change of Address for Stacy Russold').click();
+    getLink('Complete QC').click();
     // go to the Notice of Change of address on the docket record
     // qc complete
   });

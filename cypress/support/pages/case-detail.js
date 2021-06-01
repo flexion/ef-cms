@@ -18,6 +18,10 @@ exports.getButton = buttonText => {
   return cy.contains('button', buttonText);
 };
 
+exports.getLink = linkText => {
+  return cy.contains('a', linkText);
+};
+
 exports.getCaseTitleContaining = text => {
   return cy.contains('p#case-title', text);
 };
@@ -54,9 +58,9 @@ exports.getEditPetitionerButton = () => {
 };
 
 exports.getAddress1InputField = () => {
-  return cy.get('#contact.address1').scrollIntoView();
+  return cy.get('input[name="contact.address1"]');
 };
 
 exports.getSubmitEditPetitionerButton = () => {
-  return cy.get('a.submit-edit-petitioner-information');
+  return cy.get('button#submit-edit-petitioner-information');
 };
