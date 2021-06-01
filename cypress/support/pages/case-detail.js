@@ -78,5 +78,12 @@ exports.getPrintPaperServiceConfirmationButton = () => {
 };
 
 exports.getPdfPreviewUrl = () => {
-  return cy.get('#pdf-preview-iframe').invoke('attr', 'src');
+  return cy
+    .get('#pdf-preview-iframe')
+    .invoke('attr', 'src')
+    .then($style1 => {
+      const pdfUrl = $style1;
+      console.log(pdfUrl);
+    });
+  // return cy.get('#pdf-preview-iframe').attr('src');
 };

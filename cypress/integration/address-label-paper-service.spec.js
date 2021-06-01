@@ -37,8 +37,7 @@ describe('Address Label on Paper Service', function () {
   it('should display the address label on print', () => {
     // grab the pdf preview iframe's src (getAttribute?)
     // navigate to that url
-    const url = getPdfPreviewUrl();
-    console.log('urla;sldkfjslkjf', url);
+    getPdfPreviewUrl();
     getSnapshot('#pdf-preview-iframe');
   });
 });
