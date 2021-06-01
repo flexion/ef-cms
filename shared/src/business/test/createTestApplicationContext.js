@@ -22,7 +22,6 @@ const {
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,
-  getOtherPetitioners,
   getPetitionDocketEntry,
   getPetitionerById,
   getPractitionersRepresenting,
@@ -120,6 +119,9 @@ const {
 const {
   getFormattedCaseDetail,
 } = require('../utilities/getFormattedCaseDetail');
+const {
+  getFormattedPartiesNameAndTitle,
+} = require('../utilities/getFormattedPartiesNameAndTitle');
 const {
   getFullCaseByDocketNumber,
 } = require('../../persistence/dynamo/cases/getFullCaseByDocketNumber');
@@ -299,12 +301,14 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
+    getFormattedPartiesNameAndTitle: jest
+      .fn()
+      .mockImplementation(getFormattedPartiesNameAndTitle),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
     getMonthDayYearObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearObj),
     getOtherFilers: jest.fn().mockImplementation(getOtherFilers),
-    getOtherPetitioners: jest.fn().mockImplementation(getOtherPetitioners),
     getPetitionDocketEntry: jest
       .fn()
       .mockImplementation(getPetitionDocketEntry),
