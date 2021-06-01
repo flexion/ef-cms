@@ -2,8 +2,10 @@ const {
   getAddress1InputField,
   getButton,
   getCaseDetailTab,
+  getCompleteQcButton,
   getEditPetitionerButton,
   getLink,
+  getPrintPaperServiceConfirmationButton,
   getSnapshot,
   getSubmitEditPetitionerButton,
   navigateTo: navigateToCaseDetail,
@@ -20,12 +22,14 @@ describe('Address Label on Paper Service', function () {
     getCaseDetailTab('docket-record').click();
     getButton('Notice of Change of Address for Stacy Russold').click();
     getLink('Complete QC').click();
+    getCompleteQcButton().click();
+    getPrintPaperServiceConfirmationButton().click();
     // go to the Notice of Change of address on the docket record
     // qc complete
   });
 
   it('should display the address label on print', () => {
     //view the address label page prepended to the docket entry pdf
-    getSnapshot('');
+    getSnapshot('#pdf-preview-iframe');
   });
 });

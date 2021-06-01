@@ -50,7 +50,7 @@ exports.signDocumentAtCanvasCenter = () => {
 };
 
 exports.getSnapshot = area => {
-  cy.get(area).matchImageSnapshot(area);
+  cy.get(area).its('0.contentDocument.body').matchImageSnapshot(area);
 };
 
 exports.getEditPetitionerButton = () => {
@@ -63,4 +63,12 @@ exports.getAddress1InputField = () => {
 
 exports.getSubmitEditPetitionerButton = () => {
   return cy.get('button#submit-edit-petitioner-information');
+};
+
+exports.getCompleteQcButton = () => {
+  return cy.get('button#save-and-finish');
+};
+
+exports.getPrintPaperServiceConfirmationButton = () => {
+  return cy.get('button#confirm');
 };
