@@ -4,6 +4,7 @@ const cors = require('cors');
 const express = require('express');
 const logger = require('./logger');
 const { lambdaWrapper } = require('./lambdaWrapper');
+const { slowDownLimiter } = require('./middleware/slowDownLimiter');
 const app = express();
 
 app.use(cors());
@@ -39,29 +40,48 @@ const { getPublicJudgesLambda } = require('./public-api/getPublicJudgesLambda');
 const { todaysOpinionsLambda } = require('./public-api/todaysOpinionsLambda');
 const { todaysOrdersLambda } = require('./public-api/todaysOrdersLambda');
 
-// Temporarily disabled for story 7387
-// const {
-//   opinionPublicSearchLambda,
-// } = require('./public-api/opinionPublicSearchLambda');
-// const {
-//   orderPublicSearchLambda,
-// } = require('./public-api/orderPublicSearchLambda');
+const {
+  opinionPublicSearchLambda,
+} = require('./public-api/opinionPublicSearchLambda');
+const {
+  orderPublicSearchLambda,
+} = require('./public-api/orderPublicSearchLambda');
 
 /**
  * public-api
  */
-app.get('/public-api/search', lambdaWrapper(casePublicSearchLambda));
+app.get(
+  '/public-api/search',
+  slowDownLimiter,
+  lambdaWrapper(casePublicSearchLambda),
+);
 app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
 
-// Temporarily disabled for story 7387
-// app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
-// app.get('/public-api/opinion-search', lambdaWrapper(opinionPublicSearchLambda));
+app.get(
+  '/public-api/order-search',
+  slowDownLimiter,
+  lambdaWrapper(orderPublicSearchLambda),
+);
+app.get(
+  '/public-api/opinion-search',
+  slowDownLimiter,
+  lambdaWrapper(opinionPublicSearchLambda),
+);
 
-app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
+app.get(
+  '/public-api/judges',
+  slowDownLimiter,
+  lambdaWrapper(getPublicJudgesLambda),
+);
 
-app.get('/public-api/todays-opinions', lambdaWrapper(todaysOpinionsLambda));
+app.get(
+  '/public-api/todays-opinions',
+  slowDownLimiter,
+  lambdaWrapper(todaysOpinionsLambda),
+);
 app.get(
   '/public-api/todays-orders/:page/:todaysOrdersSort',
+  slowDownLimiter,
   lambdaWrapper(todaysOrdersLambda),
 );
 

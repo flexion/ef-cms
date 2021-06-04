@@ -219,6 +219,12 @@ const {
   createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
 const {
+  decrementKeyCount,
+  deleteKeyCount,
+  incrementKeyCount,
+  setExpiresAt,
+} = require('../../shared/src/persistence/dynamo/helpers/store');
+const {
   deleteCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/deleteCaseByDocketNumber');
 const {
@@ -1253,11 +1259,13 @@ const gatewayMethods = {
   casePublicSearch: casePublicSearchPersistence,
   createNewPetitionerUser,
   createNewPractitionerUser,
+  decrementKeyCount,
   deleteCaseByDocketNumber,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFromS3,
+  deleteKeyCount,
   deleteRecord,
   deleteSectionOutboxRecord,
   deleteTrialSession,
@@ -1319,10 +1327,12 @@ const gatewayMethods = {
   getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
+  incrementKeyCount,
   isEmailAvailable,
   isFileExists,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
+  setExpiresAt,
   updateCaseCorrespondence,
   verifyCaseForUser,
   verifyPendingCaseForUser,
