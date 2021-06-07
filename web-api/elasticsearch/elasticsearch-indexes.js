@@ -1,9 +1,10 @@
 exports.elasticsearchIndexes = [
-  'efcms-case',
-  'efcms-case-deadline',
-  'efcms-docket-entry',
-  'efcms-user',
-  'efcms-message',
-  'efcms-user-case',
-  'efcms-work-item',
+  // 'efcms-case',
+  // 'efcms-case-deadline',
+  // 'efcms-docket-entry',
+  // 'efcms-user',
+  // 'efcms-message',
+  // 'efcms-user-case',
+  // 'efcms-work-item',
+  'efcms-docket-entry-no-parent',
 ];

@@ -1,6 +1,7 @@
 const efcmsCaseDeadlineMappings = require('./efcms-case-deadline-mappings');
 const efcmsCaseMappings = require('./efcms-case-mappings');
 const efcmsDocketEntryMappings = require('./efcms-docket-entry-mappings');
+const efcmsDocketEntryNoParentMappings = require('./efcms-docket-entry-no-parent-mappings');
 const efcmsMessageMappings = require('./efcms-message-mappings');
 const efcmsUserCaseMappings = require('./efcms-user-case-mappings');
 const efcmsUserMappings = require('./efcms-user-mappings');
@@ -8,7 +9,7 @@ const efcmsWorkItemMappings = require('./efcms-work-item-mappings');
 
 /*
 
-To use query predicates of "term" or "prefix", column mapping should be of 
+To use query predicates of "term" or "prefix", column mapping should be of
 `type: "keyword"`
 This is especially useful when combined with a `term` query when searching for
 exact text matches (no wildcards) akin to `WHERE someCol="string literal"`
@@ -25,11 +26,12 @@ This setting will prevent analysis during indexing.
 */
 
 module.exports = {
-  ['efcms-case']: efcmsCaseMappings,
-  ['efcms-case-deadline']: efcmsCaseDeadlineMappings,
-  ['efcms-docket-entry']: efcmsDocketEntryMappings,
-  ['efcms-message']: efcmsMessageMappings,
-  ['efcms-user']: efcmsUserMappings,
-  ['efcms-user-case']: efcmsUserCaseMappings,
-  ['efcms-work-item']: efcmsWorkItemMappings,
+  // ['efcms-case']: efcmsCaseMappings,
+  // ['efcms-case-deadline']: efcmsCaseDeadlineMappings,
+  // ['efcms-docket-entry']: efcmsDocketEntryMappings,
+  // ['efcms-message']: efcmsMessageMappings,
+  // ['efcms-user']: efcmsUserMappings,
+  // ['efcms-user-case']: efcmsUserCaseMappings,
+  // ['efcms-work-item']: efcmsWorkItemMappings,
+  ['efcms-docket-entry-no-parent']: efcmsDocketEntryNoParentMappings,
 };
