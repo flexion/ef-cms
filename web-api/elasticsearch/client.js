@@ -50,11 +50,13 @@ const getClient = async ({ environmentName, version }) => {
     },
     apiVersion: ELASTICSEARCH_API_VERSION,
     awsConfig: new AWS.Config({ region: 'us-east-1' }),
-    connectionClass: connectionClass,
+    connectionClass,
     host,
     log: 'warning',
+    maxRetries: 5,
     port: 443,
     protocol: 'https',
+    requestTimeout: 60000,
   });
 };
 

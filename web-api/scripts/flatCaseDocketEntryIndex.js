@@ -4,10 +4,7 @@ const { getClient } = require('../elasticsearch/client');
 const environmentName = process.argv[2] || 'exp1';
 const version = process.argv[3] || 'alpha';
 
-const SLICE_START_ID = 98;
-const sliceIds = new Array(SLICE_START_ID)
-  .fill('')
-  .map((v, i) => SLICE_START_ID - i);
+const sliceIds = [56, 45, 46, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39];
 
 const QUERY_SIZE = 5000;
 const BULK_SIZE = 200;
