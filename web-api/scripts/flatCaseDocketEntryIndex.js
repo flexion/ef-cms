@@ -1,14 +1,5 @@
-const AWS = require('aws-sdk');
-const {
-  bulkIndexRecords,
-} = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const { chunk } = require('lodash');
 const { getClient } = require('../elasticsearch/client');
-
-const {
-  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-  ORDER_EVENT_CODES,
-} = require('../../shared/src/business/entities/EntityConstants');
 
 const environmentName = process.argv[2] || 'exp1';
 const version = process.argv[3] || 'alpha';
@@ -16,7 +7,7 @@ const version = process.argv[3] || 'alpha';
 const findDocketEntries = async () => {
   const esClient = await getClient({ environmentName, version });
 
-  const allDocketEntries = [];
+  let allDocketEntries = [];
   const responseQueue = [];
 
   // start things off by searching, setting a scroll timeout, and pushing
@@ -45,7 +36,7 @@ const findDocketEntries = async () => {
     },
     index: 'efcms-docket-entry',
     scroll: '30s',
-    size: 1000,
+    size: 4000,
   });
 
   console.log('Got a response.');
@@ -69,12 +60,58 @@ const findDocketEntries = async () => {
       });
     });
 
-    // check to see if we have collected all of the quotes
-    if (true || body.hits.total.value === allDocketEntries.length) {
-      return allDocketEntries;
+    const failedRecords = [];
+
+    const chunks = chunk(allDocketEntries, 1000);
+    let done = 0;
+    let promises = [];
+    for (let chunkOfRecords of chunks) {
+      const indexBody = chunkOfRecords
+        .flatMap(doc => {
+          const index = 'efcms-docket-entry-no-parent';
+          let id = `${doc.pk.S}_${doc.sk.S}`;
+
+          return [
+            {
+              index: {
+                _id: id,
+                _index: index,
+              },
+            },
+            doc,
+          ];
+        })
+        .filter(item => item);
+
+      if (indexBody.length) {
+        promises.push(
+          esClient.bulk({
+            body: indexBody,
+            refresh: false,
+          }),
+        );
+
+        console.log('Sent a bulk: ', ++done, chunks.length);
+
+        allDocketEntries = [];
+
+        // if (resp.errors) {
+        //   resp.items.forEach((action, i) => {
+        //     const operation = Object.keys(action)[0];
+        //     if (action[operation].error) {
+        //       let record = body[i * 2 + 1];
+        //       failedRecords.push(record);
+        //     }
+        //   });
+        // }
+      }
     }
 
-    // // get the next response if there are more quotes to fetch
+    await Promise.all(promises);
+
+    console.log('failedRecords', failedRecords);
+
+    // get the next response if there are more quotes to fetch
     responseQueue.push(
       await esClient.scroll({
         scroll: '30s',
@@ -84,54 +121,8 @@ const findDocketEntries = async () => {
   }
 };
 (async () => {
-  const docketEntries = await findDocketEntries();
+  await findDocketEntries();
 
   // output the case information
-  const results = docketEntries.filter(Boolean);
-
-  const esClient = await getClient({ environmentName, version });
-
-  const failedRecords = [];
-
-  const chunks = chunk(results, 50);
-  let done = 0;
-  for (let chunkOfRecords of chunks) {
-    const body = chunkOfRecords
-      .flatMap(doc => {
-        const index = 'efcms-docket-entry-no-parent';
-        let id = `${doc.pk.S}_${doc.sk.S}`;
-
-        return [
-          {
-            index: {
-              _id: id,
-              _index: index,
-            },
-          },
-          doc,
-        ];
-      })
-      .filter(item => item);
-
-    if (body.length) {
-      const response = await esClient.bulk({
-        body,
-        refresh: false,
-      });
-
-      console.log('Sent a bulk: ', ++done, chunks.length);
-
-      if (response.errors) {
-        response.items.forEach((action, i) => {
-          const operation = Object.keys(action)[0];
-          if (action[operation].error) {
-            let record = body[i * 2 + 1];
-            failedRecords.push(record);
-          }
-        });
-      }
-    }
-  }
-
-  console.log('failedRecords', failedRecords);
+  // const results = docketEntries.filter(Boolean);
 })();
