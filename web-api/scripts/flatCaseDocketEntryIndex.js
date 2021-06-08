@@ -4,7 +4,14 @@ const { getClient } = require('../elasticsearch/client');
 const environmentName = process.argv[2] || 'exp1';
 const version = process.argv[3] || 'alpha';
 
-const findDocketEntries = async () => {
+// const SLICE_ID = parseInt(process.argv[4]);
+const sliceIds = new Array(98).fill('').map((v, i) => 98 - i);
+
+const QUERY_SIZE = 5000;
+const BULK_SIZE = 200;
+let inserted = 0;
+
+const findDocketEntries = async sliceId => {
   const esClient = await getClient({ environmentName, version });
 
   let allDocketEntries = [];
@@ -32,15 +39,17 @@ const findDocketEntries = async () => {
             ],
           },
         },
+        slice: {
+          id: sliceId,
+          max: 100,
+        },
       },
       index: 'efcms-docket-entry',
-      scroll: '30s',
-      size: 500,
+      scroll: '2m',
+      size: QUERY_SIZE,
     },
     ['inner_hits'],
   );
-
-  console.log('Stream created');
 
   esStream.on('data', async data => {
     const docketEntryDocument = JSON.parse(data.toString());
@@ -59,7 +68,7 @@ const findDocketEntries = async () => {
       sk: { S: `docket-entry|${docketEntryDocument.docketEntryId.S}` },
     });
 
-    if (allDocketEntries.length === 500) {
+    if (allDocketEntries.length === BULK_SIZE) {
       const body = allDocketEntries
         .flatMap(doc => {
           const index = 'efcms-docket-entry-no-parent';
@@ -77,23 +86,43 @@ const findDocketEntries = async () => {
         })
         .filter(item => item);
 
-      esClient.bulk({
-        body,
-        refresh: false,
-      });
+      esClient
+        .bulk({
+          body,
+          refresh: false,
+        })
+        .then(response => {
+          if (response.errors) {
+            console.log('error when bulk inserting');
+            // response.items.forEach((action, i) => {
+            //   const operation = Object.keys(action)[0];
+            //   if (action[operation].error) {
+            //     let record = body[i * 2 + 1];
+            //     failedRecords.push(record);
+            //   }
+            // });
+          }
+        });
 
-      console.log('Sent bulk of 500');
+      inserted += BULK_SIZE;
+      console.log('sliceId', sliceId, ' - ', inserted, 'inserted');
 
       allDocketEntries = [];
     }
   });
 
-  esStream.on('end', () => {
-    console.log('done');
+  return new Promise(resolve => {
+    esStream.on('end', () => {
+      console.log('done');
+      resolve();
+    });
   });
 };
+
 (async () => {
-  await findDocketEntries();
+  for (const sliceId of sliceIds) {
+    await findDocketEntries(sliceId);
+  }
 
   // output the case information
   // const results = docketEntries.filter(Boolean);
