@@ -1,13 +1,30 @@
 import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
-const formatCounsel = ({ counsel, screenMetadata }) => {
+const formatCounsel = ({ counsel, screenMetadata }, applicationContext) => {
   const counselPendingEmail = screenMetadata.pendingEmails
     ? screenMetadata.pendingEmails[counsel.userId]
     : undefined;
 
+  applicationContext.logger.error(
+    'screenMetadata.pendingEmails',
+    screenMetadata.pendingEmails,
+  );
+
+  if (counsel.role === 'irsPractitioner') {
+    applicationContext.logger.error('userId', counsel.userId);
+    applicationContext.logger.error(
+      'screenMetadata.pendingEmails[counsel.userId]',
+      screenMetadata.pendingEmails[counsel.userId],
+    );
+  }
+
   if (counselPendingEmail) {
     counsel.formattedPendingEmail = `${counselPendingEmail} (Pending)`;
+    applicationContext.logger.error(
+      'got into if for formatted pednindg email',
+      counsel.formattedPendingEmail,
+    );
   }
 
   if (counsel.email && counselPendingEmail !== counsel.email) {
@@ -39,7 +56,10 @@ export const partiesInformationHelper = (get, applicationContext) => {
   const formattedPrivatePractitioners = (
     caseDetail.privatePractitioners || []
   ).map(practitioner =>
-    formatCounsel({ counsel: practitioner, screenMetadata }),
+    formatCounsel(
+      { counsel: practitioner, screenMetadata },
+      applicationContext,
+    ),
   );
 
   const formattedParties = (caseDetail.petitioners || []).map(petitioner => {
@@ -127,7 +147,10 @@ export const partiesInformationHelper = (get, applicationContext) => {
 
   const formattedRespondents = (caseDetail.irsPractitioners || []).map(
     respondent => ({
-      ...formatCounsel({ counsel: respondent, screenMetadata }),
+      ...formatCounsel(
+        { counsel: respondent, screenMetadata },
+        applicationContext,
+      ),
       canEditRespondent,
     }),
   );
