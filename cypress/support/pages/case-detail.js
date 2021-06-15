@@ -77,22 +77,21 @@ exports.getPrintPaperServiceConfirmationButton = () => {
   return cy.get('button#confirm');
 };
 
-exports.getPdfPreviewUrl = () => {
-  // return cy
-  //   .get('#pdf-preview-iframe')
-  //   .invoke('attr', 'src')
-  //   .then($style1 => {
-  //     const pdfUrl = $style1;
-  //     console.log(pdfUrl);
-  //   });
-
-  return cy.get('#pdf-preview-iframe').then($iframe => {
-    const iframe = $iframe.contents();
-    console.log(iframe);
-    const myInput = iframe.find('.address-label');
-    return cy.get(myInput).matchImageSnapshot(myInput);
-
-    //you don't need to trigger events like keyup or change
-  });
-  // return cy.get('#pdf-preview-iframe').attr('src');
+const getIframeDocument = () => {
+  return cy.get('#pdf-preview-iframe').its('0.contentDocument').should('exist');
 };
+
+exports.getIframeBody = () => {
+  const woo = getIframeDocument()
+    .its('body')
+    .should('not.be.undefined')
+    .then(cy.wrap);
+
+  cy.get('#pdf-preview-iframe')
+    .its('0')
+    .then(x => console.log('woo', x));
+
+  return woo;
+};
+
+// cy.get('.address-label').scrollIntoView().should('be.visible')

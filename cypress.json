@@ -1,6 +1,7 @@
 {
   "baseUrl": "http://localhost:1234",
   "browser": "edge",
+  "chromeWebSecurity": false,
   "reporter": "spec",
   "reporterOptions": {
     "toConsole": true
