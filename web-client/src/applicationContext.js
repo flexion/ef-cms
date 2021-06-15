@@ -9,6 +9,7 @@ import {
   getPetitionDocketEntry,
   getPetitionerById,
   getPractitionersRepresenting,
+  hasPartyWithServiceType,
   isUserIdRepresentedByPrivatePractitioner,
 } from '../../shared/src/business/entities/cases/Case';
 import {
@@ -38,8 +39,11 @@ import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
+import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
+import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
@@ -83,6 +87,7 @@ import {
   isStringISOFormatted,
   isValidDateString,
   prepareDateFromString,
+  validateDateAndCreateISO,
 } from '../../shared/src/business/utilities/DateHandler';
 import { canConsolidateInteractor } from '../../shared/src/business/useCases/caseConsolidation/canConsolidateInteractor';
 import { canSetTrialSessionAsCalendaredInteractor } from '../../shared/src/business/useCases/trialSessions/canSetTrialSessionAsCalendaredInteractor';
@@ -185,7 +190,6 @@ import { getUserPendingEmailInteractor } from '../../shared/src/proxies/users/ge
 import { getUserPermissions } from '../../shared/src/authorization/getUserPermissions';
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getUsersPendingEmailInteractor } from '../../shared/src/proxies/users/getUsersPendingEmailProxy';
-import { getUsersPendingEmailStatusesInteractor } from '../../shared/src/proxies/users/getUsersPendingEmailStatusesProxy';
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
@@ -415,7 +419,6 @@ const allUseCases = {
   getUserPendingEmailStatusInteractor,
   getUsersInSectionInteractor,
   getUsersPendingEmailInteractor,
-  getUsersPendingEmailStatusesInteractor,
   getWorkItemInteractor,
   loadPDFForPreviewInteractor,
   loadPDFForSigningInteractor,
@@ -662,6 +665,7 @@ const applicationContext = {
       getCaseCaption: Case.getCaseCaption,
       getContactPrimary,
       getContactSecondary,
+      getCropBox,
       getDocQcSectionForUser,
       getDocumentTitleWithAdditionalInfo,
       getFilingsAndProceedings,
@@ -674,8 +678,10 @@ const applicationContext = {
       getPetitionerById,
       getPractitionersRepresenting,
       getServedPartiesCode,
+      getStampBoxCoordinates,
       getTrialSessionStatus,
       getWorkQueueFilters,
+      hasPartyWithServiceType,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isPending: DocketEntry.isPending,
@@ -687,7 +693,9 @@ const applicationContext = {
       prepareDateFromString,
       replaceBracketed,
       setServiceIndicatorsForCase,
+      setupPdfDocument,
       sortDocketEntries,
+      validateDateAndCreateISO,
     };
   },
   setCurrentUser,

@@ -200,7 +200,7 @@
             docketNumber: 
               type: "string"
               flags: 
-                presence: "required"
+                presence: "optional"
                 description: "Docket Number of the associated Case in XXXXX-YY format."
               rules: 
                 - 
@@ -626,10 +626,12 @@
               type: "boolean"
               flags: 
                 presence: "optional"
+                description: "Has an associated PDF in S3."
             isLegacyServed: 
               type: "boolean"
               flags: 
                 presence: "optional"
+                description: "Indicates whether or not the legacy document was served prior to being migrated to the new system."
             isMinuteEntry: 
               type: "boolean"
               flags: 
@@ -708,6 +710,22 @@
                   name: "max"
                   args: 
                     date: "now"
+            servedPartiesCode: 
+              type: "string"
+              flags: 
+                only: true
+                presence: "optional"
+                description: "Served parties code to override system-computed code."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+              allow: 
+                - "B"
+                - "P"
+                - "R"
+                - null
     docketNumber: 
       type: "string"
       flags: 
@@ -800,21 +818,6 @@
         - 
           type: "object"
           keys: 
-            contactId: 
-              type: "string"
-              flags: 
-                presence: "required"
-              rules: 
-                - 
-                  name: "min"
-                  args: 
-                    limit: 1
-                - 
-                  name: "guid"
-                  args: 
-                    options: 
-                      version: 
-                        - "uuidv4"
             contactType: 
               type: "string"
               flags: 
@@ -826,14 +829,10 @@
                   args: 
                     limit: 1
               allow: 
-                - "intervenor"
-                - "otherFilers"
-                - "otherPetitioner"
-                - "otherPetitioners"
-                - "participant"
-                - "petitioner"
                 - "primary"
                 - "secondary"
+                - "otherFilers"
+                - "otherPetitioners"
             name: 
               type: "string"
               flags: 

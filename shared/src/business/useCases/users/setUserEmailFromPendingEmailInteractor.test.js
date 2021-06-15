@@ -15,9 +15,10 @@ const {
   setUserEmailFromPendingEmailInteractor,
 } = require('./setUserEmailFromPendingEmailInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { validUser } = require('../../../test/mockUsers');
+const { MOCK_PRACTITIONER, validUser } = require('../../../test/mockUsers');
 
 describe('setUserEmailFromPendingEmailInteractor', () => {
+  let mockPractitioner;
   let mockUser;
   let userCases;
   const UPDATED_EMAIL = 'other@example.com';
@@ -31,9 +32,17 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       firstName: 'Alden',
       lastName: 'Rivas',
       name: 'Alden Rivas',
+      originalBarState: 'FL',
       pendingEmail: UPDATED_EMAIL,
       role: ROLES.petitioner,
       userId: USER_ID,
+    };
+
+    mockPractitioner = {
+      ...MOCK_PRACTITIONER,
+      email: undefined,
+      pendingEmail: UPDATED_EMAIL,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     };
 
     userCases = [
@@ -48,6 +57,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],
+        privatePractitioners: [mockPractitioner],
       },
     ];
 
@@ -220,5 +230,41 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
     expect(caseToUpdate).toMatchObject({
       docketNumber: '101-21',
     });
+  });
+
+  it('should update the user cases with the new email and electronic service for a practitioner', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByUserId.mockReturnValue(userCases);
+
+    await setUserEmailFromPendingEmailInteractor(applicationContext, {
+      user: mockPractitioner,
+    });
+
+    const {
+      caseToUpdate,
+    } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
+
+    expect(applicationContext.logger.error).not.toBeCalled();
+    expect(caseToUpdate.privatePractitioners[0]).toMatchObject({
+      email: UPDATED_EMAIL,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    });
+  });
+
+  it('should log an error when the the user is not found on one of their associated cases by userId', async () => {
+    const mockErrorMessage = 'updateCaseAndAssociations failure';
+
+    applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mockRejectedValueOnce(
+        new Error(mockErrorMessage),
+      );
+
+    await expect(
+      setUserEmailFromPendingEmailInteractor(applicationContext, {
+        user: mockPractitioner,
+      }),
+    ).rejects.toThrow(mockErrorMessage);
   });
 });

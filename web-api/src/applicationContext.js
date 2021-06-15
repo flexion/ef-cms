@@ -1,4 +1,4 @@
-/* eslint-disable security/detect-object-injection, security/detect-child-process, spellcheck/spell-checker, max-lines */
+/* eslint-disable max-lines */
 const AWS = require('aws-sdk');
 const axios = require('axios');
 const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
@@ -53,9 +53,6 @@ const {
 const {
   addServedStampToDocument,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/addServedStampToDocument');
-const {
-  addWorkItemToSectionInbox,
-} = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
   advancedDocumentSearch,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
@@ -199,9 +196,6 @@ const {
   createPractitionerUserInteractor,
 } = require('../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor');
 const {
-  createSectionInboxRecord,
-} = require('../../shared/src/persistence/dynamo/workitems/createSectionInboxRecord');
-const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
 const {
@@ -219,9 +213,6 @@ const {
 const {
   createUserForContact,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact');
-const {
-  createUserInboxRecord,
-} = require('../../shared/src/persistence/dynamo/workitems/createUserInboxRecord');
 const {
   createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
@@ -283,11 +274,8 @@ const {
   deleteUserOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteUserOutboxRecord');
 const {
-  deleteWorkItemFromInbox,
-} = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromInbox');
-const {
-  deleteWorkItemFromSection,
-} = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
+  deleteWorkItem,
+} = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItem');
 const {
   DocketEntry,
 } = require('../../shared/src/business/entities/DocketEntry');
@@ -455,6 +443,9 @@ const {
   getConsolidatedCasesForLeadCase,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase');
 const {
+  getCropBox,
+} = require('../../shared/src/business/utilities/getCropBox');
+const {
   getDeployTableStatus,
 } = require('../../shared/src/persistence/dynamo/getDeployTableStatus');
 const {
@@ -512,9 +503,6 @@ const {
 const {
   getFormattedCaseDetail,
 } = require('../../shared/src/business/utilities/getFormattedCaseDetail');
-const {
-  getFullCaseByDocketNumber,
-} = require('../../shared/src/persistence/dynamo/cases/getFullCaseByDocketNumber');
 const {
   getHealthCheckInteractor,
 } = require('../../shared/src/business/useCases/health/getHealthCheckInteractor');
@@ -609,6 +597,9 @@ const {
   getSesStatus,
 } = require('../../shared/src/persistence/ses/getSesStatus');
 const {
+  getStampBoxCoordinates,
+} = require('../../shared/src/business/utilities/getStampBoxCoordinates');
+const {
   getTableStatus,
 } = require('../../shared/src/persistence/dynamo/getTableStatus');
 const {
@@ -654,6 +645,9 @@ const {
   getUserByIdInteractor,
 } = require('../../shared/src/business/useCases/getUserByIdInteractor');
 const {
+  getUserCaseMappingsByDocketNumber,
+} = require('../../shared/src/persistence/dynamo/cases/getUserCaseMappingsByDocketNumber');
+const {
   getUserCaseNote,
 } = require('../../shared/src/persistence/dynamo/userCaseNotes/getUserCaseNote');
 const {
@@ -695,9 +689,6 @@ const {
 const {
   getUsersPendingEmailInteractor,
 } = require('../../shared/src/business/useCases/users/getUsersPendingEmailInteractor');
-const {
-  getUsersPendingEmailStatusesInteractor,
-} = require('../../shared/src/business/useCases/users/getUsersPendingEmailStatusesInteractor');
 const {
   getWebSocketConnectionByConnectionId,
 } = require('../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionByConnectionId');
@@ -838,17 +829,11 @@ const {
   saveUserConnection,
 } = require('../../shared/src/persistence/dynamo/notifications/saveUserConnection');
 const {
-  saveWorkItemAndAddToSectionInbox,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemAndAddToSectionInbox');
-const {
-  saveWorkItemAndAddToUserAndSectionInbox,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemAndAddToUserAndSectionInbox');
+  saveWorkItem,
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItem');
 const {
   saveWorkItemForDocketClerkFilingExternalDocument,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
-const {
-  saveWorkItemForDocketEntryInProgress,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketEntryInProgress');
 const {
   scrapePdfContents,
 } = require('../../shared/src/business/utilities/scrapePdfContents');
@@ -910,6 +895,9 @@ const {
   setTrialSessionCalendarInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
 const {
+  setupPdfDocument,
+} = require('../../shared/src/business/utilities/setupPdfDocument');
+const {
   setUserEmailFromPendingEmailInteractor,
 } = require('../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor');
 const {
@@ -969,9 +957,6 @@ const {
 const {
   updateCaseTitleOnWorkItems,
 } = require('../../shared/src/business/useCaseHelper/workItems/updateCaseTitleOnWorkItems');
-const {
-  updateCaseTrialSortMappingRecords,
-} = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
 const {
   updateCaseTrialSortTagsInteractor,
 } = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
@@ -1051,6 +1036,9 @@ const {
 const {
   updateUser,
 } = require('../../shared/src/persistence/dynamo/users/updateUser');
+const {
+  updateUserCaseMapping,
+} = require('../../shared/src/persistence/dynamo/cases/updateUserCaseMapping');
 const {
   updateUserCaseNote,
 } = require('../../shared/src/persistence/dynamo/userCaseNotes/updateUserCaseNote');
@@ -1245,7 +1233,6 @@ const isValidatedDecorator = persistenceGatewayMethods => {
 const gatewayMethods = {
   ...isValidatedDecorator({
     addCaseToHearing,
-    addWorkItemToSectionInbox,
     associateUserWithCase,
     associateUserWithCasePending,
     bulkDeleteRecords,
@@ -1255,13 +1242,10 @@ const gatewayMethods = {
     createCaseTrialSortMappingRecords,
     createMessage,
     createPractitionerUser,
-    createSectionInboxRecord,
     createTrialSession,
     createTrialSessionWorkingCopy,
     createUser,
-    createUserInboxRecord,
     fetchPendingItems,
-    getFullCaseByDocketNumber,
     getSesStatus,
     incrementCounter,
     markMessageThreadRepliedTo,
@@ -1271,16 +1255,13 @@ const gatewayMethods = {
     removeCaseFromHearing,
     saveDocumentFromLambda,
     saveUserConnection,
-    saveWorkItemAndAddToSectionInbox,
-    saveWorkItemAndAddToUserAndSectionInbox,
+    saveWorkItem,
     saveWorkItemForDocketClerkFilingExternalDocument,
-    saveWorkItemForDocketEntryInProgress,
     setMessageAsRead,
     setPriorityOnAllWorkItems,
     setWorkItemAsRead,
     updateCase,
     updateCaseHearing,
-    updateCaseTrialSortMappingRecords,
     updateDocketEntry,
     updateDocketEntryProcessingStatus,
     updateIrsPractitionerOnCase,
@@ -1314,8 +1295,7 @@ const gatewayMethods = {
   deleteUserConnection,
   deleteUserFromCase,
   deleteUserOutboxRecord,
-  deleteWorkItemFromInbox,
-  deleteWorkItemFromSection,
+  deleteWorkItem,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
@@ -1358,6 +1338,7 @@ const gatewayMethods = {
   getUploadPolicy,
   getUserByEmail,
   getUserById,
+  getUserCaseMappingsByDocketNumber,
   getUserCaseNote,
   getUserCaseNoteForCases,
   getUserInboxMessages,
@@ -1375,6 +1356,7 @@ const gatewayMethods = {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
   updateCaseCorrespondence,
+  updateUserCaseMapping,
   updateWorkItemAssociatedJudge,
   updateWorkItemCaseStatus,
   updateWorkItemCaseTitle,
@@ -1507,7 +1489,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
         return {
           getSendStatistics: () => {
-            // mock this out so the health checks pass on smoketests
+            // mock this out so the health checks pass on smoke tests
             return {
               promise: async () => ({
                 SendDataPoints: [
@@ -1763,7 +1745,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getUserPendingEmailStatusInteractor,
         getUsersInSectionInteractor,
         getUsersPendingEmailInteractor,
-        getUsersPendingEmailStatusesInteractor,
         getWorkItemInteractor,
         onConnectInteractor,
         onDisconnectInteractor,
@@ -1845,14 +1826,17 @@ module.exports = (appContextUser, logger = createLogger()) => {
         formatNow,
         formattedTrialSessionDetails,
         getAddressPhoneDiff,
+        getCropBox,
         getDocQcSectionForUser,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
+        getStampBoxCoordinates,
         getWorkQueueFilters,
         isPending: DocketEntry.isPending,
         prepareDateFromString,
         scrapePdfContents,
         setServiceIndicatorsForCase,
+        setupPdfDocument,
       };
     },
     isAuthorized,
