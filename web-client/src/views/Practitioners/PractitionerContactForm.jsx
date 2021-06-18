@@ -19,6 +19,7 @@ export const PractitionerContactForm = connect(
     bind,
     changeCountryTypeSequence,
     COUNTRY_TYPES,
+    createPractitionerUserHelper,
     form,
     onBlurSequenceName,
     onBlurValidationSequence,
@@ -103,6 +104,29 @@ export const PractitionerContactForm = connect(
             </FormGroup>
           </div>
         </div>
+        {createPractitionerUserHelper.isAddingPractitioner && (
+          <FormGroup errorText={validationErrors.email}>
+            <label className="usa-label" htmlFor="email">
+              Email address
+            </label>
+            <input
+              autoCapitalize="none"
+              className="usa-input"
+              id="email"
+              name="email"
+              value={form.email || ''}
+              onBlur={() => {
+                onBlurValidationSequence();
+              }}
+              onChange={e => {
+                onChangeUpdateSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
+          </FormGroup>
+        )}
       </>
     );
   },

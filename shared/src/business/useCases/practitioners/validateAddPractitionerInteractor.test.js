@@ -12,6 +12,7 @@ describe('validateAddPractitionerInteractor', () => {
     });
 
     expect(Object.keys(errors)).toEqual([
+      'email',
       'admissionsDate',
       'admissionsStatus',
       'birthYear',
@@ -23,12 +24,13 @@ describe('validateAddPractitionerInteractor', () => {
     ]);
   });
 
-  it('should return null when the practitioner object is valid', () => {
+  it('returns null on no errors', () => {
     const errors = validateAddPractitionerInteractor(applicationContext, {
       practitioner: {
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         birthYear: '2009',
+        email: 'test@example.com',
         employer: 'IRS',
         firstName: 'Test',
         lastName: 'Practitioner',

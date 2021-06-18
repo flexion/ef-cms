@@ -1,8 +1,8 @@
-import { hasUpdatedEmailFactoryAction } from './hasUpdatedEmailFactoryAction';
+import { hasUpdatedEmailAction } from './hasUpdatedEmailAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('hasUpdatedEmailFactoryAction', () => {
+describe('hasUpdatedEmailAction', () => {
   let pathNoStub = jest.fn();
   let pathYesStub = jest.fn();
 
@@ -14,7 +14,7 @@ describe('hasUpdatedEmailFactoryAction', () => {
   });
 
   it('returns the yes path when updatedEmail is defined on state.form', async () => {
-    runAction(hasUpdatedEmailFactoryAction('updatedEmail'), {
+    runAction(hasUpdatedEmailAction, {
       modules: { presenter },
       state: { form: { updatedEmail: 'blah@example.com' } },
     });
@@ -23,7 +23,7 @@ describe('hasUpdatedEmailFactoryAction', () => {
   });
 
   it('returns the no path when updatedEmail is not defined on state.form', async () => {
-    runAction(hasUpdatedEmailFactoryAction('updatedEmail'), {
+    runAction(hasUpdatedEmailAction, {
       modules: { presenter },
       state: { form: {} },
     });

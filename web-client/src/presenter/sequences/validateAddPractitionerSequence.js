@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { getComputedAdmissionsDateAction } from '../actions/getComputedAdmissionsDateAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateAddPractitionerAction } from '../actions/validateAddPractitionerAction';
@@ -9,7 +9,7 @@ export const validateAddPractitionerSequence = [
   {
     ignore: [],
     validate: [
-      getComputedAdmissionsDateAction,
+      getComputedFormDateFactoryAction(null),
       validateAddPractitionerAction,
       {
         error: [setValidationErrorsAction],
