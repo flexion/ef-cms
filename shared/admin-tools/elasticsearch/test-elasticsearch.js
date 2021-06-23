@@ -12,12 +12,13 @@ const version = process.argv[3] || 'alpha';
 (async () => {
   const esClient = await getClient({ environmentName, version });
 
+  //does not like how this regex is set up, gotta fix
   const searchString = /^\s/;
   const sortOrder = 'asc';
 
   const documentQuery = {
     body: {
-      _source: ['docketNumber'],
+      _source: ['docketNumber', 'documentContents'],
       from: 0,
       query: {
         bool: {
@@ -37,11 +38,20 @@ const version = process.argv[3] || 'alpha';
                 ],
               },
             },
+            {
+              // simple_query_string: {
+              // default_operator: 'and',
+              // fields: ['documentContents.S'],
+              // query: {
+              regexp: { 'documentContents.S': { value: searchString } },
+              // },
+              // },
+            },
           ],
         },
       },
-      search_after: ['11947-08'],
-      size: 20000,
+      // search_after: ['11947-08'],
+      size: 5,
       sort: [{ 'docketNumber.S': sortOrder }],
     },
     index: 'efcms-docket-entry',
@@ -63,7 +73,7 @@ const version = process.argv[3] || 'alpha';
   }
   // console.log('total results', total);
   console.log(JSON.stringify(results.length));
-  console.log(JSON.stringify(results[results.length - 1]));
+  console.log(JSON.stringify(results));
 })();
 
 /*
