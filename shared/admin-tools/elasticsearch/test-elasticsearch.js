@@ -13,6 +13,7 @@ const version = process.argv[3] || 'alpha';
   const esClient = await getClient({ environmentName, version });
 
   const searchString = /^\s/;
+  const sortOrder = 'asc';
 
   const documentQuery = {
     body: {
@@ -39,7 +40,9 @@ const version = process.argv[3] || 'alpha';
           ],
         },
       },
+      search_after: ['11947-08'],
       size: 20000,
+      sort: [{ 'docketNumber.S': sortOrder }],
     },
     index: 'efcms-docket-entry',
   };
@@ -47,7 +50,7 @@ const version = process.argv[3] || 'alpha';
   let results = await esClient.search(documentQuery);
 
   const hits = get(results, 'hits.hits');
-  const total = get(results, 'hits.total.value');
+  // const total = get(results, 'hits.total.value');
   const formatHit = hit => {
     return {
       ...AWS.DynamoDB.Converter.unmarshall(hit['_source']),
@@ -58,8 +61,9 @@ const version = process.argv[3] || 'alpha';
   if (hits && hits.length > 0) {
     results = hits.map(formatHit);
   }
-  console.log('total results', total);
+  // console.log('total results', total);
   console.log(JSON.stringify(results.length));
+  console.log(JSON.stringify(results[results.length - 1]));
 })();
 
 /*
