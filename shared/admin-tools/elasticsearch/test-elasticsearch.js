@@ -17,7 +17,7 @@ const version = process.argv[3] || 'alpha';
   const documentQuery = {
     body: {
       _source: ['docketNumber'],
-      from: 20000,
+      from: 0,
       query: {
         bool: {
           must: [
@@ -47,6 +47,7 @@ const version = process.argv[3] || 'alpha';
   let results = await esClient.search(documentQuery);
 
   const hits = get(results, 'hits.hits');
+  const total = get(results, 'hits.total.value');
   const formatHit = hit => {
     return {
       ...AWS.DynamoDB.Converter.unmarshall(hit['_source']),
@@ -57,13 +58,14 @@ const version = process.argv[3] || 'alpha';
   if (hits && hits.length > 0) {
     results = hits.map(formatHit);
   }
+  console.log('total results', total);
   console.log(JSON.stringify(results.length));
 })();
 
 /*
 
 * Exact matches = exact words in the exact order
-			   OR = exact word in any order
+         OR = exact word in any order
 
 * If there are no exact matches, inform the user
 * If there are no exact matches, user can perform a partial match search
