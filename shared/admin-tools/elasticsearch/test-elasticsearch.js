@@ -40,7 +40,7 @@ const version = process.argv[3] || 'alpha';
           ],
         },
       },
-      search_after: ['11947-08'],
+      search_after: ['16556-10'],
       size: 20000,
       sort: [{ 'docketNumber.S': sortOrder }],
     },
