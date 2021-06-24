@@ -13,7 +13,8 @@ const version = process.argv[3] || 'alpha';
   const esClient = await getClient({ environmentName, version });
 
   //does not like how this regex is set up, gotta fix
-  const searchString = /^\s/;
+  const searchString = '[a-zA-Z,_)]{60,}';
+  // const searchString = '[^ \\n\\r_0-9.]{50,}';
   const sortOrder = 'asc';
 
   const documentQuery = {
@@ -25,27 +26,20 @@ const version = process.argv[3] || 'alpha';
           must: [
             { term: { 'entityName.S': 'DocketEntry' } },
             {
-              bool: {
-                must: [
-                  {
-                    terms: {
-                      'eventCode.S': [
-                        ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-                        ...ORDER_EVENT_CODES,
-                      ],
-                    },
-                  },
+              terms: {
+                'eventCode.S': [
+                  ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+                  ...ORDER_EVENT_CODES,
                 ],
               },
             },
             {
-              // simple_query_string: {
-              // default_operator: 'and',
-              // fields: ['documentContents.S'],
-              // query: {
-              regexp: { 'documentContents.S': { value: searchString } },
-              // },
-              // },
+              regexp: {
+                'documentContents.S': {
+                  flags: 'ALL',
+                  value: searchString,
+                },
+              },
             },
           ],
         },
@@ -58,6 +52,8 @@ const version = process.argv[3] || 'alpha';
   };
 
   let results = await esClient.search(documentQuery);
+  // console.log(JSON.stringify(results));
+  // return;
 
   const hits = get(results, 'hits.hits');
   // const total = get(results, 'hits.total.value');
@@ -72,7 +68,7 @@ const version = process.argv[3] || 'alpha';
     results = hits.map(formatHit);
   }
   // console.log('total results', total);
-  console.log(JSON.stringify(results.length));
+  // console.log(JSON.stringify(results.length));
   console.log(JSON.stringify(results));
 })();
 
