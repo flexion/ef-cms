@@ -49,14 +49,14 @@ describe('gotoMessageDetailSequence', () => {
     toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
   };
 
-  let test;
+  let integrationTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       gotoMessageDetailSequence,
     };
-    test = CerebralTest(presenter);
+    integrationTest = CerebralTest(presenter);
 
     applicationContext.getUseCases().getCaseInteractor.mockReturnValue({
       ...MOCK_CASE,
@@ -75,13 +75,13 @@ describe('gotoMessageDetailSequence', () => {
   });
 
   it('should change the page to MyAccount and close the opened menu', async () => {
-    await test.runSequence('gotoMessageDetailSequence', {
+    await integrationTest.runSequence('gotoMessageDetailSequence', {
       docketNumber: mockDocketNumber,
       documentId: mockDocumentId,
       parentMessageId: mockParentMessageId,
     });
 
-    expect(test.getState()).toMatchObject({
+    expect(integrationTest.getState()).toMatchObject({
       iframeSrc: mockPdfUrl,
       messageDetail: [mockMessage],
       messageViewerDocumentToDisplay: {

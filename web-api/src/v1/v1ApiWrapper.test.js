@@ -9,7 +9,7 @@ describe('v1ApiWrapper', () => {
       throw err;
     };
 
-  test('errors thrown during execution are 500s and serialized as the expected v1 error object', async () => {
+  it('errors thrown during execution are 500s and serialized as the expected v1 error object', async () => {
     try {
       await v1ApiWrapper(throwWithStatus(undefined));
     } catch (err) {
@@ -20,7 +20,7 @@ describe('v1ApiWrapper', () => {
     }
   });
 
-  test('errors with status code of 401, 403, 404, or 500 are preserved', async () => {
+  it('errors with status code of 401, 403, 404, or 500 are preserved', async () => {
     await expect(() => v1ApiWrapper(throwWithStatus(401))).rejects.toThrow(
       expect.objectContaining({ statusCode: 401 }),
     );
@@ -38,7 +38,7 @@ describe('v1ApiWrapper', () => {
     );
   });
 
-  test('errors with a status code not indicated by the v1 spec are 500s', async () => {
+  it('errors with a status code not indicated by the v1 spec are 500s', async () => {
     await expect(() => v1ApiWrapper(throwWithStatus(405))).rejects.toThrow(
       expect.objectContaining({ statusCode: 500 }),
     );
@@ -49,7 +49,7 @@ describe('v1ApiWrapper', () => {
 
   // Workaround until https://github.com/ustaxcourt/ef-cms/pull/462 is resolved
   // (API returning 400 instead of 404 on unknown cases)
-  test('Case validation errors are converted to 404s', async () => {
+  it('Case validation errors are converted to 404s', async () => {
     await expect(() =>
       v1ApiWrapper(throwWithStatus(400, 'The Case entity was invalid')),
     ).rejects.toThrow(expect.objectContaining({ statusCode: 404 }));

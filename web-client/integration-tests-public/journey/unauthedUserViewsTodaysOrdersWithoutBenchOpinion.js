@@ -1,18 +1,19 @@
 import { BENCH_OPINION_EVENT_CODE } from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
-export const unauthedUserViewsTodaysOrdersWithoutBenchOpinion = test => {
-  return it('should view todays orders and should not see a bench opinion', async () => {
-    await refreshElasticsearchIndex();
+export const unauthedUserViewsTodaysOrdersWithoutBenchOpinion =
+  integrationTest => {
+    return it('should view todays orders and should not see a bench opinion', async () => {
+      await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoTodaysOrdersSequence', {});
+      await integrationTest.runSequence('gotoTodaysOrdersSequence', {});
 
-    const todaysOrders = test.getState('todaysOrders.results');
+      const todaysOrders = integrationTest.getState('todaysOrders.results');
 
-    const foundBenchOpinion = todaysOrders.find(
-      d => d.eventCode === BENCH_OPINION_EVENT_CODE,
-    );
+      const foundBenchOpinion = todaysOrders.find(
+        d => d.eventCode === BENCH_OPINION_EVENT_CODE,
+      );
 
-    expect(foundBenchOpinion).toBeUndefined();
-  });
-};
+      expect(foundBenchOpinion).toBeUndefined();
+    });
+  };

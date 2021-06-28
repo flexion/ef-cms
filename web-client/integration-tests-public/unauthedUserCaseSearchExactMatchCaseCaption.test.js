@@ -10,7 +10,7 @@ import { setupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import faker from 'faker';
 
-const test = setupTest();
+const integrationTest = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES } = applicationContext.getConstants();
 
@@ -59,7 +59,7 @@ function createCaseWithCaption(captionString) {
       });
 
       afterAll(() => {
-        test.closeSocket();
+        integrationTest.closeSocket();
       });
 
       loginAs(testClient, 'petitioner@example.com');
@@ -68,13 +68,13 @@ function createCaseWithCaption(captionString) {
         const caseDetail = await uploadPetition(testClient);
 
         expect(caseDetail.docketNumber).toBeDefined();
-        test.docketNumber = caseDetail.docketNumber;
+        integrationTest.docketNumber = caseDetail.docketNumber;
         testClient.docketNumber = caseDetail.docketNumber;
         createdDocketNumbers.push(caseDetail.docketNumber);
       });
 
       const newCaseCaption = `${captionString}, Petitioner`;
-      updateCaseCaption(test.docketNumber, newCaseCaption);
+      updateCaseCaption(integrationTest.docketNumber, newCaseCaption);
     });
 
     describe('Petitions clerk serves case to IRS', () => {
@@ -85,7 +85,7 @@ function createCaseWithCaption(captionString) {
 }
 
 describe('Petitioner searches for exact name match', () => {
-  unauthedUserNavigatesToPublicSite(test);
+  unauthedUserNavigatesToPublicSite(integrationTest);
 
   it(`returns search results for ${captionSearchTerm} we expect in the correct order`, async () => {
     const queryParams = {
@@ -94,10 +94,16 @@ describe('Petitioner searches for exact name match', () => {
       petitionerName: captionSearchTerm,
     };
 
-    test.setState('advancedSearchForm.caseSearchByName', queryParams);
-    await test.runSequence('submitPublicCaseAdvancedSearchSequence', {});
+    integrationTest.setState(
+      'advancedSearchForm.caseSearchByName',
+      queryParams,
+    );
+    await integrationTest.runSequence(
+      'submitPublicCaseAdvancedSearchSequence',
+      {},
+    );
 
-    const searchResults = test.getState(
+    const searchResults = integrationTest.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
 

@@ -16,7 +16,7 @@ import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigat
 import { unauthedUserSearchesForOrderByKeyword } from './journey/unauthedUserSearchesForOrderByKeyword';
 import { unauthedUserSearchesForSealedCaseOrderByKeyword } from './journey/unauthedUserSearchesForSealedCaseOrderByKeyword';
 
-const test = setupTest();
+const integrationTest = setupTest();
 const testClient = setupTestClient();
 testClient.draftOrders = [];
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -43,7 +43,7 @@ describe.skip('Petitioner creates case', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
     testClient.docketNumber = caseDetail.docketNumber;
   });
 });
@@ -80,9 +80,9 @@ describe.skip('Docket clerk creates orders to search for', () => {
 
 // Temporarily disabled for story 7387
 describe.skip('Unauthed user searches for an order by keyword', () => {
-  unauthedUserNavigatesToPublicSite(test);
-  unauthedUserInvalidSearchForOrder(test);
-  unauthedUserSearchesForOrderByKeyword(test, testClient);
+  unauthedUserNavigatesToPublicSite(integrationTest);
+  unauthedUserInvalidSearchForOrder(integrationTest);
+  unauthedUserSearchesForOrderByKeyword(integrationTest, testClient);
 });
 
 // Temporarily disabled for story 7387
@@ -93,6 +93,6 @@ describe.skip('Docket clerk seals case', () => {
 
 // Temporarily disabled for story 7387
 describe.skip('Unauthed user searches for an order by keyword and does not see sealed cases', () => {
-  unauthedUserNavigatesToPublicSite(test);
-  unauthedUserSearchesForSealedCaseOrderByKeyword(test, testClient);
+  unauthedUserNavigatesToPublicSite(integrationTest);
+  unauthedUserSearchesForSealedCaseOrderByKeyword(integrationTest, testClient);
 });

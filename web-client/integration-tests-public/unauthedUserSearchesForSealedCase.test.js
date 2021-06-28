@@ -13,7 +13,7 @@ import { unauthedUserSearchesForSealedCasesByDocketNumber } from './journey/unau
 import { unauthedUserViewsCaseDetailForSealedCase } from './journey/unauthedUserViewsCaseDetailForSealedCase';
 import { unauthedUserViewsPrintableDocketRecordForSealedCase } from './journey/unauthedUserViewsPrintableDocketRecordForSealedCase';
 
-const test = setupTest();
+const integrationTest = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
@@ -23,7 +23,7 @@ describe('Petitioner creates case to search for', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
   loginAs(testClient, 'petitioner@example.com');
@@ -42,7 +42,7 @@ describe('Petitioner creates case to search for', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
     testClient.docketNumber = caseDetail.docketNumber;
   });
 });
@@ -58,18 +58,18 @@ describe('Docket clerk seals the case (should not be viewable to the public)', (
 });
 
 describe('Unauthed user searches for a sealed case by docket number', () => {
-  unauthedUserNavigatesToPublicSite(test);
-  unauthedUserViewsCaseDetailForSealedCase(test);
-  unauthedUserViewsPrintableDocketRecordForSealedCase(test);
+  unauthedUserNavigatesToPublicSite(integrationTest);
+  unauthedUserViewsCaseDetailForSealedCase(integrationTest);
+  unauthedUserViewsPrintableDocketRecordForSealedCase(integrationTest);
 });
 
 describe('Unauthed user searches for a sealed case by name', () => {
-  unauthedUserNavigatesToPublicSite(test);
-  unauthedUserSearchesForSealedCaseByName(test);
-  unauthedUserViewsPrintableDocketRecordForSealedCase(test);
+  unauthedUserNavigatesToPublicSite(integrationTest);
+  unauthedUserSearchesForSealedCaseByName(integrationTest);
+  unauthedUserViewsPrintableDocketRecordForSealedCase(integrationTest);
 });
 
 describe('Unauthed user searches for a sealed case and does not route to the case detail page', () => {
-  unauthedUserNavigatesToPublicSite(test);
-  unauthedUserSearchesForSealedCasesByDocketNumber(test);
+  unauthedUserNavigatesToPublicSite(integrationTest);
+  unauthedUserSearchesForSealedCasesByDocketNumber(integrationTest);
 });

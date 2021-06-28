@@ -10,28 +10,30 @@ const publicCaseDetailHelper = withAppContextDecorator(
 );
 
 export const unauthedUserSeesStrickenDocketEntry = (
-  test,
+  integrationTest,
   docketRecordIndex,
 ) => {
   return it('View case detail', async () => {
-    await test.runSequence('gotoPublicCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoPublicCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    expect(test.currentRouteUrl.includes('/case-detail')).toBeTruthy();
-    const contactPrimary = contactPrimaryFromState(test);
+    expect(
+      integrationTest.currentRouteUrl.includes('/case-detail'),
+    ).toBeTruthy();
+    const contactPrimary = contactPrimaryFromState(integrationTest);
     expect(contactPrimary.name).toBeDefined();
 
     const { formattedDocketEntriesOnDocketRecord } = runCompute(
       publicCaseDetailHelper,
       {
-        state: test.getState(),
+        state: integrationTest.getState(),
       },
     );
 
     const formattedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       docketEntry => docketEntry.index === docketRecordIndex,
     );
-    test.docketEntryId = formattedDocketEntry.docketEntryId;
+    integrationTest.docketEntryId = formattedDocketEntry.docketEntryId;
 
     expect(formattedDocketEntry.isStricken).toEqual(true);
     expect(formattedDocketEntry.showDocumentDescriptionWithoutLink).toEqual(

@@ -1,8 +1,8 @@
-export const unauthedUserViewsHealthCheck = test => {
+export const unauthedUserViewsHealthCheck = integrationTest => {
   return it('should view health check', async () => {
-    await test.runSequence('gotoHealthCheckSequence', {});
+    await integrationTest.runSequence('gotoHealthCheckSequence', {});
 
-    expect(test.getState('health')).toEqual(
+    expect(integrationTest.getState('health')).toEqual(
       expect.objectContaining({
         cognito: expect.anything(),
         dynamo: expect.objectContaining({

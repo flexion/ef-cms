@@ -6,7 +6,7 @@ import { presenter } from '../presenter-mock';
 const { CHAMBERS_SECTION } = applicationContext.getConstants();
 
 describe('gotoPrintablePendingReportForCaseSequence', () => {
-  let test;
+  let integrationTest;
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue({
       section: CHAMBERS_SECTION,
@@ -31,17 +31,24 @@ describe('gotoPrintablePendingReportForCaseSequence', () => {
     presenter.sequences = {
       gotoPrintablePendingReportForCaseSequence,
     };
-    test = CerebralTest(presenter);
+    integrationTest = CerebralTest(presenter);
   });
   it('Should show the Printable Pending Report page', async () => {
-    test.setState('currentPage', 'SomeOtherPage');
-    await test.runSequence('gotoPrintablePendingReportForCaseSequence', {
-      docketNumber: '101-21',
-    });
-    expect(test.getState('currentPage')).toBe('SimplePdfPreviewPage');
-    expect(test.getState('pdfPreviewUrl')).toBe(
+    integrationTest.setState('currentPage', 'SomeOtherPage');
+    await integrationTest.runSequence(
+      'gotoPrintablePendingReportForCaseSequence',
+      {
+        docketNumber: '101-21',
+      },
+    );
+    expect(integrationTest.getState('currentPage')).toBe(
+      'SimplePdfPreviewPage',
+    );
+    expect(integrationTest.getState('pdfPreviewUrl')).toBe(
       'http://example.com/mock-pdf-url',
     );
-    expect(test.getState('screenMetadata.headerTitle')).toBe('Pending Report');
+    expect(integrationTest.getState('screenMetadata.headerTitle')).toBe(
+      'Pending Report',
+    );
   });
 });
