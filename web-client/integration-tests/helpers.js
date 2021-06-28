@@ -545,12 +545,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
   });
   presenter.providers.socket = { start, stop: stopSocket };
 
-  integrationTest = CerebralTest(presenter);
-  integrationTest.getSequence = seqName => async obj =>
-    await integrationTest.runSequence(seqName, obj);
-  integrationTest.closeSocket = stopSocket;
-  integrationTest.applicationContext = applicationContext;
-
   global.window = {
     ...dom.window,
     DOMParser: () => {
@@ -634,6 +628,11 @@ export const setupTest = ({ useCases = {} } = {}) => {
     route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
 
+  integrationTest = CerebralTest(presenter);
+  integrationTest.getSequence = seqName => async obj =>
+    await integrationTest.runSequence(seqName, obj);
+  integrationTest.closeSocket = stopSocket;
+  integrationTest.applicationContext = applicationContext;
   integrationTest.setState('constants', applicationContext.getConstants());
 
   router.initialize(integrationTest, (route, cb) => {
