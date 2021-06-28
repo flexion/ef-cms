@@ -17,26 +17,6 @@ const { COUNTRY_TYPES } = applicationContext.getConstants();
 const updatedLastName = faker.name.lastName();
 const createdDocketNumbers = [];
 
-const updateCaseCaption = async (docketNumber, caseCaption) => {
-  loginAs(testClient, 'docketclerk@example.com');
-
-  it(`updates the case caption for ${docketNumber} to ${caseCaption}`, async () => {
-    await testClient.runSequence('gotoCaseDetailSequence', {
-      docketNumber,
-    });
-
-    await testClient.runSequence('openUpdateCaseModalSequence');
-
-    await testClient.runSequence('updateModalValueSequence', {
-      key: 'caseCaption',
-      value: caseCaption,
-    });
-
-    await testClient.runSequence('submitUpdateCaseModalSequence');
-    expect(testClient.getState('caseDetail.caseCaption')).toEqual(caseCaption);
-  });
-};
-
 const captionSearchTerm = `Rupert ${updatedLastName}`;
 const caseCaptionNames = [
   `Rupert ${updatedLastName}`,
@@ -74,7 +54,26 @@ function createCaseWithCaption(captionString) {
       });
 
       const newCaseCaption = `${captionString}, Petitioner`;
-      updateCaseCaption(integrationTest.docketNumber, newCaseCaption);
+
+      loginAs(testClient, 'docketclerk@example.com');
+
+      it(`updates the case caption for ${integrationTest.docketNumber} to ${newCaseCaption}`, async () => {
+        await testClient.runSequence('gotoCaseDetailSequence', {
+          docketNumber: integrationTest.docketNumber,
+        });
+
+        await testClient.runSequence('openUpdateCaseModalSequence');
+
+        await testClient.runSequence('updateModalValueSequence', {
+          key: 'caseCaption',
+          value: newCaseCaption,
+        });
+
+        await testClient.runSequence('submitUpdateCaseModalSequence');
+        expect(testClient.getState('caseDetail.caseCaption')).toEqual(
+          newCaseCaption,
+        );
+      });
     });
 
     describe('Petitions clerk serves case to IRS', () => {
