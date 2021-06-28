@@ -634,11 +634,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
     route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
 
-  integrationTest = CerebralTest(presenter);
-  integrationTest.getSequence = seqName => async obj =>
-    await integrationTest.runSequence(seqName, obj);
-  integrationTest.closeSocket = stopSocket;
-
   integrationTest.setState('constants', applicationContext.getConstants());
 
   router.initialize(integrationTest, (route, cb) => {
