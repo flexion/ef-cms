@@ -49,6 +49,9 @@ export const setupTest = ({ useCases = {} } = {}) => {
   });
 
   integrationTest = CerebralTest(presenter);
+  integrationTest.closeSocket = () => {
+    /* no-op */
+  };
 
   integrationTest.currentRouteUrl = null;
 
