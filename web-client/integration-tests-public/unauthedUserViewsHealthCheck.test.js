@@ -1,7 +1,7 @@
 import { setupTest } from './helpers';
 import { unauthedUserViewsHealthCheck } from './journey/unauthedUserViewsHealthCheck';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Unauthed user views health check', () => {
   beforeAll(() => {
@@ -9,8 +9,8 @@ describe('Unauthed user views health check', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  unauthedUserViewsHealthCheck(test);
+  unauthedUserViewsHealthCheck(integrationTest);
 });

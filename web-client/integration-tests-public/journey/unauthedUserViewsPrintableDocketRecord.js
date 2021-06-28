@@ -1,8 +1,11 @@
-export const unauthedUserViewsPrintableDocketRecord = test => {
+export const unauthedUserViewsPrintableDocketRecord = integrationTest => {
   return it('View printable docket record', async () => {
-    await test.runSequence('gotoPublicPrintableDocketRecordSequence', {
-      docketNumber: test.docketNumber,
-    });
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
+    await integrationTest.runSequence(
+      'gotoPublicPrintableDocketRecordSequence',
+      {
+        docketNumber: integrationTest.docketNumber,
+      },
+    );
+    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
   });
 };

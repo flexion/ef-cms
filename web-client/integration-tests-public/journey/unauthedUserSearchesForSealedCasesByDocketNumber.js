@@ -1,21 +1,29 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 
-export const unauthedUserSearchesForSealedCasesByDocketNumber = test => {
-  return it('Search for a sealed case by docket number', async () => {
-    test.currentRouteUrl = '';
-    test.setState('caseSearchByDocketNumber', {});
+export const unauthedUserSearchesForSealedCasesByDocketNumber =
+  integrationTest => {
+    return it('Search for a sealed case by docket number', async () => {
+      integrationTest.currentRouteUrl = '';
+      integrationTest.setState('caseSearchByDocketNumber', {});
 
-    await test.runSequence('updateAdvancedSearchFormValueSequence', {
-      formType: 'caseSearchByDocketNumber',
-      key: 'docketNumber',
-      value: test.docketNumber,
+      await integrationTest.runSequence(
+        'updateAdvancedSearchFormValueSequence',
+        {
+          formType: 'caseSearchByDocketNumber',
+          key: 'docketNumber',
+          value: integrationTest.docketNumber,
+        },
+      );
+
+      await integrationTest.runSequence(
+        'submitPublicCaseDocketNumberSearchSequence',
+      );
+
+      expect(
+        integrationTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`),
+      ).toEqual([]);
+      expect(integrationTest.currentRouteUrl).toBe(
+        `/case-detail/${integrationTest.docketNumber}`,
+      );
     });
-
-    await test.runSequence('submitPublicCaseDocketNumberSearchSequence');
-
-    expect(test.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`)).toEqual(
-      [],
-    );
-    expect(test.currentRouteUrl).toBe(`/case-detail/${test.docketNumber}`);
-  });
-};
+  };

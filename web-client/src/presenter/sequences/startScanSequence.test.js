@@ -3,7 +3,7 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { presenter } from '../presenter-mock';
 import { startScanSequence } from '../sequences/startScanSequence';
 describe('startScanSequence', () => {
-  let test;
+  let integrationTest;
   let mockItems;
   const mockSources = ['Test Source 1', 'Test Source 2'];
   beforeAll(() => {
@@ -20,18 +20,18 @@ describe('startScanSequence', () => {
     presenter.sequences = {
       startScanSequence,
     };
-    test = CerebralTest(presenter);
+    integrationTest = CerebralTest(presenter);
   });
   it('gets the cached scan source name and starts the scan action', async () => {
     mockItems = {
       scannerSourceIndex: '1',
       scannerSourceName: 'Mock Scanner',
     };
-    test.setState('scanner.batches', []);
-    await test.runSequence('startScanSequence', {});
+    integrationTest.setState('scanner.batches', []);
+    await integrationTest.runSequence('startScanSequence', {});
 
     expect(applicationContext.getScanner().startScanSession).toHaveBeenCalled();
-    expect(test.getState('scanner.isScanning')).toBeTruthy();
+    expect(integrationTest.getState('scanner.isScanning')).toBeTruthy();
   });
 
   it('provides a flow for setting a scan source if one is not cached', async () => {
@@ -39,12 +39,12 @@ describe('startScanSequence', () => {
       scannerSourceIndex: null,
       scannerSourceName: '',
     };
-    test.setState('scanner.batches', []);
-    await test.runSequence('startScanSequence', {});
-    const scannerState = test.getState('scanner');
+    integrationTest.setState('scanner.batches', []);
+    await integrationTest.runSequence('startScanSequence', {});
+    const scannerState = integrationTest.getState('scanner');
 
     expect(scannerState.sources.length).toEqual(mockSources.length);
-    expect(test.getState('modal.showModal')).toEqual(
+    expect(integrationTest.getState('modal.showModal')).toEqual(
       'SelectScannerSourceModal',
     );
   });

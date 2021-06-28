@@ -1,8 +1,10 @@
 import { applicationContextPublic as applicationContext } from '../../src/applicationContextPublic';
 
-export const unauthedUserNavigatesToPublicSite = test => {
+export const unauthedUserNavigatesToPublicSite = integrationTest => {
   return it('Should navigate to the public site without logging in', async () => {
-    await test.runSequence('navigateToPublicSiteSequence', {});
-    expect(test.currentRouteUrl).toEqual(applicationContext.getPublicSiteUrl());
+    await integrationTest.runSequence('navigateToPublicSiteSequence', {});
+    expect(integrationTest.currentRouteUrl).toEqual(
+      applicationContext.getPublicSiteUrl(),
+    );
   });
 };

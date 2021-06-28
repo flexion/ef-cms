@@ -4,7 +4,7 @@ import { deleteCorrespondenceDocumentSequence } from './deleteCorrespondenceDocu
 import { presenter } from '../presenter-mock';
 
 describe('deleteCorrespondenceDocumentSequence', () => {
-  let test;
+  let integrationTest;
 
   const mockCorrespondence1 = {
     correspondenceId: '1234',
@@ -22,7 +22,7 @@ describe('deleteCorrespondenceDocumentSequence', () => {
       deleteCorrespondenceDocumentSequence,
     };
 
-    test = CerebralTest(presenter);
+    integrationTest = CerebralTest(presenter);
   });
 
   it('should set viewerCorrespondenceToDisplay to the remaining correspondence after deleting', async () => {
@@ -41,11 +41,11 @@ describe('deleteCorrespondenceDocumentSequence', () => {
       },
     };
 
-    test.setState('modal', modal);
+    integrationTest.setState('modal', modal);
 
-    await test.runSequence('deleteCorrespondenceDocumentSequence');
+    await integrationTest.runSequence('deleteCorrespondenceDocumentSequence');
 
-    expect(test.getState()).toMatchObject({
+    expect(integrationTest.getState()).toMatchObject({
       viewerCorrespondenceToDisplay: mockCorrespondence2,
     });
   });

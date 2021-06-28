@@ -4,16 +4,16 @@ import { presenter } from '../presenter-mock';
 import { selectWorkItemSequence } from '../sequences/selectWorkItemSequence';
 
 describe('selectWorkItemSequence', () => {
-  let test;
+  let integrationTest;
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       selectWorkItemSequence,
     };
-    test = CerebralTest(presenter);
+    integrationTest = CerebralTest(presenter);
   });
   it('should add a work item to the selectedWorkItems state if it does not already exist', async () => {
-    test.setState('selectedWorkItems', [
+    integrationTest.setState('selectedWorkItems', [
       {
         workItemId: 'abc',
       },
@@ -21,12 +21,12 @@ describe('selectWorkItemSequence', () => {
         workItemId: 'gg',
       },
     ]);
-    await test.runSequence('selectWorkItemSequence', {
+    await integrationTest.runSequence('selectWorkItemSequence', {
       workItem: {
         workItemId: '123',
       },
     });
-    expect(test.getState('selectedWorkItems')).toMatchObject([
+    expect(integrationTest.getState('selectedWorkItems')).toMatchObject([
       {
         workItemId: 'abc',
       },
@@ -40,7 +40,7 @@ describe('selectWorkItemSequence', () => {
   });
 
   it('should remove a work item that was already selected from the selectedWorkItems state', async () => {
-    test.setState('selectedWorkItems', [
+    integrationTest.setState('selectedWorkItems', [
       {
         workItemId: 'abc',
       },
@@ -48,12 +48,12 @@ describe('selectWorkItemSequence', () => {
         workItemId: 'gg',
       },
     ]);
-    await test.runSequence('selectWorkItemSequence', {
+    await integrationTest.runSequence('selectWorkItemSequence', {
       workItem: {
         workItemId: 'gg',
       },
     });
-    expect(test.getState('selectedWorkItems')).toMatchObject([
+    expect(integrationTest.getState('selectedWorkItems')).toMatchObject([
       {
         workItemId: 'abc',
       },

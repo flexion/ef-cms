@@ -6,12 +6,12 @@ describe('clearFormAssigneeIdAction', () => {
     const { state } = await runAction(clearFormAssigneeIdAction, {
       props: { form: 'test' },
       state: {
-        test: {
+        myTest: {
           assigneeId: 'abc-123',
         },
       },
     });
 
-    expect(state.test.assigneeId).toBe('');
+    expect(state.myTest.assigneeId).toBe('');
   });
 });

@@ -4,21 +4,21 @@ import { gotoMyAccountSequence } from '../sequences/gotoMyAccountSequence';
 import { presenter } from '../presenter-mock';
 
 describe('gotoMyAccountSequence', () => {
-  let test;
+  let integrationTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       gotoMyAccountSequence,
     };
-    test = CerebralTest(presenter);
+    integrationTest = CerebralTest(presenter);
   });
 
   it('should change the page to MyAccount and close the opened menu', async () => {
-    test.setState('currentPage', 'SomeOtherPage');
-    test.setState('navigation.openMenu', true);
-    await test.runSequence('gotoMyAccountSequence');
-    expect(test.getState('currentPage')).toBe('MyAccount');
-    expect(test.getState('navigation.openMenu')).toBeUndefined();
+    integrationTest.setState('currentPage', 'SomeOtherPage');
+    integrationTest.setState('navigation.openMenu', true);
+    await integrationTest.runSequence('gotoMyAccountSequence');
+    expect(integrationTest.getState('currentPage')).toBe('MyAccount');
+    expect(integrationTest.getState('navigation.openMenu')).toBeUndefined();
   });
 });

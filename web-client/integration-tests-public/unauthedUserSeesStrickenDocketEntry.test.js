@@ -22,7 +22,7 @@ import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearch
 import { unauthedUserSearchesForStrickenOrder } from './journey/unauthedUserSearchesForStrickenOrder';
 import { unauthedUserSeesStrickenDocketEntry } from './journey/unauthedUserSeesStrickenDocketEntry';
 
-const test = setupTest();
+const integrationTest = setupTest();
 const testClient = setupTestClient();
 testClient.draftOrders = [];
 
@@ -32,14 +32,14 @@ describe('Petitioner creates a case', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
   loginAs(testClient, 'petitioner@example.com');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(testClient);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
     testClient.docketNumber = caseDetail.docketNumber;
   });
 });
@@ -64,10 +64,10 @@ describe('Docketclerk QCs and Strikes a docket entry', () => {
 });
 
 describe('Unauthed user views stricken docket entry for externally-filed document', () => {
-  unauthedUserNavigatesToPublicSite(test);
-  unauthedUserSearchesByDocketNumber(test, testClient);
-  unauthedUserSeesStrickenDocketEntry(test, 3);
-  unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(test);
+  unauthedUserNavigatesToPublicSite(integrationTest);
+  unauthedUserSearchesByDocketNumber(integrationTest, testClient);
+  unauthedUserSeesStrickenDocketEntry(integrationTest, 3);
+  unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(integrationTest);
 });
 
 describe('Docketclerk creates an order and strikes it', () => {
@@ -86,12 +86,12 @@ describe('Docketclerk creates an order and strikes it', () => {
 });
 
 describe('Unauthed user views stricken docket entry for order', () => {
-  unauthedUserSeesStrickenDocketEntry(test, 4);
-  unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(test);
+  unauthedUserSeesStrickenDocketEntry(integrationTest, 4);
+  unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(integrationTest);
 });
 
 // Temporarily disabled for story 7387
 describe.skip('Unauthed user searches for stricken order', () => {
-  unauthedUserNavigatesToPublicSite(test);
-  unauthedUserSearchesForStrickenOrder(test);
+  unauthedUserNavigatesToPublicSite(integrationTest);
+  unauthedUserSearchesForStrickenOrder(integrationTest);
 });
