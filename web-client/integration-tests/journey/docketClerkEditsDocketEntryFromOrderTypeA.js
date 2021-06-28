@@ -1,14 +1,14 @@
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryFromOrderTypeA = (
-  test,
+  integrationTest,
   draftOrderIndex,
 ) => {
   return it(`Docket Clerk edits a docket entry from the given order ${draftOrderIndex} with nonstandard type A`, async () => {
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
 
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -16,40 +16,58 @@ export const docketClerkEditsDocketEntryFromOrderTypeA = (
 
     expect(orderDocument).toBeTruthy();
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
-    });
+    await integrationTest.runSequence(
+      'gotoEditCourtIssuedDocketEntrySequence',
+      {
+        docketEntryId: orderDocument.docketEntryId,
+        docketNumber: integrationTest.docketNumber,
+      },
+    );
 
     // Type A
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: 'WRIT',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'documentType',
-      value: 'Writ of Habeas Corpus Ad Testificandum',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'documentTitle',
-      value: 'Writ of Habeas Corpus Ad Testificandum [anything]',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'scenario',
-      value: 'Type A',
-    });
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'eventCode',
+        value: 'WRIT',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentType',
+        value: 'Writ of Habeas Corpus Ad Testificandum',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentTitle',
+        value: 'Writ of Habeas Corpus Ad Testificandum [anything]',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'scenario',
+        value: 'Type A',
+      },
+    );
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'freeText',
-      value: 'Some free text',
-    });
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'freeText',
+        value: 'Some free text',
+      },
+    );
 
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
+    await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test));
+      await getFormattedDocketEntriesForTest(integrationTest));
 
     const updatedOrderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -62,12 +80,15 @@ export const docketClerkEditsDocketEntryFromOrderTypeA = (
       freeText: 'Some free text',
     });
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
-    });
+    await integrationTest.runSequence(
+      'gotoEditCourtIssuedDocketEntrySequence',
+      {
+        docketEntryId: orderDocument.docketEntryId,
+        docketNumber: integrationTest.docketNumber,
+      },
+    );
 
-    expect(test.getState('form')).toMatchObject({
+    expect(integrationTest.getState('form')).toMatchObject({
       documentTitle: 'Writ of Habeas Corpus Ad Testificandum Some free text',
       documentType: 'Writ of Habeas Corpus Ad Testificandum',
       eventCode: 'WRIT',

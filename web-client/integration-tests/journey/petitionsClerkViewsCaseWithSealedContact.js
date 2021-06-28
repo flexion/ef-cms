@@ -4,22 +4,22 @@ const {
 } = require('../helpers');
 
 export const petitionsClerkViewsCaseWithSealedContact = (
-  test,
+  integrationTest,
   contactType,
   docketNumber,
 ) => {
   return it(`Petitions clerk views case with sealed ${contactType}`, async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: docketNumber || test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: docketNumber || integrationTest.docketNumber,
     });
 
     let sealedContact;
     if (contactType === 'contactPrimary') {
-      sealedContact = contactPrimaryFromState(test);
+      sealedContact = contactPrimaryFromState(integrationTest);
     } else if (contactType === 'contactSecondary') {
-      sealedContact = contactSecondaryFromState(test);
+      sealedContact = contactSecondaryFromState(integrationTest);
     } else {
-      sealedContact = test
+      sealedContact = integrationTest
         .getState(`caseDetail.${contactType}`)
         .find(c => c.isAddressSealed === true);
     }

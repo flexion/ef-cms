@@ -5,7 +5,7 @@ import { docketClerkCreatesDocketEntryForSignedStipulatedDecision } from './jour
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { respondentUploadsProposedStipulatedDecision } from './journey/respondentUploadsProposedStipulatedDecision';
 
-const test = setupTest({
+const integrationTest = setupTest({
   useCases: {
     loadPDFForSigningInteractor: () => {
       return new Promise(resolve => {
@@ -21,26 +21,26 @@ describe('a user signs and serves a stipulated decision', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'irsPractitioner@example.com');
-  respondentUploadsProposedStipulatedDecision(test);
+  loginAs(integrationTest, 'irsPractitioner@example.com');
+  respondentUploadsProposedStipulatedDecision(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkAssignWorkItemToSelf(test);
-  docketClerkCompletesDocketEntryQcAndSendsMessage(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkAssignWorkItemToSelf(integrationTest);
+  docketClerkCompletesDocketEntryQcAndSendsMessage(integrationTest);
 
-  loginAs(test, 'adc@example.com');
-  adcsSignsProposedStipulatedDecisionFromMessage(test);
+  loginAs(integrationTest, 'adc@example.com');
+  adcsSignsProposedStipulatedDecisionFromMessage(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesDocketEntryForSignedStipulatedDecision(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesDocketEntryForSignedStipulatedDecision(integrationTest);
 });

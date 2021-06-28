@@ -2,14 +2,14 @@ import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryFromOrderTypeC = (
-  test,
+  integrationTest,
   draftOrderIndex,
 ) => {
   return it(`Docket Clerk edits a docket entry from the given order ${draftOrderIndex} with nonstandard type C`, async () => {
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
 
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -17,47 +17,65 @@ export const docketClerkEditsDocketEntryFromOrderTypeC = (
 
     expect(orderDocument).toBeTruthy();
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
-    });
+    await integrationTest.runSequence(
+      'gotoEditCourtIssuedDocketEntrySequence',
+      {
+        docketEntryId: orderDocument.docketEntryId,
+        docketNumber: integrationTest.docketNumber,
+      },
+    );
 
     // Type C
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: 'OAR',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'documentType',
-      value: 'Order that the letter "R" is added to the Docket number',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'documentTitle',
-      value:
-        'Order that the letter "R" is added to the Docket number [Docket number]',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'scenario',
-      value: 'Type C',
-    });
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'eventCode',
+        value: 'OAR',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentType',
+        value: 'Order that the letter "R" is added to the Docket number',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentTitle',
+        value:
+          'Order that the letter "R" is added to the Docket number [Docket number]',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'scenario',
+        value: 'Type C',
+      },
+    );
 
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
+    await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       docketNumbers: VALIDATION_ERROR_MESSAGES.docketNumbers[0].message,
     });
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'docketNumbers',
-      value: '123-45',
-    });
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'docketNumbers',
+        value: '123-45',
+      },
+    );
 
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
+    await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test));
+      await getFormattedDocketEntriesForTest(integrationTest));
 
     const updatedOrderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -71,12 +89,15 @@ export const docketClerkEditsDocketEntryFromOrderTypeC = (
       eventCode: 'OAR',
     });
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
-    });
+    await integrationTest.runSequence(
+      'gotoEditCourtIssuedDocketEntrySequence',
+      {
+        docketEntryId: orderDocument.docketEntryId,
+        docketNumber: integrationTest.docketNumber,
+      },
+    );
 
-    expect(test.getState('form')).toMatchObject({
+    expect(integrationTest.getState('form')).toMatchObject({
       docketNumbers: '123-45',
       documentTitle:
         'Order that the letter "R" is added to the Docket number 123-45',

@@ -8,47 +8,47 @@ import { petitionsClerkEditsPetitionInQCIRSNotice } from './journey/petitionsCle
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { privatePractitionerViewsOpenConsolidatedCases } from './journey/privatePractitionerViewsOpenConsolidatedCases';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
-describe('private practitioner views consolidated cases with statistics (test for bug 8473)', () => {
+describe('private practitioner views consolidated cases with statistics (integrationTest for bug 8473)', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
   const createdDocketNumbers = [];
 
   for (let i = 0; i < 2; i++) {
-    loginAs(test, 'privatePractitioner@example.com');
+    loginAs(integrationTest, 'privatePractitioner@example.com');
     it(`Create test case #${i}`, async () => {
       const caseDetail = await uploadPetition(
-        test,
+        integrationTest,
         {
           caseType: CASE_TYPES_MAP.deficiency,
         },
         'privatePractitioner@example.com',
       );
       expect(caseDetail.docketNumber).toBeDefined();
-      test.docketNumber = caseDetail.docketNumber;
-      createdDocketNumbers.push(test.docketNumber);
-      test.leadDocketNumber = createdDocketNumbers[0];
+      integrationTest.docketNumber = caseDetail.docketNumber;
+      createdDocketNumbers.push(integrationTest.docketNumber);
+      integrationTest.leadDocketNumber = createdDocketNumbers[0];
     });
 
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkEditsPetitionInQCIRSNotice(test);
-    petitionsClerkServesElectronicCaseToIrs(test);
+    loginAs(integrationTest, 'petitionsclerk@example.com');
+    petitionsClerkEditsPetitionInQCIRSNotice(integrationTest);
+    petitionsClerkServesElectronicCaseToIrs(integrationTest);
 
-    loginAs(test, 'docketclerk@example.com');
-    docketClerkSetsCaseReadyForTrial(test);
+    loginAs(integrationTest, 'docketclerk@example.com');
+    docketClerkSetsCaseReadyForTrial(integrationTest);
   }
 
-  docketClerkOpensCaseConsolidateModal(test);
-  docketClerkSearchesForCaseToConsolidateWith(test);
-  docketClerkConsolidatesCases(test);
+  docketClerkOpensCaseConsolidateModal(integrationTest);
+  docketClerkSearchesForCaseToConsolidateWith(integrationTest);
+  docketClerkConsolidatesCases(integrationTest);
 
-  loginAs(test, 'privatePractitioner@example.com');
-  privatePractitionerViewsOpenConsolidatedCases(test);
+  loginAs(integrationTest, 'privatePractitioner@example.com');
+  privatePractitionerViewsOpenConsolidatedCases(integrationTest);
 });

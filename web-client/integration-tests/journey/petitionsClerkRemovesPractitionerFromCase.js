@@ -1,29 +1,39 @@
-export const petitionsClerkRemovesPractitionerFromCase = test => {
+export const petitionsClerkRemovesPractitionerFromCase = integrationTest => {
   return it('Petitions clerk removes a practitioner from a case', async () => {
-    expect(test.getState('caseDetail.privatePractitioners').length).toEqual(2);
+    expect(
+      integrationTest.getState('caseDetail.privatePractitioners').length,
+    ).toEqual(2);
 
-    const barNumber = test.getState(
+    const barNumber = integrationTest.getState(
       'caseDetail.privatePractitioners.0.barNumber',
     );
 
-    await test.runSequence('gotoEditPetitionerCounselSequence', {
+    await integrationTest.runSequence('gotoEditPetitionerCounselSequence', {
       barNumber,
-      docketNumber: test.docketNumber,
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('currentPage')).toEqual('EditPetitionerCounsel');
+    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'EditPetitionerCounsel',
+    );
 
-    await test.runSequence('openRemovePetitionerCounselModalSequence');
+    await integrationTest.runSequence(
+      'openRemovePetitionerCounselModalSequence',
+    );
 
-    expect(test.getState('modal.showModal')).toEqual(
+    expect(integrationTest.getState('modal.showModal')).toEqual(
       'RemovePetitionerCounselModal',
     );
 
-    await test.runSequence('removePetitionerCounselFromCaseSequence');
+    await integrationTest.runSequence(
+      'removePetitionerCounselFromCaseSequence',
+    );
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('caseDetail.privatePractitioners').length).toEqual(1);
+    expect(
+      integrationTest.getState('caseDetail.privatePractitioners').length,
+    ).toEqual(1);
   });
 };

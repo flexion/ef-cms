@@ -12,7 +12,7 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('case inventory report journey', () => {
   beforeAll(() => {
@@ -20,7 +20,7 @@ describe('case inventory report journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
   const initialCaseInventoryCounts = {};
@@ -28,16 +28,16 @@ describe('case inventory report journey', () => {
   // eslint-disable-next-line @miovision/disallow-date/no-static-date
   const trialLocation = `Indianapolis, Indiana, ${Date.now()}`;
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
   it('cache the initial case inventory counts', async () => {
-    await test.runSequence('openCaseInventoryReportModalSequence');
+    await integrationTest.runSequence('openCaseInventoryReportModalSequence');
 
     const caseInventoryReportHelper = withAppContextDecorator(
       caseInventoryReportHelperComputed,
     );
 
     const helper = runCompute(caseInventoryReportHelper, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     const legacyJudge = helper.judges.find(
@@ -47,154 +47,154 @@ describe('case inventory report journey', () => {
     expect(legacyJudge).toBeFalsy();
 
     //New
-    await test.runSequence('updateScreenMetadataSequence', {
+    await integrationTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
       value: CASE_STATUS_TYPES.new,
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    initialCaseInventoryCounts.new = test.getState(
+    await integrationTest.runSequence('submitCaseInventoryReportModalSequence');
+    initialCaseInventoryCounts.new = integrationTest.getState(
       'caseInventoryReportData.totalCount',
     );
     //New, Judge Colvin
-    await test.runSequence('updateScreenMetadataSequence', {
+    await integrationTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: 'Colvin',
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    initialCaseInventoryCounts.newColvin = test.getState(
+    await integrationTest.runSequence('submitCaseInventoryReportModalSequence');
+    initialCaseInventoryCounts.newColvin = integrationTest.getState(
       'caseInventoryReportData.totalCount',
     );
     //Calendared, Judge Colvin
-    await test.runSequence('updateScreenMetadataSequence', {
+    await integrationTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
       value: CASE_STATUS_TYPES.calendared,
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    initialCaseInventoryCounts.calendaredColvin = test.getState(
+    await integrationTest.runSequence('submitCaseInventoryReportModalSequence');
+    initialCaseInventoryCounts.calendaredColvin = integrationTest.getState(
       'caseInventoryReportData.totalCount',
     );
     //Calendared
-    await test.runSequence('updateScreenMetadataSequence', {
+    await integrationTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: '',
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    initialCaseInventoryCounts.calendared = test.getState(
+    await integrationTest.runSequence('submitCaseInventoryReportModalSequence');
+    initialCaseInventoryCounts.calendared = integrationTest.getState(
       'caseInventoryReportData.totalCount',
     );
     //Judge Colvin
-    await test.runSequence('updateScreenMetadataSequence', {
+    await integrationTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: 'Colvin',
     });
-    await test.runSequence('updateScreenMetadataSequence', {
+    await integrationTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
       value: '',
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    initialCaseInventoryCounts.colvin = test.getState(
+    await integrationTest.runSequence('submitCaseInventoryReportModalSequence');
+    initialCaseInventoryCounts.colvin = integrationTest.getState(
       'caseInventoryReportData.totalCount',
     );
   });
 
   //Create a trial session and set as calendared
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, {
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(integrationTest, {
     judge: {
       name: 'Judge Colvin',
       userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     },
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(test);
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkSetsATrialSessionsSchedule(test);
+  docketClerkViewsTrialSessionList(integrationTest);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkSetsATrialSessionsSchedule(integrationTest);
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   for (let i = 0; i < 2; i++) {
     it(`create case ${i + 1}`, async () => {
-      const caseDetail = await uploadPetition(test);
+      const caseDetail = await uploadPetition(integrationTest);
       expect(caseDetail.docketNumber).toBeDefined();
       createdDocketNumbers.push(caseDetail.docketNumber);
     });
   }
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
   it('manually add first case to the trial session', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: createdDocketNumbers[0],
     });
-    await test.runSequence('openAddToTrialModalSequence');
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('openAddToTrialModalSequence');
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'trialSessionId',
-      value: test.trialSessionId,
+      value: integrationTest.trialSessionId,
     });
-    await test.runSequence('addCaseToTrialSessionSequence');
+    await integrationTest.runSequence('addCaseToTrialSessionSequence');
   });
 
   it('get the updated case inventory counts', async () => {
     await refreshElasticsearchIndex();
 
     //New (+1 from initial)
-    await test.runSequence('openCaseInventoryReportModalSequence');
-    await test.runSequence('updateScreenMetadataSequence', {
+    await integrationTest.runSequence('openCaseInventoryReportModalSequence');
+    await integrationTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
       value: CASE_STATUS_TYPES.new,
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    let updatedCaseInventoryCount = test.getState(
+    await integrationTest.runSequence('submitCaseInventoryReportModalSequence');
+    let updatedCaseInventoryCount = integrationTest.getState(
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
       initialCaseInventoryCounts.new + 1,
     );
     //New, Judge Colvin (same as initial)
-    await test.runSequence('updateScreenMetadataSequence', {
+    await integrationTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: 'Colvin',
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    updatedCaseInventoryCount = test.getState(
+    await integrationTest.runSequence('submitCaseInventoryReportModalSequence');
+    updatedCaseInventoryCount = integrationTest.getState(
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
       initialCaseInventoryCounts.newColvin,
     );
     //Calendared, Judge Colvin (+1 from initial)
-    await test.runSequence('updateScreenMetadataSequence', {
+    await integrationTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
       value: CASE_STATUS_TYPES.calendared,
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    updatedCaseInventoryCount = test.getState(
+    await integrationTest.runSequence('submitCaseInventoryReportModalSequence');
+    updatedCaseInventoryCount = integrationTest.getState(
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
       initialCaseInventoryCounts.calendaredColvin + 1,
     );
     //Calendared (+1 from initial)
-    await test.runSequence('updateScreenMetadataSequence', {
+    await integrationTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: '',
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    updatedCaseInventoryCount = test.getState(
+    await integrationTest.runSequence('submitCaseInventoryReportModalSequence');
+    updatedCaseInventoryCount = integrationTest.getState(
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
       initialCaseInventoryCounts.calendared + 1,
     );
     //Judge Colvin (+1 from initial)
-    await test.runSequence('updateScreenMetadataSequence', {
+    await integrationTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: 'Colvin',
     });
-    await test.runSequence('updateScreenMetadataSequence', {
+    await integrationTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
       value: '',
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    updatedCaseInventoryCount = test.getState(
+    await integrationTest.runSequence('submitCaseInventoryReportModalSequence');
+    updatedCaseInventoryCount = integrationTest.getState(
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
@@ -203,6 +203,8 @@ describe('case inventory report journey', () => {
   });
 
   it('view the printable report', async () => {
-    await test.runSequence('gotoPrintableCaseInventoryReportSequence');
+    await integrationTest.runSequence(
+      'gotoPrintableCaseInventoryReportSequence',
+    );
   });
 });

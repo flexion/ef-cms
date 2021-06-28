@@ -9,7 +9,7 @@ import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsCaseDetailAfterFilingDocument } from './journey/petitionerViewsCaseDetailAfterFilingDocument';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('petitioner files document', () => {
   beforeAll(() => {
@@ -17,17 +17,17 @@ describe('petitioner files document', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerCancelsCreateCase(test);
-  petitionerChoosesProcedureType(test);
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
-  petitionerViewsDashboard(test);
-  petitionerViewsCaseDetail(test);
-  petitionerFilesDocumentForCase(test, fakeFile);
-  petitionerViewsCaseDetailAfterFilingDocument(test);
-  petitionerFilesAmendedMotion(test, fakeFile);
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerCancelsCreateCase(integrationTest);
+  petitionerChoosesProcedureType(integrationTest);
+  petitionerChoosesCaseType(integrationTest);
+  petitionerCreatesNewCase(integrationTest, fakeFile);
+  petitionerViewsDashboard(integrationTest);
+  petitionerViewsCaseDetail(integrationTest);
+  petitionerFilesDocumentForCase(integrationTest, fakeFile);
+  petitionerViewsCaseDetailAfterFilingDocument(integrationTest);
+  petitionerFilesAmendedMotion(integrationTest, fakeFile);
 });

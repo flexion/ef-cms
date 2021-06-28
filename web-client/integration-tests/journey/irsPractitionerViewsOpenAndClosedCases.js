@@ -1,9 +1,11 @@
-export const irsPractitionerViewsOpenAndClosedCases = test => {
+export const irsPractitionerViewsOpenAndClosedCases = integrationTest => {
   return it('irs practitoner views open and closed cases', async () => {
-    await test.runSequence('gotoDashboardSequence');
+    await integrationTest.runSequence('gotoDashboardSequence');
 
-    expect(test.getState('currentPage')).toEqual('DashboardRespondent');
-    expect(test.getState('openCases').length).toBeGreaterThan(0);
-    expect(test.getState('closedCases').length).toBeGreaterThan(0);
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'DashboardRespondent',
+    );
+    expect(integrationTest.getState('openCases').length).toBeGreaterThan(0);
+    expect(integrationTest.getState('closedCases').length).toBeGreaterThan(0);
   });
 };

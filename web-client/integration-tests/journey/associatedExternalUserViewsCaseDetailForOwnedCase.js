@@ -8,22 +8,25 @@ const caseDetailHeaderHelper = withAppContextDecorator(
   caseDetailHeaderHelperComputed,
 );
 
-export const associatedExternalUserViewsCaseDetailForOwnedCase = test => {
-  return it('associated external user views case detail for owned case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+export const associatedExternalUserViewsCaseDetailForOwnedCase =
+  integrationTest => {
+    return it('associated external user views case detail for owned case', async () => {
+      await integrationTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: integrationTest.docketNumber,
+      });
 
-    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
+      expect(integrationTest.getState('caseDetail.docketNumber')).toEqual(
+        integrationTest.docketNumber,
+      );
 
-    const helper = runCompute(caseDetailHelper, {
-      state: test.getState(),
-    });
-    expect(helper.showPetitionProcessingAlert).toBeFalsy();
+      const helper = runCompute(caseDetailHelper, {
+        state: integrationTest.getState(),
+      });
+      expect(helper.showPetitionProcessingAlert).toBeFalsy();
 
-    const headerHelper = runCompute(caseDetailHeaderHelper, {
-      state: test.getState(),
+      const headerHelper = runCompute(caseDetailHeaderHelper, {
+        state: integrationTest.getState(),
+      });
+      expect(headerHelper.showExternalButtons).toBeTruthy();
     });
-    expect(headerHelper.showExternalButtons).toBeTruthy();
-  });
-};
+  };

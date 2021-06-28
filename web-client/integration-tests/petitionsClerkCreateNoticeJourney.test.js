@@ -5,27 +5,27 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { petitionsClerkViewsCaseDetailAfterAddingNotice } from './journey/petitionsClerkViewsCaseDetailAfterAddingNotice';
 import { petitionsClerkViewsDraftDocumentsForNotice } from './journey/petitionsClerkViewsDraftDocumentsForNotice';
 
-const test = setupTest();
+const integrationTest = setupTest();
 describe('Petitions Clerk Create Notice Journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkAddsNoticeToCase(test);
-  petitionsClerkViewsCaseDetailAfterAddingNotice(test, 4);
-  petitionsClerkViewsDraftDocumentsForNotice(test, 1);
-  petitionsClerkAddsDocketEntryFromOrder(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(integrationTest);
+  petitionsClerkAddsNoticeToCase(integrationTest);
+  petitionsClerkViewsCaseDetailAfterAddingNotice(integrationTest, 4);
+  petitionsClerkViewsDraftDocumentsForNotice(integrationTest, 1);
+  petitionsClerkAddsDocketEntryFromOrder(integrationTest);
 });

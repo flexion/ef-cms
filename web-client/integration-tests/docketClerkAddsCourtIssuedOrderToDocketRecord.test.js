@@ -22,8 +22,8 @@ import { petitionsClerkViewsDocketEntry } from './journey/petitionsClerkViewsDoc
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
 const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   beforeAll(() => {
@@ -31,63 +31,63 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(test, {
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkCreatesAnOrder(test, {
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order of Dismissal',
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test, 5);
-  petitionsClerkViewsDraftOrder(test, 0);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(integrationTest, 5);
+  petitionsClerkViewsDraftOrder(integrationTest, 0);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsDraftOrder(test, 0);
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeA(test, 0);
-  docketClerkConvertsAnOrderToAnOpinion(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeC(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeD(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeE(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeF(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeG(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeH(test, 0);
-  docketClerkViewsDraftOrder(test, 1);
-  docketClerkCancelsAddDocketEntryFromOrder(test, 1);
-  docketClerkViewsDraftOrder(test, 1);
-  docketClerkSignsOrder(test, 1);
-  docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
-  docketClerkViewsSavedCourtIssuedDocketEntryInProgress(test, 1);
-  docketClerkCreatesAnOrder(test, {
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkViewsDraftOrder(integrationTest, 0);
+  docketClerkSignsOrder(integrationTest, 0);
+  docketClerkAddsDocketEntryFromOrder(integrationTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeA(integrationTest, 0);
+  docketClerkConvertsAnOrderToAnOpinion(integrationTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeC(integrationTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeD(integrationTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeE(integrationTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeF(integrationTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeG(integrationTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeH(integrationTest, 0);
+  docketClerkViewsDraftOrder(integrationTest, 1);
+  docketClerkCancelsAddDocketEntryFromOrder(integrationTest, 1);
+  docketClerkViewsDraftOrder(integrationTest, 1);
+  docketClerkSignsOrder(integrationTest, 1);
+  docketClerkAddsDocketEntryFromOrderOfDismissal(integrationTest, 1);
+  docketClerkViewsSavedCourtIssuedDocketEntryInProgress(integrationTest, 1);
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(test, 2);
-  docketClerkAddsDocketEntryFromOrderWithDate(test, 2);
+  docketClerkSignsOrder(integrationTest, 2);
+  docketClerkAddsDocketEntryFromOrderWithDate(integrationTest, 2);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsDocketEntry(test, 1);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsDocketEntry(integrationTest, 1);
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerViewsCaseDetail(test, {
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerViewsCaseDetail(integrationTest, {
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
     documentCount: 5,
   });

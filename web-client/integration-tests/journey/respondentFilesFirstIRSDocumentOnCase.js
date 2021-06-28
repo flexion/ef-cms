@@ -10,31 +10,36 @@ const caseDetailHeaderHelper = withAppContextDecorator(
 );
 const fileDocumentHelper = withAppContextDecorator(fileDocumentHelperComputed);
 
-export const respondentFilesFirstIRSDocumentOnCase = (test, fakeFile) => {
+export const respondentFilesFirstIRSDocumentOnCase = (
+  integrationTest,
+  fakeFile,
+) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('Respondent files first IRS document on a case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
     const headerHelper = runCompute(caseDetailHeaderHelper, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     expect(headerHelper.showFileFirstDocumentButton).toBeTruthy();
 
-    await test.runSequence('gotoFileDocumentSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
     const fileDocHelper = runCompute(fileDocumentHelper, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     expect(fileDocHelper.showSecondaryParty).toBeTruthy();
 
-    expect(contactSecondaryFromState(test).name).toEqual('Jimothy Schultz');
+    expect(contactSecondaryFromState(integrationTest).name).toEqual(
+      'Jimothy Schultz',
+    );
 
     const documentToSelect = {
       category: 'Answer (filed by respondent only)',
@@ -45,68 +50,100 @@ export const respondentFilesFirstIRSDocumentOnCase = (test, fakeFile) => {
     };
 
     for (const key of Object.keys(documentToSelect)) {
-      await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-        key,
-        value: documentToSelect[key],
-      });
+      await integrationTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value: documentToSelect[key],
+        },
+      );
     }
 
-    await test.runSequence('validateSelectDocumentTypeSequence');
+    await integrationTest.runSequence('validateSelectDocumentTypeSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('completeDocumentSelectSequence');
+    await integrationTest.runSequence('completeDocumentSelectSequence');
 
-    expect(test.getState('form.documentType')).toEqual('Answer');
+    expect(integrationTest.getState('form.documentType')).toEqual('Answer');
 
-    expect(test.getState('form.partyPrimary')).toEqual(undefined);
+    expect(integrationTest.getState('form.partyPrimary')).toEqual(undefined);
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'certificateOfService',
-      value: true,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'certificateOfService',
+        value: true,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'hasSupportingDocuments',
-      value: false,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'hasSupportingDocuments',
+        value: false,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'attachments',
-      value: false,
-    });
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'objections',
-      value: OBJECTIONS_OPTIONS_MAP.NO,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'attachments',
+        value: false,
+      },
+    );
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'objections',
+        value: OBJECTIONS_OPTIONS_MAP.NO,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'certificateOfServiceMonth',
-      value: '12',
-    });
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'certificateOfServiceDay',
-      value: '12',
-    });
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'certificateOfServiceYear',
-      value: '2000',
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'certificateOfServiceMonth',
+        value: '12',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'certificateOfServiceDay',
+        value: '12',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'certificateOfServiceYear',
+        value: '2000',
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'primaryDocumentFile',
+        value: fakeFile,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'partyIrsPractitioner',
-      value: true,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'partyIrsPractitioner',
+        value: true,
+      },
+    );
 
-    await test.runSequence('reviewExternalDocumentInformationSequence');
+    await integrationTest.runSequence(
+      'reviewExternalDocumentInformationSequence',
+    );
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('submitExternalDocumentSequence');
+    await integrationTest.runSequence('submitExternalDocumentSequence');
   });
 };

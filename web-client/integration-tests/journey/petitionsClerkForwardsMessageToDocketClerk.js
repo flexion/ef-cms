@@ -1,57 +1,60 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const petitionsClerkForwardsMessageToDocketClerk = test => {
+export const petitionsClerkForwardsMessageToDocketClerk = integrationTest => {
   const { DOCKET_SECTION } = applicationContext.getConstants();
 
   return it('petitions clerk forwards the message to docket clerk', async () => {
-    await test.runSequence('openForwardMessageModalSequence');
+    await integrationTest.runSequence('openForwardMessageModalSequence');
 
-    expect(test.getState('modal.form')).toMatchObject({
-      parentMessageId: test.parentMessageId,
-      subject: test.testMessageSubject,
+    expect(integrationTest.getState('modal.form')).toMatchObject({
+      parentMessageId: integrationTest.parentMessageId,
+      subject: integrationTest.testMessageSubject,
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'form.message',
       value: 'Four years of malfeasance unreported. This cannot stand.',
     });
 
-    await test.runSequence('forwardMessageSequence');
+    await integrationTest.runSequence('forwardMessageSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       toSection: expect.anything(),
       toUserId: expect.anything(),
     });
 
-    await test.runSequence('updateSectionInCreateMessageModalSequence', {
-      key: 'toSection',
-      value: DOCKET_SECTION,
-    });
+    await integrationTest.runSequence(
+      'updateSectionInCreateMessageModalSequence',
+      {
+        key: 'toSection',
+        value: DOCKET_SECTION,
+      },
+    );
 
-    await test.runSequence('updateModalFormValueSequence', {
+    await integrationTest.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
       value: '1805d1ab-18d0-43ec-bafb-654e83405416', //docketclerk
     });
 
-    await test.runSequence('forwardMessageSequence');
+    await integrationTest.runSequence('forwardMessageSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('messageDetail').length).toEqual(3);
+    expect(integrationTest.getState('messageDetail').length).toEqual(3);
 
     await refreshElasticsearchIndex();
 
     //message should no longer be shown in inbox
-    await test.runSequence('gotoMessagesSequence', {
+    await integrationTest.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });
 
-    const messages = test.getState('messages');
+    const messages = integrationTest.getState('messages');
 
     const foundMessage = messages.find(
-      message => message.subject === test.testMessageSubject,
+      message => message.subject === integrationTest.testMessageSubject,
     );
 
     expect(foundMessage).not.toBeDefined();

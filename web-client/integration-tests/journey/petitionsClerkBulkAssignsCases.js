@@ -4,10 +4,13 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-export const petitionsClerkBulkAssignsCases = (test, createdCases) => {
+export const petitionsClerkBulkAssignsCases = (
+  integrationTest,
+  createdCases,
+) => {
   return it('Petitions clerk bulk assigns cases', async () => {
     const workQueueFormatted = await runCompute(formattedWorkQueue, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     const selectedWorkItems = createdCases.map(newCase => {
@@ -20,13 +23,15 @@ export const petitionsClerkBulkAssignsCases = (test, createdCases) => {
       };
     });
 
-    const currentUserId = test.getState('user').userId;
+    const currentUserId = integrationTest.getState('user').userId;
 
-    test.setState('assigneeId', currentUserId);
-    test.setState('assigneeName', 'Petitions Clerk1');
-    test.setState('selectedWorkItems', selectedWorkItems);
+    integrationTest.setState('assigneeId', currentUserId);
+    integrationTest.setState('assigneeName', 'Petitions Clerk1');
+    integrationTest.setState('selectedWorkItems', selectedWorkItems);
 
-    const result = await test.runSequence('assignSelectedWorkItemsSequence');
+    const result = await integrationTest.runSequence(
+      'assignSelectedWorkItemsSequence',
+    );
 
     const { workQueue } = result.state;
     selectedWorkItems.forEach(assignedWorkItem => {

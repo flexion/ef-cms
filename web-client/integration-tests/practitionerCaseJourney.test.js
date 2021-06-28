@@ -25,7 +25,7 @@ import { practitionerViewsCaseDetailWithPublicOrder } from './journey/practition
 import { practitionerViewsDashboard } from './journey/practitionerViewsDashboard';
 import { practitionerViewsDashboardBeforeAddingCase } from './journey/practitionerViewsDashboardBeforeAddingCase';
 
-const test = setupTest();
+const integrationTest = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Practitioner requests access to case', () => {
@@ -34,28 +34,28 @@ describe('Practitioner requests access to case', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
   //tests for practitioner starting a new case
-  loginAs(test, 'privatePractitioner@example.com');
-  practitionerCreatesNewCase(test, fakeFile);
-  practitionerViewsCaseDetailOfOwnedCase(test);
+  loginAs(integrationTest, 'privatePractitioner@example.com');
+  practitionerCreatesNewCase(integrationTest, fakeFile);
+  practitionerViewsCaseDetailOfOwnedCase(integrationTest);
 
   // verify petition filed by private practitioner can be found in petitions Section Document QC
-  loginAs(test, 'petitionsclerk@example.com');
+  loginAs(integrationTest, 'petitionsclerk@example.com');
   it('Petitions clerk views Section Document QC', async () => {
-    await test.runSequence('navigateToPathSequence', {
+    await integrationTest.runSequence('navigateToPathSequence', {
       path: '/document-qc/section/inbox',
     });
-    const workQueueToDisplay = test.getState('workQueueToDisplay');
+    const workQueueToDisplay = integrationTest.getState('workQueueToDisplay');
 
     expect(workQueueToDisplay.queue).toEqual('section');
     expect(workQueueToDisplay.box).toEqual('inbox');
 
-    const inbox = await getFormattedDocumentQCSectionInbox(test);
+    const inbox = await getFormattedDocumentQCSectionInbox(integrationTest);
     const found = inbox.find(
-      workItem => workItem.docketNumber === test.docketNumber,
+      workItem => workItem.docketNumber === integrationTest.docketNumber,
     );
 
     expect(found).toBeTruthy();
@@ -63,9 +63,9 @@ describe('Practitioner requests access to case', () => {
 
   //tests for practitioner requesting access to existing case
   //petitioner must first create a case for practitioner to request access to
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create test case #1', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(integrationTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -78,24 +78,24 @@ describe('Practitioner requests access to case', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'privatePractitioner@example.com');
-  practitionerSearchesForNonexistentCase(test);
-  practitionerViewsDashboardBeforeAddingCase(test);
-  practitionerSearchesForCase(test);
-  practitionerViewsCaseDetail(test, false);
-  practitionerRequestsAccessToCase(test, fakeFile);
-  practitionerViewsDashboard(test);
-  practitionerViewsCaseDetailOfOwnedCase(test);
-  practitionerFilesDocumentForOwnedCase(test, fakeFile);
+  loginAs(integrationTest, 'privatePractitioner@example.com');
+  practitionerSearchesForNonexistentCase(integrationTest);
+  practitionerViewsDashboardBeforeAddingCase(integrationTest);
+  practitionerSearchesForCase(integrationTest);
+  practitionerViewsCaseDetail(integrationTest, false);
+  practitionerRequestsAccessToCase(integrationTest, fakeFile);
+  practitionerViewsDashboard(integrationTest);
+  practitionerViewsCaseDetailOfOwnedCase(integrationTest);
+  practitionerFilesDocumentForOwnedCase(integrationTest, fakeFile);
 
   //tests for practitioner requesting access to existing case
   //petitioner must first create a case for practitioner to request access to
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create test case #2', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(integrationTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -108,28 +108,28 @@ describe('Practitioner requests access to case', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
   // create and serve an order that the privatePractitioner
   // should be able to view even when they are not associated with the case
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreateOrder(test);
-  petitionsClerkSignsOrder(test);
-  petitionsClerkAddsDocketEntryFromOrder(test);
-  petitionsClerkServesOrder(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkCreateOrder(integrationTest);
+  petitionsClerkSignsOrder(integrationTest);
+  petitionsClerkAddsDocketEntryFromOrder(integrationTest);
+  petitionsClerkServesOrder(integrationTest);
 
-  loginAs(test, 'privatePractitioner@example.com');
-  practitionerSearchesForCase(test);
-  practitionerViewsCaseDetailWithPublicOrder(test);
-  practitionerRequestsPendingAccessToCase(test, fakeFile);
-  practitionerViewsCaseDetailOfPendingCase(test);
+  loginAs(integrationTest, 'privatePractitioner@example.com');
+  practitionerSearchesForCase(integrationTest);
+  practitionerViewsCaseDetailWithPublicOrder(integrationTest);
+  practitionerRequestsPendingAccessToCase(integrationTest, fakeFile);
+  practitionerViewsCaseDetailOfPendingCase(integrationTest);
 
-  loginAs(test, 'irsPractitioner@example.com');
-  irsPractitionerViewsPetitionerInfoForUnassociatedCase(test);
+  loginAs(integrationTest, 'irsPractitioner@example.com');
+  irsPractitionerViewsPetitionerInfoForUnassociatedCase(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkSealsCase(test);
-  loginAs(test, 'irsPractitioner@example.com');
-  irsPractitionerViewsPetitionerInfoForUnassociatedCase(test, true); // passing flag for isSealed
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkSealsCase(integrationTest);
+  loginAs(integrationTest, 'irsPractitioner@example.com');
+  irsPractitionerViewsPetitionerInfoForUnassociatedCase(integrationTest, true); // passing flag for isSealed
 });

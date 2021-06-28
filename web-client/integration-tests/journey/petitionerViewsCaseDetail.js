@@ -6,28 +6,28 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
-export const petitionerViewsCaseDetail = (test, overrides = {}) => {
+export const petitionerViewsCaseDetail = (integrationTest, overrides = {}) => {
   return it('petitioner views case detail', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const documentCount = overrides.documentCount || 2;
     const docketNumberSuffix =
       overrides.docketNumberSuffix || DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
 
-    const caseDetail = test.getState('caseDetail');
+    const caseDetail = integrationTest.getState('caseDetail');
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: integrationTest.getState(),
       },
     );
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(caseDetail.docketNumber).toEqual(test.docketNumber);
+    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(caseDetail.docketNumber).toEqual(integrationTest.docketNumber);
     expect(caseDetail.docketNumberSuffix).toEqual(docketNumberSuffix);
     expect(caseDetailFormatted.docketNumberWithSuffix).toEqual(
-      `${test.docketNumber}${docketNumberSuffix}`,
+      `${integrationTest.docketNumber}${docketNumberSuffix}`,
     );
     expect(caseDetail.docketEntries.length).toEqual(documentCount);
 

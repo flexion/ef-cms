@@ -1,48 +1,49 @@
 import { wait } from '../helpers';
 
-export const petitionsClerkSetsARemoteTrialSessionsSchedule = test => {
-  return it('Petitions Clerk Sets A Remote Trial Sessions Schedule', async () => {
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+export const petitionsClerkSetsARemoteTrialSessionsSchedule =
+  integrationTest => {
+    return it('Petitions Clerk Sets A Remote Trial Sessions Schedule', async () => {
+      await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: integrationTest.trialSessionId,
+      });
+      await integrationTest.runSequence('openSetCalendarModalSequence');
+
+      expect(integrationTest.getState('alertWarning.message')).toEqual(
+        'Provide remote proceeding information to set this trial session.',
+      );
+
+      await integrationTest.runSequence('gotoEditTrialSessionSequence', {
+        trialSessionId: integrationTest.trialSessionId,
+      });
+
+      await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+        key: 'meetingId',
+        value: '123456789',
+      });
+
+      await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+        key: 'password',
+        value: '123456789',
+      });
+
+      await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+        key: 'joinPhoneNumber',
+        value: '123456789',
+      });
+
+      await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+        key: 'chambersPhoneNumber',
+        value: '123456789',
+      });
+
+      await integrationTest.runSequence('updateTrialSessionSequence');
+
+      await integrationTest.runSequence('openSetCalendarModalSequence');
+
+      expect(integrationTest.getState('alertWarning.message')).toBeUndefined();
+
+      await integrationTest.runSequence('setTrialSessionCalendarSequence');
+
+      await wait(1000);
     });
-    await test.runSequence('openSetCalendarModalSequence');
-
-    expect(test.getState('alertWarning.message')).toEqual(
-      'Provide remote proceeding information to set this trial session.',
-    );
-
-    await test.runSequence('gotoEditTrialSessionSequence', {
-      trialSessionId: test.trialSessionId,
-    });
-
-    await test.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'meetingId',
-      value: '123456789',
-    });
-
-    await test.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'password',
-      value: '123456789',
-    });
-
-    await test.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'joinPhoneNumber',
-      value: '123456789',
-    });
-
-    await test.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'chambersPhoneNumber',
-      value: '123456789',
-    });
-
-    await test.runSequence('updateTrialSessionSequence');
-
-    await test.runSequence('openSetCalendarModalSequence');
-
-    expect(test.getState('alertWarning.message')).toBeUndefined();
-
-    await test.runSequence('setTrialSessionCalendarSequence');
-
-    await wait(1000);
-  });
-};
+  };

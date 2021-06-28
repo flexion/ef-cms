@@ -8,7 +8,7 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 const trialLocation = `Boise, Idaho, ${Date.now()}`;
 
@@ -23,29 +23,29 @@ describe('docket clerk update case journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
 
   it('create a case', async () => {
-    const caseDetail = await uploadPetition(test, overrides);
+    const caseDetail = await uploadPetition(integrationTest, overrides);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(test);
-  docketClerkCreatesATrialSession(test, overrides);
-  docketClerkViewsTrialSessionList(test);
-  docketClerkViewsEligibleCasesForTrialSession(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(integrationTest);
+  docketClerkCreatesATrialSession(integrationTest, overrides);
+  docketClerkViewsTrialSessionList(integrationTest);
+  docketClerkViewsEligibleCasesForTrialSession(integrationTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  markAllCasesAsQCed(test, () => [test.docketNumber]);
-  petitionsClerkSetsATrialSessionsSchedule(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  markAllCasesAsQCed(integrationTest, () => [integrationTest.docketNumber]);
+  petitionsClerkSetsATrialSessionsSchedule(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusFromCalendaredToSubmitted(test);
-  docketClerkViewsInactiveCasesForTrialSession(test);
-  docketClerkUpdatesCaseStatusToReadyForTrial(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusFromCalendaredToSubmitted(integrationTest);
+  docketClerkViewsInactiveCasesForTrialSession(integrationTest);
+  docketClerkUpdatesCaseStatusToReadyForTrial(integrationTest);
 });

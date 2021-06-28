@@ -32,7 +32,7 @@ import { petitionsClerkViewsRepliesAndCompletesMessageInInbox } from './journey/
 import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsReplyInInbox';
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
 
-const test = setupTest();
+const integrationTest = setupTest();
 const { PETITIONS_SECTION, STATUS_TYPES } = applicationContext.getConstants();
 
 describe('messages journey', () => {
@@ -41,96 +41,101 @@ describe('messages journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create test case to send messages', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
-    test.documentId = caseDetail.docketEntries[0].docketEntryId;
+    integrationTest.docketNumber = caseDetail.docketNumber;
+    integrationTest.documentId = caseDetail.docketEntries[0].docketEntryId;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
-  createNewMessageOnCase(test);
-  petitionsClerkViewsSentMessagesBox(test);
-  petitionsClerk1VerifiesCaseStatusOnMessage(test, STATUS_TYPES.new);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(integrationTest);
+  createNewMessageOnCase(integrationTest);
+  petitionsClerkViewsSentMessagesBox(integrationTest);
+  petitionsClerk1VerifiesCaseStatusOnMessage(integrationTest, STATUS_TYPES.new);
 
-  loginAs(test, 'docketclerk1@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(test);
+  loginAs(integrationTest, 'docketclerk1@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(integrationTest);
 
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerk1ViewsMessageInbox(test);
+  loginAs(integrationTest, 'petitionsclerk1@example.com');
+  petitionsClerk1ViewsMessageInbox(integrationTest);
   petitionsClerk1VerifiesCaseStatusOnMessage(
-    test,
+    integrationTest,
     STATUS_TYPES.generalDocketReadyForTrial,
   );
-  petitionsClerk1ViewsMessageDetail(test);
-  petitionsClerk1RepliesToMessage(test);
+  petitionsClerk1ViewsMessageDetail(integrationTest);
+  petitionsClerk1RepliesToMessage(integrationTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsReplyInInbox(test);
-  petitionsClerkCreatesOrderFromMessage(test);
-  petitionsClerkForwardsMessageToDocketClerk(test);
-  petitionsClerkViewsInProgressMessagesOnCaseDetail(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsReplyInInbox(integrationTest);
+  petitionsClerkCreatesOrderFromMessage(integrationTest);
+  petitionsClerkForwardsMessageToDocketClerk(integrationTest);
+  petitionsClerkViewsInProgressMessagesOnCaseDetail(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsForwardedMessageInInbox(test);
-  docketClerkEditsOrderFromMessage(test);
-  docketClerkAppliesSignatureFromMessage(test);
-  docketClerkRemovesSignatureFromMessage(test);
-  docketClerkAppliesSignatureFromMessage(test);
-  docketClerkAddsDocketEntryFromMessage(test);
-  docketClerkCompletesMessageThread(test);
-  docketClerkViewsCompletedMessagesOnCaseDetail(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkViewsForwardedMessageInInbox(integrationTest);
+  docketClerkEditsOrderFromMessage(integrationTest);
+  docketClerkAppliesSignatureFromMessage(integrationTest);
+  docketClerkRemovesSignatureFromMessage(integrationTest);
+  docketClerkAppliesSignatureFromMessage(integrationTest);
+  docketClerkAddsDocketEntryFromMessage(integrationTest);
+  docketClerkCompletesMessageThread(integrationTest);
+  docketClerkViewsCompletedMessagesOnCaseDetail(integrationTest);
 
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
-  createNewMessageOnCase(test);
-  petitionsClerk1ViewsMessageInbox(test);
-  petitionsClerk1ViewsMessageDetail(test);
-  petitionsClerk1CreatesNoticeFromMessageDetail(test);
+  loginAs(integrationTest, 'petitionsclerk1@example.com');
+  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(integrationTest);
+  createNewMessageOnCase(integrationTest);
+  petitionsClerk1ViewsMessageInbox(integrationTest);
+  petitionsClerk1ViewsMessageDetail(integrationTest);
+  petitionsClerk1CreatesNoticeFromMessageDetail(integrationTest);
 
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerkCreatesNewMessageOnCaseWithNoAttachments(test);
+  loginAs(integrationTest, 'petitionsclerk1@example.com');
+  petitionsClerkCreatesNewMessageOnCaseWithNoAttachments(integrationTest);
 
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerkForwardsMessageWithAttachment(test);
+  loginAs(integrationTest, 'petitionsclerk1@example.com');
+  petitionsClerkForwardsMessageWithAttachment(integrationTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  createNewMessageOnCase(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  createNewMessageOnCase(integrationTest);
 
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerkViewsRepliesAndCompletesMessageInInbox(test);
+  loginAs(integrationTest, 'petitionsclerk1@example.com');
+  petitionsClerkViewsRepliesAndCompletesMessageInInbox(integrationTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
+  loginAs(integrationTest, 'petitionsclerk@example.com');
   it('wait for ES index', async () => {
     await refreshElasticsearchIndex();
   });
-  petitionsClerkVerifiesCompletedMessageNotInInbox(test);
-  petitionsClerkVerifiesCompletedMessageNotInSection(test);
+  petitionsClerkVerifiesCompletedMessageNotInInbox(integrationTest);
+  petitionsClerkVerifiesCompletedMessageNotInSection(integrationTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
+  loginAs(integrationTest, 'petitionsclerk@example.com');
   it('attaches a document to a message with a very long title, which is truncated in the subject', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('openCreateMessageModalSequence');
+    await integrationTest.runSequence('openCreateMessageModalSequence');
 
-    await test.runSequence('updateSectionInCreateMessageModalSequence', {
-      key: 'toSection',
-      value: PETITIONS_SECTION,
-    });
+    await integrationTest.runSequence(
+      'updateSectionInCreateMessageModalSequence',
+      {
+        key: 'toSection',
+        value: PETITIONS_SECTION,
+      },
+    );
 
-    await test.runSequence('updateModalFormValueSequence', {
+    await integrationTest.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
       value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
     });
 
-    const currentDocketEntries = test.getState('caseDetail.docketEntries');
+    const currentDocketEntries = integrationTest.getState(
+      'caseDetail.docketEntries',
+    );
     const longDocumentTitle = getTextByCount(255);
 
     const docketEntryWithLongTitle = {
@@ -159,20 +164,20 @@ describe('messages journey', () => {
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     };
 
-    test.setState('caseDetail.docketEntries', [
+    integrationTest.setState('caseDetail.docketEntries', [
       ...currentDocketEntries,
       docketEntryWithLongTitle,
     ]);
 
-    await test.runSequence('updateMessageModalAttachmentsSequence', {
+    await integrationTest.runSequence('updateMessageModalAttachmentsSequence', {
       documentId: docketEntryWithLongTitle.docketEntryId,
     });
 
-    expect(test.getState('modal.form.subject').length).toEqual(250);
-    expect(test.getState('modal.form.subject')).toEqual(
+    expect(integrationTest.getState('modal.form.subject').length).toEqual(250);
+    expect(integrationTest.getState('modal.form.subject')).toEqual(
       longDocumentTitle.slice(0, 250),
     );
 
-    await test.runSequence('clearModalFormSequence');
+    await integrationTest.runSequence('clearModalFormSequence');
   });
 });

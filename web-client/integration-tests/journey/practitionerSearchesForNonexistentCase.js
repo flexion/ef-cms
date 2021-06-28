@@ -1,9 +1,11 @@
-export const practitionerSearchesForNonexistentCase = test => {
+export const practitionerSearchesForNonexistentCase = integrationTest => {
   return it('Practitioner searches for nonexistent case', async () => {
-    await test.runSequence('updateSearchTermSequence', {
+    await integrationTest.runSequence('updateSearchTermSequence', {
       searchTerm: '999-99',
     });
-    await test.runSequence('submitCaseSearchSequence');
-    expect(test.getState('currentPage')).toEqual('CaseSearchNoMatches');
+    await integrationTest.runSequence('submitCaseSearchSequence');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseSearchNoMatches',
+    );
   });
 };

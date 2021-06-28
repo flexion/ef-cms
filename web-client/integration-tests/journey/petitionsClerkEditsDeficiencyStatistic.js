@@ -1,23 +1,23 @@
-export const petitionsClerkEditsDeficiencyStatistic = test => {
+export const petitionsClerkEditsDeficiencyStatistic = integrationTest => {
   return it('petitions clerk edits deficiency statistic on case', async () => {
-    const statistics = test.getState('caseDetail.statistics');
+    const statistics = integrationTest.getState('caseDetail.statistics');
 
     const { statisticId } = statistics[0];
 
-    await test.runSequence('gotoEditDeficiencyStatisticSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoEditDeficiencyStatisticSequence', {
+      docketNumber: integrationTest.docketNumber,
       statisticId,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'irsDeficiencyAmount',
       value: 1000,
     });
 
-    await test.runSequence('submitEditDeficiencyStatisticSequence');
+    await integrationTest.runSequence('submitEditDeficiencyStatisticSequence');
 
     expect(
-      test.getState('caseDetail.statistics')[0].irsDeficiencyAmount,
+      integrationTest.getState('caseDetail.statistics')[0].irsDeficiencyAmount,
     ).toEqual(1000);
   });
 };

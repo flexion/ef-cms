@@ -1,14 +1,14 @@
 import { getUserRecordById } from '../helpers';
 
-export const userVerifiesUpdatedEmailAddress = (test, user) =>
+export const userVerifiesUpdatedEmailAddress = (integrationTest, user) =>
   it(`${user} verifies updated email address`, async () => {
-    const userFromState = test.getState('user');
+    const userFromState = integrationTest.getState('user');
     const userFromPersistence = await getUserRecordById(userFromState.userId);
 
     const emailVerificationToken =
       userFromPersistence.pendingEmailVerificationToken;
 
-    await test.runSequence('navigateToPathSequence', {
+    await integrationTest.runSequence('navigateToPathSequence', {
       path: `/verify-email?token=${emailVerificationToken}`,
     });
 

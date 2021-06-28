@@ -1,14 +1,18 @@
-export const petitionsClerkDeletesOtherStatisticToCase = test => {
+export const petitionsClerkDeletesOtherStatisticToCase = integrationTest => {
   return it('petitions clerk deletes other statistic on the case', async () => {
-    await test.runSequence('gotoEditOtherStatisticsSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoEditOtherStatisticsSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    expect(test.getState('caseDetail.damages')).toBeDefined();
-    expect(test.getState('caseDetail.litigationCosts')).toBeDefined();
+    expect(integrationTest.getState('caseDetail.damages')).toBeDefined();
+    expect(
+      integrationTest.getState('caseDetail.litigationCosts'),
+    ).toBeDefined();
 
-    await test.runSequence('deleteOtherStatisticsSequence');
+    await integrationTest.runSequence('deleteOtherStatisticsSequence');
 
-    expect(test.getState('caseDetail.litigationCosts')).toEqual(null);
-    expect(test.getState('caseDetail.damages')).toEqual(null);
+    expect(integrationTest.getState('caseDetail.litigationCosts')).toEqual(
+      null,
+    );
+    expect(integrationTest.getState('caseDetail.damages')).toEqual(null);
   });
 };

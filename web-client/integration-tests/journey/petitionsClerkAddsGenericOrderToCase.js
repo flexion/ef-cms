@@ -4,60 +4,68 @@ import { first } from 'lodash';
 
 const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
-export const petitionsClerkAddsGenericOrderToCase = test => {
+export const petitionsClerkAddsGenericOrderToCase = integrationTest => {
   return it('Petitions clerk adds a generic Order (eventCode O) to case', async () => {
-    await test.runSequence('openCreateOrderChooseTypeModalSequence');
+    await integrationTest.runSequence('openCreateOrderChooseTypeModalSequence');
 
-    await test.runSequence('submitCreateOrderModalSequence');
+    await integrationTest.runSequence('submitCreateOrderModalSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       documentTitle: errorMessages.documentTitle[0].message,
       documentType: errorMessages.documentType,
       eventCode: errorMessages.eventCode,
     });
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
-      key: 'eventCode',
-      value: 'O',
-    });
+    await integrationTest.runSequence(
+      'updateCreateOrderModalFormValueSequence',
+      {
+        key: 'eventCode',
+        value: 'O',
+      },
+    );
 
-    expect(test.getState('modal.documentType')).toEqual('Order');
+    expect(integrationTest.getState('modal.documentType')).toEqual('Order');
 
-    test.freeText = 'Order to keep the free text';
+    integrationTest.freeText = 'Order to keep the free text';
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
-      key: 'documentTitle',
-      value: test.freeText,
-    });
+    await integrationTest.runSequence(
+      'updateCreateOrderModalFormValueSequence',
+      {
+        key: 'documentTitle',
+        value: integrationTest.freeText,
+      },
+    );
 
-    await test.runSequence('submitCreateOrderModalSequence');
+    await integrationTest.runSequence('submitCreateOrderModalSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: '<p>This is a test order.</p>',
     });
 
-    await test.runSequence('submitCourtIssuedOrderSequence');
+    await integrationTest.runSequence('submitCourtIssuedOrderSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
+    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
 
     const { draftDocuments } = applicationContext
       .getUtilities()
       .getFormattedCaseDetail({
         applicationContext,
-        caseDetail: test.getState('caseDetail'),
+        caseDetail: integrationTest.getState('caseDetail'),
       });
 
     const createdOrder = first(draftDocuments);
 
-    expect(createdOrder.documentTitle).toEqual(test.freeText);
-    expect(createdOrder.freeText).toEqual(test.freeText);
-    expect(createdOrder.draftOrderState.documentTitle).toEqual(test.freeText);
-    expect(createdOrder.freeText).toEqual(test.freeText);
+    expect(createdOrder.documentTitle).toEqual(integrationTest.freeText);
+    expect(createdOrder.freeText).toEqual(integrationTest.freeText);
+    expect(createdOrder.draftOrderState.documentTitle).toEqual(
+      integrationTest.freeText,
+    );
+    expect(createdOrder.freeText).toEqual(integrationTest.freeText);
 
-    test.docketEntryId = createdOrder.docketEntryId;
+    integrationTest.docketEntryId = createdOrder.docketEntryId;
   });
 };

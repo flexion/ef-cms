@@ -2,82 +2,86 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 
 const { CASE_TYPES_MAP, COUNTRY_TYPES } = applicationContext.getConstants();
 
-export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
+export const petitionerCreatesNewCase = (
+  integrationTest,
+  fakeFile,
+  overrides = {},
+) => {
   return it('petitioner creates a new case', async () => {
-    await test.runSequence('gotoStartCaseWizardSequence');
+    await integrationTest.runSequence('gotoStartCaseWizardSequence');
 
-    expect(test.getState('currentPage')).toBe('StartCaseWizard');
+    expect(integrationTest.getState('currentPage')).toBe('StartCaseWizard');
 
-    await test.runSequence('updateStartCaseFormValueSequence', {
+    await integrationTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'petitionFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updateStartCaseFormValueSequence', {
+    await integrationTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'petitionFileSize',
       value: 1,
     });
 
-    await test.runSequence('updateStartCaseFormValueSequence', {
+    await integrationTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'stinFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updateStartCaseFormValueSequence', {
+    await integrationTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'stinFileSize',
       value: 1,
     });
 
-    await test.runSequence('updateStartCaseFormValueSequence', {
+    await integrationTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: CASE_TYPES_MAP.other,
     });
 
-    await test.runSequence('updateStartCaseFormValueSequence', {
+    await integrationTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
       value: 'Deceased Spouse',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
       value: 'Daenerys Stormborn',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.secondaryName',
       value: 'Daenerys Stormborn 2',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
       value: '123 Abc Ln',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address2',
       value: 'Apt 2',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.city',
       value: 'Cityville',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.state',
       value: 'CA',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.postalCode',
       value: '12345',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.email',
       value: 'test@example.com',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.phone',
       value: '1234567890',
     });
 
-    expect(test.getState('form.contactPrimary')).toEqual({
+    expect(integrationTest.getState('form.contactPrimary')).toEqual({
       address1: '123 Abc Ln',
       address2: 'Apt 2',
       city: 'Cityville',
@@ -90,47 +94,49 @@ export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
       state: 'CA',
     });
 
-    await test.runSequence('updateStartCaseFormValueSequence', {
+    await integrationTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'hasIrsNotice',
       value: true,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: overrides.caseType || CASE_TYPES_MAP.whistleblower,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
       value: 'Seattle, Washington',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'procedureType',
       value: 'Regular',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'wizardStep',
       value: '5',
     });
 
-    await test.runSequence('validateStartCaseWizardSequence');
+    await integrationTest.runSequence('validateStartCaseWizardSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('alertError')).toBeUndefined();
+    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('alertError')).toBeUndefined();
 
-    await test.runSequence('submitFilePetitionSequence');
+    await integrationTest.runSequence('submitFilePetitionSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('alertError')).toBeUndefined();
+    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('alertError')).toBeUndefined();
 
-    expect(test.getState('currentPage')).toBe('FilePetitionSuccess');
+    expect(integrationTest.getState('currentPage')).toBe('FilePetitionSuccess');
 
-    await test.runSequence('gotoDashboardSequence');
+    await integrationTest.runSequence('gotoDashboardSequence');
 
-    expect(test.getState('currentPage')).toBe('DashboardPetitioner');
+    expect(integrationTest.getState('currentPage')).toBe('DashboardPetitioner');
 
-    test.docketNumber = test.getState('openCases.0.docketNumber');
+    integrationTest.docketNumber = integrationTest.getState(
+      'openCases.0.docketNumber',
+    );
   });
 };

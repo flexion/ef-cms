@@ -1,10 +1,12 @@
-export const petitionsClerkCaseSearch = test => {
+export const petitionsClerkCaseSearch = integrationTest => {
   return it('Petitions clerk searches for case', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('updateSearchTermSequence', {
-      searchTerm: test.docketNumber,
+    integrationTest.setState('caseDetail', {});
+    await integrationTest.runSequence('updateSearchTermSequence', {
+      searchTerm: integrationTest.docketNumber,
     });
-    await test.runSequence('submitCaseSearchSequence');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
+    await integrationTest.runSequence('submitCaseSearchSequence');
+    expect(integrationTest.getState('caseDetail.docketNumber')).toEqual(
+      integrationTest.docketNumber,
+    );
   });
 };

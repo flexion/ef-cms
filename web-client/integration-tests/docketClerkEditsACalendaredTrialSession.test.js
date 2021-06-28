@@ -8,7 +8,7 @@ import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Docket Clerk edits a calendared trial session', () => {
   beforeEach(() => {
@@ -16,56 +16,58 @@ describe('Docket Clerk edits a calendared trial session', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
   const trialLocation = `Helena, Montana, ${Date.now()}`;
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, {
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(integrationTest, {
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(test);
+  docketClerkViewsTrialSessionList(integrationTest);
 
   let caseDetail;
-  test.casesReadyForTrial = [];
+  integrationTest.casesReadyForTrial = [];
 
   for (let i = 0; i < 3; i++) {
-    loginAs(test, 'petitioner@example.com');
+    loginAs(integrationTest, 'petitioner@example.com');
     it('login as a petitioner and create 3 cases', async () => {
-      caseDetail = await uploadPetition(test);
+      caseDetail = await uploadPetition(integrationTest);
       expect(caseDetail.docketNumber).toBeDefined();
-      test.casesReadyForTrial.push({ docketNumber: caseDetail.docketNumber });
-      test.docketNumber = caseDetail.docketNumber;
+      integrationTest.casesReadyForTrial.push({
+        docketNumber: caseDetail.docketNumber,
+      });
+      integrationTest.docketNumber = caseDetail.docketNumber;
     });
 
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkManuallyAddsCaseToTrial(test);
+    loginAs(integrationTest, 'petitionsclerk@example.com');
+    petitionsClerkManuallyAddsCaseToTrial(integrationTest);
   }
 
   it('verify that there are 3 cases on the trial session', async () => {
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: integrationTest.trialSessionId,
     });
 
-    expect(test.getState('trialSession.caseOrder').length).toBe(3);
+    expect(integrationTest.getState('trialSession.caseOrder').length).toBe(3);
   });
 
-  markAllCasesAsQCed(test, () =>
-    test.casesReadyForTrial.map(d => d.docketNumber),
+  markAllCasesAsQCed(integrationTest, () =>
+    integrationTest.casesReadyForTrial.map(d => d.docketNumber),
   );
-  petitionsClerkSetsATrialSessionsSchedule(test);
+  petitionsClerkSetsATrialSessionsSchedule(integrationTest);
 
   it('verify that there are 3 cases on the trial session', async () => {
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: integrationTest.trialSessionId,
     });
 
-    expect(test.getState('trialSession.caseOrder').length).toBe(3);
+    expect(integrationTest.getState('trialSession.caseOrder').length).toBe(3);
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToClosed(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToClosed(integrationTest);
 
   const overrides = {
     fieldToUpdate: 'judge',
@@ -74,15 +76,15 @@ describe('Docket Clerk edits a calendared trial session', () => {
       userId: 'dabbad05-18d0-43ec-bafb-654e83405416',
     },
   };
-  docketClerkEditsTrialSession(test, overrides);
+  docketClerkEditsTrialSession(integrationTest, overrides);
 
   it('verify that there are 3 cases on the trial session', async () => {
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: integrationTest.trialSessionId,
     });
 
-    expect(test.getState('trialSession.caseOrder').length).toBe(3);
+    expect(integrationTest.getState('trialSession.caseOrder').length).toBe(3);
   });
 
-  docketClerkVerifiesCaseStatusIsUnchanged(test);
+  docketClerkVerifiesCaseStatusIsUnchanged(integrationTest);
 });

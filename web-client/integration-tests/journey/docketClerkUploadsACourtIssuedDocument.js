@@ -2,40 +2,45 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkUploadsACourtIssuedDocument = (test, fakeFile) => {
+export const docketClerkUploadsACourtIssuedDocument = (
+  integrationTest,
+  fakeFile,
+) => {
   return it('Docket Clerk uploads a court issued document', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('gotoUploadCourtIssuedDocumentSequence');
+    await integrationTest.runSequence('gotoUploadCourtIssuedDocumentSequence');
 
-    await test.runSequence('uploadCourtIssuedDocumentSequence');
+    await integrationTest.runSequence('uploadCourtIssuedDocumentSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       freeText: 'Enter a description',
       primaryDocumentFile: 'Upload a document',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'freeText',
       value: 'Some order content',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
-    await test.runSequence('validateUploadCourtIssuedDocumentSequence');
+    await integrationTest.runSequence(
+      'validateUploadCourtIssuedDocumentSequence',
+    );
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('uploadCourtIssuedDocumentSequence');
+    await integrationTest.runSequence('uploadCourtIssuedDocumentSequence');
 
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: integrationTest.getState(),
       },
     );
 
@@ -44,6 +49,6 @@ export const docketClerkUploadsACourtIssuedDocument = (test, fakeFile) => {
       prev.createdAt > current.createdAt ? prev : current,
     );
     expect(newDraftOrder).toBeTruthy();
-    test.draftOrders.push(newDraftOrder);
+    integrationTest.draftOrders.push(newDraftOrder);
   });
 };

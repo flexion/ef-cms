@@ -4,17 +4,21 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
-export const petitionsClerkViewCaseDeadline = test => {
+export const petitionsClerkViewCaseDeadline = integrationTest => {
   return it('Petitions clerk views case deadlines', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    integrationTest.setState('caseDetail', {});
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseDetailInternal',
+    );
+    expect(integrationTest.getState('caseDetail.docketNumber')).toEqual(
+      integrationTest.docketNumber,
+    );
 
     const helper = runCompute(caseDetailHelper, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
     expect(helper.caseDeadlines.length).toEqual(2);
   });

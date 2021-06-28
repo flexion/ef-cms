@@ -5,94 +5,128 @@ import { fileDocumentHelper } from '../../src/presenter/computeds/fileDocumentHe
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const petitionerFilesAmendedMotion = (test, fakeFile) => {
+export const petitionerFilesAmendedMotion = (integrationTest, fakeFile) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('petitioner files amended motion', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('gotoFileDocumentSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'category',
-      value: 'Miscellaneous',
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'category',
+        value: 'Miscellaneous',
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'documentType',
-      value: 'Amended',
-    });
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'documentTitle',
-      value: '[First, Second, etc.] Amended [Document Name]',
-    });
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'eventCode',
-      value: 'AMAT',
-    });
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'scenario',
-      value: 'Nonstandard F',
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'documentType',
+        value: 'Amended',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'documentTitle',
+        value: '[First, Second, etc.] Amended [Document Name]',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'eventCode',
+        value: 'AMAT',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'scenario',
+        value: 'Nonstandard F',
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'ordinalValue',
-      value: 'First',
-    });
-    const caseDetail = test.getState('caseDetail');
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'ordinalValue',
+        value: 'First',
+      },
+    );
+    const caseDetail = integrationTest.getState('caseDetail');
     const previousDocument = caseDetail.docketEntries.find(
       document =>
         document.documentTitle ===
         'Motion for Leave to File Out of Time Statement Anything',
     );
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'previousDocument',
-      value: previousDocument.docketEntryId,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'previousDocument',
+        value: previousDocument.docketEntryId,
+      },
+    );
 
-    await test.runSequence('completeDocumentSelectSequence');
+    await integrationTest.runSequence('completeDocumentSelectSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('wizardStep')).toEqual('FileDocument');
+    expect(integrationTest.getState('wizardStep')).toEqual('FileDocument');
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'primaryDocumentFile',
+        value: fakeFile,
+      },
+    );
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
-      value: true,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactPrimary.contactId}`,
+        value: true,
+      },
+    );
 
-    await test.runSequence('reviewExternalDocumentInformationSequence');
+    await integrationTest.runSequence(
+      'reviewExternalDocumentInformationSequence',
+    );
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       objections: VALIDATION_ERROR_MESSAGES.objections,
     });
 
     const helper = runCompute(withAppContextDecorator(fileDocumentHelper), {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     expect(helper.primaryDocument.showObjection).toEqual(true);
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'objections',
-      value: OBJECTIONS_OPTIONS_MAP.NO,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'objections',
+        value: OBJECTIONS_OPTIONS_MAP.NO,
+      },
+    );
 
-    await test.runSequence('reviewExternalDocumentInformationSequence');
+    await integrationTest.runSequence(
+      'reviewExternalDocumentInformationSequence',
+    );
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('submitExternalDocumentSequence');
+    await integrationTest.runSequence('submitExternalDocumentSequence');
   });
 };

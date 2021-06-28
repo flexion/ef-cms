@@ -1,28 +1,34 @@
-export const petitionsClerk1ServesDocumentFromMessageDetail = test => {
-  return it('petitions clerk 1 serves document from message detail', async () => {
-    await test.runSequence('openConfirmServePaperFiledDocumentSequence', {
-      docketEntryId: test.docketEntryId,
-      redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
+export const petitionsClerk1ServesDocumentFromMessageDetail =
+  integrationTest => {
+    return it('petitions clerk 1 serves document from message detail', async () => {
+      await integrationTest.runSequence(
+        'openConfirmServePaperFiledDocumentSequence',
+        {
+          docketEntryId: integrationTest.docketEntryId,
+          redirectUrl: `/messages/${integrationTest.docketNumber}/message-detail/${integrationTest.parentMessageId}`,
+        },
+      );
+
+      expect(integrationTest.getState('redirectUrl')).toBe(
+        `/messages/${integrationTest.docketNumber}/message-detail/${integrationTest.parentMessageId}`,
+      );
+      expect(integrationTest.getState('docketEntryId')).toBe(
+        integrationTest.docketEntryId,
+      );
+
+      expect(integrationTest.getState('modal.showModal')).toBe(
+        'ConfirmInitiatePaperDocumentServiceModal',
+      );
+
+      await integrationTest.setState('iframeSrc', undefined);
+
+      await integrationTest.runSequence('serveCourtIssuedDocumentSequence', {});
+
+      expect(integrationTest.getState('alertSuccess')).toEqual({
+        message: 'Document served. ',
+      });
+      expect(integrationTest.getState('currentPage')).toBe('MessageDetail');
+
+      expect(integrationTest.getState('iframeSrc')).not.toBeUndefined();
     });
-
-    expect(test.getState('redirectUrl')).toBe(
-      `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
-    );
-    expect(test.getState('docketEntryId')).toBe(test.docketEntryId);
-
-    expect(test.getState('modal.showModal')).toBe(
-      'ConfirmInitiatePaperDocumentServiceModal',
-    );
-
-    await test.setState('iframeSrc', undefined);
-
-    await test.runSequence('serveCourtIssuedDocumentSequence', {});
-
-    expect(test.getState('alertSuccess')).toEqual({
-      message: 'Document served. ',
-    });
-    expect(test.getState('currentPage')).toBe('MessageDetail');
-
-    expect(test.getState('iframeSrc')).not.toBeUndefined();
-  });
-};
+  };

@@ -5,7 +5,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 import faker from 'faker';
 
-export const admissionsClerkAddsPractitionerEmail = test => {
+export const admissionsClerkAddsPractitionerEmail = integrationTest => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
   const mockAddress2 = 'A Place';
   const mockAvailableEmail = `${faker.internet.userName()}@example.com`;
@@ -13,36 +13,40 @@ export const admissionsClerkAddsPractitionerEmail = test => {
   return it('admissions clerk edits practitioner information', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: test.barNumber,
+    await integrationTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: integrationTest.barNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'EditPractitionerUser',
+    );
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.address2',
       value: mockAddress2,
     });
 
-    await test.runSequence('submitUpdatePractitionerUserSequence');
+    await integrationTest.runSequence('submitUpdatePractitionerUserSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('practitionerDetail.contact.address2')).toBe(
-      mockAddress2,
-    );
+    expect(
+      integrationTest.getState('practitionerDetail.contact.address2'),
+    ).toBe(mockAddress2);
 
-    await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: test.barNumber,
+    await integrationTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: integrationTest.barNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'EditPractitionerUser',
+    );
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
       value: mockAvailableEmail,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
       value: mockAvailableEmail,
     });
@@ -50,7 +54,7 @@ export const admissionsClerkAddsPractitionerEmail = test => {
     let practitionerDetailHelperComputed = runCompute(
       withAppContextDecorator(practitionerDetailHelper),
       {
-        state: test.getState(),
+        state: integrationTest.getState(),
       },
     );
 
@@ -58,31 +62,31 @@ export const admissionsClerkAddsPractitionerEmail = test => {
       mockAvailableEmail,
     );
 
-    await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: test.barNumber,
+    await integrationTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: integrationTest.barNumber,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
       value: mockAvailableEmail,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
       value: mockAvailableEmail,
     });
 
-    test.setState('practitionerDetail', {});
+    integrationTest.setState('practitionerDetail', {});
 
-    await test.runSequence('submitUpdatePractitionerUserSequence');
+    await integrationTest.runSequence('submitUpdatePractitionerUserSequence');
 
     await refreshElasticsearchIndex();
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
     practitionerDetailHelperComputed = runCompute(
       withAppContextDecorator(practitionerDetailHelper),
       {
-        state: test.getState(),
+        state: integrationTest.getState(),
       },
     );
 
@@ -97,13 +101,15 @@ export const admissionsClerkAddsPractitionerEmail = test => {
 
     await refreshElasticsearchIndex();
 
-    test.setState('caseDetail', {});
+    integrationTest.setState('caseDetail', {});
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    test.pendingEmail = mockAvailableEmail;
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    integrationTest.pendingEmail = mockAvailableEmail;
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseDetailInternal',
+    );
   });
 };

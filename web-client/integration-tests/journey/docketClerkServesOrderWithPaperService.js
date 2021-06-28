@@ -4,13 +4,13 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkServesOrderWithPaperService = (
-  test,
+  integrationTest,
   draftOrderIndex,
 ) => {
   return it('Docket Clerk serves the order after the docket entry has been created (with parties with paper service)', async () => {
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -18,19 +18,26 @@ export const docketClerkServesOrderWithPaperService = (
 
     expect(orderDocument).toBeTruthy();
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
-    });
+    await integrationTest.runSequence(
+      'gotoEditCourtIssuedDocketEntrySequence',
+      {
+        docketEntryId: orderDocument.docketEntryId,
+        docketNumber: integrationTest.docketNumber,
+      },
+    );
 
-    expect(test.getState('currentPage')).toEqual('CourtIssuedDocketEntry');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CourtIssuedDocketEntry',
+    );
 
-    await test.runSequence('openConfirmInitiateServiceModalSequence');
+    await integrationTest.runSequence(
+      'openConfirmInitiateServiceModalSequence',
+    );
 
     const modalHelper = runCompute(
       withAppContextDecorator(confirmInitiateServiceModalHelper),
       {
-        state: test.getState(),
+        state: integrationTest.getState(),
       },
     );
 
@@ -40,9 +47,13 @@ export const docketClerkServesOrderWithPaperService = (
         name: 'Daenerys Stormborn, Petitioner',
       },
     ]);
-    await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
+    await integrationTest.runSequence(
+      'serveCourtIssuedDocumentFromDocketEntrySequence',
+    );
 
-    expect(test.getState('currentPage')).toEqual('PrintPaperService');
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'PrintPaperService',
+    );
+    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
   });
 };

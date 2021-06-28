@@ -7,8 +7,8 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 
 describe('Docket Clerk removes petitioners journey', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -18,13 +18,13 @@ describe('Docket Clerk removes petitioners journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
 
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(integrationTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -37,27 +37,27 @@ describe('Docket Clerk removes petitioners journey', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(integrationTest);
 
   const overrides = {
     contactType: 'intervenor',
     name: 'Test Intervenor',
   };
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkAddsPetitionerToCase(test, overrides);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkAddsPetitionerToCase(integrationTest, overrides);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkAddsPractitionersToCase(test, true);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsPractitionersToCase(integrationTest, true);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkRemovesIntervenorFromCase(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkRemovesIntervenorFromCase(integrationTest);
 
-  docketClerkVerifiesPractitionerStillExistsOnCase(test);
+  docketClerkVerifiesPractitionerStillExistsOnCase(integrationTest);
 
-  docketClerkRemovesPetitionerFromCase(test);
+  docketClerkRemovesPetitionerFromCase(integrationTest);
 });

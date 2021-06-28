@@ -7,7 +7,7 @@ import { petitionsClerkRemovesPractitionerFromCase } from './journey/petitionsCl
 import { petitionsClerkRemovesRespondentFromCase } from './journey/petitionsClerkRemovesRespondentFromCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
-const test = setupTest();
+const integrationTest = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Petitions Clerk Counsel Association Journey', () => {
@@ -16,12 +16,12 @@ describe('Petitions Clerk Counsel Association Journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(integrationTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -34,14 +34,14 @@ describe('Petitions Clerk Counsel Association Journey', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkAddsPractitionersToCase(test);
-  petitionsClerkAddsRespondentsToCase(test);
-  petitionsClerkEditsPractitionerOnCase(test);
-  petitionsClerkRemovesPractitionerFromCase(test);
-  petitionsClerkRemovesRespondentFromCase(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(integrationTest);
+  petitionsClerkAddsPractitionersToCase(integrationTest);
+  petitionsClerkAddsRespondentsToCase(integrationTest);
+  petitionsClerkEditsPractitionerOnCase(integrationTest);
+  petitionsClerkRemovesPractitionerFromCase(integrationTest);
+  petitionsClerkRemovesRespondentFromCase(integrationTest);
 });

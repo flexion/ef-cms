@@ -17,7 +17,7 @@ const caseDetailHeaderHelper = withAppContextDecorator(
   caseDetailHeaderHelperComputed,
 );
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Adds automatic block case to trial', () => {
   beforeAll(() => {
@@ -25,7 +25,7 @@ describe('Adds automatic block case to trial', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
   const trialLocation = `Charleston, West Virginia, ${Date.now()}`;
@@ -33,27 +33,27 @@ describe('Adds automatic block case to trial', () => {
     trialLocation,
   };
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(test, fakeFile, trialLocation);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(integrationTest, fakeFile, trialLocation);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkSetsCaseReadyForTrial(test);
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, overrides);
-  docketClerkViewsTrialSessionList(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkSetsCaseReadyForTrial(integrationTest);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(integrationTest, overrides);
+  docketClerkViewsTrialSessionList(integrationTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
+  loginAs(integrationTest, 'petitionsclerk@example.com');
   // automatic block with a due date
-  petitionsClerkCreatesACaseDeadline(test);
-  test.casesReadyForTrial = [];
-  petitionsClerkManuallyAddsCaseToTrial(test);
+  petitionsClerkCreatesACaseDeadline(integrationTest);
+  integrationTest.casesReadyForTrial = [];
+  petitionsClerkManuallyAddsCaseToTrial(integrationTest);
 
   it('should be able to add a trial session to an automatically blocked case', async () => {
     const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
     const headerHelper = runCompute(caseDetailHeaderHelper, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     expect(headerHelper.showBlockedTag).toBeTruthy();

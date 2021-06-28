@@ -7,7 +7,7 @@ import {
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import faker from 'faker';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 const validEmail = `${faker.internet.userName()}_no_error@example.com`;
 
@@ -19,82 +19,95 @@ describe('admissions clerk creates user for case', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(test, fakeFile);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(integrationTest, fakeFile);
 
-  loginAs(test, 'admissionsclerk@example.com');
+  loginAs(integrationTest, 'admissionsclerk@example.com');
   it('admissions clerk verifies petitioner on case has no email', async () => {
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
     petitionerContactId = contactPrimary.contactId;
 
-    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
-      contactId: contactPrimary.contactId,
-      docketNumber: test.docketNumber,
-    });
+    await integrationTest.runSequence(
+      'gotoEditPetitionerInformationInternalSequence',
+      {
+        contactId: contactPrimary.contactId,
+        docketNumber: integrationTest.docketNumber,
+      },
+    );
 
     expect(contactPrimary.email).toBeUndefined();
 
-    expect(test.getState('currentPage')).toEqual(
+    expect(integrationTest.getState('currentPage')).toEqual(
       'EditPetitionerInformationInternal',
     );
 
-    expect(test.getState('form.contact.updatedEmail')).toBeUndefined();
-    expect(test.getState('form.contact.serviceIndicator')).toBe('Paper');
+    expect(
+      integrationTest.getState('form.contact.updatedEmail'),
+    ).toBeUndefined();
+    expect(integrationTest.getState('form.contact.serviceIndicator')).toBe(
+      'Paper',
+    );
   });
 
   it('admissions clerk adds an existing email address for petitioner on case', async () => {
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.updatedEmail',
       value: 'petitioner@example.com',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.confirmEmail',
       value: 'petitioner@example.com',
     });
 
-    await test.runSequence('submitEditPetitionerSequence');
+    await integrationTest.runSequence('submitEditPetitionerSequence');
 
-    expect(test.getState('modal.showModal')).toBe('MatchingEmailFoundModal');
+    expect(integrationTest.getState('modal.showModal')).toBe(
+      'MatchingEmailFoundModal',
+    );
 
-    await test.runSequence('dismissModalSequence');
+    await integrationTest.runSequence('dismissModalSequence');
 
-    expect(test.getState('currentPage')).toEqual(
+    expect(integrationTest.getState('currentPage')).toEqual(
       'EditPetitionerInformationInternal',
     );
   });
 
   it('admissions clerk adds a new email address for petitioner on case', async () => {
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.updatedEmail',
       value: validEmail,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.confirmEmail',
       value: validEmail,
     });
 
-    await test.runSequence('submitEditPetitionerSequence');
+    await integrationTest.runSequence('submitEditPetitionerSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('modal.showModal')).toBe('NoMatchingEmailFoundModal');
+    expect(integrationTest.getState('modal.showModal')).toBe(
+      'NoMatchingEmailFoundModal',
+    );
 
-    await test.runSequence(
+    await integrationTest.runSequence(
       'submitUpdatePetitionerInformationFromModalSequence',
     );
 
-    expect(test.getState('modal.showModal')).toBeUndefined();
+    expect(integrationTest.getState('modal.showModal')).toBeUndefined();
   });
 
   it('admissions clerk checks pending email for petitioner on case with unverified email', async () => {
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseDetailInternal',
+    );
 
-    expect(test.getState('screenMetadata.pendingEmails')).toEqual({
+    expect(integrationTest.getState('screenMetadata.pendingEmails')).toEqual({
       [petitionerContactId]: validEmail,
     });
   });

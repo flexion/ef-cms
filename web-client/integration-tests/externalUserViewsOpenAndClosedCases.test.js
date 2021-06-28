@@ -6,38 +6,38 @@ import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkA
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { privatePractitionerViewsOpenAndClosedCases } from './journey/privatePractitionerViewsOpenAndClosedCases';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('external user views open and closed cases', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    loginAs(test, 'docketclerk@example.com');
+    loginAs(integrationTest, 'docketclerk@example.com');
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('login as a petitioner and create the case to close', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkAddsPractitionersToCase(test, true);
-  petitionsClerkAddsRespondentsToCase(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsPractitionersToCase(integrationTest, true);
+  petitionsClerkAddsRespondentsToCase(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToClosed(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToClosed(integrationTest);
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerViewsOpenAndClosedCases(test);
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerViewsOpenAndClosedCases(integrationTest);
 
-  loginAs(test, 'privatePractitioner@example.com');
-  privatePractitionerViewsOpenAndClosedCases(test);
+  loginAs(integrationTest, 'privatePractitioner@example.com');
+  privatePractitionerViewsOpenAndClosedCases(integrationTest);
 
-  loginAs(test, 'irsPractitioner@example.com');
-  irsPractitionerViewsOpenAndClosedCases(test);
+  loginAs(integrationTest, 'irsPractitioner@example.com');
+  irsPractitionerViewsOpenAndClosedCases(integrationTest);
 });

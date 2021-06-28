@@ -2,40 +2,44 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 
 const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
-export const petitionsClerkChangesCaseCaptionDuringQC = test => {
+export const petitionsClerkChangesCaseCaptionDuringQC = integrationTest => {
   return it('Petitions clerk changes case caption for an e-filed petition during petition QC, serves it, and verifies that a docket entry is added', async () => {
-    await test.runSequence('gotoPetitionQcSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('PetitionQc');
+    expect(integrationTest.getState('currentPage')).toEqual('PetitionQc');
 
-    const initialCaption = test.getState('form.caseCaption');
+    const initialCaption = integrationTest.getState('form.caseCaption');
 
-    await test.runSequence('updateFormValueAndCaseCaptionSequence', {
+    await integrationTest.runSequence('updateFormValueAndCaseCaptionSequence', {
       key: 'contactPrimary.name',
       value: 'A brand new name',
     });
 
-    expect(test.getState('form.caseCaption')).toContain('A brand new name');
-
-    await test.runSequence('saveSavedCaseForLaterSequence');
-
-    expect(test.getState('caseDetail.initialCaption')).toEqual(initialCaption);
-    expect(test.getState('caseDetail.caseCaption')).toContain(
+    expect(integrationTest.getState('form.caseCaption')).toContain(
       'A brand new name',
     );
 
-    await test.runSequence('serveCaseToIrsSequence');
+    await integrationTest.runSequence('saveSavedCaseForLaterSequence');
 
-    await test.runSequence('gotoWorkQueueSequence', {
+    expect(integrationTest.getState('caseDetail.initialCaption')).toEqual(
+      initialCaption,
+    );
+    expect(integrationTest.getState('caseDetail.caseCaption')).toContain(
+      'A brand new name',
+    );
+
+    await integrationTest.runSequence('serveCaseToIrsSequence');
+
+    await integrationTest.runSequence('gotoWorkQueueSequence', {
       box: 'outbox',
       queue: 'my',
     });
 
-    const workItems = test.getState('workQueue');
+    const workItems = integrationTest.getState('workQueue');
     const thisWorkItem = workItems.find(
-      workItem => workItem.docketNumber === test.docketNumber,
+      workItem => workItem.docketNumber === integrationTest.docketNumber,
     );
 
     expect(thisWorkItem.docketNumberWithSuffix).not.toContain(
@@ -43,11 +47,11 @@ export const petitionsClerkChangesCaseCaptionDuringQC = test => {
     );
     expect(thisWorkItem.caseTitle).toContain('A brand new name');
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    const docketEntries = test.getState('caseDetail.docketEntries');
+    const docketEntries = integrationTest.getState('caseDetail.docketEntries');
 
     const caseAmended = docketEntries.find(entry =>
       entry.documentTitle.startsWith('Caption of case is amended'),

@@ -1,11 +1,11 @@
-export const docketClerkAddsDocketEntryFile = (test, fakeFile) => {
+export const docketClerkAddsDocketEntryFile = (integrationTest, fakeFile) => {
   return it('Adds a file to the current docket record form', async () => {
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'primaryDocumentFileSize',
       value: 1,
     });

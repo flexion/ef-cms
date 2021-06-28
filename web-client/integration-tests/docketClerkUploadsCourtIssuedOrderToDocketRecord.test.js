@@ -14,47 +14,47 @@ import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    test.draftOrders = [];
+    integrationTest.draftOrders = [];
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(integrationTest, { procedureType: 'Regular' });
+  petitionerChoosesCaseType(integrationTest);
+  petitionerCreatesNewCase(integrationTest, fakeFile);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkUploadsACourtIssuedDocument(test, fakeFile);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkUploadsACourtIssuedDocument(integrationTest, fakeFile);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test, 4);
-  petitionsClerkViewsDraftOrder(test, 0);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(integrationTest, 4);
+  petitionsClerkViewsDraftOrder(integrationTest, 0);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsDraftOrder(test, 0);
-  docketClerkEditsAnUploadedCourtIssuedDocument(test, fakeFile, 0);
-  docketClerkSignsUploadedCourtIssuedDocument(test);
-  docketClerkEditsSignedUploadedCourtIssuedDocument(test, fakeFile);
-  docketClerkSignsUploadedCourtIssuedDocument(test);
-  docketClerkRemovesSignatureFromUploadedCourtIssuedDocument(test);
-  docketClerkAddsDocketEntryFromDraft(test, 0);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkViewsDraftOrder(integrationTest, 0);
+  docketClerkEditsAnUploadedCourtIssuedDocument(integrationTest, fakeFile, 0);
+  docketClerkSignsUploadedCourtIssuedDocument(integrationTest);
+  docketClerkEditsSignedUploadedCourtIssuedDocument(integrationTest, fakeFile);
+  docketClerkSignsUploadedCourtIssuedDocument(integrationTest);
+  docketClerkRemovesSignatureFromUploadedCourtIssuedDocument(integrationTest);
+  docketClerkAddsDocketEntryFromDraft(integrationTest, 0);
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerViewsCaseDetail(test, { documentCount: 3 });
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerViewsCaseDetail(integrationTest, { documentCount: 3 });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkUploadsACourtIssuedDocument(test, fakeFile);
-  docketClerkViewsDraftOrder(test, 2);
-  docketClerkAddsDocketEntryForNoticeFromDraft(test, 2);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkUploadsACourtIssuedDocument(integrationTest, fakeFile);
+  docketClerkViewsDraftOrder(integrationTest, 2);
+  docketClerkAddsDocketEntryForNoticeFromDraft(integrationTest, 2);
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerViewsCaseDetail(test, { documentCount: 4 });
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerViewsCaseDetail(integrationTest, { documentCount: 4 });
 });

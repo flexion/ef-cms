@@ -5,28 +5,36 @@ import {
 import { contactPrimaryFromState } from '../helpers';
 
 export const petitionsClerkViewsCaseDetail = (
-  test,
+  integrationTest,
   expectedDocumentCount = 3,
 ) => {
   return it('Petitions clerk views case detail', async () => {
-    test.setState('caseDetail', {});
+    integrationTest.setState('caseDetail', {});
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual(CASE_STATUS_TYPES.new);
-    expect(test.getState('caseDetail.docketEntries').length).toEqual(
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseDetailInternal',
+    );
+    expect(integrationTest.getState('caseDetail.docketNumber')).toEqual(
+      integrationTest.docketNumber,
+    );
+    expect(integrationTest.getState('caseDetail.status')).toEqual(
+      CASE_STATUS_TYPES.new,
+    );
+    expect(integrationTest.getState('caseDetail.docketEntries').length).toEqual(
       expectedDocumentCount,
     );
-    expect(test.getState('caseDetail.associatedJudge')).toEqual(CHIEF_JUDGE);
+    expect(integrationTest.getState('caseDetail.associatedJudge')).toEqual(
+      CHIEF_JUDGE,
+    );
 
-    const caseDetail = test.getState('caseDetail');
+    const caseDetail = integrationTest.getState('caseDetail');
 
     expect(caseDetail.associatedJudge).toBeDefined();
     expect(caseDetail.status).toBeDefined();
-    expect(contactPrimaryFromState(test).contactId).toBeDefined();
+    expect(contactPrimaryFromState(integrationTest).contactId).toBeDefined();
   });
 };

@@ -2,57 +2,57 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 
 const { PETITIONS_SECTION } = applicationContext.getConstants();
 
-export const petitionsClerkAssignsWorkItemToSelf = test => {
+export const petitionsClerkAssignsWorkItemToSelf = integrationTest => {
   return it('Petitions clerk assigns work item to self', async () => {
     // find the work item that is part of an Petition upload
-    const sectionWorkItems = test.getState('workQueue');
-    test.petitionWorkItemId = sectionWorkItems.find(
+    const sectionWorkItems = integrationTest.getState('workQueue');
+    integrationTest.petitionWorkItemId = sectionWorkItems.find(
       item =>
         item.docketEntry.documentType === 'Petition' &&
-        item.docketNumber === test.docketNumber,
+        item.docketNumber === integrationTest.docketNumber,
     ).workItemId;
 
     // verify that there is an unassigned work item in the section queue; we will assign it
-    const unassignedWorkItem = test
+    const unassignedWorkItem = integrationTest
       .getState('workQueue')
       .find(
         workItem =>
           !workItem.assigneeId &&
-          workItem.docketNumber === test.docketNumber &&
-          workItem.workItemId === test.petitionWorkItemId,
+          workItem.docketNumber === integrationTest.docketNumber &&
+          workItem.workItemId === integrationTest.petitionWorkItemId,
       );
     expect(unassignedWorkItem).toBeDefined();
-    expect(test.getState('selectedWorkItems').length).toEqual(0);
+    expect(integrationTest.getState('selectedWorkItems').length).toEqual(0);
 
     // select that work item
-    await test.runSequence('selectWorkItemSequence', {
+    await integrationTest.runSequence('selectWorkItemSequence', {
       workItem: unassignedWorkItem,
     });
-    const selectedWorkItems = test.getState('selectedWorkItems');
+    const selectedWorkItems = integrationTest.getState('selectedWorkItems');
     expect(selectedWorkItems.length).toEqual(1);
-    test.selectedWorkItem = selectedWorkItems[0];
+    integrationTest.selectedWorkItem = selectedWorkItems[0];
     expect(unassignedWorkItem).toMatchObject({
       assigneeId: null,
     });
 
     // select an assignee
-    expect(test.getState('assigneeId')).toBeNull();
-    await test.runSequence('selectAssigneeSequence', {
+    expect(integrationTest.getState('assigneeId')).toBeNull();
+    await integrationTest.runSequence('selectAssigneeSequence', {
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test Petitionsclerk',
     });
-    expect(test.getState('assigneeId')).toBeDefined();
+    expect(integrationTest.getState('assigneeId')).toBeDefined();
 
     // assign that work item to the current user
-    await test.runSequence('assignSelectedWorkItemsSequence');
+    await integrationTest.runSequence('assignSelectedWorkItemsSequence');
 
     // should clear the selected work items
-    expect(test.getState('selectedWorkItems').length).toEqual(0);
+    expect(integrationTest.getState('selectedWorkItems').length).toEqual(0);
 
     // should have updated the work item in the section queue to have an assigneeId
-    const sectionWorkQueue = test.getState('workQueue');
+    const sectionWorkQueue = integrationTest.getState('workQueue');
     const assignedWorkItem = sectionWorkQueue.find(
-      workItem => workItem.workItemId === test.petitionWorkItemId,
+      workItem => workItem.workItemId === integrationTest.petitionWorkItemId,
     );
     expect(assignedWorkItem).toMatchObject({
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -60,9 +60,9 @@ export const petitionsClerkAssignsWorkItemToSelf = test => {
     });
 
     // the work item should appear in the individual work queue
-    const workQueue = test.getState('workQueue');
+    const workQueue = integrationTest.getState('workQueue');
     const movedWorkItem = workQueue.find(
-      workItem => workItem.workItemId === test.petitionWorkItemId,
+      workItem => workItem.workItemId === integrationTest.petitionWorkItemId,
     );
     expect(movedWorkItem).toMatchObject({
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',

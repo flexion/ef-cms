@@ -1,18 +1,23 @@
-export const userUpdatesEmailAddressToOneAlreadyInUse = (test, user) =>
+export const userUpdatesEmailAddressToOneAlreadyInUse = (
+  integrationTest,
+  user,
+) =>
   it(`${user} updates email address to one that is already in use`, async () => {
-    await test.runSequence('gotoChangeLoginAndServiceEmailSequence');
+    await integrationTest.runSequence('gotoChangeLoginAndServiceEmailSequence');
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'email',
       value: 'petitioner1@example.com',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
       value: 'petitioner1@example.com',
     });
 
-    await test.runSequence('submitChangeLoginAndServiceEmailSequence');
+    await integrationTest.runSequence(
+      'submitChangeLoginAndServiceEmailSequence',
+    );
 
-    expect(test.getState('validationErrors.email')).toBeDefined();
+    expect(integrationTest.getState('validationErrors.email')).toBeDefined();
   });

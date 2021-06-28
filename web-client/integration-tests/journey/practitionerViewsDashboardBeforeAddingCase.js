@@ -1,6 +1,8 @@
-export const practitionerViewsDashboardBeforeAddingCase = test => {
+export const practitionerViewsDashboardBeforeAddingCase = integrationTest => {
   return it('Practitioner views dashboard before adding the case', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardPractitioner');
+    await integrationTest.runSequence('gotoDashboardSequence');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'DashboardPractitioner',
+    );
   });
 };

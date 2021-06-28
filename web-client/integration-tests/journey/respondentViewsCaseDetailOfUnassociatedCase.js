@@ -1,9 +1,9 @@
-export const respondentViewsCaseDetailOfUnassociatedCase = test => {
+export const respondentViewsCaseDetailOfUnassociatedCase = integrationTest => {
   return it('Respondent views case detail of unassociated case', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    integrationTest.setState('caseDetail', {});
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
   });
 };

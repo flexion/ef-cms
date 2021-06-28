@@ -9,62 +9,65 @@ const { PETITIONS_SECTION } = applicationContext.getConstants();
 
 const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
-export const createNewMessageOnCase = test => {
+export const createNewMessageOnCase = integrationTest => {
   const getHelper = () => {
     return runCompute(messageModalHelper, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
   };
 
   return it('user creates new message on a case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('openCreateMessageModalSequence');
+    await integrationTest.runSequence('openCreateMessageModalSequence');
 
-    await test.runSequence('updateSectionInCreateMessageModalSequence', {
-      key: 'toSection',
-      value: PETITIONS_SECTION,
-    });
+    await integrationTest.runSequence(
+      'updateSectionInCreateMessageModalSequence',
+      {
+        key: 'toSection',
+        value: PETITIONS_SECTION,
+      },
+    );
 
-    await test.runSequence('updateModalFormValueSequence', {
+    await integrationTest.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
       value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
     });
 
     const messageDocument = getHelper().documents[0];
-    test.testMessageDocumentId = messageDocument.docketEntryId;
+    integrationTest.testMessageDocumentId = messageDocument.docketEntryId;
 
-    await test.runSequence('updateMessageModalAttachmentsSequence', {
-      documentId: test.testMessageDocumentId,
+    await integrationTest.runSequence('updateMessageModalAttachmentsSequence', {
+      documentId: integrationTest.testMessageDocumentId,
     });
 
-    expect(test.getState('modal.form.subject')).toEqual(
+    expect(integrationTest.getState('modal.form.subject')).toEqual(
       messageDocument.documentTitle || messageDocument.documentType,
     );
 
-    test.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
+    integrationTest.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
 
-    await test.runSequence('updateModalFormValueSequence', {
+    await integrationTest.runSequence('updateModalFormValueSequence', {
       key: 'subject',
-      value: test.testMessageSubject,
+      value: integrationTest.testMessageSubject,
     });
 
-    await test.runSequence('createMessageSequence');
+    await integrationTest.runSequence('createMessageSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       message: NewMessage.VALIDATION_ERROR_MESSAGES.message[0].message,
     });
 
-    await test.runSequence('updateModalFormValueSequence', {
+    await integrationTest.runSequence('updateModalFormValueSequence', {
       key: 'message',
       value: 'bears, beets, battlestar galactica',
     });
 
-    await test.runSequence('createMessageSequence');
+    await integrationTest.runSequence('createMessageSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
     await refreshElasticsearchIndex();
   });

@@ -1,12 +1,14 @@
-export const docketClerkOpensCaseUnconsolidateModal = test => {
+export const docketClerkOpensCaseUnconsolidateModal = integrationTest => {
   it('Docket clerk opens the unconsolidate modal', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('openCleanModalSequence', {
+    await integrationTest.runSequence('openCleanModalSequence', {
       showModal: 'UnconsolidateCasesModal',
     });
-    expect(test.getState('modal.showModal')).toEqual('UnconsolidateCasesModal');
+    expect(integrationTest.getState('modal.showModal')).toEqual(
+      'UnconsolidateCasesModal',
+    );
   });
 };

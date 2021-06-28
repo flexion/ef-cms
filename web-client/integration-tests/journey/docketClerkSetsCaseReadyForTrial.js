@@ -2,33 +2,39 @@ const {
   CASE_STATUS_TYPES,
 } = require('../../../shared/src/business/entities/EntityConstants');
 
-export const docketClerkSetsCaseReadyForTrial = test => {
+export const docketClerkSetsCaseReadyForTrial = integrationTest => {
   return it('Docket clerk sets a case ready for trial', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    integrationTest.setState('caseDetail', {});
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual(
+    expect(integrationTest.getState('caseDetail.docketNumber')).toEqual(
+      integrationTest.docketNumber,
+    );
+    expect(integrationTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.generalDocket,
     );
 
-    await test.runSequence('openUpdateCaseModalSequence');
+    await integrationTest.runSequence('openUpdateCaseModalSequence');
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'caseStatus',
       value: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     });
 
-    await test.runSequence('submitUpdateCaseModalSequence');
+    await integrationTest.runSequence('submitUpdateCaseModalSequence');
 
-    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual(
+    expect(integrationTest.getState('caseDetail.docketNumber')).toEqual(
+      integrationTest.docketNumber,
+    );
+    expect(integrationTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.generalDocketReadyForTrial,
     );
 
-    if (test.casesReadyForTrial) {
-      test.casesReadyForTrial.push(test.getState('caseDetail'));
+    if (integrationTest.casesReadyForTrial) {
+      integrationTest.casesReadyForTrial.push(
+        integrationTest.getState('caseDetail'),
+      );
     }
   });
 };

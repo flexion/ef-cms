@@ -1,58 +1,64 @@
 const { refreshElasticsearchIndex } = require('../helpers');
 
-export const admissionsClerkEditsPractitionerInfo = test => {
+export const admissionsClerkEditsPractitionerInfo = integrationTest => {
   return it('admissions clerk edits practitioner information', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: test.barNumber,
+    await integrationTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: integrationTest.barNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
-    expect(test.getState('form.barNumber')).toEqual(test.barNumber);
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'EditPractitionerUser',
+    );
+    expect(integrationTest.getState('form.barNumber')).toEqual(
+      integrationTest.barNumber,
+    );
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'firstName',
       value: 'Ben',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'middleName',
       value: 'Leighton',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'lastName',
       value: 'Matlock',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
       value: '123 Legal Way',
     });
 
-    await test.runSequence('submitUpdatePractitionerUserSequence');
+    await integrationTest.runSequence('submitUpdatePractitionerUserSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
     await refreshElasticsearchIndex(5000);
 
-    expect(test.getState('currentPage')).toEqual('PractitionerDetail');
-    expect(test.getState('practitionerDetail.barNumber')).toEqual(
-      test.barNumber,
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'PractitionerDetail',
     );
-    expect(test.getState('practitionerDetail.name')).toEqual(
+    expect(integrationTest.getState('practitionerDetail.barNumber')).toEqual(
+      integrationTest.barNumber,
+    );
+    expect(integrationTest.getState('practitionerDetail.name')).toEqual(
       'Ben Leighton Matlock',
     );
-    expect(test.getState('practitionerDetail.contact.address1')).toEqual(
-      '123 Legal Way',
-    );
+    expect(
+      integrationTest.getState('practitionerDetail.contact.address1'),
+    ).toEqual('123 Legal Way');
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    const caseDetail = test.getState('caseDetail');
+    const caseDetail = integrationTest.getState('caseDetail');
     const noticeDocument = caseDetail.docketEntries.find(
       document => document.documentType === 'Notice of Change of Address',
     );

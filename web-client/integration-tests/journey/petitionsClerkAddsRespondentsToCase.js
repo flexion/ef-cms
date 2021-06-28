@@ -6,45 +6,53 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const petitionsClerkAddsRespondentsToCase = test => {
+export const petitionsClerkAddsRespondentsToCase = integrationTest => {
   return it('Petitions clerk manually adds multiple irsPractitioners to case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('caseDetail.irsPractitioners')).toEqual([]);
+    expect(integrationTest.getState('caseDetail.irsPractitioners')).toEqual([]);
 
-    await test.runSequence('openAddIrsPractitionerModalSequence');
+    await integrationTest.runSequence('openAddIrsPractitionerModalSequence');
 
     expect(
-      test.getState('validationErrors.respondentSearchError'),
+      integrationTest.getState('validationErrors.respondentSearchError'),
     ).toBeDefined();
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'respondentSearch',
       value: 'RT6789',
     });
 
-    await test.runSequence('openAddIrsPractitionerModalSequence');
+    await integrationTest.runSequence('openAddIrsPractitionerModalSequence');
 
     expect(
-      test.getState('validationErrors.respondentSearchError'),
+      integrationTest.getState('validationErrors.respondentSearchError'),
     ).toBeUndefined();
-    expect(test.getState('modal.respondentMatches.length')).toEqual(1);
-
-    //default selected because there was only 1 match
-    let respondentMatch = test.getState('modal.respondentMatches.0');
-    expect(test.getState('modal.user.userId')).toEqual(respondentMatch.userId);
-
-    await test.runSequence('associateIrsPractitionerWithCaseSequence');
-
-    expect(test.getState('caseDetail.irsPractitioners.length')).toEqual(1);
-    expect(test.getState('caseDetail.irsPractitioners.0.name')).toEqual(
-      respondentMatch.name,
+    expect(integrationTest.getState('modal.respondentMatches.length')).toEqual(
+      1,
     );
 
+    //default selected because there was only 1 match
+    let respondentMatch = integrationTest.getState('modal.respondentMatches.0');
+    expect(integrationTest.getState('modal.user.userId')).toEqual(
+      respondentMatch.userId,
+    );
+
+    await integrationTest.runSequence(
+      'associateIrsPractitionerWithCaseSequence',
+    );
+
+    expect(
+      integrationTest.getState('caseDetail.irsPractitioners.length'),
+    ).toEqual(1);
+    expect(
+      integrationTest.getState('caseDetail.irsPractitioners.0.name'),
+    ).toEqual(respondentMatch.name);
+
     let formatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     expect(formatted.irsPractitioners.length).toEqual(1);
@@ -53,24 +61,32 @@ export const petitionsClerkAddsRespondentsToCase = test => {
     );
 
     //add a second respondent
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'respondentSearch',
       value: 'RT0987',
     });
-    await test.runSequence('openAddIrsPractitionerModalSequence');
+    await integrationTest.runSequence('openAddIrsPractitionerModalSequence');
 
-    expect(test.getState('modal.respondentMatches.length')).toEqual(1);
-    respondentMatch = test.getState('modal.respondentMatches.0');
-    expect(test.getState('modal.user.userId')).toEqual(respondentMatch.userId);
-
-    await test.runSequence('associateIrsPractitionerWithCaseSequence');
-    expect(test.getState('caseDetail.irsPractitioners.length')).toEqual(2);
-    expect(test.getState('caseDetail.irsPractitioners.1.name')).toEqual(
-      respondentMatch.name,
+    expect(integrationTest.getState('modal.respondentMatches.length')).toEqual(
+      1,
+    );
+    respondentMatch = integrationTest.getState('modal.respondentMatches.0');
+    expect(integrationTest.getState('modal.user.userId')).toEqual(
+      respondentMatch.userId,
     );
 
+    await integrationTest.runSequence(
+      'associateIrsPractitionerWithCaseSequence',
+    );
+    expect(
+      integrationTest.getState('caseDetail.irsPractitioners.length'),
+    ).toEqual(2);
+    expect(
+      integrationTest.getState('caseDetail.irsPractitioners.1.name'),
+    ).toEqual(respondentMatch.name);
+
     formatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     expect(formatted.irsPractitioners.length).toEqual(2);

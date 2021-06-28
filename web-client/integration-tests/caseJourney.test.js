@@ -20,7 +20,7 @@ import { respondentAddsMotion } from './journey/respondentAddsMotion';
 import { respondentAddsStipulatedDecision } from './journey/respondentAddsStipulatedDecision';
 import { respondentViewsDashboard } from './journey/respondentViewsDashboard';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Case journey', () => {
   beforeEach(() => {
@@ -35,35 +35,35 @@ describe('Case journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerCancelsCreateCase(test);
-  petitionerChoosesProcedureType(test);
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCaseTestAllOptions(test, fakeFile);
-  petitionerViewsDashboard(test);
-  petitionerViewsCaseDetail(test);
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerCancelsCreateCase(integrationTest);
+  petitionerChoosesProcedureType(integrationTest);
+  petitionerChoosesCaseType(integrationTest);
+  petitionerCreatesNewCaseTestAllOptions(integrationTest, fakeFile);
+  petitionerViewsDashboard(integrationTest);
+  petitionerViewsCaseDetail(integrationTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCaseSearch(test);
-  petitionsClerkViewsWorkQueue(test);
-  petitionsClerkAssignsWorkItemToSelf(test);
-  petitionsClerkAssignsWorkItemToOther(test);
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerkViewsWorkQueueAfterReassign(test);
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkUpdatesCaseDetail(test);
-  petitionsClerkSubmitsCaseToIrs(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkCaseSearch(integrationTest);
+  petitionsClerkViewsWorkQueue(integrationTest);
+  petitionsClerkAssignsWorkItemToSelf(integrationTest);
+  petitionsClerkAssignsWorkItemToOther(integrationTest);
+  loginAs(integrationTest, 'petitionsclerk1@example.com');
+  petitionsClerkViewsWorkQueueAfterReassign(integrationTest);
+  petitionsClerkViewsCaseDetail(integrationTest);
+  petitionsClerkUpdatesCaseDetail(integrationTest);
+  petitionsClerkSubmitsCaseToIrs(integrationTest);
 
-  loginAs(test, 'irsPractitioner@example.com');
-  respondentViewsDashboard(test);
-  respondentAddsAnswer(test, fakeFile);
-  respondentAddsStipulatedDecision(test, fakeFile);
-  respondentAddsMotion(test, fakeFile);
+  loginAs(integrationTest, 'irsPractitioner@example.com');
+  respondentViewsDashboard(integrationTest);
+  respondentAddsAnswer(integrationTest, fakeFile);
+  respondentAddsStipulatedDecision(integrationTest, fakeFile);
+  respondentAddsMotion(integrationTest, fakeFile);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsCaseDetail(test);
-  docketClerkUpdatesCaseCaption(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkViewsCaseDetail(integrationTest);
+  docketClerkUpdatesCaseCaption(integrationTest);
 });

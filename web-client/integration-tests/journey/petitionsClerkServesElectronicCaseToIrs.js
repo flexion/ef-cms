@@ -1,15 +1,15 @@
-export const petitionsClerkServesElectronicCaseToIrs = test => {
-  return it(`Petitions clerk serves an electronically-filed case (${test.docketNumber}) to IRS`, async () => {
-    await test.runSequence('gotoPetitionQcSequence', {
-      docketNumber: test.docketNumber,
+export const petitionsClerkServesElectronicCaseToIrs = integrationTest => {
+  return it(`Petitions clerk serves an electronically-filed case (${integrationTest.docketNumber}) to IRS`, async () => {
+    await integrationTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('saveSavedCaseForLaterSequence');
+    await integrationTest.runSequence('saveSavedCaseForLaterSequence');
 
-    await test.runSequence('openConfirmServeToIrsModalSequence');
+    await integrationTest.runSequence('openConfirmServeToIrsModalSequence');
 
-    await test.runSequence('serveCaseToIrsSequence');
+    await integrationTest.runSequence('serveCaseToIrsSequence');
 
-    expect(test.getState('currentPage')).toEqual('WorkQueue');
+    expect(integrationTest.getState('currentPage')).toEqual('WorkQueue');
   });
 };

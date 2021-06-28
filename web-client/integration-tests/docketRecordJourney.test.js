@@ -25,8 +25,8 @@ import {
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
 const { PAYMENT_STATUS } = applicationContext.getConstants();
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 
 describe('Docket Clerk Verifies Docket Record Display', () => {
   beforeAll(() => {
@@ -34,14 +34,19 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(test, fakeFile, 'Birmingham, Alabama', false);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(
+    integrationTest,
+    fakeFile,
+    'Birmingham, Alabama',
+    false,
+  );
   it('verifies docket entries exist for petition for an unserved case', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     expect(formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
@@ -54,10 +59,10 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     ]);
   });
 
-  petitionsClerkSubmitsCaseToIrs(test);
+  petitionsClerkSubmitsCaseToIrs(integrationTest);
   it('verifies docket entries exist for petition, APW, DISC and RQT for a served case', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     expect(formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
@@ -90,137 +95,148 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       },
     ]);
 
-    test.docketNumber = null;
+    integrationTest.docketNumber = null;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(test, fakeFile, 'Birmingham, Alabama', false);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(
+    integrationTest,
+    fakeFile,
+    'Birmingham, Alabama',
+    false,
+  );
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
   it('files an initial filing type document AFTER a paper petition is added but not served', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoAddPaperFilingSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: 1,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: 1,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: 2018,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFileSize',
       value: 100,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'RQT',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'trialLocation',
       value: 'Little Rock, AR',
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
-      value: true,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactPrimary.contactId}`,
+        value: true,
+      },
+    );
 
-    await test.runSequence('submitPaperFilingSequence', {
+    await integrationTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     //4654- docket entries for initial filing type documents are not created until after the case has been served
     expect(formattedDocketEntriesOnDocketRecord[4]).toBeUndefined();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
+  loginAs(integrationTest, 'petitionsclerk@example.com');
   it('serves the case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    await test.runSequence('serveCaseToIrsSequence');
+    await integrationTest.runSequence('serveCaseToIrsSequence');
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
   it('files an initial filing type document AFTER a paper petition is added and is served', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoAddPaperFilingSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: 1,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: 1,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: 2018,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFileSize',
       value: 100,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'RQT',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'trialLocation',
       value: 'Little Rock, AR',
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
-      value: true,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactPrimary.contactId}`,
+        value: true,
+      },
+    );
 
-    await test.runSequence('submitPaperFilingSequence', {
+    await integrationTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     //4654- docket entries for initial (un-served and served) filing type documents are created when case has been served
     expect(formattedDocketEntriesOnDocketRecord[4]).toMatchObject({
@@ -231,63 +247,63 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(test, 'floater@example.com');
+  loginAs(integrationTest, 'floater@example.com');
   it('allows access to the floater user to view the case detail', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
   });
 
-  loginAs(test, 'general@example.com');
+  loginAs(integrationTest, 'general@example.com');
   it('allows access to the general user to view the case detail', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
   });
 
-  loginAs(test, 'reportersOffice@example.com');
+  loginAs(integrationTest, 'reportersOffice@example.com');
   it('allows access to the reportersOffice user to view the case detail', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
   it('updates the fee payment status on case detail and verifies minute entry on the docket record', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('gotoEditCaseDetailsSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoEditCaseDetailsSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentStatus',
       value: PAYMENT_STATUS.PAID,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentMethod',
       value: 'check',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateYear',
       value: '2018',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateMonth',
       value: '12',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateDay',
       value: '24',
     });
 
-    await test.runSequence('updateCaseDetailsSequence');
+    await integrationTest.runSequence('updateCaseDetailsSequence');
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const feeEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.eventCode === 'FEE',
@@ -300,26 +316,26 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkUploadsACourtIssuedDocument(test, fakeFile);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkUploadsACourtIssuedDocument(integrationTest, fakeFile);
   it('verifies the docket record after filing an unservable document type', async () => {
-    const uploadedDocument = test.draftOrders[0];
+    const uploadedDocument = integrationTest.draftOrders[0];
 
     await createCourtIssuedDocketEntry({
       docketEntryId: uploadedDocument.docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: integrationTest.docketNumber,
       eventCode: 'HEAR',
       filingDate: {
         day: '1',
         month: '1',
         year: '2020',
       },
-      test,
+      integrationTest,
       trialLocation: 'Birmingham, AL',
     });
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const docketEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === uploadedDocument.docketEntryId,
@@ -335,18 +351,18 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(test, {
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(test, 1);
-  docketClerkSignsOrder(test, 1);
-  docketClerkAddsDocketEntryFromOrder(test, 1);
+  docketClerkViewsDraftOrder(integrationTest, 1);
+  docketClerkSignsOrder(integrationTest, 1);
+  docketClerkAddsDocketEntryFromOrder(integrationTest, 1);
   it('verifies the docket record after adding a draft order to the docket record (not served)', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const orderEntry = formattedDocketEntriesOnDocketRecord[8];
 
@@ -359,20 +375,20 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(test, {
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order to do something else',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
 
-  docketClerkViewsDraftOrder(test, 2);
-  docketClerkSignsOrder(test, 2);
-  docketClerkAddsDocketEntryFromOrder(test, 2);
-  docketClerkServesDocument(test, 2);
+  docketClerkViewsDraftOrder(integrationTest, 2);
+  docketClerkSignsOrder(integrationTest, 2);
+  docketClerkAddsDocketEntryFromOrder(integrationTest, 2);
+  docketClerkServesDocument(integrationTest, 2);
   it('verifies the docket record after adding a draft order to the docket record and serving', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const orderEntry = formattedDocketEntriesOnDocketRecord[8];
 
@@ -385,61 +401,64 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
   it('verifies the docket record after filing a paper document (without serving)', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoAddPaperFilingSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: 1,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: 2,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: 2018,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFileSize',
       value: 100,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'A',
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
-      value: true,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactPrimary.contactId}`,
+        value: true,
+      },
+    );
 
-    await test.runSequence('submitPaperFilingSequence', {
+    await integrationTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const entry = formattedDocketEntriesOnDocketRecord[6];
 
-    test.docketEntryId = entry.docketEntryId;
+    integrationTest.docketEntryId = entry.docketEntryId;
 
     expect(entry.index).toBeUndefined();
     expect(entry).toMatchObject({
@@ -450,21 +469,24 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   it('verifies the docket record after serving a paper filing', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('openConfirmServePaperFiledDocumentSequence', {
-      docketEntryId: test.docketEntryId,
-    });
+    await integrationTest.runSequence(
+      'openConfirmServePaperFiledDocumentSequence',
+      {
+        docketEntryId: integrationTest.docketEntryId,
+      },
+    );
 
-    await test.runSequence('servePaperFiledDocumentSequence');
+    await integrationTest.runSequence('servePaperFiledDocumentSequence');
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const servedEntry = formattedDocketEntriesOnDocketRecord.find(
-      entry => entry.docketEntryId === test.docketEntryId,
+      entry => entry.docketEntryId === integrationTest.docketEntryId,
     );
 
     expect(servedEntry).toMatchObject({
@@ -477,13 +499,13 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   it('verifies the docket record after filing a petition electronically', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(integrationTest, {
       ownershipDisclosureFileId: '2da6d239-555a-40e8-af81-1949c8270cd7',
     });
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     expect(formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
@@ -508,21 +530,21 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     ]);
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkServesPetitionFromDocumentView(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkServesPetitionFromDocumentView(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
   const today = applicationContext.getUtilities().formatNow('MMDDYYYY');
   const [todayMonth, todayDay, todayYear] = today.split('/');
 
-  docketClerkAddsDocketEntryWithoutFile(test, {
+  docketClerkAddsDocketEntryWithoutFile(integrationTest, {
     dateReceivedDay: todayDay,
     dateReceivedMonth: todayMonth,
     dateReceivedYear: todayYear,
   });
   it('verifies the docket record after filing a paper document without a file', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     expect(formattedDocketEntriesOnDocketRecord.length).toEqual(4);
     const entry = formattedDocketEntriesOnDocketRecord[3];
@@ -537,11 +559,11 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerFilesADocumentForCase(test, fakeFile);
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerFilesADocumentForCase(integrationTest, fakeFile);
   it('verifies the docket record after filing a document electronically after serving the petition', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const entry = formattedDocketEntriesOnDocketRecord[3];
 
@@ -554,11 +576,11 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkAddsTrackedDocketEntry(test, fakeFile);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkAddsTrackedDocketEntry(integrationTest, fakeFile);
   it('verifies the docket record after filing a tracked, paper-filed docket entry (APPL)', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const entry = formattedDocketEntriesOnDocketRecord.find(
       docketEntry => docketEntry.eventCode === 'APPL',
@@ -575,14 +597,14 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
   docketClerkEditsServiceIndicatorForPetitioner(
-    test,
+    integrationTest,
     SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
   );
 
-  docketClerkAddsTrackedDocketEntry(test, fakeFile, true);
+  docketClerkAddsTrackedDocketEntry(integrationTest, fakeFile, true);
   it('verifies the docket record after filing a tracked, paper-filed docket entry (APPL) on a case with paper service parties', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const entry = formattedDocketEntriesOnDocketRecord.find(
       docketEntry => docketEntry.eventCode === 'APPL',

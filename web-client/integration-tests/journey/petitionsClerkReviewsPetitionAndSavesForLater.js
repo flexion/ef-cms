@@ -1,45 +1,48 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const petitionsClerkReviewsPetitionAndSavesForLater = test => {
-  return it('Petitions Clerk reviews petition and saves for later', async () => {
-    await refreshElasticsearchIndex();
+export const petitionsClerkReviewsPetitionAndSavesForLater =
+  integrationTest => {
+    return it('Petitions Clerk reviews petition and saves for later', async () => {
+      await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoWorkQueueSequence');
-    expect(test.getState('currentPage')).toEqual('WorkQueue');
-    await test.runSequence('chooseWorkQueueSequence', {
-      box: 'inbox',
-      queue: 'section',
+      await integrationTest.runSequence('gotoWorkQueueSequence');
+      expect(integrationTest.getState('currentPage')).toEqual('WorkQueue');
+      await integrationTest.runSequence('chooseWorkQueueSequence', {
+        box: 'inbox',
+        queue: 'section',
+      });
+
+      const workQueueToDisplay = integrationTest.getState('workQueueToDisplay');
+
+      expect(workQueueToDisplay.queue).toEqual('section');
+      expect(workQueueToDisplay.box).toEqual('inbox');
+
+      const inboxQueue = integrationTest.getState('workQueue');
+      const inboxWorkItem = inboxQueue.find(
+        workItem => workItem.docketNumber === integrationTest.docketNumber,
+      );
+
+      expect(inboxWorkItem).toBeTruthy();
+
+      await integrationTest.runSequence('gotoPetitionQcSequence', {
+        docketNumber: integrationTest.docketNumber,
+      });
+
+      await integrationTest.runSequence('updateFormValueSequence', {
+        key: 'hasVerifiedIrsNotice',
+        value: false,
+      });
+
+      await integrationTest.runSequence('saveSavedCaseForLaterSequence');
+
+      expect(integrationTest.getState('validationErrors')).toEqual({});
+
+      expect(integrationTest.getState('currentPage')).toEqual(
+        'ReviewSavedPetition',
+      );
+
+      await integrationTest.runSequence('leaveCaseForLaterServiceSequence', {});
+
+      expect(integrationTest.getState('currentPage')).toEqual('WorkQueue');
     });
-
-    const workQueueToDisplay = test.getState('workQueueToDisplay');
-
-    expect(workQueueToDisplay.queue).toEqual('section');
-    expect(workQueueToDisplay.box).toEqual('inbox');
-
-    const inboxQueue = test.getState('workQueue');
-    const inboxWorkItem = inboxQueue.find(
-      workItem => workItem.docketNumber === test.docketNumber,
-    );
-
-    expect(inboxWorkItem).toBeTruthy();
-
-    await test.runSequence('gotoPetitionQcSequence', {
-      docketNumber: test.docketNumber,
-    });
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'hasVerifiedIrsNotice',
-      value: false,
-    });
-
-    await test.runSequence('saveSavedCaseForLaterSequence');
-
-    expect(test.getState('validationErrors')).toEqual({});
-
-    expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
-
-    await test.runSequence('leaveCaseForLaterServiceSequence', {});
-
-    expect(test.getState('currentPage')).toEqual('WorkQueue');
-  });
-};
+  };

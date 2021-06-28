@@ -1,8 +1,8 @@
-export const irsSuperuserSearchForCase = test => {
+export const irsSuperuserSearchForCase = integrationTest => {
   return it('irsSuperuser searches for case by docket number from dashboard', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    test.setState('header.searchTerm', test.docketNumber);
-    await test.runSequence('submitCaseSearchSequence');
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    await integrationTest.runSequence('gotoDashboardSequence');
+    integrationTest.setState('header.searchTerm', integrationTest.docketNumber);
+    await integrationTest.runSequence('submitCaseSearchSequence');
+    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
   });
 };

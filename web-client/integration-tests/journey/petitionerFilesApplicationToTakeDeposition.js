@@ -1,16 +1,19 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
-export const petitionerFilesApplicationToTakeDeposition = (test, fakeFile) => {
+export const petitionerFilesApplicationToTakeDeposition = (
+  integrationTest,
+  fakeFile,
+) => {
   return it('Petitioner files an application to take deposition', async () => {
     const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('gotoFileDocumentSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
     const documentToSelect = {
@@ -22,49 +25,69 @@ export const petitionerFilesApplicationToTakeDeposition = (test, fakeFile) => {
     };
 
     for (const key of Object.keys(documentToSelect)) {
-      await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-        key,
-        value: documentToSelect[key],
-      });
+      await integrationTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value: documentToSelect[key],
+        },
+      );
     }
 
-    await test.runSequence('completeDocumentSelectSequence');
+    await integrationTest.runSequence('completeDocumentSelectSequence');
 
-    expect(test.getState('form.documentType')).toEqual(
+    expect(integrationTest.getState('form.documentType')).toEqual(
       documentToSelect.documentType,
     );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'primaryDocumentFile',
+        value: fakeFile,
+      },
+    );
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
-      value: true,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactPrimary.contactId}`,
+        value: true,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'certificateOfService',
-      value: false,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'certificateOfService',
+        value: false,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'hasSupportingDocuments',
-      value: false,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'hasSupportingDocuments',
+        value: false,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'objections',
-      value: OBJECTIONS_OPTIONS_MAP.NO,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'objections',
+        value: OBJECTIONS_OPTIONS_MAP.NO,
+      },
+    );
 
-    await test.runSequence('reviewExternalDocumentInformationSequence');
+    await integrationTest.runSequence(
+      'reviewExternalDocumentInformationSequence',
+    );
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('submitExternalDocumentSequence');
+    await integrationTest.runSequence('submitExternalDocumentSequence');
   });
 };

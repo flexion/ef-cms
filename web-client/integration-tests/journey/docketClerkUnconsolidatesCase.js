@@ -1,23 +1,31 @@
-export const docketClerkUnconsolidatesCase = test => {
+export const docketClerkUnconsolidatesCase = integrationTest => {
   it('Docket clerk unconsolidate a case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.leadDocketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.leadDocketNumber,
     });
 
-    await test.runSequence('openCleanModalSequence', {
+    await integrationTest.runSequence('openCleanModalSequence', {
       showModal: 'UnconsolidateCasesModal',
     });
-    expect(test.getState('modal.showModal')).toEqual('UnconsolidateCasesModal');
-    const currentDocketNumber = test.getState('caseDetail.docketNumber');
+    expect(integrationTest.getState('modal.showModal')).toEqual(
+      'UnconsolidateCasesModal',
+    );
+    const currentDocketNumber = integrationTest.getState(
+      'caseDetail.docketNumber',
+    );
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: `casesToRemove.${currentDocketNumber}`,
       value: true,
     });
 
-    await test.runSequence('submitRemoveConsolidatedCasesSequence');
+    await integrationTest.runSequence('submitRemoveConsolidatedCasesSequence');
 
-    expect(test.getState('caseDetail.leadDocketNumber')).toBeUndefined();
-    expect(test.getState('caseDetail.consolidatedCases').length).toEqual(0);
+    expect(
+      integrationTest.getState('caseDetail.leadDocketNumber'),
+    ).toBeUndefined();
+    expect(
+      integrationTest.getState('caseDetail.consolidatedCases').length,
+    ).toEqual(0);
   });
 };

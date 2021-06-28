@@ -7,7 +7,7 @@ import { petitionsClerkReviewsPetitionAndSavesForLater } from './journey/petitio
 import { petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving } from './journey/petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving';
 import { petitionsClerkViewsSectionInProgress } from './journey/petitionsClerkViewsSectionInProgress';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Petitions Clerk QCs Paper Filed Petition', () => {
   beforeAll(() => {
@@ -15,29 +15,38 @@ describe('Petitions Clerk QCs Paper Filed Petition', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCaseFromPaper(test, fakeFile);
-  petitionsClerkReviewsPetitionAndSavesForLater(test);
-  petitionsClerkViewsSectionInProgress(test);
-  petitionsClerkEditsSavedPetition(test);
-  petitionsClerkRemovesAndReaddsPetitionFile(test, fakeFile);
-  petitionsClerkEditsSavedPetition(test);
-  petitionsClerkRemovesAndReaddsPdfFromPetition(test, fakeFile);
-  petitionsClerkEditsSavedPetition(test);
-  petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving(test, fakeFile);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCaseFromPaper(integrationTest, fakeFile);
+  petitionsClerkReviewsPetitionAndSavesForLater(integrationTest);
+  petitionsClerkViewsSectionInProgress(integrationTest);
+  petitionsClerkEditsSavedPetition(integrationTest);
+  petitionsClerkRemovesAndReaddsPetitionFile(integrationTest, fakeFile);
+  petitionsClerkEditsSavedPetition(integrationTest);
+  petitionsClerkRemovesAndReaddsPdfFromPetition(integrationTest, fakeFile);
+  petitionsClerkEditsSavedPetition(integrationTest);
+  petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving(
+    integrationTest,
+    fakeFile,
+  );
 
   it('should be able to serve the case', async () => {
-    expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'ReviewSavedPetition',
+    );
 
-    await test.runSequence('openConfirmServeToIrsModalSequence');
+    await integrationTest.runSequence('openConfirmServeToIrsModalSequence');
 
-    await test.runSequence('serveCaseToIrsSequence');
+    await integrationTest.runSequence('serveCaseToIrsSequence');
 
-    expect(test.getState('currentPage')).toEqual('PrintPaperPetitionReceipt');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'PrintPaperPetitionReceipt',
+    );
 
-    await test.runSequence('completePrintPaperPetitionReceiptSequence');
+    await integrationTest.runSequence(
+      'completePrintPaperPetitionReceiptSequence',
+    );
   });
 });

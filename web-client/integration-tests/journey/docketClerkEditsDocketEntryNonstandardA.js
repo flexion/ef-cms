@@ -8,110 +8,113 @@ import {
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
-export const docketClerkEditsDocketEntryNonstandardA = test => {
+export const docketClerkEditsDocketEntryNonstandardA = integrationTest => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard A scenario', async () => {
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const { docketEntryId } = formattedDocketEntriesOnDocketRecord[0];
     const petitionDocument = getPetitionDocumentForCase(
-      test.getState('caseDetail'),
+      integrationTest.getState('caseDetail'),
     );
     expect(docketEntryId).toBeDefined();
     expect(petitionDocument.docketEntryId).toBeDefined();
 
     const docketEntriesBefore = formattedDocketEntriesOnDocketRecord.length;
 
-    await test.runSequence('gotoEditPaperFilingSequence', {
+    await integrationTest.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('PaperFiling');
-    expect(test.getState('docketEntryId')).toEqual(docketEntryId);
+    expect(integrationTest.getState('currentPage')).toEqual('PaperFiling');
+    expect(integrationTest.getState('docketEntryId')).toEqual(docketEntryId);
 
-    expect(test.getState('form')).toMatchObject({
+    expect(integrationTest.getState('form')).toMatchObject({
       dateReceivedDay: '1',
       dateReceivedMonth: '1',
       dateReceivedYear: '2018',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'NNOB',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: '1',
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: '1',
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: '2050',
     });
 
-    await test.runSequence('submitPaperFilingSequence', {
+    await integrationTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
       previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: '2012',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'previousDocument',
       value: petitionDocument.docketEntryId,
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
-    const contactSecondary = contactSecondaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactSecondary = contactSecondaryFromState(integrationTest);
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: `filersMap.${contactSecondary.contactId}`,
-      value: true,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactSecondary.contactId}`,
+        value: true,
+      },
+    );
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'partyIrsPractitioner',
       value: true,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'hasOtherFilingParty',
       value: true,
     });
 
-    await test.runSequence('submitPaperFilingSequence', {
+    await integrationTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       otherFilingParty: 'Enter other filing party name.',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'otherFilingParty',
       value: 'Brianna Noble',
     });
 
-    await test.runSequence('submitPaperFilingSequence', {
+    await integrationTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test));
+      await getFormattedDocketEntriesForTest(integrationTest));
 
     const docketEntriesAfter = formattedDocketEntriesOnDocketRecord.length;
 

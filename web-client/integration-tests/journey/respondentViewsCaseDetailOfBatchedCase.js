@@ -1,16 +1,20 @@
 import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
-export const respondentViewsCaseDetailOfBatchedCase = test => {
+export const respondentViewsCaseDetailOfBatchedCase = integrationTest => {
   return it('Respondent views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    integrationTest.setState('caseDetail', {});
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual(
+    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(integrationTest.getState('caseDetail.docketNumber')).toEqual(
+      integrationTest.docketNumber,
+    );
+    expect(integrationTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.generalDocket,
     );
-    expect(test.getState('caseDetail.docketEntries').length).toEqual(2);
+    expect(integrationTest.getState('caseDetail.docketEntries').length).toEqual(
+      2,
+    );
   });
 };

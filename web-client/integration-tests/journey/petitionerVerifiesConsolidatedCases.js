@@ -1,6 +1,6 @@
-export const petitionerVerifiesConsolidatedCases = test => {
+export const petitionerVerifiesConsolidatedCases = integrationTest => {
   return it('Petitioner verifies there are consolidated cases', async () => {
-    const cases = test.getState('openCases');
+    const cases = integrationTest.getState('openCases');
 
     const casesWithConsolidation = cases.filter(
       caseDetail => !!caseDetail.leadDocketNumber,

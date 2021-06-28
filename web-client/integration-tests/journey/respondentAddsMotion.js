@@ -2,28 +2,31 @@ import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
-export const respondentAddsMotion = (test, fakeFile) => {
+export const respondentAddsMotion = (integrationTest, fakeFile) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('Respondent adds Motion with supporting Brief', async () => {
-    await test.runSequence('gotoFileDocumentSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('completeDocumentSelectSequence');
+    await integrationTest.runSequence('completeDocumentSelectSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       category: VALIDATION_ERROR_MESSAGES.category,
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'category',
-      value: 'Motion',
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'category',
+        value: 'Motion',
+      },
+    );
 
-    await test.runSequence('validateSelectDocumentTypeSequence');
-    expect(test.getState('validationErrors')).toEqual({
+    await integrationTest.runSequence('validateSelectDocumentTypeSequence');
+    expect(integrationTest.getState('validationErrors')).toEqual({
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
@@ -36,76 +39,105 @@ export const respondentAddsMotion = (test, fakeFile) => {
     };
 
     for (const key of Object.keys(documentToSelect)) {
-      await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-        key,
-        value: documentToSelect[key],
-      });
+      await integrationTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value: documentToSelect[key],
+        },
+      );
     }
 
-    await test.runSequence('validateSelectDocumentTypeSequence');
+    await integrationTest.runSequence('validateSelectDocumentTypeSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('completeDocumentSelectSequence');
+    await integrationTest.runSequence('completeDocumentSelectSequence');
 
-    expect(test.getState('form.documentType')).toEqual(
+    expect(integrationTest.getState('form.documentType')).toEqual(
       'Motion for Continuance',
     );
 
-    expect(test.getState('form.partyPrimary')).toBeUndefined();
+    expect(integrationTest.getState('form.partyPrimary')).toBeUndefined();
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'primaryDocumentFile',
+        value: fakeFile,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'certificateOfService',
-      value: false,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'certificateOfService',
+        value: false,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'attachments',
-      value: false,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'attachments',
+        value: false,
+      },
+    );
 
-    await test.runSequence('addSupportingDocumentToFormSequence', {
+    await integrationTest.runSequence('addSupportingDocumentToFormSequence', {
       type: 'primary',
     });
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'supportingDocuments.0.supportingDocument',
-      value: 'Brief in Support',
-    });
-
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'supportingDocuments.0.category',
-      value: 'Supporting Document',
-    });
-
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'supportingDocuments.0.documentType',
-      value: 'Brief in Support',
-    });
-
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'supportingDocuments.0.previousDocument',
-      value: {
-        documentTitle: test.getState('form.documentTitle'),
-        documentType: test.getState('form.documentType'),
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'supportingDocuments.0.supportingDocument',
+        value: 'Brief in Support',
       },
-    });
+    );
 
-    const contactPrimary = contactPrimaryFromState(test);
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'supportingDocuments.0.category',
+        value: 'Supporting Document',
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
-      value: true,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'supportingDocuments.0.documentType',
+        value: 'Brief in Support',
+      },
+    );
 
-    await test.runSequence('reviewExternalDocumentInformationSequence');
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'supportingDocuments.0.previousDocument',
+        value: {
+          documentTitle: integrationTest.getState('form.documentTitle'),
+          documentType: integrationTest.getState('form.documentType'),
+        },
+      },
+    );
 
-    expect(test.getState('validationErrors')).toEqual({
+    const contactPrimary = contactPrimaryFromState(integrationTest);
+
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactPrimary.contactId}`,
+        value: true,
+      },
+    );
+
+    await integrationTest.runSequence(
+      'reviewExternalDocumentInformationSequence',
+    );
+
+    expect(integrationTest.getState('validationErrors')).toEqual({
       objections: VALIDATION_ERROR_MESSAGES.objections,
       supportingDocuments: [
         {
@@ -116,20 +148,30 @@ export const respondentAddsMotion = (test, fakeFile) => {
       ],
     });
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'objections',
-      value: OBJECTIONS_OPTIONS_MAP.YES,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'objections',
+        value: OBJECTIONS_OPTIONS_MAP.YES,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'supportingDocuments.0.supportingDocumentFile',
-      value: fakeFile,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'supportingDocuments.0.supportingDocumentFile',
+        value: fakeFile,
+      },
+    );
 
-    await test.runSequence('reviewExternalDocumentInformationSequence');
+    await integrationTest.runSequence(
+      'reviewExternalDocumentInformationSequence',
+    );
 
-    await test.runSequence('submitExternalDocumentSequence');
+    await integrationTest.runSequence('submitExternalDocumentSequence');
 
-    expect(test.getState('caseDetail.docketEntries').length).toEqual(7);
+    expect(integrationTest.getState('caseDetail.docketEntries').length).toEqual(
+      7,
+    );
   });
 };

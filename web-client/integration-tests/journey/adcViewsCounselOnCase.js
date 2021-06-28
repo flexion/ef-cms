@@ -1,14 +1,21 @@
-export const adcViewsCounselOnCase = test => {
+export const adcViewsCounselOnCase = integrationTest => {
   return it('ADC views counsel on case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('showViewPetitionerCounselModalSequence', {
-      privatePractitioner: test.privatePractitioner,
-    });
+    await integrationTest.runSequence(
+      'showViewPetitionerCounselModalSequence',
+      {
+        privatePractitioner: integrationTest.privatePractitioner,
+      },
+    );
 
-    expect(test.getState('modal.showModal')).toBe('ViewPetitionerCounselModal');
-    expect(test.getState('modal.contact')).toEqual(test.privatePractitioner);
+    expect(integrationTest.getState('modal.showModal')).toBe(
+      'ViewPetitionerCounselModal',
+    );
+    expect(integrationTest.getState('modal.contact')).toEqual(
+      integrationTest.privatePractitioner,
+    );
   });
 };

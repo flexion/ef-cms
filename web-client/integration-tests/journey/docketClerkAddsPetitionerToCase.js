@@ -4,66 +4,71 @@ import {
 } from '../../../shared/src/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
 
-export const docketClerkAddsPetitionerToCase = (test, overrides = {}) => {
+export const docketClerkAddsPetitionerToCase = (
+  integrationTest,
+  overrides = {},
+) => {
   return it('docket clerk adds new petitioner to case', async () => {
-    const petitionersBeforeAdding = test.getState(
+    const petitionersBeforeAdding = integrationTest.getState(
       'caseDetail.petitioners',
     ).length;
 
-    await test.runSequence('gotoAddPetitionerToCaseSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoAddPetitionerToCaseSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.contactType',
       value: overrides.contactType || CONTACT_TYPES.otherPetitioner,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.name',
       value: overrides.name || 'A New Petitioner',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.additionalName',
       value: 'A Petitioner Additional Name',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.phone',
       value: '6126788888',
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
 
-    await test.runSequence('setSelectedAddressOnFormSequence', {
+    await integrationTest.runSequence('setSelectedAddressOnFormSequence', {
       contactId: contactPrimary.contactId,
     });
 
     const mockUpdatedCaption = 'Something Else';
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.caseCaption',
       value: mockUpdatedCaption,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.serviceIndicator',
       value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 
-    await test.runSequence('submitAddPetitionerSequence');
+    await integrationTest.runSequence('submitAddPetitionerSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('caseDetail.petitioners').length).toEqual(
+    expect(integrationTest.getState('caseDetail.petitioners').length).toEqual(
       petitionersBeforeAdding + 1,
     );
 
-    expect(test.getState('caseDetail.caseCaption')).toEqual(mockUpdatedCaption);
+    expect(integrationTest.getState('caseDetail.caseCaption')).toEqual(
+      mockUpdatedCaption,
+    );
 
     if (overrides.contactType === 'intervenor') {
-      test.intervenorContactId = test
+      integrationTest.intervenorContactId = integrationTest
         .getState('caseDetail.petitioners')
         .find(p => p.contactType === CONTACT_TYPES.intervenor).contactId;
     }

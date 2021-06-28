@@ -54,15 +54,16 @@ const practitionerWithoutEmail = {
   },
 };
 
-export const admissionsClerkMigratesPractitionerWithoutEmail = test => {
-  return it('Admissions Clerk migrates practitioner without email', async () => {
-    await axiosInstance.post(
-      'http://localhost:4000/practitioners',
-      practitionerWithoutEmail,
-    );
+export const admissionsClerkMigratesPractitionerWithoutEmail =
+  integrationTest => {
+    return it('Admissions Clerk migrates practitioner without email', async () => {
+      await axiosInstance.post(
+        'http://localhost:4000/practitioners',
+        practitionerWithoutEmail,
+      );
 
-    test.barNumber = practitionerWithoutEmail.user.barNumber;
+      integrationTest.barNumber = practitionerWithoutEmail.user.barNumber;
 
-    await refreshElasticsearchIndex();
-  });
-};
+      await refreshElasticsearchIndex();
+    });
+  };

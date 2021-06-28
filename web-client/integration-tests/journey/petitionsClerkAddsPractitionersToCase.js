@@ -7,80 +7,101 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
+export const petitionsClerkAddsPractitionersToCase = (
+  integrationTest,
+  skipSecondary,
+) => {
   return it('Petitions clerk manually adds multiple privatePractitioners to case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    const practitionerBarNumber = test.barNumber || 'PT1234';
+    const practitionerBarNumber = integrationTest.barNumber || 'PT1234';
 
-    expect(test.getState('caseDetail.privatePractitioners')).toEqual([]);
+    expect(integrationTest.getState('caseDetail.privatePractitioners')).toEqual(
+      [],
+    );
 
-    await test.runSequence('openAddPrivatePractitionerModalSequence');
+    await integrationTest.runSequence(
+      'openAddPrivatePractitionerModalSequence',
+    );
 
     expect(
-      test.getState('validationErrors.practitionerSearchError'),
+      integrationTest.getState('validationErrors.practitionerSearchError'),
     ).toBeDefined();
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'practitionerSearch',
       value: practitionerBarNumber,
     });
 
-    await test.runSequence('openAddPrivatePractitionerModalSequence');
+    await integrationTest.runSequence(
+      'openAddPrivatePractitionerModalSequence',
+    );
 
     expect(
-      test.getState('validationErrors.practitionerSearchError'),
+      integrationTest.getState('validationErrors.practitionerSearchError'),
     ).toBeUndefined();
-    expect(test.getState('modal.practitionerMatches.length')).toEqual(1);
+    expect(
+      integrationTest.getState('modal.practitionerMatches.length'),
+    ).toEqual(1);
 
     //default selected because there was only 1 match
-    let practitionerMatch = test.getState('modal.practitionerMatches.0');
-    expect(test.getState('modal.user.userId')).toEqual(
+    let practitionerMatch = integrationTest.getState(
+      'modal.practitionerMatches.0',
+    );
+    expect(integrationTest.getState('modal.user.userId')).toEqual(
       practitionerMatch.userId,
     );
 
     const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
     const contactPrimary = formattedCase.petitioners[0];
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: `representingMap.${contactPrimary.contactId}`,
       value: true,
     });
 
-    if (test.intervenorContactId) {
-      await test.runSequence('updateModalValueSequence', {
-        key: `representingMap.${test.intervenorContactId}`,
+    if (integrationTest.intervenorContactId) {
+      await integrationTest.runSequence('updateModalValueSequence', {
+        key: `representingMap.${integrationTest.intervenorContactId}`,
         value: true,
       });
     }
 
     expect(
-      test.getState('validationErrors.practitionerSearchError'),
+      integrationTest.getState('validationErrors.practitionerSearchError'),
     ).toBeUndefined();
 
-    await test.runSequence('associatePrivatePractitionerWithCaseSequence');
-
-    expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(1);
-    expect(
-      test.getState('caseDetail.privatePractitioners.0.representing'),
-    ).toContain(contactPrimary.contactId);
-
-    if (test.intervenorContactId) {
-      expect(
-        test.getState('caseDetail.privatePractitioners.0.representing'),
-      ).toContain(test.intervenorContactId);
-    }
-
-    expect(test.getState('caseDetail.privatePractitioners.0.name')).toEqual(
-      practitionerMatch.name,
+    await integrationTest.runSequence(
+      'associatePrivatePractitionerWithCaseSequence',
     );
 
+    expect(
+      integrationTest.getState('caseDetail.privatePractitioners.length'),
+    ).toEqual(1);
+    expect(
+      integrationTest.getState(
+        'caseDetail.privatePractitioners.0.representing',
+      ),
+    ).toContain(contactPrimary.contactId);
+
+    if (integrationTest.intervenorContactId) {
+      expect(
+        integrationTest.getState(
+          'caseDetail.privatePractitioners.0.representing',
+        ),
+      ).toContain(integrationTest.intervenorContactId);
+    }
+
+    expect(
+      integrationTest.getState('caseDetail.privatePractitioners.0.name'),
+    ).toEqual(practitionerMatch.name);
+
     let formatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     expect(formatted.privatePractitioners.length).toEqual(1);
@@ -88,41 +109,51 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
       `${practitionerMatch.name} (${practitionerMatch.barNumber})`,
     );
 
-    test.privatePractitioners = formatted.privatePractitioners[0];
+    integrationTest.privatePractitioners = formatted.privatePractitioners[0];
 
     //add a second practitioner
     if (!skipSecondary) {
-      await test.runSequence('updateFormValueSequence', {
+      await integrationTest.runSequence('updateFormValueSequence', {
         key: 'practitionerSearch',
         value: 'PT5432',
       });
-      await test.runSequence('openAddPrivatePractitionerModalSequence');
+      await integrationTest.runSequence(
+        'openAddPrivatePractitionerModalSequence',
+      );
 
-      expect(test.getState('modal.practitionerMatches.length')).toEqual(1);
-      practitionerMatch = test.getState('modal.practitionerMatches.0');
-      expect(test.getState('modal.user.userId')).toEqual(
+      expect(
+        integrationTest.getState('modal.practitionerMatches.length'),
+      ).toEqual(1);
+      practitionerMatch = integrationTest.getState(
+        'modal.practitionerMatches.0',
+      );
+      expect(integrationTest.getState('modal.user.userId')).toEqual(
         practitionerMatch.userId,
       );
 
       const contactSecondary = formattedCase.petitioners[1];
-      await test.runSequence('updateModalValueSequence', {
+      await integrationTest.runSequence('updateModalValueSequence', {
         key: `representingMap.${contactSecondary.contactId}`,
         value: true,
       });
 
-      await test.runSequence('associatePrivatePractitionerWithCaseSequence');
-      expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(
-        2,
+      await integrationTest.runSequence(
+        'associatePrivatePractitionerWithCaseSequence',
       );
       expect(
-        test.getState('caseDetail.privatePractitioners.1.representing'),
+        integrationTest.getState('caseDetail.privatePractitioners.length'),
+      ).toEqual(2);
+      expect(
+        integrationTest.getState(
+          'caseDetail.privatePractitioners.1.representing',
+        ),
       ).toEqual([contactSecondary.contactId]);
-      expect(test.getState('caseDetail.privatePractitioners.1.name')).toEqual(
-        practitionerMatch.name,
-      );
+      expect(
+        integrationTest.getState('caseDetail.privatePractitioners.1.name'),
+      ).toEqual(practitionerMatch.name);
 
       formatted = runCompute(formattedCaseDetail, {
-        state: test.getState(),
+        state: integrationTest.getState(),
       });
 
       expect(formatted.privatePractitioners.length).toEqual(2);

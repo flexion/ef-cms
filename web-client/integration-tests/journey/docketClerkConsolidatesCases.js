@@ -1,10 +1,14 @@
-export const docketClerkConsolidatesCases = test => {
+export const docketClerkConsolidatesCases = integrationTest => {
   return it('Docket clerk consolidates cases', async () => {
-    test.setState('modal.confirmSelection', true);
-    await test.runSequence('submitAddConsolidatedCaseSequence');
+    integrationTest.setState('modal.confirmSelection', true);
+    await integrationTest.runSequence('submitAddConsolidatedCaseSequence');
 
-    expect(test.getState('caseDetail')).toHaveProperty('consolidatedCases');
-    expect(test.getState('caseDetail.consolidatedCases').length).toEqual(2);
-    expect(test.getState('modal.showModal')).toBeUndefined();
+    expect(integrationTest.getState('caseDetail')).toHaveProperty(
+      'consolidatedCases',
+    );
+    expect(
+      integrationTest.getState('caseDetail.consolidatedCases').length,
+    ).toEqual(2);
+    expect(integrationTest.getState('modal.showModal')).toBeUndefined();
   });
 };

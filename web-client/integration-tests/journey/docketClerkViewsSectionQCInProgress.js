@@ -1,22 +1,25 @@
-export const docketClerkViewsSectionQCInProgress = (test, shouldExist) => {
+export const docketClerkViewsSectionQCInProgress = (
+  integrationTest,
+  shouldExist,
+) => {
   return it('Docket clerk views Section Document QC - In Progress', async () => {
-    await test.runSequence('gotoWorkQueueSequence');
-    expect(test.getState('currentPage')).toEqual('WorkQueue');
-    await test.runSequence('chooseWorkQueueSequence', {
+    await integrationTest.runSequence('gotoWorkQueueSequence');
+    expect(integrationTest.getState('currentPage')).toEqual('WorkQueue');
+    await integrationTest.runSequence('chooseWorkQueueSequence', {
       box: 'inProgress',
       queue: 'section',
     });
 
-    const workQueueToDisplay = test.getState('workQueueToDisplay');
+    const workQueueToDisplay = integrationTest.getState('workQueueToDisplay');
 
     expect(workQueueToDisplay.queue).toEqual('section');
     expect(workQueueToDisplay.box).toEqual('inProgress');
 
-    const inProgressQueue = test.getState('workQueue');
+    const inProgressQueue = integrationTest.getState('workQueue');
     const inProgressWorkItem = inProgressQueue.find(
       workItem =>
         workItem.docketEntry.docketEntryId ===
-        test.docketRecordEntry.docketEntryId,
+        integrationTest.docketRecordEntry.docketEntryId,
     );
 
     if (shouldExist) {

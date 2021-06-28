@@ -1,12 +1,12 @@
 const axios = require('axios');
 
-export const userNavigatesToCreateCaseConfirmation = test => {
+export const userNavigatesToCreateCaseConfirmation = integrationTest => {
   it('user sees the case confirmation pdf', async () => {
-    await test.runSequence('gotoPrintableCaseConfirmationSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoPrintableCaseConfirmationSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    const pdfPreviewUrl = test.getState('pdfPreviewUrl');
+    const pdfPreviewUrl = integrationTest.getState('pdfPreviewUrl');
     expect(pdfPreviewUrl).not.toBeNull();
 
     await axios.get(pdfPreviewUrl);

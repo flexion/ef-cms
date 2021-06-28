@@ -1,9 +1,11 @@
-export const chambersViewsTrialSessionWorkingCopy = test => {
+export const chambersViewsTrialSessionWorkingCopy = integrationTest => {
   return it('Chambers views trial session working copy', async () => {
-    await test.runSequence('gotoTrialSessionWorkingCopySequence', {
-      trialSessionId: test.trialSessionId,
+    await integrationTest.runSequence('gotoTrialSessionWorkingCopySequence', {
+      trialSessionId: integrationTest.trialSessionId,
     });
 
-    expect(test.getState('currentPage')).toEqual('TrialSessionWorkingCopy');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'TrialSessionWorkingCopy',
+    );
   });
 };

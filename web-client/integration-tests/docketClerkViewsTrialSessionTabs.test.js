@@ -10,7 +10,7 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { petitionsClerkViewsATrialSessionsEligibleCases } from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Docket Clerk Views Trial Session Tabs', () => {
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
   const caseCount = 2;
@@ -28,7 +28,7 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
     trialLocation,
   };
 
-  test.casesReadyForTrial = [];
+  integrationTest.casesReadyForTrial = [];
 
   const createdDocketNumbers = [];
 
@@ -41,44 +41,44 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
       testSession.docketNumber = caseDetail.docketNumber;
     });
 
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkSubmitsCaseToIrs(test);
+    loginAs(integrationTest, 'petitionsclerk@example.com');
+    petitionsClerkSubmitsCaseToIrs(integrationTest);
 
-    loginAs(test, 'docketclerk@example.com');
-    docketClerkSetsCaseReadyForTrial(test);
+    loginAs(integrationTest, 'docketclerk@example.com');
+    docketClerkSetsCaseReadyForTrial(integrationTest);
   };
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, overrides);
-  docketClerkViewsTrialSessionList(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(integrationTest, overrides);
+  docketClerkViewsTrialSessionList(integrationTest);
   // Trial Session should exist in New tab
-  docketClerkViewsTrialSessionsTab(test, { tab: 'New' });
+  docketClerkViewsTrialSessionsTab(integrationTest, { tab: 'New' });
 
   for (let i = 0; i < caseCount; i++) {
     const id = i + 1;
-    makeCaseReadyForTrial(test, id, overrides);
+    makeCaseReadyForTrial(integrationTest, id, overrides);
   }
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsATrialSessionsEligibleCases(test, caseCount);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsATrialSessionsEligibleCases(integrationTest, caseCount);
 
-  petitionsClerkManuallyAddsCaseToTrial(test);
+  petitionsClerkManuallyAddsCaseToTrial(integrationTest);
   // only mark cases 0 and 1 as QCed
-  markAllCasesAsQCed(test, () => {
+  markAllCasesAsQCed(integrationTest, () => {
     return [createdDocketNumbers[1]];
   });
-  petitionsClerkSetsATrialSessionsSchedule(test);
+  petitionsClerkSetsATrialSessionsSchedule(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
   // Trial Session should exist in Open tab
-  docketClerkViewsTrialSessionsTab(test, { tab: 'Open' });
+  docketClerkViewsTrialSessionsTab(integrationTest, { tab: 'Open' });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkManuallyRemovesCaseFromTrial(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkManuallyRemovesCaseFromTrial(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
   // Trial Session should exist in Closed tab
-  docketClerkViewsTrialSessionsTab(test, { tab: 'Closed' });
+  docketClerkViewsTrialSessionsTab(integrationTest, { tab: 'Closed' });
   // Trial Session should exist in All tab
-  docketClerkViewsTrialSessionsTab(test, { tab: 'All' });
+  docketClerkViewsTrialSessionsTab(integrationTest, { tab: 'All' });
 });

@@ -1,10 +1,10 @@
-export const petitionsClerkEditsSavedPetition = test => {
+export const petitionsClerkEditsSavedPetition = integrationTest => {
   return it('Petitions Clerk edits saved petition', async () => {
-    await test.runSequence('gotoPetitionQcSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: integrationTest.docketNumber,
       tab: 'IrsNotice',
     });
 
-    expect(test.getState('currentPage')).toEqual('PetitionQc');
+    expect(integrationTest.getState('currentPage')).toEqual('PetitionQc');
   });
 };

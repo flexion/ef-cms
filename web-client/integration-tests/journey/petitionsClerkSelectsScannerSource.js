@@ -1,36 +1,36 @@
 export const petitionsClerkSelectsScannerSource = (
-  test,
+  integrationTest,
   { scannerSourceIndex, scannerSourceName },
 ) => {
   return it('Petitions clerk selects a scanner', async () => {
-    await test.runSequence('openChangeScannerSourceModalSequence');
+    await integrationTest.runSequence('openChangeScannerSourceModalSequence');
 
-    expect(test.getState('modal.showModal')).toEqual(
+    expect(integrationTest.getState('modal.showModal')).toEqual(
       'SelectScannerSourceModal',
     );
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'scanner',
       value: scannerSourceName,
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'index',
       value: scannerSourceIndex,
     });
 
-    await test.runSequence('selectScannerSequence', {
+    await integrationTest.runSequence('selectScannerSequence', {
       scannerSourceIndex,
       scannerSourceName,
     });
 
-    expect(test.getState('scanner.scannerSourceIndex')).toEqual(
+    expect(integrationTest.getState('scanner.scannerSourceIndex')).toEqual(
       scannerSourceIndex,
     );
-    expect(test.getState('scanner.scannerSourceName')).toEqual(
+    expect(integrationTest.getState('scanner.scannerSourceName')).toEqual(
       scannerSourceName,
     );
 
-    expect(test.getState('modal')).toMatchObject({});
+    expect(integrationTest.getState('modal')).toMatchObject({});
   });
 };

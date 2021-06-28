@@ -17,10 +17,10 @@ describe('Document title journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  const test = setupTest();
+  const integrationTest = setupTest();
 
   const formattedWorkQueue = withAppContextDecorator(
     formattedWorkQueueComputed,
@@ -30,20 +30,20 @@ describe('Document title journey', () => {
     completeDocumentTypeSectionHelperComputed,
   );
 
-  loginAs(test, 'privatePractitioner2@example.com');
-  practitionerCreatesNewCase(test, fakeFile);
+  loginAs(integrationTest, 'privatePractitioner2@example.com');
+  practitionerCreatesNewCase(integrationTest, fakeFile);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(integrationTest);
 
-  loginAs(test, 'privatePractitioner2@example.com');
+  loginAs(integrationTest, 'privatePractitioner2@example.com');
   it('Practitioner files Exhibit(s) document', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('gotoFileDocumentSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
     const documentToSelect = {
@@ -55,112 +55,129 @@ describe('Document title journey', () => {
     };
 
     for (const key of Object.keys(documentToSelect)) {
-      await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-        key,
-        value: documentToSelect[key],
-      });
+      await integrationTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value: documentToSelect[key],
+        },
+      );
     }
 
-    await test.runSequence('validateSelectDocumentTypeSequence');
+    await integrationTest.runSequence('validateSelectDocumentTypeSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('completeDocumentSelectSequence');
+    await integrationTest.runSequence('completeDocumentSelectSequence');
 
-    expect(test.getState('form.documentType')).toEqual('Exhibit(s)');
+    expect(integrationTest.getState('form.documentType')).toEqual('Exhibit(s)');
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'hasSupportingDocuments',
-      value: false,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'hasSupportingDocuments',
+        value: false,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'attachments',
-      value: false,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'attachments',
+        value: false,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'primaryDocumentFile',
+        value: fakeFile,
+      },
+    );
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
-      value: true,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactPrimary.contactId}`,
+        value: true,
+      },
+    );
 
-    await test.runSequence('reviewExternalDocumentInformationSequence');
+    await integrationTest.runSequence(
+      'reviewExternalDocumentInformationSequence',
+    );
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('submitExternalDocumentSequence');
+    await integrationTest.runSequence('submitExternalDocumentSequence');
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
   it('Docket clerk QCs Exhibits docket entry and adds additionalInfo', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    const exhibitDocketEntry = test
+    const exhibitDocketEntry = integrationTest
       .getState('caseDetail.docketEntries')
       .find(entry => entry.eventCode === 'EXH');
 
-    await test.runSequence('gotoDocketEntryQcSequence', {
+    await integrationTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: exhibitDocketEntry.docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'additionalInfo',
       value: 'Is this pool safe for diving? It deep ends.',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'addToCoversheet',
       value: true,
     });
 
-    await test.runSequence('completeDocketEntryQCSequence');
+    await integrationTest.runSequence('completeDocketEntryQCSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('alertSuccess').message).toEqual(
+    expect(integrationTest.getState('alertSuccess').message).toEqual(
       'Exhibit(s) Is this pool safe for diving? It deep ends. has been completed.',
     );
 
-    await test.runSequence('chooseWorkQueueSequence', {
+    await integrationTest.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'my',
     });
 
     const workQueueFormatted = runCompute(formattedWorkQueue, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
     const exhibitOutboxWorkItem = workQueueFormatted.find(
       workItem =>
         workItem.docketEntry.docketEntryId === exhibitDocketEntry.docketEntryId,
     );
-    test.docketEntryId = exhibitDocketEntry.docketEntryId;
+    integrationTest.docketEntryId = exhibitDocketEntry.docketEntryId;
 
     expect(exhibitOutboxWorkItem.docketEntry.descriptionDisplay).toEqual(
       'Exhibit(s) Is this pool safe for diving? It deep ends.',
     );
   });
 
-  loginAs(test, 'privatePractitioner2@example.com');
+  loginAs(integrationTest, 'privatePractitioner2@example.com');
   it('Practitioner files amendment to Exhibit(s) document', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('gotoFileDocumentSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
 
     const documentToSelect = {
       category: 'Miscellaneous',
@@ -174,22 +191,25 @@ describe('Document title journey', () => {
     };
 
     for (const key of Object.keys(documentToSelect)) {
-      await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-        key,
-        value: documentToSelect[key],
-      });
+      await integrationTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value: documentToSelect[key],
+        },
+      );
     }
 
-    await test.runSequence('validateSelectDocumentTypeSequence');
+    await integrationTest.runSequence('validateSelectDocumentTypeSequence');
 
-    await test.runSequence('completeDocumentSelectSequence');
+    await integrationTest.runSequence('completeDocumentSelectSequence');
 
-    test.setState('docketEntryId', undefined);
+    integrationTest.setState('docketEntryId', undefined);
 
     const completeDocumentTypeSection = runCompute(
       completeDocumentTypeSectionHelper,
       {
-        state: test.getState(),
+        state: integrationTest.getState(),
       },
     );
 
@@ -199,28 +219,36 @@ describe('Document title journey', () => {
       ).documentTitle,
     ).toEqual('Exhibit(s) Is this pool safe for diving? It deep ends.');
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'previousDocument',
-      value: test.docketEntryId,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'previousDocument',
+        value: integrationTest.docketEntryId,
+      },
+    );
 
-    await test.runSequence('completeDocumentSelectSequence');
+    await integrationTest.runSequence('completeDocumentSelectSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
-      value: true,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactPrimary.contactId}`,
+        value: true,
+      },
+    );
 
-    await test.runSequence('reviewExternalDocumentInformationSequence');
+    await integrationTest.runSequence(
+      'reviewExternalDocumentInformationSequence',
+    );
 
-    expect(test.getState('form.documentTitle')).toEqual(
+    expect(integrationTest.getState('form.documentTitle')).toEqual(
       'First Amendment to Exhibit(s) Is this pool safe for diving? It deep ends.',
     );
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('submitExternalDocumentSequence');
+    await integrationTest.runSequence('submitExternalDocumentSequence');
   });
 });

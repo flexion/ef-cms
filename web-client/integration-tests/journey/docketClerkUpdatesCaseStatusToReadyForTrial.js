@@ -4,49 +4,59 @@ import {
 } from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
+export const docketClerkUpdatesCaseStatusToReadyForTrial = integrationTest => {
   return it('Docket clerk updates case status to General Docket - At Issue (Ready for Trial)', async () => {
-    test.setState('caseDetail', {});
+    integrationTest.setState('caseDetail', {});
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumberDifferentPlaceOfTrial || test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber:
+        integrationTest.docketNumberDifferentPlaceOfTrial ||
+        integrationTest.docketNumber,
     });
 
-    const currentStatus = test.getState('caseDetail.status');
+    const currentStatus = integrationTest.getState('caseDetail.status');
 
-    await test.runSequence('openUpdateCaseModalSequence');
+    await integrationTest.runSequence('openUpdateCaseModalSequence');
 
-    expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
+    expect(integrationTest.getState('modal.showModal')).toEqual(
+      'UpdateCaseModalDialog',
+    );
 
-    expect(test.getState('modal.caseStatus')).toEqual(currentStatus);
+    expect(integrationTest.getState('modal.caseStatus')).toEqual(currentStatus);
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'caseStatus',
       value: CASE_STATUS_TYPES.generalDocket,
     });
 
-    await test.runSequence('clearModalSequence');
+    await integrationTest.runSequence('clearModalSequence');
 
-    expect(test.getState('caseDetail.status')).toEqual(currentStatus);
-    expect(test.getState('modal')).toEqual({});
+    expect(integrationTest.getState('caseDetail.status')).toEqual(
+      currentStatus,
+    );
+    expect(integrationTest.getState('modal')).toEqual({});
 
-    await test.runSequence('openUpdateCaseModalSequence');
+    await integrationTest.runSequence('openUpdateCaseModalSequence');
 
-    expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
-    expect(test.getState('modal.caseStatus')).toEqual(currentStatus);
+    expect(integrationTest.getState('modal.showModal')).toEqual(
+      'UpdateCaseModalDialog',
+    );
+    expect(integrationTest.getState('modal.caseStatus')).toEqual(currentStatus);
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'caseStatus',
       value: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     });
 
-    await test.runSequence('submitUpdateCaseModalSequence');
+    await integrationTest.runSequence('submitUpdateCaseModalSequence');
 
-    expect(test.getState('caseDetail.status')).toEqual(
+    expect(integrationTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.generalDocketReadyForTrial,
     );
-    expect(test.getState('caseDetail.associatedJudge')).toEqual(CHIEF_JUDGE);
-    expect(test.getState('modal')).toEqual({});
+    expect(integrationTest.getState('caseDetail.associatedJudge')).toEqual(
+      CHIEF_JUDGE,
+    );
+    expect(integrationTest.getState('modal')).toEqual({});
 
     await refreshElasticsearchIndex();
   });

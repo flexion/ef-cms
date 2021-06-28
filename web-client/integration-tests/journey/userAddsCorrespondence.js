@@ -1,32 +1,39 @@
 import { fakeFile } from '../helpers';
 
-export const userAddsCorrespondence = (test, correspondenceTitle, user) =>
+export const userAddsCorrespondence = (
+  integrationTest,
+  correspondenceTitle,
+  user,
+) =>
   it(`${user} adds correspondence to case`, async () => {
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'documentTitle',
       value: correspondenceTitle,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
 
-    await test.runSequence('uploadCorrespondenceDocumentSequence', {
+    await integrationTest.runSequence('uploadCorrespondenceDocumentSequence', {
       tab: 'correspondence',
     });
 
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('caseDetail.correspondence')).toEqual(
+    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('caseDetail.correspondence')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           documentTitle: correspondenceTitle,
         }),
       ]),
     );
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    const displayedCorrespondenceId = test.getState('correspondenceId');
-    const mostRecentCorrespondence = test
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseDetailInternal',
+    );
+    const displayedCorrespondenceId =
+      integrationTest.getState('correspondenceId');
+    const mostRecentCorrespondence = integrationTest
       .getState('caseDetail.correspondence')
       .slice(-1)
       .pop();

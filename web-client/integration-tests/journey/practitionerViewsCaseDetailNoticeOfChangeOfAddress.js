@@ -1,18 +1,19 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
 export const practitionerViewsCaseDetailNoticeOfChangeOfAddress = (
-  test,
+  integrationTest,
   createdDocketNumberIndex,
 ) => {
   return it('practitioner views case detail notice of change of address', async () => {
     await refreshElasticsearchIndex(5000);
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber:
+        integrationTest.createdDocketNumbers[createdDocketNumberIndex],
     });
 
-    const currentUser = test.getState('user');
-    const privatePractitioners = test.getState(
+    const currentUser = integrationTest.getState('user');
+    const privatePractitioners = integrationTest.getState(
       'caseDetail.privatePractitioners',
     );
     const privatePractitioner = privatePractitioners.find(
@@ -20,12 +21,12 @@ export const practitionerViewsCaseDetailNoticeOfChangeOfAddress = (
     );
 
     expect(privatePractitioner.contact).toMatchObject({
-      address1: test.updatedPractitionerAddress,
+      address1: integrationTest.updatedPractitionerAddress,
     });
 
     expect(privatePractitioner.firmName).toBe('My Awesome Law Firm');
 
-    const documents = test.getState('caseDetail.docketEntries');
+    const documents = integrationTest.getState('caseDetail.docketEntries');
 
     const changeOfAddressDocument = documents.find(
       document => document.documentType === 'Notice of Change of Address',

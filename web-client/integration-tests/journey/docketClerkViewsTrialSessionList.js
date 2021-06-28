@@ -7,25 +7,26 @@ const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,
 );
 
-export const docketClerkViewsTrialSessionList = test => {
+export const docketClerkViewsTrialSessionList = integrationTest => {
   return it('Docket clerk views trial session list', async () => {
-    await test.runSequence('gotoTrialSessionsSequence');
-    expect(test.getState('currentPage')).toEqual('TrialSessions');
+    await integrationTest.runSequence('gotoTrialSessionsSequence');
+    expect(integrationTest.getState('currentPage')).toEqual('TrialSessions');
 
     const formatted = runCompute(formattedTrialSessions, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
     expect(formatted.formattedSessions.length).toBeGreaterThan(0);
 
     const trialSession = find(formatted.sessionsByTerm, {
-      trialSessionId: test.lastCreatedTrialSessionId,
+      trialSessionId: integrationTest.lastCreatedTrialSessionId,
     });
 
     expect(trialSession).toBeDefined();
 
-    test.trialSessionId = trialSession && trialSession.trialSessionId;
-    if (test.createdTrialSessions) {
-      test.createdTrialSessions.push(test.trialSessionId);
+    integrationTest.trialSessionId =
+      trialSession && trialSession.trialSessionId;
+    if (integrationTest.createdTrialSessions) {
+      integrationTest.createdTrialSessions.push(integrationTest.trialSessionId);
     }
   });
 };

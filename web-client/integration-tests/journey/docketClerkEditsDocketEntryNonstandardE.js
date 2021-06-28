@@ -3,50 +3,50 @@ import { getFormattedDocketEntriesForTest } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
-export const docketClerkEditsDocketEntryNonstandardE = test => {
+export const docketClerkEditsDocketEntryNonstandardE = integrationTest => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard E scenario', async () => {
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const { docketEntryId } = formattedDocketEntriesOnDocketRecord[0];
     expect(docketEntryId).toBeDefined();
 
     const docketEntriesBefore = formattedDocketEntriesOnDocketRecord.length;
 
-    await test.runSequence('gotoEditPaperFilingSequence', {
+    await integrationTest.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('PaperFiling');
-    expect(test.getState('docketEntryId')).toEqual(docketEntryId);
+    expect(integrationTest.getState('currentPage')).toEqual('PaperFiling');
+    expect(integrationTest.getState('docketEntryId')).toEqual(docketEntryId);
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'M057',
     });
 
-    await test.runSequence('submitPaperFilingSequence', {
+    await integrationTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'trialLocation',
       value: 'Boise, Idaho',
     });
 
-    await test.runSequence('submitPaperFilingSequence', {
+    await integrationTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test));
+      await getFormattedDocketEntriesForTest(integrationTest));
 
     const docketEntriesAfter = formattedDocketEntriesOnDocketRecord.length;
 

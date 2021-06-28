@@ -1,21 +1,30 @@
-export const userDeletesCorrespondence = (test, correspondenceTitle, user) =>
+export const userDeletesCorrespondence = (
+  integrationTest,
+  correspondenceTitle,
+  user,
+) =>
   it(`${user} deletes correspondence`, async () => {
-    await test.runSequence('openConfirmDeleteCorrespondenceModalSequence', {
-      correspondenceId: test.correspondenceDocument.correspondenceId,
-      documentTitle: correspondenceTitle,
-    });
+    await integrationTest.runSequence(
+      'openConfirmDeleteCorrespondenceModalSequence',
+      {
+        correspondenceId:
+          integrationTest.correspondenceDocument.correspondenceId,
+        documentTitle: correspondenceTitle,
+      },
+    );
 
-    expect(test.getState('modal.showModal')).toEqual(
+    expect(integrationTest.getState('modal.showModal')).toEqual(
       'DeleteCorrespondenceModal',
     );
 
-    await test.runSequence('deleteCorrespondenceDocumentSequence');
+    await integrationTest.runSequence('deleteCorrespondenceDocumentSequence');
 
-    const deletedCorrespondence = test
+    const deletedCorrespondence = integrationTest
       .getState('caseDetail.correspondence')
       .find(
         c =>
-          c.correspondenceId === test.correspondenceDocument.correspondenceId,
+          c.correspondenceId ===
+          integrationTest.correspondenceDocument.correspondenceId,
       );
     expect(deletedCorrespondence).toBeUndefined();
   });

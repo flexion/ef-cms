@@ -3,16 +3,16 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryFromOrderTypeH = (
-  test,
+  integrationTest,
   draftOrderIndex,
 ) => {
   const { TRANSCRIPT_EVENT_CODE } = applicationContext.getConstants();
 
   return it(`Docket Clerk edits a docket entry from the given order ${draftOrderIndex} with nonstandard type H`, async () => {
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
 
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -20,85 +20,124 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
 
     expect(orderDocument).toBeTruthy();
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
-    });
+    await integrationTest.runSequence(
+      'gotoEditCourtIssuedDocketEntrySequence',
+      {
+        docketEntryId: orderDocument.docketEntryId,
+        docketNumber: integrationTest.docketNumber,
+      },
+    );
 
     // Type H
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: TRANSCRIPT_EVENT_CODE,
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'filingDateMonth',
-      value: '1',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'filingDateDay',
-      value: '1',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'filingDateYear',
-      value: '2021',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'documentType',
-      value: 'Transcript',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'documentTitle',
-      value: 'Transcript of [anything] on [date]',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'scenario',
-      value: 'Type H',
-    });
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'eventCode',
+        value: TRANSCRIPT_EVENT_CODE,
+      },
+    );
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'filingDateMonth',
+        value: '1',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'filingDateDay',
+        value: '1',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'filingDateYear',
+        value: '2021',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentType',
+        value: 'Transcript',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentTitle',
+        value: 'Transcript of [anything] on [date]',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'scenario',
+        value: 'Type H',
+      },
+    );
 
-    expect(test.getState('form.trialLocation')).toBeUndefined();
+    expect(integrationTest.getState('form.trialLocation')).toBeUndefined();
 
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
+    await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       date: VALIDATION_ERROR_MESSAGES.date[2],
       freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
     });
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'month',
-      value: '1',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'day',
-      value: '1',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'year',
-      value: '2050',
-    });
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'month',
+        value: '1',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'day',
+        value: '1',
+      },
+    );
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'year',
+        value: '2050',
+      },
+    );
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'freeText',
-      value: 'this is free text',
-    });
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'freeText',
+        value: 'this is free text',
+      },
+    );
 
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
+    await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       date: VALIDATION_ERROR_MESSAGES.date[1].message,
     });
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'year',
-      value: '2018',
-    });
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'year',
+        value: '2018',
+      },
+    );
 
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
+    await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test));
+      await getFormattedDocketEntriesForTest(integrationTest));
 
     const updatedOrderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -112,12 +151,15 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
       freeText: 'this is free text',
     });
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
-    });
+    await integrationTest.runSequence(
+      'gotoEditCourtIssuedDocketEntrySequence',
+      {
+        docketEntryId: orderDocument.docketEntryId,
+        docketNumber: integrationTest.docketNumber,
+      },
+    );
 
-    expect(test.getState('form')).toMatchObject({
+    expect(integrationTest.getState('form')).toMatchObject({
       date: '2018-01-01T05:00:00.000Z',
       day: '1',
       documentTitle: 'Transcript of this is free text on 01-01-2018',

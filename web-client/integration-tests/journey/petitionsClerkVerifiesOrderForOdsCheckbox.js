@@ -1,95 +1,110 @@
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
-export const petitionsClerkVerifiesOrderForOdsCheckbox = (test, fakeFile) => {
+export const petitionsClerkVerifiesOrderForOdsCheckbox = (
+  integrationTest,
+  fakeFile,
+) => {
   return it('Petitions clerk verifies that the Order for ODS checkbox is correctly checked and unchecked', async () => {
-    await test.runSequence('gotoStartCaseWizardSequence');
+    await integrationTest.runSequence('gotoStartCaseWizardSequence');
 
-    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'StartCaseInternal',
+    );
 
-    await test.runSequence('updateStartCaseInternalPartyTypeSequence', {
-      key: 'partyType',
-      value: PARTY_TYPES.petitioner,
-    });
+    await integrationTest.runSequence(
+      'updateStartCaseInternalPartyTypeSequence',
+      {
+        key: 'partyType',
+        value: PARTY_TYPES.petitioner,
+      },
+    );
 
-    expect(test.getState('form.orderForOds')).toBeFalsy();
+    expect(integrationTest.getState('form.orderForOds')).toBeFalsy();
 
-    await test.runSequence('updateStartCaseInternalPartyTypeSequence', {
-      key: 'partyType',
-      value: PARTY_TYPES.corporation,
-    });
+    await integrationTest.runSequence(
+      'updateStartCaseInternalPartyTypeSequence',
+      {
+        key: 'partyType',
+        value: PARTY_TYPES.corporation,
+      },
+    );
 
-    expect(test.getState('form.orderForOds')).toBeTruthy();
+    expect(integrationTest.getState('form.orderForOds')).toBeTruthy();
 
-    await test.runSequence('submitPetitionFromPaperSequence');
+    await integrationTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(
-      test.getState('validationErrors.ownershipDisclosureFile'),
+      integrationTest.getState('validationErrors.ownershipDisclosureFile'),
     ).toBeUndefined();
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'orderForOds',
       value: false,
     });
 
-    await test.runSequence('submitPetitionFromPaperSequence');
+    await integrationTest.runSequence('submitPetitionFromPaperSequence');
 
-    expect(test.getState('validationErrors.ownershipDisclosureFile')).toEqual(
-      CaseInternal.VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile,
-    );
+    expect(
+      integrationTest.getState('validationErrors.ownershipDisclosureFile'),
+    ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile);
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'orderForOds',
       value: true,
     });
 
     // simulate switching to ODS document tab
-    await test.runSequence('cerebralBindSimpleSetStateSequence', {
+    await integrationTest.runSequence('cerebralBindSimpleSetStateSequence', {
       key: 'currentViewMetadata.documentSelectedForScan',
       value: 'ownershipDisclosureFile',
     });
 
-    await test.runSequence('setDocumentUploadModeSequence', {
+    await integrationTest.runSequence('setDocumentUploadModeSequence', {
       documentUploadMode: 'upload',
     });
 
-    await test.runSequence('setDocumentForUploadSequence', {
+    await integrationTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'ownershipDisclosureFile',
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
-    expect(test.getState('form.orderForOds')).toBeFalsy();
+    expect(integrationTest.getState('form.orderForOds')).toBeFalsy();
 
-    await test.runSequence('openConfirmDeletePDFModalSequence');
+    await integrationTest.runSequence('openConfirmDeletePDFModalSequence');
 
-    expect(test.getState('modal.showModal')).toEqual('ConfirmDeletePDFModal');
+    expect(integrationTest.getState('modal.showModal')).toEqual(
+      'ConfirmDeletePDFModal',
+    );
 
-    await test.runSequence('removeScannedPdfSequence');
+    await integrationTest.runSequence('removeScannedPdfSequence');
 
-    expect(test.getState('form.ownershipDisclosureFile')).toBeUndefined();
-    expect(test.getState('form.orderForOds')).toBeTruthy();
+    expect(
+      integrationTest.getState('form.ownershipDisclosureFile'),
+    ).toBeUndefined();
+    expect(integrationTest.getState('form.orderForOds')).toBeTruthy();
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'orderForOds',
       value: false,
     });
 
-    await test.runSequence('cerebralBindSimpleSetStateSequence', {
+    await integrationTest.runSequence('cerebralBindSimpleSetStateSequence', {
       key: 'currentViewMetadata.documentSelectedForScan',
       value: 'petitionFile',
     });
 
-    await test.runSequence('setDocumentUploadModeSequence', {
+    await integrationTest.runSequence('setDocumentUploadModeSequence', {
       documentUploadMode: 'upload',
     });
 
-    await test.runSequence('setDocumentForUploadSequence', {
+    await integrationTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'petitionFile',
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
-    expect(test.getState('form.orderForOds')).toBeFalsy();
+    expect(integrationTest.getState('form.orderForOds')).toBeFalsy();
   });
 };

@@ -1,14 +1,18 @@
 export const docketClerkNavigatesToEditDocketEntryMetaMinuteEntry = (
-  test,
+  integrationTest,
   docketRecordIndex = 2,
 ) => {
   it('the docketclerk navigates to page to edit docket entry meta for a minute entry', async () => {
-    await test.runSequence('gotoEditDocketEntryMetaSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoEditDocketEntryMetaSequence', {
+      docketNumber: integrationTest.docketNumber,
       docketRecordIndex,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
-    expect(test.getState('screenMetadata.editType')).toEqual('NoDocument');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'EditDocketEntryMeta',
+    );
+    expect(integrationTest.getState('screenMetadata.editType')).toEqual(
+      'NoDocument',
+    );
   });
 };

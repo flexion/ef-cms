@@ -4,7 +4,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
-  test,
+  integrationTest,
   draftOrderIndex,
 ) => {
   return it('Docket Clerk adds a docket entry from an Order of Dismissal', async () => {
@@ -14,11 +14,11 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: integrationTest.getState(),
       },
     );
 
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -26,58 +26,69 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
 
     expect(draftOrderDocument).toBeTruthy();
 
-    await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+    await integrationTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
       docketEntryId: draftOrderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: integrationTest.docketNumber,
     });
 
     helperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
-        state: test.getState(),
+        state: integrationTest.getState(),
       },
     );
 
-    expect(test.getState('form.eventCode')).toEqual('OD');
-    expect(test.getState('form.documentType')).toEqual('Order of Dismissal');
+    expect(integrationTest.getState('form.eventCode')).toEqual('OD');
+    expect(integrationTest.getState('form.documentType')).toEqual(
+      'Order of Dismissal',
+    );
     expect(helperComputed.showJudge).toBeTruthy();
-    expect(test.getState('form.judge')).toBeFalsy();
+    expect(integrationTest.getState('form.judge')).toBeFalsy();
     expect(helperComputed.showFreeText).toBeTruthy();
-    expect(test.getState('form.freeText')).toBeFalsy();
+    expect(integrationTest.getState('form.freeText')).toBeFalsy();
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'judge',
-      value: 'Buch',
-    });
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'judge',
+        value: 'Buch',
+      },
+    );
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'freeText',
-      value: 'for Something',
-    });
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'freeText',
+        value: 'for Something',
+      },
+    );
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'attachments',
-      value: true,
-    });
+    await integrationTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'attachments',
+        value: true,
+      },
+    );
 
-    expect(test.getState('form.generatedDocumentTitle')).toContain(
+    expect(integrationTest.getState('form.generatedDocumentTitle')).toContain(
       'Judge Buch for Something',
     );
 
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
+    await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('alertSuccess').message).toEqual(
+    expect(integrationTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to docket record.',
     );
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: integrationTest.getState(),
       },
     );
 

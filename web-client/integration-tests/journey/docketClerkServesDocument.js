@@ -3,27 +3,36 @@ import {
   refreshElasticsearchIndex,
 } from '../helpers';
 
-export const docketClerkServesDocument = (test, draftOrderIndex) => {
+export const docketClerkServesDocument = (integrationTest, draftOrderIndex) => {
   return it(`Docket Clerk serves the order after the docket entry has been created ${draftOrderIndex}`, async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
-    });
+    await integrationTest.runSequence(
+      'gotoEditCourtIssuedDocketEntrySequence',
+      {
+        docketEntryId: orderDocument.docketEntryId,
+        docketNumber: integrationTest.docketNumber,
+      },
+    );
 
-    expect(test.getState('currentPage')).toEqual('CourtIssuedDocketEntry');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CourtIssuedDocketEntry',
+    );
 
-    await test.runSequence('openConfirmInitiateServiceModalSequence');
+    await integrationTest.runSequence(
+      'openConfirmInitiateServiceModalSequence',
+    );
 
-    await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
+    await integrationTest.runSequence(
+      'serveCourtIssuedDocumentFromDocketEntrySequence',
+    );
 
     await refreshElasticsearchIndex();
   });

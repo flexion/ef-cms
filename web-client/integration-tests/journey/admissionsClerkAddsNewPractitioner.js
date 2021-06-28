@@ -1,12 +1,12 @@
-export const admissionsClerkAddsNewPractitioner = test => {
+export const admissionsClerkAddsNewPractitioner = integrationTest => {
   return it('admissions clerk adds a new practitioner', async () => {
-    test.currentTimestamp = Date.now();
+    integrationTest.currentTimestamp = Date.now();
 
-    await test.runSequence('gotoCreatePractitionerUserSequence');
+    await integrationTest.runSequence('gotoCreatePractitionerUserSequence');
 
-    await test.runSequence('submitAddPractitionerSequence');
+    await integrationTest.runSequence('submitAddPractitionerSequence');
 
-    expect(Object.keys(test.getState('validationErrors'))).toEqual([
+    expect(Object.keys(integrationTest.getState('validationErrors'))).toEqual([
       'phone',
       'email',
       'admissionsDate',
@@ -19,82 +19,84 @@ export const admissionsClerkAddsNewPractitioner = test => {
       'contact',
     ]);
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.phone',
       value: '111-111-1111',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'email',
       value: 'caroleBaskinH8r@example.com',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'month',
       value: '1',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'day',
       value: '1',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'year',
       value: '2010',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'birthYear',
       value: '1922',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'employer',
       value: 'Private',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'originalBarState',
       value: 'OK',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'practitionerType',
       value: 'Non-Attorney',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'firstName',
-      value: `joe ${test.currentTimestamp}`,
+      value: `joe ${integrationTest.currentTimestamp}`,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'lastName',
       value: 'exotic tiger king',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
       value: '123 Zoo St',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.city',
       value: 'Middle of Nowhere',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.state',
       value: 'OK',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.postalCode',
       value: '09876',
     });
 
-    await test.runSequence('submitAddPractitionerSequence');
+    await integrationTest.runSequence('submitAddPractitionerSequence');
 
-    expect(Object.keys(test.getState('validationErrors'))).toEqual([
+    expect(Object.keys(integrationTest.getState('validationErrors'))).toEqual([
       'confirmEmail',
     ]);
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
       value: 'caroleBaskinH8r@example.com',
     });
 
-    await test.runSequence('submitAddPractitionerSequence');
+    await integrationTest.runSequence('submitAddPractitionerSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    test.barNumber = test.getState('practitionerDetail.barNumber');
+    integrationTest.barNumber = integrationTest.getState(
+      'practitionerDetail.barNumber',
+    );
   });
 };

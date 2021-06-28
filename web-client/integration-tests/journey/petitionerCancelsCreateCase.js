@@ -1,31 +1,33 @@
-export const petitionerCancelsCreateCase = test => {
+export const petitionerCancelsCreateCase = integrationTest => {
   it('petitioner navigates to create case and cancels', async () => {
-    await test.runSequence('gotoStartCaseWizardSequence', {
+    await integrationTest.runSequence('gotoStartCaseWizardSequence', {
       step: '1',
       wizardStep: 'StartCaseStep1',
     });
-    expect(test.getState('modal.showModal')).toBeFalsy();
-    expect(test.getState('form')).toEqual({
+    expect(integrationTest.getState('modal.showModal')).toBeFalsy();
+    expect(integrationTest.getState('form')).toEqual({
       contactPrimary: {},
       wizardStep: '1',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
       value: 'Seattle, Washington',
     });
-    expect(test.getState('form.preferredTrialCity')).toEqual(
+    expect(integrationTest.getState('form.preferredTrialCity')).toEqual(
       'Seattle, Washington',
     );
 
-    await test.runSequence('formCancelToggleCancelSequence'); // someone clicks cancel
-    expect(test.getState('modal.showModal')).toBeTruthy();
-    await test.runSequence('formCancelToggleCancelSequence'); // someone aborts cancellation
-    expect(test.getState('currentPage')).toEqual('StartCaseWizard');
+    await integrationTest.runSequence('formCancelToggleCancelSequence'); // someone clicks cancel
+    expect(integrationTest.getState('modal.showModal')).toBeTruthy();
+    await integrationTest.runSequence('formCancelToggleCancelSequence'); // someone aborts cancellation
+    expect(integrationTest.getState('currentPage')).toEqual('StartCaseWizard');
 
-    await test.runSequence('formCancelToggleCancelSequence');
-    await test.runSequence('closeModalAndReturnToDashboardSequence');
-    expect(test.getState('modal.showModal')).toBeFalsy();
-    expect(test.getState('currentPage')).toEqual('DashboardPetitioner');
+    await integrationTest.runSequence('formCancelToggleCancelSequence');
+    await integrationTest.runSequence('closeModalAndReturnToDashboardSequence');
+    expect(integrationTest.getState('modal.showModal')).toBeFalsy();
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'DashboardPetitioner',
+    );
   });
 };

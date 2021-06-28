@@ -13,7 +13,7 @@ import { petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox } from './jo
 import { petitionsClerkVerifiesOrderForOdsCheckbox } from './journey/petitionsClerkVerifiesOrderForOdsCheckbox';
 import { petitionsClerkVerifiesPetitionPaymentFeeOptions } from './journey/petitionsClerkVerifiesPetitionPaymentFeeOptions';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Petitions clerk case journey', () => {
   beforeAll(() => {
@@ -21,42 +21,45 @@ describe('Petitions clerk case journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCaseFromPaper(test, fakeFile);
-  petitionsClerkVerifiesOrderForOdsCheckbox(test, fakeFile);
-  petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(test, fakeFile);
-  petitionsClerkVerifiesPetitionPaymentFeeOptions(test, fakeFile);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCaseFromPaper(integrationTest, fakeFile);
+  petitionsClerkVerifiesOrderForOdsCheckbox(integrationTest, fakeFile);
+  petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(
+    integrationTest,
+    fakeFile,
+  );
+  petitionsClerkVerifiesPetitionPaymentFeeOptions(integrationTest, fakeFile);
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create case #1', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
-    test.docketEntryId = caseDetail.docketEntries[0].docketEntryId;
+    integrationTest.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketEntryId = caseDetail.docketEntries[0].docketEntryId;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkEditsPetitionInQCIRSNotice(test);
-  petitionsClerkChangesCaseCaptionDuringQC(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkEditsPetitionInQCIRSNotice(integrationTest);
+  petitionsClerkChangesCaseCaptionDuringQC(integrationTest);
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create case #2', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
-    test.docketEntryId = caseDetail.docketEntries[0].docketEntryId;
+    integrationTest.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketEntryId = caseDetail.docketEntries[0].docketEntryId;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkAddsDeficiencyStatisticToCase(test);
-  petitionsClerkCancelsAddingDeficiencyStatisticToCase(test);
-  petitionsClerkEditsDeficiencyStatistic(test);
-  petitionsClerkDeleteDeficiencyStatistic(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsDeficiencyStatisticToCase(integrationTest);
+  petitionsClerkCancelsAddingDeficiencyStatisticToCase(integrationTest);
+  petitionsClerkEditsDeficiencyStatistic(integrationTest);
+  petitionsClerkDeleteDeficiencyStatistic(integrationTest);
 
-  petitionsClerkAddsOtherStatisticsToCase(test);
-  petitionsClerkEditOtherStatisticToCase(test);
-  petitionsClerkDeletesOtherStatisticToCase(test);
+  petitionsClerkAddsOtherStatisticsToCase(integrationTest);
+  petitionsClerkEditOtherStatisticToCase(integrationTest);
+  petitionsClerkDeletesOtherStatisticToCase(integrationTest);
 });

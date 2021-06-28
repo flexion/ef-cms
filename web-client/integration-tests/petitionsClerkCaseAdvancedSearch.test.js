@@ -2,7 +2,7 @@ import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkAdvancedSearchForCase } from './journey/petitionsClerkAdvancedSearchForCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('petitions clerk case advanced search', () => {
   beforeAll(() => {
@@ -10,10 +10,10 @@ describe('petitions clerk case advanced search', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(test, fakeFile);
-  petitionsClerkAdvancedSearchForCase(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(integrationTest, fakeFile);
+  petitionsClerkAdvancedSearchForCase(integrationTest);
 });

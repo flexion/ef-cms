@@ -11,7 +11,7 @@ import { userNavigatesToEditCorrespondence } from './journey/userNavigatesToEdit
 describe('Adds correspondence to a case', () => {
   let caseDetail;
 
-  const test = setupTest();
+  const integrationTest = setupTest();
 
   const firstCorrespondenceTitle = 'My first correspondence';
   const secondCorrespondenceTitle = 'My second correspondence';
@@ -21,54 +21,74 @@ describe('Adds correspondence to a case', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('create case', async () => {
-    caseDetail = await uploadPetition(test);
+    caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  userNavigatesToAddCorrespondence(test, 'DocketClerk');
-  userAddsCorrespondence(test, firstCorrespondenceTitle, 'DocketClerk');
-  userAddsCorrespondence(test, secondCorrespondenceTitle, 'DocketClerk');
-  userNavigatesToEditCorrespondence(
-    test,
+  loginAs(integrationTest, 'docketclerk@example.com');
+  userNavigatesToAddCorrespondence(integrationTest, 'DocketClerk');
+  userAddsCorrespondence(
+    integrationTest,
     firstCorrespondenceTitle,
     'DocketClerk',
   );
-  docketClerkCreatesMessageWithCorrespondence(test);
-  docketClerkViewsMessageWithCorrespondence(test);
+  userAddsCorrespondence(
+    integrationTest,
+    secondCorrespondenceTitle,
+    'DocketClerk',
+  );
   userNavigatesToEditCorrespondence(
-    test,
+    integrationTest,
     firstCorrespondenceTitle,
     'DocketClerk',
   );
-  userEditsCorrespondence(test, 'DocketClerk');
-  docketClerkDeletesCorrespondence(test, firstCorrespondenceTitle);
+  docketClerkCreatesMessageWithCorrespondence(integrationTest);
+  docketClerkViewsMessageWithCorrespondence(integrationTest);
+  userNavigatesToEditCorrespondence(
+    integrationTest,
+    firstCorrespondenceTitle,
+    'DocketClerk',
+  );
+  userEditsCorrespondence(integrationTest, 'DocketClerk');
+  docketClerkDeletesCorrespondence(integrationTest, firstCorrespondenceTitle);
 
-  loginAs(test, 'admissionsclerk@example.com');
-  userNavigatesToAddCorrespondence(test, 'AdmissionsClerk');
-  userAddsCorrespondence(test, firstCorrespondenceTitle, 'AdmissionsClerk');
-  userNavigatesToEditCorrespondence(
-    test,
+  loginAs(integrationTest, 'admissionsclerk@example.com');
+  userNavigatesToAddCorrespondence(integrationTest, 'AdmissionsClerk');
+  userAddsCorrespondence(
+    integrationTest,
     firstCorrespondenceTitle,
     'AdmissionsClerk',
   );
-  userEditsCorrespondence(test, 'AdmissionsClerk');
-  userDeletesCorrespondence(test, firstCorrespondenceTitle, 'AdmissionsClerk');
-
-  loginAs(test, 'general@example.com');
-  userNavigatesToAddCorrespondence(test, 'General user');
-  userAddsCorrespondence(test, firstCorrespondenceTitle, 'General user');
   userNavigatesToEditCorrespondence(
-    test,
+    integrationTest,
+    firstCorrespondenceTitle,
+    'AdmissionsClerk',
+  );
+  userEditsCorrespondence(integrationTest, 'AdmissionsClerk');
+  userDeletesCorrespondence(
+    integrationTest,
+    firstCorrespondenceTitle,
+    'AdmissionsClerk',
+  );
+
+  loginAs(integrationTest, 'general@example.com');
+  userNavigatesToAddCorrespondence(integrationTest, 'General user');
+  userAddsCorrespondence(
+    integrationTest,
     firstCorrespondenceTitle,
     'General user',
   );
-  userEditsCorrespondence(test, 'General user');
-  userDeletesCorrespondence(test, firstCorrespondenceTitle);
+  userNavigatesToEditCorrespondence(
+    integrationTest,
+    firstCorrespondenceTitle,
+    'General user',
+  );
+  userEditsCorrespondence(integrationTest, 'General user');
+  userDeletesCorrespondence(integrationTest, firstCorrespondenceTitle);
 });

@@ -14,7 +14,7 @@ import {
 import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('petitioner files document', () => {
   beforeAll(() => {
@@ -22,48 +22,48 @@ describe('petitioner files document', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
   const trialLocation = `Jacksonville, Florida, ${Date.now()}`;
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, { trialLocation });
-  docketClerkViewsTrialSessionList(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(integrationTest, { trialLocation });
+  docketClerkViewsTrialSessionList(integrationTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkSetsATrialSessionsSchedule(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkSetsATrialSessionsSchedule(integrationTest);
   it('manually add the case to the session', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    await test.runSequence('openAddToTrialModalSequence');
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('openAddToTrialModalSequence');
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'trialSessionId',
-      value: test.trialSessionId,
+      value: integrationTest.trialSessionId,
     });
 
-    await test.runSequence('addCaseToTrialSessionSequence');
+    await integrationTest.runSequence('addCaseToTrialSessionSequence');
     await wait(1000);
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerFilesDocumentForCase(test, fakeFile);
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerFilesDocumentForCase(integrationTest, fakeFile);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsSectionInboxHighPriority(test);
-  docketClerkRemovesCaseFromTrial(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkViewsSectionInboxHighPriority(integrationTest);
+  docketClerkRemovesCaseFromTrial(integrationTest);
 
   it('refresh elasticsearch index', async () => {
     await refreshElasticsearchIndex();
   });
 
-  docketClerkViewsSectionInboxNotHighPriority(test);
+  docketClerkViewsSectionInboxNotHighPriority(integrationTest);
 });

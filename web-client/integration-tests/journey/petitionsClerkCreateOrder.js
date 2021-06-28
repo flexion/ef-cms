@@ -1,52 +1,60 @@
 import { applicationContext } from '../../src/applicationContext';
 import { first } from 'lodash';
 
-export const petitionsClerkCreateOrder = test => {
+export const petitionsClerkCreateOrder = integrationTest => {
   return it('Petitions clerk creates order', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
-      key: 'eventCode',
-      value: 'O',
-    });
+    await integrationTest.runSequence(
+      'updateCreateOrderModalFormValueSequence',
+      {
+        key: 'eventCode',
+        value: 'O',
+      },
+    );
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
-      key: 'documentTitle',
-      value: 'My Awesome Order',
-    });
+    await integrationTest.runSequence(
+      'updateCreateOrderModalFormValueSequence',
+      {
+        key: 'documentTitle',
+        value: 'My Awesome Order',
+      },
+    );
 
-    await test.runSequence('submitCreateOrderModalSequence');
+    await integrationTest.runSequence('submitCreateOrderModalSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: '<p>This is a test order.</p>',
     });
 
-    await test.runSequence('submitCourtIssuedOrderSequence');
+    await integrationTest.runSequence('submitCourtIssuedOrderSequence');
 
     //skip signing and go back to caseDetail
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('caseDetail.docketEntries').length).toEqual(4);
+    expect(integrationTest.getState('caseDetail.docketEntries').length).toEqual(
+      4,
+    );
 
     const { draftDocuments } = applicationContext
       .getUtilities()
       .getFormattedCaseDetail({
         applicationContext,
-        caseDetail: test.getState('caseDetail'),
+        caseDetail: integrationTest.getState('caseDetail'),
       });
 
-    test.docketEntryId = first(draftDocuments)
+    integrationTest.docketEntryId = first(draftDocuments)
       ? first(draftDocuments).docketEntryId
       : undefined;
-    expect(test.getState('draftDocumentViewerDocketEntryId')).toBe(
-      test.docketEntryId,
+    expect(integrationTest.getState('draftDocumentViewerDocketEntryId')).toBe(
+      integrationTest.docketEntryId,
     );
   });
 };

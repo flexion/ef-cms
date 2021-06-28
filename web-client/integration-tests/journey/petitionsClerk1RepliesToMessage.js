@@ -1,38 +1,38 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const petitionsClerk1RepliesToMessage = test => {
+export const petitionsClerk1RepliesToMessage = integrationTest => {
   return it('petitions clerk 1 replies to the message they received', async () => {
-    await test.runSequence('openReplyToMessageModalSequence');
+    await integrationTest.runSequence('openReplyToMessageModalSequence');
 
-    expect(test.getState('modal.form')).toMatchObject({
-      parentMessageId: test.parentMessageId,
-      subject: test.testMessageSubject,
+    expect(integrationTest.getState('modal.form')).toMatchObject({
+      parentMessageId: integrationTest.parentMessageId,
+      subject: integrationTest.testMessageSubject,
       to: 'Test Petitionsclerk',
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'form.message',
       value: 'Identity theft is not a joke, Jim.',
     });
 
-    await test.runSequence('replyToMessageSequence');
+    await integrationTest.runSequence('replyToMessageSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('messageDetail').length).toEqual(2);
+    expect(integrationTest.getState('messageDetail').length).toEqual(2);
 
     await refreshElasticsearchIndex();
 
     //message should no longer be shown in inbox
-    await test.runSequence('gotoMessagesSequence', {
+    await integrationTest.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });
 
-    const messages = test.getState('messages');
+    const messages = integrationTest.getState('messages');
 
     const foundMessage = messages.find(
-      message => message.subject === test.testMessageSubject,
+      message => message.subject === integrationTest.testMessageSubject,
     );
 
     expect(foundMessage).not.toBeDefined();

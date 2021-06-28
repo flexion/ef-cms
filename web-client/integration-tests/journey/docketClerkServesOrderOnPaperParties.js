@@ -3,12 +3,15 @@ import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkServesOrderOnPaperParties = (test, draftOrderIndex) => {
+export const docketClerkServesOrderOnPaperParties = (
+  integrationTest,
+  draftOrderIndex,
+) => {
   return it('Docket Clerk serves the order on 3 parties with paper service', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -16,19 +19,26 @@ export const docketClerkServesOrderOnPaperParties = (test, draftOrderIndex) => {
 
     expect(orderDocument).toBeTruthy();
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
-    });
+    await integrationTest.runSequence(
+      'gotoEditCourtIssuedDocketEntrySequence',
+      {
+        docketEntryId: orderDocument.docketEntryId,
+        docketNumber: integrationTest.docketNumber,
+      },
+    );
 
-    expect(test.getState('currentPage')).toEqual('CourtIssuedDocketEntry');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CourtIssuedDocketEntry',
+    );
 
-    await test.runSequence('openConfirmInitiateServiceModalSequence');
+    await integrationTest.runSequence(
+      'openConfirmInitiateServiceModalSequence',
+    );
 
     const modalHelper = runCompute(
       withAppContextDecorator(confirmInitiateServiceModalHelper),
       {
-        state: test.getState(),
+        state: integrationTest.getState(),
       },
     );
 
@@ -36,6 +46,8 @@ export const docketClerkServesOrderOnPaperParties = (test, draftOrderIndex) => {
 
     expect(modalHelper.contactsNeedingPaperService.length).toEqual(2);
 
-    await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
+    await integrationTest.runSequence(
+      'serveCourtIssuedDocumentFromDocketEntrySequence',
+    );
   });
 };

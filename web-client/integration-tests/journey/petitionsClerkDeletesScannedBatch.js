@@ -1,15 +1,17 @@
-export const petitionsClerkDeletesScannedBatch = test => {
+export const petitionsClerkDeletesScannedBatch = integrationTest => {
   return it('Petitions clerk deletes a batch', async () => {
-    const selectedDocumentType = test.getState(
+    const selectedDocumentType = integrationTest.getState(
       'currentViewMetadata.documentSelectedForScan',
     );
-    const batches = test.getState(`scanner.batches.${selectedDocumentType}`);
+    const batches = integrationTest.getState(
+      `scanner.batches.${selectedDocumentType}`,
+    );
 
-    await test.runSequence('openConfirmDeleteBatchModalSequence', {
+    await integrationTest.runSequence('openConfirmDeleteBatchModalSequence', {
       batchIndexToDelete: 0,
     });
 
-    await test.runSequence('removeBatchSequence');
+    await integrationTest.runSequence('removeBatchSequence');
 
     expect(batches).toHaveLength(0);
   });

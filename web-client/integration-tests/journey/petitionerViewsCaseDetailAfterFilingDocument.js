@@ -8,37 +8,37 @@ const { DOCKET_NUMBER_SUFFIXES, INITIAL_DOCUMENT_TYPES } =
   applicationContext.getConstants();
 
 export const petitionerViewsCaseDetailAfterFilingDocument = (
-  test,
+  integrationTest,
   overrides = {},
 ) => {
   return it('petitioner views case detail after filing a document', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
     const docketNumberSuffix =
       overrides.docketNumberSuffix || DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
 
-    const caseDetail = test.getState('caseDetail');
+    const caseDetail = integrationTest.getState('caseDetail');
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: integrationTest.getState(),
       },
     );
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(caseDetail.docketNumber).toEqual(test.docketNumber);
+    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(caseDetail.docketNumber).toEqual(integrationTest.docketNumber);
     expect(caseDetail.docketNumberSuffix).toEqual(docketNumberSuffix);
     expect(caseDetailFormatted.docketNumberWithSuffix).toEqual(
-      `${test.docketNumber}${docketNumberSuffix}`,
+      `${integrationTest.docketNumber}${docketNumberSuffix}`,
     );
 
     // verify that the user was given a link to their receipt
-    expect(test.getState('alertSuccess.linkUrl')).toBeDefined();
+    expect(integrationTest.getState('alertSuccess.linkUrl')).toBeDefined();
 
     expect(caseDetail.docketEntries.length).toEqual(6);
 
