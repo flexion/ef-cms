@@ -17,6 +17,11 @@ body.no-scroll {
   flex: 1;
 }
 
+.ck-content {
+  height: 640px;
+  border: 1px solid lightgray !important;
+}
+
 hr {
   z-index: 1;
   display: block;
