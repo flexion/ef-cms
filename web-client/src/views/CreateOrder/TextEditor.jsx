@@ -1,26 +1,28 @@
 /* eslint-disable react/prop-types */
 import 'react-quill/dist/quill.snow.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
-import { editCorrespondenceDocumentSequence } from '../../presenter/sequences/editCorrespondenceDocumentSequence';
 import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+import viewToPlainText from '@ckeditor/ckeditor5-clipboard/src/utils/viewtoplaintext';
+
 import React, { Suspense, useEffect, useRef } from 'react';
-import reactQuill from 'react-quill';
 
-const inlineStylesFontSizes = {};
-const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
+// import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
+// import reactQuill from 'react-quill';
 
-const ReactQuill = React.lazy(async () => {
-  const Size = reactQuill.Quill.import('attributors/style/size');
-  Size.whitelist = fontSizes;
-  reactQuill.Quill.register(Size, true);
+// const inlineStylesFontSizes = {};
+// const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
 
-  fontSizes.forEach(item => {
-    inlineStylesFontSizes[item] = `font-size: ${item};`;
-  });
+// const ReactQuill = React.lazy(async () => {
+//   const Size = reactQuill.Quill.import('attributors/style/size');
+//   Size.whitelist = fontSizes;
+//   reactQuill.Quill.register(Size, true);
 
-  return { default: reactQuill };
-});
+//   fontSizes.forEach(item => {
+//     inlineStylesFontSizes[item] = `font-size: ${item};`;
+//   });
+
+//   return { default: reactQuill };
+// });
 
 export const TextEditor = ({
   defaultValue,
@@ -52,42 +54,34 @@ export const TextEditor = ({
 
   return (
     <>
-      {/* <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/decoupled-document/ckeditor.js"></script> */}
       <CKEditor
         data={editorDelta || defaultValue}
         editor={DecoupledEditor}
-        onChange={(event, editor) => console.log({ editor, event })}
-        // onChange={(content, delta, source, editor) => {
-        //   console.log();
-        //   const fullDelta = editor.getContents();
-        //   const documentContents = editor.getText();
-        //   const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
-        //     inlineStyles: {
-        //       size: inlineStylesFontSizes,
-        //     },
-        //   });
-        //   const html = converter.convert();
-        //   updateFormValueSequence({
-        //     key: 'richText',
-        //     value: html,
-        //   });
-        //   updateFormValueSequence({
-        //     key: 'editorDelta',
-        //     value: fullDelta,
-        //   });
-        //   updateFormValueSequence({
-        //     key: 'documentContents',
-        //     value: documentContents,
-        //   });
-        //   updateScreenMetadataSequence({
-        //     key: 'pristine',
-        //     value: false,
-        //   });
-        // }}
+        onChange={(event, editor) => {
+          const html = editor.getData();
+          const documentContents = viewToPlainText(
+            editor.editing.view.document.getRoot(),
+          );
+
+          updateFormValueSequence({
+            key: 'richText',
+            value: html,
+          });
+          // todo: is editorDelta actually used?
+          // updateFormValueSequence({
+          //   key: 'editorDelta',
+          //   value: fullDelta,
+          // });
+          updateFormValueSequence({
+            key: 'documentContents',
+            value: documentContents,
+          });
+          updateScreenMetadataSequence({
+            key: 'pristine',
+            value: false,
+          });
+        }}
         onError={({ willEditorRestart }) => {
-          // If the editor is restarted, the toolbar element will be created once again.
-          // The `onReady` callback will be called again and the new toolbar will be added.
-          // This is why you need to remove the older toolbar.
           if (willEditorRestart) {
             this.editor.ui.view.toolbar.element.remove();
           }
@@ -95,7 +89,6 @@ export const TextEditor = ({
         onReady={editor => {
           console.log('Editor is ready to use!', editor);
 
-          // Insert the toolbar before the editable area.
           editor.ui
             .getEditableElement()
             .parentElement.insertBefore(
@@ -109,41 +102,20 @@ export const TextEditor = ({
       <Suspense fallback={<div>Loading...</div>}>
         {/* <ReactQuill
           defaultValue={editorDelta || defaultValue}
-          formats={[
-            'size',
-            'bold',
-            'italic',
-            'underline',
-            'bullet',
-            'list',
-            'indent',
-          ]}
-          modules={{
-            toolbar: [
-              [
-                {
-                  size: fontSizes,
-                },
-              ],
-              ['bold', 'italic', 'underline'],
-              [
-                { list: 'bullet' },
-                { list: 'ordered' },
-                { indent: '-1' },
-                { indent: '+1' },
-              ],
-            ],
-          }}
           tabIndex={0}
           onChange={(content, delta, source, editor) => {
             const fullDelta = editor.getContents();
+            console.log('editorDelta fullDelta', fullDelta);
             const documentContents = editor.getText();
+            console.log('documentContents', documentContents);
+
             const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
               inlineStyles: {
                 size: inlineStylesFontSizes,
               },
             });
             const html = converter.convert();
+            console.log('html for richText!!', html);
             updateFormValueSequence({
               key: 'richText',
               value: html,
@@ -155,10 +127,6 @@ export const TextEditor = ({
             updateFormValueSequence({
               key: 'documentContents',
               value: documentContents,
-            });
-            updateScreenMetadataSequence({
-              key: 'pristine',
-              value: false,
             });
           }}
         /> */}
