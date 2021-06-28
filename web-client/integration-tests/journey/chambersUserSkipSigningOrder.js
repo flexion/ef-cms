@@ -2,53 +2,58 @@ import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/O
 
 const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
-export const chambersUserSkipSigningOrder = test => {
+export const chambersUserSkipSigningOrder = integrationTest => {
   return it('Chambers user adds order and skips signing', async () => {
-    await test.runSequence('openCreateOrderChooseTypeModalSequence');
+    await integrationTest.runSequence('openCreateOrderChooseTypeModalSequence');
 
-    await test.runSequence('submitCreateOrderModalSequence');
+    await integrationTest.runSequence('submitCreateOrderModalSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       documentTitle: errorMessages.documentTitle[0].message,
       documentType: errorMessages.documentType,
       eventCode: errorMessages.eventCode,
     });
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
-      key: 'eventCode',
-      value: 'ODD',
-    });
+    await integrationTest.runSequence(
+      'updateCreateOrderModalFormValueSequence',
+      {
+        key: 'eventCode',
+        value: 'ODD',
+      },
+    );
 
-    expect(test.getState('modal.documentType')).toEqual(
+    expect(integrationTest.getState('modal.documentType')).toEqual(
       'Order of Dismissal and Decision',
     );
 
-    await test.runSequence('submitCreateOrderModalSequence');
+    await integrationTest.runSequence('submitCreateOrderModalSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: '<p>This is a test order.</p>',
     });
 
-    await test.runSequence('submitCourtIssuedOrderSequence');
+    await integrationTest.runSequence('submitCourtIssuedOrderSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
+    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
 
     //skip signing and go back to caseDetail
-    await test.runSequence('skipSigningOrderSequence');
+    await integrationTest.runSequence('skipSigningOrderSequence');
 
     // should navigate to the case detail internal page with the draft documents tab showing
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseDetailInternal',
+    );
 
     expect(
-      test.getState(
+      integrationTest.getState(
         'currentViewMetadata.caseDetail.caseDetailInternalTabs.drafts',
       ),
     ).toBeTruthy();
 
-    expect(test.getState('alertSuccess')).toBeDefined();
+    expect(integrationTest.getState('alertSuccess')).toBeDefined();
   });
 };

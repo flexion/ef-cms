@@ -17,8 +17,8 @@ import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritiz
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   beforeAll(() => {
@@ -26,54 +26,54 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(integrationTest, { procedureType: 'Regular' });
+  petitionerChoosesCaseType(integrationTest);
+  petitionerCreatesNewCase(integrationTest, fakeFile);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(test, {
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkCreatesAnOrder(test, {
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order of Dismissal',
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
-  docketClerkCreatesAnOrder(test, {
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order to Show Cause',
     eventCode: 'OSC',
     expectedDocumentType: 'Order to Show Cause',
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test, 6);
-  petitionsClerkViewsDraftOrder(test, 0);
-  petitionsClerkPrioritizesCase(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(integrationTest, 6);
+  petitionsClerkViewsDraftOrder(integrationTest, 0);
+  petitionsClerkPrioritizesCase(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsDraftOrder(test, 0);
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkViewsDraftOrder(test, 1);
-  docketClerkCancelsAddDocketEntryFromOrder(test, 1);
-  docketClerkViewsDraftOrder(test, 1);
-  docketClerkSignsOrder(test, 1);
-  docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
-  docketClerkViewsSavedCourtIssuedDocketEntryInProgress(test, 1);
-  docketClerkServesDocument(test, 0);
-  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 0);
-  docketClerkServesDocument(test, 1);
-  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 1);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkViewsDraftOrder(integrationTest, 0);
+  docketClerkSignsOrder(integrationTest, 0);
+  docketClerkAddsDocketEntryFromOrder(integrationTest, 0);
+  docketClerkViewsDraftOrder(integrationTest, 1);
+  docketClerkCancelsAddDocketEntryFromOrder(integrationTest, 1);
+  docketClerkViewsDraftOrder(integrationTest, 1);
+  docketClerkSignsOrder(integrationTest, 1);
+  docketClerkAddsDocketEntryFromOrderOfDismissal(integrationTest, 1);
+  docketClerkViewsSavedCourtIssuedDocketEntryInProgress(integrationTest, 1);
+  docketClerkServesDocument(integrationTest, 0);
+  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(integrationTest, 0);
+  docketClerkServesDocument(integrationTest, 1);
+  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(integrationTest, 1);
 
-  docketClerkViewsDraftOrder(test, 2);
-  docketClerkSignsOrder(test, 2);
-  docketClerkAddsDocketEntryFromOrder(test, 2);
-  docketClerkServesDocumentFromCaseDetailDocumentView(test);
-  docketClerkViewsCaseDetailDocumentView(test);
+  docketClerkViewsDraftOrder(integrationTest, 2);
+  docketClerkSignsOrder(integrationTest, 2);
+  docketClerkAddsDocketEntryFromOrder(integrationTest, 2);
+  docketClerkServesDocumentFromCaseDetailDocumentView(integrationTest);
+  docketClerkViewsCaseDetailDocumentView(integrationTest);
 });

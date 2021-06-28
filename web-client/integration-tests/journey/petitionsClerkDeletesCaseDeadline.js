@@ -4,27 +4,27 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
-export const petitionsClerkDeletesCaseDeadline = test => {
+export const petitionsClerkDeletesCaseDeadline = integrationTest => {
   return it('Petitions clerk deletes a case deadline', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    integrationTest.setState('caseDetail', {});
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
     const helper = runCompute(caseDetailHelper, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
-    await test.runSequence('openDeleteCaseDeadlineModalSequence', {
+    await integrationTest.runSequence('openDeleteCaseDeadlineModalSequence', {
       caseDeadlineId: helper.caseDeadlines[0].caseDeadlineId,
     });
 
-    expect(test.getState('form.caseDeadlineId')).toBeTruthy();
-    expect(test.getState('form.month')).toBeTruthy();
-    expect(test.getState('form.day')).toBeTruthy();
-    expect(test.getState('form.year')).toBeTruthy();
-    expect(test.getState('form.description')).toBeTruthy();
+    expect(integrationTest.getState('form.caseDeadlineId')).toBeTruthy();
+    expect(integrationTest.getState('form.month')).toBeTruthy();
+    expect(integrationTest.getState('form.day')).toBeTruthy();
+    expect(integrationTest.getState('form.year')).toBeTruthy();
+    expect(integrationTest.getState('form.description')).toBeTruthy();
 
-    await test.runSequence('deleteCaseDeadlineSequence');
+    await integrationTest.runSequence('deleteCaseDeadlineSequence');
   });
 };

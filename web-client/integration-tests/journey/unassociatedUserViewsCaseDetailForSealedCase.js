@@ -1,15 +1,15 @@
-export const unassociatedUserViewsCaseDetailForSealedCase = test => {
+export const unassociatedUserViewsCaseDetailForSealedCase = integrationTest => {
   return it('unassociated user views case detail for a sealed case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('caseDetail.isSealed')).toBeTruthy();
-    expect(test.getState('caseDetail.docketNumber')).toBeDefined();
+    expect(integrationTest.getState('caseDetail.isSealed')).toBeTruthy();
+    expect(integrationTest.getState('caseDetail.docketNumber')).toBeDefined();
 
     //this user should NOT see any case details because they are not associated with the case
-    expect(test.getState('caseDetail.sealedDate')).toBeUndefined();
-    expect(test.getState('caseDetail.caseCaption')).toBeUndefined();
-    expect(test.getState('caseDetail.docketEntries')).toEqual([]);
+    expect(integrationTest.getState('caseDetail.sealedDate')).toBeUndefined();
+    expect(integrationTest.getState('caseDetail.caseCaption')).toBeUndefined();
+    expect(integrationTest.getState('caseDetail.docketEntries')).toEqual([]);
   });
 };

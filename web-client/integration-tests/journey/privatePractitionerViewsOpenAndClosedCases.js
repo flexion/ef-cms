@@ -1,9 +1,11 @@
-export const privatePractitionerViewsOpenAndClosedCases = test => {
+export const privatePractitionerViewsOpenAndClosedCases = integrationTest => {
   return it('private practitioner views open and closed cases', async () => {
-    await test.runSequence('gotoDashboardSequence');
+    await integrationTest.runSequence('gotoDashboardSequence');
 
-    expect(test.getState('currentPage')).toEqual('DashboardPractitioner');
-    expect(test.getState('openCases').length).toBeGreaterThan(0);
-    expect(test.getState('closedCases').length).toBeGreaterThan(0);
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'DashboardPractitioner',
+    );
+    expect(integrationTest.getState('openCases').length).toBeGreaterThan(0);
+    expect(integrationTest.getState('closedCases').length).toBeGreaterThan(0);
   });
 };

@@ -6,30 +6,33 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const docketClerkRemovesCaseFromHearing = test => {
+export const docketClerkRemovesCaseFromHearing = integrationTest => {
   return it('Docket clerk removes case from hearing', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('openRemoveFromTrialSessionModalSequence', {
-      trialSessionId: test.createdTrialSessions[1],
-    });
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence(
+      'openRemoveFromTrialSessionModalSequence',
+      {
+        trialSessionId: integrationTest.createdTrialSessions[1],
+      },
+    );
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'disposition',
       value: 'Test disposition',
     });
 
-    await test.runSequence('removeCaseFromTrialSequence');
+    await integrationTest.runSequence('removeCaseFromTrialSequence');
 
     const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     expect(formattedCase.hearings).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          trialSessionId: test.createdTrialSessions[1],
+          trialSessionId: integrationTest.createdTrialSessions[1],
         }),
       ]),
     );

@@ -1,33 +1,41 @@
 import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 
-export const docketClerkUpdatesSealedContactAddress = (test, contactType) => {
+export const docketClerkUpdatesSealedContactAddress = (
+  integrationTest,
+  contactType,
+) => {
   return it('docket clerk updates sealed contact address', async () => {
     let contact;
     if (contactType === 'contactPrimary') {
-      contact = contactPrimaryFromState(test);
+      contact = contactPrimaryFromState(integrationTest);
     } else if (contactType === 'contactSecondary') {
-      contact = contactSecondaryFromState(test);
+      contact = contactSecondaryFromState(integrationTest);
     }
 
-    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
-      contactId: contact.contactId,
-      docketNumber: test.docketNumber,
-    });
+    await integrationTest.runSequence(
+      'gotoEditPetitionerInformationInternalSequence',
+      {
+        contactId: contact.contactId,
+        docketNumber: integrationTest.docketNumber,
+      },
+    );
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
       value: 'somewhere over the rainbow',
     });
 
-    await test.runSequence('submitEditPetitionerSequence');
+    await integrationTest.runSequence('submitEditPetitionerSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
     expect(
-      test.getState('currentViewMetadata.caseDetail.caseInformationTab'),
+      integrationTest.getState(
+        'currentViewMetadata.caseDetail.caseInformationTab',
+      ),
     ).toEqual('parties');
 
-    const docketEntries = test.getState('caseDetail.docketEntries');
+    const docketEntries = integrationTest.getState('caseDetail.docketEntries');
     const noticeOfContactChange = docketEntries.find(
       d => d.eventCode === 'NCA',
     );

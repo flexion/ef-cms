@@ -7,17 +7,17 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const practitionerViewsCaseDetailWithPaperService = test => {
+export const practitionerViewsCaseDetailWithPaperService = integrationTest => {
   return it('Practitioner views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    integrationTest.setState('caseDetail', {});
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
 
     const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     expect(formattedCase.isPaper).toEqual(true);

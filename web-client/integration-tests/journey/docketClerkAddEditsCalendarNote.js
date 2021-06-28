@@ -6,48 +6,59 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const docketClerkAddEditsCalendarNote = (test, addingOrEditing) => {
+export const docketClerkAddEditsCalendarNote = (
+  integrationTest,
+  addingOrEditing,
+) => {
   return it(`Docket Clerk ${addingOrEditing} calendar note`, async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseDetailInternal',
+    );
 
-    let caseDetail = test.getState('caseDetail');
+    let caseDetail = integrationTest.getState('caseDetail');
 
-    await test.runSequence('openAddEditCalendarNoteModalSequence', {
+    await integrationTest.runSequence('openAddEditCalendarNoteModalSequence', {
       note: caseDetail.trialSessionNotes,
     });
 
-    expect(test.getState('modal.notes')).toEqual(caseDetail.trialSessionNotes);
+    expect(integrationTest.getState('modal.notes')).toEqual(
+      caseDetail.trialSessionNotes,
+    );
 
-    await test.runSequence('clearModalFormSequence');
+    await integrationTest.runSequence('clearModalFormSequence');
 
-    caseDetail = test.getState('caseDetail');
+    caseDetail = integrationTest.getState('caseDetail');
 
-    expect(test.getState('modal.notes')).toEqual(caseDetail.trialSessionNotes);
+    expect(integrationTest.getState('modal.notes')).toEqual(
+      caseDetail.trialSessionNotes,
+    );
 
-    await test.runSequence('openAddEditCalendarNoteModalSequence', {
+    await integrationTest.runSequence('openAddEditCalendarNoteModalSequence', {
       note: caseDetail.trialSessionNotes,
     });
 
     const updatedNote = 'This is a new note';
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'note',
       value: updatedNote,
     });
 
-    await test.runSequence('updateCalendarNoteSequence');
+    await integrationTest.runSequence('updateCalendarNoteSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('alertSuccess.message')).toEqual('Note saved.');
+    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('alertSuccess.message')).toEqual(
+      'Note saved.',
+    );
 
     caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     expect(caseDetail.trialSessionNotes).toEqual(updatedNote);
-    test.calendarNote = caseDetail.trialSessionNotes;
+    integrationTest.calendarNote = caseDetail.trialSessionNotes;
   });
 };

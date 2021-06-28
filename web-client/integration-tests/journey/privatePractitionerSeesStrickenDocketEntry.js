@@ -4,20 +4,20 @@ import {
 } from '../helpers';
 
 export const privatePractitionerSeesStrickenDocketEntry = (
-  test,
+  integrationTest,
   docketRecordIndex,
 ) => {
   return it('private practitioner sees stricken docket entry on case detail', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
     expect(contactPrimary.name).toBeDefined();
 
     const formattedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       docketEntry => docketEntry.index === docketRecordIndex,
     );
-    test.docketEntryId = formattedDocketEntry.docketEntryId;
+    integrationTest.docketEntryId = formattedDocketEntry.docketEntryId;
 
     expect(formattedDocketEntry.isStricken).toEqual(true);
     expect(formattedDocketEntry.showDocumentDescriptionWithoutLink).toEqual(

@@ -7,28 +7,31 @@ const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
 const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
 
-export const petitionsClerkEditsCaseDeadline = (test, overrides = {}) => {
+export const petitionsClerkEditsCaseDeadline = (
+  integrationTest,
+  overrides = {},
+) => {
   return it('Petitions clerk edits a case deadline', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    integrationTest.setState('caseDetail', {});
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
     const helper = runCompute(caseDetailHelper, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
-    await test.runSequence('openEditCaseDeadlineModalSequence', {
+    await integrationTest.runSequence('openEditCaseDeadlineModalSequence', {
       caseDeadlineId: helper.caseDeadlines[0].caseDeadlineId,
     });
 
-    expect(test.getState('form.caseDeadlineId')).toBeTruthy();
-    expect(test.getState('form.month')).toBeTruthy();
-    expect(test.getState('form.day')).toBeTruthy();
-    expect(test.getState('form.year')).toBeTruthy();
-    expect(test.getState('form.description')).toBeTruthy();
+    expect(integrationTest.getState('form.caseDeadlineId')).toBeTruthy();
+    expect(integrationTest.getState('form.month')).toBeTruthy();
+    expect(integrationTest.getState('form.day')).toBeTruthy();
+    expect(integrationTest.getState('form.year')).toBeTruthy();
+    expect(integrationTest.getState('form.description')).toBeTruthy();
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'description',
       value: `We're talking away
 I don't know what
@@ -43,40 +46,40 @@ I'll be gone
 In a day or two`,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'month',
       value: overrides.month || '4',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'day',
       value: overrides.day || '1',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'year',
       value: overrides.year || '2035',
     });
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('updateCaseDeadlineSequence');
+    await integrationTest.runSequence('updateCaseDeadlineSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       description: VALIDATION_ERROR_MESSAGES.description[0].message,
     });
 
-    await test.runSequence('validateCaseDeadlineSequence');
+    await integrationTest.runSequence('validateCaseDeadlineSequence');
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'description',
       value: overrides.description || "We're talking away another day...",
     });
 
-    await test.runSequence('validateCaseDeadlineSequence');
+    await integrationTest.runSequence('validateCaseDeadlineSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('updateCaseDeadlineSequence');
+    await integrationTest.runSequence('updateCaseDeadlineSequence');
   });
 };

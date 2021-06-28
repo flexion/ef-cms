@@ -1,19 +1,19 @@
-export const docketClerkSignsOrder = (test, draftOrderIndex) => {
+export const docketClerkSignsOrder = (integrationTest, draftOrderIndex) => {
   return it('Docket clerk signs order', async () => {
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
 
-    await test.runSequence('gotoSignOrderSequence', {
+    await integrationTest.runSequence('gotoSignOrderSequence', {
       docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('setPDFSignatureDataSequence', {
+    await integrationTest.runSequence('setPDFSignatureDataSequence', {
       signatureData: {
         scale: 1,
         x: 100,
         y: 100,
       },
     });
-    await test.runSequence('saveDocumentSigningSequence');
+    await integrationTest.runSequence('saveDocumentSigningSequence');
   });
 };

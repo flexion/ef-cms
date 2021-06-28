@@ -11,44 +11,52 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const docketClerkViewsCaseDetailDocumentView = test => {
+export const docketClerkViewsCaseDetailDocumentView = integrationTest => {
   return it('Docketclerk views case detail document view', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    const caseDetail = test.getState('caseDetail');
+    const caseDetail = integrationTest.getState('caseDetail');
 
     await viewCaseDetail({
       docketNumber: caseDetail.docketNumber,
-      test,
+      integrationTest,
     });
     const formatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(1);
 
     await refreshElasticsearchIndex();
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
     expect(caseDetail.associatedJudge).toBeDefined();
     expect(caseDetail.status).toBeDefined();
     expect(contactPrimary.contactId).toBeDefined();
 
-    await test.runSequence('changeTabAndSetViewerDocumentToDisplaySequence', {
-      docketRecordTab: 'documentView',
-      viewerDocumentToDisplay: {
-        docketEntryId: formatted.pendingItemsDocketEntries[0].docketEntryId,
+    await integrationTest.runSequence(
+      'changeTabAndSetViewerDocumentToDisplaySequence',
+      {
+        docketRecordTab: 'documentView',
+        viewerDocumentToDisplay: {
+          docketEntryId: formatted.pendingItemsDocketEntries[0].docketEntryId,
+        },
       },
-    });
+    );
 
-    test.docketEntryId = formatted.pendingItemsDocketEntries[0].docketEntryId;
+    integrationTest.docketEntryId =
+      formatted.pendingItemsDocketEntries[0].docketEntryId;
 
-    expect(test.getState('docketEntryId')).toEqual(test.docketEntryId);
+    expect(integrationTest.getState('docketEntryId')).toEqual(
+      integrationTest.docketEntryId,
+    );
 
     expect(
-      test.getState('currentViewMetadata.caseDetail.docketRecordTab'),
+      integrationTest.getState(
+        'currentViewMetadata.caseDetail.docketRecordTab',
+      ),
     ).toEqual('documentView');
   });
 };

@@ -6,24 +6,24 @@ import { docketClerkViewsCaseDetail } from './journey/docketClerkViewsCaseDetail
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Docket Clerk serves a Order of Amended Petition', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
-  test.draftOrders = [];
+  integrationTest.draftOrders = [];
 
   beforeEach(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(integrationTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -36,25 +36,31 @@ describe('Docket Clerk serves a Order of Amended Petition', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(test, {
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(test, 0);
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition(test, 0);
+  docketClerkViewsDraftOrder(integrationTest, 0);
+  docketClerkSignsOrder(integrationTest, 0);
+  docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition(
+    integrationTest,
+    0,
+  );
 
-  docketClerkViewsCaseDetail(test);
+  docketClerkViewsCaseDetail(integrationTest);
 
   it('verify the docket entries title is set correctly', () => {
-    const servedEntry = test
+    const servedEntry = integrationTest
       .getState('caseDetail.docketEntries')
-      .find(d => d.docketEntryId === test.docketRecordEntry.docketEntryId);
+      .find(
+        d =>
+          d.docketEntryId === integrationTest.docketRecordEntry.docketEntryId,
+      );
     expect(servedEntry.documentTitle).toEqual(
       'Order for Amended Petition on 02-02-2050',
     );

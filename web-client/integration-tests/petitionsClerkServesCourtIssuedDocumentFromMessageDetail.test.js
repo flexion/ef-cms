@@ -9,8 +9,8 @@ import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1View
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
 import { petitionsClerkClicksCaseDetailTabFromMessageDetail } from './journey/petitionsClerkClicksCaseDetailTabFromMessageDetail';
 
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 
 describe('Petitions Clerk Serves Court Issued Document From Message Detail', () => {
   beforeAll(() => {
@@ -18,36 +18,36 @@ describe('Petitions Clerk Serves Court Issued Document From Message Detail', () 
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(test, {
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkCreatesAnOrder(test, {
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order of Dismissal',
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
 
-  docketClerkViewsDraftOrder(test, 0);
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  createNewMessageOnCase(test);
+  docketClerkViewsDraftOrder(integrationTest, 0);
+  docketClerkSignsOrder(integrationTest, 0);
+  docketClerkAddsDocketEntryFromOrder(integrationTest, 0);
+  createNewMessageOnCase(integrationTest);
 
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerk1ViewsMessageInbox(test);
-  petitionsClerk1ViewsMessageDetail(test);
-  petitionsClerk1ServesDocumentFromMessageDetail(test);
-  petitionsClerkClicksCaseDetailTabFromMessageDetail(test);
+  loginAs(integrationTest, 'petitionsclerk1@example.com');
+  petitionsClerk1ViewsMessageInbox(integrationTest);
+  petitionsClerk1ViewsMessageDetail(integrationTest);
+  petitionsClerk1ServesDocumentFromMessageDetail(integrationTest);
+  petitionsClerkClicksCaseDetailTabFromMessageDetail(integrationTest);
 });

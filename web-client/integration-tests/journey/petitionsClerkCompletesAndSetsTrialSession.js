@@ -1,43 +1,43 @@
 import { wait } from '../helpers';
 
 export const petitionsClerkCompletesAndSetsTrialSession = (
-  test,
+  integrationTest,
   overrides = {},
 ) => {
   return it('petitions clerk completes a trial session before calendaring', async () => {
-    await test.runSequence('gotoEditTrialSessionSequence', {
-      trialSessionId: test.trialSessionId,
+    await integrationTest.runSequence('gotoEditTrialSessionSequence', {
+      trialSessionId: integrationTest.trialSessionId,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditTrialSession');
+    expect(integrationTest.getState('currentPage')).toEqual('EditTrialSession');
 
-    await test.runSequence('openSetCalendarModalSequence');
+    await integrationTest.runSequence('openSetCalendarModalSequence');
 
-    expect(test.getState('alertWarning')).toEqual({
+    expect(integrationTest.getState('alertWarning')).toEqual({
       message: 'Provide an address and a judge to set this trial session.',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'address1',
       value: '123 Flavor Ave',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'city',
       value: 'Seattle',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'state',
       value: 'WA',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'postalCode',
       value: '98101',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'judge',
       value: overrides.judge || {
         name: 'Cohen',
@@ -45,23 +45,29 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
       },
     });
 
-    await test.runSequence('updateTrialSessionSequence');
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await integrationTest.runSequence('updateTrialSessionSequence');
+    await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: integrationTest.trialSessionId,
     });
-    expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'TrialSessionDetail',
+    );
 
-    await test.runSequence('setTrialSessionCalendarSequence');
+    await integrationTest.runSequence('setTrialSessionCalendarSequence');
     await wait(1000); // we need to wait for some reason
 
     if (overrides.hasPaper) {
-      expect(test.getState('currentPage')).toEqual('PrintPaperTrialNotices');
-      expect(test.getState('alertWarning')).toEqual({
+      expect(integrationTest.getState('currentPage')).toEqual(
+        'PrintPaperTrialNotices',
+      );
+      expect(integrationTest.getState('alertWarning')).toEqual({
         message: 'Print and mail all paper service documents now.',
       });
     } else {
-      expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
-      expect(test.getState('alertSuccess')).toEqual({
+      expect(integrationTest.getState('currentPage')).toEqual(
+        'TrialSessionDetail',
+      );
+      expect(integrationTest.getState('alertSuccess')).toEqual({
         message: 'Eligible cases set for trial.',
       });
     }

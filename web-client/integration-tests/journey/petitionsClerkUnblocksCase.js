@@ -1,35 +1,40 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
 export const petitionsClerkUnblocksCase = (
-  test,
+  integrationTest,
   trialLocation,
   checkReport = true,
 ) => {
   return it('Petitions clerk unblocks the case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    expect(test.getState('caseDetail').blocked).toBeTruthy();
+    expect(integrationTest.getState('caseDetail').blocked).toBeTruthy();
 
-    await test.runSequence('unblockCaseFromTrialSequence');
+    await integrationTest.runSequence('unblockCaseFromTrialSequence');
 
-    expect(test.getState('alertSuccess').message).toEqual(
+    expect(integrationTest.getState('alertSuccess').message).toEqual(
       'Block removed. Case is eligible for next available trial session.',
     );
-    expect(test.getState('caseDetail').blocked).toBeFalsy();
-    expect(test.getState('caseDetail').blockedReason).toBeUndefined();
+    expect(integrationTest.getState('caseDetail').blocked).toBeFalsy();
+    expect(
+      integrationTest.getState('caseDetail').blockedReason,
+    ).toBeUndefined();
 
     if (checkReport) {
       await refreshElasticsearchIndex();
 
-      await test.runSequence('gotoBlockedCasesReportSequence');
+      await integrationTest.runSequence('gotoBlockedCasesReportSequence');
 
-      await test.runSequence('getBlockedCasesByTrialLocationSequence', {
-        key: 'trialLocation',
-        value: trialLocation,
-      });
+      await integrationTest.runSequence(
+        'getBlockedCasesByTrialLocationSequence',
+        {
+          key: 'trialLocation',
+          value: trialLocation,
+        },
+      );
 
-      expect(test.getState('blockedCases')).toMatchObject([]);
+      expect(integrationTest.getState('blockedCases')).toMatchObject([]);
     }
   });
 };

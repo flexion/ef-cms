@@ -11,24 +11,24 @@ import { userLogsInAndChecksVerifiedEmailAddress } from './journey/userLogsInAnd
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
 import faker from 'faker';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('admissions clerk practitioner journey', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
-    test.barNumber = 'SC2222'; //privatePractitioner3
+    integrationTest.barNumber = 'SC2222'; //privatePractitioner3
 
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(integrationTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -41,42 +41,44 @@ describe('admissions clerk practitioner journey', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkAddsPractitionersToCase(test, true);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(integrationTest);
+  petitionsClerkAddsPractitionersToCase(integrationTest, true);
 
-  loginAs(test, 'admissionsclerk@example.com');
+  loginAs(integrationTest, 'admissionsclerk@example.com');
 
   it('admissions clerk navigates to edit form', async () => {
     await refreshElasticsearchIndex();
-    await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: test.barNumber,
+    await integrationTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: integrationTest.barNumber,
     });
-    expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'EditPractitionerUser',
+    );
   });
 
   it('admissions clerk updates practitioner email but it already exists', async () => {
-    expect(test.getState('form.pendingEmail')).toBeUndefined();
-    expect(test.getState('form.originalEmail')).toBe(
+    expect(integrationTest.getState('form.pendingEmail')).toBeUndefined();
+    expect(integrationTest.getState('form.originalEmail')).toBe(
       'privatePractitioner3@example.com',
     );
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
       value: 'privatePractitioner99@example.com',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
       value: 'privatePractitioner99@example.com',
     });
 
-    await test.runSequence('submitUpdatePractitionerUserSequence');
+    await integrationTest.runSequence('submitUpdatePractitionerUserSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       email:
         'An account with this email already exists. Enter a new email address.',
     });
@@ -84,45 +86,55 @@ describe('admissions clerk practitioner journey', () => {
 
   const validEmail = `${faker.internet.userName()}_no_error@example.com`;
   it('admissions clerk updates practitioner email', async () => {
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
       value: validEmail,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
       value: validEmail,
     });
 
-    await test.runSequence('submitUpdatePractitionerUserSequence');
+    await integrationTest.runSequence('submitUpdatePractitionerUserSequence');
 
-    expect(test.getState('modal.showModal')).toBe('EmailVerificationModal');
-    expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
+    expect(integrationTest.getState('modal.showModal')).toBe(
+      'EmailVerificationModal',
+    );
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'EditPractitionerUser',
+    );
 
-    await test.runSequence(
+    await integrationTest.runSequence(
       'closeVerifyEmailModalAndNavigateToPractitionerDetailSequence',
     );
 
-    expect(test.getState('modal.showModal')).toBeUndefined();
-    expect(test.getState('currentPage')).toEqual('PractitionerDetail');
+    expect(integrationTest.getState('modal.showModal')).toBeUndefined();
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'PractitionerDetail',
+    );
 
-    await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: test.barNumber,
+    await integrationTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: integrationTest.barNumber,
     });
 
-    expect(test.getState('form.pendingEmail')).toBe(validEmail);
-    expect(test.getState('form.originalEmail')).toBe(
+    expect(integrationTest.getState('form.pendingEmail')).toBe(validEmail);
+    expect(integrationTest.getState('form.originalEmail')).toBe(
       'privatePractitioner3@example.com',
     );
-    expect(test.getState('form.updatedEmail')).toBeUndefined();
-    expect(test.getState('form.confirmEmail')).toBeUndefined();
+    expect(integrationTest.getState('form.updatedEmail')).toBeUndefined();
+    expect(integrationTest.getState('form.confirmEmail')).toBeUndefined();
   });
 
   describe('private practitioner logs in and verifies email address', () => {
-    loginAs(test, 'privatePractitioner3@example.com');
-    userVerifiesUpdatedEmailAddress(test, 'practitioner');
+    loginAs(integrationTest, 'privatePractitioner3@example.com');
+    userVerifiesUpdatedEmailAddress(integrationTest, 'practitioner');
 
-    loginAs(test, 'privatePractitioner3@example.com');
-    userLogsInAndChecksVerifiedEmailAddress(test, 'practitioner', validEmail);
+    loginAs(integrationTest, 'privatePractitioner3@example.com');
+    userLogsInAndChecksVerifiedEmailAddress(
+      integrationTest,
+      'practitioner',
+      validEmail,
+    );
   });
 });

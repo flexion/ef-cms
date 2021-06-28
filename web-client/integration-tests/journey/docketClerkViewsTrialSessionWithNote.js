@@ -2,27 +2,27 @@ import { formattedTrialSessionDetails } from '../../src/presenter/computeds/form
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkViewsTrialSessionWithNote = test => {
+export const docketClerkViewsTrialSessionWithNote = integrationTest => {
   return it('Docket Clerk Views trial session with note', async () => {
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: integrationTest.trialSessionId,
     });
 
     const trialSessionFormatted = runCompute(
       withAppContextDecorator(formattedTrialSessionDetails),
       {
-        state: test.getState(),
+        state: integrationTest.getState(),
       },
     );
 
     expect(trialSessionFormatted.computedStatus).toEqual('New');
 
     const foundCase = trialSessionFormatted.caseOrder.find(
-      _case => _case.docketNumber == test.docketNumber,
+      _case => _case.docketNumber == integrationTest.docketNumber,
     );
 
     expect(foundCase).toBeTruthy();
 
-    expect(foundCase.calendarNotes).toEqual(test.calendarNote);
+    expect(foundCase.calendarNotes).toEqual(integrationTest.calendarNote);
   });
 };

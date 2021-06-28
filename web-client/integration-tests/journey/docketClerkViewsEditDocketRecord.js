@@ -1,14 +1,14 @@
-export const docketClerkViewsEditDocketRecord = test => {
+export const docketClerkViewsEditDocketRecord = integrationTest => {
   return it('Docket clerk views Edit Docket Record', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('gotoEditPaperFilingSequence', {
-      docketEntryId: test.docketRecordEntry.docketEntryId,
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoEditPaperFilingSequence', {
+      docketEntryId: integrationTest.docketRecordEntry.docketEntryId,
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('PaperFiling');
+    expect(integrationTest.getState('currentPage')).toEqual('PaperFiling');
   });
 };

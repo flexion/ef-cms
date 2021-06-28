@@ -1,18 +1,20 @@
-export const petitionsClerkEditOtherStatisticToCase = test => {
+export const petitionsClerkEditOtherStatisticToCase = integrationTest => {
   return it('petitions clerk edits other statistic on the case', async () => {
-    await test.runSequence('gotoEditOtherStatisticsSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoEditOtherStatisticsSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    expect(test.getState('caseDetail.damages')).toEqual(5678);
-    expect(test.getState('caseDetail.litigationCosts')).toEqual(1234);
+    expect(integrationTest.getState('caseDetail.damages')).toEqual(5678);
+    expect(integrationTest.getState('caseDetail.litigationCosts')).toEqual(
+      1234,
+    );
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'litigationCosts',
       value: 99,
     });
 
-    await test.runSequence('submitEditOtherStatisticsSequence');
+    await integrationTest.runSequence('submitEditOtherStatisticsSequence');
 
-    expect(test.getState('caseDetail.litigationCosts')).toEqual(99);
+    expect(integrationTest.getState('caseDetail.litigationCosts')).toEqual(99);
   });
 };

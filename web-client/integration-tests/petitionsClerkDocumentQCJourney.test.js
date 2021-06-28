@@ -11,7 +11,7 @@ import { petitionsClerkVerifiesAssignedWorkItem } from './journey/petitionsClerk
 import { petitionsClerkViewsMyDocumentQC } from './journey/petitionsClerkViewsMyDocumentQC';
 import { petitionsClerkViewsSectionDocumentQC } from './journey/petitionsClerkViewsSectionDocumentQC';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Petitions Clerk Document QC Journey', () => {
   beforeEach(() => {
@@ -19,23 +19,23 @@ describe('Petitions Clerk Document QC Journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
   const createdCases = [];
 
   const caseCreationCount = 3;
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsSectionDocumentQC(test, true);
-  petitionsClerkViewsMyDocumentQC(test, true);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsSectionDocumentQC(integrationTest, true);
+  petitionsClerkViewsMyDocumentQC(integrationTest, true);
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
 
   // Create multiple cases for testing
   for (let i = 0; i < caseCreationCount; i++) {
     it(`create case ${i + 1}`, async () => {
-      const caseDetail = await uploadPetition(test);
+      const caseDetail = await uploadPetition(integrationTest);
       expect(caseDetail.docketNumber).toBeDefined();
       createdCases.push(caseDetail);
     });
@@ -45,11 +45,14 @@ describe('Petitions Clerk Document QC Journey', () => {
     await refreshElasticsearchIndex();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsSectionDocumentQC(test);
-  petitionsClerkGetsSectionDocumentQCInboxCount(test, caseCreationCount);
-  petitionsClerkBulkAssignsCases(test, createdCases);
-  petitionsClerkViewsMyDocumentQC(test);
-  petitionsClerkGetsMyDocumentQCInboxCount(test, caseCreationCount);
-  petitionsClerkVerifiesAssignedWorkItem(test, createdCases);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsSectionDocumentQC(integrationTest);
+  petitionsClerkGetsSectionDocumentQCInboxCount(
+    integrationTest,
+    caseCreationCount,
+  );
+  petitionsClerkBulkAssignsCases(integrationTest, createdCases);
+  petitionsClerkViewsMyDocumentQC(integrationTest);
+  petitionsClerkGetsMyDocumentQCInboxCount(integrationTest, caseCreationCount);
+  petitionsClerkVerifiesAssignedWorkItem(integrationTest, createdCases);
 });

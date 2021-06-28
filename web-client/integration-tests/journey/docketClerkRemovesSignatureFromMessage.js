@@ -7,29 +7,32 @@ const formattedMessageDetail = withAppContextDecorator(
   formattedMessageDetailComputed,
 );
 
-export const docketClerkRemovesSignatureFromMessage = test => {
+export const docketClerkRemovesSignatureFromMessage = integrationTest => {
   return it('docket clerk removes signature on an order from a message', async () => {
-    await test.runSequence('gotoMessageDetailSequence', {
-      docketNumber: test.docketNumber,
-      parentMessageId: test.parentMessageId,
+    await integrationTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
+      parentMessageId: integrationTest.parentMessageId,
     });
 
     let messageDetailFormatted = runCompute(formattedMessageDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
     const orderDocument = messageDetailFormatted.attachments[1];
     expect(orderDocument.documentTitle).toEqual('Order');
 
-    await test.runSequence('openConfirmRemoveSignatureModalSequence', {
-      docketEntryIdToEdit: orderDocument.documentId,
-    });
+    await integrationTest.runSequence(
+      'openConfirmRemoveSignatureModalSequence',
+      {
+        docketEntryIdToEdit: orderDocument.documentId,
+      },
+    );
 
-    await test.runSequence('removeSignatureSequence');
+    await integrationTest.runSequence('removeSignatureSequence');
 
-    expect(test.getState('currentPage')).toEqual('MessageDetail');
+    expect(integrationTest.getState('currentPage')).toEqual('MessageDetail');
 
     const { formattedDraftDocuments } = await getFormattedDocketEntriesForTest(
-      test,
+      integrationTest,
     );
 
     const caseOrderDocument = formattedDraftDocuments.find(

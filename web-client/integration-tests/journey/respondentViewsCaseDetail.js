@@ -1,14 +1,19 @@
-export const respondentViewsCaseDetail = (test, isAssociated = true) => {
+export const respondentViewsCaseDetail = (
+  integrationTest,
+  isAssociated = true,
+) => {
   return it('Respondent views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    integrationTest.setState('caseDetail', {});
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
 
     if (isAssociated) {
-      expect(test.getState('caseDetail.irsPractitioners')).toEqual([]);
+      expect(integrationTest.getState('caseDetail.irsPractitioners')).toEqual(
+        [],
+      );
     }
   });
 };

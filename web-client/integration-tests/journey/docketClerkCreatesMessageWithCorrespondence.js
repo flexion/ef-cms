@@ -9,42 +9,47 @@ const JUDGES_CHAMBERS = applicationContext
   .getJudgesChambers();
 const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
-export const docketClerkCreatesMessageWithCorrespondence = test => {
+export const docketClerkCreatesMessageWithCorrespondence = integrationTest => {
   const getHelper = () => {
     return runCompute(messageModalHelper, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
   };
 
   it('docketclerk creates a message with correspondence document attached', async () => {
-    await test.runSequence('openCreateMessageModalSequence');
+    await integrationTest.runSequence('openCreateMessageModalSequence');
 
-    await test.runSequence('updateSectionInCreateMessageModalSequence', {
-      key: 'toSection',
-      value: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
-    });
+    await integrationTest.runSequence(
+      'updateSectionInCreateMessageModalSequence',
+      {
+        key: 'toSection',
+        value: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
+      },
+    );
 
-    await test.runSequence('updateModalFormValueSequence', {
+    await integrationTest.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
       value: '9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5', //colvinsChambers
     });
 
     const correspondence = getHelper().correspondence.find(
-      c => c.correspondenceId === test.correspondenceDocument.correspondenceId,
+      c =>
+        c.correspondenceId ===
+        integrationTest.correspondenceDocument.correspondenceId,
     );
 
-    await test.runSequence('updateMessageModalAttachmentsSequence', {
+    await integrationTest.runSequence('updateMessageModalAttachmentsSequence', {
       documentId: correspondence.correspondenceId,
     });
 
-    await test.runSequence('updateModalFormValueSequence', {
+    await integrationTest.runSequence('updateModalFormValueSequence', {
       key: 'message',
       value: 'are we human?',
     });
 
-    await test.runSequence('createMessageSequence');
+    await integrationTest.runSequence('createMessageSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
     await refreshElasticsearchIndex();
   });

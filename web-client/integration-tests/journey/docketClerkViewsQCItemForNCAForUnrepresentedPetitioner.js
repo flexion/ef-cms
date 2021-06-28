@@ -4,24 +4,25 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-export const docketClerkViewsQCItemForNCAForUnrepresentedPetitioner = test => {
-  return it('Docket clerk views QC item for NCA for unrepresented petitioner', async () => {
-    await test.runSequence('chooseWorkQueueSequence', {
-      box: 'inbox',
-      queue: 'section',
-    });
-    const workQueueFormatted = runCompute(formattedWorkQueue, {
-      state: test.getState(),
-    });
+export const docketClerkViewsQCItemForNCAForUnrepresentedPetitioner =
+  integrationTest => {
+    return it('Docket clerk views QC item for NCA for unrepresented petitioner', async () => {
+      await integrationTest.runSequence('chooseWorkQueueSequence', {
+        box: 'inbox',
+        queue: 'section',
+      });
+      const workQueueFormatted = runCompute(formattedWorkQueue, {
+        state: integrationTest.getState(),
+      });
 
-    const noticeOfChangeOfAddressQCItem = workQueueFormatted.find(
-      workItem => workItem.docketNumber === test.docketNumber,
-    );
+      const noticeOfChangeOfAddressQCItem = workQueueFormatted.find(
+        workItem => workItem.docketNumber === integrationTest.docketNumber,
+      );
 
-    expect(noticeOfChangeOfAddressQCItem).toMatchObject({
-      docketEntry: {
-        documentType: 'Notice of Change of Address',
-      },
+      expect(noticeOfChangeOfAddressQCItem).toMatchObject({
+        docketEntry: {
+          documentType: 'Notice of Change of Address',
+        },
+      });
     });
-  });
-};
+  };

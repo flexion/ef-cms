@@ -23,8 +23,8 @@ import { irsSuperuserGetsReconciliationReport } from './journey/irsSuperuserGets
 import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
 import { petitionerFilesApplicationToTakeDeposition } from './journey/petitionerFilesApplicationToTakeDeposition';
 
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 
 describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   beforeAll(() => {
@@ -32,67 +32,67 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
-  petitionerFilesADocumentForCase(test, fakeFile);
+  petitionerFilesADocumentForCase(integrationTest, fakeFile);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkChecksDocketEntryEditLink(test);
-  docketClerkQCsDocketEntry(test);
-  docketClerkChecksDocketEntryEditLink(test, { value: true });
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkChecksDocketEntryEditLink(integrationTest);
+  docketClerkQCsDocketEntry(integrationTest);
+  docketClerkChecksDocketEntryEditLink(integrationTest, { value: true });
 
   // edit docket entry meta for a minute entry
-  docketClerkNavigatesToEditDocketEntryMetaMinuteEntry(test);
-  docketClerkEditsDocketEntryMetaMinuteEntry(test);
-  docketClerkVerifiesDocketEntryMetaUpdatesMinuteEntry(test);
-  docketClerkNavigatesToEditDocketEntryMetaMinuteEntry(test);
+  docketClerkNavigatesToEditDocketEntryMetaMinuteEntry(integrationTest);
+  docketClerkEditsDocketEntryMetaMinuteEntry(integrationTest);
+  docketClerkVerifiesDocketEntryMetaUpdatesMinuteEntry(integrationTest);
+  docketClerkNavigatesToEditDocketEntryMetaMinuteEntry(integrationTest);
 
-  docketClerkNavigatesToEditDocketEntryMeta(test, 3);
-  docketClerkEditsDocketEntryMeta(test, 3, {
+  docketClerkNavigatesToEditDocketEntryMeta(integrationTest, 3);
+  docketClerkEditsDocketEntryMeta(integrationTest, 3, {
     filedBy: 'Resp. & Petr. Mona Schultz, Brianna Noble',
   });
-  docketClerkVerifiesDocketEntryMetaUpdates(test, 3);
-  docketClerkNavigatesToEditDocketEntryMeta(test, 3);
-  docketClerkVerifiesDocketEntryMetaUpdatesInEditForm(test);
+  docketClerkVerifiesDocketEntryMetaUpdates(integrationTest, 3);
+  docketClerkNavigatesToEditDocketEntryMeta(integrationTest, 3);
+  docketClerkVerifiesDocketEntryMetaUpdatesInEditForm(integrationTest);
 
-  docketClerkCreatesAnOrder(test, {
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkServesDocument(test, 0);
-  docketClerkNavigatesToEditDocketEntryMetaCourtIssued(test, 4);
-  docketClerkEditsDocketEntryMetaCourtIssued(test, 4);
-  docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates(test, 4);
-  docketClerkNavigatesToEditDocketEntryMetaCourtIssued(test, 4);
-  docketClerkVerifiesEditCourtIssuedNonstandardFields(test);
+  docketClerkSignsOrder(integrationTest, 0);
+  docketClerkAddsDocketEntryFromOrder(integrationTest, 0);
+  docketClerkServesDocument(integrationTest, 0);
+  docketClerkNavigatesToEditDocketEntryMetaCourtIssued(integrationTest, 4);
+  docketClerkEditsDocketEntryMetaCourtIssued(integrationTest, 4);
+  docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates(integrationTest, 4);
+  docketClerkNavigatesToEditDocketEntryMetaCourtIssued(integrationTest, 4);
+  docketClerkVerifiesEditCourtIssuedNonstandardFields(integrationTest);
 
-  docketClerkCreatesAnOrder(test, {
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order of Dismissal',
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
-  docketClerkSignsOrder(test, 1);
-  docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
-  docketClerkServesDocument(test, 1);
-  docketClerkNavigatesToEditDocketEntryMetaCourtIssued(test, 5);
-  docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge(test);
+  docketClerkSignsOrder(integrationTest, 1);
+  docketClerkAddsDocketEntryFromOrderOfDismissal(integrationTest, 1);
+  docketClerkServesDocument(integrationTest, 1);
+  docketClerkNavigatesToEditDocketEntryMetaCourtIssued(integrationTest, 5);
+  docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge(integrationTest);
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerFilesApplicationToTakeDeposition(test, fakeFile);
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerFilesApplicationToTakeDeposition(integrationTest, fakeFile);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkNavigatesToEditDocketEntryMeta(test, 6);
-  docketClerkEditsDocketEntryMetaWithNewFreeText(test, 6);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkNavigatesToEditDocketEntryMeta(integrationTest, 6);
+  docketClerkEditsDocketEntryMetaWithNewFreeText(integrationTest, 6);
 
-  irsSuperuserGetsReconciliationReport(test);
+  irsSuperuserGetsReconciliationReport(integrationTest);
 });

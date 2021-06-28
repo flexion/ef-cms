@@ -4,91 +4,130 @@ import {
 } from '../../../shared/src/business/entities/EntityConstants';
 
 export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
-  test,
+  integrationTest,
   docketRecordIndex,
 ) => {
   return it('docket clerk edits docket entry meta', async () => {
-    expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'EditDocketEntryMeta',
+    );
 
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'freeText',
-      value: 'The Sauceboss',
+    await integrationTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'freeText',
+        value: 'The Sauceboss',
+      },
+    );
+
+    await integrationTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'filingDate',
+        value: '2020-01-04T05:00:00.000Z',
+      },
+    );
+
+    await integrationTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'filingDateDay',
+        value: '04',
+      },
+    );
+
+    await integrationTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'filingDateMonth',
+        value: '01',
+      },
+    );
+
+    await integrationTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'filingDateYear',
+        value: '2020',
+      },
+    );
+
+    await integrationTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'partyIrsPractitioner',
+        value: 'true',
+      },
+    );
+
+    await integrationTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'action',
+        value: 'Added new nickname of "Sauceboss"',
+      },
+    );
+
+    await integrationTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'hasOtherFilingParty',
+        value: true,
+      },
+    );
+
+    await integrationTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'pending',
+        value: true,
+      },
+    );
+
+    await integrationTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'objections',
+        value: OBJECTIONS_OPTIONS_MAP.NO,
+      },
+    );
+
+    await integrationTest.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'filingDate',
-      value: '2020-01-04T05:00:00.000Z',
-    });
-
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'filingDateDay',
-      value: '04',
-    });
-
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'filingDateMonth',
-      value: '01',
-    });
-
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'filingDateYear',
-      value: '2020',
-    });
-
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'partyIrsPractitioner',
-      value: 'true',
-    });
-
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'action',
-      value: 'Added new nickname of "Sauceboss"',
-    });
-
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'hasOtherFilingParty',
-      value: true,
-    });
-
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'pending',
-      value: true,
-    });
-
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'objections',
-      value: OBJECTIONS_OPTIONS_MAP.NO,
-    });
-
-    await test.runSequence('submitEditDocketEntryMetaSequence', {
-      docketNumber: test.docketNumber,
-    });
-
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       otherFilingParty: 'Enter other filing party name.',
     });
 
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'otherFilingParty',
-      value: 'Brianna Noble',
+    await integrationTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'otherFilingParty',
+        value: 'Brianna Noble',
+      },
+    );
+
+    await integrationTest.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('submitEditDocketEntryMetaSequence', {
-      docketNumber: test.docketNumber,
-    });
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('validationErrors')).toEqual({});
-
-    expect(test.getState('alertSuccess')).toMatchObject({
+    expect(integrationTest.getState('alertSuccess')).toMatchObject({
       message: 'Docket entry changes saved.',
     });
 
-    expect(test.getState('caseDetail.automaticBlocked')).toEqual(true);
-    expect(test.getState('caseDetail.automaticBlockedReason')).toEqual(
-      AUTOMATIC_BLOCKED_REASONS.pending,
+    expect(integrationTest.getState('caseDetail.automaticBlocked')).toEqual(
+      true,
     );
-    expect(test.getState('caseDetail.hasPendingItems')).toEqual(true);
-    const docketEntries = test.getState('caseDetail.docketEntries');
+    expect(
+      integrationTest.getState('caseDetail.automaticBlockedReason'),
+    ).toEqual(AUTOMATIC_BLOCKED_REASONS.pending);
+    expect(integrationTest.getState('caseDetail.hasPendingItems')).toEqual(
+      true,
+    );
+    const docketEntries = integrationTest.getState('caseDetail.docketEntries');
     const pendingDocketEntry = docketEntries.find(
       d => d.index === docketRecordIndex,
     );

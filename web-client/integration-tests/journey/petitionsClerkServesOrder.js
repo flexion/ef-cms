@@ -1,10 +1,10 @@
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
-export const petitionsClerkServesOrder = test => {
+export const petitionsClerkServesOrder = integrationTest => {
   return it('Petitions Clerk serves the order', async () => {
-    const { docketEntryId } = test;
+    const { docketEntryId } = integrationTest;
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -12,14 +12,23 @@ export const petitionsClerkServesOrder = test => {
 
     expect(orderDocument).toBeTruthy();
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
-    });
+    await integrationTest.runSequence(
+      'gotoEditCourtIssuedDocketEntrySequence',
+      {
+        docketEntryId: orderDocument.docketEntryId,
+        docketNumber: integrationTest.docketNumber,
+      },
+    );
 
-    expect(test.getState('currentPage')).toEqual('CourtIssuedDocketEntry');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CourtIssuedDocketEntry',
+    );
 
-    await test.runSequence('openConfirmInitiateServiceModalSequence');
-    await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
+    await integrationTest.runSequence(
+      'openConfirmInitiateServiceModalSequence',
+    );
+    await integrationTest.runSequence(
+      'serveCourtIssuedDocumentFromDocketEntrySequence',
+    );
   });
 };

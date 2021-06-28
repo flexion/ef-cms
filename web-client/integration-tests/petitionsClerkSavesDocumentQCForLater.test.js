@@ -9,7 +9,7 @@ import { petitionsClerkReviewsPetitionAndSavesForLater } from './journey/petitio
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkViewsSectionInProgress } from './journey/petitionsClerkViewsSectionInProgress';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Petitions Clerk Saves Document QC for Later', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -19,12 +19,12 @@ describe('Petitions Clerk Saves Document QC for Later', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(integrationTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -37,21 +37,21 @@ describe('Petitions Clerk Saves Document QC for Later', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
+  loginAs(integrationTest, 'petitionsclerk@example.com');
 
   it('refresh elasticsearch index', async () => {
     await refreshElasticsearchIndex();
   });
 
-  petitionsClerkReviewsPetitionAndSavesForLater(test);
+  petitionsClerkReviewsPetitionAndSavesForLater(integrationTest);
 
   it('refresh elasticsearch index', async () => {
     await refreshElasticsearchIndex();
   });
 
-  petitionsClerkViewsSectionInProgress(test);
-  petitionsClerkServesPetitionFromDocumentView(test);
+  petitionsClerkViewsSectionInProgress(integrationTest);
+  petitionsClerkServesPetitionFromDocumentView(integrationTest);
 });

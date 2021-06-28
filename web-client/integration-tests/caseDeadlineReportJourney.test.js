@@ -8,7 +8,7 @@ import {
 import { petitionsClerkCreatesACaseDeadline } from './journey/petitionsClerkCreatesACaseDeadline';
 import { petitionsClerkViewsDeadlineReport } from './journey/petitionsClerkViewsDeadlineReport';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Case deadline report journey', () => {
   const randomDay = `1${Math.floor(Math.random() * 9) + 1}`;
@@ -22,26 +22,26 @@ describe('Case deadline report journey', () => {
 
   beforeAll(() => {
     jest.setTimeout(30000);
-    test.createdDocketNumbers = [];
+    integrationTest.createdDocketNumbers = [];
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
   describe('set up test data - 3 cases with 2 deadlines each', () => {
     for (let i = 0; i < 3; i++) {
-      loginAs(test, 'petitioner@example.com');
+      loginAs(integrationTest, 'petitioner@example.com');
       it(`create case ${i}`, async () => {
-        const caseDetail = await uploadPetition(test);
+        const caseDetail = await uploadPetition(integrationTest);
         expect(caseDetail.docketNumber).toBeDefined();
-        test.docketNumber = caseDetail.docketNumber;
-        test.createdDocketNumbers.push(caseDetail.docketNumber);
+        integrationTest.docketNumber = caseDetail.docketNumber;
+        integrationTest.createdDocketNumbers.push(caseDetail.docketNumber);
       });
 
-      loginAs(test, 'petitionsclerk@example.com');
-      petitionsClerkCreatesACaseDeadline(test, overrides);
-      petitionsClerkCreatesACaseDeadline(test, {
+      loginAs(integrationTest, 'petitionsclerk@example.com');
+      petitionsClerkCreatesACaseDeadline(integrationTest, overrides);
+      petitionsClerkCreatesACaseDeadline(integrationTest, {
         ...overrides,
         month: '02',
       });
@@ -49,37 +49,41 @@ describe('Case deadline report journey', () => {
   });
 
   describe('docket clerk', () => {
-    loginAs(test, 'docketclerk@example.com');
+    loginAs(integrationTest, 'docketclerk@example.com');
     it('updates associatedJudge for first case to Judge Buch', async () => {
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: test.createdDocketNumbers[0],
+      await integrationTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: integrationTest.createdDocketNumbers[0],
       });
 
-      await test.runSequence('openUpdateCaseModalSequence');
+      await integrationTest.runSequence('openUpdateCaseModalSequence');
 
-      expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
+      expect(integrationTest.getState('modal.showModal')).toEqual(
+        'UpdateCaseModalDialog',
+      );
 
-      await test.runSequence('updateModalValueSequence', {
+      await integrationTest.runSequence('updateModalValueSequence', {
         key: 'caseStatus',
         value: CASE_STATUS_TYPES.submitted,
       });
-      await test.runSequence('updateModalValueSequence', {
+      await integrationTest.runSequence('updateModalValueSequence', {
         key: 'associatedJudge',
         value: 'Buch',
       });
 
-      await test.runSequence('submitUpdateCaseModalSequence');
+      await integrationTest.runSequence('submitUpdateCaseModalSequence');
 
-      expect(test.getState('validationErrors')).toEqual({});
+      expect(integrationTest.getState('validationErrors')).toEqual({});
 
-      expect(test.getState('caseDetail.associatedJudge')).toEqual('Buch');
+      expect(integrationTest.getState('caseDetail.associatedJudge')).toEqual(
+        'Buch',
+      );
 
       await refreshElasticsearchIndex();
     });
   });
 
   describe('View the deadlines report', () => {
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkViewsDeadlineReport(test, overrides);
+    loginAs(integrationTest, 'petitionsclerk@example.com');
+    petitionsClerkViewsDeadlineReport(integrationTest, overrides);
   });
 });

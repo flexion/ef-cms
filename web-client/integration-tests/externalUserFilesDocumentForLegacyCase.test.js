@@ -3,40 +3,40 @@ import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFil
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { getOtherFilers } from '../../shared/src/business/entities/cases/Case';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('an external user files a document for their legacy case', () => {
   const seededDocketNumber = '999-15';
 
   beforeAll(() => {
     jest.setTimeout(30000);
-    test.docketNumber = seededDocketNumber;
+    integrationTest.docketNumber = seededDocketNumber;
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  associatedExternalUserViewsCaseDetailForOwnedCase(test);
-  externalUserFilesDocumentForOwnedCase(test, fakeFile);
+  loginAs(integrationTest, 'petitioner@example.com');
+  associatedExternalUserViewsCaseDetailForOwnedCase(integrationTest);
+  externalUserFilesDocumentForOwnedCase(integrationTest, fakeFile);
 
-  loginAs(test, 'privatePractitioner@example.com');
-  associatedExternalUserViewsCaseDetailForOwnedCase(test);
-  externalUserFilesDocumentForOwnedCase(test, fakeFile);
+  loginAs(integrationTest, 'privatePractitioner@example.com');
+  associatedExternalUserViewsCaseDetailForOwnedCase(integrationTest);
+  externalUserFilesDocumentForOwnedCase(integrationTest, fakeFile);
 
-  loginAs(test, 'irsPractitioner@example.com');
-  associatedExternalUserViewsCaseDetailForOwnedCase(test);
-  externalUserFilesDocumentForOwnedCase(test, fakeFile);
+  loginAs(integrationTest, 'irsPractitioner@example.com');
+  associatedExternalUserViewsCaseDetailForOwnedCase(integrationTest);
+  externalUserFilesDocumentForOwnedCase(integrationTest, fakeFile);
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
   it('verifies otherFiler parties receive paper service when serviceIndicator is set to paper', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    const otherFilers = getOtherFilers(test.getState('caseDetail'));
-    const docketEntries = test.getState('caseDetail.docketEntries');
+    const otherFilers = getOtherFilers(integrationTest.getState('caseDetail'));
+    const docketEntries = integrationTest.getState('caseDetail.docketEntries');
     const lastServedDocument = docketEntries.pop();
 
     const isOtherFilerServed = lastServedDocument.servedParties.find(

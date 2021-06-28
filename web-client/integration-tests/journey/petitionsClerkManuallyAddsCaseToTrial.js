@@ -7,47 +7,49 @@ const addToTrialSessionModalHelper = withAppContextDecorator(
   addToTrialSessionModalHelperComputed,
 );
 
-export const petitionsClerkManuallyAddsCaseToTrial = test => {
+export const petitionsClerkManuallyAddsCaseToTrial = integrationTest => {
   return it('Petitions clerk manually adds a case to an uncalendared trial session', async () => {
     const caseToAdd =
-      test.casesReadyForTrial[test.casesReadyForTrial.length - 1];
+      integrationTest.casesReadyForTrial[
+        integrationTest.casesReadyForTrial.length - 1
+      ];
 
-    test.manuallyAddedTrialCaseDocketNumber = caseToAdd.docketNumber;
+    integrationTest.manuallyAddedTrialCaseDocketNumber = caseToAdd.docketNumber;
 
-    await test.runSequence('gotoCaseDetailSequence', {
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: caseToAdd.docketNumber,
     });
 
-    await test.runSequence('openAddToTrialModalSequence');
+    await integrationTest.runSequence('openAddToTrialModalSequence');
 
     let modalHelper = await runCompute(addToTrialSessionModalHelper, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     expect(modalHelper.showSessionNotSetAlert).toEqual(false);
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'showAllLocations',
       value: true,
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'trialSessionId',
-      value: test.trialSessionId,
+      value: integrationTest.trialSessionId,
     });
 
     // Because the selected trial session is not yet calendared, we should show
     // the alert in the UI stating so.
     modalHelper = await runCompute(addToTrialSessionModalHelper, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     expect(modalHelper.showSessionNotSetAlert).toEqual(true);
 
-    await test.runSequence('addCaseToTrialSessionSequence');
+    await integrationTest.runSequence('addCaseToTrialSessionSequence');
     await wait(1000);
 
-    const trialSessionJudge = test.getState('trialSessionJudge');
+    const trialSessionJudge = integrationTest.getState('trialSessionJudge');
     expect(trialSessionJudge).toMatchObject(
       expect.objectContaining({
         name: expect.anything(),

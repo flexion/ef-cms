@@ -1,15 +1,17 @@
-export const petitionsClerkManuallyRemovesCaseFromTrial = test => {
+export const petitionsClerkManuallyRemovesCaseFromTrial = integrationTest => {
   return it('Petitions clerk manually removes a case from an uncalendared trial session', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.manuallyAddedTrialCaseDocketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.manuallyAddedTrialCaseDocketNumber,
     });
 
-    await test.runSequence('openRemoveFromTrialSessionModalSequence');
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence(
+      'openRemoveFromTrialSessionModalSequence',
+    );
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'disposition',
       value: 'Test disposition',
     });
 
-    await test.runSequence('removeCaseFromTrialSequence');
+    await integrationTest.runSequence('removeCaseFromTrialSequence');
   });
 };

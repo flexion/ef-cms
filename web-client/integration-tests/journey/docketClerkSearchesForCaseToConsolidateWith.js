@@ -1,11 +1,17 @@
-export const docketClerkSearchesForCaseToConsolidateWith = test => {
+export const docketClerkSearchesForCaseToConsolidateWith = integrationTest => {
   return it('Docket clerk searches for case to consolidate with', async () => {
-    test.setState('modal.searchTerm', test.leadDocketNumber);
-    await test.runSequence('submitCaseSearchForConsolidationSequence', {
-      docketNumber: test.leadDocketNumber,
-    });
-    expect(test.getState('modal.caseDetail.docketNumber')).toEqual(
-      test.leadDocketNumber,
+    integrationTest.setState(
+      'modal.searchTerm',
+      integrationTest.leadDocketNumber,
+    );
+    await integrationTest.runSequence(
+      'submitCaseSearchForConsolidationSequence',
+      {
+        docketNumber: integrationTest.leadDocketNumber,
+      },
+    );
+    expect(integrationTest.getState('modal.caseDetail.docketNumber')).toEqual(
+      integrationTest.leadDocketNumber,
     );
   });
 };

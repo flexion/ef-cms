@@ -14,8 +14,8 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { unassociatedUserAdvancedSearchForSealedCase } from './journey/unassociatedUserAdvancedSearchForSealedCase';
 import { unassociatedUserViewsCaseDetailForSealedCase } from './journey/unassociatedUserViewsCaseDetailForSealedCase';
 
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Docket Clerk seals a case', () => {
@@ -24,12 +24,12 @@ describe('Docket Clerk seals a case', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(integrationTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
@@ -43,49 +43,49 @@ describe('Docket Clerk seals a case', () => {
     });
     console.log('new case docket#', caseDetail.docketNumber);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkAddsPractitionersToCase(test);
-  petitionsClerkAddsRespondentsToCase(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(integrationTest);
+  petitionsClerkAddsPractitionersToCase(integrationTest);
+  petitionsClerkAddsRespondentsToCase(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkSealsCase(test);
-  docketClerkCreatesAnOrder(test, {
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkSealsCase(integrationTest);
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order for a sealed case',
     eventCode: 'O',
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkServesDocument(test, 0);
+  docketClerkSignsOrder(integrationTest, 0);
+  docketClerkAddsDocketEntryFromOrder(integrationTest, 0);
+  docketClerkServesDocument(integrationTest, 0);
 
   //verify that an internal user can still find this case via advanced search by name
-  loginAs(test, 'petitionsclerk@example.com');
-  associatedUserAdvancedSearchForSealedCase(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  associatedUserAdvancedSearchForSealedCase(integrationTest);
 
   //associated users
-  loginAs(test, 'petitioner@example.com');
-  associatedUserViewsCaseDetailForSealedCase(test);
+  loginAs(integrationTest, 'petitioner@example.com');
+  associatedUserViewsCaseDetailForSealedCase(integrationTest);
 
-  loginAs(test, 'privatePractitioner@example.com');
-  associatedUserViewsCaseDetailForSealedCase(test);
-  associatedUserAdvancedSearchForSealedCase(test);
+  loginAs(integrationTest, 'privatePractitioner@example.com');
+  associatedUserViewsCaseDetailForSealedCase(integrationTest);
+  associatedUserAdvancedSearchForSealedCase(integrationTest);
 
-  loginAs(test, 'irsPractitioner@example.com');
-  associatedUserViewsCaseDetailForSealedCase(test);
-  associatedUserAdvancedSearchForSealedCase(test);
+  loginAs(integrationTest, 'irsPractitioner@example.com');
+  associatedUserViewsCaseDetailForSealedCase(integrationTest);
+  associatedUserAdvancedSearchForSealedCase(integrationTest);
 
   //unassociated users
-  loginAs(test, 'privatePractitioner3@example.com');
-  unassociatedUserViewsCaseDetailForSealedCase(test);
-  unassociatedUserAdvancedSearchForSealedCase(test);
-  externalUserSearchesForAnOrderOnSealedCase(test);
+  loginAs(integrationTest, 'privatePractitioner3@example.com');
+  unassociatedUserViewsCaseDetailForSealedCase(integrationTest);
+  unassociatedUserAdvancedSearchForSealedCase(integrationTest);
+  externalUserSearchesForAnOrderOnSealedCase(integrationTest);
 
-  loginAs(test, 'irsPractitioner3@example.com');
-  unassociatedUserViewsCaseDetailForSealedCase(test);
-  unassociatedUserAdvancedSearchForSealedCase(test);
+  loginAs(integrationTest, 'irsPractitioner3@example.com');
+  unassociatedUserViewsCaseDetailForSealedCase(integrationTest);
+  unassociatedUserAdvancedSearchForSealedCase(integrationTest);
 });

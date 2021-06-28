@@ -3,73 +3,73 @@ import { Case } from '../../../shared/src/business/entities/cases/Case';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
-export const petitionsClerkSubmitsCaseToIrs = test => {
+export const petitionsClerkSubmitsCaseToIrs = integrationTest => {
   return it('Petitions clerk submits case to IRS', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('gotoPetitionQcSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
       value: false,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'irsMonth',
       value: '12',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2050',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateYear',
       value: '2018',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateMonth',
       value: '12',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateDay',
       value: '24',
     });
 
-    await test.runSequence('saveSavedCaseForLaterSequence');
-    expect(test.getState('validationErrors')).toEqual({
+    await integrationTest.runSequence('saveSavedCaseForLaterSequence');
+    expect(integrationTest.getState('validationErrors')).toEqual({
       irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[0].message,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2017',
     });
 
-    await test.runSequence('saveSavedCaseForLaterSequence');
-    expect(test.getState('validationErrors')).toEqual({});
-    await test.runSequence('serveCaseToIrsSequence');
+    await integrationTest.runSequence('saveSavedCaseForLaterSequence');
+    expect(integrationTest.getState('validationErrors')).toEqual({});
+    await integrationTest.runSequence('serveCaseToIrsSequence');
 
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    integrationTest.setState('caseDetail', {});
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
     // check that save occurred
-    expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
+    expect(integrationTest.getState('caseDetail.irsNoticeDate')).toEqual(
       '2017-12-24T05:00:00.000Z',
     );
-    expect(test.getState('caseDetail.status')).toEqual(
+    expect(integrationTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.generalDocket,
     );
     //check that documents were served
-    const documents = test.getState('caseDetail.docketEntries');
+    const documents = integrationTest.getState('caseDetail.docketEntries');
     for (const document of documents) {
       if (!document.isMinuteEntry) {
         expect(document.servedAt).toBeDefined();

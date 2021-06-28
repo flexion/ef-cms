@@ -1,16 +1,18 @@
-export const petitionsClerkUnprioritizesCase = test => {
+export const petitionsClerkUnprioritizesCase = integrationTest => {
   return it('Petitions clerk unprioritizes the case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    expect(test.getState('caseDetail').highPriority).toBeTruthy();
+    expect(integrationTest.getState('caseDetail').highPriority).toBeTruthy();
 
-    await test.runSequence('unprioritizeCaseSequence');
+    await integrationTest.runSequence('unprioritizeCaseSequence');
 
-    expect(test.getState('alertSuccess').message).toEqual(
+    expect(integrationTest.getState('alertSuccess').message).toEqual(
       'High priority removed. Case is eligible for next available trial session.',
     );
-    expect(test.getState('caseDetail').highPriority).toBeFalsy();
-    expect(test.getState('caseDetail').highPriorityReason).toBeUndefined();
+    expect(integrationTest.getState('caseDetail').highPriority).toBeFalsy();
+    expect(
+      integrationTest.getState('caseDetail').highPriorityReason,
+    ).toBeUndefined();
   });
 };

@@ -3,61 +3,61 @@ import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkEditsOrderFromMessage = test => {
+export const docketClerkEditsOrderFromMessage = integrationTest => {
   const formattedMessageDetail = withAppContextDecorator(
     formattedMessageDetailComputed,
   );
 
   return it('docket clerk edits a signed order from a message', async () => {
-    await test.runSequence('gotoMessageDetailSequence', {
-      docketNumber: test.docketNumber,
-      parentMessageId: test.parentMessageId,
+    await integrationTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
+      parentMessageId: integrationTest.parentMessageId,
     });
 
     let messageDetailFormatted = runCompute(formattedMessageDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
     const orderDocument = messageDetailFormatted.attachments[1];
     expect(orderDocument.documentTitle).toEqual('Order');
 
-    await test.runSequence('openConfirmEditModalSequence', {
+    await integrationTest.runSequence('openConfirmEditModalSequence', {
       docketEntryIdToEdit: orderDocument.documentId,
-      docketNumber: test.docketNumber,
-      parentMessageId: test.parentMessageId,
-      redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
+      docketNumber: integrationTest.docketNumber,
+      parentMessageId: integrationTest.parentMessageId,
+      redirectUrl: `/messages/${integrationTest.docketNumber}/message-detail/${integrationTest.parentMessageId}`,
     });
 
-    await test.runSequence('navigateToEditOrderSequence');
+    await integrationTest.runSequence('navigateToEditOrderSequence');
 
-    expect(test.getState('currentPage')).toEqual('CreateOrder');
-    expect(test.getState('form.documentTitle')).toEqual('Order');
+    expect(integrationTest.getState('currentPage')).toEqual('CreateOrder');
+    expect(integrationTest.getState('form.documentTitle')).toEqual('Order');
 
-    await test.runSequence('openEditOrderTitleModalSequence');
+    await integrationTest.runSequence('openEditOrderTitleModalSequence');
 
-    expect(test.getState('modal.eventCode')).toEqual('O');
-    expect(test.getState('modal.documentTitle')).toEqual('Order');
+    expect(integrationTest.getState('modal.eventCode')).toEqual('O');
+    expect(integrationTest.getState('modal.documentTitle')).toEqual('Order');
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: '<p>This is an updated order.</p>',
     });
 
-    await test.runSequence('submitCourtIssuedOrderSequence');
+    await integrationTest.runSequence('submitCourtIssuedOrderSequence');
 
-    expect(test.getState('currentPage')).toEqual('SignOrder');
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
+    expect(integrationTest.getState('currentPage')).toEqual('SignOrder');
+    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
 
-    await test.runSequence('skipSigningOrderSequence');
+    await integrationTest.runSequence('skipSigningOrderSequence');
 
-    expect(test.getState('currentPage')).toEqual('MessageDetail');
+    expect(integrationTest.getState('currentPage')).toEqual('MessageDetail');
 
     messageDetailFormatted = runCompute(formattedMessageDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
     expect(messageDetailFormatted.attachments.length).toEqual(2);
 
     const { formattedDraftDocuments } = await getFormattedDocketEntriesForTest(
-      test,
+      integrationTest,
     );
 
     const caseOrderDocument = formattedDraftDocuments.find(

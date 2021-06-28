@@ -5,7 +5,7 @@ import { docketClerkViewsCaseDetail } from './journey/docketClerkViewsCaseDetail
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Docket Clerk updates a hearing session', () => {
   beforeEach(() => {
@@ -13,33 +13,35 @@ describe('Docket Clerk updates a hearing session', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  test.createdTrialSessions = [];
+  integrationTest.createdTrialSessions = [];
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
   const trialLocation = `Hartford, Connecticut, ${Date.now()}`;
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, {
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(integrationTest, {
     sessionType: 'Motion/Hearing',
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(test);
+  docketClerkViewsTrialSessionList(integrationTest);
 
-  docketClerkAddsCaseToHearing(test, 'Low blast radius', 0);
+  docketClerkAddsCaseToHearing(integrationTest, 'Low blast radius', 0);
 
-  docketClerkEditsTrialSession(test);
+  docketClerkEditsTrialSession(integrationTest);
 
-  docketClerkViewsCaseDetail(test);
+  docketClerkViewsCaseDetail(integrationTest);
 
   it('should NOT set the trialSessionId on the case', () => {
-    expect(test.getState('caseDetail.trialSessionId')).toBeUndefined();
+    expect(
+      integrationTest.getState('caseDetail.trialSessionId'),
+    ).toBeUndefined();
   });
 });

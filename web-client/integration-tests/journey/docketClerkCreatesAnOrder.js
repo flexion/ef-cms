@@ -2,58 +2,69 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkCreatesAnOrder = (test, data) => {
+export const docketClerkCreatesAnOrder = (integrationTest, data) => {
   return it('Docket Clerk creates an order', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('openCreateOrderChooseTypeModalSequence', {});
+    await integrationTest.runSequence(
+      'openCreateOrderChooseTypeModalSequence',
+      {},
+    );
 
-    expect(test.getState('modal.documentTitle')).toBeFalsy();
+    expect(integrationTest.getState('modal.documentTitle')).toBeFalsy();
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
-      key: 'eventCode',
-      value: data.eventCode,
-    });
+    await integrationTest.runSequence(
+      'updateCreateOrderModalFormValueSequence',
+      {
+        key: 'eventCode',
+        value: data.eventCode,
+      },
+    );
 
     if (data.expectedDocumentType) {
-      expect(test.getState('modal.documentType')).toEqual(
+      expect(integrationTest.getState('modal.documentType')).toEqual(
         data.expectedDocumentType,
       );
     } else {
-      expect(test.getState('modal.documentType').length).toBeGreaterThan(0);
+      expect(
+        integrationTest.getState('modal.documentType').length,
+      ).toBeGreaterThan(0);
     }
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
-      key: 'documentTitle',
-      value: data.documentTitle,
-    });
+    await integrationTest.runSequence(
+      'updateCreateOrderModalFormValueSequence',
+      {
+        key: 'documentTitle',
+        value: data.documentTitle,
+      },
+    );
 
-    await test.runSequence('submitCreateOrderModalSequence');
+    await integrationTest.runSequence('submitCreateOrderModalSequence');
 
-    expect(test.getState('currentPage')).toBe('CreateOrder');
+    expect(integrationTest.getState('currentPage')).toBe('CreateOrder');
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: 'Some order content',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'documentContents',
       value: data.documentContents || 'Some order content',
     });
 
-    await test.runSequence('submitCourtIssuedOrderSequence');
+    await integrationTest.runSequence('submitCourtIssuedOrderSequence');
 
     //skip signing and go back to caseDetail
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: integrationTest.getState(),
       },
     );
 
@@ -62,12 +73,12 @@ export const docketClerkCreatesAnOrder = (test, data) => {
       prev.createdAt > current.createdAt ? prev : current,
     );
 
-    expect(test.getState('draftDocumentViewerDocketEntryId')).toBe(
+    expect(integrationTest.getState('draftDocumentViewerDocketEntryId')).toBe(
       newDraftOrder.docketEntryId,
     );
 
     expect(newDraftOrder).toBeTruthy();
-    test.draftOrders.push(newDraftOrder);
-    test.docketEntryId = newDraftOrder.docketEntryId;
+    integrationTest.draftOrders.push(newDraftOrder);
+    integrationTest.docketEntryId = newDraftOrder.docketEntryId;
   });
 };

@@ -6,27 +6,32 @@ const formattedTrialSessionDetails = withAppContextDecorator(
   formattedTrialSessionDetailsComputed,
 );
 
-export const docketClerkEditsTrialSession = (test, overrides = {}) => {
+export const docketClerkEditsTrialSession = (
+  integrationTest,
+  overrides = {},
+) => {
   return it('Docket clerk edits trial session', async () => {
-    await test.runSequence('gotoEditTrialSessionSequence', {
-      trialSessionId: test.trialSessionId,
+    await integrationTest.runSequence('gotoEditTrialSessionSequence', {
+      trialSessionId: integrationTest.trialSessionId,
     });
-    expect(test.getState('currentPage')).toEqual('EditTrialSession');
+    expect(integrationTest.getState('currentPage')).toEqual('EditTrialSession');
 
     const mockNote = 'hello';
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: overrides.fieldToUpdate || 'notes',
       value: overrides.valueToUpdate || mockNote,
     });
 
-    await test.runSequence('updateTrialSessionSequence');
+    await integrationTest.runSequence('updateTrialSessionSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'TrialSessionDetail',
+    );
 
     const formatted = runCompute(formattedTrialSessionDetails, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     const expectedUpdatedValue =

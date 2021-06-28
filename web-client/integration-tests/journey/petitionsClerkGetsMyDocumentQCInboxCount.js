@@ -5,16 +5,17 @@ import { workQueueHelper as workQueueHelperComputed } from '../../src/presenter/
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
 export const petitionsClerkGetsMyDocumentQCInboxCount = (
-  test,
+  integrationTest,
   adjustExpectedCountBy = 0,
 ) => {
   return it('Petitions clerk gets My Document QC Inbox case count', async () => {
     const helper = await runCompute(workQueueHelper, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
-    if (test.petitionsClerkMyDocumentQCInboxCount) {
+    if (integrationTest.petitionsClerkMyDocumentQCInboxCount) {
       expect(helper.individualInboxCount).toEqual(
-        test.petitionsClerkMyDocumentQCInboxCount + adjustExpectedCountBy,
+        integrationTest.petitionsClerkMyDocumentQCInboxCount +
+          adjustExpectedCountBy,
       );
     } else {
       expect(helper.individualInboxCount).toBeGreaterThan(0);

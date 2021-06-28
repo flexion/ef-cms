@@ -1,10 +1,10 @@
-export const chambersUserViewsSignDraftDocument = test => {
+export const chambersUserViewsSignDraftDocument = integrationTest => {
   return it('Chambers user views sign draft document', async () => {
-    await test.runSequence('gotoSignOrderSequence', {
-      docketEntryId: test.docketEntryId,
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoSignOrderSequence', {
+      docketEntryId: integrationTest.docketEntryId,
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('SignOrder');
+    expect(integrationTest.getState('currentPage')).toEqual('SignOrder');
   });
 };

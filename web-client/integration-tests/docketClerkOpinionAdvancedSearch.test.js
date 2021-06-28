@@ -2,7 +2,7 @@ import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityC
 import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('docket clerk opinion advanced search', () => {
   beforeAll(() => {
@@ -10,49 +10,51 @@ describe('docket clerk opinion advanced search', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
 
   it('go to advanced opinion search tab', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoAdvancedSearchSequence');
-    test.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
+    await integrationTest.runSequence('gotoAdvancedSearchSequence');
+    integrationTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
 
-    const judges = test.getState('legacyAndCurrentJudges');
+    const judges = integrationTest.getState('legacyAndCurrentJudges');
     expect(judges.length).toBeGreaterThan(0);
 
     const legacyJudge = judges.find(judge => judge.role === 'legacyJudge');
     expect(legacyJudge).toBeTruthy();
 
-    await test.runSequence('submitOpinionAdvancedSearchSequence');
+    await integrationTest.runSequence('submitOpinionAdvancedSearchSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       keyword: DocumentSearch.VALIDATION_ERROR_MESSAGES.keyword,
     });
   });
 
   describe('search for things that should not be found', () => {
     it('search for a keyword that is not present in any served opinion', async () => {
-      test.setState('advancedSearchForm', {
+      integrationTest.setState('advancedSearchForm', {
         opinionSearch: {
           keyword: 'osteodontolignikeratic',
           startDate: '1995-08-03',
         },
       });
 
-      await test.runSequence('submitOpinionAdvancedSearchSequence');
+      await integrationTest.runSequence('submitOpinionAdvancedSearchSequence');
 
-      expect(test.getState('validationErrors')).toEqual({});
+      expect(integrationTest.getState('validationErrors')).toEqual({});
       expect(
-        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+        integrationTest.getState(
+          `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+        ),
       ).toEqual([]);
     });
 
     it('search for an opinion type that is not present in any served opinion', async () => {
-      test.setState('advancedSearchForm', {
+      integrationTest.setState('advancedSearchForm', {
         opinionSearch: {
           keyword: 'opinion',
           opinionType: 'Memorandum Opinion',
@@ -60,28 +62,32 @@ describe('docket clerk opinion advanced search', () => {
         },
       });
 
-      await test.runSequence('submitOpinionAdvancedSearchSequence');
+      await integrationTest.runSequence('submitOpinionAdvancedSearchSequence');
 
-      expect(test.getState('validationErrors')).toEqual({});
+      expect(integrationTest.getState('validationErrors')).toEqual({});
       expect(
-        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+        integrationTest.getState(
+          `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+        ),
       ).toEqual([]);
     });
   });
 
   describe('search for things that should be found', () => {
     it('search for a keyword that is present in a served opinion', async () => {
-      test.setState('advancedSearchForm', {
+      integrationTest.setState('advancedSearchForm', {
         opinionSearch: {
           keyword: 'sunglasses',
           startDate: '1995-08-03',
         },
       });
 
-      await test.runSequence('submitOpinionAdvancedSearchSequence');
+      await integrationTest.runSequence('submitOpinionAdvancedSearchSequence');
 
       expect(
-        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+        integrationTest.getState(
+          `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+        ),
       ).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -94,7 +100,7 @@ describe('docket clerk opinion advanced search', () => {
     });
 
     it('search for a keyword and docket number that is present in a served opinion', async () => {
-      test.setState('advancedSearchForm', {
+      integrationTest.setState('advancedSearchForm', {
         opinionSearch: {
           docketNumber: '105-20',
           keyword: 'sunglasses',
@@ -102,10 +108,12 @@ describe('docket clerk opinion advanced search', () => {
         },
       });
 
-      await test.runSequence('submitOpinionAdvancedSearchSequence');
+      await integrationTest.runSequence('submitOpinionAdvancedSearchSequence');
 
       expect(
-        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+        integrationTest.getState(
+          `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+        ),
       ).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -118,17 +126,19 @@ describe('docket clerk opinion advanced search', () => {
     });
 
     it('includes the number of pages present in each document in the search results', async () => {
-      test.setState('advancedSearchForm', {
+      integrationTest.setState('advancedSearchForm', {
         opinionSearch: {
           keyword: 'sunglasses',
           startDate: '1995-08-03',
         },
       });
 
-      await test.runSequence('submitOpinionAdvancedSearchSequence');
+      await integrationTest.runSequence('submitOpinionAdvancedSearchSequence');
 
       expect(
-        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+        integrationTest.getState(
+          `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+        ),
       ).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -139,7 +149,7 @@ describe('docket clerk opinion advanced search', () => {
     });
 
     it('search for an opinion type that is present in any served opinion', async () => {
-      test.setState('advancedSearchForm', {
+      integrationTest.setState('advancedSearchForm', {
         opinionSearch: {
           keyword: 'opinion',
           opinionType: 'T.C. Opinion',
@@ -147,10 +157,12 @@ describe('docket clerk opinion advanced search', () => {
         },
       });
 
-      await test.runSequence('submitOpinionAdvancedSearchSequence');
+      await integrationTest.runSequence('submitOpinionAdvancedSearchSequence');
 
       expect(
-        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+        integrationTest.getState(
+          `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+        ),
       ).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -164,35 +176,37 @@ describe('docket clerk opinion advanced search', () => {
   });
 
   it('clears search fields', async () => {
-    test.setState('advancedSearchForm', {
+    integrationTest.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'sunglasses',
       },
     });
 
-    await test.runSequence('clearAdvancedSearchFormSequence', {
+    await integrationTest.runSequence('clearAdvancedSearchFormSequence', {
       formType: 'opinionSearch',
     });
 
-    expect(test.getState('advancedSearchForm.opinionSearch')).toEqual({
+    expect(
+      integrationTest.getState('advancedSearchForm.opinionSearch'),
+    ).toEqual({
       keyword: '',
     });
   });
 
   it('clears validation errors when switching tabs', async () => {
-    test.setState('advancedSearchForm', {
+    integrationTest.setState('advancedSearchForm', {
       opinionSearch: {},
     });
 
-    await test.runSequence('submitOpinionAdvancedSearchSequence');
+    await integrationTest.runSequence('submitOpinionAdvancedSearchSequence');
 
-    expect(test.getState('alertError')).toEqual({
+    expect(integrationTest.getState('alertError')).toEqual({
       messages: ['Enter a keyword or phrase'],
       title: 'Please correct the following errors:',
     });
 
-    await test.runSequence('advancedSearchTabChangeSequence');
+    await integrationTest.runSequence('advancedSearchTabChangeSequence');
 
-    expect(test.getState('alertError')).not.toBeDefined();
+    expect(integrationTest.getState('alertError')).not.toBeDefined();
   });
 });

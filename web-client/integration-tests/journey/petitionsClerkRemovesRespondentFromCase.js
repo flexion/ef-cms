@@ -1,22 +1,32 @@
-export const petitionsClerkRemovesRespondentFromCase = test => {
+export const petitionsClerkRemovesRespondentFromCase = integrationTest => {
   return it('Petitions clerk removes a respondent from a case', async () => {
-    expect(test.getState('caseDetail.irsPractitioners').length).toEqual(2);
+    expect(
+      integrationTest.getState('caseDetail.irsPractitioners').length,
+    ).toEqual(2);
 
-    const barNumber = test.getState('caseDetail.irsPractitioners.1.barNumber');
+    const barNumber = integrationTest.getState(
+      'caseDetail.irsPractitioners.1.barNumber',
+    );
 
-    await test.runSequence('gotoEditRespondentCounselSequence', {
+    await integrationTest.runSequence('gotoEditRespondentCounselSequence', {
       barNumber,
-      docketNumber: test.docketNumber,
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('openRemoveRespondentCounselModalSequence');
+    await integrationTest.runSequence(
+      'openRemoveRespondentCounselModalSequence',
+    );
 
-    expect(test.getState('modal.showModal')).toBe(
+    expect(integrationTest.getState('modal.showModal')).toBe(
       'RemoveRespondentCounselModal',
     );
 
-    await test.runSequence('removeRespondentCounselFromCaseSequence');
+    await integrationTest.runSequence(
+      'removeRespondentCounselFromCaseSequence',
+    );
 
-    expect(test.getState('caseDetail.irsPractitioners').length).toEqual(1);
+    expect(
+      integrationTest.getState('caseDetail.irsPractitioners').length,
+    ).toEqual(1);
   });
 };

@@ -1,35 +1,37 @@
 import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const docketClerkUpdatesCaseStatusToClosed = test => {
+export const docketClerkUpdatesCaseStatusToClosed = integrationTest => {
   return it('Docket clerk updates case status to closed', async () => {
-    test.setState('caseDetail', {});
+    integrationTest.setState('caseDetail', {});
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    const currentStatus = test.getState('caseDetail.status');
+    const currentStatus = integrationTest.getState('caseDetail.status');
 
-    await test.runSequence('openUpdateCaseModalSequence');
+    await integrationTest.runSequence('openUpdateCaseModalSequence');
 
-    expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
+    expect(integrationTest.getState('modal.showModal')).toEqual(
+      'UpdateCaseModalDialog',
+    );
 
-    expect(test.getState('modal.caseStatus')).toEqual(currentStatus);
+    expect(integrationTest.getState('modal.caseStatus')).toEqual(currentStatus);
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'caseStatus',
       value: CASE_STATUS_TYPES.closed,
     });
 
-    await test.runSequence('submitUpdateCaseModalSequence');
+    await integrationTest.runSequence('submitUpdateCaseModalSequence');
 
     await refreshElasticsearchIndex();
 
-    expect(test.getState('caseDetail.status')).toEqual(
+    expect(integrationTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.closed,
     );
 
-    expect(test.getState('modal')).toEqual({});
+    expect(integrationTest.getState('modal')).toEqual({});
   });
 };

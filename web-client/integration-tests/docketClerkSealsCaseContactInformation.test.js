@@ -10,8 +10,8 @@ import { docketClerkUpdatesSealedContactAddress } from './journey/docketClerkUpd
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { petitionsClerkViewsCaseWithSealedContact } from './journey/petitionsClerkViewsCaseWithSealedContact';
 
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Docket Clerk seals a case contact information', () => {
@@ -22,12 +22,12 @@ describe('Docket Clerk seals a case contact information', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(integrationTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
@@ -40,27 +40,28 @@ describe('Docket Clerk seals a case contact information', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
 
-    test.contactId = contactPrimaryFromState(test).contactId;
+    integrationTest.contactId =
+      contactPrimaryFromState(integrationTest).contactId;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
   contactType = 'contactPrimary';
-  docketClerkSealsContactInformation(test, contactType);
-  docketClerkUpdatesSealedContactAddress(test, contactType);
+  docketClerkSealsContactInformation(integrationTest, contactType);
+  docketClerkUpdatesSealedContactAddress(integrationTest, contactType);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseWithSealedContact(test, contactType);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseWithSealedContact(integrationTest, contactType);
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
   contactType = 'contactSecondary';
-  docketClerkSealsContactInformation(test, contactType);
-  docketClerkUpdatesSealedContactAddress(test, contactType);
+  docketClerkSealsContactInformation(integrationTest, contactType);
+  docketClerkUpdatesSealedContactAddress(integrationTest, contactType);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseWithSealedContact(test, contactType);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseWithSealedContact(integrationTest, contactType);
 });

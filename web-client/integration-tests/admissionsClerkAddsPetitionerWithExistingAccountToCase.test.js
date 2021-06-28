@@ -9,7 +9,7 @@ import {
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('admissions clerk adds petitioner with existing cognito account to case', () => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
@@ -21,57 +21,64 @@ describe('admissions clerk adds petitioner with existing cognito account to case
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(test, fakeFile);
-  petitionsClerkAddsPractitionersToCase(test, true);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(integrationTest, fakeFile);
+  petitionsClerkAddsPractitionersToCase(integrationTest, true);
 
-  loginAs(test, 'admissionsclerk@example.com');
+  loginAs(integrationTest, 'admissionsclerk@example.com');
   it('admissions clerk adds petitioner email with existing cognito account to case', async () => {
     await refreshElasticsearchIndex();
 
-    let contactPrimary = contactPrimaryFromState(test);
+    let contactPrimary = contactPrimaryFromState(integrationTest);
 
-    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
-      contactId: contactPrimary.contactId,
-      docketNumber: test.docketNumber,
-    });
+    await integrationTest.runSequence(
+      'gotoEditPetitionerInformationInternalSequence',
+      {
+        contactId: contactPrimary.contactId,
+        docketNumber: integrationTest.docketNumber,
+      },
+    );
 
-    expect(test.getState('currentPage')).toEqual(
+    expect(integrationTest.getState('currentPage')).toEqual(
       'EditPetitionerInformationInternal',
     );
-    expect(test.getState('form.updatedEmail')).toBeUndefined();
-    expect(test.getState('form.confirmEmail')).toBeUndefined();
+    expect(integrationTest.getState('form.updatedEmail')).toBeUndefined();
+    expect(integrationTest.getState('form.confirmEmail')).toBeUndefined();
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.updatedEmail',
       value: EMAIL_TO_ADD,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.confirmEmail',
       value: EMAIL_TO_ADD,
     });
 
-    await test.runSequence('submitEditPetitionerSequence');
+    await integrationTest.runSequence('submitEditPetitionerSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('modal.showModal')).toBe('MatchingEmailFoundModal');
-    expect(test.getState('currentPage')).toEqual(
+    expect(integrationTest.getState('modal.showModal')).toBe(
+      'MatchingEmailFoundModal',
+    );
+    expect(integrationTest.getState('currentPage')).toEqual(
       'EditPetitionerInformationInternal',
     );
 
-    await test.runSequence(
+    await integrationTest.runSequence(
       'submitUpdatePetitionerInformationFromModalSequence',
     );
 
-    expect(test.getState('modal.showModal')).toBeUndefined();
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(integrationTest.getState('modal.showModal')).toBeUndefined();
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseDetailInternal',
+    );
 
-    contactPrimary = contactPrimaryFromState(test);
+    contactPrimary = contactPrimaryFromState(integrationTest);
 
     expect(contactPrimary.email).toEqual(EMAIL_TO_ADD);
     expect(contactPrimary.serviceIndicator).toEqual(
@@ -81,32 +88,38 @@ describe('admissions clerk adds petitioner with existing cognito account to case
     await refreshElasticsearchIndex();
   });
 
-  loginAs(test, 'petitioner2@example.com');
+  loginAs(integrationTest, 'petitioner2@example.com');
   it('petitioner with existing account verifies case is added to dashboard', async () => {
-    await test.runSequence('gotoDashboardSequence');
+    await integrationTest.runSequence('gotoDashboardSequence');
 
-    expect(test.getState('currentPage')).toEqual('DashboardPetitioner');
-    const openCases = test.getState('openCases');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'DashboardPetitioner',
+    );
+    const openCases = integrationTest.getState('openCases');
 
-    const addedCase = openCases.find(c => c.docketNumber === test.docketNumber);
+    const addedCase = openCases.find(
+      c => c.docketNumber === integrationTest.docketNumber,
+    );
     expect(addedCase).toBeDefined();
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(test.getState('screenMetadata.isAssociated')).toEqual(true);
+    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(integrationTest.getState('screenMetadata.isAssociated')).toEqual(
+      true,
+    );
   });
 
   it('should verify that practitioner representing contactId matches contactPrimary contactId after email is updated', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
 
-    const practitionerRepresenting = test.getState(
+    const practitionerRepresenting = integrationTest.getState(
       'caseDetail.privatePractitioners.0.representing',
     );
 

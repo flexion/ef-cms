@@ -11,8 +11,8 @@ import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProce
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 
 describe('Chambers dashboard', () => {
   beforeAll(() => {
@@ -20,22 +20,22 @@ describe('Chambers dashboard', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test);
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
-  petitionerViewsDashboard(test);
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(integrationTest);
+  petitionerChoosesCaseType(integrationTest);
+  petitionerCreatesNewCase(integrationTest, fakeFile);
+  petitionerViewsDashboard(integrationTest);
 
-  loginAs(test, 'colvinsChambers@example.com');
-  chambersUserViewsCaseDetail(test, 2);
-  chambersUserViewsDraftDocuments(test);
-  chambersUserAddsOrderToCase(test);
-  chambersUserViewsCaseDetailAfterAddingOrder(test, 3);
-  chambersUserViewsDraftDocuments(test, 1);
-  chambersUserViewsSignDraftDocument(test);
-  chambersUserAppliesSignatureToDraftDocument(test);
-  chambersUserSavesSignatureForDraftDocument(test);
+  loginAs(integrationTest, 'colvinsChambers@example.com');
+  chambersUserViewsCaseDetail(integrationTest, 2);
+  chambersUserViewsDraftDocuments(integrationTest);
+  chambersUserAddsOrderToCase(integrationTest);
+  chambersUserViewsCaseDetailAfterAddingOrder(integrationTest, 3);
+  chambersUserViewsDraftDocuments(integrationTest, 1);
+  chambersUserViewsSignDraftDocument(integrationTest);
+  chambersUserAppliesSignatureToDraftDocument(integrationTest);
+  chambersUserSavesSignatureForDraftDocument(integrationTest);
 });

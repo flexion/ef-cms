@@ -1,22 +1,30 @@
-export const chambersUserAppliesSignatureToDraftDocument = test => {
+export const chambersUserAppliesSignatureToDraftDocument = integrationTest => {
   return it('Chambers user applies signature to a draft document', async () => {
-    expect(test.getState('pdfForSigning.nameForSigning')).toEqual(
+    expect(integrationTest.getState('pdfForSigning.nameForSigning')).toEqual(
       'John O. Colvin',
     );
-    expect(test.getState('pdfForSigning.nameForSigningLine2')).toEqual('Judge');
+    expect(
+      integrationTest.getState('pdfForSigning.nameForSigningLine2'),
+    ).toEqual('Judge');
 
-    await test.runSequence('setPDFSignatureDataSequence', {
+    await integrationTest.runSequence('setPDFSignatureDataSequence', {
       isPdfAlreadySigned: false,
       signatureApplied: true,
       signatureData: { scale: 1, x: 20, y: 20 },
     });
 
-    expect(test.getState('pdfForSigning.signatureData')).toMatchObject({
+    expect(
+      integrationTest.getState('pdfForSigning.signatureData'),
+    ).toMatchObject({
       scale: 1,
       x: 20,
       y: 20,
     });
-    expect(test.getState('pdfForSigning.signatureApplied')).toEqual(true);
-    expect(test.getState('pdfForSigning.isPdfAlreadySigned')).toEqual(false);
+    expect(integrationTest.getState('pdfForSigning.signatureApplied')).toEqual(
+      true,
+    );
+    expect(
+      integrationTest.getState('pdfForSigning.isPdfAlreadySigned'),
+    ).toEqual(false);
   });
 };

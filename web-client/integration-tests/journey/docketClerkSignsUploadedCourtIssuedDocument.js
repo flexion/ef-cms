@@ -1,26 +1,28 @@
-export const docketClerkSignsUploadedCourtIssuedDocument = test => {
+export const docketClerkSignsUploadedCourtIssuedDocument = integrationTest => {
   return it('Docket Clerk signs an uploaded court issued document', async () => {
-    await test.runSequence('gotoSignOrderSequence', {
-      docketEntryId: test.docketEntryId,
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoSignOrderSequence', {
+      docketEntryId: integrationTest.docketEntryId,
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('SignOrder');
+    expect(integrationTest.getState('currentPage')).toEqual('SignOrder');
 
-    await test.runSequence('setPDFSignatureDataSequence', {
+    await integrationTest.runSequence('setPDFSignatureDataSequence', {
       signatureData: {
         scale: 1,
         x: 100,
         y: 100,
       },
     });
-    await test.runSequence('saveDocumentSigningSequence');
+    await integrationTest.runSequence('saveDocumentSigningSequence');
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseDetailInternal',
+    );
 
-    const caseDocument = test
+    const caseDocument = integrationTest
       .getState('caseDetail.docketEntries')
-      .find(d => d.docketEntryId === test.docketEntryId);
+      .find(d => d.docketEntryId === integrationTest.docketEntryId);
 
     expect(caseDocument.signedAt).toBeTruthy();
   });

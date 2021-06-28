@@ -14,7 +14,7 @@ import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkView
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('petitions clerk sets a trial session calendar', () => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
@@ -31,14 +31,14 @@ describe('petitions clerk sets a trial session calendar', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
   describe(`Create trial session with Small session type for '${trialLocation}'`, () => {
-    loginAs(test, 'docketclerk@example.com');
-    docketClerkCreatesATrialSession(test, overrides);
-    docketClerkViewsTrialSessionList(test);
-    docketClerkViewsNewTrialSession(test);
+    loginAs(integrationTest, 'docketclerk@example.com');
+    docketClerkCreatesATrialSession(integrationTest, overrides);
+    docketClerkViewsTrialSessionList(integrationTest);
+    docketClerkViewsNewTrialSession(integrationTest);
   });
 
   describe('Create cases', () => {
@@ -50,47 +50,52 @@ describe('petitions clerk sets a trial session calendar', () => {
       };
 
       for (let i = 0; i < 3; i++) {
-        loginAs(test, 'petitioner@example.com');
+        loginAs(integrationTest, 'petitioner@example.com');
         it(`create case ${i} and set ready for trial`, async () => {
-          const caseDetail = await uploadPetition(test, caseOverrides);
+          const caseDetail = await uploadPetition(
+            integrationTest,
+            caseOverrides,
+          );
           expect(caseDetail.docketNumber).toBeDefined();
-          test.docketNumber = caseDetail.docketNumber;
+          integrationTest.docketNumber = caseDetail.docketNumber;
         });
 
-        loginAs(test, 'petitionsclerk@example.com');
-        petitionsClerkSubmitsCaseToIrs(test);
+        loginAs(integrationTest, 'petitionsclerk@example.com');
+        petitionsClerkSubmitsCaseToIrs(integrationTest);
 
-        loginAs(test, 'docketclerk@example.com');
-        docketClerkSetsCaseReadyForTrial(test);
+        loginAs(integrationTest, 'docketclerk@example.com');
+        docketClerkSetsCaseReadyForTrial(integrationTest);
       }
     });
 
     describe('case #5 - manually added to session', () => {
-      loginAs(test, 'petitionsclerk@example.com');
-      test.casesReadyForTrial = [];
-      petitionsClerkCreatesNewCase(test, fakeFile, trialLocation);
-      petitionsClerkManuallyAddsCaseToTrial(test);
+      loginAs(integrationTest, 'petitionsclerk@example.com');
+      integrationTest.casesReadyForTrial = [];
+      petitionsClerkCreatesNewCase(integrationTest, fakeFile, trialLocation);
+      petitionsClerkManuallyAddsCaseToTrial(integrationTest);
     });
   });
 
   describe('petitions clerk sets calendar for trial session', () => {
-    petitionsClerkViewsNewTrialSession(test);
-    markAllCasesAsQCed(test, () => [test.docketNumber]);
-    petitionsClerkSetsATrialSessionsSchedule(test);
+    petitionsClerkViewsNewTrialSession(integrationTest);
+    markAllCasesAsQCed(integrationTest, () => [integrationTest.docketNumber]);
+    petitionsClerkSetsATrialSessionsSchedule(integrationTest);
 
     it('petitions clerk should be redirected to print paper service for the trial session', async () => {
-      expect(test.getState('currentPage')).toEqual('PrintPaperTrialNotices');
+      expect(integrationTest.getState('currentPage')).toEqual(
+        'PrintPaperTrialNotices',
+      );
     });
 
     it('petitions clerk verifies that both cases were set on the trial session', async () => {
-      await test.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: test.trialSessionId,
+      await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: integrationTest.trialSessionId,
       });
 
       const trialSessionFormatted = runCompute(
         withAppContextDecorator(formattedTrialSessionDetails),
         {
-          state: test.getState(),
+          state: integrationTest.getState(),
         },
       );
 

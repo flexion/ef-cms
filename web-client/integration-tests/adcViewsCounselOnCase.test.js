@@ -3,7 +3,7 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('adc views counsel on case', () => {
   beforeAll(() => {
@@ -11,20 +11,20 @@ describe('adc views counsel on case', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(test);
-  petitionsClerkAddsPractitionersToCase(test, true);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(integrationTest);
+  petitionsClerkAddsPractitionersToCase(integrationTest, true);
 
-  loginAs(test, 'adc@example.com');
-  adcViewsCounselOnCase(test);
+  loginAs(integrationTest, 'adc@example.com');
+  adcViewsCounselOnCase(integrationTest);
 });

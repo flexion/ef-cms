@@ -1,7 +1,11 @@
-export const respondentViewsDashboard = test => {
+export const respondentViewsDashboard = integrationTest => {
   return it('Respondent views dashboard', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardRespondent');
-    expect(test.getState('openCases').length).toBeGreaterThanOrEqual(0);
+    await integrationTest.runSequence('gotoDashboardSequence');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'DashboardRespondent',
+    );
+    expect(integrationTest.getState('openCases').length).toBeGreaterThanOrEqual(
+      0,
+    );
   });
 };

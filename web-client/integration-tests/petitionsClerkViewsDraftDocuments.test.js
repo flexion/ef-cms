@@ -10,7 +10,7 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Petitions Clerk Views Draft Documents', () => {
   beforeAll(() => {
@@ -18,45 +18,50 @@ describe('Petitions Clerk Views Draft Documents', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(test, fakeFile, 'Lubbock, Texas');
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(integrationTest, fakeFile, 'Lubbock, Texas');
 
   it('views case detail', async () => {
-    await viewCaseDetail({ docketNumber: test.docketNumber, test });
+    await viewCaseDetail({
+      docketNumber: integrationTest.docketNumber,
+      integrationTest,
+    });
   });
 
-  petitionsClerkAddsOrderToCase(test);
-  petitionsClerkAddsOrderToCase(test);
-  petitionsClerkViewsDraftDocuments(test, 2);
+  petitionsClerkAddsOrderToCase(integrationTest);
+  petitionsClerkAddsOrderToCase(integrationTest);
+  petitionsClerkViewsDraftDocuments(integrationTest, 2);
 
   it('views the second document in the draft documents list', async () => {
     // reset the draft documents view meta
-    test.setState('draftDocumentViewerDocketEntryId', null);
+    integrationTest.setState('draftDocumentViewerDocketEntryId', null);
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
       primaryTab: 'drafts',
     });
 
     expect(
-      test.getState(
+      integrationTest.getState(
         'currentViewMetadata.caseDetail.caseDetailInternalTabs.drafts',
       ),
     ).toEqual(true);
 
     // this gets fired when the component is mounted, so it is being explicitly called here
-    await test.runSequence('loadDefaultDraftViewerDocumentToDisplaySequence');
+    await integrationTest.runSequence(
+      'loadDefaultDraftViewerDocumentToDisplaySequence',
+    );
 
     let formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     let { draftDocuments } = formattedCase;
 
-    const viewerDraftDocumentIdToDisplay = test.getState(
+    const viewerDraftDocumentIdToDisplay = integrationTest.getState(
       'viewerDraftDocumentToDisplay.docketEntryId',
     );
     expect(viewerDraftDocumentIdToDisplay).toEqual(
@@ -64,44 +69,57 @@ describe('Petitions Clerk Views Draft Documents', () => {
     );
 
     // select the second document in the list
-    await test.runSequence('setViewerDraftDocumentToDisplaySequence', {
-      viewerDraftDocumentToDisplay: draftDocuments[1],
-    });
+    await integrationTest.runSequence(
+      'setViewerDraftDocumentToDisplaySequence',
+      {
+        viewerDraftDocumentToDisplay: draftDocuments[1],
+      },
+    );
 
     expect(
-      test.getState('screenMetadata.draftDocumentViewerDocketEntryId'),
+      integrationTest.getState(
+        'screenMetadata.draftDocumentViewerDocketEntryId',
+      ),
     ).toEqual(draftDocuments[1].docketEntryId);
 
     // change tabs and come back to draft documents
 
-    test.setState('currentViewMetadata.caseDetail.primaryTab', 'docketRecord');
-    await test.runSequence('caseDetailPrimaryTabChangeSequence');
-
-    test.setState('currentViewMetadata.caseDetail.primaryTab', 'drafts');
-    await test.runSequence('caseDetailPrimaryTabChangeSequence');
-
-    expect(test.getState('viewerDraftDocumentToDisplay.docketEntryId')).toEqual(
-      draftDocuments[1].docketEntryId,
+    integrationTest.setState(
+      'currentViewMetadata.caseDetail.primaryTab',
+      'docketRecord',
     );
+    await integrationTest.runSequence('caseDetailPrimaryTabChangeSequence');
+
+    integrationTest.setState(
+      'currentViewMetadata.caseDetail.primaryTab',
+      'drafts',
+    );
+    await integrationTest.runSequence('caseDetailPrimaryTabChangeSequence');
+
+    expect(
+      integrationTest.getState('viewerDraftDocumentToDisplay.docketEntryId'),
+    ).toEqual(draftDocuments[1].docketEntryId);
 
     //leave case and come back
-    await test.runSequence('gotoDashboardSequence');
+    await integrationTest.runSequence('gotoDashboardSequence');
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
       primaryTab: 'drafts',
     });
 
     // this gets fired when the component is mounted, so it is being explicitly called here
-    await test.runSequence('loadDefaultDraftViewerDocumentToDisplaySequence');
+    await integrationTest.runSequence(
+      'loadDefaultDraftViewerDocumentToDisplaySequence',
+    );
 
     formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     // resets back to first document
-    expect(test.getState('viewerDraftDocumentToDisplay.docketEntryId')).toEqual(
-      formattedCase.draftDocuments[0].docketEntryId,
-    );
+    expect(
+      integrationTest.getState('viewerDraftDocumentToDisplay.docketEntryId'),
+    ).toEqual(formattedCase.draftDocuments[0].docketEntryId);
   });
 });

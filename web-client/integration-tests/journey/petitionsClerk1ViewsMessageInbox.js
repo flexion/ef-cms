@@ -1,22 +1,23 @@
-export const petitionsClerk1ViewsMessageInbox = test => {
+export const petitionsClerk1ViewsMessageInbox = integrationTest => {
   return it('petitions clerk 1 views their messages inbox', async () => {
-    await test.runSequence('gotoMessagesSequence', {
+    await integrationTest.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });
 
-    const messages = test.getState('messages');
+    const messages = integrationTest.getState('messages');
 
     const foundMessage = messages.find(
-      message => message.subject === test.testMessageSubject,
+      message => message.subject === integrationTest.testMessageSubject,
     );
 
     expect(foundMessage).toBeDefined();
 
-    test.testMessageDocumentId = foundMessage.attachments[0].documentId;
-    test.parentMessageId = foundMessage.parentMessageId;
+    integrationTest.testMessageDocumentId =
+      foundMessage.attachments[0].documentId;
+    integrationTest.parentMessageId = foundMessage.parentMessageId;
 
-    expect(test.getState('messagesSectionCount')).toBeGreaterThan(0);
-    expect(test.getState('messagesInboxCount')).toBeGreaterThan(0);
+    expect(integrationTest.getState('messagesSectionCount')).toBeGreaterThan(0);
+    expect(integrationTest.getState('messagesInboxCount')).toBeGreaterThan(0);
   });
 };

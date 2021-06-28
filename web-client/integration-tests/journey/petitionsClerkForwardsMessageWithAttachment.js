@@ -5,69 +5,72 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
-export const petitionsClerkForwardsMessageWithAttachment = test => {
+export const petitionsClerkForwardsMessageWithAttachment = integrationTest => {
   const { DOCKET_SECTION } = applicationContext.getConstants();
   const getHelper = () => {
     return runCompute(messageModalHelper, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
   };
 
   return it('petitions clerk forwards the message with an added attachment', async () => {
-    await test.runSequence('gotoMessagesSequence', {
+    await integrationTest.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });
 
-    const messages = test.getState('messages');
+    const messages = integrationTest.getState('messages');
 
     const foundMessage = messages.find(
-      message => message.subject === test.testMessageSubject,
+      message => message.subject === integrationTest.testMessageSubject,
     );
 
     expect(foundMessage).toBeDefined();
 
-    await test.runSequence('gotoMessageDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
       parentMessageId: foundMessage.parentMessageId,
     });
 
-    await test.runSequence('openForwardMessageModalSequence');
+    await integrationTest.runSequence('openForwardMessageModalSequence');
 
-    expect(test.getState('modal.form')).toMatchObject({
+    expect(integrationTest.getState('modal.form')).toMatchObject({
       parentMessageId: foundMessage.parentMessageId,
-      subject: test.testMessageSubject,
+      subject: integrationTest.testMessageSubject,
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'form.message',
       value: 'identity theft is not a joke, Jim',
     });
 
-    await test.runSequence('updateSectionInCreateMessageModalSequence', {
-      key: 'toSection',
-      value: DOCKET_SECTION,
-    });
+    await integrationTest.runSequence(
+      'updateSectionInCreateMessageModalSequence',
+      {
+        key: 'toSection',
+        value: DOCKET_SECTION,
+      },
+    );
 
     const messageDocument = getHelper().documents[0];
-    test.testMessageDocumentId = messageDocument.docketEntryId;
+    integrationTest.testMessageDocumentId = messageDocument.docketEntryId;
 
-    await test.runSequence('updateMessageModalAttachmentsSequence', {
+    await integrationTest.runSequence('updateMessageModalAttachmentsSequence', {
       documentId: messageDocument.docketEntryId,
     });
 
-    await test.runSequence('updateModalFormValueSequence', {
+    await integrationTest.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
       value: '1805d1ab-18d0-43ec-bafb-654e83405416', //docketclerk
     });
 
-    await test.runSequence('forwardMessageSequence');
+    await integrationTest.runSequence('forwardMessageSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('messageViewerDocumentToDisplay')).toEqual({
+    expect(integrationTest.getState('messageViewerDocumentToDisplay')).toEqual({
       documentId: messageDocument.docketEntryId,
     });
-    expect(test.getState('iframeSrc')).toBeDefined();
+    expect(integrationTest.getState('iframeSrc')).toBeDefined();
   });
 };

@@ -1,17 +1,19 @@
-export const petitionsClerkDeletesCaseNote = test => {
+export const petitionsClerkDeletesCaseNote = integrationTest => {
   return it('petitions clerk deletes case note from a case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('caseDetail.caseNote')).toEqual(
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseDetailInternal',
+    );
+    expect(integrationTest.getState('caseDetail.caseNote')).toEqual(
       'this is a note added from the modal',
     );
 
-    await test.runSequence('openDeleteCaseNoteConfirmModalSequence');
+    await integrationTest.runSequence('openDeleteCaseNoteConfirmModalSequence');
 
-    await test.runSequence('deleteCaseNoteSequence');
+    await integrationTest.runSequence('deleteCaseNoteSequence');
 
-    expect(test.getState('caseDetail.caseNote')).toBeUndefined();
+    expect(integrationTest.getState('caseDetail.caseNote')).toBeUndefined();
   });
 };

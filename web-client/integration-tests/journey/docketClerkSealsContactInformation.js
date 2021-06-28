@@ -4,47 +4,51 @@ const {
 } = require('../helpers');
 
 export const docketClerkSealsContactInformation = (
-  test,
+  integrationTest,
   contactType,
   docketNumber,
 ) => {
   return it(`Docket clerk seals ${contactType} information`, async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: docketNumber || test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: docketNumber || integrationTest.docketNumber,
     });
 
     let contactToSeal;
 
     if (contactType === 'contactPrimary') {
-      contactToSeal = contactPrimaryFromState(test);
+      contactToSeal = contactPrimaryFromState(integrationTest);
     } else if (contactType === 'contactSecondary') {
-      contactToSeal = contactSecondaryFromState(test);
+      contactToSeal = contactSecondaryFromState(integrationTest);
     } else {
-      contactToSeal = test
+      contactToSeal = integrationTest
         .getState(`caseDetail.${contactType}`)
         .find(contact => contact.isAddressSealed === false);
     }
 
     expect(contactToSeal.isAddressSealed).toBe(false);
 
-    await test.runSequence('openSealAddressModalSequence', { contactToSeal });
+    await integrationTest.runSequence('openSealAddressModalSequence', {
+      contactToSeal,
+    });
 
-    expect(test.getState('contactToSeal')).toEqual(contactToSeal);
-    expect(test.getState('modal.showModal')).toEqual('SealAddressModal');
+    expect(integrationTest.getState('contactToSeal')).toEqual(contactToSeal);
+    expect(integrationTest.getState('modal.showModal')).toEqual(
+      'SealAddressModal',
+    );
 
-    await test.runSequence('sealAddressSequence');
+    await integrationTest.runSequence('sealAddressSequence');
 
-    expect(test.getState('modal.showModal')).toBeUndefined();
-    expect(test.getState('alertSuccess.message')).toEqual(
+    expect(integrationTest.getState('modal.showModal')).toBeUndefined();
+    expect(integrationTest.getState('alertSuccess.message')).toEqual(
       `Address sealed for ${contactToSeal.name}.`,
     );
 
     if (contactType === 'contactPrimary') {
-      contactToSeal = contactPrimaryFromState(test);
+      contactToSeal = contactPrimaryFromState(integrationTest);
     } else if (contactType === 'contactSecondary') {
-      contactToSeal = contactSecondaryFromState(test);
+      contactToSeal = contactSecondaryFromState(integrationTest);
     } else {
-      contactToSeal = test
+      contactToSeal = integrationTest
         .getState(`caseDetail.${contactType}`)
         .find(c => c.contactId === contactToSeal.contactId);
     }

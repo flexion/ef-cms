@@ -1,8 +1,10 @@
-export const userNavigatesToAddCorrespondence = (test, user) =>
+export const userNavigatesToAddCorrespondence = (integrationTest, user) =>
   it(`${user} navigates to add correspondence page`, async () => {
-    await test.runSequence('gotoUploadCorrespondenceDocumentSequence');
+    await integrationTest.runSequence(
+      'gotoUploadCorrespondenceDocumentSequence',
+    );
 
-    expect(test.getState('currentPage')).toEqual(
+    expect(integrationTest.getState('currentPage')).toEqual(
       'UploadCorrespondenceDocument',
     );
   });

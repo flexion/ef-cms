@@ -1,8 +1,11 @@
-export const docketClerkStrikesDocketEntry = (test, docketRecordIndex) => {
+export const docketClerkStrikesDocketEntry = (
+  integrationTest,
+  docketRecordIndex,
+) => {
   return it('docket clerk strikes docket entry', async () => {
-    await test.runSequence('strikeDocketEntrySequence');
+    await integrationTest.runSequence('strikeDocketEntrySequence');
 
-    const caseDocuments = test.getState('caseDetail.docketEntries');
+    const caseDocuments = integrationTest.getState('caseDetail.docketEntries');
     const strickenDocument = caseDocuments.find(
       d => d.index === docketRecordIndex,
     );

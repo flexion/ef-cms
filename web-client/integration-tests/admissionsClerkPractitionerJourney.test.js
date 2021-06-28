@@ -16,7 +16,7 @@ import {
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('admissions clerk practitioner journey', () => {
   const { COUNTRY_TYPES, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
@@ -27,17 +27,17 @@ describe('admissions clerk practitioner journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'admissionsclerk@example.com');
-  admissionsClerkAddsNewPractitioner(test);
-  admissionsClerkSearchesForPractitionersByName(test);
-  admissionsClerkSearchesForPractitionerByBarNumber(test);
+  loginAs(integrationTest, 'admissionsclerk@example.com');
+  admissionsClerkAddsNewPractitioner(integrationTest);
+  admissionsClerkSearchesForPractitionersByName(integrationTest);
+  admissionsClerkSearchesForPractitionerByBarNumber(integrationTest);
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(integrationTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -50,19 +50,19 @@ describe('admissions clerk practitioner journey', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkAddsPractitionersToCase(test, true);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(integrationTest);
+  petitionsClerkAddsPractitionersToCase(integrationTest, true);
 
-  loginAs(test, 'admissionsclerk@example.com');
-  admissionsClerkEditsPractitionerInfo(test);
+  loginAs(integrationTest, 'admissionsclerk@example.com');
+  admissionsClerkEditsPractitionerInfo(integrationTest);
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(integrationTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -75,39 +75,39 @@ describe('admissions clerk practitioner journey', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'admissionsclerk@example.com');
-  admissionsClerkMigratesPractitionerWithoutEmail(test);
+  loginAs(integrationTest, 'admissionsclerk@example.com');
+  admissionsClerkMigratesPractitionerWithoutEmail(integrationTest);
   admissionsClerkVerifiesPractitionerServiceIndicator(
-    test,
+    integrationTest,
     SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkAddsPractitionersToCase(test, true);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(integrationTest);
+  petitionsClerkAddsPractitionersToCase(integrationTest, true);
 
   it('wait for ES index', async () => {
     await refreshElasticsearchIndex();
   });
 
-  loginAs(test, 'admissionsclerk@example.com');
-  admissionsClerkAddsPractitionerEmail(test);
+  loginAs(integrationTest, 'admissionsclerk@example.com');
+  admissionsClerkAddsPractitionerEmail(integrationTest);
 
   // show Practitioners only, and not case-users (bug ref: #8081)
   it('searches for indexed Practitioners only and not CaseUser records', async () => {
-    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+    await integrationTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'practitionerSearchByName',
       key: 'practitionerName',
       value: 'Buch',
     });
 
-    await test.runSequence('submitPractitionerNameSearchSequence');
+    await integrationTest.runSequence('submitPractitionerNameSearchSequence');
 
     expect(
-      test.getState(
+      integrationTest.getState(
         `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}.0.name`,
       ),
     ).toEqual('Ronald Buch Jr.');

@@ -17,7 +17,7 @@ import { petitionsClerkViewsCaseDetailAfterAddingOrder } from './journey/petitio
 import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
 import { petitionsDeletesOrderFromCase } from './journey/petitionsDeletesOrderFromCase';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Petitions Clerk Create Order Journey', () => {
   beforeAll(() => {
@@ -25,37 +25,37 @@ describe('Petitions Clerk Create Order Journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test);
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
-  petitionerViewsDashboard(test);
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(integrationTest);
+  petitionerChoosesCaseType(integrationTest);
+  petitionerCreatesNewCase(integrationTest, fakeFile);
+  petitionerViewsDashboard(integrationTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkViewsDraftDocuments(test);
-  petitionsClerkAddsOrderToCase(test);
-  petitionsClerkViewsCaseDetailAfterAddingOrder(test);
-  petitionsClerkViewsDraftDocuments(test, 1);
-  petitionsClerkEditsDraftOrder(test, {});
-  petitionsClerkViewsDraftDocuments(test, 1);
-  petitionsClerkEditsDraftOrder(test, {
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(integrationTest);
+  petitionsClerkViewsDraftDocuments(integrationTest);
+  petitionsClerkAddsOrderToCase(integrationTest);
+  petitionsClerkViewsCaseDetailAfterAddingOrder(integrationTest);
+  petitionsClerkViewsDraftDocuments(integrationTest, 1);
+  petitionsClerkEditsDraftOrder(integrationTest, {});
+  petitionsClerkViewsDraftDocuments(integrationTest, 1);
+  petitionsClerkEditsDraftOrder(integrationTest, {
     currentRichText: '<p>This is an edited test order.</p>',
     setRichText: '<p>This is a re-edited test order</p>',
   });
-  petitionsClerkCreatesMessageToChambers(test);
-  petitionsDeletesOrderFromCase(test);
-  petitionsClerkViewsDraftDocuments(test, 0);
+  petitionsClerkCreatesMessageToChambers(integrationTest);
+  petitionsDeletesOrderFromCase(integrationTest);
+  petitionsClerkViewsDraftDocuments(integrationTest, 0);
 
-  petitionsClerkAddsGenericOrderToCase(test);
-  petitionsClerkSignsOrder(test);
-  petitionsClerkViewsAddDocketEntryForGenericOrder(test);
-  petitionsClerkEditsGenericOrder(test);
-  petitionsClerkSignsOrder(test);
-  petitionsClerkViewsAddDocketEntryForGenericOrder(test);
-  petitionsClerkServesElectronicCaseToIrs(test);
-  petitionsClerkAddsDocketEntryForOrderAndSavesForLater(test);
+  petitionsClerkAddsGenericOrderToCase(integrationTest);
+  petitionsClerkSignsOrder(integrationTest);
+  petitionsClerkViewsAddDocketEntryForGenericOrder(integrationTest);
+  petitionsClerkEditsGenericOrder(integrationTest);
+  petitionsClerkSignsOrder(integrationTest);
+  petitionsClerkViewsAddDocketEntryForGenericOrder(integrationTest);
+  petitionsClerkServesElectronicCaseToIrs(integrationTest);
+  petitionsClerkAddsDocketEntryForOrderAndSavesForLater(integrationTest);
 });

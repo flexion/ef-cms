@@ -6,7 +6,7 @@ import { petitionsClerkUnprioritizesCase } from './journey/petitionsClerkUnprior
 import { petitionsClerkVerifyEligibleCase } from './journey/petitionsClerkVerifyEligibleCase';
 import { petitionsClerkVerifyNotEligibleCase } from './journey/petitionsClerkVerifyNotEligibleCase';
 
-const test = setupTest();
+const integrationTest = setupTest();
 let caseDetail;
 
 describe('Docket clerk verifies high priority case is not blocked', () => {
@@ -15,44 +15,49 @@ describe('Docket clerk verifies high priority case is not blocked', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
-    caseDetail = await uploadPetition(test, {
+    caseDetail = await uploadPetition(integrationTest, {
       preferredTrialCity: 'Lubbock, Texas',
     });
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
     expect(caseDetail.docketNumber).toBeDefined();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkPrioritizesCase(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkPrioritizesCase(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkAddsPaperFiledPendingDocketEntryAndServes(test, fakeFile);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes(
+    integrationTest,
+    fakeFile,
+  );
 
   it('verify that the high-priority case is not automaticBlocked', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    expect(test.getState('caseDetail.automaticBlocked')).toBeFalsy();
+    expect(integrationTest.getState('caseDetail.automaticBlocked')).toBeFalsy();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkVerifyEligibleCase(test);
-  petitionsClerkUnprioritizesCase(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkVerifyEligibleCase(integrationTest);
+  petitionsClerkUnprioritizesCase(integrationTest);
 
   it('verify that the non-high-priority case is set to automaticBlocked', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    expect(test.getState('caseDetail.automaticBlocked')).toBeTruthy();
-    expect(test.getState('caseDetail.automaticBlockedReason')).toBe(
+    expect(
+      integrationTest.getState('caseDetail.automaticBlocked'),
+    ).toBeTruthy();
+    expect(integrationTest.getState('caseDetail.automaticBlockedReason')).toBe(
       AUTOMATIC_BLOCKED_REASONS.pending,
     );
   });
 
-  petitionsClerkVerifyNotEligibleCase(test);
+  petitionsClerkVerifyNotEligibleCase(integrationTest);
 });

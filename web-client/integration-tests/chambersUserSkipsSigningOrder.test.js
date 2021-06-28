@@ -4,8 +4,8 @@ import { chambersUserViewsCaseDetail } from './journey/chambersUserViewsCaseDeta
 import { chambersUserViewsDraftDocuments } from './journey/chambersUserViewsDraftDocuments';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 
 describe('chambers user skips signing an order', () => {
   beforeAll(() => {
@@ -13,21 +13,21 @@ describe('chambers user skips signing an order', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
 
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'colvinsChambers@example.com');
+  loginAs(integrationTest, 'colvinsChambers@example.com');
 
-  chambersUserViewsCaseDetail(test, 2);
-  chambersUserViewsDraftDocuments(test);
-  chambersUserAddsOrderToCase(test);
-  chambersUserSkipSigningOrder(test);
+  chambersUserViewsCaseDetail(integrationTest, 2);
+  chambersUserViewsDraftDocuments(integrationTest);
+  chambersUserAddsOrderToCase(integrationTest);
+  chambersUserSkipSigningOrder(integrationTest);
 });

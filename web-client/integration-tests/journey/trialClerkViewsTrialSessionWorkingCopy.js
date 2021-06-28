@@ -1,17 +1,25 @@
-export const trialClerkViewsTrialSessionWorkingCopy = test => {
+export const trialClerkViewsTrialSessionWorkingCopy = integrationTest => {
   return it('Trial Clerk views trial session working copy', async () => {
-    await test.runSequence('gotoTrialSessionWorkingCopySequence', {
-      trialSessionId: test.trialSessionId,
+    await integrationTest.runSequence('gotoTrialSessionWorkingCopySequence', {
+      trialSessionId: integrationTest.trialSessionId,
     });
-    expect(test.getState('currentPage')).toEqual('TrialSessionWorkingCopy');
-    expect(test.getState('trialSessionWorkingCopy.trialSessionId')).toEqual(
-      test.trialSessionId,
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'TrialSessionWorkingCopy',
     );
-    expect(test.getState('trialSessionWorkingCopy.filters.showAll')).toEqual(
-      true,
+    expect(
+      integrationTest.getState('trialSessionWorkingCopy.trialSessionId'),
+    ).toEqual(integrationTest.trialSessionId);
+    expect(
+      integrationTest.getState('trialSessionWorkingCopy.filters.showAll'),
+    ).toEqual(true);
+    expect(integrationTest.getState('trialSessionWorkingCopy.sort')).toEqual(
+      'docket',
     );
-    expect(test.getState('trialSessionWorkingCopy.sort')).toEqual('docket');
-    expect(test.getState('trialSessionWorkingCopy.sortOrder')).toEqual('asc');
-    expect(test.getState('trialSession.caseOrder').length).toEqual(1);
+    expect(
+      integrationTest.getState('trialSessionWorkingCopy.sortOrder'),
+    ).toEqual('asc');
+    expect(integrationTest.getState('trialSession.caseOrder').length).toEqual(
+      1,
+    );
   });
 };

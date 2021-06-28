@@ -15,8 +15,8 @@ import { privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully } from 
 import { privatePractitionerSeesStrickenDocketEntry } from './journey/privatePractitionerSeesStrickenDocketEntry';
 import { userSearchesForStrickenDocument } from './journey/userSearchesForStrickenDocument';
 
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 console.error = () => null;
 
 describe("Docket Clerk Edits a Docket Entry's Meta", () => {
@@ -25,46 +25,48 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
-  petitionerFilesADocumentForCase(test, fakeFile);
+  petitionerFilesADocumentForCase(integrationTest, fakeFile);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkChecksDocketEntryEditLink(test);
-  docketClerkQCsDocketEntry(test);
-  docketClerkChecksDocketEntryEditLink(test, { value: true });
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkChecksDocketEntryEditLink(integrationTest);
+  docketClerkQCsDocketEntry(integrationTest);
+  docketClerkChecksDocketEntryEditLink(integrationTest, { value: true });
 
-  docketClerkNavigatesToEditDocketEntryMeta(test, 3);
-  docketClerkStrikesDocketEntry(test, 3);
+  docketClerkNavigatesToEditDocketEntryMeta(integrationTest, 3);
+  docketClerkStrikesDocketEntry(integrationTest, 3);
 
-  docketClerkCreatesAnOrder(test, {
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order that is stricken',
     eventCode: 'O',
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkServesDocument(test, 0);
-  docketClerkNavigatesToEditDocketEntryMetaForCourtIssued(test, 4);
-  docketClerkStrikesDocketEntry(test, 4);
+  docketClerkSignsOrder(integrationTest, 0);
+  docketClerkAddsDocketEntryFromOrder(integrationTest, 0);
+  docketClerkServesDocument(integrationTest, 0);
+  docketClerkNavigatesToEditDocketEntryMetaForCourtIssued(integrationTest, 4);
+  docketClerkStrikesDocketEntry(integrationTest, 4);
 
-  loginAs(test, 'privatePractitioner@example.com');
-  practitionerViewsCaseDetail(test, false);
-  privatePractitionerSeesStrickenDocketEntry(test, 4);
-  privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully(test);
-  userSearchesForStrickenDocument(test);
+  loginAs(integrationTest, 'privatePractitioner@example.com');
+  practitionerViewsCaseDetail(integrationTest, false);
+  privatePractitionerSeesStrickenDocketEntry(integrationTest, 4);
+  privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully(
+    integrationTest,
+  );
+  userSearchesForStrickenDocument(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  userSearchesForStrickenDocument(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  userSearchesForStrickenDocument(integrationTest);
 });

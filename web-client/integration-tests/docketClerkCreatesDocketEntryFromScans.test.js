@@ -15,7 +15,7 @@ import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Create Docket Entry From Scans', () => {
   let scannerSourceIndex = 0;
@@ -40,34 +40,36 @@ describe('Create Docket Entry From Scans', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile, { caseType: CASE_TYPES_MAP.cdp });
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(integrationTest, { procedureType: 'Regular' });
+  petitionerChoosesCaseType(integrationTest);
+  petitionerCreatesNewCase(integrationTest, fakeFile, {
+    caseType: CASE_TYPES_MAP.cdp,
+  });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkAddsDocketEntryWithoutFile(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkAddsDocketEntryWithoutFile(integrationTest);
 
-  docketClerkViewsQCInProgress(test, true);
-  docketClerkViewsSectionQCInProgress(test, true);
-  docketClerkViewsEditDocketRecord(test);
+  docketClerkViewsQCInProgress(integrationTest, true);
+  docketClerkViewsSectionQCInProgress(integrationTest, true);
+  docketClerkViewsEditDocketRecord(integrationTest);
 
-  selectScannerSource(test, {
+  selectScannerSource(integrationTest, {
     scannerSourceIndex,
     scannerSourceName,
   });
-  addBatchesForScanning(test, {
+  addBatchesForScanning(integrationTest, {
     scannerSourceIndex,
     scannerSourceName,
   });
-  createPDFFromScannedBatches(test);
+  createPDFFromScannedBatches(integrationTest);
 
-  docketClerkAddsDocketEntryFile(test, fakeFile);
-  docketClerkSavesAndServesDocketEntry(test);
+  docketClerkAddsDocketEntryFile(integrationTest, fakeFile);
+  docketClerkSavesAndServesDocketEntry(integrationTest);
 
-  docketClerkViewsQCInProgress(test, false);
-  docketClerkViewsSectionQCInProgress(test, false);
+  docketClerkViewsQCInProgress(integrationTest, false);
+  docketClerkViewsSectionQCInProgress(integrationTest, false);
 });

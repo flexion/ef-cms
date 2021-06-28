@@ -6,101 +6,101 @@ import {
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
-export const docketClerkEditsDocketEntryNonstandardC = test => {
+export const docketClerkEditsDocketEntryNonstandardC = integrationTest => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard C scenario', async () => {
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
 
     const { docketEntryId } = formattedDocketEntriesOnDocketRecord[0];
     const petitionDocument = getPetitionDocumentForCase(
-      test.getState('caseDetail'),
+      integrationTest.getState('caseDetail'),
     );
     expect(docketEntryId).toBeDefined();
     expect(petitionDocument.docketEntryId).toBeDefined();
 
     const docketEntriesBefore = formattedDocketEntriesOnDocketRecord.length;
 
-    await test.runSequence('gotoEditPaperFilingSequence', {
+    await integrationTest.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('PaperFiling');
-    expect(test.getState('docketEntryId')).toEqual(docketEntryId);
+    expect(integrationTest.getState('currentPage')).toEqual('PaperFiling');
+    expect(integrationTest.getState('docketEntryId')).toEqual(docketEntryId);
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'DCL',
     });
 
-    await test.runSequence('submitPaperFilingSequence', {
+    await integrationTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
       previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'freeText',
       value: 'Bob Barker',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'previousDocument',
       value: petitionDocument.docketEntryId,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'mailingDate',
       value: 'yesterday',
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'additionalInfo',
       value: 'some additional info',
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'additionalInfo2',
       value: 'some additional info pt 2',
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'addToCoversheet',
       value: true,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'attachments',
       value: true,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'certificateOfService',
       value: true,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'certificateOfServiceDay',
       value: '1',
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'certificateOfServiceMonth',
       value: '1',
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'certificateOfServiceYear',
       value: '2011',
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'pending',
       value: true,
     });
 
-    await test.runSequence('submitPaperFilingSequence', {
+    await integrationTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test));
+      await getFormattedDocketEntriesForTest(integrationTest));
 
     const docketEntriesAfter = formattedDocketEntriesOnDocketRecord.length;
 

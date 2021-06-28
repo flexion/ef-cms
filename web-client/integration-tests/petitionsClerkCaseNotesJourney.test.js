@@ -2,7 +2,7 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsCaseNote } from './journey/petitionsClerkAddsCaseNote';
 import { petitionsClerkDeletesCaseNote } from './journey/petitionsClerkDeletesCaseNote';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('petitions clerk case notes journey', () => {
   beforeAll(() => {
@@ -10,17 +10,17 @@ describe('petitions clerk case notes journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkAddsCaseNote(test);
-  petitionsClerkDeletesCaseNote(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsCaseNote(integrationTest);
+  petitionsClerkDeletesCaseNote(integrationTest);
 });

@@ -5,8 +5,8 @@ import { petitionsClerk1ServesDocumentFromMessageDetail } from './journey/petiti
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
 
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 
 describe('Petitions Clerk Serves Paper Filed Document From Message Detail', () => {
   beforeAll(() => {
@@ -14,22 +14,25 @@ describe('Petitions Clerk Serves Paper Filed Document From Message Detail', () =
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk1@example.com');
-  docketClerkAddsPaperFiledDocketEntryAndSavesForLater(test, fakeFile);
-  createNewMessageOnCase(test);
+  loginAs(integrationTest, 'docketclerk1@example.com');
+  docketClerkAddsPaperFiledDocketEntryAndSavesForLater(
+    integrationTest,
+    fakeFile,
+  );
+  createNewMessageOnCase(integrationTest);
 
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerk1ViewsMessageInbox(test);
-  petitionsClerk1ViewsMessageDetail(test);
-  petitionsClerk1ServesDocumentFromMessageDetail(test);
+  loginAs(integrationTest, 'petitionsclerk1@example.com');
+  petitionsClerk1ViewsMessageInbox(integrationTest);
+  petitionsClerk1ViewsMessageDetail(integrationTest);
+  petitionsClerk1ServesDocumentFromMessageDetail(integrationTest);
 });

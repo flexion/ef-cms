@@ -1,11 +1,19 @@
-export const petitionsClerkViewsAddDocketEntryForGenericOrder = test => {
-  return it('Petitions clerk views Add Docket Entry form for generic order', async () => {
-    await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketEntryId: test.docketEntryId,
-      docketNumber: test.docketNumber,
-    });
+export const petitionsClerkViewsAddDocketEntryForGenericOrder =
+  integrationTest => {
+    return it('Petitions clerk views Add Docket Entry form for generic order', async () => {
+      await integrationTest.runSequence(
+        'gotoAddCourtIssuedDocketEntrySequence',
+        {
+          docketEntryId: integrationTest.docketEntryId,
+          docketNumber: integrationTest.docketNumber,
+        },
+      );
 
-    expect(test.getState('currentPage')).toEqual('CourtIssuedDocketEntry');
-    expect(test.getState('form.freeText')).toEqual(test.freeText);
-  });
-};
+      expect(integrationTest.getState('currentPage')).toEqual(
+        'CourtIssuedDocketEntry',
+      );
+      expect(integrationTest.getState('form.freeText')).toEqual(
+        integrationTest.freeText,
+      );
+    });
+  };

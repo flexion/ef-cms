@@ -1,41 +1,46 @@
 const faker = require('faker');
 const { refreshElasticsearchIndex } = require('../helpers');
 
-export const practitionerUpdatesAddress = test => {
+export const practitionerUpdatesAddress = integrationTest => {
   return it('practitioner updates address', async () => {
-    await test.runSequence('gotoUserContactEditSequence');
+    await integrationTest.runSequence('gotoUserContactEditSequence');
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
       value: '',
     });
 
-    await test.runSequence('submitUpdateUserContactInformationSequence');
-    expect(test.getState('validationErrors')).toEqual({
+    await integrationTest.runSequence(
+      'submitUpdateUserContactInformationSequence',
+    );
+    expect(integrationTest.getState('validationErrors')).toEqual({
       contact: { address1: expect.anything() },
     });
 
-    test.updatedPractitionerAddress = faker.address.streetAddress(true);
+    integrationTest.updatedPractitionerAddress =
+      faker.address.streetAddress(true);
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
-      value: test.updatedPractitionerAddress,
+      value: integrationTest.updatedPractitionerAddress,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'firmName',
       value: 'My Awesome Law Firm',
     });
 
-    await test.runSequence('submitUpdateUserContactInformationSequence');
+    await integrationTest.runSequence(
+      'submitUpdateUserContactInformationSequence',
+    );
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('userContactUpdateCompleteSequence');
+    await integrationTest.runSequence('userContactUpdateCompleteSequence');
 
     await refreshElasticsearchIndex(5000);
 
-    expect(test.getState('alertSuccess')).toMatchObject({
+    expect(integrationTest.getState('alertSuccess')).toMatchObject({
       message: 'Changes saved.',
     });
   });

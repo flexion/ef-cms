@@ -11,42 +11,42 @@ const formattedMessageDetail = withAppContextDecorator(
   formattedMessageDetailComputed,
 );
 
-export const docketClerkAppliesSignatureFromMessage = test => {
+export const docketClerkAppliesSignatureFromMessage = integrationTest => {
   return it('docket clerk applies signature to an order from a message', async () => {
-    await test.runSequence('gotoMessageDetailSequence', {
-      docketNumber: test.docketNumber,
-      parentMessageId: test.parentMessageId,
+    await integrationTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
+      parentMessageId: integrationTest.parentMessageId,
     });
 
     let messageDetailFormatted = runCompute(formattedMessageDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
     const orderDocument = messageDetailFormatted.attachments[1];
     expect(orderDocument.documentTitle).toEqual('Order');
 
-    await test.runSequence('gotoSignOrderSequence', {
+    await integrationTest.runSequence('gotoSignOrderSequence', {
       docketEntryId: orderDocument.documentId,
-      docketNumber: test.docketNumber,
-      parentMessageId: test.parentMessageId,
-      redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
+      docketNumber: integrationTest.docketNumber,
+      parentMessageId: integrationTest.parentMessageId,
+      redirectUrl: `/messages/${integrationTest.docketNumber}/message-detail/${integrationTest.parentMessageId}`,
     });
 
-    expect(test.getState('currentPage')).toEqual('SignOrder');
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
+    expect(integrationTest.getState('currentPage')).toEqual('SignOrder');
+    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
 
-    await test.runSequence('setPDFSignatureDataSequence', {
+    await integrationTest.runSequence('setPDFSignatureDataSequence', {
       signatureData: {
         scale: 1,
         x: 100,
         y: 100,
       },
     });
-    await test.runSequence('saveDocumentSigningSequence');
+    await integrationTest.runSequence('saveDocumentSigningSequence');
 
-    expect(test.getState('currentPage')).toEqual('MessageDetail');
+    expect(integrationTest.getState('currentPage')).toEqual('MessageDetail');
 
     const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
     const caseOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
       d => d.docketEntryId === orderDocument.documentId,

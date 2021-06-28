@@ -1,15 +1,15 @@
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
 export const petitionsClerkViewsDocketRecordAfterSettingTrial = (
-  test,
+  integrationTest,
   overrides = {},
 ) => {
   return it('Petitions clerk views docket record for a case after calendaring', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    const docketEntries = test.getState('caseDetail.docketEntries');
+    const docketEntries = integrationTest.getState('caseDetail.docketEntries');
 
     const noticeOfTrial = docketEntries.find(
       entry =>

@@ -6,8 +6,8 @@ import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1Views
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 
 describe('Petitions Clerk Serves Paper Petition From Message Detail & Document View', () => {
   beforeAll(() => {
@@ -15,25 +15,25 @@ describe('Petitions Clerk Serves Paper Petition From Message Detail & Document V
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCaseFromPaper(test, fakeFile);
-  createNewMessageOnCase(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCaseFromPaper(integrationTest, fakeFile);
+  createNewMessageOnCase(integrationTest);
 
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerk1ViewsMessageInbox(test);
-  petitionsClerk1ViewsMessageDetail(test);
-  petitionsClerk1ServesPetitionFromMessageDetail(test);
+  loginAs(integrationTest, 'petitionsclerk1@example.com');
+  petitionsClerk1ViewsMessageInbox(integrationTest);
+  petitionsClerk1ViewsMessageDetail(integrationTest);
+  petitionsClerk1ServesPetitionFromMessageDetail(integrationTest);
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkServesPetitionFromDocumentView(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkServesPetitionFromDocumentView(integrationTest);
 });

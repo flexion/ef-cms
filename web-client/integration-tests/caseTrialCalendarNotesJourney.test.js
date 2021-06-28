@@ -8,7 +8,7 @@ import { docketClerkDeletesCalendarNote } from './journey/docketClerkDeletesCale
 import { docketClerkViewsTrialSessionWithNote } from './journey/docketClerkViewsTrialSessionWithNote';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('case trial calendar notes journey', () => {
   beforeAll(() => {
@@ -16,7 +16,7 @@ describe('case trial calendar notes journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
   // eslint-disable-next-line @miovision/disallow-date/no-static-date
@@ -28,28 +28,28 @@ describe('case trial calendar notes journey', () => {
     trialLocation: trialLocation1,
   };
 
-  test.createdTrialSessions = [];
+  integrationTest.createdTrialSessions = [];
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, overrides1);
-  docketClerkViewsTrialSessionList(test);
-  docketClerkViewsNewTrialSession(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(integrationTest, overrides1);
+  docketClerkViewsTrialSessionList(integrationTest);
+  docketClerkViewsNewTrialSession(integrationTest);
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('creates a case', async () => {
-    const caseDetail = await uploadPetition(test, overrides1);
+    const caseDetail = await uploadPetition(integrationTest, overrides1);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkManuallyAddsCaseToTrialSessionWithoutNote(test);
-  docketClerkViewsTrialSessionWithNote(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkManuallyAddsCaseToTrialSessionWithoutNote(integrationTest);
+  docketClerkViewsTrialSessionWithNote(integrationTest);
 
-  docketClerkAddEditsCalendarNote(test, 'adds');
-  docketClerkViewsTrialSessionWithNote(test);
-  docketClerkAddEditsCalendarNote(test, 'edits');
-  docketClerkDeletesCalendarNote(test);
+  docketClerkAddEditsCalendarNote(integrationTest, 'adds');
+  docketClerkViewsTrialSessionWithNote(integrationTest);
+  docketClerkAddEditsCalendarNote(integrationTest, 'edits');
+  docketClerkDeletesCalendarNote(integrationTest);
 
-  docketClerkViewsTrialSessionWithNote(test);
+  docketClerkViewsTrialSessionWithNote(integrationTest);
 });

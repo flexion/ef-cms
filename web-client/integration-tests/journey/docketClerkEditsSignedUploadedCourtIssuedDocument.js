@@ -1,35 +1,37 @@
 export const docketClerkEditsSignedUploadedCourtIssuedDocument = (
-  test,
+  integrationTest,
   fakeFile,
 ) => {
   return it('Docket Clerk edits a signed uploaded court issued document', async () => {
-    await test.runSequence('openConfirmEditModalSequence', {
-      docketEntryIdToEdit: test.docketEntryId,
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('openConfirmEditModalSequence', {
+      docketEntryIdToEdit: integrationTest.docketEntryId,
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('navigateToEditOrderSequence');
+    await integrationTest.runSequence('navigateToEditOrderSequence');
 
-    expect(test.getState('currentPage')).toEqual(
+    expect(integrationTest.getState('currentPage')).toEqual(
       'EditUploadCourtIssuedDocument',
     );
 
-    await test.runSequence('clearExistingDocumentSequence');
+    await integrationTest.runSequence('clearExistingDocumentSequence');
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
 
-    await test.runSequence('editUploadCourtIssuedDocumentSequence', {
+    await integrationTest.runSequence('editUploadCourtIssuedDocumentSequence', {
       tab: 'drafts',
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseDetailInternal',
+    );
 
-    const caseDocument = test
+    const caseDocument = integrationTest
       .getState('caseDetail.docketEntries')
-      .find(d => d.docketEntryId === test.docketEntryId);
+      .find(d => d.docketEntryId === integrationTest.docketEntryId);
     expect(caseDocument.signedAt).toEqual(null);
   });
 };

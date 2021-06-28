@@ -1,22 +1,22 @@
-export const petitionsClerkRemovesPendingItemFromCase = test => {
+export const petitionsClerkRemovesPendingItemFromCase = integrationTest => {
   return it('Petitions Clerk removes a pending item from a case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    const documents = test.getState('caseDetail.docketEntries');
+    const documents = integrationTest.getState('caseDetail.docketEntries');
 
     const pendingDocument = documents.find(
       document => document.pending === true,
     );
 
-    await test.runSequence(
+    await integrationTest.runSequence(
       'openConfirmRemoveCaseDetailPendingItemModalSequence',
       {
         docketEntryId: pendingDocument.docketEntryId,
       },
     );
 
-    await test.runSequence('removeCaseDetailPendingItemSequence');
+    await integrationTest.runSequence('removeCaseDetailPendingItemSequence');
   });
 };

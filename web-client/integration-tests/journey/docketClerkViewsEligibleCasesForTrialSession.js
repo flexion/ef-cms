@@ -1,12 +1,14 @@
-export const docketClerkViewsEligibleCasesForTrialSession = test => {
+export const docketClerkViewsEligibleCasesForTrialSession = integrationTest => {
   return it('Docket clerk views eligible cases for a trial session', async () => {
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: integrationTest.trialSessionId,
     });
 
-    expect(test.getState('trialSession.eligibleCases').length).toEqual(1);
-    expect(test.getState('trialSession.eligibleCases.0.docketNumber')).toEqual(
-      test.docketNumber,
-    );
+    expect(
+      integrationTest.getState('trialSession.eligibleCases').length,
+    ).toEqual(1);
+    expect(
+      integrationTest.getState('trialSession.eligibleCases.0.docketNumber'),
+    ).toEqual(integrationTest.docketNumber);
   });
 };

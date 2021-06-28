@@ -9,7 +9,7 @@ import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsC
 import { petitionsClerkViewsMyDocumentQC } from './journey/petitionsClerkViewsMyDocumentQC';
 import { petitionsClerkViewsSectionDocumentQC } from './journey/petitionsClerkViewsSectionDocumentQC';
 
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('INDIVIDUAL DOC QC: Petition Gets Served', () => {
   beforeAll(() => {
@@ -17,19 +17,19 @@ describe('INDIVIDUAL DOC QC: Petition Gets Served', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test);
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
-  petitionerViewsDashboard(test);
+  loginAs(integrationTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(integrationTest);
+  petitionerChoosesCaseType(integrationTest);
+  petitionerCreatesNewCase(integrationTest, fakeFile);
+  petitionerViewsDashboard(integrationTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsSectionDocumentQC(test);
-  petitionsClerkAssignsWorkItemToSelf(test);
-  petitionsClerkViewsMyDocumentQC(test);
-  petitionsClerkSelectsFirstPetitionOnMyDocumentQC(test);
-  petitionsClerkSubmitsCaseToIrs(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsSectionDocumentQC(integrationTest);
+  petitionsClerkAssignsWorkItemToSelf(integrationTest);
+  petitionsClerkViewsMyDocumentQC(integrationTest);
+  petitionsClerkSelectsFirstPetitionOnMyDocumentQC(integrationTest);
+  petitionsClerkSubmitsCaseToIrs(integrationTest);
 });

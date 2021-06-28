@@ -1,16 +1,16 @@
 import { contactPrimaryFromState } from '../helpers';
 
-export const petitionerNavigatesToEditContact = test => {
+export const petitionerNavigatesToEditContact = integrationTest => {
   it('petitioner views contact edit page', async () => {
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
     const contactIdToUse = contactPrimary.contactId;
 
-    await test.runSequence('gotoContactEditSequence', {
+    await integrationTest.runSequence('gotoContactEditSequence', {
       contactId: contactIdToUse,
-      docketNumber: test.getState('caseDetail.docketNumber'),
+      docketNumber: integrationTest.getState('caseDetail.docketNumber'),
     });
 
-    const currentPage = test.getState('currentPage');
+    const currentPage = integrationTest.getState('currentPage');
     expect(currentPage).toEqual('ContactEdit');
   });
 };

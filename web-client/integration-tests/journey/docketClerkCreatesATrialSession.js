@@ -3,15 +3,18 @@ import { TrialSession } from '../../../shared/src/business/entities/trialSession
 
 const errorMessages = TrialSession.VALIDATION_ERROR_MESSAGES;
 
-export const docketClerkCreatesATrialSession = (test, overrides = {}) => {
+export const docketClerkCreatesATrialSession = (
+  integrationTest,
+  overrides = {},
+) => {
   return it('Docket clerk starts a trial session', async () => {
-    await test.runSequence('gotoAddTrialSessionSequence');
+    await integrationTest.runSequence('gotoAddTrialSessionSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('submitTrialSessionSequence');
+    await integrationTest.runSequence('submitTrialSessionSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       maxCases: errorMessages.maxCases,
       sessionType: errorMessages.sessionType,
       startDate: errorMessages.startDate[1],
@@ -20,57 +23,57 @@ export const docketClerkCreatesATrialSession = (test, overrides = {}) => {
       trialLocation: errorMessages.trialLocation,
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'proceedingType',
       value: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'maxCases',
       value: overrides.maxCases || 100,
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'sessionType',
       value: overrides.sessionType || 'Hybrid',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'month',
       value: '13',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'day',
       value: '12',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'year',
       value: '2025',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'address1',
       value: '123 Flavor Ave',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'city',
       value: 'Seattle',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'state',
       value: 'WA',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'postalCode',
       value: '98101',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'judge',
       value: overrides.judge || {
         name: 'Cohen',
@@ -79,50 +82,50 @@ export const docketClerkCreatesATrialSession = (test, overrides = {}) => {
     });
 
     if (overrides.trialClerk) {
-      await test.runSequence('updateTrialSessionFormDataSequence', {
+      await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
         key: 'trialClerk',
         value: overrides.trialClerk,
       });
     }
 
-    await test.runSequence('validateTrialSessionSequence');
+    await integrationTest.runSequence('validateTrialSessionSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(integrationTest.getState('validationErrors')).toEqual({
       startDate: errorMessages.startDate[1],
       term: errorMessages.term,
       trialLocation: errorMessages.trialLocation,
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'month',
       value: '12',
     });
 
-    await test.runSequence('validateTrialSessionSequence');
+    await integrationTest.runSequence('validateTrialSessionSequence');
 
-    expect(test.getState('form.term')).toEqual('Fall');
-    expect(test.getState('form.termYear')).toEqual('2025');
+    expect(integrationTest.getState('form.term')).toEqual('Fall');
+    expect(integrationTest.getState('form.termYear')).toEqual('2025');
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',
       value: overrides.trialLocation || 'Seattle, Washington',
     });
 
-    await test.runSequence('validateTrialSessionSequence');
+    await integrationTest.runSequence('validateTrialSessionSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('submitTrialSessionSequence');
+    await integrationTest.runSequence('submitTrialSessionSequence');
 
-    expect(test.getState('alertSuccess')).toEqual({
+    expect(integrationTest.getState('alertSuccess')).toEqual({
       message: 'Trial session added.',
     });
 
-    const lastCreatedTrialSessionId = test.getState(
+    const lastCreatedTrialSessionId = integrationTest.getState(
       'lastCreatedTrialSessionId',
     );
     expect(lastCreatedTrialSessionId).toBeDefined();
 
-    test.lastCreatedTrialSessionId = lastCreatedTrialSessionId;
+    integrationTest.lastCreatedTrialSessionId = lastCreatedTrialSessionId;
   });
 };

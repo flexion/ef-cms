@@ -6,14 +6,17 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const petitionsClerkViewsDraftDocuments = (test, count = 0) => {
+export const petitionsClerkViewsDraftDocuments = (
+  integrationTest,
+  count = 0,
+) => {
   return it('Petitions clerk views Draft Documents', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    integrationTest.setState('caseDetail', {});
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
     const formatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
 
     expect(formatted.draftDocuments.length).toEqual(count);

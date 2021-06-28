@@ -1,31 +1,31 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
 export const petitionsClerkManuallyAddsCaseToCalendaredTrialSession = (
-  test,
+  integrationTest,
   createdCasesIndex,
 ) => {
   return it('Petitions clerk manually adds a case to a calendared trial session', async () => {
-    const caseToAdd = test.createdCases[createdCasesIndex];
+    const caseToAdd = integrationTest.createdCases[createdCasesIndex];
 
-    await test.runSequence('gotoCaseDetailSequence', {
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: caseToAdd,
     });
 
-    await test.runSequence('openAddToTrialModalSequence');
+    await integrationTest.runSequence('openAddToTrialModalSequence');
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'showAllLocations',
       value: true,
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await integrationTest.runSequence('updateModalValueSequence', {
       key: 'trialSessionId',
-      value: test.trialSessionId,
+      value: integrationTest.trialSessionId,
     });
 
-    await test.runSequence('addCaseToTrialSessionSequence');
+    await integrationTest.runSequence('addCaseToTrialSessionSequence');
     await refreshElasticsearchIndex();
 
-    expect(test.getState('caseDetail.trialDate')).toBeDefined();
+    expect(integrationTest.getState('caseDetail.trialDate')).toBeDefined();
   });
 };

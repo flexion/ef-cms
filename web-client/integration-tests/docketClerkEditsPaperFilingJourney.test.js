@@ -7,7 +7,7 @@ import {
   wait,
 } from './helpers';
 import { docketClerkAddsMiscellaneousPaperFiling } from './journey/docketClerkAddsMiscellaneousPaperFiling';
-const test = setupTest();
+const integrationTest = setupTest();
 
 describe('Docket Clerk edits a paper filing journey', () => {
   beforeAll(() => {
@@ -15,23 +15,23 @@ describe('Docket Clerk edits a paper filing journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('create case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(integrationTest, 'docketclerk@example.com');
   it('create a paper-filed docket entry', async () => {
-    await test.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoAddPaperFilingSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
 
-    await test.runSequence('submitPaperFilingSequence', {
+    await integrationTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -42,128 +42,141 @@ describe('Docket Clerk edits a paper filing journey', () => {
       'filers',
     ];
 
-    expect(Object.keys(test.getState('validationErrors'))).toEqual(
+    expect(Object.keys(integrationTest.getState('validationErrors'))).toEqual(
       paperFilingValidationErrors,
     );
 
-    await test.runSequence('setDocumentForUploadSequence', {
+    await integrationTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'primaryDocumentFile',
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
-    expect(Object.keys(test.getState('validationErrors'))).toEqual(
+    expect(Object.keys(integrationTest.getState('validationErrors'))).toEqual(
       paperFilingValidationErrors,
     );
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: 1,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: 1,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: 2018,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'A',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'trialLocation',
       value: 'Little Rock, AR',
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(integrationTest);
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
-      value: true,
-    });
+    await integrationTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactPrimary.contactId}`,
+        value: true,
+      },
+    );
 
-    await test.runSequence('submitPaperFilingSequence', {
+    await integrationTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseDetailInternal',
+    );
 
-    const caseDocument = test.getState('caseDetail.docketEntries.0');
+    const caseDocument = integrationTest.getState('caseDetail.docketEntries.0');
     expect(caseDocument).toMatchObject({
       documentTitle: 'Answer',
       documentType: 'Answer',
       eventCode: 'A',
       isFileAttached: true,
     });
-    test.docketEntryId = caseDocument.docketEntryId;
+    integrationTest.docketEntryId = caseDocument.docketEntryId;
   });
 
   it('open modal to serve paper-filed document (but do not serve)', async () => {
-    const caseDocument = test.getState('caseDetail.docketEntries.0');
+    const caseDocument = integrationTest.getState('caseDetail.docketEntries.0');
 
-    await test.runSequence('changeTabAndSetViewerDocumentToDisplaySequence', {
-      docketRecordTab: 'documentView',
-      viewerDocumentToDisplay: caseDocument,
-    });
+    await integrationTest.runSequence(
+      'changeTabAndSetViewerDocumentToDisplaySequence',
+      {
+        docketRecordTab: 'documentView',
+        viewerDocumentToDisplay: caseDocument,
+      },
+    );
 
-    await test.runSequence('openConfirmServePaperFiledDocumentSequence', {
-      docketEntryId: test.docketEntryId,
-    });
+    await integrationTest.runSequence(
+      'openConfirmServePaperFiledDocumentSequence',
+      {
+        docketEntryId: integrationTest.docketEntryId,
+      },
+    );
 
     expect(
-      test.getState('viewerDocumentToDisplay.documentTitle'),
+      integrationTest.getState('viewerDocumentToDisplay.documentTitle'),
     ).toBeDefined();
   });
 
   it('edit paper-filed docket entry, replacing PDF', async () => {
-    await test.runSequence('gotoEditPaperFilingSequence', {
-      docketEntryId: test.docketEntryId,
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoEditPaperFilingSequence', {
+      docketEntryId: integrationTest.docketEntryId,
+      docketNumber: integrationTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('PaperFiling');
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
-    expect(test.getState('currentViewMetadata.documentUploadMode')).toEqual(
-      'preview',
-    );
+    expect(integrationTest.getState('currentPage')).toEqual('PaperFiling');
+    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
+    expect(
+      integrationTest.getState('currentViewMetadata.documentUploadMode'),
+    ).toEqual('preview');
 
-    await test.runSequence('removeScannedPdfSequence');
+    await integrationTest.runSequence('removeScannedPdfSequence');
     await wait(200);
 
-    expect(test.getState('currentViewMetadata.documentUploadMode')).toEqual(
-      'scan',
-    );
+    expect(
+      integrationTest.getState('currentViewMetadata.documentUploadMode'),
+    ).toEqual('scan');
 
-    await test.runSequence('submitPaperFilingSequence');
+    await integrationTest.runSequence('submitPaperFilingSequence');
 
-    expect(Object.keys(test.getState('validationErrors'))).toEqual([
+    expect(Object.keys(integrationTest.getState('validationErrors'))).toEqual([
       'primaryDocumentFile',
     ]);
 
-    await test.runSequence('setDocumentForUploadSequence', {
+    await integrationTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'primaryDocumentFile',
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
-    expect(test.getState('currentPage')).toEqual('PaperFiling');
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
-    expect(test.getState('form.primaryDocumentFile')).toBeDefined();
-    expect(test.getState('currentViewMetadata.documentUploadMode')).toEqual(
-      'preview',
+    expect(integrationTest.getState('currentPage')).toEqual('PaperFiling');
+    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
+    expect(integrationTest.getState('form.primaryDocumentFile')).toBeDefined();
+    expect(
+      integrationTest.getState('currentViewMetadata.documentUploadMode'),
+    ).toEqual('preview');
+
+    await integrationTest.runSequence('submitPaperFilingSequence');
+
+    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseDetailInternal',
     );
-
-    await test.runSequence('submitPaperFilingSequence');
-
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
   });
 
-  docketClerkAddsMiscellaneousPaperFiling(test, fakeFile);
+  docketClerkAddsMiscellaneousPaperFiling(integrationTest, fakeFile);
 });

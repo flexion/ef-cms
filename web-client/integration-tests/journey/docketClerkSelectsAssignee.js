@@ -1,10 +1,10 @@
-export const docketClerkSelectsAssignee = test => {
+export const docketClerkSelectsAssignee = integrationTest => {
   return it('Docket clerk select an assignee', async () => {
-    expect(test.getState('assigneeId')).toBeUndefined();
-    await test.runSequence('selectAssigneeSequence', {
+    expect(integrationTest.getState('assigneeId')).toBeUndefined();
+    await integrationTest.runSequence('selectAssigneeSequence', {
       assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test Docketclerk',
     });
-    expect(test.getState('assigneeId')).toBeDefined();
+    expect(integrationTest.getState('assigneeId')).toBeDefined();
   });
 };

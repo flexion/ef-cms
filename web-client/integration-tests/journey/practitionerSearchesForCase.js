@@ -1,9 +1,9 @@
-export const practitionerSearchesForCase = test => {
+export const practitionerSearchesForCase = integrationTest => {
   return it('Practitioner searches for case', async () => {
-    await test.runSequence('updateSearchTermSequence', {
-      searchTerm: test.docketNumber,
+    await integrationTest.runSequence('updateSearchTermSequence', {
+      searchTerm: integrationTest.docketNumber,
     });
-    await test.runSequence('submitCaseSearchSequence');
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    await integrationTest.runSequence('submitCaseSearchSequence');
+    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
   });
 };

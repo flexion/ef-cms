@@ -1,22 +1,22 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const userSearchesForStrickenDocument = test => {
+export const userSearchesForStrickenDocument = integrationTest => {
   return it('User searches for a stricken order', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoAdvancedSearchSequence');
+    await integrationTest.runSequence('gotoAdvancedSearchSequence');
 
-    test.setState('advancedSearchForm', {
+    integrationTest.setState('advancedSearchForm', {
       orderSearch: {
         keyword: 'Order that is stricken',
       },
     });
 
-    await test.runSequence('submitOrderAdvancedSearchSequence');
+    await integrationTest.runSequence('submitOrderAdvancedSearchSequence');
 
     expect(
-      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      integrationTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
     ).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({

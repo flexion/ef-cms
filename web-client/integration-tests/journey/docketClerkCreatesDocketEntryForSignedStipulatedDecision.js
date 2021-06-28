@@ -3,33 +3,49 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 const { STATUS_TYPES } = applicationContext.getConstants();
 
 export const docketClerkCreatesDocketEntryForSignedStipulatedDecision =
-  test => {
+  integrationTest => {
     return it('docketclerk creates a docket entry for the signed stipulated decision', async () => {
-      await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-        docketEntryId: test.stipDecisionDocketEntryId,
-        docketNumber: test.docketNumber,
-      });
+      await integrationTest.runSequence(
+        'gotoAddCourtIssuedDocketEntrySequence',
+        {
+          docketEntryId: integrationTest.stipDecisionDocketEntryId,
+          docketNumber: integrationTest.docketNumber,
+        },
+      );
 
-      expect(test.getState('form.documentType')).toEqual('Stipulated Decision');
+      expect(integrationTest.getState('form.documentType')).toEqual(
+        'Stipulated Decision',
+      );
 
-      await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-        key: 'judge',
-        value: 'Judge Ashford',
-      });
+      await integrationTest.runSequence(
+        'updateCourtIssuedDocketEntryFormValueSequence',
+        {
+          key: 'judge',
+          value: 'Judge Ashford',
+        },
+      );
 
-      await test.runSequence('openConfirmInitiateServiceModalSequence');
-      expect(test.getState('validationErrors')).toEqual({});
+      await integrationTest.runSequence(
+        'openConfirmInitiateServiceModalSequence',
+      );
+      expect(integrationTest.getState('validationErrors')).toEqual({});
 
-      await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
-      expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-      const documents = test
+      await integrationTest.runSequence(
+        'serveCourtIssuedDocumentFromDocketEntrySequence',
+      );
+      expect(integrationTest.getState('currentPage')).toEqual(
+        'CaseDetailInternal',
+      );
+      const documents = integrationTest
         .getState('caseDetail.docketEntries')
         .filter(d => d.isOnDocketRecord);
       expect(documents.length).toEqual(4);
-      const stipDecisionDocument = test
+      const stipDecisionDocument = integrationTest
         .getState('caseDetail.docketEntries')
         .find(d => d.documentType === 'Stipulated Decision');
       expect(stipDecisionDocument.servedAt).toBeDefined();
-      expect(test.getState('caseDetail.status')).toEqual(STATUS_TYPES.closed);
+      expect(integrationTest.getState('caseDetail.status')).toEqual(
+        STATUS_TYPES.closed,
+      );
     });
   };

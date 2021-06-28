@@ -1,10 +1,12 @@
-export const practitionerViewsCaseDetailOfPendingCase = test => {
+export const practitionerViewsCaseDetailOfPendingCase = integrationTest => {
   return it('Practitioner views case detail of owned case', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    integrationTest.setState('caseDetail', {});
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(test.getState('screenMetadata.pendingAssociation')).toEqual(true);
+    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(
+      integrationTest.getState('screenMetadata.pendingAssociation'),
+    ).toEqual(true);
   });
 };

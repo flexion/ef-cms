@@ -12,8 +12,8 @@ import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkA
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 
 describe('Docket Clerk edits service indicators for petitioner, practitioner, and respondent', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -23,13 +23,13 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
 
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(integrationTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -42,30 +42,30 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkEditsPetitionerInformation(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkEditsPetitionerInformation(integrationTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkAddsPractitionersToCase(test);
-  petitionsClerkAddsRespondentsToCase(test);
+  loginAs(integrationTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsPractitionersToCase(integrationTest);
+  petitionsClerkAddsRespondentsToCase(integrationTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkEditsServiceIndicatorForPetitioner(test);
-  docketClerkEditsServiceIndicatorForPractitioner(test);
-  docketClerkEditsServiceIndicatorForRespondent(test);
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkEditsServiceIndicatorForPetitioner(integrationTest);
+  docketClerkEditsServiceIndicatorForPractitioner(integrationTest);
+  docketClerkEditsServiceIndicatorForRespondent(integrationTest);
   // create an order to serve - it should be served to 3 paper service parties now
-  docketClerkCreatesAnOrder(test, {
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkServesOrderOnPaperParties(test, 0);
+  docketClerkSignsOrder(integrationTest, 0);
+  docketClerkAddsDocketEntryFromOrder(integrationTest, 0);
+  docketClerkServesOrderOnPaperParties(integrationTest, 0);
 });

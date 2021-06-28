@@ -11,8 +11,8 @@ import {
   uploadPetition,
 } from './helpers';
 
-const test = setupTest();
-test.draftOrders = [];
+const integrationTest = setupTest();
+integrationTest.draftOrders = [];
 
 describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
   const { STIPULATED_DECISION_EVENT_CODE } = applicationContext.getConstants();
@@ -22,33 +22,33 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    integrationTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
 
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(integrationTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
-    test.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
+    integrationTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(test, {
+  loginAs(integrationTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(integrationTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(test, 0);
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsStipulatedDecisionDocketEntryFromOrder(test, 0);
-  docketClerkServesDocument(test, 0);
+  docketClerkViewsDraftOrder(integrationTest, 0);
+  docketClerkSignsOrder(integrationTest, 0);
+  docketClerkAddsStipulatedDecisionDocketEntryFromOrder(integrationTest, 0);
+  docketClerkServesDocument(integrationTest, 0);
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(integrationTest, 'petitioner@example.com');
   it('petitioner views Stipulated Decision on docket record', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
     const stipulatedDecisionDocument =
       formattedDocketEntriesOnDocketRecord.find(
         document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
@@ -56,10 +56,10 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
     expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(true);
   });
 
-  loginAs(test, 'privatePractitioner@example.com');
+  loginAs(integrationTest, 'privatePractitioner@example.com');
   it('unassociated privatePractitioner views Stipulated Decision on docket record', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(integrationTest);
     const stipulatedDecisionDocument =
       formattedDocketEntriesOnDocketRecord.find(
         document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,

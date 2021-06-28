@@ -1,12 +1,15 @@
-export const petitionsClerkSavesSignatureForDraftDocument = (test, title) => {
+export const petitionsClerkSavesSignatureForDraftDocument = (
+  integrationTest,
+  title,
+) => {
   return it('Petitions clerk saves signature for draft document', async () => {
-    await test.runSequence('saveDocumentSigningSequence', {
+    await integrationTest.runSequence('saveDocumentSigningSequence', {
       gotoAfterSigning: 'DocumentDetail',
     });
 
-    expect(test.getState('draftDocumentViewerDocketEntryId')).toBe(
-      test.docketEntryId,
+    expect(integrationTest.getState('draftDocumentViewerDocketEntryId')).toBe(
+      integrationTest.docketEntryId,
     );
-    expect(test.getState('alertSuccess.message')).toEqual(title);
+    expect(integrationTest.getState('alertSuccess.message')).toEqual(title);
   });
 };

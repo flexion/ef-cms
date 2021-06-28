@@ -7,47 +7,53 @@ const formattedMessageDetail = withAppContextDecorator(
   formattedMessageDetailComputed,
 );
 
-export const petitionsClerkCreatesOrderFromMessage = test => {
+export const petitionsClerkCreatesOrderFromMessage = integrationTest => {
   return it('petitions clerk creates an order from a message', async () => {
-    await test.runSequence('gotoMessageDetailSequence', {
-      docketNumber: test.docketNumber,
-      parentMessageId: test.parentMessageId,
+    await integrationTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
+      parentMessageId: integrationTest.parentMessageId,
     });
 
-    await test.runSequence('openCreateOrderChooseTypeModalSequence', {
-      parentMessageId: test.parentMessageId,
-    });
+    await integrationTest.runSequence(
+      'openCreateOrderChooseTypeModalSequence',
+      {
+        parentMessageId: integrationTest.parentMessageId,
+      },
+    );
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
-      key: 'eventCode',
-      value: 'O',
-    });
+    await integrationTest.runSequence(
+      'updateCreateOrderModalFormValueSequence',
+      {
+        key: 'eventCode',
+        value: 'O',
+      },
+    );
 
-    await test.runSequence('submitCreateOrderModalSequence');
+    await integrationTest.runSequence('submitCreateOrderModalSequence');
 
-    await test.runSequence('updateFormValueSequence', {
+    await integrationTest.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: '<p>This is a test order.</p>',
     });
 
-    await test.runSequence('submitCourtIssuedOrderSequence');
+    await integrationTest.runSequence('submitCourtIssuedOrderSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
+    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
 
-    await test.runSequence('setPDFSignatureDataSequence', {
+    await integrationTest.runSequence('setPDFSignatureDataSequence', {
       signatureData: {
         scale: 1,
         x: 100,
         y: 100,
       },
     });
-    await test.runSequence('saveDocumentSigningSequence');
+    await integrationTest.runSequence('saveDocumentSigningSequence');
 
-    expect(test.getState('currentPage')).toEqual('MessageDetail');
+    expect(integrationTest.getState('currentPage')).toEqual('MessageDetail');
 
     const messageDetailFormatted = runCompute(formattedMessageDetail, {
-      state: test.getState(),
+      state: integrationTest.getState(),
     });
     expect(messageDetailFormatted.attachments.length).toEqual(2);
     expect(messageDetailFormatted.attachments[1]).toMatchObject({
@@ -55,7 +61,7 @@ export const petitionsClerkCreatesOrderFromMessage = test => {
     });
 
     const { formattedDraftDocuments } = await getFormattedDocketEntriesForTest(
-      test,
+      integrationTest,
     );
 
     const draftOrder = formattedDraftDocuments.find(

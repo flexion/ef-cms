@@ -1,31 +1,33 @@
-export const petitionsClerkAddsCaseNote = test => {
+export const petitionsClerkAddsCaseNote = integrationTest => {
   return it('petitions clerk adds procedural note to a case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await integrationTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: integrationTest.docketNumber,
     });
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('caseDetail.caseNote')).toBeUndefined();
+    expect(integrationTest.getState('currentPage')).toEqual(
+      'CaseDetailInternal',
+    );
+    expect(integrationTest.getState('caseDetail.caseNote')).toBeUndefined();
 
-    await test.runSequence('openAddEditCaseNoteModalSequence');
+    await integrationTest.runSequence('openAddEditCaseNoteModalSequence');
 
-    expect(test.getState('modal')).toMatchObject({
+    expect(integrationTest.getState('modal')).toMatchObject({
       notes: undefined,
     });
 
-    await test.runSequence('cerebralBindSimpleSetStateSequence', {
+    await integrationTest.runSequence('cerebralBindSimpleSetStateSequence', {
       key: 'modal.notes',
       value: 'this is a note added from the modal',
     });
 
-    expect(test.getState('modal')).toMatchObject({
+    expect(integrationTest.getState('modal')).toMatchObject({
       notes: 'this is a note added from the modal',
     });
 
-    await test.runSequence('updateCaseNoteSequence');
+    await integrationTest.runSequence('updateCaseNoteSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(integrationTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('caseDetail.caseNote')).toEqual(
+    expect(integrationTest.getState('caseDetail.caseNote')).toEqual(
       'this is a note added from the modal',
     );
   });
