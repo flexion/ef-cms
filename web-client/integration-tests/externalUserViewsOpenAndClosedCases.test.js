@@ -11,7 +11,6 @@ const integrationTest = setupTest();
 describe('external user views open and closed cases', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    loginAs(integrationTest, 'docketclerk@example.com');
   });
 
   afterAll(() => {

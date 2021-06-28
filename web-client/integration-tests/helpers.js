@@ -492,8 +492,8 @@ export const uploadPetition = async (
   return response.data;
 };
 
-export const loginAs = (integrationTest, user) => {
-  return it(`login as ${user}`, async () => {
+export const loginAs = (integrationTest, user) =>
+  it(`login as ${user}`, async () => {
     await integrationTest.runSequence('updateFormValueSequence', {
       key: 'name',
       value: user,
@@ -505,7 +505,6 @@ export const loginAs = (integrationTest, user) => {
 
     expect(integrationTest.getState('user.email')).toBeDefined();
   });
-};
 
 export const setupTest = ({ useCases = {} } = {}) => {
   let integrationTest;
