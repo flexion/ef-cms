@@ -1,6 +1,7 @@
 /* eslint-disable @miovision/disallow-date/no-new-date */
 const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { get } = require('lodash');
+const { getCurrentInvoke } = require('@vendia/serverless-express');
 const { transports } = require('winston');
 
 let cache;
@@ -15,6 +16,7 @@ module.exports =
   (transport = console()) =>
   (req, res, next) => {
     const logger = createLogger({ transports: [transport] });
+    const currentInvoke = getCurrentInvoke();
 
     if (process.env.NODE_ENV === 'production') {
       logger.defaultMeta = {
@@ -29,7 +31,7 @@ module.exports =
           url: req.url,
         },
         requestId: {
-          apiGateway: get(req, 'apiGateway.event.requestContext.requestId'),
+          apiGateway: get(currentInvoke, 'event.requestContext.requestId'),
           applicationLoadBalancer: req.get('x-amzn-trace-id'),
           lambda: get(req, 'apiGateway.context.awsRequestId'),
         },
