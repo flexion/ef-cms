@@ -6,6 +6,8 @@ import 'react-quill/dist/quill.snow.css';
 
 // Require Editor JS files.
 import 'froala-editor/js/froala_editor.pkgd.min.js';
+import 'froala-editor/js/plugins/font_size.min.js';
+import 'froala-editor/js/plugins/lists.min.js';
 import FroalaEditor from 'react-froala-wysiwyg';
 
 // Require Editor CSS files.
@@ -65,9 +67,18 @@ export const TextEditor = ({
       <FroalaEditor
         config={{
           charCounterCount: false,
-          fontSize: ['8', '10', '12', '14', '18', '30', '60', '96'],
-          fontSizeSelection: true,
-          placeholderText: 'Edit Your Content Here!',
+          toolbarButtons: [
+            'formatOL',
+            'formatUL',
+            'fontSize',
+            'indent',
+            'outdent',
+            'bold',
+            'italics',
+            'underline',
+            'undo',
+            'redo',
+          ],
         }}
         model={editorDelta || defaultValue}
         tabIndex={0}
