@@ -79,29 +79,29 @@ export const TextEditor = ({
           placeholderText: 'Edit Your Content Here!',
         }}
         // defaultValue={editorDelta || defaultValue}
-        model={state.model}
+        model={editorDelta || defaultValue}
         tabIndex={0}
         tag="textarea"
-        onModelChange={handleModelChange}
-        // onChange={editor => {
-        //   console.log('edioter', editor);
-        //   // const fullDelta = editor.node.contents(node);
+        onModelChange={model => {
+          console.log('this is the right one', state.model);
 
-        //   const html = editor.html.get(true);
-        //   console.log('html for richText!!', html);
-        //   updateFormValueSequence({
-        //     key: 'richText',
-        //     value: html,
-        //   });
-        //   updateFormValueSequence({
-        //     key: 'editorDelta',
-        //     value: html,
-        //   });
-        //   updateFormValueSequence({
-        //     key: 'documentContents',
-        //     value: html,
-        //   });
-        // }}
+          // const fullDelta = editor.node.contents(node);
+
+          // const html = editor.html.get(true);
+          // console.log('html for richText!!', html);
+          updateFormValueSequence({
+            key: 'richText',
+            value: editorDelta || defaultValue,
+          });
+          // updateFormValueSequence({
+          //   key: 'editorDelta',
+          //   value: html,
+          // });
+          // updateFormValueSequence({
+          //   key: 'documentContents',
+          //   value: html,
+          // });
+        }}
       />
       <Suspense fallback={<div>Loading...</div>}>
         {/* <ReactQuill
