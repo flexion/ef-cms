@@ -38,17 +38,6 @@ export const TextEditor = ({
   updateFormValueSequence,
   updateScreenMetadataSequence,
 }) => {
-  const handleModelChange = model => {
-    console.log('model', model);
-    this.setState({
-      model,
-    });
-  };
-
-  const state = {
-    model: 'Example text',
-  };
-
   const quillEscapeRef = useRef(null);
 
   const onKeyboard = event => {
@@ -76,31 +65,30 @@ export const TextEditor = ({
       <FroalaEditor
         config={{
           charCounterCount: false,
+          fontSize: ['8', '10', '12', '14', '18', '30', '60', '96'],
+          fontSizeSelection: true,
           placeholderText: 'Edit Your Content Here!',
         }}
-        // defaultValue={editorDelta || defaultValue}
         model={editorDelta || defaultValue}
         tabIndex={0}
         tag="textarea"
         onModelChange={model => {
-          console.log('this is the right one', state.model);
-
-          // const fullDelta = editor.node.contents(node);
-
-          // const html = editor.html.get(true);
-          // console.log('html for richText!!', html);
           updateFormValueSequence({
             key: 'richText',
-            value: editorDelta || defaultValue,
+            value: model,
           });
-          // updateFormValueSequence({
-          //   key: 'editorDelta',
-          //   value: html,
-          // });
-          // updateFormValueSequence({
-          //   key: 'documentContents',
-          //   value: html,
-          // });
+          updateFormValueSequence({
+            key: 'editorDelta',
+            value: model,
+          });
+          updateFormValueSequence({
+            key: 'documentContents',
+            value: model,
+          });
+          updateScreenMetadataSequence({
+            key: 'pristine',
+            value: false,
+          });
         }}
       />
       <Suspense fallback={<div>Loading...</div>}>
