@@ -38,6 +38,17 @@ export const TextEditor = ({
   updateFormValueSequence,
   updateScreenMetadataSequence,
 }) => {
+  const handleModelChange = model => {
+    console.log('model', model);
+    this.setState({
+      model,
+    });
+  };
+
+  const state = {
+    model: 'Example text',
+  };
+
   const quillEscapeRef = useRef(null);
 
   const onKeyboard = event => {
@@ -67,7 +78,30 @@ export const TextEditor = ({
           charCounterCount: false,
           placeholderText: 'Edit Your Content Here!',
         }}
+        // defaultValue={editorDelta || defaultValue}
+        model={state.model}
+        tabIndex={0}
         tag="textarea"
+        onModelChange={handleModelChange}
+        // onChange={editor => {
+        //   console.log('edioter', editor);
+        //   // const fullDelta = editor.node.contents(node);
+
+        //   const html = editor.html.get(true);
+        //   console.log('html for richText!!', html);
+        //   updateFormValueSequence({
+        //     key: 'richText',
+        //     value: html,
+        //   });
+        //   updateFormValueSequence({
+        //     key: 'editorDelta',
+        //     value: html,
+        //   });
+        //   updateFormValueSequence({
+        //     key: 'documentContents',
+        //     value: html,
+        //   });
+        // }}
       />
       <Suspense fallback={<div>Loading...</div>}>
         {/* <ReactQuill
