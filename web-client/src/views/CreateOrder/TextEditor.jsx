@@ -1,8 +1,16 @@
 /* eslint-disable react/prop-types */
 import 'react-quill/dist/quill.snow.css';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
-import viewToPlainText from '@ckeditor/ckeditor5-clipboard/src/utils/viewtoplaintext';
+// import { CKEditor } from '@ckeditor/ckeditor5-react';
+// import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+// import viewToPlainText from '@ckeditor/ckeditor5-clipboard/src/utils/viewtoplaintext';
+
+// Require Editor JS files.
+import 'froala-editor/js/froala_editor.pkgd.min.js';
+import FroalaEditor from 'react-froala-wysiwyg';
+
+// Require Editor CSS files.
+import 'froala-editor/css/froala_editor.pkgd.min.css';
+import 'froala-editor/css/froala_style.min.css';
 
 import React, { Suspense, useEffect, useRef } from 'react';
 
@@ -54,50 +62,12 @@ export const TextEditor = ({
 
   return (
     <>
-      <CKEditor
-        data={editorDelta || defaultValue}
-        editor={DecoupledEditor}
-        onChange={(event, editor) => {
-          const html = editor.getData();
-          const documentContents = viewToPlainText(
-            editor.editing.view.document.getRoot(),
-          );
-
-          updateFormValueSequence({
-            key: 'richText',
-            value: html,
-          });
-          // todo: is editorDelta actually used?
-          // updateFormValueSequence({
-          //   key: 'editorDelta',
-          //   value: fullDelta,
-          // });
-          updateFormValueSequence({
-            key: 'documentContents',
-            value: documentContents,
-          });
-          updateScreenMetadataSequence({
-            key: 'pristine',
-            value: false,
-          });
+      <FroalaEditor
+        config={{
+          charCounterCount: false,
+          placeholderText: 'Edit Your Content Here!',
         }}
-        onError={({ willEditorRestart }) => {
-          if (willEditorRestart) {
-            this.editor.ui.view.toolbar.element.remove();
-          }
-        }}
-        onReady={editor => {
-          console.log('Editor is ready to use!', editor);
-
-          editor.ui
-            .getEditableElement()
-            .parentElement.insertBefore(
-              editor.ui.view.toolbar.element,
-              editor.ui.getEditableElement(),
-            );
-
-          this.editor = editor;
-        }}
+        tag="textarea"
       />
       <Suspense fallback={<div>Loading...</div>}>
         {/* <ReactQuill
