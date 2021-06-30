@@ -47,6 +47,7 @@ exports.handler = (awsEvent, handlerContext, callback) => {
     `form-action ${applicationUrl} ${subdomainsUrl}`,
     `object-src ${subdomainsUrl} ${applicationUrl} ${s3Url}`,
     `script-src 'self' 'unsafe-inline' ${tinyMCEUrl} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${statuspageUrl} resource://pdf.js`,
+    `script-src-elem' ${tinyMCEUrl}`,
     'worker-src blob:',
     `style-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlStaging}`,
     `img-src 'self' ${applicationUrl} ${subdomainsUrl} blob: data:`,
