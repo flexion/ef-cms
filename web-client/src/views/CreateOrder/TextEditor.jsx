@@ -3,6 +3,7 @@ import 'react-quill/dist/quill.snow.css';
 // import { CKEditor } from '@ckeditor/ckeditor5-react';
 // import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 // import viewToPlainText from '@ckeditor/ckeditor5-clipboard/src/utils/viewtoplaintext';
+import { Editor } from '@tinymce/tinymce-react';
 
 // Require Editor JS files.
 import 'froala-editor/js/froala_editor.pkgd.min.js';
@@ -16,23 +17,23 @@ import 'froala-editor/css/froala_style.min.css';
 
 import React, { Suspense, useEffect, useRef } from 'react';
 
-// import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
-// import reactQuill from 'react-quill';
+import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
+import reactQuill from 'react-quill';
 
-// const inlineStylesFontSizes = {};
-// const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
+const inlineStylesFontSizes = {};
+const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
 
-// const ReactQuill = React.lazy(async () => {
-//   const Size = reactQuill.Quill.import('attributors/style/size');
-//   Size.whitelist = fontSizes;
-//   reactQuill.Quill.register(Size, true);
+const ReactQuill = React.lazy(async () => {
+  const Size = reactQuill.Quill.import('attributors/style/size');
+  Size.whitelist = fontSizes;
+  reactQuill.Quill.register(Size, true);
 
-//   fontSizes.forEach(item => {
-//     inlineStylesFontSizes[item] = `font-size: ${item};`;
-//   });
+  fontSizes.forEach(item => {
+    inlineStylesFontSizes[item] = `font-size: ${item};`;
+  });
 
-//   return { default: reactQuill };
-// });
+  return { default: reactQuill };
+});
 
 export const TextEditor = ({
   defaultValue,
@@ -64,43 +65,9 @@ export const TextEditor = ({
 
   return (
     <>
-      <FroalaEditor
-        config={{
-          charCounterCount: false,
-          toolbarButtons: [
-            'formatOL',
-            'formatUL',
-            'fontSize',
-            'indent',
-            'outdent',
-            'bold',
-            'italics',
-            'underline',
-            'undo',
-            'redo',
-          ],
-        }}
-        model={editorDelta || defaultValue}
-        tabIndex={0}
-        tag="textarea"
-        onModelChange={model => {
-          updateFormValueSequence({
-            key: 'richText',
-            value: model,
-          });
-          updateFormValueSequence({
-            key: 'editorDelta',
-            value: model,
-          });
-          updateFormValueSequence({
-            key: 'documentContents',
-            value: model,
-          });
-          updateScreenMetadataSequence({
-            key: 'pristine',
-            value: false,
-          });
-        }}
+      <Editor
+        apiKey="Get your free API key at tiny.cloud and paste it here"
+        plugins="wordcount"
       />
       <Suspense fallback={<div>Loading...</div>}>
         {/* <ReactQuill
@@ -130,6 +97,10 @@ export const TextEditor = ({
             updateFormValueSequence({
               key: 'documentContents',
               value: documentContents,
+            });
+            updateScreenMetadataSequence({
+              key: 'pristine',
+              value: false,
             });
           }}
         /> */}
