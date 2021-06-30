@@ -1,0 +1,16 @@
+{
+  "name": "efcms-avt",
+  "version": "0.0.1",
+  "description": "Convert PDF pages to PNGs prior to labelImg labeling",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "pdf",
+    "png",
+    "convert"
+  ],
+  "license": "CC0-1.0",
+  "dependencies": {
+    "pdf2pic": "2.1.4"
+  }
+}
