@@ -57,10 +57,10 @@ export const TextEditor = ({
         defaultValue={editorDelta || defaultValue}
         plugins="lists"
         tabIndex={0}
-        toolbar="numlist bullist"
+        toolbar="numlist bullist indent outdent bold underline italic"
         onChange={(event, editor) => {
           // const fullDelta = editor.getContents();
-          console.log('event', event);
+          // console.log('event', event);
           const richText = editor.getContent();
           const text = editor.getContent({ format: 'text' });
           updateFormValueSequence({
