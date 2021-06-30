@@ -1,19 +1,6 @@
 /* eslint-disable react/prop-types */
 import 'react-quill/dist/quill.snow.css';
-// import { CKEditor } from '@ckeditor/ckeditor5-react';
-// import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
-// import viewToPlainText from '@ckeditor/ckeditor5-clipboard/src/utils/viewtoplaintext';
 import { Editor } from '@tinymce/tinymce-react';
-
-// Require Editor JS files.
-import 'froala-editor/js/froala_editor.pkgd.min.js';
-import 'froala-editor/js/plugins/font_size.min.js';
-import 'froala-editor/js/plugins/lists.min.js';
-import FroalaEditor from 'react-froala-wysiwyg';
-
-// Require Editor CSS files.
-import 'froala-editor/css/froala_editor.pkgd.min.css';
-import 'froala-editor/css/froala_style.min.css';
 
 import React, { Suspense, useEffect, useRef } from 'react';
 
@@ -68,33 +55,25 @@ export const TextEditor = ({
       <Editor
         apiKey="q9bz4id627ys55f2aefddvdq6t7papa5w20u3di4tjrupm5x"
         defaultValue={editorDelta || defaultValue}
-        plugins="wordcount"
+        plugins="lists"
         tabIndex={0}
+        toolbar="numlist bullist"
         onChange={(event, editor) => {
           // const fullDelta = editor.getContents();
           console.log('event', event);
           const richText = editor.getContent();
-          // const documentContents = editor.getText();
-          // console.log('documentContents', documentContents);
-
-          // const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
-          //   inlineStyles: {
-          //     size: inlineStylesFontSizes,
-          //   },
-          // });
-          // const html = converter.convert();
-          // console.log('html for richText!!', html);
+          const text = editor.getContent({ format: 'text' });
           updateFormValueSequence({
             key: 'richText',
-            value: editor,
+            value: richText,
           });
-          updateFormValueSequence({
-            key: 'editorDelta',
-            value: editor,
-          });
+          // updateFormValueSequence({
+          //   key: 'editorDelta',
+          //   value: editor,
+          // });
           updateFormValueSequence({
             key: 'documentContents',
-            value: editor,
+            value: text,
           });
           updateScreenMetadataSequence({
             key: 'pristine',
