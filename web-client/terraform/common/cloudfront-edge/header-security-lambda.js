@@ -40,7 +40,7 @@ exports.handler = (awsEvent, handlerContext, callback) => {
   const statuspageUrl = 'https://lynmjtcq5px1.statuspage.io';
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
-    `connect-src ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl}`,
+    `connect-src 'self' ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl}`,
     "default-src 'none'",
     "manifest-src 'self'",
     `form-action ${applicationUrl} ${subdomainsUrl}`,
@@ -48,8 +48,8 @@ exports.handler = (awsEvent, handlerContext, callback) => {
     `script-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${statuspageUrl} resource://pdf.js`,
     'worker-src blob:',
     `style-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlStaging}`,
-    `img-src ${applicationUrl} ${subdomainsUrl} blob: data:`,
-    `font-src ${applicationUrl} ${subdomainsUrl}`,
+    `img-src 'self' ${applicationUrl} ${subdomainsUrl} blob: data:`,
+    `font-src 'self' ${applicationUrl} ${subdomainsUrl}`,
     `frame-src ${s3Url} ${subdomainsUrl} ${statuspageUrl} blob: data:`,
     "frame-ancestors 'none'",
   ];
