@@ -4,24 +4,6 @@ import { Editor } from '@tinymce/tinymce-react';
 
 import React, { Suspense, useEffect, useRef } from 'react';
 
-import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
-import reactQuill from 'react-quill';
-
-const inlineStylesFontSizes = {};
-const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
-
-const ReactQuill = React.lazy(async () => {
-  const Size = reactQuill.Quill.import('attributors/style/size');
-  Size.whitelist = fontSizes;
-  reactQuill.Quill.register(Size, true);
-
-  fontSizes.forEach(item => {
-    inlineStylesFontSizes[item] = `font-size: ${item};`;
-  });
-
-  return { default: reactQuill };
-});
-
 export const TextEditor = ({
   defaultValue,
   editorDelta,
@@ -59,18 +41,16 @@ export const TextEditor = ({
         tabIndex={0}
         toolbar="numlist bullist indent outdent bold underline italic"
         onChange={(event, editor) => {
-          // const fullDelta = editor.getContents();
-          // console.log('event', event);
           const richText = editor.getContent();
           const text = editor.getContent({ format: 'text' });
           updateFormValueSequence({
             key: 'richText',
             value: richText,
           });
-          // updateFormValueSequence({
-          //   key: 'editorDelta',
-          //   value: editor,
-          // });
+          updateFormValueSequence({
+            key: 'editorDelta',
+            value: editor,
+          });
           updateFormValueSequence({
             key: 'documentContents',
             value: text,
