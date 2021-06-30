@@ -45,6 +45,6 @@ exports.signDocumentAtCanvasCenter = () => {
   return cy.get('#sign-pdf-canvas').click('center');
 };
 
-exports.getSnapshot = area => {
-  cy.get(area).matchImageSnapshot(area);
+exports.saveSignature = () => {
+  return cy.get('#save-signature-button').click();
 };

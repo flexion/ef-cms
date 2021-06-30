@@ -1,8 +1,8 @@
 const {
   createOrder,
-  getSnapshot,
   hoverOverSignatureWarning,
   navigateTo: navigateToCaseDetail,
+  saveSignature,
   signDocumentAtCanvasCenter,
 } = require('../support/pages/case-detail');
 
@@ -18,6 +18,9 @@ describe('Sign order', function () {
 
   it("should place the signature to the top right of the point that's clicked", () => {
     signDocumentAtCanvasCenter();
-    getSnapshot('#sign-pdf-canvas');
+  });
+
+  it('should save the signature', () => {
+    saveSignature();
   });
 });
