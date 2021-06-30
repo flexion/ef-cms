@@ -66,8 +66,41 @@ export const TextEditor = ({
   return (
     <>
       <Editor
-        apiKey="Get your free API key at tiny.cloud and paste it here"
+        apiKey="q9bz4id627ys55f2aefddvdq6t7papa5w20u3di4tjrupm5x"
+        defaultValue={editorDelta || defaultValue}
         plugins="wordcount"
+        tabIndex={0}
+        onChange={(event, editor) => {
+          // const fullDelta = editor.getContents();
+          console.log('event', event);
+          const richText = editor.getContent();
+          // const documentContents = editor.getText();
+          // console.log('documentContents', documentContents);
+
+          // const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
+          //   inlineStyles: {
+          //     size: inlineStylesFontSizes,
+          //   },
+          // });
+          // const html = converter.convert();
+          // console.log('html for richText!!', html);
+          updateFormValueSequence({
+            key: 'richText',
+            value: editor,
+          });
+          updateFormValueSequence({
+            key: 'editorDelta',
+            value: editor,
+          });
+          updateFormValueSequence({
+            key: 'documentContents',
+            value: editor,
+          });
+          updateScreenMetadataSequence({
+            key: 'pristine',
+            value: false,
+          });
+        }}
       />
       <Suspense fallback={<div>Loading...</div>}>
         {/* <ReactQuill
