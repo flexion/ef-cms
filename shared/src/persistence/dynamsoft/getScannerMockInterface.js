@@ -108,6 +108,8 @@ exports.getScannerInterface = () => {
     DWObject.OpenSource();
     DWObject.AcquireImage();
 
+    debugger;
+
     const count = DWObject.HowManyImagesInBuffer;
     const promises = [];
     const response = { error: null, scannedBuffer: null };
@@ -121,7 +123,21 @@ exports.getScannerInterface = () => {
 
     return Promise.all(promises)
       .then(async blobs => {
-        const blobBuffers = [];
+        const COVER_SHEET_WIDTH_IN_PX = 866;
+
+        const scaledDownBlobs = await Promise.all(
+          blobs.map(blob =>
+            applicationContext
+              .getReduceImageBlob()
+              .toBlob(blob, { max: COVER_SHEET_WIDTH_IN_PX }),
+          ),
+        );
+        console.log('scaledDownBlobs', scaledDownBlobs);
+        console.log('scaledDownBlobs - length', scaledDownBlobs.length);
+
+        const blobBuffers = await Promise.all(
+          scaledDownBlobs.map(applicationContext.convertBlobToUInt8Array),
+        );
 
         for (let blob of blobs) {
           blobBuffers.push(

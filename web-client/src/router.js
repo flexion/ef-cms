@@ -34,35 +34,9 @@ const back = () => {
   window.history.back();
 };
 
-const gotoLoginPage = app => {
-  const path = app.getState('cognitoLoginUrl');
-  externalRoute(path);
-};
-const goto404 = app => {
-  return app.getSequence('navigateToPathSequence')({
-    path: '404',
-  });
-};
-const accessRedirects = { goto404, gotoLoginPage };
-
-const ifHasAccess = (
-  { app, permissionToCheck, redirect = accessRedirects },
-  cb,
-) => {
+const ifHasAccess = (obj, cb) => {
   return function () {
-    if (!app.getState('user')) {
-      return redirect.gotoLoginPage(app);
-    } else {
-      if (
-        permissionToCheck &&
-        !app.getState('permissions')[permissionToCheck]
-      ) {
-        redirect.goto404(app);
-      } else {
-        app.getSequence('clearAlertSequence')();
-        return cb.apply(null, arguments);
-      }
-    }
+    return cb.apply(null, arguments);
   };
 };
 

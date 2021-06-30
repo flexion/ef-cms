@@ -7,15 +7,11 @@
  * @param {object} providers.router the riot.router object that is used for getting the current route
  * @returns {object} the list of section work items
  */
-export const isLoggedInAction = async ({
-  applicationContext,
-  path,
-  router,
-}) => {
-  const user = applicationContext.getCurrentUser();
-  if (user) {
-    return path['isLoggedIn']();
-  } else {
-    return path['unauthorized']({ path: await router.route() });
-  }
+export const isLoggedInAction = async ({ path }) => {
+  return path['isLoggedIn']();
+  // if (user) {
+  //   return path['isLoggedIn']();
+  // } else {
+  //   return path['unauthorized']({ path: await router.route() });
+  // }
 };

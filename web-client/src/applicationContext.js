@@ -1,4 +1,6 @@
-import * as reduce from 'image-blob-reduce';
+import ImageBlobReduce from 'image-blob-reduce';
+const reduce = ImageBlobReduce();
+
 import { BroadcastChannel } from 'broadcast-channel';
 import {
   Case,
