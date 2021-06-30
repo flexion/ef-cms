@@ -76,13 +76,17 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       .getCaseByDocketNumber.mockImplementation(() => userCases[0]);
   });
 
-  it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined with a practitioner user', async () => {
+  it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined, and service indicator set to electronic with a practitioner user', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByUserId.mockReturnValue(userCases);
 
     await setUserEmailFromPendingEmailInteractor(applicationContext, {
-      user: { ...mockPractitioner, email: UPDATED_EMAIL },
+      user: {
+        ...mockPractitioner,
+        email: UPDATED_EMAIL,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      },
     });
 
     expect(
@@ -92,6 +96,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       email: UPDATED_EMAIL,
       entityName: 'Practitioner',
       pendingEmail: undefined,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
   });
 
@@ -133,12 +138,13 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
+            contactType: CONTACT_TYPES.petitioner,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
           {
             ...getContactPrimary(MOCK_CASE),
             contactId: USER_ID,
-            contactType: CONTACT_TYPES.secondary,
+            contactType: CONTACT_TYPES.petitioner,
             email: undefined,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
