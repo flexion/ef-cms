@@ -1,38 +1,8 @@
 /* eslint-disable react/prop-types */
 import 'react-quill/dist/quill.snow.css';
-// import { CKEditor } from '@ckeditor/ckeditor5-react';
-// import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
-// import viewToPlainText from '@ckeditor/ckeditor5-clipboard/src/utils/viewtoplaintext';
-
-// Require Editor JS files.
-import 'froala-editor/js/froala_editor.pkgd.min.js';
-import 'froala-editor/js/plugins/font_size.min.js';
-import 'froala-editor/js/plugins/lists.min.js';
-import FroalaEditor from 'react-froala-wysiwyg';
-
-// Require Editor CSS files.
-import 'froala-editor/css/froala_editor.pkgd.min.css';
-import 'froala-editor/css/froala_style.min.css';
+import { Editor } from '@tinymce/tinymce-react';
 
 import React, { Suspense, useEffect, useRef } from 'react';
-
-// import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
-// import reactQuill from 'react-quill';
-
-// const inlineStylesFontSizes = {};
-// const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
-
-// const ReactQuill = React.lazy(async () => {
-//   const Size = reactQuill.Quill.import('attributors/style/size');
-//   Size.whitelist = fontSizes;
-//   reactQuill.Quill.register(Size, true);
-
-//   fontSizes.forEach(item => {
-//     inlineStylesFontSizes[item] = `font-size: ${item};`;
-//   });
-
-//   return { default: reactQuill };
-// });
 
 export const TextEditor = ({
   defaultValue,
@@ -64,37 +34,26 @@ export const TextEditor = ({
 
   return (
     <>
-      <FroalaEditor
-        config={{
-          charCounterCount: false,
-          toolbarButtons: [
-            'formatOL',
-            'formatUL',
-            'fontSize',
-            'indent',
-            'outdent',
-            'bold',
-            'italics',
-            'underline',
-            'undo',
-            'redo',
-          ],
-        }}
-        model={editorDelta || defaultValue}
+      <Editor
+        apiKey="q9bz4id627ys55f2aefddvdq6t7papa5w20u3di4tjrupm5x"
+        defaultValue={editorDelta || defaultValue}
+        plugins="lists"
         tabIndex={0}
-        tag="textarea"
-        onModelChange={model => {
+        toolbar="numlist bullist indent outdent bold underline italic"
+        onChange={(event, editor) => {
+          const richText = editor.getContent();
+          const text = editor.getContent({ format: 'text' });
           updateFormValueSequence({
             key: 'richText',
-            value: model,
+            value: richText,
           });
           updateFormValueSequence({
             key: 'editorDelta',
-            value: model,
+            value: editor,
           });
           updateFormValueSequence({
             key: 'documentContents',
-            value: model,
+            value: text,
           });
           updateScreenMetadataSequence({
             key: 'pristine',
@@ -130,6 +89,10 @@ export const TextEditor = ({
             updateFormValueSequence({
               key: 'documentContents',
               value: documentContents,
+            });
+            updateScreenMetadataSequence({
+              key: 'pristine',
+              value: false,
             });
           }}
         /> */}
