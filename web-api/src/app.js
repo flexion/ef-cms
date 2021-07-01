@@ -12,6 +12,9 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '1200kb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, res, next) => {
+  console.log('requestIP-----', req.ip);
+  console.log('request connection-----', req.connection);
+  console.log('request socket-----', req.socket);
   if (process.env.NODE_ENV !== 'production') {
     // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
     // aws-serverless-express/middleware plugin is looking for these headers, which are needed on the lambdas
