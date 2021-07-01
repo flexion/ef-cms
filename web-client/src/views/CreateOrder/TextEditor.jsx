@@ -36,20 +36,22 @@ export const TextEditor = ({
     <>
       <Editor
         apiKey="q9bz4id627ys55f2aefddvdq6t7papa5w20u3di4tjrupm5x"
-        defaultValue={editorDelta || defaultValue}
         plugins="lists"
         tabIndex={0}
         toolbar="numlist bullist indent outdent bold underline italic"
-        onChange={(event, editor) => {
+        value={editorDelta || defaultValue}
+        onChange={(value, editor) => {
           const richText = editor.getContent();
-          const text = editor.getContent({ format: 'text' });
           updateFormValueSequence({
             key: 'richText',
             value: richText,
           });
+        }}
+        onEditorChange={(value, editor) => {
+          const text = editor.getContent({ format: 'text' });
           updateFormValueSequence({
             key: 'editorDelta',
-            value: editor,
+            value,
           });
           updateFormValueSequence({
             key: 'documentContents',
