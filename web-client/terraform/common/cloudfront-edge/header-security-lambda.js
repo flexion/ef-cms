@@ -39,6 +39,7 @@ exports.handler = (awsEvent, handlerContext, callback) => {
   const s3Url = 'https://s3.us-east-1.amazonaws.com';
   const statuspageUrl = 'https://lynmjtcq5px1.statuspage.io';
   const tinyMCEUrl = 'https://cdn.tiny.cloud';
+  const tinyMCEImageUrl = 'https://sp.tinymce.com';
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
     `connect-src 'self' ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl}`,
@@ -48,8 +49,8 @@ exports.handler = (awsEvent, handlerContext, callback) => {
     `object-src ${subdomainsUrl} ${applicationUrl} ${s3Url}`,
     `script-src 'self' 'unsafe-inline' ${tinyMCEUrl} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${statuspageUrl} resource://pdf.js`,
     'worker-src blob:',
-    `style-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlStaging}`,
-    `img-src 'self' ${applicationUrl} ${subdomainsUrl} blob: data:`,
+    `style-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${tinyMCEUrl}`,
+    `img-src 'self' ${applicationUrl} ${subdomainsUrl} blob: data: ${tinyMCEImageUrl}`,
     `font-src 'self' ${applicationUrl} ${subdomainsUrl}`,
     `frame-src ${s3Url} ${subdomainsUrl} ${statuspageUrl} blob: data:`,
     "frame-ancestors 'none'",
