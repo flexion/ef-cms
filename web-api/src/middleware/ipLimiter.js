@@ -12,7 +12,16 @@ exports.ipLimiter = async (req, res, next) => {
 
   const { expiresAt, id: count } = results;
 
+  console.log({
+    KEY,
+    count,
+    expiresAt,
+  });
+
+  console.log(!expiresAt || Date.now() > expiresAt);
+
   if (!expiresAt || Date.now() > expiresAt) {
+    console.log('deleting key count');
     await applicationContext
       .getPersistenceGateway()
       .deleteKeyCount({ applicationContext, key: KEY });
@@ -25,7 +34,7 @@ exports.ipLimiter = async (req, res, next) => {
   }
 
   if (count >= MAX_COUNT) {
-    return res.status(429).text({
+    return res.status(429).json({
       message: `you are only allowed ${MAX_COUNT} requests a minute`,
     });
   }
