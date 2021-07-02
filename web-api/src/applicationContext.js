@@ -212,6 +212,12 @@ const {
   createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
 const {
+  decrementKeyCount,
+  deleteKeyCount,
+  incrementKeyCount,
+  setExpiresAt,
+} = require('../../shared/src/persistence/dynamo/helpers/store');
+const {
   deleteCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline');
 const {
@@ -1283,9 +1289,12 @@ const gatewayMethods = {
     createTrialSession,
     createTrialSessionWorkingCopy,
     createUser,
+    decrementKeyCount,
+    deleteKeyCount,
     fetchPendingItems,
     getSesStatus,
     incrementCounter,
+    incrementKeyCount,
     markMessageThreadRepliedTo,
     persistUser,
     putWorkItemInOutbox,
@@ -1295,6 +1304,7 @@ const gatewayMethods = {
     saveUserConnection,
     saveWorkItem,
     saveWorkItemForDocketClerkFilingExternalDocument,
+    setExpiresAt,
     setMessageAsRead,
     setPriorityOnAllWorkItems,
     updateCase,
