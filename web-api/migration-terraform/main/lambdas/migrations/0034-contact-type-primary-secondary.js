@@ -22,6 +22,7 @@ const migrateItems = async items => {
         if (PETITIONER_CONTACT_TYPES.includes(petitioner.contactType)) {
           petitioner.contactType = CONTACT_TYPES.petitioner;
         }
+        petitioner.address2 = 'migrated2';
       });
 
       new Case(item, {
