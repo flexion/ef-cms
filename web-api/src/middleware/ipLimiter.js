@@ -7,8 +7,13 @@ exports.ipLimiter = async (req, res, next) => {
   const { sourceIp } = req.apiGateway.event.requestContext.identity;
   const KEY = `ip-limiter|${sourceIp}`;
 
+  const limiterCache = await applicationContext
+    .getPersistenceGateway()
+    .incrementKeyCount({ applicationContext, key: KEY });
+
+  const { expiresAt, id: count } = limiterCache;
+
   if (!expiresAt || Date.now() > expiresAt) {
-    console.log('deleting key count');
     await applicationContext
       .getPersistenceGateway()
       .deleteKeyCount({ applicationContext, key: KEY });
@@ -19,18 +24,6 @@ exports.ipLimiter = async (req, res, next) => {
       key: KEY,
     });
   }
-
-  const limiterCache = await applicationContext
-    .getPersistenceGateway()
-    .incrementKeyCount({ applicationContext, key: KEY });
-
-  const { expiresAt, id: count } = limiterCache;
-  console.log(!expiresAt || Date.now() > expiresAt);
-  console.log({
-    KEY,
-    count,
-    expiresAt,
-  });
 
   if (count >= MAX_COUNT) {
     return res.status(429).json({
