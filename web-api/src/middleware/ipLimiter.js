@@ -15,7 +15,7 @@ exports.ipLimiter = key => async (req, res, next) => {
   let { expiresAt, id: count } = limiterCache;
 
   if (!expiresAt || Date.now() > expiresAt) {
-    count = 0;
+    count = 1;
 
     await applicationContext
       .getPersistenceGateway()
