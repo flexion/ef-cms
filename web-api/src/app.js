@@ -478,12 +478,12 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   );
   app.get(
     '/case-documents/opinion-search',
-    ipLimiter,
+    ipLimiter('opinion-search'),
     lambdaWrapper(opinionAdvancedSearchLambda),
   );
   app.get(
     '/case-documents/order-search',
-    ipLimiter,
+    ipLimiter('order-search'),
     lambdaWrapper(orderAdvancedSearchLambda),
   );
   // POST
