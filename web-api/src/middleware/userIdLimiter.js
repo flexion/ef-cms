@@ -1,12 +1,15 @@
 const createApplicationContext = require('../applicationContext');
+const { getUserFromAuthHeader } = require('./apiGatewayHelper');
 
-exports.ipLimiter = key => async (req, res, next) => {
+exports.userIdLimiter = key => async (req, res, next) => {
+  const user = getUserFromAuthHeader(req);
+  if (!user) return res.status(401).json({ message: 'auth header required' });
   const MAX_COUNT = 15;
   const WINDOW_TIME = 60 * 1000;
   const applicationContext =
-    req.applicationContext || createApplicationContext(null); // allow req.applicationContext mock for testing
-  const { sourceIp } = req.apiGateway.event.requestContext.identity;
-  const KEY = `ip-limiter-${key}|${sourceIp}`;
+    req.applicationContext || createApplicationContext(user); // allow req.applicationContext mock for testing
+  // const { sourceIp } = req.apiGateway.event.requestContext.identity;
+  const KEY = `user-limiter-${key}|${user.userId}`;
 
   const limiterCache = await applicationContext
     .getPersistenceGateway()
@@ -28,7 +31,7 @@ exports.ipLimiter = key => async (req, res, next) => {
     count = 1;
   }
 
-  if (count >= MAX_COUNT) {
+  if (count > MAX_COUNT) {
     return res.status(429).json({
       message: `you are only allowed ${MAX_COUNT} requests a minute`,
     });
