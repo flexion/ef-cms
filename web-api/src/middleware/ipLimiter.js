@@ -15,8 +15,6 @@ exports.ipLimiter = key => async (req, res, next) => {
   let { expiresAt, id: count } = limiterCache;
 
   if (!expiresAt || Date.now() > expiresAt) {
-    count = 1;
-
     await applicationContext
       .getPersistenceGateway()
       .deleteKeyCount({ applicationContext, key: KEY });
@@ -28,7 +26,7 @@ exports.ipLimiter = key => async (req, res, next) => {
     });
   }
 
-  if (count > MAX_COUNT) {
+  if (count >= MAX_COUNT) {
     return res.status(429).json({
       message: `you are only allowed ${MAX_COUNT} requests a minute`,
     });
