@@ -24,6 +24,8 @@ exports.ipLimiter = key => async (req, res, next) => {
       expiresAt: Date.now() + WINDOW_TIME,
       key: KEY,
     });
+
+    count = 1;
   }
 
   if (count >= MAX_COUNT) {
