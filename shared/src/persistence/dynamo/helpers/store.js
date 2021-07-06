@@ -29,8 +29,10 @@ exports.setExpiresAt = ({ applicationContext, expiresAt, key }) =>
   client.updateConsistent({
     ExpressionAttributeNames: {
       '#expiresAt': 'expiresAt',
+      '#id': 'id',
     },
     ExpressionAttributeValues: {
+      ':id': 1,
       ':value': expiresAt,
     },
     Key: {
@@ -38,7 +40,7 @@ exports.setExpiresAt = ({ applicationContext, expiresAt, key }) =>
       sk: `${key}`,
     },
     ReturnValues: 'ALL_NEW',
-    UpdateExpression: 'SET #expiresAt = :value',
+    UpdateExpression: 'SET #expiresAt = :value, #id = :id',
     applicationContext,
   });
 
