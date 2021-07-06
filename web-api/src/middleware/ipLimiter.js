@@ -3,7 +3,8 @@ const createApplicationContext = require('../applicationContext');
 exports.ipLimiter = async (req, res, next) => {
   const MAX_COUNT = 15;
   const WINDOW_TIME = 60 * 1000;
-  const applicationContext = createApplicationContext(null);
+  const applicationContext =
+    req.applicationContext || createApplicationContext(null); // allow req.applicationContext mock for testing
   const { sourceIp } = req.apiGateway.event.requestContext.identity;
   const KEY = `ip-limiter|${sourceIp}`;
 
@@ -11,9 +12,11 @@ exports.ipLimiter = async (req, res, next) => {
     .getPersistenceGateway()
     .incrementKeyCount({ applicationContext, key: KEY });
 
-  const { expiresAt, id: count } = limiterCache;
+  let { expiresAt, id: count } = limiterCache;
 
   if (!expiresAt || Date.now() > expiresAt) {
+    count = 0;
+
     await applicationContext
       .getPersistenceGateway()
       .deleteKeyCount({ applicationContext, key: KEY });
@@ -25,7 +28,7 @@ exports.ipLimiter = async (req, res, next) => {
     });
   }
 
-  if (count >= MAX_COUNT) {
+  if (count > MAX_COUNT) {
     return res.status(429).json({
       message: `you are only allowed ${MAX_COUNT} requests a minute`,
     });
