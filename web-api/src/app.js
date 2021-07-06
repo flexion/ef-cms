@@ -395,7 +395,6 @@ const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
 const { getUserLambda } = require('./users/getUserLambda');
 const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
 const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
-const { ipLimiter } = require('./middleware/ipLimiter');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
@@ -409,6 +408,7 @@ const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
 const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
 const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
 const { updateContactLambda } = require('./cases/updateContactLambda');
+const { userIdLimiter } = require('./middleware/userIdLimiter');
 const { validatePdfLambda } = require('./documents/validatePdfLambda');
 const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 
@@ -484,12 +484,12 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   );
   app.get(
     '/case-documents/opinion-search',
-    ipLimiter('opinion-search'),
+    userIdLimiter('opinion-search'),
     lambdaWrapper(opinionAdvancedSearchLambda),
   );
   app.get(
     '/case-documents/order-search',
-    ipLimiter('order-search'),
+    userIdLimiter('order-search'),
     lambdaWrapper(orderAdvancedSearchLambda),
   );
   // POST
