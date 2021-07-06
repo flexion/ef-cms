@@ -13,7 +13,7 @@ describe('ipLimiter', () => {
       expiresAt: Date.now() + 1e6,
       id: 20,
     });
-    await ipLimiter(
+    await ipLimiter('order-search')(
       {
         apiGateway: {
           event: {
@@ -49,7 +49,7 @@ describe('ipLimiter', () => {
       expiresAt: Date.now() + 1e6,
       id: 0,
     });
-    await ipLimiter(
+    await ipLimiter('order-search')(
       {
         apiGateway: {
           event: {
@@ -85,7 +85,7 @@ describe('ipLimiter', () => {
       expiresAt: Date.now() - 1e6,
       id: 30,
     });
-    await ipLimiter(
+    await ipLimiter('order-search')(
       {
         apiGateway: {
           event: {

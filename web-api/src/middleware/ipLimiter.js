@@ -1,12 +1,12 @@
 const createApplicationContext = require('../applicationContext');
 
-exports.ipLimiter = async (req, res, next) => {
+exports.ipLimiter = key => async (req, res, next) => {
   const MAX_COUNT = 15;
   const WINDOW_TIME = 60 * 1000;
   const applicationContext =
     req.applicationContext || createApplicationContext(null); // allow req.applicationContext mock for testing
   const { sourceIp } = req.apiGateway.event.requestContext.identity;
-  const KEY = `ip-limiter|${sourceIp}`;
+  const KEY = `ip-limiter-${key}|${sourceIp}`;
 
   const limiterCache = await applicationContext
     .getPersistenceGateway()
