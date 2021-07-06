@@ -1,0 +1,26 @@
+<annotation>
+	<folder>sign-order</folder>
+	<filename>sign-order-7.png</filename>
+	<path>/Users/jojo/Projects/ef-cms/avt/training-data/sign-order/sign-order-7.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1700</width>
+		<height>2200</height>
+		<depth>1</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>signature</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>887</xmin>
+			<ymin>990</ymin>
+			<xmax>1350</xmax>
+			<ymax>1078</ymax>
+		</bndbox>
+	</object>
+</annotation>
