@@ -9,5 +9,6 @@
 echo $AWS_ACCOUNT_ID
 UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:streams_${ENV}_green" --region us-east-1 | jq -r ".EventSourceMappings[0].UUID" )
 aws lambda update-event-source-mapping --uuid "${UUID}" --region us-east-1 --no-enabled
+sleep 60
 IS_ENABLED=$(aws lambda get-event-source-mapping --uuid "${UUID}" --region us-east-1 --query "State")
 echo $IS_ENABLED
