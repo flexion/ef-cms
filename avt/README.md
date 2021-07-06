@@ -22,10 +22,12 @@ pipenv run make qt5py3
 pipenv run python3 labelImg.py
 ```
 
-3. Once you're running it, open the necessary training data directory. For this example, we'll be using `avt/training-data/sign-order`. 
+3. Once you're running it, open the necessary training data directory. For this example, we'll be using `avt/training-data/sign-order`.
 4. Once you open the directory, start drawing the rectangles around the object and labeling them with the _exact_ same label and **get them as close as you can.**
+
+**Note:** Make sure to save in the `annotations` directory. See `sign-order/annotations` for examples!
 
 <insert demo>
 
 5. After saving, click the `Next Image` button and repeat until you're finished.
-6. After labeling all of the training data, 
+6. After labeling all of the training data, we'll need to generate the annotations for the training data via `npm run convert-annotations <prefix>`. For example: `npm run convert-annotations sign-order`.

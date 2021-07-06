@@ -4,7 +4,8 @@
   "description": "Convert PDF pages to PNGs prior to labelImg labeling",
   "main": "index.js",
   "scripts": {
-    "convert": "node convert-pdf-to-png.js"
+    "convert-pdf": "node convert-pdf-to-png.js",
+    "convert-annotation": "node convert-annotations.js"
   },
   "keywords": [
     "pdf",
