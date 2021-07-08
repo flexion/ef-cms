@@ -9,21 +9,21 @@ const { PETITIONS_SECTION } = applicationContext.getConstants();
 
 const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
-export const createNewMessageOnCase = integrationTest => {
+export const createNewMessageOnCase = cerebralTest => {
   const getHelper = () => {
     return runCompute(messageModalHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
   };
 
   return it('user creates new message on a case', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('openCreateMessageModalSequence');
+    await cerebralTest.runSequence('openCreateMessageModalSequence');
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateSectionInCreateMessageModalSequence',
       {
         key: 'toSection',
@@ -31,43 +31,43 @@ export const createNewMessageOnCase = integrationTest => {
       },
     );
 
-    await integrationTest.runSequence('updateModalFormValueSequence', {
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
       value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
     });
 
     const messageDocument = getHelper().documents[0];
-    integrationTest.testMessageDocumentId = messageDocument.docketEntryId;
+    cerebralTest.testMessageDocumentId = messageDocument.docketEntryId;
 
-    await integrationTest.runSequence('updateMessageModalAttachmentsSequence', {
-      documentId: integrationTest.testMessageDocumentId,
+    await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+      documentId: cerebralTest.testMessageDocumentId,
     });
 
-    expect(integrationTest.getState('modal.form.subject')).toEqual(
+    expect(cerebralTest.getState('modal.form.subject')).toEqual(
       messageDocument.documentTitle || messageDocument.documentType,
     );
 
-    integrationTest.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
+    cerebralTest.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
 
-    await integrationTest.runSequence('updateModalFormValueSequence', {
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'subject',
-      value: integrationTest.testMessageSubject,
+      value: cerebralTest.testMessageSubject,
     });
 
-    await integrationTest.runSequence('createMessageSequence');
+    await cerebralTest.runSequence('createMessageSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       message: NewMessage.VALIDATION_ERROR_MESSAGES.message[0].message,
     });
 
-    await integrationTest.runSequence('updateModalFormValueSequence', {
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'message',
       value: 'bears, beets, battlestar galactica',
     });
 
-    await integrationTest.runSequence('createMessageSequence');
+    await cerebralTest.runSequence('createMessageSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     await refreshElasticsearchIndex();
   });

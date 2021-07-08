@@ -2,14 +2,14 @@ import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryFromOrderTypeD = (
-  integrationTest,
+  cerebralTest,
   draftOrderIndex,
 ) => {
   return it(`Docket Clerk edits a docket entry from the given order ${draftOrderIndex} with nonstandard type D`, async () => {
-    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -17,37 +17,34 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
 
     expect(orderDocument).toBeTruthy();
 
-    await integrationTest.runSequence(
-      'gotoEditCourtIssuedDocketEntrySequence',
-      {
-        docketEntryId: orderDocument.docketEntryId,
-        docketNumber: integrationTest.docketNumber,
-      },
-    );
+    await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+      docketEntryId: orderDocument.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
+    });
 
     // Type D
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
         value: 'OF',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'documentType',
         value: 'Order for Filing Fee',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'documentTitle',
         value: 'Order for Filing Fee on [Date] [Anything]',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'scenario',
@@ -55,27 +52,27 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
       },
     );
 
-    await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       date: VALIDATION_ERROR_MESSAGES.date[2],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'month',
         value: '1',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'day',
         value: '1',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'year',
@@ -83,13 +80,13 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
       },
     );
 
-    await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       date: VALIDATION_ERROR_MESSAGES.date[0].message,
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'year',
@@ -97,12 +94,12 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
       },
     );
 
-    await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest));
+      await getFormattedDocketEntriesForTest(cerebralTest));
 
     const updatedOrderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -115,15 +112,12 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
       eventCode: 'OF',
     });
 
-    await integrationTest.runSequence(
-      'gotoEditCourtIssuedDocketEntrySequence',
-      {
-        docketEntryId: orderDocument.docketEntryId,
-        docketNumber: integrationTest.docketNumber,
-      },
-    );
+    await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+      docketEntryId: orderDocument.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
+    });
 
-    expect(integrationTest.getState('form')).toMatchObject({
+    expect(cerebralTest.getState('form')).toMatchObject({
       date: '2050-01-01T05:00:00.000Z',
       day: '1',
       documentTitle: 'Order for Filing Fee on 01-01-2050',

@@ -14,7 +14,7 @@ import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkView
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('petitions clerk sets a remote trial session calendar', () => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
@@ -31,14 +31,14 @@ describe('petitions clerk sets a remote trial session calendar', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   describe(`Create a remote trial session with Small session type for '${trialLocation}'`, () => {
-    loginAs(integrationTest, 'docketclerk@example.com');
-    docketClerkCreatesARemoteTrialSession(integrationTest, overrides);
-    docketClerkViewsTrialSessionList(integrationTest);
-    docketClerkViewsNewTrialSession(integrationTest);
+    loginAs(cerebralTest, 'docketclerk@example.com');
+    docketClerkCreatesARemoteTrialSession(cerebralTest, overrides);
+    docketClerkViewsTrialSessionList(cerebralTest);
+    docketClerkViewsNewTrialSession(cerebralTest);
   });
 
   describe('Create cases', () => {
@@ -50,53 +50,50 @@ describe('petitions clerk sets a remote trial session calendar', () => {
       };
 
       for (let i = 0; i < 3; i++) {
-        loginAs(integrationTest, 'petitioner@example.com');
+        loginAs(cerebralTest, 'petitioner@example.com');
         it(`create case ${i} and set ready for trial`, async () => {
-          const caseDetail = await uploadPetition(
-            integrationTest,
-            caseOverrides,
-          );
+          const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
           expect(caseDetail.docketNumber).toBeDefined();
-          integrationTest.docketNumber = caseDetail.docketNumber;
+          cerebralTest.docketNumber = caseDetail.docketNumber;
         });
 
-        loginAs(integrationTest, 'petitionsclerk@example.com');
-        petitionsClerkSubmitsCaseToIrs(integrationTest);
+        loginAs(cerebralTest, 'petitionsclerk@example.com');
+        petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-        loginAs(integrationTest, 'docketclerk@example.com');
-        docketClerkSetsCaseReadyForTrial(integrationTest);
+        loginAs(cerebralTest, 'docketclerk@example.com');
+        docketClerkSetsCaseReadyForTrial(cerebralTest);
       }
     });
 
     describe('case #5 - manually added to session', () => {
-      loginAs(integrationTest, 'petitionsclerk@example.com');
-      integrationTest.casesReadyForTrial = [];
-      petitionsClerkCreatesNewCase(integrationTest, fakeFile, trialLocation);
-      petitionsClerkManuallyAddsCaseToTrial(integrationTest);
+      loginAs(cerebralTest, 'petitionsclerk@example.com');
+      cerebralTest.casesReadyForTrial = [];
+      petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation);
+      petitionsClerkManuallyAddsCaseToTrial(cerebralTest);
     });
   });
 
   describe('petitions clerk sets calendar for trial session', () => {
-    petitionsClerkViewsNewTrialSession(integrationTest);
-    markAllCasesAsQCed(integrationTest, () => [integrationTest.docketNumber]);
+    petitionsClerkViewsNewTrialSession(cerebralTest);
+    markAllCasesAsQCed(cerebralTest, () => [cerebralTest.docketNumber]);
 
-    petitionsClerkSetsARemoteTrialSessionsSchedule(integrationTest);
+    petitionsClerkSetsARemoteTrialSessionsSchedule(cerebralTest);
 
     it('petitions clerk should be redirected to print paper service for the trial session', async () => {
-      expect(integrationTest.getState('currentPage')).toEqual(
+      expect(cerebralTest.getState('currentPage')).toEqual(
         'PrintPaperTrialNotices',
       );
     });
 
     it('petitions clerk verifies that both cases were set on the trial session', async () => {
-      await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: integrationTest.trialSessionId,
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
       });
 
       const trialSessionFormatted = runCompute(
         withAppContextDecorator(formattedTrialSessionDetails),
         {
-          state: integrationTest.getState(),
+          state: cerebralTest.getState(),
         },
       );
 

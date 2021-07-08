@@ -8,7 +8,7 @@ import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
 describe('Trial Session Eligible Cases - Both small and regular cases get scheduled to the trial session that’s a hybrid session', () => {
@@ -17,7 +17,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const trialLocation = `Despacito, Texas, ${Date.now()}`;
@@ -30,10 +30,10 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   const createdDocketNumbers = [];
 
   describe(`Create trial session with Hybrid session type for '${trialLocation}' with max case count = 2`, () => {
-    loginAs(integrationTest, 'docketclerk@example.com');
-    docketClerkCreatesATrialSession(integrationTest, overrides);
-    docketClerkViewsTrialSessionList(integrationTest);
-    docketClerkViewsNewTrialSession(integrationTest);
+    loginAs(cerebralTest, 'docketclerk@example.com');
+    docketClerkCreatesATrialSession(cerebralTest, overrides);
+    docketClerkViewsTrialSessionList(cerebralTest);
+    docketClerkViewsNewTrialSession(cerebralTest);
   });
 
   describe('Create cases', () => {
@@ -46,19 +46,19 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         receivedAtMonth: '01',
         receivedAtYear: '2019',
       };
-      loginAs(integrationTest, 'petitioner@example.com');
+      loginAs(cerebralTest, 'petitioner@example.com');
       it('Create case #1', async () => {
-        const caseDetail = await uploadPetition(integrationTest, caseOverrides);
+        const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
         createdDocketNumbers.push(caseDetail.docketNumber);
-        integrationTest.docketNumber = caseDetail.docketNumber;
+        cerebralTest.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(integrationTest, 'petitionsclerk@example.com');
-      petitionsClerkSubmitsCaseToIrs(integrationTest);
+      loginAs(cerebralTest, 'petitionsclerk@example.com');
+      petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-      loginAs(integrationTest, 'docketclerk@example.com');
-      docketClerkSetsCaseReadyForTrial(integrationTest);
+      loginAs(cerebralTest, 'docketclerk@example.com');
+      docketClerkSetsCaseReadyForTrial(cerebralTest);
     });
 
     describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Regular case type with filed date 1/2/2019`, () => {
@@ -70,19 +70,19 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         receivedAtMonth: '01',
         receivedAtYear: '2019',
       };
-      loginAs(integrationTest, 'petitioner@example.com');
+      loginAs(cerebralTest, 'petitioner@example.com');
       it('Create case #2', async () => {
-        const caseDetail = await uploadPetition(integrationTest, caseOverrides);
+        const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
         createdDocketNumbers.push(caseDetail.docketNumber);
-        integrationTest.docketNumber = caseDetail.docketNumber;
+        cerebralTest.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(integrationTest, 'petitionsclerk@example.com');
-      petitionsClerkSubmitsCaseToIrs(integrationTest);
+      loginAs(cerebralTest, 'petitionsclerk@example.com');
+      petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-      loginAs(integrationTest, 'docketclerk@example.com');
-      docketClerkSetsCaseReadyForTrial(integrationTest);
+      loginAs(cerebralTest, 'docketclerk@example.com');
+      docketClerkSetsCaseReadyForTrial(cerebralTest);
     });
 
     describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 2/1/2019`, () => {
@@ -94,51 +94,49 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         receivedAtMonth: '02',
         receivedAtYear: '2019',
       };
-      loginAs(integrationTest, 'petitioner@example.com');
+      loginAs(cerebralTest, 'petitioner@example.com');
       it('Create case #3', async () => {
-        const caseDetail = await uploadPetition(integrationTest, caseOverrides);
+        const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
         createdDocketNumbers.push(caseDetail.docketNumber);
-        integrationTest.docketNumber = caseDetail.docketNumber;
+        cerebralTest.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(integrationTest, 'petitionsclerk@example.com');
-      petitionsClerkSubmitsCaseToIrs(integrationTest);
+      loginAs(cerebralTest, 'petitionsclerk@example.com');
+      petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-      loginAs(integrationTest, 'docketclerk@example.com');
-      docketClerkSetsCaseReadyForTrial(integrationTest);
+      loginAs(cerebralTest, 'docketclerk@example.com');
+      docketClerkSetsCaseReadyForTrial(cerebralTest);
     });
   });
 
   describe(`Result: Case #1, #2, and #3 should show as eligible for '${trialLocation}' session`, () => {
-    loginAs(integrationTest, 'petitionsclerk@example.com');
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
 
     it(`Case #1, #2, and #3 should show as eligible for '${trialLocation}' session`, async () => {
-      await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: integrationTest.trialSessionId,
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
       });
 
       expect(
-        integrationTest.getState('trialSession.eligibleCases').length,
+        cerebralTest.getState('trialSession.eligibleCases').length,
       ).toEqual(3);
       expect(
-        integrationTest.getState('trialSession.eligibleCases.0.docketNumber'),
+        cerebralTest.getState('trialSession.eligibleCases.0.docketNumber'),
       ).toEqual(createdDocketNumbers[0]);
       expect(
-        integrationTest.getState('trialSession.eligibleCases.1.docketNumber'),
+        cerebralTest.getState('trialSession.eligibleCases.1.docketNumber'),
       ).toEqual(createdDocketNumbers[1]);
       expect(
-        integrationTest.getState('trialSession.eligibleCases.2.docketNumber'),
+        cerebralTest.getState('trialSession.eligibleCases.2.docketNumber'),
       ).toEqual(createdDocketNumbers[2]);
-      expect(integrationTest.getState('trialSession.isCalendared')).toEqual(
-        false,
-      );
+      expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
 
   describe('Calendar clerk marks all eligible cases as QCed', () => {
-    loginAs(integrationTest, 'petitionsclerk@example.com');
-    markAllCasesAsQCed(integrationTest, () => [
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    markAllCasesAsQCed(cerebralTest, () => [
       createdDocketNumbers[0],
       createdDocketNumbers[1],
       createdDocketNumbers[2],
@@ -146,29 +144,27 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   });
 
   describe(`Set calendar for '${trialLocation}' session`, () => {
-    loginAs(integrationTest, 'petitionsclerk@example.com');
-    petitionsClerkSetsATrialSessionsSchedule(integrationTest);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
   });
 
   describe(`Result: Case #1 and #2 are assigned to '${trialLocation}' session`, () => {
-    loginAs(integrationTest, 'petitionsclerk@example.com');
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
 
     it(`Case #1 and #2 are assigned to '${trialLocation}' session`, async () => {
-      await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: integrationTest.trialSessionId,
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
       });
 
       expect(
-        integrationTest.getState('trialSession.calendaredCases').length,
+        cerebralTest.getState('trialSession.calendaredCases').length,
       ).toEqual(2);
-      expect(integrationTest.getState('trialSession.isCalendared')).toEqual(
-        true,
-      );
+      expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(true);
       expect(
-        integrationTest.getState('trialSession.calendaredCases.0.docketNumber'),
+        cerebralTest.getState('trialSession.calendaredCases.0.docketNumber'),
       ).toEqual(createdDocketNumbers[0]);
       expect(
-        integrationTest.getState('trialSession.calendaredCases.1.docketNumber'),
+        cerebralTest.getState('trialSession.calendaredCases.1.docketNumber'),
       ).toEqual(createdDocketNumbers[1]);
     });
   });

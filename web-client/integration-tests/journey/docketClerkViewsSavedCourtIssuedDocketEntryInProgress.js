@@ -1,13 +1,13 @@
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkViewsSavedCourtIssuedDocketEntryInProgress = (
-  integrationTest,
+  cerebralTest,
   draftOrderIndex,
 ) => {
   return it('Docket Clerk views an in-progress docket entry for the given court-issued document', async () => {
-    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === docketEntryId,
@@ -15,19 +15,16 @@ export const docketClerkViewsSavedCourtIssuedDocketEntryInProgress = (
 
     expect(orderDocument).toBeTruthy();
 
-    await integrationTest.runSequence(
-      'gotoEditCourtIssuedDocketEntrySequence',
-      {
-        docketEntryId: orderDocument.docketEntryId,
-        docketNumber: integrationTest.docketNumber,
-      },
-    );
+    await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+      docketEntryId: orderDocument.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
+    });
 
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'CourtIssuedDocketEntry',
     );
-    expect(integrationTest.getState('isEditingDocketEntry')).toBeTruthy();
-    expect(integrationTest.getState('form.eventCode')).toEqual(
+    expect(cerebralTest.getState('isEditingDocketEntry')).toBeTruthy();
+    expect(cerebralTest.getState('form.eventCode')).toEqual(
       orderDocument.eventCode,
     );
   });

@@ -3,7 +3,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkCancelsAddDocketEntryFromOrder = (
-  integrationTest,
+  cerebralTest,
   draftOrderIndex,
 ) => {
   return it('Docket Clerk cancels adding a docket entry from the given order', async () => {
@@ -12,11 +12,11 @@ export const docketClerkCancelsAddDocketEntryFromOrder = (
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -24,18 +24,18 @@ export const docketClerkCancelsAddDocketEntryFromOrder = (
 
     expect(draftOrderDocument).toBeTruthy();
 
-    await integrationTest.runSequence('openCancelDraftDocumentModalSequence');
-    expect(integrationTest.getState('modal.showModal')).toEqual(
+    await cerebralTest.runSequence('openCancelDraftDocumentModalSequence');
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'CancelDraftDocumentModal',
     );
 
-    await integrationTest.runSequence('cancelAddDraftDocumentSequence');
-    expect(integrationTest.getState('modal')).toEqual({});
+    await cerebralTest.runSequence('cancelAddDraftDocumentSequence');
+    expect(cerebralTest.getState('modal')).toEqual({});
 
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 

@@ -1,13 +1,11 @@
-export const judgeViewsNotesFromCaseDetail = integrationTest => {
+export const judgeViewsNotesFromCaseDetail = cerebralTest => {
   return it('Judge views added notes from case detail', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
-    expect(integrationTest.getState('judgesNote.notes')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('judgesNote.notes')).toEqual(
       'this is a note added from the modal',
     );
   });

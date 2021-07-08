@@ -1,13 +1,13 @@
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const petitionsClerkViewsDocketEntry = (
-  integrationTest,
+  cerebralTest,
   draftOrderIndex,
 ) => {
   return it('Petitions Clerk views the docket entry for the given document', async () => {
-    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const docketRecordEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === docketEntryId,

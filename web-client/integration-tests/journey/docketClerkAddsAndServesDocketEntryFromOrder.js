@@ -5,7 +5,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkAddsAndServesDocketEntryFromOrder = (
-  integrationTest,
+  cerebralTest,
   draftOrderIndex,
 ) => {
   return it(`Docket Clerk adds and serves a docket entry from the given order ${draftOrderIndex}`, async () => {
@@ -16,11 +16,11 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -28,22 +28,22 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
 
     expect(draftOrderDocument).toBeTruthy();
 
-    await integrationTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
       docketEntryId: draftOrderDocument.docketEntryId,
-      docketNumber: integrationTest.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
     // default
-    expect(integrationTest.getState('form.eventCode')).toEqual(
+    expect(cerebralTest.getState('form.eventCode')).toEqual(
       draftOrderDocument.eventCode,
     );
 
-    expect(integrationTest.getState('form.documentType')).toEqual(
+    expect(cerebralTest.getState('form.documentType')).toEqual(
       draftOrderDocument.documentType,
     );
 
     // eventCode: O
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
@@ -54,14 +54,14 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
     nonstandardHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
     addCourtIssuedDocketEntryHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryHelper),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
@@ -69,11 +69,11 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
       addCourtIssuedDocketEntryHelperComputed.showServiceStamp,
     ).toBeTruthy();
     expect(nonstandardHelperComputed.showFreeText).toBeTruthy();
-    expect(integrationTest.getState('form.freeText')).toEqual('Order');
-    expect(integrationTest.getState('form.serviceStamp')).toBeFalsy();
+    expect(cerebralTest.getState('form.freeText')).toEqual('Order');
+    expect(cerebralTest.getState('form.serviceStamp')).toBeFalsy();
 
     // eventCode: OCA
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
@@ -84,15 +84,15 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
     nonstandardHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
     expect(nonstandardHelperComputed.showFreeText).toBeTruthy();
-    expect(integrationTest.getState('form.freeText')).toBeFalsy();
+    expect(cerebralTest.getState('form.freeText')).toBeFalsy();
 
     // eventCode: OAJ
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
@@ -103,17 +103,17 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
     nonstandardHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
     expect(nonstandardHelperComputed.showFreeText).toBeTruthy();
-    expect(integrationTest.getState('form.freeText')).toBeFalsy();
+    expect(cerebralTest.getState('form.freeText')).toBeFalsy();
     expect(nonstandardHelperComputed.showJudge).toBeTruthy();
-    expect(integrationTest.getState('form.judge')).toBeFalsy();
+    expect(cerebralTest.getState('form.judge')).toBeFalsy();
 
     // eventCode: OAL
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
@@ -124,16 +124,16 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
     nonstandardHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
     expect(nonstandardHelperComputed.showFreeText).toBeFalsy();
     expect(nonstandardHelperComputed.showDocketNumbers).toBeTruthy();
-    expect(integrationTest.getState('form.docketNumbers')).toBeFalsy();
+    expect(cerebralTest.getState('form.docketNumbers')).toBeFalsy();
 
     // eventCode: OAP
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
@@ -144,19 +144,19 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
     nonstandardHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
     expect(nonstandardHelperComputed.showFreeText).toBeTruthy();
-    expect(integrationTest.getState('form.freeText')).toBeFalsy();
+    expect(cerebralTest.getState('form.freeText')).toBeFalsy();
     expect(nonstandardHelperComputed.showDateFirst).toBeTruthy();
-    expect(integrationTest.getState('form.month')).toBeFalsy();
-    expect(integrationTest.getState('form.day')).toBeFalsy();
-    expect(integrationTest.getState('form.year')).toBeFalsy();
+    expect(cerebralTest.getState('form.month')).toBeFalsy();
+    expect(cerebralTest.getState('form.day')).toBeFalsy();
+    expect(cerebralTest.getState('form.year')).toBeFalsy();
 
     // eventCode: OODS
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
@@ -167,18 +167,18 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
     nonstandardHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
     expect(nonstandardHelperComputed.showFreeText).toBeFalsy();
     expect(nonstandardHelperComputed.showDateFirst).toBeTruthy();
-    expect(integrationTest.getState('form.month')).toBeFalsy();
-    expect(integrationTest.getState('form.day')).toBeFalsy();
-    expect(integrationTest.getState('form.year')).toBeFalsy();
+    expect(cerebralTest.getState('form.month')).toBeFalsy();
+    expect(cerebralTest.getState('form.day')).toBeFalsy();
+    expect(cerebralTest.getState('form.year')).toBeFalsy();
 
     // test defined
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
@@ -186,7 +186,7 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'freeText',
@@ -195,7 +195,7 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
     );
 
     if (draftOrderDocument.eventCode === 'O') {
-      await integrationTest.runSequence(
+      await cerebralTest.runSequence(
         'updateCourtIssuedDocketEntryFormValueSequence',
         {
           key: 'serviceStamp',
@@ -207,26 +207,26 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
     nonstandardHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    expect(integrationTest.getState('form.eventCode')).toEqual(
+    expect(cerebralTest.getState('form.eventCode')).toEqual(
       draftOrderDocument.eventCode,
     );
 
-    expect(integrationTest.getState('form.documentType')).toEqual(
+    expect(cerebralTest.getState('form.documentType')).toEqual(
       draftOrderDocument.documentType,
     );
 
-    const caseDetail = integrationTest.getState('caseDetail');
+    const caseDetail = cerebralTest.getState('caseDetail');
     const servedDocketEntry = caseDetail.docketEntries.find(
       d => d.docketEntryId === docketEntryId,
     );
 
-    integrationTest.docketRecordEntry = servedDocketEntry;
+    cerebralTest.docketRecordEntry = servedDocketEntry;
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'serveCourtIssuedDocumentFromDocketEntrySequence',
     );
   });

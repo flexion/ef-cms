@@ -7,21 +7,21 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
 export const docketClerkDoesNotViewQCItemForNCAForCaseWithNoPaperService =
-  integrationTest => {
+  cerebralTest => {
     return it('Docket Clerk does not view QC item for NCA for case with no paper service', async () => {
       const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
-      integrationTest.setState('caseDetail', {});
-      await integrationTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber: integrationTest.docketNumber,
+      cerebralTest.setState('caseDetail', {});
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: cerebralTest.docketNumber,
       });
-      expect(integrationTest.getState('currentPage')).toEqual(
+      expect(cerebralTest.getState('currentPage')).toEqual(
         'CaseDetailInternal',
       );
 
-      const caseWithNoPaperService = integrationTest.getState('caseDetail');
+      const caseWithNoPaperService = cerebralTest.getState('caseDetail');
 
-      const contactPrimary = contactPrimaryFromState(integrationTest);
+      const contactPrimary = contactPrimaryFromState(cerebralTest);
 
       expect(contactPrimary.serviceIndicator).not.toEqual(
         SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -30,16 +30,16 @@ export const docketClerkDoesNotViewQCItemForNCAForCaseWithNoPaperService =
         caseWithNoPaperService.privatePractitioners[0].serviceIndicator,
       ).not.toEqual(SERVICE_INDICATOR_TYPES.SI_PAPER);
 
-      await integrationTest.runSequence('chooseWorkQueueSequence', {
+      await cerebralTest.runSequence('chooseWorkQueueSequence', {
         box: 'inbox',
         queue: 'section',
       });
       const workQueueFormatted = runCompute(formattedWorkQueue, {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       });
 
       const noticeOfChangeOfAddressQCItem = workQueueFormatted.find(
-        workItem => workItem.docketNumber === integrationTest.docketNumber,
+        workItem => workItem.docketNumber === cerebralTest.docketNumber,
       );
 
       expect(noticeOfChangeOfAddressQCItem).toBeUndefined();

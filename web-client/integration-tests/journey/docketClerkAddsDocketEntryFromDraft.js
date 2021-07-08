@@ -3,7 +3,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkAddsDocketEntryFromDraft = (
-  integrationTest,
+  cerebralTest,
   draftOrderIndex,
 ) => {
   return it('Docket Clerk adds a docket entry from the given draft', async () => {
@@ -12,11 +12,11 @@ export const docketClerkAddsDocketEntryFromDraft = (
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -25,12 +25,12 @@ export const docketClerkAddsDocketEntryFromDraft = (
     expect(draftOrderDocument).toBeTruthy();
     expect(draftOrderDocument.numberOfPages).toEqual(1);
 
-    await integrationTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
       docketEntryId: draftOrderDocument.docketEntryId,
-      docketNumber: integrationTest.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
@@ -38,7 +38,7 @@ export const docketClerkAddsDocketEntryFromDraft = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'documentType',
@@ -46,7 +46,7 @@ export const docketClerkAddsDocketEntryFromDraft = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'scenario',
@@ -54,7 +54,7 @@ export const docketClerkAddsDocketEntryFromDraft = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'documentTitle',
@@ -62,21 +62,21 @@ export const docketClerkAddsDocketEntryFromDraft = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'filingDateMonth',
         value: '1',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'filingDateDay',
         value: '1',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'filingDateYear',
@@ -84,20 +84,20 @@ export const docketClerkAddsDocketEntryFromDraft = (
       },
     );
 
-    await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(integrationTest.getState('alertSuccess').message).toEqual(
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to docket record.',
     );
 
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     caseDetailFormatted = await runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 

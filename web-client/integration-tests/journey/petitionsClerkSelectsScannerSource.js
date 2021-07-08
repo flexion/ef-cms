@@ -1,36 +1,36 @@
 export const petitionsClerkSelectsScannerSource = (
-  integrationTest,
+  cerebralTest,
   { scannerSourceIndex, scannerSourceName },
 ) => {
   return it('Petitions clerk selects a scanner', async () => {
-    await integrationTest.runSequence('openChangeScannerSourceModalSequence');
+    await cerebralTest.runSequence('openChangeScannerSourceModalSequence');
 
-    expect(integrationTest.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'SelectScannerSourceModal',
     );
 
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'scanner',
       value: scannerSourceName,
     });
 
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'index',
       value: scannerSourceIndex,
     });
 
-    await integrationTest.runSequence('selectScannerSequence', {
+    await cerebralTest.runSequence('selectScannerSequence', {
       scannerSourceIndex,
       scannerSourceName,
     });
 
-    expect(integrationTest.getState('scanner.scannerSourceIndex')).toEqual(
+    expect(cerebralTest.getState('scanner.scannerSourceIndex')).toEqual(
       scannerSourceIndex,
     );
-    expect(integrationTest.getState('scanner.scannerSourceName')).toEqual(
+    expect(cerebralTest.getState('scanner.scannerSourceName')).toEqual(
       scannerSourceName,
     );
 
-    expect(integrationTest.getState('modal')).toMatchObject({});
+    expect(cerebralTest.getState('modal')).toMatchObject({});
   });
 };

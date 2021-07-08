@@ -1,17 +1,15 @@
 export const docketClerkVerifiesDocketEntryMetaUpdatesMinuteEntry = (
-  integrationTest,
+  cerebralTest,
   docketRecordIndex = 2,
 ) => {
   return it('docket clerk verifies docket entry meta updates for a minute entry', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const caseDetail = integrationTest.getState('caseDetail');
+    const caseDetail = cerebralTest.getState('caseDetail');
     const docketRecordEntry = caseDetail.docketEntries.find(
       entry => entry.index === docketRecordIndex,
     );

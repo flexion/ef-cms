@@ -7,58 +7,56 @@ const formattedCaseDetail = withAppContextDecorator(
 );
 
 export const docketClerkAddEditsCalendarNote = (
-  integrationTest,
+  cerebralTest,
   addingOrEditing,
 ) => {
   return it(`Docket Clerk ${addingOrEditing} calendar note`, async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    let caseDetail = integrationTest.getState('caseDetail');
+    let caseDetail = cerebralTest.getState('caseDetail');
 
-    await integrationTest.runSequence('openAddEditCalendarNoteModalSequence', {
+    await cerebralTest.runSequence('openAddEditCalendarNoteModalSequence', {
       note: caseDetail.trialSessionNotes,
     });
 
-    expect(integrationTest.getState('modal.notes')).toEqual(
+    expect(cerebralTest.getState('modal.notes')).toEqual(
       caseDetail.trialSessionNotes,
     );
 
-    await integrationTest.runSequence('clearModalFormSequence');
+    await cerebralTest.runSequence('clearModalFormSequence');
 
-    caseDetail = integrationTest.getState('caseDetail');
+    caseDetail = cerebralTest.getState('caseDetail');
 
-    expect(integrationTest.getState('modal.notes')).toEqual(
+    expect(cerebralTest.getState('modal.notes')).toEqual(
       caseDetail.trialSessionNotes,
     );
 
-    await integrationTest.runSequence('openAddEditCalendarNoteModalSequence', {
+    await cerebralTest.runSequence('openAddEditCalendarNoteModalSequence', {
       note: caseDetail.trialSessionNotes,
     });
 
     const updatedNote = 'This is a new note';
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'note',
       value: updatedNote,
     });
 
-    await integrationTest.runSequence('updateCalendarNoteSequence');
+    await cerebralTest.runSequence('updateCalendarNoteSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
-    expect(integrationTest.getState('alertSuccess.message')).toEqual(
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('alertSuccess.message')).toEqual(
       'Note saved.',
     );
 
     caseDetail = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(caseDetail.trialSessionNotes).toEqual(updatedNote);
-    integrationTest.calendarNote = caseDetail.trialSessionNotes;
+    cerebralTest.calendarNote = caseDetail.trialSessionNotes;
   });
 };

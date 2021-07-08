@@ -4,13 +4,10 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-export const petitionsClerkBulkAssignsCases = (
-  integrationTest,
-  createdCases,
-) => {
+export const petitionsClerkBulkAssignsCases = (cerebralTest, createdCases) => {
   return it('Petitions clerk bulk assigns cases', async () => {
     const workQueueFormatted = await runCompute(formattedWorkQueue, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     const selectedWorkItems = createdCases.map(newCase => {
@@ -23,13 +20,13 @@ export const petitionsClerkBulkAssignsCases = (
       };
     });
 
-    const currentUserId = integrationTest.getState('user').userId;
+    const currentUserId = cerebralTest.getState('user').userId;
 
-    integrationTest.setState('assigneeId', currentUserId);
-    integrationTest.setState('assigneeName', 'Petitions Clerk1');
-    integrationTest.setState('selectedWorkItems', selectedWorkItems);
+    cerebralTest.setState('assigneeId', currentUserId);
+    cerebralTest.setState('assigneeName', 'Petitions Clerk1');
+    cerebralTest.setState('selectedWorkItems', selectedWorkItems);
 
-    const result = await integrationTest.runSequence(
+    const result = await cerebralTest.runSequence(
       'assignSelectedWorkItemsSequence',
     );
 

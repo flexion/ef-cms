@@ -1,10 +1,10 @@
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
-export const petitionsClerkServesOrder = integrationTest => {
+export const petitionsClerkServesOrder = cerebralTest => {
   return it('Petitions Clerk serves the order', async () => {
-    const { docketEntryId } = integrationTest;
+    const { docketEntryId } = cerebralTest;
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -12,22 +12,17 @@ export const petitionsClerkServesOrder = integrationTest => {
 
     expect(orderDocument).toBeTruthy();
 
-    await integrationTest.runSequence(
-      'gotoEditCourtIssuedDocketEntrySequence',
-      {
-        docketEntryId: orderDocument.docketEntryId,
-        docketNumber: integrationTest.docketNumber,
-      },
-    );
+    await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+      docketEntryId: orderDocument.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
+    });
 
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'CourtIssuedDocketEntry',
     );
 
-    await integrationTest.runSequence(
-      'openConfirmInitiateServiceModalSequence',
-    );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
+    await cerebralTest.runSequence(
       'serveCourtIssuedDocumentFromDocketEntrySequence',
     );
   });

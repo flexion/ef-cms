@@ -6,40 +6,36 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const docketClerkDeletesCalendarNote = integrationTest => {
+export const docketClerkDeletesCalendarNote = cerebralTest => {
   return it('Docket Clerk deletes calendar note', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    let caseDetail = integrationTest.getState('caseDetail');
+    let caseDetail = cerebralTest.getState('caseDetail');
 
-    await integrationTest.runSequence('openAddEditCalendarNoteModalSequence', {
+    await cerebralTest.runSequence('openAddEditCalendarNoteModalSequence', {
       note: caseDetail.trialSessionNotes,
     });
 
-    expect(integrationTest.getState('modal.notes')).toEqual(
+    expect(cerebralTest.getState('modal.notes')).toEqual(
       caseDetail.trialSessionNotes,
     );
 
-    await integrationTest.runSequence('deleteCalendarNoteSequence');
-    expect(integrationTest.getState('alertSuccess.message')).toEqual(
+    await cerebralTest.runSequence('deleteCalendarNoteSequence');
+    expect(cerebralTest.getState('alertSuccess.message')).toEqual(
       'Note deleted.',
     );
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
     caseDetail = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(caseDetail.trialSessionNotes).toBe(null);
-    integrationTest.calendarNote = null;
+    cerebralTest.calendarNote = null;
   });
 };

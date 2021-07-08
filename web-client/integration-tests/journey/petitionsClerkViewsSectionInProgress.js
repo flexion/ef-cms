@@ -4,23 +4,23 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-export const petitionsClerkViewsSectionInProgress = integrationTest => {
+export const petitionsClerkViewsSectionInProgress = cerebralTest => {
   return it('Petitions Clerk views section inProgress', async () => {
-    await integrationTest.runSequence('gotoWorkQueueSequence');
-    expect(integrationTest.getState('currentPage')).toEqual('WorkQueue');
-    await integrationTest.runSequence('chooseWorkQueueSequence', {
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'inProgress',
       queue: 'section',
     });
 
-    const workQueueToDisplay = integrationTest.getState('workQueueToDisplay');
+    const workQueueToDisplay = cerebralTest.getState('workQueueToDisplay');
 
     expect(workQueueToDisplay.queue).toEqual('section');
     expect(workQueueToDisplay.box).toEqual('inProgress');
 
     const formattedWorkItem = runCompute(formattedWorkQueue, {
-      state: integrationTest.getState(),
-    }).find(item => item.docketNumber === integrationTest.docketNumber);
+      state: cerebralTest.getState(),
+    }).find(item => item.docketNumber === cerebralTest.docketNumber);
 
     expect(formattedWorkItem.editLink).toContain('/review');
   });

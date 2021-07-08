@@ -17,7 +17,7 @@ const caseDetailHeaderHelper = withAppContextDecorator(
   caseDetailHeaderHelperComputed,
 );
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Adds automatic block case to trial', () => {
   beforeAll(() => {
@@ -25,7 +25,7 @@ describe('Adds automatic block case to trial', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const trialLocation = `Charleston, West Virginia, ${Date.now()}`;
@@ -33,27 +33,27 @@ describe('Adds automatic block case to trial', () => {
     trialLocation,
   };
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(integrationTest, fakeFile, trialLocation);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkSetsCaseReadyForTrial(integrationTest);
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(integrationTest, overrides);
-  docketClerkViewsTrialSessionList(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkSetsCaseReadyForTrial(cerebralTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, overrides);
+  docketClerkViewsTrialSessionList(cerebralTest);
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
   // automatic block with a due date
-  petitionsClerkCreatesACaseDeadline(integrationTest);
-  integrationTest.casesReadyForTrial = [];
-  petitionsClerkManuallyAddsCaseToTrial(integrationTest);
+  petitionsClerkCreatesACaseDeadline(cerebralTest);
+  cerebralTest.casesReadyForTrial = [];
+  petitionsClerkManuallyAddsCaseToTrial(cerebralTest);
 
   it('should be able to add a trial session to an automatically blocked case', async () => {
     const formattedCase = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
     const headerHelper = runCompute(caseDetailHeaderHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(headerHelper.showBlockedTag).toBeTruthy();

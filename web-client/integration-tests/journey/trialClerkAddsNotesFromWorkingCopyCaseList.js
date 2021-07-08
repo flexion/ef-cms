@@ -6,55 +6,53 @@ const trialSessionWorkingCopyHelper = withAppContextDecorator(
   trialSessionWorkingCopyHelperComputed,
 );
 
-export const trialClerkAddsNotesFromWorkingCopyCaseList = integrationTest => {
+export const trialClerkAddsNotesFromWorkingCopyCaseList = cerebralTest => {
   return it('Trial Clerk adds case notes from working copy case list', async () => {
-    await integrationTest.runSequence('gotoTrialSessionWorkingCopySequence', {
-      trialSessionId: integrationTest.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionWorkingCopySequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'TrialSessionWorkingCopy',
     );
 
     let workingCopyHelper = runCompute(trialSessionWorkingCopyHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     const { docketNumber } = workingCopyHelper.formattedCases[0];
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'openAddEditUserCaseNoteModalFromListSequence',
       {
         docketNumber,
       },
     );
 
-    expect(integrationTest.getState('modal')).toEqual({
+    expect(cerebralTest.getState('modal')).toEqual({
       caseTitle: 'Mona Schultz',
       docketNumber,
       notes: undefined,
       showModal: 'AddEditUserCaseNoteModal',
     });
 
-    await integrationTest.runSequence('cerebralBindSimpleSetStateSequence', {
+    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
       key: 'modal.notes',
       value: 'this is a note added from the modal',
     });
 
-    expect(integrationTest.getState('modal')).toEqual({
+    expect(cerebralTest.getState('modal')).toEqual({
       caseTitle: 'Mona Schultz',
       docketNumber,
       notes: 'this is a note added from the modal',
       showModal: 'AddEditUserCaseNoteModal',
     });
 
-    await integrationTest.runSequence(
-      'updateUserCaseNoteOnWorkingCopySequence',
-    );
+    await cerebralTest.runSequence('updateUserCaseNoteOnWorkingCopySequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     expect(
-      integrationTest.getState(
+      cerebralTest.getState(
         `trialSessionWorkingCopy.userNotes.${docketNumber}.notes`,
       ),
     ).toEqual('this is a note added from the modal');

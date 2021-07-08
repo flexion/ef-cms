@@ -1,17 +1,17 @@
 export const docketClerkConsolidatesCaseThatCannotBeConsolidated =
-  integrationTest => {
+  cerebralTest => {
     return it('Docket clerk consolidates case that cannot be consolidated', async () => {
-      integrationTest.setState('modal.confirmSelection', true);
-      await integrationTest.runSequence('submitAddConsolidatedCaseSequence');
+      cerebralTest.setState('modal.confirmSelection', true);
+      await cerebralTest.runSequence('submitAddConsolidatedCaseSequence');
 
-      expect(integrationTest.getState('modal.showModal')).toBe(
+      expect(cerebralTest.getState('modal.showModal')).toBe(
         'AddConsolidatedCaseModal',
       );
-      expect(integrationTest.getState('modal.error')).toEqual([
+      expect(cerebralTest.getState('modal.error')).toEqual([
         'Place of trial is not the same',
       ]);
       expect(
-        integrationTest.getState('caseDetail.consolidatedCases'),
+        cerebralTest.getState('caseDetail.consolidatedCases'),
       ).toBeUndefined();
     });
   };

@@ -4,14 +4,14 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkServesOrderOnPaperParties = (
-  integrationTest,
+  cerebralTest,
   draftOrderIndex,
 ) => {
   return it('Docket Clerk serves the order on 3 parties with paper service', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -19,26 +19,21 @@ export const docketClerkServesOrderOnPaperParties = (
 
     expect(orderDocument).toBeTruthy();
 
-    await integrationTest.runSequence(
-      'gotoEditCourtIssuedDocketEntrySequence',
-      {
-        docketEntryId: orderDocument.docketEntryId,
-        docketNumber: integrationTest.docketNumber,
-      },
-    );
+    await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+      docketEntryId: orderDocument.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
+    });
 
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'CourtIssuedDocketEntry',
     );
 
-    await integrationTest.runSequence(
-      'openConfirmInitiateServiceModalSequence',
-    );
+    await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
 
     const modalHelper = runCompute(
       withAppContextDecorator(confirmInitiateServiceModalHelper),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
@@ -46,7 +41,7 @@ export const docketClerkServesOrderOnPaperParties = (
 
     expect(modalHelper.contactsNeedingPaperService.length).toEqual(2);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'serveCourtIssuedDocumentFromDocketEntrySequence',
     );
   });

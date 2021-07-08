@@ -1,46 +1,46 @@
 import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
 
-export const docketClerkEditsPetitionerInformation = integrationTest => {
+export const docketClerkEditsPetitionerInformation = cerebralTest => {
   return it('docket clerk edits petitioner information', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    expect(integrationTest.getState('caseDetail.status')).not.toEqual(
+    expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
       CASE_STATUS_TYPES.new,
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',
       {
         contactId: contactPrimary.contactId,
-        docketNumber: integrationTest.docketNumber,
+        docketNumber: cerebralTest.docketNumber,
       },
     );
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.name',
       value: 'Bob',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.additionalName',
       value: 'Bob Additional Name',
     });
 
-    await integrationTest.runSequence('submitEditPetitionerSequence');
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
 
-    expect(contactPrimaryFromState(integrationTest).additionalName).toEqual(
+    expect(contactPrimaryFromState(cerebralTest).additionalName).toEqual(
       'Bob Additional Name',
     );
 
-    expect(contactPrimaryFromState(integrationTest).name).toEqual('Bob');
+    expect(contactPrimaryFromState(cerebralTest).name).toEqual('Bob');
 
     expect(
-      integrationTest.getState(
+      cerebralTest.getState(
         'currentViewMetadata.caseDetail.caseInformationTab',
       ),
     ).toEqual('parties');

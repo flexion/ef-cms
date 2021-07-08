@@ -1,14 +1,14 @@
-export const petitionsClerkViewsReplyInInbox = integrationTest => {
+export const petitionsClerkViewsReplyInInbox = cerebralTest => {
   return it('petitions clerk views the reply they were sent in their inbox', async () => {
-    await integrationTest.runSequence('gotoMessagesSequence', {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });
 
-    const messages = integrationTest.getState('messages');
+    const messages = cerebralTest.getState('messages');
 
     const foundMessage = messages.find(
-      message => message.subject === integrationTest.testMessageSubject,
+      message => message.subject === cerebralTest.testMessageSubject,
     );
 
     expect(foundMessage).toBeDefined();

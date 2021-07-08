@@ -5,7 +5,7 @@ import { docketClerkViewsCaseDetail } from './journey/docketClerkViewsCaseDetail
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Docket Clerk updates a hearing session', () => {
   beforeEach(() => {
@@ -13,35 +13,33 @@ describe('Docket Clerk updates a hearing session', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  integrationTest.createdTrialSessions = [];
+  cerebralTest.createdTrialSessions = [];
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(integrationTest);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
   const trialLocation = `Hartford, Connecticut, ${Date.now()}`;
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(integrationTest, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, {
     sessionType: 'Motion/Hearing',
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(integrationTest);
+  docketClerkViewsTrialSessionList(cerebralTest);
 
-  docketClerkAddsCaseToHearing(integrationTest, 'Low blast radius', 0);
+  docketClerkAddsCaseToHearing(cerebralTest, 'Low blast radius', 0);
 
-  docketClerkEditsTrialSession(integrationTest);
+  docketClerkEditsTrialSession(cerebralTest);
 
-  docketClerkViewsCaseDetail(integrationTest);
+  docketClerkViewsCaseDetail(cerebralTest);
 
   it('should NOT set the trialSessionId on the case', () => {
-    expect(
-      integrationTest.getState('caseDetail.trialSessionId'),
-    ).toBeUndefined();
+    expect(cerebralTest.getState('caseDetail.trialSessionId')).toBeUndefined();
   });
 });

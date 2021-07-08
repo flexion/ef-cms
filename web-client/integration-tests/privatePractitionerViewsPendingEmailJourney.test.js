@@ -12,7 +12,7 @@ import { practitionerRequestsAccessToCase } from './journey/practitionerRequests
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('private practitioner views pending email journey', () => {
   beforeAll(() => {
@@ -20,12 +20,12 @@ describe('private practitioner views pending email journey', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(integrationTest, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -38,20 +38,20 @@ describe('private practitioner views pending email journey', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  loginAs(integrationTest, 'admissionsclerk@example.com');
-  admissionsClerkMigratesPractitionerWithoutEmail(integrationTest);
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
+  admissionsClerkMigratesPractitionerWithoutEmail(cerebralTest);
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkAddsPractitionersToCase(integrationTest, true);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 
-  loginAs(integrationTest, 'admissionsclerk@example.com');
-  admissionsClerkAddsPractitionerEmail(integrationTest);
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
+  admissionsClerkAddsPractitionerEmail(cerebralTest);
 
   it('admission clerk views pending email for counsel on case', () => {
     const partiesInformationHelper = withAppContextDecorator(
@@ -59,21 +59,21 @@ describe('private practitioner views pending email journey', () => {
     );
 
     const partiesHelper = runCompute(partiesInformationHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     const practitionerWithPendingEmail =
       partiesHelper.formattedPetitioners[0].representingPractitioners.find(
-        prac => prac.barNumber === integrationTest.barNumber,
+        prac => prac.barNumber === cerebralTest.barNumber,
       );
 
     expect(practitionerWithPendingEmail.formattedPendingEmail).toBe(
-      `${integrationTest.pendingEmail} (Pending)`,
+      `${cerebralTest.pendingEmail} (Pending)`,
     );
   });
 
-  loginAs(integrationTest, 'privatePractitioner@example.com');
-  practitionerRequestsAccessToCase(integrationTest, fakeFile);
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  practitionerRequestsAccessToCase(cerebralTest, fakeFile);
 
   it('unassociated private practitioner views pending email for counsel on case', () => {
     const partiesInformationHelper = withAppContextDecorator(
@@ -81,16 +81,16 @@ describe('private practitioner views pending email journey', () => {
     );
 
     const partiesHelper = runCompute(partiesInformationHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     const practitionerWithPendingEmail =
       partiesHelper.formattedPetitioners[0].representingPractitioners.find(
-        prac => prac.barNumber === integrationTest.barNumber,
+        prac => prac.barNumber === cerebralTest.barNumber,
       );
 
     expect(practitionerWithPendingEmail.formattedPendingEmail).toBe(
-      `${integrationTest.pendingEmail} (Pending)`,
+      `${cerebralTest.pendingEmail} (Pending)`,
     );
   });
 });

@@ -1,9 +1,9 @@
-export const docketClerkOpensCaseConsolidateModal = integrationTest => {
+export const docketClerkOpensCaseConsolidateModal = cerebralTest => {
   it('Docket clerk opens the consolidation modal', async () => {
-    await integrationTest.runSequence('openCleanModalSequence', {
+    await cerebralTest.runSequence('openCleanModalSequence', {
       showModal: 'AddConsolidatedCaseModal',
     });
-    expect(integrationTest.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'AddConsolidatedCaseModal',
     );
   });

@@ -9,23 +9,23 @@ const caseDetailHeaderHelper = withAppContextDecorator(
 );
 
 export const associatedExternalUserViewsCaseDetailForOwnedCase =
-  integrationTest => {
+  cerebralTest => {
     return it('associated external user views case detail for owned case', async () => {
-      await integrationTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber: integrationTest.docketNumber,
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: cerebralTest.docketNumber,
       });
 
-      expect(integrationTest.getState('caseDetail.docketNumber')).toEqual(
-        integrationTest.docketNumber,
+      expect(cerebralTest.getState('caseDetail.docketNumber')).toEqual(
+        cerebralTest.docketNumber,
       );
 
       const helper = runCompute(caseDetailHelper, {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       });
       expect(helper.showPetitionProcessingAlert).toBeFalsy();
 
       const headerHelper = runCompute(caseDetailHeaderHelper, {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       });
       expect(headerHelper.showExternalButtons).toBeTruthy();
     });

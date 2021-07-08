@@ -1,20 +1,20 @@
 export const petitionsClerkClicksCaseDetailTabFromMessageDetail =
-  integrationTest => {
+  cerebralTest => {
     return it('petitions clerk clicks case detail tab from message detail', async () => {
-      expect(integrationTest.getState('currentPage')).toEqual('MessageDetail');
+      expect(cerebralTest.getState('currentPage')).toEqual('MessageDetail');
 
       // simulate click on the case detail primary tab
-      integrationTest.setState(
+      cerebralTest.setState(
         'currentViewMetadata.caseDetail.primaryTab',
         'drafts',
       );
-      await integrationTest.runSequence('caseDetailPrimaryTabChangeSequence');
+      await cerebralTest.runSequence('caseDetailPrimaryTabChangeSequence');
 
-      expect(integrationTest.getState('currentPage')).toEqual(
+      expect(cerebralTest.getState('currentPage')).toEqual(
         'CaseDetailInternal',
       );
       expect(
-        integrationTest.getState(
+        cerebralTest.getState(
           'currentViewMetadata.caseDetail.caseDetailInternalTabs.drafts',
         ),
       ).toBeTruthy();

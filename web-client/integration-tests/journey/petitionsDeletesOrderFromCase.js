@@ -6,37 +6,37 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const petitionsDeletesOrderFromCase = integrationTest => {
+export const petitionsDeletesOrderFromCase = cerebralTest => {
   return it('Petitions clerk deletes Order from case', async () => {
     let formatted = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     const draftOrder = formatted.draftDocuments[0];
 
-    await integrationTest.runSequence('archiveDraftDocumentModalSequence', {
+    await cerebralTest.runSequence('archiveDraftDocumentModalSequence', {
       docketEntryId: draftOrder.docketEntryId,
       docketNumber: draftOrder.docketNumber,
       documentTitle: draftOrder.documentTitle,
       redirectToCaseDetail: true,
     });
 
-    await integrationTest.runSequence('archiveDraftDocumentSequence');
+    await cerebralTest.runSequence('archiveDraftDocumentSequence');
 
     formatted = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
-    expect(integrationTest.getState('alertSuccess.message')).toEqual(
+    expect(cerebralTest.getState('alertSuccess.message')).toEqual(
       'Document deleted.',
     );
     expect(
-      integrationTest.getState('viewerDraftDocumentToDisplay'),
+      cerebralTest.getState('viewerDraftDocumentToDisplay'),
     ).toBeUndefined();
     expect(
-      integrationTest.getState('draftDocumentViewerDocketEntryId'),
+      cerebralTest.getState('draftDocumentViewerDocketEntryId'),
     ).toBeUndefined();
-    expect(integrationTest.getState('caseDetail.messages').length).toBe(1);
+    expect(cerebralTest.getState('caseDetail.messages').length).toBe(1);
 
     expect(
       formatted.draftDocuments.find(

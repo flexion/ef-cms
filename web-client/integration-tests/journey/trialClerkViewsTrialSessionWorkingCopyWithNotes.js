@@ -6,29 +6,28 @@ const trialSessionWorkingCopyHelper = withAppContextDecorator(
   trialSessionWorkingCopyHelperComputed,
 );
 
-export const trialClerkViewsTrialSessionWorkingCopyWithNotes =
-  integrationTest => {
-    return it('Trial Clerk views trial session working copy with notes', async () => {
-      await integrationTest.runSequence('gotoTrialSessionWorkingCopySequence', {
-        trialSessionId: integrationTest.trialSessionId,
-      });
-      expect(integrationTest.getState('currentPage')).toEqual(
-        'TrialSessionWorkingCopy',
-      );
-      expect(
-        integrationTest.getState('trialSessionWorkingCopy.trialSessionId'),
-      ).toEqual(integrationTest.trialSessionId);
-
-      let workingCopyHelper = runCompute(trialSessionWorkingCopyHelper, {
-        state: integrationTest.getState(),
-      });
-
-      const { docketNumber } = workingCopyHelper.formattedCases[0];
-
-      expect(
-        integrationTest.getState(
-          `trialSessionWorkingCopy.userNotes.${docketNumber}.notes`,
-        ),
-      ).toEqual('this is a note added from the modal');
+export const trialClerkViewsTrialSessionWorkingCopyWithNotes = cerebralTest => {
+  return it('Trial Clerk views trial session working copy with notes', async () => {
+    await cerebralTest.runSequence('gotoTrialSessionWorkingCopySequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
-  };
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'TrialSessionWorkingCopy',
+    );
+    expect(
+      cerebralTest.getState('trialSessionWorkingCopy.trialSessionId'),
+    ).toEqual(cerebralTest.trialSessionId);
+
+    let workingCopyHelper = runCompute(trialSessionWorkingCopyHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    const { docketNumber } = workingCopyHelper.formattedCases[0];
+
+    expect(
+      cerebralTest.getState(
+        `trialSessionWorkingCopy.userNotes.${docketNumber}.notes`,
+      ),
+    ).toEqual('this is a note added from the modal');
+  });
+};

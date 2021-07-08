@@ -1,43 +1,43 @@
 import { wait } from '../helpers';
 
 export const petitionsClerkCompletesAndSetsTrialSession = (
-  integrationTest,
+  cerebralTest,
   overrides = {},
 ) => {
   return it('petitions clerk completes a trial session before calendaring', async () => {
-    await integrationTest.runSequence('gotoEditTrialSessionSequence', {
-      trialSessionId: integrationTest.trialSessionId,
+    await cerebralTest.runSequence('gotoEditTrialSessionSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual('EditTrialSession');
+    expect(cerebralTest.getState('currentPage')).toEqual('EditTrialSession');
 
-    await integrationTest.runSequence('openSetCalendarModalSequence');
+    await cerebralTest.runSequence('openSetCalendarModalSequence');
 
-    expect(integrationTest.getState('alertWarning')).toEqual({
+    expect(cerebralTest.getState('alertWarning')).toEqual({
       message: 'Provide an address and a judge to set this trial session.',
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'address1',
       value: '123 Flavor Ave',
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'city',
       value: 'Seattle',
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'state',
       value: 'WA',
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'postalCode',
       value: '98101',
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'judge',
       value: overrides.judge || {
         name: 'Cohen',
@@ -45,29 +45,27 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
       },
     });
 
-    await integrationTest.runSequence('updateTrialSessionSequence');
-    await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: integrationTest.trialSessionId,
+    await cerebralTest.runSequence('updateTrialSessionSequence');
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'TrialSessionDetail',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
 
-    await integrationTest.runSequence('setTrialSessionCalendarSequence');
+    await cerebralTest.runSequence('setTrialSessionCalendarSequence');
     await wait(1000); // we need to wait for some reason
 
     if (overrides.hasPaper) {
-      expect(integrationTest.getState('currentPage')).toEqual(
+      expect(cerebralTest.getState('currentPage')).toEqual(
         'PrintPaperTrialNotices',
       );
-      expect(integrationTest.getState('alertWarning')).toEqual({
+      expect(cerebralTest.getState('alertWarning')).toEqual({
         message: 'Print and mail all paper service documents now.',
       });
     } else {
-      expect(integrationTest.getState('currentPage')).toEqual(
+      expect(cerebralTest.getState('currentPage')).toEqual(
         'TrialSessionDetail',
       );
-      expect(integrationTest.getState('alertSuccess')).toEqual({
+      expect(cerebralTest.getState('alertSuccess')).toEqual({
         message: 'Eligible cases set for trial.',
       });
     }

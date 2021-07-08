@@ -5,50 +5,48 @@ import {
 import { contactPrimaryFromState } from '../helpers';
 import { getPetitionerById } from '../../../shared/src/business/entities/cases/Case';
 
-export const docketClerkRemovesPetitionerFromCase = integrationTest => {
+export const docketClerkRemovesPetitionerFromCase = cerebralTest => {
   return it('docket clerk removes petitioner', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('caseDetail.status')).not.toEqual(
+    expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
       CASE_STATUS_TYPES.new,
     );
 
     const contactPrimaryContactId =
-      contactPrimaryFromState(integrationTest).contactId;
+      contactPrimaryFromState(cerebralTest).contactId;
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',
       {
         contactId: contactPrimaryContactId,
-        docketNumber: integrationTest.docketNumber,
+        docketNumber: cerebralTest.docketNumber,
       },
     );
 
-    await integrationTest.runSequence('openRemovePetitionerModalSequence');
+    await cerebralTest.runSequence('openRemovePetitionerModalSequence');
 
-    expect(integrationTest.getState('modal.showModal')).toBe(
+    expect(cerebralTest.getState('modal.showModal')).toBe(
       'RemovePetitionerModal',
     );
 
-    await integrationTest.runSequence('openRemovePetitionerModalSequence');
-    await integrationTest.runSequence(
-      'removePetitionerAndUpdateCaptionSequence',
-    );
+    await cerebralTest.runSequence('openRemovePetitionerModalSequence');
+    await cerebralTest.runSequence('removePetitionerAndUpdateCaptionSequence');
 
     expect(
       getPetitionerById(
-        integrationTest.getState('caseDetail'),
+        cerebralTest.getState('caseDetail'),
         contactPrimaryContactId,
       ),
     ).toBeUndefined();
 
-    expect(integrationTest.getState('alertSuccess.message')).toBe(
+    expect(cerebralTest.getState('alertSuccess.message')).toBe(
       'Petitioner successfully removed.',
     );
     expect(
-      integrationTest.getState('currentViewMetadata.caseDetail.partyViewTab'),
+      cerebralTest.getState('currentViewMetadata.caseDetail.partyViewTab'),
     ).toBe(PARTY_VIEW_TABS.petitionersAndCounsel);
   });
 };

@@ -6,21 +6,21 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const petitionsClerkEditsGenericOrder = integrationTest => {
+export const petitionsClerkEditsGenericOrder = cerebralTest => {
   return it('Petitions Clerk edits generic order', async () => {
     const formatted = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     const draftOrder = formatted.draftDocuments[0];
 
-    await integrationTest.runSequence('gotoEditOrderSequence', {
+    await cerebralTest.runSequence('gotoEditOrderSequence', {
       docketEntryIdToEdit: draftOrder.docketEntryId,
       docketNumber: draftOrder.docketNumber,
     });
 
-    await integrationTest.runSequence('submitCourtIssuedOrderSequence');
+    await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual('SignOrder');
+    expect(cerebralTest.getState('currentPage')).toEqual('SignOrder');
   });
 };

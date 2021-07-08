@@ -1,11 +1,8 @@
 import { getPetitionWorkItemForCase } from '../helpers';
 
-export const petitionerAddNewCaseToTestObj = (
-  integrationTest,
-  createdCases,
-) => {
+export const petitionerAddNewCaseToTestObj = (cerebralTest, createdCases) => {
   return it('[TEST SETUP DATA] Adds the most recent case to the test object', async () => {
-    const petitionerNewCase = integrationTest.getState('caseDetail');
+    const petitionerNewCase = cerebralTest.getState('caseDetail');
     expect(petitionerNewCase).toBeDefined();
 
     const workitem = getPetitionWorkItemForCase(petitionerNewCase);

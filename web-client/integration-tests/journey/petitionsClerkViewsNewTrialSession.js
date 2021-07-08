@@ -2,16 +2,16 @@ import { formattedTrialSessionDetails } from '../../src/presenter/computeds/form
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const petitionsClerkViewsNewTrialSession = integrationTest => {
+export const petitionsClerkViewsNewTrialSession = cerebralTest => {
   return it('petitions clerk views a new trial session', async () => {
-    await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: integrationTest.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
     const trialSessionFormatted = runCompute(
       withAppContextDecorator(formattedTrialSessionDetails),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 

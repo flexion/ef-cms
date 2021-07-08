@@ -3,15 +3,15 @@ import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const petitionsClerkAddsDocketEntryFromOrder = integrationTest => {
+export const petitionsClerkAddsDocketEntryFromOrder = cerebralTest => {
   return it('Petitions Clerk adds a docket entry from the given order', async () => {
     let helper;
 
     helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
-    const { docketEntryId } = integrationTest;
+    const { docketEntryId } = cerebralTest;
 
     const draftOrderDocument = helper.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -19,26 +19,26 @@ export const petitionsClerkAddsDocketEntryFromOrder = integrationTest => {
 
     expect(draftOrderDocument).toBeTruthy();
 
-    await integrationTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
       docketEntryId: draftOrderDocument.docketEntryId,
-      docketNumber: integrationTest.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const judges = integrationTest.getState('judges');
+    const judges = cerebralTest.getState('judges');
     expect(judges.length).toBeGreaterThan(0);
 
     const legacyJudge = judges.find(judge => judge.role === 'legacyJudge');
     expect(legacyJudge).toBeFalsy();
 
-    expect(integrationTest.getState('form.eventCode')).toEqual(
+    expect(cerebralTest.getState('form.eventCode')).toEqual(
       draftOrderDocument.eventCode,
     );
 
-    expect(integrationTest.getState('form.documentType')).toEqual(
+    expect(cerebralTest.getState('form.documentType')).toEqual(
       draftOrderDocument.documentType,
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'serviceStamp',
@@ -46,14 +46,14 @@ export const petitionsClerkAddsDocketEntryFromOrder = integrationTest => {
       },
     );
 
-    await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(integrationTest.getState('alertSuccess').message).toEqual(
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to docket record.',
     );
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const newDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === docketEntryId,

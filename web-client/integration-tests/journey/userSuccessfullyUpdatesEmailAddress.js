@@ -5,44 +5,42 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const headerHelper = withAppContextDecorator(headerHelperComputed);
 
 export const userSuccessfullyUpdatesEmailAddress = (
-  integrationTest,
+  cerebralTest,
   user,
   mockUpdatedEmail,
 ) =>
   it(`${user} successfully updates email address`, async () => {
-    await integrationTest.runSequence('gotoChangeLoginAndServiceEmailSequence');
+    await cerebralTest.runSequence('gotoChangeLoginAndServiceEmailSequence');
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'email',
       value: mockUpdatedEmail,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
       value: mockUpdatedEmail,
     });
 
-    await integrationTest.runSequence(
-      'submitChangeLoginAndServiceEmailSequence',
-    );
+    await cerebralTest.runSequence('submitChangeLoginAndServiceEmailSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'VerifyNewEmailModal',
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'closeVerifyEmailModalAndNavigateToMyAccountSequence',
       {
         path: '/my-account',
       },
     );
 
-    expect(integrationTest.getState('currentPage')).toEqual('MyAccount');
+    expect(cerebralTest.getState('currentPage')).toEqual('MyAccount');
 
     const header = runCompute(headerHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(header.showVerifyEmailWarningNotification).toBeTruthy();

@@ -2,18 +2,18 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 import { contactPrimaryFromState } from '../helpers';
 
 export const petitionerFilesApplicationToTakeDeposition = (
-  integrationTest,
+  cerebralTest,
   fakeFile,
 ) => {
   return it('Petitioner files an application to take deposition', async () => {
     const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('gotoFileDocumentSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const documentToSelect = {
@@ -25,7 +25,7 @@ export const petitionerFilesApplicationToTakeDeposition = (
     };
 
     for (const key of Object.keys(documentToSelect)) {
-      await integrationTest.runSequence(
+      await cerebralTest.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
           key,
@@ -34,13 +34,13 @@ export const petitionerFilesApplicationToTakeDeposition = (
       );
     }
 
-    await integrationTest.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(integrationTest.getState('form.documentType')).toEqual(
+    expect(cerebralTest.getState('form.documentType')).toEqual(
       documentToSelect.documentType,
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'primaryDocumentFile',
@@ -48,9 +48,9 @@ export const petitionerFilesApplicationToTakeDeposition = (
       },
     );
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: `filersMap.${contactPrimary.contactId}`,
@@ -58,7 +58,7 @@ export const petitionerFilesApplicationToTakeDeposition = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'certificateOfService',
@@ -66,7 +66,7 @@ export const petitionerFilesApplicationToTakeDeposition = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'hasSupportingDocuments',
@@ -74,7 +74,7 @@ export const petitionerFilesApplicationToTakeDeposition = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'objections',
@@ -82,12 +82,10 @@ export const petitionerFilesApplicationToTakeDeposition = (
       },
     );
 
-    await integrationTest.runSequence(
-      'reviewExternalDocumentInformationSequence',
-    );
+    await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('submitExternalDocumentSequence');
+    await cerebralTest.runSequence('submitExternalDocumentSequence');
   });
 };

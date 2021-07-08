@@ -1,11 +1,11 @@
-export const privatePractitionerViewsOpenAndClosedCases = integrationTest => {
+export const privatePractitionerViewsOpenAndClosedCases = cerebralTest => {
   return it('private practitioner views open and closed cases', async () => {
-    await integrationTest.runSequence('gotoDashboardSequence');
+    await cerebralTest.runSequence('gotoDashboardSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'DashboardPractitioner',
     );
-    expect(integrationTest.getState('openCases').length).toBeGreaterThan(0);
-    expect(integrationTest.getState('closedCases').length).toBeGreaterThan(0);
+    expect(cerebralTest.getState('openCases').length).toBeGreaterThan(0);
+    expect(cerebralTest.getState('closedCases').length).toBeGreaterThan(0);
   });
 };

@@ -14,7 +14,7 @@ import { petitionsClerkViewsCaseDetailAfterAddingOrder } from './journey/petitio
 import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
 import { petitionsClerkViewsSignDraftDocument } from './journey/petitionsClerkViewsSignDraftDocument';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Petitions Clerk Create Order Journey', () => {
   beforeAll(() => {
@@ -22,29 +22,29 @@ describe('Petitions Clerk Create Order Journey', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
-  petitionerChoosesProcedureType(integrationTest);
-  petitionerChoosesCaseType(integrationTest);
-  petitionerCreatesNewCase(integrationTest, fakeFile);
-  petitionerViewsDashboard(integrationTest);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(cerebralTest);
+  petitionerChoosesCaseType(cerebralTest);
+  petitionerCreatesNewCase(cerebralTest, fakeFile);
+  petitionerViewsDashboard(cerebralTest);
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(integrationTest);
-  petitionsClerkViewsDraftDocuments(integrationTest);
-  petitionsClerkAddsOrderToCase(integrationTest);
-  petitionsClerkViewsCaseDetailAfterAddingOrder(integrationTest);
-  petitionsClerkViewsDraftDocuments(integrationTest, 1);
-  petitionsClerkViewsSignDraftDocument(integrationTest);
-  petitionsClerkAppliesSignatureToDraftDocument(integrationTest);
-  petitionsClerkClearsSignatureFromDraftDocument(integrationTest);
-  petitionsClerkAppliesSignatureToDraftDocument(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(cerebralTest);
+  petitionsClerkViewsDraftDocuments(cerebralTest);
+  petitionsClerkAddsOrderToCase(cerebralTest);
+  petitionsClerkViewsCaseDetailAfterAddingOrder(cerebralTest);
+  petitionsClerkViewsDraftDocuments(cerebralTest, 1);
+  petitionsClerkViewsSignDraftDocument(cerebralTest);
+  petitionsClerkAppliesSignatureToDraftDocument(cerebralTest);
+  petitionsClerkClearsSignatureFromDraftDocument(cerebralTest);
+  petitionsClerkAppliesSignatureToDraftDocument(cerebralTest);
   petitionsClerkSavesSignatureForDraftDocument(
-    integrationTest,
+    cerebralTest,
     'Order of Dismissal and Decision updated.',
   );
-  petitionsClerkNavigatesBackAfterViewSignDraftDocument(integrationTest);
-  petitionsClerkRemovesSignatureFromDraftDocument(integrationTest);
+  petitionsClerkNavigatesBackAfterViewSignDraftDocument(cerebralTest);
+  petitionsClerkRemovesSignatureFromDraftDocument(cerebralTest);
 });

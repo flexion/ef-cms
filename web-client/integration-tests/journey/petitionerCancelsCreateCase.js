@@ -1,33 +1,31 @@
-export const petitionerCancelsCreateCase = integrationTest => {
+export const petitionerCancelsCreateCase = cerebralTest => {
   it('petitioner navigates to create case and cancels', async () => {
-    await integrationTest.runSequence('gotoStartCaseWizardSequence', {
+    await cerebralTest.runSequence('gotoStartCaseWizardSequence', {
       step: '1',
       wizardStep: 'StartCaseStep1',
     });
-    expect(integrationTest.getState('modal.showModal')).toBeFalsy();
-    expect(integrationTest.getState('form')).toEqual({
+    expect(cerebralTest.getState('modal.showModal')).toBeFalsy();
+    expect(cerebralTest.getState('form')).toEqual({
       contactPrimary: {},
       wizardStep: '1',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
       value: 'Seattle, Washington',
     });
-    expect(integrationTest.getState('form.preferredTrialCity')).toEqual(
+    expect(cerebralTest.getState('form.preferredTrialCity')).toEqual(
       'Seattle, Washington',
     );
 
-    await integrationTest.runSequence('formCancelToggleCancelSequence'); // someone clicks cancel
-    expect(integrationTest.getState('modal.showModal')).toBeTruthy();
-    await integrationTest.runSequence('formCancelToggleCancelSequence'); // someone aborts cancellation
-    expect(integrationTest.getState('currentPage')).toEqual('StartCaseWizard');
+    await cerebralTest.runSequence('formCancelToggleCancelSequence'); // someone clicks cancel
+    expect(cerebralTest.getState('modal.showModal')).toBeTruthy();
+    await cerebralTest.runSequence('formCancelToggleCancelSequence'); // someone aborts cancellation
+    expect(cerebralTest.getState('currentPage')).toEqual('StartCaseWizard');
 
-    await integrationTest.runSequence('formCancelToggleCancelSequence');
-    await integrationTest.runSequence('closeModalAndReturnToDashboardSequence');
-    expect(integrationTest.getState('modal.showModal')).toBeFalsy();
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'DashboardPetitioner',
-    );
+    await cerebralTest.runSequence('formCancelToggleCancelSequence');
+    await cerebralTest.runSequence('closeModalAndReturnToDashboardSequence');
+    expect(cerebralTest.getState('modal.showModal')).toBeFalsy();
+    expect(cerebralTest.getState('currentPage')).toEqual('DashboardPetitioner');
   });
 };

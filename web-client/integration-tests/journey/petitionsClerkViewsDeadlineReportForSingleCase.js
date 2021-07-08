@@ -11,13 +11,13 @@ const caseDeadlineReportHelper = withAppContextDecorator(
 );
 
 export const petitionsClerkViewsDeadlineReportForSingleCase = (
-  integrationTest,
+  cerebralTest,
   overrides = {},
 ) => {
   return it('Petitions clerk views deadline report for a single case', async () => {
-    await integrationTest.runSequence('gotoCaseDeadlineReportSequence');
-    expect(integrationTest.getState('currentPage')).toEqual('CaseDeadlines');
-    expect(integrationTest.getState('judges').length).toBeGreaterThan(0);
+    await cerebralTest.runSequence('gotoCaseDeadlineReportSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDeadlines');
+    expect(cerebralTest.getState('judges').length).toBeGreaterThan(0);
 
     let startDate, endDate;
     if (!overrides.day || !overrides.month || !overrides.year) {
@@ -29,21 +29,19 @@ export const petitionsClerkViewsDeadlineReportForSingleCase = (
       endDate = computedDate;
     }
 
-    await integrationTest.runSequence('selectDateRangeFromCalendarSequence', {
+    await cerebralTest.runSequence('selectDateRangeFromCalendarSequence', {
       endDate: prepareDateFromString(endDate, FORMATS.MMDDYYYY),
       startDate: prepareDateFromString(startDate, FORMATS.MMDDYYYY),
     });
-    integrationTest.setState('screenMetadata.filterStartDateState', startDate);
-    integrationTest.setState('screenMetadata.filterEndDateState', endDate);
+    cerebralTest.setState('screenMetadata.filterStartDateState', startDate);
+    cerebralTest.setState('screenMetadata.filterEndDateState', endDate);
 
-    await integrationTest.runSequence('updateDateRangeForDeadlinesSequence');
+    await cerebralTest.runSequence('updateDateRangeForDeadlinesSequence');
 
-    let deadlines = integrationTest.getState(
-      'caseDeadlineReport.caseDeadlines',
-    );
+    let deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
 
     let deadlinesForThisCase = deadlines.filter(
-      d => d.docketNumber === integrationTest.docketNumber,
+      d => d.docketNumber === cerebralTest.docketNumber,
     );
 
     expect(deadlinesForThisCase.length).toEqual(1);
@@ -51,23 +49,23 @@ export const petitionsClerkViewsDeadlineReportForSingleCase = (
     expect(deadlinesForThisCase[0].deadlineDate).toBeDefined();
 
     let helper = runCompute(caseDeadlineReportHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.showLoadMoreButton).toBeTruthy();
 
-    await integrationTest.runSequence('loadMoreCaseDeadlinesSequence');
+    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
 
-    deadlines = integrationTest.getState('caseDeadlineReport.caseDeadlines');
+    deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
 
     deadlinesForThisCase = deadlines.filter(
-      d => d.docketNumber === integrationTest.docketNumber,
+      d => d.docketNumber === cerebralTest.docketNumber,
     );
 
     expect(deadlinesForThisCase.length).toEqual(2);
 
     helper = runCompute(caseDeadlineReportHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.showLoadMoreButton).toBeFalsy();

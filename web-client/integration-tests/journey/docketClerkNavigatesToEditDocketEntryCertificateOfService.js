@@ -1,40 +1,38 @@
 export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
-  integrationTest,
+  cerebralTest,
   docketRecordIndex = 2,
 ) => {
   it('the docketclerk navigates to page to edit docket entry meta for a minute entry', async () => {
-    await integrationTest.runSequence('gotoEditDocketEntryMetaSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
       docketRecordIndex,
     });
 
-    expect(integrationTest.getState('form.numberOfPages')).toEqual(2);
+    expect(cerebralTest.getState('form.numberOfPages')).toEqual(2);
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'EditDocketEntryMeta',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('EditDocketEntryMeta');
     expect(
-      integrationTest.getState('screenMetadata.documentTitlePreview'),
+      cerebralTest.getState('screenMetadata.documentTitlePreview'),
     ).toEqual('Certificate of Service of Petition 03-03-2003');
-    expect(integrationTest.getState('form.serviceDate')).toEqual(
+    expect(cerebralTest.getState('form.serviceDate')).toEqual(
       '2003-03-03T05:00:00.000Z',
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'serviceDateMonth',
         value: '05',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'serviceDateDay',
         value: '10',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'serviceDateYear',
@@ -43,44 +41,44 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
     );
 
     expect(
-      integrationTest.getState('screenMetadata.documentTitlePreview'),
+      cerebralTest.getState('screenMetadata.documentTitlePreview'),
     ).toEqual('Certificate of Service of Petition 05-10-2005');
-    expect(integrationTest.getState('form.serviceDate')).toEqual(
+    expect(cerebralTest.getState('form.serviceDate')).toEqual(
       '2005-05-10T04:00:00.000Z',
     );
 
-    await integrationTest.runSequence('submitEditDocketEntryMetaSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('alertSuccess')).toMatchObject({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Docket entry changes saved.',
     });
 
-    await integrationTest.runSequence('gotoEditDocketEntryMetaSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
       docketRecordIndex,
     });
 
-    expect(integrationTest.getState('form.numberOfPages')).toEqual(3);
+    expect(cerebralTest.getState('form.numberOfPages')).toEqual(3);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'filingDateDay',
         value: '13',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'filingDateMonth',
         value: '07',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'filingDateYear',
@@ -88,24 +86,24 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
       },
     );
 
-    await integrationTest.runSequence('submitEditDocketEntryMetaSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('alertSuccess')).toMatchObject({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Docket entry changes saved.',
     });
 
-    await integrationTest.runSequence('gotoEditDocketEntryMetaSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
       docketRecordIndex,
     });
 
-    expect(integrationTest.getState('form.numberOfPages')).toEqual(4);
+    expect(cerebralTest.getState('form.numberOfPages')).toEqual(4);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'eventCode',
@@ -113,21 +111,21 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
       },
     );
 
-    await integrationTest.runSequence('submitEditDocketEntryMetaSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('alertSuccess')).toMatchObject({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Docket entry changes saved.',
     });
 
-    await integrationTest.runSequence('gotoEditDocketEntryMetaSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
       docketRecordIndex,
     });
 
-    expect(integrationTest.getState('form.numberOfPages')).toEqual(5);
+    expect(cerebralTest.getState('form.numberOfPages')).toEqual(5);
   });
 };

@@ -1,41 +1,41 @@
 import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 
 export const docketClerkUpdatesSealedContactAddress = (
-  integrationTest,
+  cerebralTest,
   contactType,
 ) => {
   return it('docket clerk updates sealed contact address', async () => {
     let contact;
     if (contactType === 'contactPrimary') {
-      contact = contactPrimaryFromState(integrationTest);
+      contact = contactPrimaryFromState(cerebralTest);
     } else if (contactType === 'contactSecondary') {
-      contact = contactSecondaryFromState(integrationTest);
+      contact = contactSecondaryFromState(cerebralTest);
     }
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',
       {
         contactId: contact.contactId,
-        docketNumber: integrationTest.docketNumber,
+        docketNumber: cerebralTest.docketNumber,
       },
     );
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
       value: 'somewhere over the rainbow',
     });
 
-    await integrationTest.runSequence('submitEditPetitionerSequence');
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     expect(
-      integrationTest.getState(
+      cerebralTest.getState(
         'currentViewMetadata.caseDetail.caseInformationTab',
       ),
     ).toEqual('parties');
 
-    const docketEntries = integrationTest.getState('caseDetail.docketEntries');
+    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
     const noticeOfContactChange = docketEntries.find(
       d => d.eventCode === 'NCA',
     );

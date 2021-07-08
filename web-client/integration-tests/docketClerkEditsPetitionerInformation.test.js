@@ -7,7 +7,7 @@ import {
 } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('docket clerk edits the petitioner information', () => {
@@ -16,15 +16,15 @@ describe('docket clerk edits the petitioner information', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   let caseDetail;
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
 
   it('login as a tax payer and create a case', async () => {
-    caseDetail = await uploadPetition(integrationTest, {
+    caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
@@ -37,19 +37,19 @@ describe('docket clerk edits the petitioner information', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
 
-  petitionsClerkServesElectronicCaseToIrs(integrationTest);
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
 
   it('login as the docketclerk and edit the case contact information', async () => {
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',
       {
         contactId: contactPrimary.contactId,
@@ -59,41 +59,41 @@ describe('docket clerk edits the petitioner information', () => {
 
     expect(contactPrimary.address1).toEqual('734 Cowley Parkway');
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
       value: '',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.phone',
       value: '',
     });
 
-    expect(integrationTest.getState('form.contact.address1')).toBeUndefined();
+    expect(cerebralTest.getState('form.contact.address1')).toBeUndefined();
 
-    await integrationTest.runSequence('submitEditPetitionerSequence');
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       contact: {
         address1: 'Enter mailing address',
         phone: 'Enter phone number',
       },
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.phone',
       value: '1234567890',
     });
 
-    await integrationTest.runSequence('submitEditPetitionerSequence');
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       contact: {
         address1: 'Enter mailing address',
       },
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',
       {
         contactId: contactPrimary.contactId,
@@ -101,45 +101,43 @@ describe('docket clerk edits the petitioner information', () => {
       },
     );
 
-    expect(integrationTest.getState('form.contact.address2')).toEqual(
+    expect(cerebralTest.getState('form.contact.address2')).toEqual(
       'Cum aut velit volupt',
     );
 
-    expect(integrationTest.getState('form.contact.address3')).toEqual(
+    expect(cerebralTest.getState('form.contact.address3')).toEqual(
       'Et sunt veritatis ei',
     );
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
       value: '123 Some Street',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address2',
       value: '',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address3',
       value: '',
     });
   });
 
   it('verify that the paper service modal is displayed after submitting the address, the address was updated, and a Notice of Change of Address was generated and served', async () => {
-    await integrationTest.runSequence('submitEditPetitionerSequence');
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     expect(contactPrimary.address1).toEqual('123 Some Street');
 
     expect(contactPrimary.address2).toBeUndefined();
     expect(contactPrimary.address3).toBeUndefined();
 
-    const noticeDocument = integrationTest
+    const noticeDocument = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(d => d.documentTitle === 'Notice of Change of Address');
     expect(noticeDocument.servedAt).toBeDefined();

@@ -11,7 +11,7 @@ import { petitionsClerkVerifiesAssignedWorkItem } from './journey/petitionsClerk
 import { petitionsClerkViewsMyDocumentQC } from './journey/petitionsClerkViewsMyDocumentQC';
 import { petitionsClerkViewsSectionDocumentQC } from './journey/petitionsClerkViewsSectionDocumentQC';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Petitions Clerk Document QC Journey', () => {
   beforeEach(() => {
@@ -19,23 +19,23 @@ describe('Petitions Clerk Document QC Journey', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const createdCases = [];
 
   const caseCreationCount = 3;
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkViewsSectionDocumentQC(integrationTest, true);
-  petitionsClerkViewsMyDocumentQC(integrationTest, true);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsSectionDocumentQC(cerebralTest, true);
+  petitionsClerkViewsMyDocumentQC(cerebralTest, true);
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
 
   // Create multiple cases for testing
   for (let i = 0; i < caseCreationCount; i++) {
     it(`create case ${i + 1}`, async () => {
-      const caseDetail = await uploadPetition(integrationTest);
+      const caseDetail = await uploadPetition(cerebralTest);
       expect(caseDetail.docketNumber).toBeDefined();
       createdCases.push(caseDetail);
     });
@@ -45,14 +45,14 @@ describe('Petitions Clerk Document QC Journey', () => {
     await refreshElasticsearchIndex();
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkViewsSectionDocumentQC(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsSectionDocumentQC(cerebralTest);
   petitionsClerkGetsSectionDocumentQCInboxCount(
-    integrationTest,
+    cerebralTest,
     caseCreationCount,
   );
-  petitionsClerkBulkAssignsCases(integrationTest, createdCases);
-  petitionsClerkViewsMyDocumentQC(integrationTest);
-  petitionsClerkGetsMyDocumentQCInboxCount(integrationTest, caseCreationCount);
-  petitionsClerkVerifiesAssignedWorkItem(integrationTest, createdCases);
+  petitionsClerkBulkAssignsCases(cerebralTest, createdCases);
+  petitionsClerkViewsMyDocumentQC(cerebralTest);
+  petitionsClerkGetsMyDocumentQCInboxCount(cerebralTest, caseCreationCount);
+  petitionsClerkVerifiesAssignedWorkItem(cerebralTest, createdCases);
 });

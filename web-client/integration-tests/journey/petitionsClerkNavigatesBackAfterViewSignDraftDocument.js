@@ -1,25 +1,25 @@
 export const petitionsClerkNavigatesBackAfterViewSignDraftDocument =
-  integrationTest => {
+  cerebralTest => {
     return it('Petitions clerk views sign draft document and navigates back to draft documents', async () => {
-      await integrationTest.runSequence('gotoSignOrderSequence', {
-        docketEntryId: integrationTest.docketEntryId,
-        docketNumber: integrationTest.docketNumber,
+      await cerebralTest.runSequence('gotoSignOrderSequence', {
+        docketEntryId: cerebralTest.docketEntryId,
+        docketNumber: cerebralTest.docketNumber,
       });
 
-      expect(integrationTest.getState('currentPage')).toEqual('SignOrder');
+      expect(cerebralTest.getState('currentPage')).toEqual('SignOrder');
 
-      await integrationTest.runSequence(
+      await cerebralTest.runSequence(
         'navigateToCaseDetailWithDraftDocumentSequence',
         {
           primaryTab: 'draftDocuments',
           viewerDraftDocumentToDisplay: {
-            docketEntryId: integrationTest.docketEntryId,
+            docketEntryId: cerebralTest.docketEntryId,
           },
         },
       );
 
       expect(
-        integrationTest.getState('currentViewMetadata.caseDetail.primaryTab'),
+        cerebralTest.getState('currentViewMetadata.caseDetail.primaryTab'),
       ).toEqual('drafts');
     });
   };

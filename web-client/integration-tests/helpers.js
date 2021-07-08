@@ -111,39 +111,39 @@ export const callCognitoTriggerForPendingEmail = async userId => {
   });
 };
 
-export const getFormattedDocumentQCMyInbox = async integrationTest => {
-  await integrationTest.runSequence('chooseWorkQueueSequence', {
+export const getFormattedDocumentQCMyInbox = async cerebralTest => {
+  await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'my',
   });
   return runCompute(formattedWorkQueue, {
-    state: integrationTest.getState(),
+    state: cerebralTest.getState(),
   });
 };
 
-export const getFormattedDocketEntriesForTest = async integrationTest => {
-  await integrationTest.runSequence('gotoCaseDetailSequence', {
-    docketNumber: integrationTest.docketNumber,
+export const getFormattedDocketEntriesForTest = async cerebralTest => {
+  await cerebralTest.runSequence('gotoCaseDetailSequence', {
+    docketNumber: cerebralTest.docketNumber,
   });
   return runCompute(formattedDocketEntries, {
-    state: integrationTest.getState(),
+    state: cerebralTest.getState(),
   });
 };
 
-export const contactPrimaryFromState = integrationTest => {
-  return integrationTest.getState('caseDetail.petitioners.0');
+export const contactPrimaryFromState = cerebralTest => {
+  return cerebralTest.getState('caseDetail.petitioners.0');
 };
 
-export const contactSecondaryFromState = integrationTest => {
-  return integrationTest.getState('caseDetail.petitioners.1');
+export const contactSecondaryFromState = cerebralTest => {
+  return cerebralTest.getState('caseDetail.petitioners.1');
 };
 
-export const getCaseMessagesForCase = async integrationTest => {
-  await integrationTest.runSequence('gotoCaseDetailSequence', {
-    docketNumber: integrationTest.docketNumber,
+export const getCaseMessagesForCase = async cerebralTest => {
+  await cerebralTest.runSequence('gotoCaseDetailSequence', {
+    docketNumber: cerebralTest.docketNumber,
   });
   return runCompute(formattedCaseMessages, {
-    state: integrationTest.getState(),
+    state: cerebralTest.getState(),
   });
 };
 
@@ -186,67 +186,67 @@ export const deleteEmails = emails => {
   );
 };
 
-export const getFormattedDocumentQCSectionInbox = async integrationTest => {
-  await integrationTest.runSequence('chooseWorkQueueSequence', {
+export const getFormattedDocumentQCSectionInbox = async cerebralTest => {
+  await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'section',
   });
   return runCompute(formattedWorkQueue, {
-    state: integrationTest.getState(),
+    state: cerebralTest.getState(),
   });
 };
 
-export const getFormattedDocumentQCMyOutbox = async integrationTest => {
-  await integrationTest.runSequence('chooseWorkQueueSequence', {
+export const getFormattedDocumentQCMyOutbox = async cerebralTest => {
+  await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'my',
   });
   return runCompute(formattedWorkQueue, {
-    state: integrationTest.getState(),
+    state: cerebralTest.getState(),
   });
 };
 
-export const getFormattedDocumentQCSectionOutbox = async integrationTest => {
-  await integrationTest.runSequence('chooseWorkQueueSequence', {
+export const getFormattedDocumentQCSectionOutbox = async cerebralTest => {
+  await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'section',
   });
   return runCompute(formattedWorkQueue, {
-    state: integrationTest.getState(),
+    state: cerebralTest.getState(),
   });
 };
 
 export const serveDocument = async ({
+  cerebralTest,
   docketEntryId,
   docketNumber,
-  integrationTest,
 }) => {
-  await integrationTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+  await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
     docketEntryId,
     docketNumber,
   });
 
-  await integrationTest.runSequence('openConfirmInitiateServiceModalSequence');
-  await integrationTest.runSequence(
+  await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
+  await cerebralTest.runSequence(
     'serveCourtIssuedDocumentFromDocketEntrySequence',
   );
 };
 
 export const createCourtIssuedDocketEntry = async ({
+  cerebralTest,
   docketEntryId,
   docketNumber,
   eventCode,
   filingDate,
-  integrationTest,
   trialLocation,
 }) => {
-  await integrationTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+  await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
     docketEntryId,
     docketNumber,
   });
 
   if (eventCode) {
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
@@ -255,7 +255,7 @@ export const createCourtIssuedDocketEntry = async ({
     );
   }
 
-  await integrationTest.runSequence(
+  await cerebralTest.runSequence(
     'updateCourtIssuedDocketEntryFormValueSequence',
     {
       key: 'judge',
@@ -264,7 +264,7 @@ export const createCourtIssuedDocketEntry = async ({
   );
 
   if (trialLocation) {
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'trialLocation',
@@ -274,21 +274,21 @@ export const createCourtIssuedDocketEntry = async ({
   }
 
   if (filingDate) {
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'filingDateMonth',
         value: filingDate.month,
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'filingDateDay',
         value: filingDate.day,
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'filingDateYear',
@@ -297,30 +297,30 @@ export const createCourtIssuedDocketEntry = async ({
     );
   }
 
-  await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
+  await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 };
 
-export const getIndividualInboxCount = integrationTest => {
+export const getIndividualInboxCount = cerebralTest => {
   return runCompute(workQueueHelper, {
-    state: integrationTest.getState(),
+    state: cerebralTest.getState(),
   }).individualInboxCount;
 };
 
-export const getSectionInboxCount = integrationTest => {
+export const getSectionInboxCount = cerebralTest => {
   return runCompute(workQueueHelper, {
-    state: integrationTest.getState(),
+    state: cerebralTest.getState(),
   }).sectionInboxCount;
 };
 
-export const getSectionInProgressCount = integrationTest => {
+export const getSectionInProgressCount = cerebralTest => {
   return runCompute(workQueueHelper, {
-    state: integrationTest.getState(),
+    state: cerebralTest.getState(),
   }).sectionInProgressCount;
 };
 
-export const getIndividualInProgressCount = integrationTest => {
+export const getIndividualInProgressCount = cerebralTest => {
   return runCompute(workQueueHelper, {
-    state: integrationTest.getState(),
+    state: cerebralTest.getState(),
   }).individualInProgressCount;
 };
 
@@ -328,11 +328,11 @@ export const findWorkItemByDocketNumber = (queue, docketNumber) => {
   return queue.find(workItem => workItem.docketNumber === docketNumber);
 };
 
-export const getNotifications = integrationTest => {
-  return integrationTest.getState('notifications');
+export const getNotifications = cerebralTest => {
+  return cerebralTest.getState('notifications');
 };
 
-export const assignWorkItems = async (integrationTest, to, workItems) => {
+export const assignWorkItems = async (cerebralTest, to, workItems) => {
   const users = {
     adc: {
       name: 'test ADC',
@@ -343,22 +343,22 @@ export const assignWorkItems = async (integrationTest, to, workItems) => {
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     },
   };
-  await integrationTest.runSequence('selectAssigneeSequence', {
+  await cerebralTest.runSequence('selectAssigneeSequence', {
     assigneeId: users[to].userId,
     assigneeName: users[to].name,
   });
   for (let workItem of workItems) {
-    await integrationTest.runSequence('selectWorkItemSequence', {
+    await cerebralTest.runSequence('selectWorkItemSequence', {
       workItem,
     });
   }
-  await integrationTest.runSequence('assignSelectedWorkItemsSequence');
+  await cerebralTest.runSequence('assignSelectedWorkItemsSequence');
 };
 
-export const uploadExternalDecisionDocument = async integrationTest => {
-  const contactPrimary = contactPrimaryFromState(integrationTest);
+export const uploadExternalDecisionDocument = async cerebralTest => {
+  const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-  integrationTest.setState('form', {
+  cerebralTest.setState('form', {
     attachments: false,
     category: 'Decision',
     certificateOfService: false,
@@ -377,13 +377,13 @@ export const uploadExternalDecisionDocument = async integrationTest => {
     supportingDocumentFreeText: null,
     supportingDocumentMetadata: null,
   });
-  await integrationTest.runSequence('submitExternalDocumentSequence');
+  await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
 
-export const uploadExternalRatificationDocument = async integrationTest => {
-  const contactPrimary = contactPrimaryFromState(integrationTest);
+export const uploadExternalRatificationDocument = async cerebralTest => {
+  const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-  integrationTest.setState('form', {
+  cerebralTest.setState('form', {
     attachments: false,
     category: 'Miscellaneous',
     certificateOfService: false,
@@ -403,11 +403,11 @@ export const uploadExternalRatificationDocument = async integrationTest => {
     supportingDocumentFreeText: null,
     supportingDocumentMetadata: null,
   });
-  await integrationTest.runSequence('submitExternalDocumentSequence');
+  await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
 
-export const uploadProposedStipulatedDecision = async integrationTest => {
-  integrationTest.setState('form', {
+export const uploadProposedStipulatedDecision = async cerebralTest => {
+  cerebralTest.setState('form', {
     attachments: false,
     category: 'Decision',
     certificateOfService: false,
@@ -424,11 +424,11 @@ export const uploadProposedStipulatedDecision = async integrationTest => {
     scenario: 'Standard',
     searchError: false,
   });
-  await integrationTest.runSequence('submitExternalDocumentSequence');
+  await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
 
 export const uploadPetition = async (
-  integrationTest,
+  cerebralTest,
   overrides = {},
   loginUsername = 'petitioner@example.com',
 ) => {
@@ -487,27 +487,27 @@ export const uploadPetition = async (
     },
   });
 
-  integrationTest.setState('caseDetail', response.data);
+  cerebralTest.setState('caseDetail', response.data);
 
   return response.data;
 };
 
-export const loginAs = (integrationTest, user) =>
+export const loginAs = (cerebralTest, user) =>
   it(`login as ${user}`, async () => {
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'name',
       value: user,
     });
 
-    await integrationTest.runSequence('submitLoginSequence', {
+    await cerebralTest.runSequence('submitLoginSequence', {
       path: '/',
     });
 
-    expect(integrationTest.getState('user.email')).toBeDefined();
+    expect(cerebralTest.getState('user.email')).toBeDefined();
   });
 
 export const setupTest = ({ useCases = {} } = {}) => {
-  let integrationTest;
+  let cerebralTest;
   global.FormData = FormDataHelper;
   global.Blob = () => {
     return fakeFile;
@@ -574,7 +574,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     },
     location: { replace: jest.fn() },
     open: url => {
-      integrationTest.setState('openedUrl', url);
+      cerebralTest.setState('openedUrl', url);
       return {
         close: jest.fn(),
         document: {
@@ -627,22 +627,22 @@ export const setupTest = ({ useCases = {} } = {}) => {
     route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
 
-  integrationTest = CerebralTest(presenter);
-  integrationTest.getSequence = seqName => async obj =>
-    await integrationTest.runSequence(seqName, obj);
-  integrationTest.closeSocket = stopSocket;
-  integrationTest.applicationContext = applicationContext;
-  integrationTest.setState('constants', applicationContext.getConstants());
+  cerebralTest = CerebralTest(presenter);
+  cerebralTest.getSequence = seqName => async obj =>
+    await cerebralTest.runSequence(seqName, obj);
+  cerebralTest.closeSocket = stopSocket;
+  cerebralTest.applicationContext = applicationContext;
+  cerebralTest.setState('constants', applicationContext.getConstants());
 
-  router.initialize(integrationTest, (route, cb) => {
+  router.initialize(cerebralTest, (route, cb) => {
     routes.push({
       cb,
       route,
     });
   });
-  initializeSocketProvider(integrationTest);
+  initializeSocketProvider(cerebralTest);
 
-  return integrationTest;
+  return cerebralTest;
 };
 
 const mockQuery = routeToGoTo => {
@@ -670,8 +670,8 @@ export const gotoRoute = async (routes, routeToGoTo) => {
   throw new Error(`route ${routeToGoTo} not found`);
 };
 
-export const viewCaseDetail = async ({ docketNumber, integrationTest }) => {
-  await integrationTest.runSequence('gotoCaseDetailSequence', {
+export const viewCaseDetail = async ({ cerebralTest, docketNumber }) => {
+  await cerebralTest.runSequence('gotoCaseDetailSequence', {
     docketNumber,
   });
 };
@@ -700,15 +700,15 @@ export const base64ToUInt8Array = b64 => {
   return bytes;
 };
 
-export const setBatchPages = ({ integrationTest }) => {
-  const selectedDocumentType = integrationTest.getState(
+export const setBatchPages = ({ cerebralTest }) => {
+  const selectedDocumentType = cerebralTest.getState(
     'currentViewMetadata.documentSelectedForScan',
   );
-  let batches = integrationTest.getState(
+  let batches = cerebralTest.getState(
     `scanner.batches.${selectedDocumentType}`,
   );
 
-  integrationTest.setState(
+  cerebralTest.setState(
     `scanner.batches.${selectedDocumentType}`,
     batches.map(batch => ({
       ...batch,

@@ -1,23 +1,23 @@
 export const petitionsClerkCancelsAddingDeficiencyStatisticToCase =
-  integrationTest => {
+  cerebralTest => {
     return it('Petitions clerk cancels adding deficiency statistic to case', async () => {
-      await integrationTest.runSequence('gotoAddDeficiencyStatisticsSequence', {
-        docketNumber: integrationTest.docketNumber,
+      await cerebralTest.runSequence('gotoAddDeficiencyStatisticsSequence', {
+        docketNumber: cerebralTest.docketNumber,
       });
 
-      expect(integrationTest.getState('currentPage')).toEqual(
+      expect(cerebralTest.getState('currentPage')).toEqual(
         'AddDeficiencyStatistics',
       );
 
-      await integrationTest.runSequence('cancelAddStatisticSequence', {
-        docketNumber: integrationTest.docketNumber,
+      await cerebralTest.runSequence('cancelAddStatisticSequence', {
+        docketNumber: cerebralTest.docketNumber,
       });
 
-      expect(integrationTest.getState('currentPage')).toEqual(
+      expect(cerebralTest.getState('currentPage')).toEqual(
         'CaseDetailInternal',
       );
       expect(
-        integrationTest.getState(
+        cerebralTest.getState(
           'currentViewMetadata.caseDetail.caseInformationTab',
         ),
       ).toEqual('statistics');

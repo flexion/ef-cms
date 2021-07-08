@@ -1,15 +1,15 @@
 export const petitionsClerkSelectsFirstPetitionOnMyDocumentQC =
-  integrationTest => {
+  cerebralTest => {
     return it('Petitions clerk selects first petition on My Document QC', async () => {
-      const workItem = integrationTest
+      const workItem = cerebralTest
         .getState('workQueue')
         .find(
           workItemInQueue =>
-            workItemInQueue.docketNumber === integrationTest.docketNumber,
+            workItemInQueue.docketNumber === cerebralTest.docketNumber,
         );
 
       const { docketEntryId } = workItem.docketEntry;
 
-      integrationTest.docketEntryId = docketEntryId;
+      cerebralTest.docketEntryId = docketEntryId;
     });
   };

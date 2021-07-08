@@ -3,44 +3,42 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkUploadsACourtIssuedDocument = (
-  integrationTest,
+  cerebralTest,
   fakeFile,
 ) => {
   return it('Docket Clerk uploads a court issued document', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('gotoUploadCourtIssuedDocumentSequence');
+    await cerebralTest.runSequence('gotoUploadCourtIssuedDocumentSequence');
 
-    await integrationTest.runSequence('uploadCourtIssuedDocumentSequence');
+    await cerebralTest.runSequence('uploadCourtIssuedDocumentSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       freeText: 'Enter a description',
       primaryDocumentFile: 'Upload a document',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'freeText',
       value: 'Some order content',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
-    await integrationTest.runSequence(
-      'validateUploadCourtIssuedDocumentSequence',
-    );
+    await cerebralTest.runSequence('validateUploadCourtIssuedDocumentSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('uploadCourtIssuedDocumentSequence');
+    await cerebralTest.runSequence('uploadCourtIssuedDocumentSequence');
 
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
@@ -49,6 +47,6 @@ export const docketClerkUploadsACourtIssuedDocument = (
       prev.createdAt > current.createdAt ? prev : current,
     );
     expect(newDraftOrder).toBeTruthy();
-    integrationTest.draftOrders.push(newDraftOrder);
+    cerebralTest.draftOrders.push(newDraftOrder);
   });
 };

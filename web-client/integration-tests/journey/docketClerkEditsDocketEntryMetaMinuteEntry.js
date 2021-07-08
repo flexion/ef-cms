@@ -1,10 +1,8 @@
-export const docketClerkEditsDocketEntryMetaMinuteEntry = integrationTest => {
+export const docketClerkEditsDocketEntryMetaMinuteEntry = cerebralTest => {
   return it('docket clerk edits docket entry meta for a minute entry', async () => {
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'EditDocketEntryMeta',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('EditDocketEntryMeta');
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'filingDate',
@@ -12,7 +10,7 @@ export const docketClerkEditsDocketEntryMetaMinuteEntry = integrationTest => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'filingDateDay',
@@ -20,7 +18,7 @@ export const docketClerkEditsDocketEntryMetaMinuteEntry = integrationTest => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'filingDateMonth',
@@ -28,7 +26,7 @@ export const docketClerkEditsDocketEntryMetaMinuteEntry = integrationTest => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'filingDateYear',
@@ -36,7 +34,7 @@ export const docketClerkEditsDocketEntryMetaMinuteEntry = integrationTest => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'documentTitle',
@@ -44,13 +42,13 @@ export const docketClerkEditsDocketEntryMetaMinuteEntry = integrationTest => {
       },
     );
 
-    await integrationTest.runSequence('submitEditDocketEntryMetaSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('alertSuccess')).toMatchObject({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Docket entry changes saved.',
     });
   });

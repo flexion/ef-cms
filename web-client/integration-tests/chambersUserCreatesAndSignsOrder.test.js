@@ -11,8 +11,8 @@ import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProce
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
-const integrationTest = setupTest();
-integrationTest.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Chambers dashboard', () => {
   beforeAll(() => {
@@ -20,22 +20,22 @@ describe('Chambers dashboard', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
-  petitionerChoosesProcedureType(integrationTest);
-  petitionerChoosesCaseType(integrationTest);
-  petitionerCreatesNewCase(integrationTest, fakeFile);
-  petitionerViewsDashboard(integrationTest);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(cerebralTest);
+  petitionerChoosesCaseType(cerebralTest);
+  petitionerCreatesNewCase(cerebralTest, fakeFile);
+  petitionerViewsDashboard(cerebralTest);
 
-  loginAs(integrationTest, 'colvinsChambers@example.com');
-  chambersUserViewsCaseDetail(integrationTest, 2);
-  chambersUserViewsDraftDocuments(integrationTest);
-  chambersUserAddsOrderToCase(integrationTest);
-  chambersUserViewsCaseDetailAfterAddingOrder(integrationTest, 3);
-  chambersUserViewsDraftDocuments(integrationTest, 1);
-  chambersUserViewsSignDraftDocument(integrationTest);
-  chambersUserAppliesSignatureToDraftDocument(integrationTest);
-  chambersUserSavesSignatureForDraftDocument(integrationTest);
+  loginAs(cerebralTest, 'colvinsChambers@example.com');
+  chambersUserViewsCaseDetail(cerebralTest, 2);
+  chambersUserViewsDraftDocuments(cerebralTest);
+  chambersUserAddsOrderToCase(cerebralTest);
+  chambersUserViewsCaseDetailAfterAddingOrder(cerebralTest, 3);
+  chambersUserViewsDraftDocuments(cerebralTest, 1);
+  chambersUserViewsSignDraftDocument(cerebralTest);
+  chambersUserAppliesSignatureToDraftDocument(cerebralTest);
+  chambersUserSavesSignatureForDraftDocument(cerebralTest);
 });

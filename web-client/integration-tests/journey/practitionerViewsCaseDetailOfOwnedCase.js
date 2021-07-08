@@ -1,21 +1,19 @@
 import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 
-export const practitionerViewsCaseDetailOfOwnedCase = integrationTest => {
+export const practitionerViewsCaseDetailOfOwnedCase = cerebralTest => {
   return it('Practitioner views case detail of owned case', async () => {
-    integrationTest.setState('caseDetail', {});
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
     expect(
-      integrationTest.getState('caseDetail.privatePractitioners.0.name'),
+      cerebralTest.getState('caseDetail.privatePractitioners.0.name'),
     ).toEqual('Test Private Practitioner');
-    const contactPrimary = contactPrimaryFromState(integrationTest);
-    const contactSecondary = contactSecondaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    const contactSecondary = contactSecondaryFromState(cerebralTest);
     expect(
-      integrationTest.getState(
-        'caseDetail.privatePractitioners.0.representing',
-      ),
+      cerebralTest.getState('caseDetail.privatePractitioners.0.representing'),
     ).toEqual([contactPrimary.contactId, contactSecondary.contactId]);
   });
 };

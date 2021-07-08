@@ -2,58 +2,53 @@ import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/O
 
 const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
-export const chambersUserSkipSigningOrder = integrationTest => {
+export const chambersUserSkipSigningOrder = cerebralTest => {
   return it('Chambers user adds order and skips signing', async () => {
-    await integrationTest.runSequence('openCreateOrderChooseTypeModalSequence');
+    await cerebralTest.runSequence('openCreateOrderChooseTypeModalSequence');
 
-    await integrationTest.runSequence('submitCreateOrderModalSequence');
+    await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       documentTitle: errorMessages.documentTitle[0].message,
       documentType: errorMessages.documentType,
       eventCode: errorMessages.eventCode,
     });
 
-    await integrationTest.runSequence(
-      'updateCreateOrderModalFormValueSequence',
-      {
-        key: 'eventCode',
-        value: 'ODD',
-      },
-    );
+    await cerebralTest.runSequence('updateCreateOrderModalFormValueSequence', {
+      key: 'eventCode',
+      value: 'ODD',
+    });
 
-    expect(integrationTest.getState('modal.documentType')).toEqual(
+    expect(cerebralTest.getState('modal.documentType')).toEqual(
       'Order of Dismissal and Decision',
     );
 
-    await integrationTest.runSequence('submitCreateOrderModalSequence');
+    await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: '<p>This is a test order.</p>',
     });
 
-    await integrationTest.runSequence('submitCourtIssuedOrderSequence');
+    await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
-    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
 
     //skip signing and go back to caseDetail
-    await integrationTest.runSequence('skipSigningOrderSequence');
+    await cerebralTest.runSequence('skipSigningOrderSequence');
 
     // should navigate to the case detail internal page with the draft documents tab showing
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
     expect(
-      integrationTest.getState(
+      cerebralTest.getState(
         'currentViewMetadata.caseDetail.caseDetailInternalTabs.drafts',
       ),
     ).toBeTruthy();
 
-    expect(integrationTest.getState('alertSuccess')).toBeDefined();
+    expect(cerebralTest.getState('alertSuccess')).toBeDefined();
   });
 };

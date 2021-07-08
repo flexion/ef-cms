@@ -1,49 +1,49 @@
 export const petitionsClerkViewsRepliesAndCompletesMessageInInbox =
-  integrationTest => {
+  cerebralTest => {
     return it('petitions clerk views, replies, and completes messsage in inbox', async () => {
-      await integrationTest.runSequence('gotoMessagesSequence', {
+      await cerebralTest.runSequence('gotoMessagesSequence', {
         box: 'inbox',
         queue: 'my',
       });
 
-      const messages = integrationTest.getState('messages');
+      const messages = cerebralTest.getState('messages');
 
       const foundMessage = messages.find(
-        message => message.subject === integrationTest.testMessageSubject,
+        message => message.subject === cerebralTest.testMessageSubject,
       );
 
       expect(foundMessage).toBeDefined();
       expect(foundMessage.from).toEqual('Test Petitionsclerk');
 
-      integrationTest.parentMessageId = foundMessage.parentMessageId;
+      cerebralTest.parentMessageId = foundMessage.parentMessageId;
 
-      await integrationTest.runSequence('gotoMessageDetailSequence', {
-        docketNumber: integrationTest.docketNumber,
-        parentMessageId: integrationTest.parentMessageId,
+      await cerebralTest.runSequence('gotoMessageDetailSequence', {
+        docketNumber: cerebralTest.docketNumber,
+        parentMessageId: cerebralTest.parentMessageId,
       });
 
-      await integrationTest.runSequence('openReplyToMessageModalSequence');
+      await cerebralTest.runSequence('openReplyToMessageModalSequence');
 
-      expect(integrationTest.getState('modal.form')).toMatchObject({
-        parentMessageId: integrationTest.parentMessageId,
-        subject: integrationTest.testMessageSubject,
+      expect(cerebralTest.getState('modal.form')).toMatchObject({
+        parentMessageId: cerebralTest.parentMessageId,
+        subject: cerebralTest.testMessageSubject,
         to: 'Test Petitionsclerk',
       });
 
-      await integrationTest.runSequence('updateModalValueSequence', {
+      await cerebralTest.runSequence('updateModalValueSequence', {
         key: 'form.message',
         value: 'Millions of families suffer from it every year.',
       });
 
-      await integrationTest.runSequence('replyToMessageSequence');
+      await cerebralTest.runSequence('replyToMessageSequence');
 
-      await integrationTest.runSequence('openCompleteMessageModalSequence');
+      await cerebralTest.runSequence('openCompleteMessageModalSequence');
 
-      await integrationTest.runSequence('updateModalValueSequence', {
+      await cerebralTest.runSequence('updateModalValueSequence', {
         key: 'form.message',
         value: 'Win, Win win no matter what',
       });
 
-      await integrationTest.runSequence('completeMessageSequence');
+      await cerebralTest.runSequence('completeMessageSequence');
     });
   };

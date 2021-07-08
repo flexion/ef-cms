@@ -2,22 +2,22 @@ import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
-export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
+export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('petitioner files document for case', async () => {
-    await integrationTest.runSequence('gotoFileDocumentSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       category: VALIDATION_ERROR_MESSAGES.category,
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'category',
@@ -25,33 +25,33 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence('validateSelectDocumentTypeSequence');
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'documentType',
         value: 'Answer',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'documentTitle',
         value: 'Answer',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'eventCode',
         value: 'A',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'scenario',
@@ -59,15 +59,15 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence('validateSelectDocumentTypeSequence');
+    await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(integrationTest.getState('form.documentType')).toEqual('Answer');
+    expect(cerebralTest.getState('form.documentType')).toEqual('Answer');
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'category',
@@ -75,34 +75,34 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'documentType',
         value: 'Motion for Leave to File Out of Time',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'documentTitle',
         value: 'Motion for Leave to File Out of Time [Document Name]',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'eventCode',
         value: 'M014',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'scenario',
@@ -110,16 +110,16 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       secondaryDocument: {
         category: VALIDATION_ERROR_MESSAGES.category,
         documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       },
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'secondaryDocument.category',
@@ -127,28 +127,28 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'secondaryDocument.documentType',
         value: 'Statement',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'secondaryDocument.documentTitle',
         value: 'Statement [anything]',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'secondaryDocument.eventCode',
         value: 'STAT',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'secondaryDocument.scenario',
@@ -156,15 +156,15 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       secondaryDocument: {
         freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
       },
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'secondaryDocument.freeText',
@@ -172,17 +172,17 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('form.documentTitle')).toEqual(
+    expect(cerebralTest.getState('form.documentTitle')).toEqual(
       'Motion for Leave to File Out of Time Statement Anything',
     );
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: `filersMap.${contactPrimary.contactId}`,
@@ -190,21 +190,19 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
-      'reviewExternalDocumentInformationSequence',
-    );
+    await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
-    expect(integrationTest.getState('form.filers')).toEqual([
+    expect(cerebralTest.getState('form.filers')).toEqual([
       contactPrimary.contactId,
     ]);
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       objections: VALIDATION_ERROR_MESSAGES.objections,
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'certificateOfService',
@@ -212,14 +210,14 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence('addSupportingDocumentToFormSequence', {
+    await cerebralTest.runSequence('addSupportingDocumentToFormSequence', {
       type: 'primary',
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
         VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
       objections: VALIDATION_ERROR_MESSAGES.objections,
@@ -233,7 +231,7 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       ],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'objections',
@@ -241,10 +239,10 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
         VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
@@ -257,21 +255,21 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       ],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'certificateOfServiceMonth',
         value: '12',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'certificateOfServiceDay',
         value: '12',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'certificateOfServiceYear',
@@ -279,10 +277,10 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
         VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
@@ -295,7 +293,7 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       ],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'certificateOfServiceYear',
@@ -303,10 +301,10 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
       supportingDocuments: [
@@ -317,14 +315,14 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       ],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'supportingDocuments.0.category',
         value: 'Supporting Document',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'supportingDocuments.0.documentType',
@@ -332,17 +330,17 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'supportingDocuments.0.previousDocument',
         value: {
-          documentTitle: integrationTest.getState('form.documentTitle'),
-          documentType: integrationTest.getState('form.documentType'),
+          documentTitle: cerebralTest.getState('form.documentTitle'),
+          documentType: cerebralTest.getState('form.documentType'),
         },
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'supportingDocuments.0.supportingDocument',
@@ -350,10 +348,10 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
       supportingDocuments: [
@@ -367,7 +365,7 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       ],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'supportingDocuments.0.supportingDocumentFreeText',
@@ -375,10 +373,10 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
       supportingDocuments: [
@@ -390,21 +388,21 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       ],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'primaryDocumentFile',
         value: fakeFile,
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'secondaryDocumentFile',
         value: fakeFile,
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'supportingDocuments.0.supportingDocumentFile',
@@ -412,19 +410,19 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('addSupportingDocumentToFormSequence', {
+    await cerebralTest.runSequence('addSupportingDocumentToFormSequence', {
       type: 'secondary',
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       secondarySupportingDocuments: [
         {
           index: 0,
@@ -433,35 +431,35 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       ],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'secondarySupportingDocuments.0.category',
         value: 'Supporting Document',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'secondarySupportingDocuments.0.documentType',
         value: 'Declaration in Support',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'secondarySupportingDocuments.0.previousDocument',
         value: {
-          documentTitle: integrationTest.getState(
+          documentTitle: cerebralTest.getState(
             'form.secondaryDocument.documentTitle',
           ),
-          documentType: integrationTest.getState(
+          documentType: cerebralTest.getState(
             'form.secondaryDocument.documentType',
           ),
         },
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'secondarySupportingDocuments.0.supportingDocument',
@@ -469,10 +467,10 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       secondarySupportingDocuments: [
         {
           index: 0,
@@ -484,7 +482,7 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       ],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'secondarySupportingDocuments.0.supportingDocumentFile',
@@ -492,7 +490,7 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'secondarySupportingDocuments.0.supportingDocumentFreeText',
@@ -500,12 +498,10 @@ export const petitionerFilesDocumentForCase = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
-      'reviewExternalDocumentInformationSequence',
-    );
+    await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('submitExternalDocumentSequence');
+    await cerebralTest.runSequence('submitExternalDocumentSequence');
   });
 };

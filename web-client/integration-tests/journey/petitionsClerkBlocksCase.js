@@ -5,50 +5,47 @@ const { DOCKET_NUMBER_SUFFIXES, STATUS_TYPES } =
   applicationContext.getConstants();
 
 export const petitionsClerkBlocksCase = (
-  integrationTest,
+  cerebralTest,
   trialLocation,
   overrides = {},
 ) => {
   return it('Petitions clerk blocks the case', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(integrationTest.getState('caseDetail').blocked).toBeFalsy();
+    expect(cerebralTest.getState('caseDetail').blocked).toBeFalsy();
 
-    await integrationTest.runSequence('blockCaseFromTrialSequence');
+    await cerebralTest.runSequence('blockCaseFromTrialSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       reason: 'Provide a reason',
     });
 
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'reason',
       value: 'just because',
     });
 
-    await integrationTest.runSequence('blockCaseFromTrialSequence');
+    await cerebralTest.runSequence('blockCaseFromTrialSequence');
 
-    expect(integrationTest.getState('alertSuccess').message).toEqual(
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Case blocked from being set for trial.',
     );
-    expect(integrationTest.getState('caseDetail').blocked).toBeTruthy();
-    expect(integrationTest.getState('caseDetail').blockedReason).toEqual(
+    expect(cerebralTest.getState('caseDetail').blocked).toBeTruthy();
+    expect(cerebralTest.getState('caseDetail').blockedReason).toEqual(
       'just because',
     );
 
     await refreshElasticsearchIndex();
 
-    await integrationTest.runSequence('gotoBlockedCasesReportSequence');
+    await cerebralTest.runSequence('gotoBlockedCasesReportSequence');
 
-    await integrationTest.runSequence(
-      'getBlockedCasesByTrialLocationSequence',
-      {
-        key: 'trialLocation',
-        value: trialLocation,
-      },
-    );
+    await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
+      key: 'trialLocation',
+      value: trialLocation,
+    });
 
-    expect(integrationTest.getState('blockedCases')).toEqual(
+    expect(cerebralTest.getState('blockedCases')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           blocked: true,
@@ -57,7 +54,7 @@ export const petitionsClerkBlocksCase = (
           caseCaption:
             overrides.caseCaption ||
             'Daenerys Stormborn, Deceased, Daenerys Stormborn, Surviving Spouse, Petitioner',
-          docketNumber: integrationTest.docketNumber,
+          docketNumber: cerebralTest.docketNumber,
           docketNumberSuffix:
             overrides.docketNumberSuffix || DOCKET_NUMBER_SUFFIXES.SMALL,
           status:

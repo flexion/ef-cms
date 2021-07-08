@@ -9,7 +9,7 @@ import {
 } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('admissions clerk adds petitioner without existing cognito account to case', () => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
@@ -21,89 +21,85 @@ describe('admissions clerk adds petitioner without existing cognito account to c
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(integrationTest, fakeFile);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
 
-  loginAs(integrationTest, 'admissionsclerk@example.com');
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
   it('admissions clerk adds petitioner email without existing cognito account to case', async () => {
     await refreshElasticsearchIndex();
 
-    let contactPrimary = contactPrimaryFromState(integrationTest);
+    let contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',
       {
         contactId: contactPrimary.contactId,
-        docketNumber: integrationTest.docketNumber,
+        docketNumber: cerebralTest.docketNumber,
       },
     );
 
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'EditPetitionerInformationInternal',
     );
-    expect(integrationTest.getState('form.updatedEmail')).toBeUndefined();
-    expect(integrationTest.getState('form.confirmEmail')).toBeUndefined();
+    expect(cerebralTest.getState('form.updatedEmail')).toBeUndefined();
+    expect(cerebralTest.getState('form.confirmEmail')).toBeUndefined();
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.updatedEmail',
       value: EMAIL_TO_ADD,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.confirmEmail',
       value: EMAIL_TO_ADD,
     });
 
-    await integrationTest.runSequence('submitEditPetitionerSequence');
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('modal.showModal')).toBe(
+    expect(cerebralTest.getState('modal.showModal')).toBe(
       'NoMatchingEmailFoundModal',
     );
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'EditPetitionerInformationInternal',
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'submitUpdatePetitionerInformationFromModalSequence',
     );
 
-    expect(integrationTest.getState('modal.showModal')).toBeUndefined();
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('modal.showModal')).toBeUndefined();
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    contactPrimary = contactPrimaryFromState(integrationTest);
+    contactPrimary = contactPrimaryFromState(cerebralTest);
 
     expect(contactPrimary.email).toBeUndefined();
     expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
 
-    integrationTest.userId = contactPrimary.contactId;
+    cerebralTest.userId = contactPrimary.contactId;
 
     await refreshElasticsearchIndex();
   });
 
   it('petitioner verifies email via cognito', async () => {
-    await callCognitoTriggerForPendingEmail(integrationTest.userId);
+    await callCognitoTriggerForPendingEmail(cerebralTest.userId);
   });
 
-  loginAs(integrationTest, 'admissionsclerk@example.com');
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
   it('admissions clerk verifies petitioner email is no longer pending and service preference was updated to electronic', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     expect(contactPrimary.email).toEqual(EMAIL_TO_ADD);
     expect(contactPrimary.serviceIndicator).toEqual(

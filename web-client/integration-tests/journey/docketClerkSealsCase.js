@@ -1,17 +1,17 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const docketClerkSealsCase = integrationTest => {
+export const docketClerkSealsCase = cerebralTest => {
   return it('Docketclerk seals a case', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('caseDetail.sealedDate')).toBeUndefined();
+    expect(cerebralTest.getState('caseDetail.sealedDate')).toBeUndefined();
 
-    await integrationTest.runSequence('sealCaseSequence');
+    await cerebralTest.runSequence('sealCaseSequence');
 
-    expect(integrationTest.getState('caseDetail.sealedDate')).toBeDefined();
-    expect(integrationTest.getState('caseDetail.isSealed')).toBeTruthy();
+    expect(cerebralTest.getState('caseDetail.sealedDate')).toBeDefined();
+    expect(cerebralTest.getState('caseDetail.isSealed')).toBeTruthy();
 
     await refreshElasticsearchIndex();
   });

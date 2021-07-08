@@ -12,7 +12,7 @@ import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocum
 import { petitionsClerkManuallyAddsCaseToCalendaredTrialSession } from './journey/petitionsClerkManuallyAddsCaseToCalendaredTrialSession';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   beforeAll(() => {
@@ -20,61 +20,60 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  integrationTest.createdCases = [];
+  cerebralTest.createdCases = [];
   let judgeDocketSectionQCInboxCountBefore;
   let adcDocketSectionQCInboxCountBefore;
 
-  loginAs(integrationTest, 'judgeCohen@example.com');
+  loginAs(cerebralTest, 'judgeCohen@example.com');
   it("Get judge's document qc section inbox before", async () => {
-    await getFormattedDocumentQCSectionInbox(integrationTest);
-    judgeDocketSectionQCInboxCountBefore =
-      getSectionInboxCount(integrationTest);
+    await getFormattedDocumentQCSectionInbox(cerebralTest);
+    judgeDocketSectionQCInboxCountBefore = getSectionInboxCount(cerebralTest);
   });
 
-  loginAs(integrationTest, 'adc@example.com');
+  loginAs(cerebralTest, 'adc@example.com');
   it("Get adc's document qc section inbox before", async () => {
-    await getFormattedDocumentQCSectionInbox(integrationTest);
-    adcDocketSectionQCInboxCountBefore = getSectionInboxCount(integrationTest);
+    await getFormattedDocumentQCSectionInbox(cerebralTest);
+    adcDocketSectionQCInboxCountBefore = getSectionInboxCount(cerebralTest);
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   for (let index = 0; index <= 2; index++) {
     it(`Create case ${index}`, async () => {
-      const caseDetail = await uploadPetition(integrationTest);
+      const caseDetail = await uploadPetition(cerebralTest);
       expect(caseDetail.docketNumber).toBeDefined();
-      integrationTest.createdCases.push(caseDetail.docketNumber);
-      integrationTest.docketNumber = caseDetail.docketNumber;
+      cerebralTest.createdCases.push(caseDetail.docketNumber);
+      cerebralTest.docketNumber = caseDetail.docketNumber;
     });
-    petitionerFilesADocumentForCase(integrationTest, fakeFile);
+    petitionerFilesADocumentForCase(cerebralTest, fakeFile);
   }
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(integrationTest);
-  docketClerkViewsTrialSessionList(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest);
+  docketClerkViewsTrialSessionList(cerebralTest);
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkSetsATrialSessionsSchedule(integrationTest);
-  petitionsClerkManuallyAddsCaseToCalendaredTrialSession(integrationTest, 0);
-  petitionsClerkManuallyAddsCaseToCalendaredTrialSession(integrationTest, 1);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
+  petitionsClerkManuallyAddsCaseToCalendaredTrialSession(cerebralTest, 0);
+  petitionsClerkManuallyAddsCaseToCalendaredTrialSession(cerebralTest, 1);
 
-  loginAs(integrationTest, 'judgeCohen@example.com');
+  loginAs(cerebralTest, 'judgeCohen@example.com');
   it("Get judge's document qc section inbox after", async () => {
-    await getFormattedDocumentQCSectionInbox(integrationTest);
+    await getFormattedDocumentQCSectionInbox(cerebralTest);
     const judgeDocketSectionQCInboxCountAfter =
-      getSectionInboxCount(integrationTest);
+      getSectionInboxCount(cerebralTest);
     expect(judgeDocketSectionQCInboxCountAfter).toBe(
       judgeDocketSectionQCInboxCountBefore + 2,
     );
   });
 
-  loginAs(integrationTest, 'adc@example.com');
+  loginAs(cerebralTest, 'adc@example.com');
   it("Get adc's document qc section inbox after", async () => {
-    await getFormattedDocumentQCSectionInbox(integrationTest);
+    await getFormattedDocumentQCSectionInbox(cerebralTest);
     const adcDocketSectionQCInboxCountAfter =
-      getSectionInboxCount(integrationTest);
+      getSectionInboxCount(cerebralTest);
     expect(adcDocketSectionQCInboxCountAfter).toBe(
       adcDocketSectionQCInboxCountBefore + 1,
     );

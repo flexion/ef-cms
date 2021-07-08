@@ -1,28 +1,28 @@
-export const petitionsClerkPrioritizesCase = integrationTest => {
+export const petitionsClerkPrioritizesCase = cerebralTest => {
   return it('Petitions clerk prioritizes the case', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(integrationTest.getState('caseDetail').highPriority).toBeFalsy();
+    expect(cerebralTest.getState('caseDetail').highPriority).toBeFalsy();
 
-    await integrationTest.runSequence('prioritizeCaseSequence');
+    await cerebralTest.runSequence('prioritizeCaseSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       reason: 'Provide a reason',
     });
 
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'reason',
       value: 'just because',
     });
 
-    await integrationTest.runSequence('prioritizeCaseSequence');
+    await cerebralTest.runSequence('prioritizeCaseSequence');
 
-    expect(integrationTest.getState('alertSuccess').message).toEqual(
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Case added to eligible list and will be set for trial when calendar is set.',
     );
-    expect(integrationTest.getState('caseDetail').highPriority).toBeTruthy();
-    expect(integrationTest.getState('caseDetail').highPriorityReason).toEqual(
+    expect(cerebralTest.getState('caseDetail').highPriority).toBeTruthy();
+    expect(cerebralTest.getState('caseDetail').highPriorityReason).toEqual(
       'just because',
     );
   });

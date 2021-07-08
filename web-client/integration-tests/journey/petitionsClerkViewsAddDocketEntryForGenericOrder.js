@@ -1,19 +1,16 @@
 export const petitionsClerkViewsAddDocketEntryForGenericOrder =
-  integrationTest => {
+  cerebralTest => {
     return it('Petitions clerk views Add Docket Entry form for generic order', async () => {
-      await integrationTest.runSequence(
-        'gotoAddCourtIssuedDocketEntrySequence',
-        {
-          docketEntryId: integrationTest.docketEntryId,
-          docketNumber: integrationTest.docketNumber,
-        },
-      );
+      await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+        docketEntryId: cerebralTest.docketEntryId,
+        docketNumber: cerebralTest.docketNumber,
+      });
 
-      expect(integrationTest.getState('currentPage')).toEqual(
+      expect(cerebralTest.getState('currentPage')).toEqual(
         'CourtIssuedDocketEntry',
       );
-      expect(integrationTest.getState('form.freeText')).toEqual(
-        integrationTest.freeText,
+      expect(cerebralTest.getState('form.freeText')).toEqual(
+        cerebralTest.freeText,
       );
     });
   };

@@ -1,26 +1,26 @@
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
-export const docketClerkQCsDocketEntry = (integrationTest, data = {}) => {
+export const docketClerkQCsDocketEntry = (cerebralTest, data = {}) => {
   return it('Docket Clerk QCs docket entry', async () => {
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const lastIndex = formattedDocketEntriesOnDocketRecord.length - 1;
     data.index = data.index || lastIndex;
 
     const { docketEntryId } = formattedDocketEntriesOnDocketRecord[data.index];
 
-    await integrationTest.runSequence('gotoDocketEntryQcSequence', {
+    await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
       docketNumber: formattedDocketEntriesOnDocketRecord.docketNumber,
     });
 
-    await integrationTest.runSequence('completeDocketEntryQCSequence');
+    await cerebralTest.runSequence('completeDocketEntryQCSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest));
+      await getFormattedDocketEntriesForTest(cerebralTest));
 
     const selectedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,

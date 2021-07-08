@@ -1,16 +1,16 @@
-export const petitionsClerkViewsWorkQueueAfterReassign = integrationTest => {
+export const petitionsClerkViewsWorkQueueAfterReassign = cerebralTest => {
   return it('Petitions clerk views work queue after reassign', async () => {
-    await integrationTest.runSequence('gotoWorkQueueSequence');
-    expect(integrationTest.getState('currentPage')).toEqual('WorkQueue');
-    await integrationTest.runSequence('chooseWorkQueueSequence', {
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'my',
     });
-    const workItem = integrationTest
+    const workItem = cerebralTest
       .getState('workQueue')
       .find(
         workItemInQueue =>
-          workItemInQueue.workItemId === integrationTest.petitionWorkItemId,
+          workItemInQueue.workItemId === cerebralTest.petitionWorkItemId,
       );
     expect(workItem).toBeDefined();
   });

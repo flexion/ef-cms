@@ -1,30 +1,26 @@
-export const petitionsClerkAddsOtherStatisticsToCase = integrationTest => {
+export const petitionsClerkAddsOtherStatisticsToCase = cerebralTest => {
   return it('petitions clerk adds other statistics to case', async () => {
-    await integrationTest.runSequence('gotoAddOtherStatisticsSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoAddOtherStatisticsSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'AddOtherStatistics',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('AddOtherStatistics');
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'litigationCosts',
       value: 1234,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'damages',
       value: 5678,
     });
 
-    await integrationTest.runSequence('submitAddOtherStatisticsSequence');
+    await cerebralTest.runSequence('submitAddOtherStatisticsSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    expect(integrationTest.getState('caseDetail')).toMatchObject({
+    expect(cerebralTest.getState('caseDetail')).toMatchObject({
       damages: 5678,
       litigationCosts: 1234,
     });

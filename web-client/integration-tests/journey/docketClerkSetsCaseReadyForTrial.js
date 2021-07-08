@@ -2,39 +2,37 @@ const {
   CASE_STATUS_TYPES,
 } = require('../../../shared/src/business/entities/EntityConstants');
 
-export const docketClerkSetsCaseReadyForTrial = integrationTest => {
+export const docketClerkSetsCaseReadyForTrial = cerebralTest => {
   return it('Docket clerk sets a case ready for trial', async () => {
-    integrationTest.setState('caseDetail', {});
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(integrationTest.getState('caseDetail.docketNumber')).toEqual(
-      integrationTest.docketNumber,
+    expect(cerebralTest.getState('caseDetail.docketNumber')).toEqual(
+      cerebralTest.docketNumber,
     );
-    expect(integrationTest.getState('caseDetail.status')).toEqual(
+    expect(cerebralTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.generalDocket,
     );
 
-    await integrationTest.runSequence('openUpdateCaseModalSequence');
+    await cerebralTest.runSequence('openUpdateCaseModalSequence');
 
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'caseStatus',
       value: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     });
 
-    await integrationTest.runSequence('submitUpdateCaseModalSequence');
+    await cerebralTest.runSequence('submitUpdateCaseModalSequence');
 
-    expect(integrationTest.getState('caseDetail.docketNumber')).toEqual(
-      integrationTest.docketNumber,
+    expect(cerebralTest.getState('caseDetail.docketNumber')).toEqual(
+      cerebralTest.docketNumber,
     );
-    expect(integrationTest.getState('caseDetail.status')).toEqual(
+    expect(cerebralTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.generalDocketReadyForTrial,
     );
 
-    if (integrationTest.casesReadyForTrial) {
-      integrationTest.casesReadyForTrial.push(
-        integrationTest.getState('caseDetail'),
-      );
+    if (cerebralTest.casesReadyForTrial) {
+      cerebralTest.casesReadyForTrial.push(cerebralTest.getState('caseDetail'));
     }
   });
 };

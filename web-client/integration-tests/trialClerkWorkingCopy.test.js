@@ -12,7 +12,7 @@ import { trialClerkViewsNotesFromCaseDetail } from './journey/trialClerkViewsNot
 import { trialClerkViewsTrialSessionWorkingCopy } from './journey/trialClerkViewsTrialSessionWorkingCopy';
 import { trialClerkViewsTrialSessionWorkingCopyWithNotes } from './journey/trialClerkViewsTrialSessionWorkingCopyWithNotes';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
 describe('Trial Clerk Views Trial Session Working Copy', () => {
@@ -21,7 +21,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const trialLocation = `Boise, Idaho, ${Date.now()}`;
@@ -37,10 +37,10 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   };
   const createdDocketNumbers = [];
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(integrationTest, overrides);
-  docketClerkViewsTrialSessionList(integrationTest);
-  docketClerkViewsNewTrialSession(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, overrides);
+  docketClerkViewsTrialSessionList(cerebralTest);
+  docketClerkViewsNewTrialSession(cerebralTest);
 
   const caseOverrides = {
     ...overrides,
@@ -50,27 +50,27 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
     receivedAtMonth: '01',
     receivedAtYear: '2019',
   };
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(integrationTest, caseOverrides);
+    const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
     expect(caseDetail.docketNumber).toBeDefined();
     createdDocketNumbers.push(caseDetail.docketNumber);
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkSubmitsCaseToIrs(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkSetsCaseReadyForTrial(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkSetsCaseReadyForTrial(cerebralTest);
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  markAllCasesAsQCed(integrationTest, () => createdDocketNumbers);
-  petitionsClerkSetsATrialSessionsSchedule(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  markAllCasesAsQCed(cerebralTest, () => createdDocketNumbers);
+  petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
 
-  loginAs(integrationTest, 'trialclerk@example.com');
-  trialClerkViewsTrialSessionWorkingCopy(integrationTest);
-  trialClerkAddsNotesFromWorkingCopyCaseList(integrationTest);
-  trialClerkViewsNotesFromCaseDetail(integrationTest);
-  trialClerkViewsTrialSessionWorkingCopyWithNotes(integrationTest);
+  loginAs(cerebralTest, 'trialclerk@example.com');
+  trialClerkViewsTrialSessionWorkingCopy(cerebralTest);
+  trialClerkAddsNotesFromWorkingCopyCaseList(cerebralTest);
+  trialClerkViewsNotesFromCaseDetail(cerebralTest);
+  trialClerkViewsTrialSessionWorkingCopyWithNotes(cerebralTest);
 });

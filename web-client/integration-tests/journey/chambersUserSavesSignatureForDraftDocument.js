@@ -1,10 +1,10 @@
-export const chambersUserSavesSignatureForDraftDocument = integrationTest => {
+export const chambersUserSavesSignatureForDraftDocument = cerebralTest => {
   return it('Chambers user saves signature for draft document', async () => {
-    await integrationTest.runSequence('saveDocumentSigningSequence', {
+    await cerebralTest.runSequence('saveDocumentSigningSequence', {
       gotoAfterSigning: 'DocumentDetail',
     });
 
-    expect(integrationTest.getState('alertSuccess.message')).toEqual(
+    expect(cerebralTest.getState('alertSuccess.message')).toEqual(
       'Order of Dismissal and Decision updated.',
     );
   });

@@ -11,7 +11,7 @@ import {
 } from './helpers';
 import applicationContextFactory from '../../web-api/src/applicationContext';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('verify old sent work items do not show up in the outbox', () => {
   let workItem6Days;
@@ -27,13 +27,13 @@ describe('verify old sent work items do not show up in the outbox', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
 
   it('creates the case', async () => {
-    caseDetail = await uploadPetition(integrationTest);
+    caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
 
     const applicationContext = applicationContextFactory({
@@ -110,11 +110,11 @@ describe('verify old sent work items do not show up in the outbox', () => {
     });
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
 
   it('the petitionsclerk user should have the expected work items equal to or new than 7 days', async () => {
     const myOutbox = (
-      await getFormattedDocumentQCMyOutbox(integrationTest)
+      await getFormattedDocumentQCMyOutbox(cerebralTest)
     ).filter(item => item.docketNumber === caseDetail.docketNumber);
     expect(myOutbox.length).toEqual(2);
     expect(
@@ -125,7 +125,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
     ).toBeDefined();
 
     const sectionOutbox = (
-      await getFormattedDocumentQCSectionOutbox(integrationTest)
+      await getFormattedDocumentQCSectionOutbox(cerebralTest)
     ).filter(item => item.docketNumber === caseDetail.docketNumber);
     expect(sectionOutbox.length).toEqual(2);
     expect(

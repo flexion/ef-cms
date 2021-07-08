@@ -1,13 +1,13 @@
-export const petitionsClerk1ViewsMessageDetail = integrationTest => {
+export const petitionsClerk1ViewsMessageDetail = cerebralTest => {
   return it('petitions clerk 1 views the message detail for the message they received', async () => {
-    await integrationTest.runSequence('gotoMessageDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
-      parentMessageId: integrationTest.parentMessageId,
+    await cerebralTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      parentMessageId: cerebralTest.parentMessageId,
     });
 
-    expect(integrationTest.getState('messageDetail')).toMatchObject([
+    expect(cerebralTest.getState('messageDetail')).toMatchObject([
       {
-        parentMessageId: integrationTest.parentMessageId,
+        parentMessageId: cerebralTest.parentMessageId,
       },
     ]);
   });

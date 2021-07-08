@@ -1,39 +1,37 @@
 export const docketClerkDeletesCorrespondence = (
-  integrationTest,
+  cerebralTest,
   correspondenceTitle,
 ) =>
   it('Docket clerk deletes correspondence', async () => {
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'openConfirmDeleteCorrespondenceModalSequence',
       {
-        correspondenceId:
-          integrationTest.correspondenceDocument.correspondenceId,
+        correspondenceId: cerebralTest.correspondenceDocument.correspondenceId,
         documentTitle: correspondenceTitle,
       },
     );
 
-    expect(integrationTest.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'DeleteCorrespondenceModal',
     );
 
-    await integrationTest.runSequence('deleteCorrespondenceDocumentSequence');
+    await cerebralTest.runSequence('deleteCorrespondenceDocumentSequence');
 
-    const deletedCorrespondence = integrationTest
+    const deletedCorrespondence = cerebralTest
       .getState('caseDetail.correspondence')
       .find(
         c =>
           c.correspondenceId ===
-          integrationTest.correspondenceDocument.correspondenceId,
+          cerebralTest.correspondenceDocument.correspondenceId,
       );
     expect(deletedCorrespondence).toBeUndefined();
 
-    expect(integrationTest.getState('caseDetail.messages')).toEqual(
+    expect(cerebralTest.getState('caseDetail.messages')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           attachments: expect.arrayContaining([
             expect.objectContaining({
-              documentId:
-                integrationTest.correspondenceDocument.correspondenceId,
+              documentId: cerebralTest.correspondenceDocument.correspondenceId,
             }),
           ]),
         }),

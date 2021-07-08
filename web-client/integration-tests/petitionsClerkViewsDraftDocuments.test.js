@@ -10,7 +10,7 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Petitions Clerk Views Draft Documents', () => {
   beforeAll(() => {
@@ -18,50 +18,50 @@ describe('Petitions Clerk Views Draft Documents', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(integrationTest, fakeFile, 'Lubbock, Texas');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, 'Lubbock, Texas');
 
   it('views case detail', async () => {
     await viewCaseDetail({
-      docketNumber: integrationTest.docketNumber,
-      integrationTest,
+      cerebralTest,
+      docketNumber: cerebralTest.docketNumber,
     });
   });
 
-  petitionsClerkAddsOrderToCase(integrationTest);
-  petitionsClerkAddsOrderToCase(integrationTest);
-  petitionsClerkViewsDraftDocuments(integrationTest, 2);
+  petitionsClerkAddsOrderToCase(cerebralTest);
+  petitionsClerkAddsOrderToCase(cerebralTest);
+  petitionsClerkViewsDraftDocuments(cerebralTest, 2);
 
   it('views the second document in the draft documents list', async () => {
     // reset the draft documents view meta
-    integrationTest.setState('draftDocumentViewerDocketEntryId', null);
+    cerebralTest.setState('draftDocumentViewerDocketEntryId', null);
 
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
       primaryTab: 'drafts',
     });
 
     expect(
-      integrationTest.getState(
+      cerebralTest.getState(
         'currentViewMetadata.caseDetail.caseDetailInternalTabs.drafts',
       ),
     ).toEqual(true);
 
     // this gets fired when the component is mounted, so it is being explicitly called here
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'loadDefaultDraftViewerDocumentToDisplaySequence',
     );
 
     let formattedCase = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     let { draftDocuments } = formattedCase;
 
-    const viewerDraftDocumentIdToDisplay = integrationTest.getState(
+    const viewerDraftDocumentIdToDisplay = cerebralTest.getState(
       'viewerDraftDocumentToDisplay.docketEntryId',
     );
     expect(viewerDraftDocumentIdToDisplay).toEqual(
@@ -69,57 +69,52 @@ describe('Petitions Clerk Views Draft Documents', () => {
     );
 
     // select the second document in the list
-    await integrationTest.runSequence(
-      'setViewerDraftDocumentToDisplaySequence',
-      {
-        viewerDraftDocumentToDisplay: draftDocuments[1],
-      },
-    );
+    await cerebralTest.runSequence('setViewerDraftDocumentToDisplaySequence', {
+      viewerDraftDocumentToDisplay: draftDocuments[1],
+    });
 
     expect(
-      integrationTest.getState(
-        'screenMetadata.draftDocumentViewerDocketEntryId',
-      ),
+      cerebralTest.getState('screenMetadata.draftDocumentViewerDocketEntryId'),
     ).toEqual(draftDocuments[1].docketEntryId);
 
     // change tabs and come back to draft documents
 
-    integrationTest.setState(
+    cerebralTest.setState(
       'currentViewMetadata.caseDetail.primaryTab',
       'docketRecord',
     );
-    await integrationTest.runSequence('caseDetailPrimaryTabChangeSequence');
+    await cerebralTest.runSequence('caseDetailPrimaryTabChangeSequence');
 
-    integrationTest.setState(
+    cerebralTest.setState(
       'currentViewMetadata.caseDetail.primaryTab',
       'drafts',
     );
-    await integrationTest.runSequence('caseDetailPrimaryTabChangeSequence');
+    await cerebralTest.runSequence('caseDetailPrimaryTabChangeSequence');
 
     expect(
-      integrationTest.getState('viewerDraftDocumentToDisplay.docketEntryId'),
+      cerebralTest.getState('viewerDraftDocumentToDisplay.docketEntryId'),
     ).toEqual(draftDocuments[1].docketEntryId);
 
     //leave case and come back
-    await integrationTest.runSequence('gotoDashboardSequence');
+    await cerebralTest.runSequence('gotoDashboardSequence');
 
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
       primaryTab: 'drafts',
     });
 
     // this gets fired when the component is mounted, so it is being explicitly called here
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'loadDefaultDraftViewerDocumentToDisplaySequence',
     );
 
     formattedCase = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     // resets back to first document
     expect(
-      integrationTest.getState('viewerDraftDocumentToDisplay.docketEntryId'),
+      cerebralTest.getState('viewerDraftDocumentToDisplay.docketEntryId'),
     ).toEqual(formattedCase.draftDocuments[0].docketEntryId);
   });
 });

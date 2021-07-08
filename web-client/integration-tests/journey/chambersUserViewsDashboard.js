@@ -2,26 +2,24 @@ import { runCompute } from 'cerebral/test';
 import { trialSessionsSummaryHelper } from '../../src/presenter/computeds/trialSessionsSummaryHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const chambersUserViewsDashboard = integrationTest => {
+export const chambersUserViewsDashboard = cerebralTest => {
   return it('Chambers user views dashboard', async () => {
-    await integrationTest.runSequence('gotoDashboardSequence');
+    await cerebralTest.runSequence('gotoDashboardSequence');
 
     const trialSessionsSummaryHelperComputed = runCompute(
       withAppContextDecorator(trialSessionsSummaryHelper),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
-    const messages = integrationTest.getState('messages');
+    const messages = cerebralTest.getState('messages');
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'DashboardChambers',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('DashboardChambers');
     expect(messages.length).toBeGreaterThan(0);
     expect(messages).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          subject: integrationTest.testMessageSubject,
+          subject: cerebralTest.testMessageSubject,
         }),
       ]),
     );

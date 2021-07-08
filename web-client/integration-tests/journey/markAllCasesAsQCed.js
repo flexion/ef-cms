@@ -1,13 +1,13 @@
-export const markAllCasesAsQCed = (integrationTest, getDocketNumbers) => {
+export const markAllCasesAsQCed = (cerebralTest, getDocketNumbers) => {
   return it('Marks all the eligible cases as QCed', async () => {
     const docketNumbers = getDocketNumbers();
 
-    await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: integrationTest.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
     for (const docketNumber of docketNumbers) {
-      await integrationTest.runSequence('updateQcCompleteForTrialSequence', {
+      await cerebralTest.runSequence('updateQcCompleteForTrialSequence', {
         docketNumber,
         qcCompleteForTrial: true,
       });

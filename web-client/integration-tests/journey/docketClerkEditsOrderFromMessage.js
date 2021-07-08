@@ -3,61 +3,61 @@ import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkEditsOrderFromMessage = integrationTest => {
+export const docketClerkEditsOrderFromMessage = cerebralTest => {
   const formattedMessageDetail = withAppContextDecorator(
     formattedMessageDetailComputed,
   );
 
   return it('docket clerk edits a signed order from a message', async () => {
-    await integrationTest.runSequence('gotoMessageDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
-      parentMessageId: integrationTest.parentMessageId,
+    await cerebralTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      parentMessageId: cerebralTest.parentMessageId,
     });
 
     let messageDetailFormatted = runCompute(formattedMessageDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
     const orderDocument = messageDetailFormatted.attachments[1];
     expect(orderDocument.documentTitle).toEqual('Order');
 
-    await integrationTest.runSequence('openConfirmEditModalSequence', {
+    await cerebralTest.runSequence('openConfirmEditModalSequence', {
       docketEntryIdToEdit: orderDocument.documentId,
-      docketNumber: integrationTest.docketNumber,
-      parentMessageId: integrationTest.parentMessageId,
-      redirectUrl: `/messages/${integrationTest.docketNumber}/message-detail/${integrationTest.parentMessageId}`,
+      docketNumber: cerebralTest.docketNumber,
+      parentMessageId: cerebralTest.parentMessageId,
+      redirectUrl: `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
     });
 
-    await integrationTest.runSequence('navigateToEditOrderSequence');
+    await cerebralTest.runSequence('navigateToEditOrderSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual('CreateOrder');
-    expect(integrationTest.getState('form.documentTitle')).toEqual('Order');
+    expect(cerebralTest.getState('currentPage')).toEqual('CreateOrder');
+    expect(cerebralTest.getState('form.documentTitle')).toEqual('Order');
 
-    await integrationTest.runSequence('openEditOrderTitleModalSequence');
+    await cerebralTest.runSequence('openEditOrderTitleModalSequence');
 
-    expect(integrationTest.getState('modal.eventCode')).toEqual('O');
-    expect(integrationTest.getState('modal.documentTitle')).toEqual('Order');
+    expect(cerebralTest.getState('modal.eventCode')).toEqual('O');
+    expect(cerebralTest.getState('modal.documentTitle')).toEqual('Order');
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: '<p>This is an updated order.</p>',
     });
 
-    await integrationTest.runSequence('submitCourtIssuedOrderSequence');
+    await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual('SignOrder');
-    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
+    expect(cerebralTest.getState('currentPage')).toEqual('SignOrder');
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
 
-    await integrationTest.runSequence('skipSigningOrderSequence');
+    await cerebralTest.runSequence('skipSigningOrderSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual('MessageDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('MessageDetail');
 
     messageDetailFormatted = runCompute(formattedMessageDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
     expect(messageDetailFormatted.attachments.length).toEqual(2);
 
     const { formattedDraftDocuments } = await getFormattedDocketEntriesForTest(
-      integrationTest,
+      cerebralTest,
     );
 
     const caseOrderDocument = formattedDraftDocuments.find(

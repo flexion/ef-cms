@@ -8,8 +8,8 @@ import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
-const integrationTest = setupTest();
-integrationTest.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   beforeAll(() => {
@@ -17,26 +17,26 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(integrationTest, fakeFile);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(integrationTest, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkViewsDraftOrder(integrationTest, 0);
-  docketClerkSignsOrder(integrationTest, 0);
-  docketClerkAddsDocketEntryFromOrder(integrationTest, 0);
-  docketClerkServesOrderWithPaperService(integrationTest, 0);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkViewsDraftOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+  docketClerkServesOrderWithPaperService(cerebralTest, 0);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(
-    integrationTest,
+    cerebralTest,
     0,
     CASE_STATUS_TYPES.generalDocket,
   );

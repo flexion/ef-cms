@@ -11,33 +11,33 @@ const caseDetailHeaderHelper = withAppContextDecorator(
 const fileDocumentHelper = withAppContextDecorator(fileDocumentHelperComputed);
 
 export const respondentFilesFirstIRSDocumentOnCase = (
-  integrationTest,
+  cerebralTest,
   fakeFile,
 ) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('Respondent files first IRS document on a case', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const headerHelper = runCompute(caseDetailHeaderHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(headerHelper.showFileFirstDocumentButton).toBeTruthy();
 
-    await integrationTest.runSequence('gotoFileDocumentSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const fileDocHelper = runCompute(fileDocumentHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(fileDocHelper.showSecondaryParty).toBeTruthy();
 
-    expect(contactSecondaryFromState(integrationTest).name).toEqual(
+    expect(contactSecondaryFromState(cerebralTest).name).toEqual(
       'Jimothy Schultz',
     );
 
@@ -50,7 +50,7 @@ export const respondentFilesFirstIRSDocumentOnCase = (
     };
 
     for (const key of Object.keys(documentToSelect)) {
-      await integrationTest.runSequence(
+      await cerebralTest.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
           key,
@@ -59,17 +59,17 @@ export const respondentFilesFirstIRSDocumentOnCase = (
       );
     }
 
-    await integrationTest.runSequence('validateSelectDocumentTypeSequence');
+    await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(integrationTest.getState('form.documentType')).toEqual('Answer');
+    expect(cerebralTest.getState('form.documentType')).toEqual('Answer');
 
-    expect(integrationTest.getState('form.partyPrimary')).toEqual(undefined);
+    expect(cerebralTest.getState('form.partyPrimary')).toEqual(undefined);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'certificateOfService',
@@ -77,7 +77,7 @@ export const respondentFilesFirstIRSDocumentOnCase = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'hasSupportingDocuments',
@@ -85,14 +85,14 @@ export const respondentFilesFirstIRSDocumentOnCase = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'attachments',
         value: false,
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'objections',
@@ -100,21 +100,21 @@ export const respondentFilesFirstIRSDocumentOnCase = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'certificateOfServiceMonth',
         value: '12',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'certificateOfServiceDay',
         value: '12',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'certificateOfServiceYear',
@@ -122,7 +122,7 @@ export const respondentFilesFirstIRSDocumentOnCase = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'primaryDocumentFile',
@@ -130,7 +130,7 @@ export const respondentFilesFirstIRSDocumentOnCase = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'partyIrsPractitioner',
@@ -138,12 +138,10 @@ export const respondentFilesFirstIRSDocumentOnCase = (
       },
     );
 
-    await integrationTest.runSequence(
-      'reviewExternalDocumentInformationSequence',
-    );
+    await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('submitExternalDocumentSequence');
+    await cerebralTest.runSequence('submitExternalDocumentSequence');
   });
 };

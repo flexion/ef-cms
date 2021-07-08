@@ -4,15 +4,13 @@ import {
 } from '../../../shared/src/business/entities/EntityConstants';
 
 export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
-  integrationTest,
+  cerebralTest,
   docketRecordIndex,
 ) => {
   return it('docket clerk edits docket entry meta', async () => {
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'EditDocketEntryMeta',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('EditDocketEntryMeta');
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'freeText',
@@ -20,7 +18,7 @@ export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'filingDate',
@@ -28,7 +26,7 @@ export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'filingDateDay',
@@ -36,7 +34,7 @@ export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'filingDateMonth',
@@ -44,7 +42,7 @@ export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'filingDateYear',
@@ -52,7 +50,7 @@ export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'partyIrsPractitioner',
@@ -60,7 +58,7 @@ export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'action',
@@ -68,7 +66,7 @@ export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'hasOtherFilingParty',
@@ -76,7 +74,7 @@ export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'pending',
@@ -84,7 +82,7 @@ export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'objections',
@@ -92,15 +90,15 @@ export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
       },
     );
 
-    await integrationTest.runSequence('submitEditDocketEntryMetaSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       otherFilingParty: 'Enter other filing party name.',
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'otherFilingParty',
@@ -108,26 +106,22 @@ export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
       },
     );
 
-    await integrationTest.runSequence('submitEditDocketEntryMetaSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('alertSuccess')).toMatchObject({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Docket entry changes saved.',
     });
 
-    expect(integrationTest.getState('caseDetail.automaticBlocked')).toEqual(
-      true,
+    expect(cerebralTest.getState('caseDetail.automaticBlocked')).toEqual(true);
+    expect(cerebralTest.getState('caseDetail.automaticBlockedReason')).toEqual(
+      AUTOMATIC_BLOCKED_REASONS.pending,
     );
-    expect(
-      integrationTest.getState('caseDetail.automaticBlockedReason'),
-    ).toEqual(AUTOMATIC_BLOCKED_REASONS.pending);
-    expect(integrationTest.getState('caseDetail.hasPendingItems')).toEqual(
-      true,
-    );
-    const docketEntries = integrationTest.getState('caseDetail.docketEntries');
+    expect(cerebralTest.getState('caseDetail.hasPendingItems')).toEqual(true);
+    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
     const pendingDocketEntry = docketEntries.find(
       d => d.index === docketRecordIndex,
     );

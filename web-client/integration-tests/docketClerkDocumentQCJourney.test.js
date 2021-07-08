@@ -12,24 +12,24 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { practitionerRequestsAccessToCase } from './journey/practitionerRequestsAccessToCase';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Docket Clerk Document QC Journey', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
-  integrationTest.draftOrders = [];
+  cerebralTest.draftOrders = [];
 
   beforeEach(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(integrationTest, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -42,34 +42,34 @@ describe('Docket Clerk Document QC Journey', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(integrationTest, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(integrationTest, 0);
-  docketClerkSignsOrder(integrationTest, 0);
-  docketClerkAddsAndServesDocketEntryFromOrder(integrationTest, 0);
+  docketClerkViewsDraftOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkAddsAndServesDocketEntryFromOrder(cerebralTest, 0);
 
-  docketClerkViewsQCInProgress(integrationTest, false);
-  docketClerkViewsQCOutbox(integrationTest, true);
+  docketClerkViewsQCInProgress(cerebralTest, false);
+  docketClerkViewsQCOutbox(cerebralTest, true);
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  loginAs(integrationTest, 'privatePractitioner@example.com');
-  practitionerRequestsAccessToCase(integrationTest, fakeFile);
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  practitionerRequestsAccessToCase(cerebralTest, fakeFile);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkAssignWorkItemToSelf(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAssignWorkItemToSelf(cerebralTest);
 
   // Bug 6934 - Bug was caused when the work item was marked as read,
   // causing the link to change for the work item.
-  docketClerkViewsAssignedWorkItemEditLink(integrationTest);
+  docketClerkViewsAssignedWorkItemEditLink(cerebralTest);
 
-  docketClerkViewsAssignedWorkItemEditLink(integrationTest);
+  docketClerkViewsAssignedWorkItemEditLink(cerebralTest);
 });

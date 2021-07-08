@@ -11,7 +11,7 @@ import {
 } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
@@ -28,12 +28,12 @@ describe('Petitions Clerk Counsel Association Journey', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(integrationTest, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -47,23 +47,23 @@ describe('Petitions Clerk Counsel Association Journey', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  loginAs(integrationTest, 'admissionsclerk@example.com');
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
   it('admissions clerk adds secondary petitioner email with existing cognito account to case', async () => {
     await refreshElasticsearchIndex();
 
-    let contactSecondary = contactSecondaryFromState(integrationTest);
+    let contactSecondary = contactSecondaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',
       {
         contactId: contactSecondary.contactId,
-        docketNumber: integrationTest.docketNumber,
+        docketNumber: cerebralTest.docketNumber,
       },
     );
 
@@ -71,43 +71,41 @@ describe('Petitions Clerk Counsel Association Journey', () => {
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
 
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'EditPetitionerInformationInternal',
     );
-    expect(integrationTest.getState('form.updatedEmail')).toBeUndefined();
-    expect(integrationTest.getState('form.confirmEmail')).toBeUndefined();
+    expect(cerebralTest.getState('form.updatedEmail')).toBeUndefined();
+    expect(cerebralTest.getState('form.confirmEmail')).toBeUndefined();
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.updatedEmail',
       value: 'petitioner2@example.com',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.confirmEmail',
       value: 'petitioner2@example.com',
     });
 
-    await integrationTest.runSequence('submitEditPetitionerSequence');
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('modal.showModal')).toBe(
+    expect(cerebralTest.getState('modal.showModal')).toBe(
       'MatchingEmailFoundModal',
     );
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'EditPetitionerInformationInternal',
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'submitUpdatePetitionerInformationFromModalSequence',
     );
 
-    expect(integrationTest.getState('modal.showModal')).toBeUndefined();
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('modal.showModal')).toBeUndefined();
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    contactSecondary = contactSecondaryFromState(integrationTest);
+    contactSecondary = contactSecondaryFromState(cerebralTest);
 
     expect(contactSecondary.email).toEqual('petitioner2@example.com');
     expect(contactSecondary.serviceIndicator).toEqual(
@@ -117,83 +115,77 @@ describe('Petitions Clerk Counsel Association Journey', () => {
     await refreshElasticsearchIndex();
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
 
   it('Petitions clerk manually adds a privatePractitioner to case', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const practitionerBarNumber = 'PT1234';
 
-    expect(integrationTest.getState('caseDetail.privatePractitioners')).toEqual(
+    expect(cerebralTest.getState('caseDetail.privatePractitioners')).toEqual(
       [],
     );
 
-    await integrationTest.runSequence(
-      'openAddPrivatePractitionerModalSequence',
-    );
+    await cerebralTest.runSequence('openAddPrivatePractitionerModalSequence');
 
     expect(
-      integrationTest.getState('validationErrors.practitionerSearchError'),
+      cerebralTest.getState('validationErrors.practitionerSearchError'),
     ).toBeDefined();
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'practitionerSearch',
       value: practitionerBarNumber,
     });
 
-    await integrationTest.runSequence(
-      'openAddPrivatePractitionerModalSequence',
+    await cerebralTest.runSequence('openAddPrivatePractitionerModalSequence');
+
+    expect(
+      cerebralTest.getState('validationErrors.practitionerSearchError'),
+    ).toBeUndefined();
+    expect(cerebralTest.getState('modal.practitionerMatches.length')).toEqual(
+      1,
     );
 
-    expect(
-      integrationTest.getState('validationErrors.practitionerSearchError'),
-    ).toBeUndefined();
-    expect(
-      integrationTest.getState('modal.practitionerMatches.length'),
-    ).toEqual(1);
-
-    let practitionerMatch = integrationTest.getState(
+    let practitionerMatch = cerebralTest.getState(
       'modal.practitionerMatches.0',
     );
-    expect(integrationTest.getState('modal.user.userId')).toEqual(
+    expect(cerebralTest.getState('modal.user.userId')).toEqual(
       practitionerMatch.userId,
     );
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
-    const contactSecondary = contactSecondaryFromState(integrationTest);
-    await integrationTest.runSequence('updateModalValueSequence', {
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    const contactSecondary = contactSecondaryFromState(cerebralTest);
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: `representingMap.${contactPrimary.contactId}`,
       value: true,
     });
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: `representingMap.${contactSecondary.contactId}`,
       value: true,
     });
 
     expect(
-      integrationTest.getState('validationErrors.practitionerSearchError'),
+      cerebralTest.getState('validationErrors.practitionerSearchError'),
     ).toBeUndefined();
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'associatePrivatePractitionerWithCaseSequence',
     );
 
     expect(
-      integrationTest.getState('caseDetail.privatePractitioners.length'),
+      cerebralTest.getState('caseDetail.privatePractitioners.length'),
     ).toEqual(1);
     expect(
-      integrationTest.getState(
-        'caseDetail.privatePractitioners.0.representing',
-      ),
+      cerebralTest.getState('caseDetail.privatePractitioners.0.representing'),
     ).toEqual([contactPrimary.contactId, contactSecondary.contactId]);
     expect(
-      integrationTest.getState('caseDetail.privatePractitioners.0.name'),
+      cerebralTest.getState('caseDetail.privatePractitioners.0.name'),
     ).toEqual(practitionerMatch.name);
 
     let formatted = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(formatted.privatePractitioners.length).toEqual(1);
@@ -204,46 +196,44 @@ describe('Petitions Clerk Counsel Association Journey', () => {
     await refreshElasticsearchIndex();
   });
 
-  loginAs(integrationTest, 'admissionsclerk@example.com');
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
   it('Admissions Clerk updates petitioner email address', async () => {
     const NEW_EMAIL = `new${Math.random()}@example.com`;
 
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
-    integrationTest.contactPrimaryId = contactPrimary.contactId;
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    cerebralTest.contactPrimaryId = contactPrimary.contactId;
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',
       {
         contactId: contactPrimary.contactId,
-        docketNumber: integrationTest.docketNumber,
+        docketNumber: cerebralTest.docketNumber,
       },
     );
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.updatedEmail',
       value: NEW_EMAIL,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.confirmEmail',
       value: NEW_EMAIL,
     });
 
-    await integrationTest.runSequence('submitEditPetitionerSequence');
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'submitUpdatePetitionerInformationFromModalSequence',
     );
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
-    expect(integrationTest.getState('alertSuccess.message')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('alertSuccess.message')).toEqual(
       'Changes saved.',
     );
 
@@ -251,19 +241,17 @@ describe('Petitions Clerk Counsel Association Journey', () => {
   });
 
   it('petitioner verifies email via cognito', async () => {
-    await callCognitoTriggerForPendingEmail(integrationTest.contactPrimaryId);
+    await callCognitoTriggerForPendingEmail(cerebralTest.contactPrimaryId);
   });
 
   it('admissions clerk verifies petitioner service preference was not updated', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -272,46 +260,42 @@ describe('Petitions Clerk Counsel Association Journey', () => {
 
   it('Petitions clerk removes a practitioner from a case', async () => {
     expect(
-      integrationTest.getState('caseDetail.privatePractitioners').length,
+      cerebralTest.getState('caseDetail.privatePractitioners').length,
     ).toEqual(1);
 
-    const barNumber = integrationTest.getState(
+    const barNumber = cerebralTest.getState(
       'caseDetail.privatePractitioners.0.barNumber',
     );
 
-    await integrationTest.runSequence('gotoEditPetitionerCounselSequence', {
+    await cerebralTest.runSequence('gotoEditPetitionerCounselSequence', {
       barNumber,
-      docketNumber: integrationTest.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'EditPetitionerCounsel',
     );
 
-    await integrationTest.runSequence(
-      'openRemovePetitionerCounselModalSequence',
-    );
+    await cerebralTest.runSequence('openRemovePetitionerCounselModalSequence');
 
-    expect(integrationTest.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'RemovePetitionerCounselModal',
     );
 
-    await integrationTest.runSequence(
-      'removePetitionerCounselFromCaseSequence',
-    );
+    await cerebralTest.runSequence('removePetitionerCounselFromCaseSequence');
 
     await refreshElasticsearchIndex();
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     expect(
-      integrationTest.getState('caseDetail.privatePractitioners').length,
+      cerebralTest.getState('caseDetail.privatePractitioners').length,
     ).toEqual(0);
   });
 
   it('verifies the service indicator for the second petitioner reverts to electronic', async () => {
-    const contactSecondary = contactSecondaryFromState(integrationTest);
+    const contactSecondary = contactSecondaryFromState(cerebralTest);
 
     expect(contactSecondary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,

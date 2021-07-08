@@ -6,8 +6,8 @@ import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1Views
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
-const integrationTest = setupTest();
-integrationTest.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Petitions Clerk Serves Paper Petition From Message Detail & Document View', () => {
   beforeAll(() => {
@@ -15,25 +15,25 @@ describe('Petitions Clerk Serves Paper Petition From Message Detail & Document V
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCaseFromPaper(integrationTest, fakeFile);
-  createNewMessageOnCase(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  createNewMessageOnCase(cerebralTest);
 
-  loginAs(integrationTest, 'petitionsclerk1@example.com');
-  petitionsClerk1ViewsMessageInbox(integrationTest);
-  petitionsClerk1ViewsMessageDetail(integrationTest);
-  petitionsClerk1ServesPetitionFromMessageDetail(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk1@example.com');
+  petitionsClerk1ViewsMessageInbox(cerebralTest);
+  petitionsClerk1ViewsMessageDetail(cerebralTest);
+  petitionsClerk1ServesPetitionFromMessageDetail(cerebralTest);
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(integrationTest);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkServesPetitionFromDocumentView(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 });

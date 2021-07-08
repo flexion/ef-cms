@@ -1,34 +1,33 @@
-export const petitionsClerk1ServesDocumentFromMessageDetail =
-  integrationTest => {
-    return it('petitions clerk 1 serves document from message detail', async () => {
-      await integrationTest.runSequence(
-        'openConfirmServePaperFiledDocumentSequence',
-        {
-          docketEntryId: integrationTest.docketEntryId,
-          redirectUrl: `/messages/${integrationTest.docketNumber}/message-detail/${integrationTest.parentMessageId}`,
-        },
-      );
+export const petitionsClerk1ServesDocumentFromMessageDetail = cerebralTest => {
+  return it('petitions clerk 1 serves document from message detail', async () => {
+    await cerebralTest.runSequence(
+      'openConfirmServePaperFiledDocumentSequence',
+      {
+        docketEntryId: cerebralTest.docketEntryId,
+        redirectUrl: `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
+      },
+    );
 
-      expect(integrationTest.getState('redirectUrl')).toBe(
-        `/messages/${integrationTest.docketNumber}/message-detail/${integrationTest.parentMessageId}`,
-      );
-      expect(integrationTest.getState('docketEntryId')).toBe(
-        integrationTest.docketEntryId,
-      );
+    expect(cerebralTest.getState('redirectUrl')).toBe(
+      `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
+    );
+    expect(cerebralTest.getState('docketEntryId')).toBe(
+      cerebralTest.docketEntryId,
+    );
 
-      expect(integrationTest.getState('modal.showModal')).toBe(
-        'ConfirmInitiatePaperDocumentServiceModal',
-      );
+    expect(cerebralTest.getState('modal.showModal')).toBe(
+      'ConfirmInitiatePaperDocumentServiceModal',
+    );
 
-      await integrationTest.setState('iframeSrc', undefined);
+    await cerebralTest.setState('iframeSrc', undefined);
 
-      await integrationTest.runSequence('serveCourtIssuedDocumentSequence', {});
+    await cerebralTest.runSequence('serveCourtIssuedDocumentSequence', {});
 
-      expect(integrationTest.getState('alertSuccess')).toEqual({
-        message: 'Document served. ',
-      });
-      expect(integrationTest.getState('currentPage')).toBe('MessageDetail');
-
-      expect(integrationTest.getState('iframeSrc')).not.toBeUndefined();
+    expect(cerebralTest.getState('alertSuccess')).toEqual({
+      message: 'Document served. ',
     });
-  };
+    expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');
+
+    expect(cerebralTest.getState('iframeSrc')).not.toBeUndefined();
+  });
+};

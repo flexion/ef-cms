@@ -9,80 +9,76 @@ const documentViewerHelper = withAppContextDecorator(
   documentViewerHelperComputed,
 );
 
-export const petitionsClerkServesPetitionFromDocumentView = integrationTest => {
+export const petitionsClerkServesPetitionFromDocumentView = cerebralTest => {
   return it('petitions clerk serves electronic petition from document view', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const petitionDocketEntryId = integrationTest
+    const petitionDocketEntryId = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(d => d.eventCode === 'P').docketEntryId;
 
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketEntryId: petitionDocketEntryId,
-      docketNumber: integrationTest.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
       docketRecordTab: 'documentView',
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'loadDefaultDocketViewerDocumentToDisplaySequence',
     );
 
     let helper = runCompute(documentViewerHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.showNotServed).toBeTruthy();
     expect(helper.showServePetitionButton).toBeTruthy();
 
-    await integrationTest.runSequence('gotoPetitionQcSequence', {
-      docketNumber: integrationTest.docketNumber,
-      redirectUrl: `/case-detail/${integrationTest.docketNumber}/document-view?docketEntryId=${petitionDocketEntryId}`,
+    await cerebralTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${petitionDocketEntryId}`,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
       value: false,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual('PetitionQc');
+    expect(cerebralTest.getState('currentPage')).toEqual('PetitionQc');
 
-    await integrationTest.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'ReviewSavedPetition',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
 
-    await integrationTest.runSequence('openConfirmServeToIrsModalSequence');
+    await cerebralTest.runSequence('openConfirmServeToIrsModalSequence');
 
-    await integrationTest.runSequence('serveCaseToIrsSequence');
+    await cerebralTest.runSequence('serveCaseToIrsSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'loadDefaultDocketViewerDocumentToDisplaySequence',
     );
 
     helper = runCompute(documentViewerHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.showServePetitionButton).toBeFalsy();
     expect(helper.showNotServed).toBeFalsy();
 
-    await integrationTest.runSequence('gotoWorkQueueSequence');
-    expect(integrationTest.getState('currentPage')).toEqual('WorkQueue');
-    await integrationTest.runSequence('chooseWorkQueueSequence', {
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'section',
     });
 
     const formattedWorkItem = runCompute(formattedWorkQueue, {
-      state: integrationTest.getState(),
-    }).find(item => item.docketNumber === integrationTest.docketNumber);
+      state: cerebralTest.getState(),
+    }).find(item => item.docketNumber === cerebralTest.docketNumber);
 
     expect(formattedWorkItem.editLink).toContain(
       '/document-view?docketEntryId=',

@@ -5,7 +5,7 @@ import { docketClerkEditsTrialSession } from './journey/docketClerkEditsTrialSes
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest } from './helpers';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Docket Clerk Creates A Trial', () => {
   beforeEach(() => {
@@ -13,24 +13,24 @@ describe('Docket Clerk Creates A Trial', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(integrationTest, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, {
     trialLocation: 'Peoria, Illinois',
   });
-  docketClerkViewsTrialSessionList(integrationTest);
-  docketClerkEditsTrialSession(integrationTest);
+  docketClerkViewsTrialSessionList(cerebralTest);
+  docketClerkEditsTrialSession(cerebralTest);
 
   const trialLocation = `San Diego, California, ${Date.now()}`;
-  docketClerkCreatesARemoteTrialSession(integrationTest, {
+  docketClerkCreatesARemoteTrialSession(cerebralTest, {
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(integrationTest);
+  docketClerkViewsTrialSessionList(cerebralTest);
 
-  docketClerkCreatesARemoteTrialSession(integrationTest, {
+  docketClerkCreatesARemoteTrialSession(cerebralTest, {
     sessionType: SESSION_TYPES.special,
   });
-  docketClerkViewsTrialSessionList(integrationTest);
+  docketClerkViewsTrialSessionList(cerebralTest);
 });

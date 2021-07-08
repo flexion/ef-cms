@@ -1,20 +1,18 @@
-export const petitionsClerkEditOtherStatisticToCase = integrationTest => {
+export const petitionsClerkEditOtherStatisticToCase = cerebralTest => {
   return it('petitions clerk edits other statistic on the case', async () => {
-    await integrationTest.runSequence('gotoEditOtherStatisticsSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoEditOtherStatisticsSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(integrationTest.getState('caseDetail.damages')).toEqual(5678);
-    expect(integrationTest.getState('caseDetail.litigationCosts')).toEqual(
-      1234,
-    );
+    expect(cerebralTest.getState('caseDetail.damages')).toEqual(5678);
+    expect(cerebralTest.getState('caseDetail.litigationCosts')).toEqual(1234);
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'litigationCosts',
       value: 99,
     });
 
-    await integrationTest.runSequence('submitEditOtherStatisticsSequence');
+    await cerebralTest.runSequence('submitEditOtherStatisticsSequence');
 
-    expect(integrationTest.getState('caseDetail.litigationCosts')).toEqual(99);
+    expect(cerebralTest.getState('caseDetail.litigationCosts')).toEqual(99);
   });
 };

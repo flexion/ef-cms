@@ -1,12 +1,12 @@
-export const practitionerViewsCaseDetailOfPendingCase = integrationTest => {
+export const practitionerViewsCaseDetailOfPendingCase = cerebralTest => {
   return it('Practitioner views case detail of owned case', async () => {
-    integrationTest.setState('caseDetail', {});
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
-    expect(
-      integrationTest.getState('screenMetadata.pendingAssociation'),
-    ).toEqual(true);
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(cerebralTest.getState('screenMetadata.pendingAssociation')).toEqual(
+      true,
+    );
   });
 };

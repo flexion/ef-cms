@@ -1,21 +1,18 @@
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
-export const docketClerkSavesAndServesDocketEntry = integrationTest => {
+export const docketClerkSavesAndServesDocketEntry = cerebralTest => {
   return it('Docketclerk saves and serves a docket entry', async () => {
-    await integrationTest.runSequence('submitPaperFilingSequence');
+    await cerebralTest.runSequence('submitPaperFilingSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    integrationTest.docketRecordEntry =
-      formattedDocketEntriesOnDocketRecord.find(
-        entry => entry.eventCode === 'ADMR',
-      );
+    cerebralTest.docketRecordEntry = formattedDocketEntriesOnDocketRecord.find(
+      entry => entry.eventCode === 'ADMR',
+    );
 
-    expect(integrationTest.docketRecordEntry.index).toBeTruthy();
+    expect(cerebralTest.docketRecordEntry.index).toBeTruthy();
   });
 };

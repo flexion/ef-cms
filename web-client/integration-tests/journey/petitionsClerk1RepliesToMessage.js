@@ -1,38 +1,38 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const petitionsClerk1RepliesToMessage = integrationTest => {
+export const petitionsClerk1RepliesToMessage = cerebralTest => {
   return it('petitions clerk 1 replies to the message they received', async () => {
-    await integrationTest.runSequence('openReplyToMessageModalSequence');
+    await cerebralTest.runSequence('openReplyToMessageModalSequence');
 
-    expect(integrationTest.getState('modal.form')).toMatchObject({
-      parentMessageId: integrationTest.parentMessageId,
-      subject: integrationTest.testMessageSubject,
+    expect(cerebralTest.getState('modal.form')).toMatchObject({
+      parentMessageId: cerebralTest.parentMessageId,
+      subject: cerebralTest.testMessageSubject,
       to: 'Test Petitionsclerk',
     });
 
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'form.message',
       value: 'Identity theft is not a joke, Jim.',
     });
 
-    await integrationTest.runSequence('replyToMessageSequence');
+    await cerebralTest.runSequence('replyToMessageSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('messageDetail').length).toEqual(2);
+    expect(cerebralTest.getState('messageDetail').length).toEqual(2);
 
     await refreshElasticsearchIndex();
 
     //message should no longer be shown in inbox
-    await integrationTest.runSequence('gotoMessagesSequence', {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });
 
-    const messages = integrationTest.getState('messages');
+    const messages = cerebralTest.getState('messages');
 
     const foundMessage = messages.find(
-      message => message.subject === integrationTest.testMessageSubject,
+      message => message.subject === cerebralTest.testMessageSubject,
     );
 
     expect(foundMessage).not.toBeDefined();

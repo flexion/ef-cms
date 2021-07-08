@@ -22,8 +22,8 @@ import { petitionsClerkViewsDocketEntry } from './journey/petitionsClerkViewsDoc
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
 const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
-const integrationTest = setupTest();
-integrationTest.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   beforeAll(() => {
@@ -31,63 +31,63 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(integrationTest);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(integrationTest, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkCreatesAnOrder(integrationTest, {
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order of Dismissal',
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(integrationTest, 5);
-  petitionsClerkViewsDraftOrder(integrationTest, 0);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(cerebralTest, 5);
+  petitionsClerkViewsDraftOrder(cerebralTest, 0);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkViewsDraftOrder(integrationTest, 0);
-  docketClerkSignsOrder(integrationTest, 0);
-  docketClerkAddsDocketEntryFromOrder(integrationTest, 0);
-  docketClerkEditsDocketEntryFromOrderTypeA(integrationTest, 0);
-  docketClerkConvertsAnOrderToAnOpinion(integrationTest, 0);
-  docketClerkEditsDocketEntryFromOrderTypeC(integrationTest, 0);
-  docketClerkEditsDocketEntryFromOrderTypeD(integrationTest, 0);
-  docketClerkEditsDocketEntryFromOrderTypeE(integrationTest, 0);
-  docketClerkEditsDocketEntryFromOrderTypeF(integrationTest, 0);
-  docketClerkEditsDocketEntryFromOrderTypeG(integrationTest, 0);
-  docketClerkEditsDocketEntryFromOrderTypeH(integrationTest, 0);
-  docketClerkViewsDraftOrder(integrationTest, 1);
-  docketClerkCancelsAddDocketEntryFromOrder(integrationTest, 1);
-  docketClerkViewsDraftOrder(integrationTest, 1);
-  docketClerkSignsOrder(integrationTest, 1);
-  docketClerkAddsDocketEntryFromOrderOfDismissal(integrationTest, 1);
-  docketClerkViewsSavedCourtIssuedDocketEntryInProgress(integrationTest, 1);
-  docketClerkCreatesAnOrder(integrationTest, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkViewsDraftOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeA(cerebralTest, 0);
+  docketClerkConvertsAnOrderToAnOpinion(cerebralTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeC(cerebralTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeD(cerebralTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeE(cerebralTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeF(cerebralTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeG(cerebralTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeH(cerebralTest, 0);
+  docketClerkViewsDraftOrder(cerebralTest, 1);
+  docketClerkCancelsAddDocketEntryFromOrder(cerebralTest, 1);
+  docketClerkViewsDraftOrder(cerebralTest, 1);
+  docketClerkSignsOrder(cerebralTest, 1);
+  docketClerkAddsDocketEntryFromOrderOfDismissal(cerebralTest, 1);
+  docketClerkViewsSavedCourtIssuedDocketEntryInProgress(cerebralTest, 1);
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(integrationTest, 2);
-  docketClerkAddsDocketEntryFromOrderWithDate(integrationTest, 2);
+  docketClerkSignsOrder(cerebralTest, 2);
+  docketClerkAddsDocketEntryFromOrderWithDate(cerebralTest, 2);
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkViewsDocketEntry(integrationTest, 1);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsDocketEntry(cerebralTest, 1);
 
-  loginAs(integrationTest, 'petitioner@example.com');
-  petitionerViewsCaseDetail(integrationTest, {
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerViewsCaseDetail(cerebralTest, {
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
     documentCount: 5,
   });

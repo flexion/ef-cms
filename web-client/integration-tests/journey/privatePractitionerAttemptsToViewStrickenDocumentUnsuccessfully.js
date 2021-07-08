@@ -1,10 +1,10 @@
 export const privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully =
-  integrationTest => {
+  cerebralTest => {
     return it('private practitioner views stricken document unsuccessfully', async () => {
       await expect(
-        integrationTest.runSequence('openCaseDocumentDownloadUrlSequence', {
-          docketEntryId: integrationTest.docketEntryId,
-          docketNumber: integrationTest.docketNumber,
+        cerebralTest.runSequence('openCaseDocumentDownloadUrlSequence', {
+          docketEntryId: cerebralTest.docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
         }),
       ).rejects.toThrow('Unauthorized to view document at this time.');
     });

@@ -3,19 +3,19 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkViewsNewTrialSession = (
-  integrationTest,
+  cerebralTest,
   checkCase,
   calendarNote,
 ) => {
   return it('Docket Clerk Views a new trial session', async () => {
-    await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: integrationTest.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
     const trialSessionFormatted = runCompute(
       withAppContextDecorator(formattedTrialSessionDetails),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
@@ -23,7 +23,7 @@ export const docketClerkViewsNewTrialSession = (
 
     if (checkCase) {
       const foundCase = trialSessionFormatted.caseOrder.find(
-        _case => _case.docketNumber == integrationTest.docketNumber,
+        _case => _case.docketNumber == cerebralTest.docketNumber,
       );
 
       expect(foundCase).toBeTruthy();

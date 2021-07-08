@@ -3,85 +3,85 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 const { CASE_TYPES_MAP, COUNTRY_TYPES } = applicationContext.getConstants();
 
 export const petitionerCreatesNewCase = (
-  integrationTest,
+  cerebralTest,
   fakeFile,
   overrides = {},
 ) => {
   return it('petitioner creates a new case', async () => {
-    await integrationTest.runSequence('gotoStartCaseWizardSequence');
+    await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
-    expect(integrationTest.getState('currentPage')).toBe('StartCaseWizard');
+    expect(cerebralTest.getState('currentPage')).toBe('StartCaseWizard');
 
-    await integrationTest.runSequence('updateStartCaseFormValueSequence', {
+    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'petitionFile',
       value: fakeFile,
     });
 
-    await integrationTest.runSequence('updateStartCaseFormValueSequence', {
+    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'petitionFileSize',
       value: 1,
     });
 
-    await integrationTest.runSequence('updateStartCaseFormValueSequence', {
+    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'stinFile',
       value: fakeFile,
     });
 
-    await integrationTest.runSequence('updateStartCaseFormValueSequence', {
+    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'stinFileSize',
       value: 1,
     });
 
-    await integrationTest.runSequence('updateStartCaseFormValueSequence', {
+    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: CASE_TYPES_MAP.other,
     });
 
-    await integrationTest.runSequence('updateStartCaseFormValueSequence', {
+    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
       value: 'Deceased Spouse',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
       value: 'Daenerys Stormborn',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.secondaryName',
       value: 'Daenerys Stormborn 2',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
       value: '123 Abc Ln',
     });
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address2',
       value: 'Apt 2',
     });
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.city',
       value: 'Cityville',
     });
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.state',
       value: 'CA',
     });
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.postalCode',
       value: '12345',
     });
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.email',
       value: 'test@example.com',
     });
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.phone',
       value: '1234567890',
     });
 
-    expect(integrationTest.getState('form.contactPrimary')).toEqual({
+    expect(cerebralTest.getState('form.contactPrimary')).toEqual({
       address1: '123 Abc Ln',
       address2: 'Apt 2',
       city: 'Cityville',
@@ -94,48 +94,48 @@ export const petitionerCreatesNewCase = (
       state: 'CA',
     });
 
-    await integrationTest.runSequence('updateStartCaseFormValueSequence', {
+    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'hasIrsNotice',
       value: true,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: overrides.caseType || CASE_TYPES_MAP.whistleblower,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
       value: 'Seattle, Washington',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'procedureType',
       value: 'Regular',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'wizardStep',
       value: '5',
     });
 
-    await integrationTest.runSequence('validateStartCaseWizardSequence');
+    await cerebralTest.runSequence('validateStartCaseWizardSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
-    expect(integrationTest.getState('alertError')).toBeUndefined();
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('alertError')).toBeUndefined();
 
-    await integrationTest.runSequence('submitFilePetitionSequence');
+    await cerebralTest.runSequence('submitFilePetitionSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
-    expect(integrationTest.getState('alertError')).toBeUndefined();
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('alertError')).toBeUndefined();
 
-    expect(integrationTest.getState('currentPage')).toBe('FilePetitionSuccess');
+    expect(cerebralTest.getState('currentPage')).toBe('FilePetitionSuccess');
 
-    await integrationTest.runSequence('gotoDashboardSequence');
+    await cerebralTest.runSequence('gotoDashboardSequence');
 
-    expect(integrationTest.getState('currentPage')).toBe('DashboardPetitioner');
+    expect(cerebralTest.getState('currentPage')).toBe('DashboardPetitioner');
 
-    integrationTest.docketNumber = integrationTest.getState(
+    cerebralTest.docketNumber = cerebralTest.getState(
       'openCases.0.docketNumber',
     );
   });

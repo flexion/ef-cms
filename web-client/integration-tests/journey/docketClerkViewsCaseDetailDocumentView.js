@@ -11,32 +11,32 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const docketClerkViewsCaseDetailDocumentView = integrationTest => {
+export const docketClerkViewsCaseDetailDocumentView = cerebralTest => {
   return it('Docketclerk views case detail document view', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const caseDetail = integrationTest.getState('caseDetail');
+    const caseDetail = cerebralTest.getState('caseDetail');
 
     await viewCaseDetail({
+      cerebralTest,
       docketNumber: caseDetail.docketNumber,
-      integrationTest,
     });
     const formatted = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(1);
 
     await refreshElasticsearchIndex();
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(caseDetail.associatedJudge).toBeDefined();
     expect(caseDetail.status).toBeDefined();
     expect(contactPrimary.contactId).toBeDefined();
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'changeTabAndSetViewerDocumentToDisplaySequence',
       {
         docketRecordTab: 'documentView',
@@ -46,17 +46,15 @@ export const docketClerkViewsCaseDetailDocumentView = integrationTest => {
       },
     );
 
-    integrationTest.docketEntryId =
+    cerebralTest.docketEntryId =
       formatted.pendingItemsDocketEntries[0].docketEntryId;
 
-    expect(integrationTest.getState('docketEntryId')).toEqual(
-      integrationTest.docketEntryId,
+    expect(cerebralTest.getState('docketEntryId')).toEqual(
+      cerebralTest.docketEntryId,
     );
 
     expect(
-      integrationTest.getState(
-        'currentViewMetadata.caseDetail.docketRecordTab',
-      ),
+      cerebralTest.getState('currentViewMetadata.caseDetail.docketRecordTab'),
     ).toEqual('documentView');
   });
 };

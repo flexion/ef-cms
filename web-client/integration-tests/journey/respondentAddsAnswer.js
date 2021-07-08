@@ -1,20 +1,20 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { contactPrimaryFromState } from '../helpers';
 
-export const respondentAddsAnswer = (integrationTest, fakeFile) => {
+export const respondentAddsAnswer = (cerebralTest, fakeFile) => {
   return it('Respondent adds an answer', async () => {
-    await integrationTest.runSequence('gotoFileDocumentSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       category: VALIDATION_ERROR_MESSAGES.category,
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'category',
@@ -22,8 +22,8 @@ export const respondentAddsAnswer = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence('validateSelectDocumentTypeSequence');
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
@@ -36,7 +36,7 @@ export const respondentAddsAnswer = (integrationTest, fakeFile) => {
     };
 
     for (const key of Object.keys(documentToSelect)) {
-      await integrationTest.runSequence(
+      await cerebralTest.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
           key,
@@ -45,17 +45,17 @@ export const respondentAddsAnswer = (integrationTest, fakeFile) => {
       );
     }
 
-    await integrationTest.runSequence('validateSelectDocumentTypeSequence');
+    await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(integrationTest.getState('form.documentType')).toEqual('Answer');
+    expect(cerebralTest.getState('form.documentType')).toEqual('Answer');
 
-    expect(integrationTest.getState('form.partyPrimary')).toBeUndefined();
+    expect(cerebralTest.getState('form.partyPrimary')).toBeUndefined();
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'primaryDocumentFile',
@@ -63,7 +63,7 @@ export const respondentAddsAnswer = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'certificateOfService',
@@ -71,7 +71,7 @@ export const respondentAddsAnswer = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'attachments',
@@ -79,7 +79,7 @@ export const respondentAddsAnswer = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'hasSupportingDocuments',
@@ -87,9 +87,9 @@ export const respondentAddsAnswer = (integrationTest, fakeFile) => {
       },
     );
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: `filersMap.${contactPrimary.contactId}`,
@@ -97,14 +97,10 @@ export const respondentAddsAnswer = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
-      'reviewExternalDocumentInformationSequence',
-    );
+    await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
-    await integrationTest.runSequence('submitExternalDocumentSequence');
+    await cerebralTest.runSequence('submitExternalDocumentSequence');
 
-    expect(integrationTest.getState('caseDetail.docketEntries').length).toEqual(
-      4,
-    );
+    expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(4);
   });
 };

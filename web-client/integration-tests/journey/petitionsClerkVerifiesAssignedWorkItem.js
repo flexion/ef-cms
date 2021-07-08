@@ -1,21 +1,21 @@
 import { getPetitionWorkItemForCase } from '../helpers';
 
 export const petitionsClerkVerifiesAssignedWorkItem = (
-  integrationTest,
+  cerebralTest,
   createdCases,
 ) => {
   return it('Petitions clerk verifies assignment of work item', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: createdCases[0].docketNumber,
     });
 
     const { workItemId } = getPetitionWorkItemForCase(
-      integrationTest.getState('caseDetail'),
+      cerebralTest.getState('caseDetail'),
     );
 
-    await integrationTest.runSequence('gotoWorkQueueSequence');
-    expect(integrationTest.getState('currentPage')).toEqual('WorkQueue');
-    const workItem = integrationTest
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
+    const workItem = cerebralTest
       .getState('workQueue')
       .find(workItemInQueue => workItemInQueue.workItemId === workItemId);
     expect(workItem).toBeDefined();

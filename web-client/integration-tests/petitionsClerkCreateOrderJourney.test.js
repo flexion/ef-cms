@@ -17,7 +17,7 @@ import { petitionsClerkViewsCaseDetailAfterAddingOrder } from './journey/petitio
 import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
 import { petitionsDeletesOrderFromCase } from './journey/petitionsDeletesOrderFromCase';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Petitions Clerk Create Order Journey', () => {
   beforeAll(() => {
@@ -25,37 +25,37 @@ describe('Petitions Clerk Create Order Journey', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
-  petitionerChoosesProcedureType(integrationTest);
-  petitionerChoosesCaseType(integrationTest);
-  petitionerCreatesNewCase(integrationTest, fakeFile);
-  petitionerViewsDashboard(integrationTest);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(cerebralTest);
+  petitionerChoosesCaseType(cerebralTest);
+  petitionerCreatesNewCase(cerebralTest, fakeFile);
+  petitionerViewsDashboard(cerebralTest);
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(integrationTest);
-  petitionsClerkViewsDraftDocuments(integrationTest);
-  petitionsClerkAddsOrderToCase(integrationTest);
-  petitionsClerkViewsCaseDetailAfterAddingOrder(integrationTest);
-  petitionsClerkViewsDraftDocuments(integrationTest, 1);
-  petitionsClerkEditsDraftOrder(integrationTest, {});
-  petitionsClerkViewsDraftDocuments(integrationTest, 1);
-  petitionsClerkEditsDraftOrder(integrationTest, {
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(cerebralTest);
+  petitionsClerkViewsDraftDocuments(cerebralTest);
+  petitionsClerkAddsOrderToCase(cerebralTest);
+  petitionsClerkViewsCaseDetailAfterAddingOrder(cerebralTest);
+  petitionsClerkViewsDraftDocuments(cerebralTest, 1);
+  petitionsClerkEditsDraftOrder(cerebralTest, {});
+  petitionsClerkViewsDraftDocuments(cerebralTest, 1);
+  petitionsClerkEditsDraftOrder(cerebralTest, {
     currentRichText: '<p>This is an edited test order.</p>',
     setRichText: '<p>This is a re-edited test order</p>',
   });
-  petitionsClerkCreatesMessageToChambers(integrationTest);
-  petitionsDeletesOrderFromCase(integrationTest);
-  petitionsClerkViewsDraftDocuments(integrationTest, 0);
+  petitionsClerkCreatesMessageToChambers(cerebralTest);
+  petitionsDeletesOrderFromCase(cerebralTest);
+  petitionsClerkViewsDraftDocuments(cerebralTest, 0);
 
-  petitionsClerkAddsGenericOrderToCase(integrationTest);
-  petitionsClerkSignsOrder(integrationTest);
-  petitionsClerkViewsAddDocketEntryForGenericOrder(integrationTest);
-  petitionsClerkEditsGenericOrder(integrationTest);
-  petitionsClerkSignsOrder(integrationTest);
-  petitionsClerkViewsAddDocketEntryForGenericOrder(integrationTest);
-  petitionsClerkServesElectronicCaseToIrs(integrationTest);
-  petitionsClerkAddsDocketEntryForOrderAndSavesForLater(integrationTest);
+  petitionsClerkAddsGenericOrderToCase(cerebralTest);
+  petitionsClerkSignsOrder(cerebralTest);
+  petitionsClerkViewsAddDocketEntryForGenericOrder(cerebralTest);
+  petitionsClerkEditsGenericOrder(cerebralTest);
+  petitionsClerkSignsOrder(cerebralTest);
+  petitionsClerkViewsAddDocketEntryForGenericOrder(cerebralTest);
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+  petitionsClerkAddsDocketEntryForOrderAndSavesForLater(cerebralTest);
 });

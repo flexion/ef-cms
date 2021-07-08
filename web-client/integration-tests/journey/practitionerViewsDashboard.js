@@ -1,16 +1,16 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const practitionerViewsDashboard = integrationTest => {
+export const practitionerViewsDashboard = cerebralTest => {
   return it('Practitioner views dashboard', async () => {
     await refreshElasticsearchIndex();
-    await integrationTest.runSequence('gotoDashboardSequence');
-    expect(integrationTest.getState('currentPage')).toEqual(
+    await cerebralTest.runSequence('gotoDashboardSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'DashboardPractitioner',
     );
-    expect(integrationTest.getState('openCases').length).toBeGreaterThan(0);
-    const latestDocketNumber = integrationTest.getState(
+    expect(cerebralTest.getState('openCases').length).toBeGreaterThan(0);
+    const latestDocketNumber = cerebralTest.getState(
       'openCases.0.docketNumber',
     );
-    expect(integrationTest.docketNumber).toEqual(latestDocketNumber);
+    expect(cerebralTest.docketNumber).toEqual(latestDocketNumber);
   });
 };

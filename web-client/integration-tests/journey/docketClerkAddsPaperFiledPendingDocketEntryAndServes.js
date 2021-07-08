@@ -2,53 +2,53 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
-  integrationTest,
+  cerebralTest,
   fakeFile,
 ) => {
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
 
   return it('Docketclerk adds paper filed docket entry and serves', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('updateScreenMetadataSequence', {
+    await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
       value: false,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: 4,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: 30,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: 2001,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFileSize',
       value: 100,
     });
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: `filersMap.${contactPrimary.contactId}`,
@@ -56,30 +56,28 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
       },
     );
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'EVID',
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'pending',
       value: true,
     });
 
-    await integrationTest.runSequence('submitPaperFilingSequence');
+    await cerebralTest.runSequence('submitPaperFilingSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('alertSuccess').message).toEqual(
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to docket record.',
     );
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
-    expect(integrationTest.getState('form')).toEqual({});
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('form')).toEqual({});
 
-    integrationTest.docketEntryId = integrationTest
+    cerebralTest.docketEntryId = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(doc => doc.eventCode === 'EVID').docketEntryId;
   });

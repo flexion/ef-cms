@@ -4,8 +4,8 @@ import { chambersUserViewsCaseDetail } from './journey/chambersUserViewsCaseDeta
 import { chambersUserViewsDraftDocuments } from './journey/chambersUserViewsDraftDocuments';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const integrationTest = setupTest();
-integrationTest.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('chambers user skips signing an order', () => {
   beforeAll(() => {
@@ -13,21 +13,21 @@ describe('chambers user skips signing an order', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
 
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(integrationTest);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'colvinsChambers@example.com');
+  loginAs(cerebralTest, 'colvinsChambers@example.com');
 
-  chambersUserViewsCaseDetail(integrationTest, 2);
-  chambersUserViewsDraftDocuments(integrationTest);
-  chambersUserAddsOrderToCase(integrationTest);
-  chambersUserSkipSigningOrder(integrationTest);
+  chambersUserViewsCaseDetail(cerebralTest, 2);
+  chambersUserViewsDraftDocuments(cerebralTest);
+  chambersUserAddsOrderToCase(cerebralTest);
+  chambersUserSkipSigningOrder(cerebralTest);
 });

@@ -11,7 +11,7 @@ import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritiz
 
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('trial hearings journey', () => {
   beforeAll(() => {
@@ -19,7 +19,7 @@ describe('trial hearings journey', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const trialLocation1 = `Denver, Colorado, ${Date.now()}`;
@@ -36,90 +36,79 @@ describe('trial hearings journey', () => {
     sessionType: 'Small',
     trialLocation: trialLocation2,
   };
-  integrationTest.createdTrialSessions = [];
-  integrationTest.createdCases = [];
+  cerebralTest.createdTrialSessions = [];
+  cerebralTest.createdCases = [];
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(integrationTest, overrides1);
-  docketClerkViewsTrialSessionList(integrationTest);
-  docketClerkViewsNewTrialSession(integrationTest);
-  docketClerkCreatesATrialSession(integrationTest, overrides2);
-  docketClerkViewsTrialSessionList(integrationTest);
-  docketClerkViewsNewTrialSession(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, overrides1);
+  docketClerkViewsTrialSessionList(cerebralTest);
+  docketClerkViewsNewTrialSession(cerebralTest);
+  docketClerkCreatesATrialSession(cerebralTest, overrides2);
+  docketClerkViewsTrialSessionList(cerebralTest);
+  docketClerkViewsNewTrialSession(cerebralTest);
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('create case 1', async () => {
-    const caseDetail = await uploadPetition(integrationTest, overrides1);
+    const caseDetail = await uploadPetition(cerebralTest, overrides1);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
-    integrationTest.createdCases.push(integrationTest.docketNumber);
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.createdCases.push(cerebralTest.docketNumber);
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkManuallyAddsCaseToTrialSessionWithNote(integrationTest);
-  docketClerkAddsCaseToHearing(integrationTest, 'Test hearing note one.');
-  docketClerkViewsNewTrialSession(
-    integrationTest,
-    true,
-    'Test hearing note one.',
-  );
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkManuallyAddsCaseToTrialSessionWithNote(cerebralTest);
+  docketClerkAddsCaseToHearing(cerebralTest, 'Test hearing note one.');
+  docketClerkViewsNewTrialSession(cerebralTest, true, 'Test hearing note one.');
 
-  loginAs(integrationTest, 'judgeCohen@example.com');
+  loginAs(cerebralTest, 'judgeCohen@example.com');
   judgeViewsTrialSessionWorkingCopy(
-    integrationTest,
+    cerebralTest,
     true,
     'Test hearing note one.',
   );
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('create case 2', async () => {
-    const caseDetail = await uploadPetition(integrationTest);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
-    integrationTest.createdCases.push(integrationTest.docketNumber);
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.createdCases.push(cerebralTest.docketNumber);
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkPrioritizesCase(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkPrioritizesCase(cerebralTest);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkAddsCaseToHearing(integrationTest, 'Test hearing note two.');
-  docketClerkViewsNewTrialSession(
-    integrationTest,
-    true,
-    'Test hearing note two.',
-  );
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAddsCaseToHearing(cerebralTest, 'Test hearing note two.');
+  docketClerkViewsNewTrialSession(cerebralTest, true, 'Test hearing note two.');
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('create case 3', async () => {
-    const caseDetail = await uploadPetition(integrationTest, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       preferredTrialCity: trialLocation1,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
-    integrationTest.createdCases.push(integrationTest.docketNumber);
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.createdCases.push(cerebralTest.docketNumber);
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkBlocksCase(integrationTest, trialLocation1, {
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkBlocksCase(cerebralTest, trialLocation1, {
     caseCaption: 'Mona Schultz, Petitioner',
     caseStatus: 'New',
     docketNumberSuffix: 'L',
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkAddsCaseToHearing(integrationTest, 'Test hearing note three.');
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAddsCaseToHearing(cerebralTest, 'Test hearing note three.');
   docketClerkViewsNewTrialSession(
-    integrationTest,
+    cerebralTest,
     true,
     'Test hearing note three.',
   );
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkAddsCaseToHearing(integrationTest, 'Test hearing note four.');
-  docketClerkEditsHearingNote(
-    integrationTest,
-    'Updated test hearing note four.',
-  );
-  docketClerkRemovesCaseFromHearing(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAddsCaseToHearing(cerebralTest, 'Test hearing note four.');
+  docketClerkEditsHearingNote(cerebralTest, 'Updated test hearing note four.');
+  docketClerkRemovesCaseFromHearing(cerebralTest);
 });

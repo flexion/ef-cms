@@ -9,7 +9,7 @@ import { petitionsClerkReviewsPetitionAndSavesForLater } from './journey/petitio
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkViewsSectionInProgress } from './journey/petitionsClerkViewsSectionInProgress';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Petitions Clerk Saves Document QC for Later', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -19,12 +19,12 @@ describe('Petitions Clerk Saves Document QC for Later', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(integrationTest, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -37,21 +37,21 @@ describe('Petitions Clerk Saves Document QC for Later', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
 
   it('refresh elasticsearch index', async () => {
     await refreshElasticsearchIndex();
   });
 
-  petitionsClerkReviewsPetitionAndSavesForLater(integrationTest);
+  petitionsClerkReviewsPetitionAndSavesForLater(cerebralTest);
 
   it('refresh elasticsearch index', async () => {
     await refreshElasticsearchIndex();
   });
 
-  petitionsClerkViewsSectionInProgress(integrationTest);
-  petitionsClerkServesPetitionFromDocumentView(integrationTest);
+  petitionsClerkViewsSectionInProgress(cerebralTest);
+  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 });

@@ -1,14 +1,14 @@
-export const docketClerkConsolidatesCases = integrationTest => {
+export const docketClerkConsolidatesCases = cerebralTest => {
   return it('Docket clerk consolidates cases', async () => {
-    integrationTest.setState('modal.confirmSelection', true);
-    await integrationTest.runSequence('submitAddConsolidatedCaseSequence');
+    cerebralTest.setState('modal.confirmSelection', true);
+    await cerebralTest.runSequence('submitAddConsolidatedCaseSequence');
 
-    expect(integrationTest.getState('caseDetail')).toHaveProperty(
+    expect(cerebralTest.getState('caseDetail')).toHaveProperty(
       'consolidatedCases',
     );
     expect(
-      integrationTest.getState('caseDetail.consolidatedCases').length,
+      cerebralTest.getState('caseDetail.consolidatedCases').length,
     ).toEqual(2);
-    expect(integrationTest.getState('modal.showModal')).toBeUndefined();
+    expect(cerebralTest.getState('modal.showModal')).toBeUndefined();
   });
 };

@@ -11,35 +11,33 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-export const docketClerkQCsNCAForCaseWithPaperService = integrationTest => {
+export const docketClerkQCsNCAForCaseWithPaperService = cerebralTest => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
   return it('Docket Clerk QCs NCA for case with paper service', async () => {
     await refreshElasticsearchIndex();
 
-    integrationTest.setState('caseDetail', {});
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
 
-    await integrationTest.runSequence('chooseWorkQueueSequence', {
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
     });
     const workQueueFormatted = runCompute(formattedWorkQueue, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     const noticeOfChangeOfAddressQCItem = workQueueFormatted.find(
-      workItem => workItem.docketNumber === integrationTest.docketNumber,
+      workItem => workItem.docketNumber === cerebralTest.docketNumber,
     );
 
     expect(noticeOfChangeOfAddressQCItem).toMatchObject({
@@ -47,7 +45,7 @@ export const docketClerkQCsNCAForCaseWithPaperService = integrationTest => {
     });
 
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const lastIndex = formattedDocketEntriesOnDocketRecord.length - 1;
     noticeOfChangeOfAddressQCItem.index =
@@ -56,7 +54,7 @@ export const docketClerkQCsNCAForCaseWithPaperService = integrationTest => {
     const { docketEntryId } =
       formattedDocketEntriesOnDocketRecord[noticeOfChangeOfAddressQCItem.index];
 
-    await integrationTest.runSequence('gotoDocketEntryQcSequence', {
+    await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
       docketNumber: formattedDocketEntriesOnDocketRecord.docketNumber,
     });
@@ -66,17 +64,17 @@ export const docketClerkQCsNCAForCaseWithPaperService = integrationTest => {
     );
 
     const { showFilingPartiesForm } = runCompute(addDocketEntryHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(showFilingPartiesForm).toBe(false);
 
-    await integrationTest.runSequence('completeDocketEntryQCSequence');
+    await cerebralTest.runSequence('completeDocketEntryQCSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest));
+      await getFormattedDocketEntriesForTest(cerebralTest));
 
     const selectedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,

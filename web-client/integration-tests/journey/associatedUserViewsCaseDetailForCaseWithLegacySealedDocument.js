@@ -8,19 +8,19 @@ const formattedCaseDetail = withAppContextDecorator(
 );
 
 export const associatedUserViewsCaseDetailForCaseWithLegacySealedDocument =
-  integrationTest => {
+  cerebralTest => {
     return it('associated user views case detail for a case with a legacy sealed document', async () => {
       const { formattedDocketEntriesOnDocketRecord } =
-        await getFormattedDocketEntriesForTest(integrationTest);
+        await getFormattedDocketEntriesForTest(cerebralTest);
 
       const legacySealedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
-        entry => entry.docketEntryId === integrationTest.docketEntryId,
+        entry => entry.docketEntryId === cerebralTest.docketEntryId,
       );
 
       expect(legacySealedDocketEntry.showLinkToDocument).toBeFalsy();
 
       const formattedCase = runCompute(formattedCaseDetail, {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       });
 
       expect(formattedCase.petitioners[0]).toMatchObject({
@@ -28,14 +28,12 @@ export const associatedUserViewsCaseDetailForCaseWithLegacySealedDocument =
         contactId: expect.anything(),
         name: expect.anything(),
       });
-      expect(
-        integrationTest.getState('screenMetadata.isAssociated'),
-      ).toBeTruthy();
+      expect(cerebralTest.getState('screenMetadata.isAssociated')).toBeTruthy();
 
       await expect(
-        integrationTest.runSequence('openCaseDocumentDownloadUrlSequence', {
-          docketEntryId: integrationTest.docketEntryId,
-          docketNumber: integrationTest.docketNumber,
+        cerebralTest.runSequence('openCaseDocumentDownloadUrlSequence', {
+          docketEntryId: cerebralTest.docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
           isPublic: false,
         }),
       ).rejects.toThrow('Unauthorized to view document at this time.');

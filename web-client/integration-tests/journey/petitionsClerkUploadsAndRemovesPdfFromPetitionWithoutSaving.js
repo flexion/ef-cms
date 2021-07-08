@@ -1,5 +1,5 @@
 export const petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving = (
-  integrationTest,
+  cerebralTest,
   fakeFile,
 ) => {
   const applicationForWaiverOfFilingFeeFile =
@@ -7,48 +7,46 @@ export const petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving = (
   const documentToRemoveAndReAdd = 'stinFile';
 
   return it('Petitions Clerk uploads and removes pdf from petition without saving', async () => {
-    integrationTest.setState(
+    cerebralTest.setState(
       'currentViewMetadata.documentSelectedForPreview',
       applicationForWaiverOfFilingFeeFile,
     );
-    await integrationTest.runSequence('setDocumentForPreviewSequence');
+    await cerebralTest.runSequence('setDocumentForPreviewSequence');
 
-    integrationTest.setState(
+    cerebralTest.setState(
       'currentViewMetadata.documentSelectedForPreview',
       'stinFile',
     );
-    await integrationTest.runSequence('setDocumentForPreviewSequence');
+    await cerebralTest.runSequence('setDocumentForPreviewSequence');
 
-    await integrationTest.runSequence('setDocumentForUploadSequence', {
+    await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentType: documentToRemoveAndReAdd,
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
     expect(
-      integrationTest.getState('form')[documentToRemoveAndReAdd],
+      cerebralTest.getState('form')[documentToRemoveAndReAdd],
     ).toBeDefined();
 
-    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
     expect(
-      integrationTest.getState(
-        'currentViewMetadata.documentSelectedForPreview',
-      ),
+      cerebralTest.getState('currentViewMetadata.documentSelectedForPreview'),
     ).toBe(documentToRemoveAndReAdd);
 
-    await integrationTest.runSequence('deleteUploadedPdfSequence');
+    await cerebralTest.runSequence('deleteUploadedPdfSequence');
 
-    expect(integrationTest.getState('pdfPreviewUrl')).toBeUndefined();
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeUndefined();
     expect(
-      integrationTest.getState('form')[documentToRemoveAndReAdd],
+      cerebralTest.getState('form')[documentToRemoveAndReAdd],
     ).toBeUndefined();
 
-    integrationTest.setState(
+    cerebralTest.setState(
       'currentViewMetadata.documentSelectedForPreview',
       applicationForWaiverOfFilingFeeFile,
     );
-    await integrationTest.runSequence('setDocumentForPreviewSequence');
-    expect(integrationTest.getState('form.docketEntries')).toEqual(
+    await cerebralTest.runSequence('setDocumentForPreviewSequence');
+    expect(cerebralTest.getState('form.docketEntries')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           documentType: 'Application for Waiver of Filing Fee',
@@ -56,6 +54,6 @@ export const petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving = (
       ]),
     );
 
-    await integrationTest.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
   });
 };

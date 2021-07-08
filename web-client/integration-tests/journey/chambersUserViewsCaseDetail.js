@@ -4,29 +4,27 @@ import {
 } from '../../../shared/src/business/entities/EntityConstants';
 
 export const chambersUserViewsCaseDetail = (
-  integrationTest,
+  cerebralTest,
   expectedDocumentCount = 2,
 ) => {
   return it('Chambers user views case detail', async () => {
-    integrationTest.setState('caseDetail', {});
+    cerebralTest.setState('caseDetail', {});
 
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('caseDetail.docketNumber')).toEqual(
+      cerebralTest.docketNumber,
     );
-    expect(integrationTest.getState('caseDetail.docketNumber')).toEqual(
-      integrationTest.docketNumber,
-    );
-    expect(integrationTest.getState('caseDetail.status')).toEqual(
+    expect(cerebralTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.new,
     );
-    expect(integrationTest.getState('caseDetail.docketEntries').length).toEqual(
+    expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(
       expectedDocumentCount,
     );
-    expect(integrationTest.getState('caseDetail.associatedJudge')).toEqual(
+    expect(cerebralTest.getState('caseDetail.associatedJudge')).toEqual(
       CHIEF_JUDGE,
     );
   });

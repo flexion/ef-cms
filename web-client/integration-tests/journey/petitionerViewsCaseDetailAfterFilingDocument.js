@@ -8,37 +8,37 @@ const { DOCKET_NUMBER_SUFFIXES, INITIAL_DOCUMENT_TYPES } =
   applicationContext.getConstants();
 
 export const petitionerViewsCaseDetailAfterFilingDocument = (
-  integrationTest,
+  cerebralTest,
   overrides = {},
 ) => {
   return it('petitioner views case detail after filing a document', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const docketNumberSuffix =
       overrides.docketNumberSuffix || DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
 
-    const caseDetail = integrationTest.getState('caseDetail');
+    const caseDetail = cerebralTest.getState('caseDetail');
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
-    expect(caseDetail.docketNumber).toEqual(integrationTest.docketNumber);
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(caseDetail.docketNumber).toEqual(cerebralTest.docketNumber);
     expect(caseDetail.docketNumberSuffix).toEqual(docketNumberSuffix);
     expect(caseDetailFormatted.docketNumberWithSuffix).toEqual(
-      `${integrationTest.docketNumber}${docketNumberSuffix}`,
+      `${cerebralTest.docketNumber}${docketNumberSuffix}`,
     );
 
     // verify that the user was given a link to their receipt
-    expect(integrationTest.getState('alertSuccess.linkUrl')).toBeDefined();
+    expect(cerebralTest.getState('alertSuccess.linkUrl')).toBeDefined();
 
     expect(caseDetail.docketEntries.length).toEqual(6);
 

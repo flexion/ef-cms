@@ -8,7 +8,7 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 const trialLocation = `Boise, Idaho, ${Date.now()}`;
 
@@ -23,29 +23,29 @@ describe('docket clerk update case journey', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
 
   it('create a case', async () => {
-    const caseDetail = await uploadPetition(integrationTest, overrides);
+    const caseDetail = await uploadPetition(cerebralTest, overrides);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(integrationTest);
-  docketClerkCreatesATrialSession(integrationTest, overrides);
-  docketClerkViewsTrialSessionList(integrationTest);
-  docketClerkViewsEligibleCasesForTrialSession(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
+  docketClerkCreatesATrialSession(cerebralTest, overrides);
+  docketClerkViewsTrialSessionList(cerebralTest);
+  docketClerkViewsEligibleCasesForTrialSession(cerebralTest);
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  markAllCasesAsQCed(integrationTest, () => [integrationTest.docketNumber]);
-  petitionsClerkSetsATrialSessionsSchedule(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  markAllCasesAsQCed(cerebralTest, () => [cerebralTest.docketNumber]);
+  petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusFromCalendaredToSubmitted(integrationTest);
-  docketClerkViewsInactiveCasesForTrialSession(integrationTest);
-  docketClerkUpdatesCaseStatusToReadyForTrial(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusFromCalendaredToSubmitted(cerebralTest);
+  docketClerkViewsInactiveCasesForTrialSession(cerebralTest);
+  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
 });

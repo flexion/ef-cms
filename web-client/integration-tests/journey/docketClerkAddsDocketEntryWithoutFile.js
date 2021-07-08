@@ -6,26 +6,26 @@ import {
 } from '../helpers';
 
 export const docketClerkAddsDocketEntryWithoutFile = (
-  integrationTest,
+  cerebralTest,
   overrides = {},
 ) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('Docketclerk adds docket entry data without a file', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('submitPaperFilingSequence', {
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
@@ -33,22 +33,22 @@ export const docketClerkAddsDocketEntryWithoutFile = (
     });
 
     //primary document
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: overrides.dateReceivedMonth || 1,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: overrides.dateReceivedDay || 1,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: overrides.dateReceivedYear || 2018,
     });
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: `filersMap.${contactPrimary.contactId}`,
@@ -56,56 +56,53 @@ export const docketClerkAddsDocketEntryWithoutFile = (
       },
     );
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'ADMR',
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'documentType',
       value: 'Administrative Record',
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'objections',
       value: OBJECTIONS_OPTIONS_MAP.NO,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'hasOtherFilingParty',
       value: true,
     });
 
-    await integrationTest.runSequence('submitPaperFilingSequence', {
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       otherFilingParty: VALIDATION_ERROR_MESSAGES.otherFilingParty,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'otherFilingParty',
       value: 'Brianna Noble',
     });
 
-    await integrationTest.runSequence('submitPaperFilingSequence', {
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    integrationTest.docketRecordEntry =
-      formattedDocketEntriesOnDocketRecord.find(
-        entry => entry.documentTitle === 'Administrative Record',
-      );
+    cerebralTest.docketRecordEntry = formattedDocketEntriesOnDocketRecord.find(
+      entry => entry.documentTitle === 'Administrative Record',
+    );
 
-    expect(integrationTest.docketRecordEntry.index).toBeFalsy();
+    expect(cerebralTest.docketRecordEntry.index).toBeFalsy();
   });
 };

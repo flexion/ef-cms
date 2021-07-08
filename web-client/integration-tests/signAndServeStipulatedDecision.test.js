@@ -5,7 +5,7 @@ import { docketClerkCreatesDocketEntryForSignedStipulatedDecision } from './jour
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { respondentUploadsProposedStipulatedDecision } from './journey/respondentUploadsProposedStipulatedDecision';
 
-const integrationTest = setupTest({
+const cerebralTest = setupTest({
   useCases: {
     loadPDFForSigningInteractor: () => {
       return new Promise(resolve => {
@@ -21,26 +21,26 @@ describe('a user signs and serves a stipulated decision', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(integrationTest);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'irsPractitioner@example.com');
-  respondentUploadsProposedStipulatedDecision(integrationTest);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  respondentUploadsProposedStipulatedDecision(cerebralTest);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkAssignWorkItemToSelf(integrationTest);
-  docketClerkCompletesDocketEntryQcAndSendsMessage(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAssignWorkItemToSelf(cerebralTest);
+  docketClerkCompletesDocketEntryQcAndSendsMessage(cerebralTest);
 
-  loginAs(integrationTest, 'adc@example.com');
-  adcsSignsProposedStipulatedDecisionFromMessage(integrationTest);
+  loginAs(cerebralTest, 'adc@example.com');
+  adcsSignsProposedStipulatedDecisionFromMessage(cerebralTest);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesDocketEntryForSignedStipulatedDecision(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesDocketEntryForSignedStipulatedDecision(cerebralTest);
 });

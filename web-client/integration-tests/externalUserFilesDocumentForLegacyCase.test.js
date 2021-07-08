@@ -3,40 +3,40 @@ import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFil
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { getOtherFilers } from '../../shared/src/business/entities/cases/Case';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('an external user files a document for their legacy case', () => {
   const seededDocketNumber = '999-15';
 
   beforeAll(() => {
     jest.setTimeout(30000);
-    integrationTest.docketNumber = seededDocketNumber;
+    cerebralTest.docketNumber = seededDocketNumber;
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
-  associatedExternalUserViewsCaseDetailForOwnedCase(integrationTest);
-  externalUserFilesDocumentForOwnedCase(integrationTest, fakeFile);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  associatedExternalUserViewsCaseDetailForOwnedCase(cerebralTest);
+  externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
 
-  loginAs(integrationTest, 'privatePractitioner@example.com');
-  associatedExternalUserViewsCaseDetailForOwnedCase(integrationTest);
-  externalUserFilesDocumentForOwnedCase(integrationTest, fakeFile);
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  associatedExternalUserViewsCaseDetailForOwnedCase(cerebralTest);
+  externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
 
-  loginAs(integrationTest, 'irsPractitioner@example.com');
-  associatedExternalUserViewsCaseDetailForOwnedCase(integrationTest);
-  externalUserFilesDocumentForOwnedCase(integrationTest, fakeFile);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  associatedExternalUserViewsCaseDetailForOwnedCase(cerebralTest);
+  externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('verifies otherFiler parties receive paper service when serviceIndicator is set to paper', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const otherFilers = getOtherFilers(integrationTest.getState('caseDetail'));
-    const docketEntries = integrationTest.getState('caseDetail.docketEntries');
+    const otherFilers = getOtherFilers(cerebralTest.getState('caseDetail'));
+    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
     const lastServedDocument = docketEntries.pop();
 
     const isOtherFilerServed = lastServedDocument.servedParties.find(

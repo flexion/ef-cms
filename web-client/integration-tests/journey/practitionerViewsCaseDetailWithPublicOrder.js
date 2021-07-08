@@ -1,13 +1,13 @@
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
-export const practitionerViewsCaseDetailWithPublicOrder = integrationTest => {
+export const practitionerViewsCaseDetailWithPublicOrder = cerebralTest => {
   return it('Practitioner views case detail with a publically-available order', async () => {
-    integrationTest.setState('caseDetail', {});
+    cerebralTest.setState('caseDetail', {});
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
 
     const publicallyAvailableOrderDocketEntry =
       formattedDocketEntriesOnDocketRecord.find(d => d.eventCode === 'O');

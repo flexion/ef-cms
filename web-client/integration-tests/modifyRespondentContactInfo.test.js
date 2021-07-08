@@ -8,7 +8,7 @@ import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAdd
 import { respondentUpdatesAddress } from './journey/respondentUpdatesAddress';
 import { respondentViewsCaseDetailNoticeOfChangeOfAddress } from './journey/respondentViewsCaseDetailNoticeOfChangeOfAddress';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Modify Respondent Contact Information', () => {
   beforeAll(() => {
@@ -16,23 +16,23 @@ describe('Modify Respondent Contact Information', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   let caseDetail;
-  integrationTest.createdDocketNumbers = [];
+  cerebralTest.createdDocketNumbers = [];
 
   for (let i = 0; i < 3; i++) {
-    loginAs(integrationTest, 'petitioner@example.com');
+    loginAs(cerebralTest, 'petitioner@example.com');
 
     it(`create case #${i} and associate a respondent`, async () => {
-      caseDetail = await uploadPetition(integrationTest);
+      caseDetail = await uploadPetition(cerebralTest);
       expect(caseDetail.docketNumber).toBeDefined();
-      integrationTest.createdDocketNumbers.push(caseDetail.docketNumber);
+      cerebralTest.createdDocketNumbers.push(caseDetail.docketNumber);
     });
 
-    loginAs(integrationTest, 'petitionsclerk@example.com');
-    petitionsClerkAddsRespondentsToCase(integrationTest);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkAddsRespondentsToCase(cerebralTest);
   }
 
   it('wait for ES index', async () => {
@@ -40,8 +40,8 @@ describe('Modify Respondent Contact Information', () => {
     await refreshElasticsearchIndex();
   });
 
-  loginAs(integrationTest, 'irsPractitioner@example.com');
-  respondentUpdatesAddress(integrationTest);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  respondentUpdatesAddress(cerebralTest);
 
   it('wait for ES index', async () => {
     // waiting for the associated cases to be updated, and THEN an index
@@ -49,6 +49,6 @@ describe('Modify Respondent Contact Information', () => {
   });
 
   for (let i = 0; i < 3; i++) {
-    respondentViewsCaseDetailNoticeOfChangeOfAddress(integrationTest, i);
+    respondentViewsCaseDetailNoticeOfChangeOfAddress(cerebralTest, i);
   }
 });

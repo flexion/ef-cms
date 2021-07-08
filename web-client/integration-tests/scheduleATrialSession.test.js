@@ -13,7 +13,7 @@ import { petitionsClerkViewsACalendaredTrialSession } from './journey/petitionsC
 import { petitionsClerkViewsATrialSessionsEligibleCases } from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
 import { petitionsClerkViewsATrialSessionsEligibleCasesWithManuallyAddedCase } from './journey/petitionsClerkViewsATrialSessionsEligibleCasesWithManuallyAddedCase';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Schedule A Trial Session', () => {
   beforeAll(() => {
@@ -21,7 +21,7 @@ describe('Schedule A Trial Session', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const caseCount = 2;
@@ -37,7 +37,7 @@ describe('Schedule A Trial Session', () => {
     trialLocation: trialLocation2,
   };
 
-  integrationTest.casesReadyForTrial = [];
+  cerebralTest.casesReadyForTrial = [];
 
   const createdDocketNumbers = [];
 
@@ -50,53 +50,53 @@ describe('Schedule A Trial Session', () => {
       testSession.docketNumber = caseDetail.docketNumber;
     });
 
-    loginAs(integrationTest, 'petitionsclerk@example.com');
-    petitionsClerkSubmitsCaseToIrs(integrationTest);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-    loginAs(integrationTest, 'docketclerk@example.com');
-    docketClerkSetsCaseReadyForTrial(integrationTest);
+    loginAs(cerebralTest, 'docketclerk@example.com');
+    docketClerkSetsCaseReadyForTrial(cerebralTest);
   };
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(integrationTest, overrides);
-  docketClerkViewsTrialSessionList(integrationTest);
-  docketClerkViewsNewTrialSession(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, overrides);
+  docketClerkViewsTrialSessionList(cerebralTest);
+  docketClerkViewsNewTrialSession(cerebralTest);
 
   for (let i = 0; i < caseCount; i++) {
     const id = i + 1;
-    makeCaseReadyForTrial(integrationTest, id, overrides);
+    makeCaseReadyForTrial(cerebralTest, id, overrides);
   }
 
   // Add case with a different city
-  makeCaseReadyForTrial(integrationTest, caseCount + 1, {});
+  makeCaseReadyForTrial(cerebralTest, caseCount + 1, {});
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkViewsATrialSessionsEligibleCases(integrationTest, caseCount);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, caseCount);
 
-  petitionsClerkManuallyAddsCaseToTrial(integrationTest);
+  petitionsClerkManuallyAddsCaseToTrial(cerebralTest);
   petitionsClerkViewsATrialSessionsEligibleCasesWithManuallyAddedCase(
-    integrationTest,
+    cerebralTest,
     caseCount + 1,
   );
-  petitionsClerkManuallyRemovesCaseFromTrial(integrationTest);
-  petitionsClerkViewsATrialSessionsEligibleCases(integrationTest, caseCount);
-  petitionsClerkManuallyAddsCaseToTrial(integrationTest);
+  petitionsClerkManuallyRemovesCaseFromTrial(cerebralTest);
+  petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, caseCount);
+  petitionsClerkManuallyAddsCaseToTrial(cerebralTest);
 
   // only mark cases 0 and 1 as QCed
-  markAllCasesAsQCed(integrationTest, () => {
+  markAllCasesAsQCed(cerebralTest, () => {
     return [createdDocketNumbers[0], createdDocketNumbers[1]];
   });
 
-  petitionsClerkSetsATrialSessionsSchedule(integrationTest);
+  petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
   // only 2 cases should have been calendared because only 2 were marked as QCed
-  petitionsClerkViewsACalendaredTrialSession(integrationTest, caseCount);
+  petitionsClerkViewsACalendaredTrialSession(cerebralTest, caseCount);
 
   // create a trial session without a judge
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(integrationTest, overrides2);
-  docketClerkViewsTrialSessionList(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, overrides2);
+  docketClerkViewsTrialSessionList(cerebralTest);
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  makeCaseReadyForTrial(integrationTest, caseCount + 2, overrides2);
-  petitionsClerkManuallyAddsCaseToTrialWithoutJudge(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  makeCaseReadyForTrial(cerebralTest, caseCount + 2, overrides2);
+  petitionsClerkManuallyAddsCaseToTrialWithoutJudge(cerebralTest);
 });

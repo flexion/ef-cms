@@ -6,63 +6,63 @@ import {
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
-export const docketClerkEditsDocketEntryStandard = integrationTest => {
+export const docketClerkEditsDocketEntryStandard = cerebralTest => {
   return it('docket clerk edits docket entry with Standard scenario', async () => {
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const { docketEntryId } = formattedDocketEntriesOnDocketRecord[0];
     expect(docketEntryId).toBeDefined();
 
     const docketEntriesBefore = formattedDocketEntriesOnDocketRecord.length;
 
-    await integrationTest.runSequence('gotoEditPaperFilingSequence', {
+    await cerebralTest.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId,
-      docketNumber: integrationTest.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual('PaperFiling');
-    expect(integrationTest.getState('docketEntryId')).toEqual(docketEntryId);
+    expect(cerebralTest.getState('currentPage')).toEqual('PaperFiling');
+    expect(cerebralTest.getState('docketEntryId')).toEqual(docketEntryId);
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'EA',
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: '1',
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: '1',
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: '2050',
     });
 
-    await integrationTest.runSequence('submitPaperFilingSequence', {
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: '2018',
     });
 
-    await integrationTest.runSequence('submitPaperFilingSequence', {
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest));
+      await getFormattedDocketEntriesForTest(cerebralTest));
 
     const docketEntriesAfter = formattedDocketEntriesOnDocketRecord.length;
 
@@ -77,7 +77,7 @@ export const docketClerkEditsDocketEntryStandard = integrationTest => {
       document => document.docketEntryId === docketEntryId,
     );
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     expect(updatedDocument).toMatchObject({
       documentTitle: 'Entry of Appearance',

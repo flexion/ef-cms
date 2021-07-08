@@ -1,15 +1,15 @@
 export const petitionsClerkVerifiesCompletedMessageNotInSection =
-  integrationTest => {
+  cerebralTest => {
     return it('petitions clerk verifies the completed message is not in the section inbox', async () => {
-      await integrationTest.runSequence('gotoMessagesSequence', {
+      await cerebralTest.runSequence('gotoMessagesSequence', {
         box: 'inbox',
         queue: 'section',
       });
 
-      const messages = integrationTest.getState('messages');
+      const messages = cerebralTest.getState('messages');
 
       const foundMessage = messages.find(
-        message => message.subject === integrationTest.testMessageSubject,
+        message => message.subject === cerebralTest.testMessageSubject,
       );
 
       expect(foundMessage).toBeUndefined();

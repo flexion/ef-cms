@@ -7,52 +7,52 @@ const formattedMessageDetail = withAppContextDecorator(
   formattedMessageDetailComputed,
 );
 
-export const docketClerkCompletesMessageThread = integrationTest => {
+export const docketClerkCompletesMessageThread = cerebralTest => {
   return it('docket clerk completes message thread', async () => {
-    await integrationTest.runSequence('openCompleteMessageModalSequence');
+    await cerebralTest.runSequence('openCompleteMessageModalSequence');
 
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'form.message',
       value: 'Win, Win, Win, Win',
     });
 
-    await integrationTest.runSequence('completeMessageSequence');
+    await cerebralTest.runSequence('completeMessageSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('messageDetail').length).toEqual(3);
+    expect(cerebralTest.getState('messageDetail').length).toEqual(3);
 
     const messageDetailFormatted = runCompute(formattedMessageDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
     expect(messageDetailFormatted.isCompleted).toEqual(true);
 
     await refreshElasticsearchIndex();
 
     //message should no longer be shown in inbox
-    await integrationTest.runSequence('gotoMessagesSequence', {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });
 
-    let messages = integrationTest.getState('messages');
+    let messages = cerebralTest.getState('messages');
 
     let foundMessage = messages.find(
-      message => message.subject === integrationTest.testMessageSubject,
+      message => message.subject === cerebralTest.testMessageSubject,
     );
 
     expect(foundMessage).not.toBeDefined();
 
     //message thread should be shown in completed box
-    await integrationTest.runSequence('gotoMessagesSequence', {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
       box: 'completed',
       queue: 'my',
     });
 
-    messages = integrationTest.getState('messages');
+    messages = cerebralTest.getState('messages');
 
     foundMessage = messages.find(
-      message => message.subject === integrationTest.testMessageSubject,
+      message => message.subject === cerebralTest.testMessageSubject,
     );
 
     expect(foundMessage).toBeDefined();

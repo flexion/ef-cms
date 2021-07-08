@@ -3,21 +3,21 @@ import {
   getFormattedDocketEntriesForTest,
 } from '../helpers';
 
-export const petitionerEditsCasePrimaryContactPhone = integrationTest => {
+export const petitionerEditsCasePrimaryContactPhone = cerebralTest => {
   return it('petitioner updates primary contact phone', async () => {
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.phone',
       value: '9999999999',
     });
 
-    await integrationTest.runSequence('submitEditContactSequence');
+    await cerebralTest.runSequence('submitEditContactSequence');
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     expect(contactPrimary.phone).toEqual('999-999-9999');
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const noticeDocument = formattedDocketEntriesOnDocketRecord.find(
       entry =>

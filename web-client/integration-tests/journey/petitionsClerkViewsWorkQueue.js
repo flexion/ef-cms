@@ -1,27 +1,25 @@
 import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
-export const petitionsClerkViewsWorkQueue = integrationTest => {
+export const petitionsClerkViewsWorkQueue = cerebralTest => {
   return it('Petitions clerk views work queue', async () => {
-    await integrationTest.runSequence('gotoWorkQueueSequence');
-    expect(integrationTest.getState('currentPage')).toEqual('WorkQueue');
-    expect(integrationTest.getState('workQueue').length).toBeGreaterThanOrEqual(
-      0,
-    );
-    expect(integrationTest.getState('users').length).toBeGreaterThan(0);
-    await integrationTest.runSequence('chooseWorkQueueSequence', {
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
+    expect(cerebralTest.getState('workQueue').length).toBeGreaterThanOrEqual(0);
+    expect(cerebralTest.getState('users').length).toBeGreaterThan(0);
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
     });
-    const workItem = integrationTest
+    const workItem = cerebralTest
       .getState('workQueue')
       .find(
         workItemInQueue =>
-          workItemInQueue.docketNumber === integrationTest.docketNumber &&
+          workItemInQueue.docketNumber === cerebralTest.docketNumber &&
           workItemInQueue.docketEntry.documentType === 'Petition',
       );
     expect(workItem).toBeDefined();
     expect(workItem.caseStatus).toEqual(CASE_STATUS_TYPES.new);
-    integrationTest.docketEntryId = workItem.docketEntry.docketEntryId;
-    integrationTest.workItemId = workItem.workItemId;
+    cerebralTest.docketEntryId = workItem.docketEntry.docketEntryId;
+    cerebralTest.workItemId = workItem.workItemId;
   });
 };

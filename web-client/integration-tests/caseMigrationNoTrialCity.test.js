@@ -7,7 +7,7 @@ const caseDetailHeaderHelper = withAppContextDecorator(
   caseDetailHeaderHelperComputed,
 );
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('migrated case that is missing a preferred trial city journey', () => {
   let seededDocketNumber;
@@ -17,35 +17,35 @@ describe('migrated case that is missing a preferred trial city journey', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
 
   it('verify the case is blocked because it has a deadline', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: seededDocketNumber,
     });
 
     const headerHelper = runCompute(caseDetailHeaderHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(headerHelper.showBlockedTag).toBeTruthy();
   });
 
   it('remove the deadline and verify the case is no longer blocked', async () => {
-    integrationTest.setState(
+    cerebralTest.setState(
       'form.caseDeadlineId',
       'ad1ddb24-f3c4-47b4-b10e-76d1d050b2ab',
     );
 
-    await integrationTest.runSequence('deleteCaseDeadlineSequence', {
+    await cerebralTest.runSequence('deleteCaseDeadlineSequence', {
       docketNumber: seededDocketNumber,
     });
 
     const headerHelper = runCompute(caseDetailHeaderHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(headerHelper.showBlockedTag).toBeFalsy();

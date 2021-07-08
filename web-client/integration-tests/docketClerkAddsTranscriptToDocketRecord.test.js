@@ -9,8 +9,8 @@ import {
   uploadPetition,
 } from './helpers';
 
-const integrationTest = setupTest();
-integrationTest.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Docket Clerk Adds Transcript to Docket Record', () => {
   const { TRANSCRIPT_EVENT_CODE } = applicationContext.getConstants();
@@ -21,47 +21,47 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(integrationTest);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(integrationTest, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(integrationTest, 0);
+  docketClerkViewsDraftOrder(cerebralTest, 0);
   // old transcript that should be available to the user
-  docketClerkAddsTranscriptDocketEntryFromOrder(integrationTest, 0, {
+  docketClerkAddsTranscriptDocketEntryFromOrder(cerebralTest, 0, {
     day: '01',
     month: '01',
     year: '2019',
   });
-  docketClerkCreatesAnOrder(integrationTest, {
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(integrationTest, 1);
+  docketClerkViewsDraftOrder(cerebralTest, 1);
   // new transcript that should NOT be available to the user
   const today = applicationContext.getUtilities().getMonthDayYearObj();
-  docketClerkAddsTranscriptDocketEntryFromOrder(integrationTest, 1, {
+  docketClerkAddsTranscriptDocketEntryFromOrder(cerebralTest, 1, {
     day: today.day,
     month: today.month,
     year: today.year,
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('petitioner views transcript on docket record', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
     const transcriptDocuments = formattedDocketEntriesOnDocketRecord.filter(
       document => document.eventCode === TRANSCRIPT_EVENT_CODE,
     );
@@ -69,9 +69,9 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     expect(transcriptDocuments[0].showLinkToDocument).toEqual(true);
     expect(transcriptDocuments[0].isUnservable).toEqual(true);
 
-    await integrationTest.runSequence('openCaseDocumentDownloadUrlSequence', {
+    await cerebralTest.runSequence('openCaseDocumentDownloadUrlSequence', {
       docketEntryId: transcriptDocuments[0].docketEntryId,
-      docketNumber: integrationTest.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
       isPublic: false,
       useSameTab: true,
     });
@@ -84,9 +84,9 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     expect(transcriptDocuments[1].isUnservable).toEqual(true);
 
     await expect(
-      integrationTest.runSequence('openCaseDocumentDownloadUrlSequence', {
+      cerebralTest.runSequence('openCaseDocumentDownloadUrlSequence', {
         docketEntryId: transcriptDocuments[1].docketEntryId,
-        docketNumber: integrationTest.docketNumber,
+        docketNumber: cerebralTest.docketNumber,
         isPublic: false,
       }),
     ).rejects.toThrow('Unauthorized to view document at this time.');

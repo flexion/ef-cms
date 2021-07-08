@@ -1,14 +1,14 @@
 export const admissionsClerkVerifiesPractitionerServiceIndicator = (
-  integrationTest,
+  cerebralTest,
   expectedServiceIndicator,
 ) => {
   return it('admissions clerk verifies practitioner service preference', async () => {
-    await integrationTest.runSequence('gotoPractitionerDetailSequence', {
-      barNumber: integrationTest.barNumber,
+    await cerebralTest.runSequence('gotoPractitionerDetailSequence', {
+      barNumber: cerebralTest.barNumber,
     });
 
     expect(
-      integrationTest.getState('practitionerDetail').serviceIndicator,
+      cerebralTest.getState('practitionerDetail').serviceIndicator,
     ).toEqual(expectedServiceIndicator);
   });
 };

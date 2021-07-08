@@ -15,7 +15,7 @@ import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Create Docket Entry From Scans', () => {
   let scannerSourceIndex = 0;
@@ -40,36 +40,36 @@ describe('Create Docket Entry From Scans', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
-  petitionerChoosesProcedureType(integrationTest, { procedureType: 'Regular' });
-  petitionerChoosesCaseType(integrationTest);
-  petitionerCreatesNewCase(integrationTest, fakeFile, {
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(cerebralTest, { procedureType: 'Regular' });
+  petitionerChoosesCaseType(cerebralTest);
+  petitionerCreatesNewCase(cerebralTest, fakeFile, {
     caseType: CASE_TYPES_MAP.cdp,
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkAddsDocketEntryWithoutFile(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAddsDocketEntryWithoutFile(cerebralTest);
 
-  docketClerkViewsQCInProgress(integrationTest, true);
-  docketClerkViewsSectionQCInProgress(integrationTest, true);
-  docketClerkViewsEditDocketRecord(integrationTest);
+  docketClerkViewsQCInProgress(cerebralTest, true);
+  docketClerkViewsSectionQCInProgress(cerebralTest, true);
+  docketClerkViewsEditDocketRecord(cerebralTest);
 
-  selectScannerSource(integrationTest, {
+  selectScannerSource(cerebralTest, {
     scannerSourceIndex,
     scannerSourceName,
   });
-  addBatchesForScanning(integrationTest, {
+  addBatchesForScanning(cerebralTest, {
     scannerSourceIndex,
     scannerSourceName,
   });
-  createPDFFromScannedBatches(integrationTest);
+  createPDFFromScannedBatches(cerebralTest);
 
-  docketClerkAddsDocketEntryFile(integrationTest, fakeFile);
-  docketClerkSavesAndServesDocketEntry(integrationTest);
+  docketClerkAddsDocketEntryFile(cerebralTest, fakeFile);
+  docketClerkSavesAndServesDocketEntry(cerebralTest);
 
-  docketClerkViewsQCInProgress(integrationTest, false);
-  docketClerkViewsSectionQCInProgress(integrationTest, false);
+  docketClerkViewsQCInProgress(cerebralTest, false);
+  docketClerkViewsSectionQCInProgress(cerebralTest, false);
 });

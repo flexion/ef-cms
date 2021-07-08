@@ -1,19 +1,19 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 
-export const respondentAddsStipulatedDecision = (integrationTest, fakeFile) => {
+export const respondentAddsStipulatedDecision = (cerebralTest, fakeFile) => {
   return it('Respondent adds stipulated decision', async () => {
-    await integrationTest.runSequence('gotoFileDocumentSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       category: VALIDATION_ERROR_MESSAGES.category,
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'category',
@@ -21,8 +21,8 @@ export const respondentAddsStipulatedDecision = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence('validateSelectDocumentTypeSequence');
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
@@ -35,7 +35,7 @@ export const respondentAddsStipulatedDecision = (integrationTest, fakeFile) => {
     };
 
     for (const key of Object.keys(documentToSelect)) {
-      await integrationTest.runSequence(
+      await cerebralTest.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
           key,
@@ -44,17 +44,17 @@ export const respondentAddsStipulatedDecision = (integrationTest, fakeFile) => {
       );
     }
 
-    await integrationTest.runSequence('validateSelectDocumentTypeSequence');
+    await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(integrationTest.getState('form.documentType')).toEqual(
+    expect(cerebralTest.getState('form.documentType')).toEqual(
       'Proposed Stipulated Decision',
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'primaryDocumentFile',
@@ -62,7 +62,7 @@ export const respondentAddsStipulatedDecision = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'certificateOfService',
@@ -70,7 +70,7 @@ export const respondentAddsStipulatedDecision = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'attachments',
@@ -78,7 +78,7 @@ export const respondentAddsStipulatedDecision = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'hasSupportingDocuments',
@@ -86,7 +86,7 @@ export const respondentAddsStipulatedDecision = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'partyIrsPractitioner',
@@ -94,14 +94,10 @@ export const respondentAddsStipulatedDecision = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
-      'reviewExternalDocumentInformationSequence',
-    );
+    await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
-    await integrationTest.runSequence('submitExternalDocumentSequence');
+    await cerebralTest.runSequence('submitExternalDocumentSequence');
 
-    expect(integrationTest.getState('caseDetail.docketEntries').length).toEqual(
-      5,
-    );
+    expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(5);
   });
 };

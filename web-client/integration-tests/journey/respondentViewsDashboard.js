@@ -1,11 +1,7 @@
-export const respondentViewsDashboard = integrationTest => {
+export const respondentViewsDashboard = cerebralTest => {
   return it('Respondent views dashboard', async () => {
-    await integrationTest.runSequence('gotoDashboardSequence');
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'DashboardRespondent',
-    );
-    expect(integrationTest.getState('openCases').length).toBeGreaterThanOrEqual(
-      0,
-    );
+    await cerebralTest.runSequence('gotoDashboardSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('DashboardRespondent');
+    expect(cerebralTest.getState('openCases').length).toBeGreaterThanOrEqual(0);
   });
 };

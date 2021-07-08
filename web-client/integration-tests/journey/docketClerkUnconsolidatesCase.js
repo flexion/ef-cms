@@ -1,31 +1,31 @@
-export const docketClerkUnconsolidatesCase = integrationTest => {
+export const docketClerkUnconsolidatesCase = cerebralTest => {
   it('Docket clerk unconsolidate a case', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.leadDocketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.leadDocketNumber,
     });
 
-    await integrationTest.runSequence('openCleanModalSequence', {
+    await cerebralTest.runSequence('openCleanModalSequence', {
       showModal: 'UnconsolidateCasesModal',
     });
-    expect(integrationTest.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'UnconsolidateCasesModal',
     );
-    const currentDocketNumber = integrationTest.getState(
+    const currentDocketNumber = cerebralTest.getState(
       'caseDetail.docketNumber',
     );
 
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: `casesToRemove.${currentDocketNumber}`,
       value: true,
     });
 
-    await integrationTest.runSequence('submitRemoveConsolidatedCasesSequence');
+    await cerebralTest.runSequence('submitRemoveConsolidatedCasesSequence');
 
     expect(
-      integrationTest.getState('caseDetail.leadDocketNumber'),
+      cerebralTest.getState('caseDetail.leadDocketNumber'),
     ).toBeUndefined();
     expect(
-      integrationTest.getState('caseDetail.consolidatedCases').length,
+      cerebralTest.getState('caseDetail.consolidatedCases').length,
     ).toEqual(0);
   });
 };

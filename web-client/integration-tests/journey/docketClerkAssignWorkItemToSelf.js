@@ -5,40 +5,37 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-export const docketClerkAssignWorkItemToSelf = integrationTest => {
+export const docketClerkAssignWorkItemToSelf = cerebralTest => {
   return it('Docket clerk assigns the selected work items to self', async () => {
     await refreshElasticsearchIndex();
 
-    await integrationTest.runSequence('chooseWorkQueueSequence', {
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
     });
-    let sectionWorkQueue = integrationTest.getState('workQueue');
+    let sectionWorkQueue = cerebralTest.getState('workQueue');
 
     const workQueueFormatted = runCompute(formattedWorkQueue, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     const selectedWorkItem = workQueueFormatted.find(
-      workItem => workItem.docketNumber === integrationTest.docketNumber,
+      workItem => workItem.docketNumber === cerebralTest.docketNumber,
     );
 
-    integrationTest.docketEntryId = selectedWorkItem.docketEntry.docketEntryId;
+    cerebralTest.docketEntryId = selectedWorkItem.docketEntry.docketEntryId;
 
     expect(selectedWorkItem).toMatchObject({
       assigneeId: null,
     });
 
-    integrationTest.setState('selectedWorkItems', [selectedWorkItem]);
-    integrationTest.setState('assigneeName', 'Test Docketclerk');
-    integrationTest.setState(
-      'assigneeId',
-      '1805d1ab-18d0-43ec-bafb-654e83405416',
-    );
+    cerebralTest.setState('selectedWorkItems', [selectedWorkItem]);
+    cerebralTest.setState('assigneeName', 'Test Docketclerk');
+    cerebralTest.setState('assigneeId', '1805d1ab-18d0-43ec-bafb-654e83405416');
 
-    await integrationTest.runSequence('assignSelectedWorkItemsSequence');
+    await cerebralTest.runSequence('assignSelectedWorkItemsSequence');
 
-    sectionWorkQueue = integrationTest.getState('workQueue');
+    sectionWorkQueue = cerebralTest.getState('workQueue');
     const assignedSelectedWorkItem = sectionWorkQueue.find(
       workItem => workItem.workItemId === selectedWorkItem.workItemId,
     );

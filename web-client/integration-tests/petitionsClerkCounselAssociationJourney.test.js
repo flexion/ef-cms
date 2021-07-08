@@ -7,7 +7,7 @@ import { petitionsClerkRemovesPractitionerFromCase } from './journey/petitionsCl
 import { petitionsClerkRemovesRespondentFromCase } from './journey/petitionsClerkRemovesRespondentFromCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Petitions Clerk Counsel Association Journey', () => {
@@ -16,12 +16,12 @@ describe('Petitions Clerk Counsel Association Journey', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(integrationTest, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -34,14 +34,14 @@ describe('Petitions Clerk Counsel Association Journey', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(integrationTest);
-  petitionsClerkAddsPractitionersToCase(integrationTest);
-  petitionsClerkAddsRespondentsToCase(integrationTest);
-  petitionsClerkEditsPractitionerOnCase(integrationTest);
-  petitionsClerkRemovesPractitionerFromCase(integrationTest);
-  petitionsClerkRemovesRespondentFromCase(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(cerebralTest);
+  petitionsClerkAddsPractitionersToCase(cerebralTest);
+  petitionsClerkAddsRespondentsToCase(cerebralTest);
+  petitionsClerkEditsPractitionerOnCase(cerebralTest);
+  petitionsClerkRemovesPractitionerFromCase(cerebralTest);
+  petitionsClerkRemovesRespondentFromCase(cerebralTest);
 });

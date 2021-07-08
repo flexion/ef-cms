@@ -3,108 +3,83 @@ import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseIn
 import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
 
 export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
-  integrationTest,
+  cerebralTest,
   fakeFile,
 ) => {
   return it('Petitions clerk verifies petition payment fee options and required fields', async () => {
-    await integrationTest.runSequence('gotoStartCaseWizardSequence');
+    await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'StartCaseInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('StartCaseInternal');
 
-    expect(
-      integrationTest.getState('form.petitionPaymentStatus'),
-    ).toBeUndefined();
+    expect(cerebralTest.getState('form.petitionPaymentStatus')).toBeUndefined();
 
-    await integrationTest.runSequence(
-      'updatePetitionPaymentFormValueSequence',
-      {
-        key: 'petitionPaymentStatus',
-        value: PAYMENT_STATUS.PAID,
-      },
-    );
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'petitionPaymentStatus',
+      value: PAYMENT_STATUS.PAID,
+    });
 
-    expect(integrationTest.getState('form.orderForFilingFee')).toEqual(false);
+    expect(cerebralTest.getState('form.orderForFilingFee')).toEqual(false);
 
-    await integrationTest.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
-    expect(integrationTest.getState('validationErrors')).toMatchObject({
+    expect(cerebralTest.getState('validationErrors')).toMatchObject({
       petitionPaymentDate: Case.VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
       petitionPaymentMethod:
         Case.VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
     });
 
-    await integrationTest.runSequence(
-      'updatePetitionPaymentFormValueSequence',
-      {
-        key: 'paymentDateDay',
-        value: '01',
-      },
-    );
-    await integrationTest.runSequence(
-      'updatePetitionPaymentFormValueSequence',
-      {
-        key: 'paymentDateMonth',
-        value: '01',
-      },
-    );
-    await integrationTest.runSequence(
-      'updatePetitionPaymentFormValueSequence',
-      {
-        key: 'paymentDateYear',
-        value: '2001',
-      },
-    );
-    await integrationTest.runSequence(
-      'updatePetitionPaymentFormValueSequence',
-      {
-        key: 'petitionPaymentMethod',
-        value: 'check',
-      },
-    );
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'paymentDateDay',
+      value: '01',
+    });
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'paymentDateMonth',
+      value: '01',
+    });
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'paymentDateYear',
+      value: '2001',
+    });
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'petitionPaymentMethod',
+      value: 'check',
+    });
 
-    await integrationTest.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(
-      integrationTest.getState('validationErrors.petitionPaymentDate'),
+      cerebralTest.getState('validationErrors.petitionPaymentDate'),
     ).toBeUndefined();
     expect(
-      integrationTest.getState('validationErrors.petitionPaymentMethod'),
+      cerebralTest.getState('validationErrors.petitionPaymentMethod'),
     ).toBeUndefined();
 
-    await integrationTest.runSequence(
-      'updatePetitionPaymentFormValueSequence',
-      {
-        key: 'petitionPaymentStatus',
-        value: PAYMENT_STATUS.UNPAID,
-      },
-    );
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'petitionPaymentStatus',
+      value: PAYMENT_STATUS.UNPAID,
+    });
 
-    expect(integrationTest.getState('form.orderForFilingFee')).toEqual(true);
+    expect(cerebralTest.getState('form.orderForFilingFee')).toEqual(true);
 
-    await integrationTest.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(
-      integrationTest.getState('validationErrors.petitionPaymentDate'),
+      cerebralTest.getState('validationErrors.petitionPaymentDate'),
     ).toBeUndefined();
     expect(
-      integrationTest.getState('validationErrors.petitionPaymentMethod'),
+      cerebralTest.getState('validationErrors.petitionPaymentMethod'),
     ).toBeUndefined();
 
-    await integrationTest.runSequence(
-      'updatePetitionPaymentFormValueSequence',
-      {
-        key: 'petitionPaymentStatus',
-        value: PAYMENT_STATUS.WAIVED,
-      },
-    );
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'petitionPaymentStatus',
+      value: PAYMENT_STATUS.WAIVED,
+    });
 
-    expect(integrationTest.getState('form.orderForFilingFee')).toEqual(false);
+    expect(cerebralTest.getState('form.orderForFilingFee')).toEqual(false);
 
-    await integrationTest.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
-    expect(integrationTest.getState('validationErrors')).toMatchObject({
+    expect(cerebralTest.getState('validationErrors')).toMatchObject({
       applicationForWaiverOfFilingFeeFile:
         CaseInternal.VALIDATION_ERROR_MESSAGES
           .applicationForWaiverOfFilingFeeFile,
@@ -112,40 +87,31 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
         Case.VALIDATION_ERROR_MESSAGES.petitionPaymentWaivedDate,
     });
 
-    await integrationTest.runSequence(
-      'updatePetitionPaymentFormValueSequence',
-      {
-        key: 'paymentDateWaivedDay',
-        value: '02',
-      },
-    );
-    await integrationTest.runSequence(
-      'updatePetitionPaymentFormValueSequence',
-      {
-        key: 'paymentDateWaivedMonth',
-        value: '02',
-      },
-    );
-    await integrationTest.runSequence(
-      'updatePetitionPaymentFormValueSequence',
-      {
-        key: 'paymentDateWaivedYear',
-        value: '2002',
-      },
-    );
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'paymentDateWaivedDay',
+      value: '02',
+    });
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'paymentDateWaivedMonth',
+      value: '02',
+    });
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'paymentDateWaivedYear',
+      value: '2002',
+    });
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'applicationForWaiverOfFilingFeeFile',
       value: fakeFile,
     });
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'applicationForWaiverOfFilingFeeFileSize',
       value: 1,
     });
 
-    await integrationTest.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(
-      integrationTest.getState('validationErrors.petitionPaymentWaivedDate'),
+      cerebralTest.getState('validationErrors.petitionPaymentWaivedDate'),
     ).toBeUndefined();
   });
 };

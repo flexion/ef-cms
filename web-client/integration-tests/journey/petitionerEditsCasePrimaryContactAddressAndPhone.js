@@ -4,33 +4,33 @@ import {
 } from '../helpers';
 
 export const petitionerEditsCasePrimaryContactAddressAndPhone =
-  integrationTest => {
+  cerebralTest => {
     return it('petitioner updates primary contact address and phone', async () => {
-      await integrationTest.runSequence('updateFormValueSequence', {
+      await cerebralTest.runSequence('updateFormValueSequence', {
         key: 'contact.address1',
         value: '101 Main St.',
       });
 
-      await integrationTest.runSequence('updateFormValueSequence', {
+      await cerebralTest.runSequence('updateFormValueSequence', {
         key: 'contact.address3',
         value: 'Apt. 101',
       });
 
-      await integrationTest.runSequence('updateFormValueSequence', {
+      await cerebralTest.runSequence('updateFormValueSequence', {
         key: 'contact.phone',
         value: '1111111111',
       });
 
-      await integrationTest.runSequence('submitEditContactSequence');
+      await cerebralTest.runSequence('submitEditContactSequence');
 
-      const contactPrimary = contactPrimaryFromState(integrationTest);
+      const contactPrimary = contactPrimaryFromState(cerebralTest);
 
       expect(contactPrimary.address1).toEqual('101 Main St.');
       expect(contactPrimary.address3).toEqual('Apt. 101');
       expect(contactPrimary.phone).toEqual('111-111-1111');
 
       const { formattedDocketEntriesOnDocketRecord } =
-        await getFormattedDocketEntriesForTest(integrationTest);
+        await getFormattedDocketEntriesForTest(cerebralTest);
 
       const noticeDocument = formattedDocketEntriesOnDocketRecord.find(
         entry =>

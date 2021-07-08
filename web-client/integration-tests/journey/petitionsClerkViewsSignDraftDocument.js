@@ -1,10 +1,10 @@
-export const petitionsClerkViewsSignDraftDocument = integrationTest => {
+export const petitionsClerkViewsSignDraftDocument = cerebralTest => {
   return it('Petitions clerk views sign draft document', async () => {
-    await integrationTest.runSequence('gotoSignOrderSequence', {
-      docketEntryId: integrationTest.docketEntryId,
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoSignOrderSequence', {
+      docketEntryId: cerebralTest.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual('SignOrder');
+    expect(cerebralTest.getState('currentPage')).toEqual('SignOrder');
   });
 };

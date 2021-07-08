@@ -9,8 +9,8 @@ import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1View
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
 import { petitionsClerkClicksCaseDetailTabFromMessageDetail } from './journey/petitionsClerkClicksCaseDetailTabFromMessageDetail';
 
-const integrationTest = setupTest();
-integrationTest.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Petitions Clerk Serves Court Issued Document From Message Detail', () => {
   beforeAll(() => {
@@ -18,36 +18,36 @@ describe('Petitions Clerk Serves Court Issued Document From Message Detail', () 
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(integrationTest);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(integrationTest, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkCreatesAnOrder(integrationTest, {
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order of Dismissal',
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
 
-  docketClerkViewsDraftOrder(integrationTest, 0);
-  docketClerkSignsOrder(integrationTest, 0);
-  docketClerkAddsDocketEntryFromOrder(integrationTest, 0);
-  createNewMessageOnCase(integrationTest);
+  docketClerkViewsDraftOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+  createNewMessageOnCase(cerebralTest);
 
-  loginAs(integrationTest, 'petitionsclerk1@example.com');
-  petitionsClerk1ViewsMessageInbox(integrationTest);
-  petitionsClerk1ViewsMessageDetail(integrationTest);
-  petitionsClerk1ServesDocumentFromMessageDetail(integrationTest);
-  petitionsClerkClicksCaseDetailTabFromMessageDetail(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk1@example.com');
+  petitionsClerk1ViewsMessageInbox(cerebralTest);
+  petitionsClerk1ViewsMessageDetail(cerebralTest);
+  petitionsClerk1ServesDocumentFromMessageDetail(cerebralTest);
+  petitionsClerkClicksCaseDetailTabFromMessageDetail(cerebralTest);
 });

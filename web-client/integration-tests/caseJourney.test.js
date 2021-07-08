@@ -20,7 +20,7 @@ import { respondentAddsMotion } from './journey/respondentAddsMotion';
 import { respondentAddsStipulatedDecision } from './journey/respondentAddsStipulatedDecision';
 import { respondentViewsDashboard } from './journey/respondentViewsDashboard';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Case journey', () => {
   beforeEach(() => {
@@ -35,35 +35,35 @@ describe('Case journey', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
-  petitionerCancelsCreateCase(integrationTest);
-  petitionerChoosesProcedureType(integrationTest);
-  petitionerChoosesCaseType(integrationTest);
-  petitionerCreatesNewCaseTestAllOptions(integrationTest, fakeFile);
-  petitionerViewsDashboard(integrationTest);
-  petitionerViewsCaseDetail(integrationTest);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerCancelsCreateCase(cerebralTest);
+  petitionerChoosesProcedureType(cerebralTest);
+  petitionerChoosesCaseType(cerebralTest);
+  petitionerCreatesNewCaseTestAllOptions(cerebralTest, fakeFile);
+  petitionerViewsDashboard(cerebralTest);
+  petitionerViewsCaseDetail(cerebralTest);
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkCaseSearch(integrationTest);
-  petitionsClerkViewsWorkQueue(integrationTest);
-  petitionsClerkAssignsWorkItemToSelf(integrationTest);
-  petitionsClerkAssignsWorkItemToOther(integrationTest);
-  loginAs(integrationTest, 'petitionsclerk1@example.com');
-  petitionsClerkViewsWorkQueueAfterReassign(integrationTest);
-  petitionsClerkViewsCaseDetail(integrationTest);
-  petitionsClerkUpdatesCaseDetail(integrationTest);
-  petitionsClerkSubmitsCaseToIrs(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCaseSearch(cerebralTest);
+  petitionsClerkViewsWorkQueue(cerebralTest);
+  petitionsClerkAssignsWorkItemToSelf(cerebralTest);
+  petitionsClerkAssignsWorkItemToOther(cerebralTest);
+  loginAs(cerebralTest, 'petitionsclerk1@example.com');
+  petitionsClerkViewsWorkQueueAfterReassign(cerebralTest);
+  petitionsClerkViewsCaseDetail(cerebralTest);
+  petitionsClerkUpdatesCaseDetail(cerebralTest);
+  petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-  loginAs(integrationTest, 'irsPractitioner@example.com');
-  respondentViewsDashboard(integrationTest);
-  respondentAddsAnswer(integrationTest, fakeFile);
-  respondentAddsStipulatedDecision(integrationTest, fakeFile);
-  respondentAddsMotion(integrationTest, fakeFile);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  respondentViewsDashboard(cerebralTest);
+  respondentAddsAnswer(cerebralTest, fakeFile);
+  respondentAddsStipulatedDecision(cerebralTest, fakeFile);
+  respondentAddsMotion(cerebralTest, fakeFile);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkViewsCaseDetail(integrationTest);
-  docketClerkUpdatesCaseCaption(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkViewsCaseDetail(cerebralTest);
+  docketClerkUpdatesCaseCaption(cerebralTest);
 });

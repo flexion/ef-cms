@@ -1,31 +1,31 @@
-export const respondentUpdatesAddress = integrationTest => {
+export const respondentUpdatesAddress = cerebralTest => {
   return it('respondent updates address', async () => {
-    await integrationTest.runSequence('gotoUserContactEditSequence');
+    await cerebralTest.runSequence('gotoUserContactEditSequence');
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
       value: '',
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'submitUpdateUserContactInformationSequence',
     );
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       contact: { address1: expect.anything() },
     });
 
-    integrationTest.updatedRespondentAddress = `UPDATED ADDRESS ${Date.now()}`;
+    cerebralTest.updatedRespondentAddress = `UPDATED ADDRESS ${Date.now()}`;
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
-      value: integrationTest.updatedRespondentAddress,
+      value: cerebralTest.updatedRespondentAddress,
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'submitUpdateUserContactInformationSequence',
     );
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
 };

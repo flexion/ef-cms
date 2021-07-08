@@ -5,82 +5,80 @@ import {
 } from '../helpers';
 
 export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
-  integrationTest,
+  cerebralTest,
   fakeFile,
 ) => {
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
 
   return it('Docketclerk adds paper filed docket entry and saves for later', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('updateScreenMetadataSequence', {
+    await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
       value: false,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: 1,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: 1,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: 2018,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFileSize',
       value: 100,
     });
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: `filersMap.${contactPrimary.contactId}`,
         value: true,
       },
     );
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'A',
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'pending',
       value: true,
     });
 
-    await integrationTest.runSequence('submitPaperFilingSequence', {
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    integrationTest.docketEntryId = integrationTest
+    cerebralTest.docketEntryId = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(doc => doc.eventCode === 'A').docketEntryId;
 
-    expect(integrationTest.getState('alertSuccess').message).toEqual(
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to docket record.',
     );
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
-    expect(integrationTest.getState('form')).toEqual({});
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('form')).toEqual({});
 
     const { formattedPendingDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     expect(formattedPendingDocketEntriesOnDocketRecord).toEqual([]);
   });

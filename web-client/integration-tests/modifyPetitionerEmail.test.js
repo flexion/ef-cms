@@ -10,7 +10,7 @@ import { userUpdatesEmailAddressToOneAlreadyInUse } from './journey/userUpdatesE
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
 import faker from 'faker';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Modify Petitioner Email', () => {
   beforeAll(() => {
@@ -18,16 +18,16 @@ describe('Modify Petitioner Email', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   let caseDetail;
-  integrationTest.createdDocketNumbers = [];
+  cerebralTest.createdDocketNumbers = [];
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('petitioner creates a case', async () => {
     caseDetail = await uploadPetition(
-      integrationTest,
+      cerebralTest,
       {},
       'petitioner@example.com',
     );
@@ -36,20 +36,20 @@ describe('Modify Petitioner Email', () => {
     await refreshElasticsearchIndex();
   });
 
-  userUpdatesEmailAddressToOneAlreadyInUse(integrationTest, 'petitioner');
+  userUpdatesEmailAddressToOneAlreadyInUse(cerebralTest, 'petitioner');
 
   const mockUpdatedEmail = `${faker.internet.userName()}_no_error@example.com`;
   userSuccessfullyUpdatesEmailAddress(
-    integrationTest,
+    cerebralTest,
     'petitioner',
     mockUpdatedEmail,
   );
 
-  userVerifiesUpdatedEmailAddress(integrationTest, 'petitioner');
+  userVerifiesUpdatedEmailAddress(cerebralTest, 'petitioner');
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   userLogsInAndChecksVerifiedEmailAddress(
-    integrationTest,
+    cerebralTest,
     'petitioner',
     mockUpdatedEmail,
   );

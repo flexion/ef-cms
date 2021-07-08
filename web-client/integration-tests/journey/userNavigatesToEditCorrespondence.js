@@ -1,26 +1,22 @@
 export const userNavigatesToEditCorrespondence = (
-  integrationTest,
+  cerebralTest,
   correspondenceTitle,
   user,
 ) =>
   it(`${user} navigates to edit correspondence`, async () => {
-    integrationTest.correspondenceDocument = integrationTest
+    cerebralTest.correspondenceDocument = cerebralTest
       .getState('caseDetail.correspondence')
       .find(
         _correspondence =>
           _correspondence.documentTitle === correspondenceTitle,
       );
 
-    await integrationTest.runSequence(
-      'gotoEditCorrespondenceDocumentSequence',
-      {
-        correspondenceId:
-          integrationTest.correspondenceDocument.correspondenceId,
-        docketNumber: integrationTest.docketNumber,
-      },
-    );
+    await cerebralTest.runSequence('gotoEditCorrespondenceDocumentSequence', {
+      correspondenceId: cerebralTest.correspondenceDocument.correspondenceId,
+      docketNumber: cerebralTest.docketNumber,
+    });
 
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'EditCorrespondenceDocument',
     );
   });

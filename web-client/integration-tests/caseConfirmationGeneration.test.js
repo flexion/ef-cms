@@ -6,7 +6,7 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { userNavigatesToCreateCaseConfirmation } from './journey/userNavigatesToCreateCaseConfirmation';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Case Confirmation', () => {
   beforeAll(() => {
@@ -14,33 +14,33 @@ describe('Case Confirmation', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   describe('Petitioner creates a case / Petitionsclerk Sends to Holding Queue / Petitionsclerk then has access to case confirmation', () => {
-    loginAs(integrationTest, 'petitioner@example.com');
-    petitionerChoosesProcedureType(integrationTest);
-    petitionerChoosesCaseType(integrationTest);
-    petitionerCreatesNewCase(integrationTest, fakeFile);
-    loginAs(integrationTest, 'petitionsclerk@example.com');
-    petitionsClerkSubmitsCaseToIrs(integrationTest);
-    userNavigatesToCreateCaseConfirmation(integrationTest);
+    loginAs(cerebralTest, 'petitioner@example.com');
+    petitionerChoosesProcedureType(cerebralTest);
+    petitionerChoosesCaseType(cerebralTest);
+    petitionerCreatesNewCase(cerebralTest, fakeFile);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkSubmitsCaseToIrs(cerebralTest);
+    userNavigatesToCreateCaseConfirmation(cerebralTest);
   });
 
   describe('Petitioner creates a case / Petitionsclerk Sends to Holding Queue / Petitioner then has access to case confirmation', () => {
-    loginAs(integrationTest, 'petitioner@example.com');
-    petitionerChoosesProcedureType(integrationTest);
-    petitionerChoosesCaseType(integrationTest);
-    petitionerCreatesNewCase(integrationTest, fakeFile);
-    loginAs(integrationTest, 'petitionsclerk@example.com');
-    petitionsClerkSubmitsCaseToIrs(integrationTest);
-    loginAs(integrationTest, 'petitioner@example.com');
-    userNavigatesToCreateCaseConfirmation(integrationTest);
+    loginAs(cerebralTest, 'petitioner@example.com');
+    petitionerChoosesProcedureType(cerebralTest);
+    petitionerChoosesCaseType(cerebralTest);
+    petitionerCreatesNewCase(cerebralTest, fakeFile);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkSubmitsCaseToIrs(cerebralTest);
+    loginAs(cerebralTest, 'petitioner@example.com');
+    userNavigatesToCreateCaseConfirmation(cerebralTest);
   });
 
   describe('Petitionsclerk creates a case then serves case then has access to case confirmation', () => {
-    loginAs(integrationTest, 'petitionsclerk@example.com');
-    petitionsClerkCreatesNewCase(integrationTest, fakeFile);
-    userNavigatesToCreateCaseConfirmation(integrationTest);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
+    userNavigatesToCreateCaseConfirmation(cerebralTest);
   });
 });

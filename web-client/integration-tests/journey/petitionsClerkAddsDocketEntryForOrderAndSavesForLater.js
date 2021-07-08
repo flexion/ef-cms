@@ -6,57 +6,54 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
 export const petitionsClerkAddsDocketEntryForOrderAndSavesForLater =
-  integrationTest => {
+  cerebralTest => {
     return it('Petitions clerk adds docket entry for order and saves for later', async () => {
-      await integrationTest.runSequence(
-        'gotoAddCourtIssuedDocketEntrySequence',
-        {
-          docketEntryId: integrationTest.docketEntryId,
-          docketNumber: integrationTest.docketNumber,
-        },
-      );
+      await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+        docketEntryId: cerebralTest.docketEntryId,
+        docketNumber: cerebralTest.docketNumber,
+      });
 
-      expect(integrationTest.getState('currentPage')).toEqual(
+      expect(cerebralTest.getState('currentPage')).toEqual(
         'CourtIssuedDocketEntry',
       );
-      expect(integrationTest.getState('form.freeText')).toEqual(
-        integrationTest.freeText,
+      expect(cerebralTest.getState('form.freeText')).toEqual(
+        cerebralTest.freeText,
       );
 
-      await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
+      await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-      expect(integrationTest.getState('validationErrors')).toEqual({});
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-      expect(integrationTest.getState('currentPage')).toEqual(
+      expect(cerebralTest.getState('currentPage')).toEqual(
         'CaseDetailInternal',
       );
 
       await refreshElasticsearchIndex();
 
-      await integrationTest.runSequence('gotoWorkQueueSequence');
-      expect(integrationTest.getState('currentPage')).toEqual('WorkQueue');
-      await integrationTest.runSequence('chooseWorkQueueSequence', {
+      await cerebralTest.runSequence('gotoWorkQueueSequence');
+      expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
+      await cerebralTest.runSequence('chooseWorkQueueSequence', {
         box: 'inProgress',
         queue: 'my',
       });
 
-      const workQueueToDisplay = integrationTest.getState('workQueueToDisplay');
+      const workQueueToDisplay = cerebralTest.getState('workQueueToDisplay');
 
       expect(workQueueToDisplay.queue).toEqual('my');
       expect(workQueueToDisplay.box).toEqual('inProgress');
 
       const workQueueFormatted = runCompute(formattedWorkQueue, {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       });
       const inboxWorkItem = workQueueFormatted.find(
-        workItem => workItem.docketNumber === integrationTest.docketNumber,
+        workItem => workItem.docketNumber === cerebralTest.docketNumber,
       );
 
       expect(inboxWorkItem).toMatchObject({
         docketEntry: {
           documentTitle: 'Order to keep the free text',
         },
-        editLink: `/case-detail/${integrationTest.docketNumber}/document-view?docketEntryId=${inboxWorkItem.docketEntry.docketEntryId}`,
+        editLink: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${inboxWorkItem.docketEntry.docketEntryId}`,
         inProgress: true,
       });
     });

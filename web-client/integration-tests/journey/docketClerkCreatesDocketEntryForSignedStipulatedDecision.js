@@ -3,21 +3,18 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 const { STATUS_TYPES } = applicationContext.getConstants();
 
 export const docketClerkCreatesDocketEntryForSignedStipulatedDecision =
-  integrationTest => {
+  cerebralTest => {
     return it('docketclerk creates a docket entry for the signed stipulated decision', async () => {
-      await integrationTest.runSequence(
-        'gotoAddCourtIssuedDocketEntrySequence',
-        {
-          docketEntryId: integrationTest.stipDecisionDocketEntryId,
-          docketNumber: integrationTest.docketNumber,
-        },
-      );
+      await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+        docketEntryId: cerebralTest.stipDecisionDocketEntryId,
+        docketNumber: cerebralTest.docketNumber,
+      });
 
-      expect(integrationTest.getState('form.documentType')).toEqual(
+      expect(cerebralTest.getState('form.documentType')).toEqual(
         'Stipulated Decision',
       );
 
-      await integrationTest.runSequence(
+      await cerebralTest.runSequence(
         'updateCourtIssuedDocketEntryFormValueSequence',
         {
           key: 'judge',
@@ -25,26 +22,24 @@ export const docketClerkCreatesDocketEntryForSignedStipulatedDecision =
         },
       );
 
-      await integrationTest.runSequence(
-        'openConfirmInitiateServiceModalSequence',
-      );
-      expect(integrationTest.getState('validationErrors')).toEqual({});
+      await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-      await integrationTest.runSequence(
+      await cerebralTest.runSequence(
         'serveCourtIssuedDocumentFromDocketEntrySequence',
       );
-      expect(integrationTest.getState('currentPage')).toEqual(
+      expect(cerebralTest.getState('currentPage')).toEqual(
         'CaseDetailInternal',
       );
-      const documents = integrationTest
+      const documents = cerebralTest
         .getState('caseDetail.docketEntries')
         .filter(d => d.isOnDocketRecord);
       expect(documents.length).toEqual(4);
-      const stipDecisionDocument = integrationTest
+      const stipDecisionDocument = cerebralTest
         .getState('caseDetail.docketEntries')
         .find(d => d.documentType === 'Stipulated Decision');
       expect(stipDecisionDocument.servedAt).toBeDefined();
-      expect(integrationTest.getState('caseDetail.status')).toEqual(
+      expect(cerebralTest.getState('caseDetail.status')).toEqual(
         STATUS_TYPES.closed,
       );
     });

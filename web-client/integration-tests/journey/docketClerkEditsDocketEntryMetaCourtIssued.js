@@ -2,36 +2,34 @@ import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryMetaCourtIssued = (
-  integrationTest,
+  cerebralTest,
   docketRecordIndex,
 ) => {
   return it('docket clerk edits docket entry meta for a court-issued document', async () => {
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'EditDocketEntryMeta',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('EditDocketEntryMeta');
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
         value: 'OAP',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'documentType',
         value: 'Order for Amended Petition',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'documentTitle',
         value: 'Order for Amended Petition on [Date] [Anything]',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'scenario',
@@ -39,7 +37,7 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'freeText',
@@ -47,29 +45,29 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = (
       },
     );
 
-    await integrationTest.runSequence('submitEditDocketEntryMetaSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       date: VALIDATION_ERROR_MESSAGES.date[2],
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'month',
         value: '4',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'day',
         value: '4',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'year',
@@ -77,7 +75,7 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'pending',
@@ -85,15 +83,15 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = (
       },
     );
 
-    await integrationTest.runSequence('submitEditDocketEntryMetaSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       date: VALIDATION_ERROR_MESSAGES.date[0].message,
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'year',
@@ -101,17 +99,17 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = (
       },
     );
 
-    await integrationTest.runSequence('submitEditDocketEntryMetaSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('alertSuccess')).toMatchObject({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Docket entry changes saved.',
     });
 
-    const docketEntries = integrationTest.getState('caseDetail.docketEntries');
+    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
     const pendingDocketEntry = docketEntries.find(
       d => d.index === docketRecordIndex,
     );
@@ -119,7 +117,7 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = (
     expect(pendingDocketEntry.pending).toEqual(true);
 
     const { formattedPendingDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     expect(formattedPendingDocketEntriesOnDocketRecord).toEqual(
       expect.arrayContaining([

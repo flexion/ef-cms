@@ -2,7 +2,7 @@ import { chambersUserViewsDashboard } from './journey/chambersUserViewsDashboard
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkCreatesMessageToChambers } from './journey/petitionsClerkCreatesMessageToChambers';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Chambers dashboard', () => {
   beforeAll(() => {
@@ -10,19 +10,19 @@ describe('Chambers dashboard', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(integrationTest);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesMessageToChambers(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesMessageToChambers(cerebralTest);
 
-  loginAs(integrationTest, 'colvinsChambers@example.com');
-  chambersUserViewsDashboard(integrationTest);
+  loginAs(cerebralTest, 'colvinsChambers@example.com');
+  chambersUserViewsDashboard(cerebralTest);
 });

@@ -7,7 +7,7 @@ import { withAppContextDecorator } from '../src/withAppContext';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const { CASE_TYPES_MAP } = applicationContext.getConstants();
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 const statisticsFormHelper = withAppContextDecorator(
   statisticsFormHelperComputed,
@@ -19,7 +19,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const caseOverrides = {
@@ -27,59 +27,59 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     procedureType: 'Small',
   };
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(integrationTest, caseOverrides);
+    const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkSubmitsCaseToIrs(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('changes the case type to deficiency with irs notice', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('gotoEditCaseDetailsSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoEditCaseDetailsSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     let statisticsUiHelper = runCompute(statisticsFormHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(statisticsUiHelper.showStatisticsForm).toEqual(false);
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
       value: true,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: CASE_TYPES_MAP.deficiency,
     });
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(statisticsUiHelper.showStatisticsForm).toEqual(true);
 
-    await integrationTest.runSequence('updateCaseDetailsSequence');
+    await cerebralTest.runSequence('updateCaseDetailsSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       statistics: '"statistics" must contain at least 1 items',
     });
 
-    await integrationTest.runSequence('addStatisticToFormSequence');
+    await cerebralTest.runSequence('addStatisticToFormSequence');
 
-    await integrationTest.runSequence('updateCaseDetailsSequence');
+    await cerebralTest.runSequence('updateCaseDetailsSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       statistics: [
         {
           enterAllValues: 'Enter year, deficiency amount, and total penalties',
@@ -88,29 +88,27 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       ],
     });
 
-    await integrationTest.runSequence('updateStatisticsFormValueSequence', {
+    await cerebralTest.runSequence('updateStatisticsFormValueSequence', {
       key: 'statistics.0.year',
       value: 2019,
     });
 
-    await integrationTest.runSequence('updateStatisticsFormValueSequence', {
+    await cerebralTest.runSequence('updateStatisticsFormValueSequence', {
       key: 'statistics.0.irsDeficiencyAmount',
       value: 100,
     });
 
-    await integrationTest.runSequence('updateStatisticsFormValueSequence', {
+    await cerebralTest.runSequence('updateStatisticsFormValueSequence', {
       key: 'statistics.0.irsTotalPenalties',
       value: 100,
     });
 
-    await integrationTest.runSequence('updateCaseDetailsSequence');
+    await cerebralTest.runSequence('updateCaseDetailsSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
-    expect(integrationTest.getState('alertSuccess').message).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Changes saved.',
     );
-    expect(integrationTest.getState('caseDetail.statistics').length).toEqual(1);
+    expect(cerebralTest.getState('caseDetail.statistics').length).toEqual(1);
   });
 });

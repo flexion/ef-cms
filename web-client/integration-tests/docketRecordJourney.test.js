@@ -25,8 +25,8 @@ import {
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
 const { PAYMENT_STATUS } = applicationContext.getConstants();
-const integrationTest = setupTest();
-integrationTest.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Docket Clerk Verifies Docket Record Display', () => {
   beforeAll(() => {
@@ -34,19 +34,19 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(
-    integrationTest,
+    cerebralTest,
     fakeFile,
     'Birmingham, Alabama',
     false,
   );
   it('verifies docket entries exist for petition for an unserved case', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     expect(formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
@@ -59,10 +59,10 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     ]);
   });
 
-  petitionsClerkSubmitsCaseToIrs(integrationTest);
+  petitionsClerkSubmitsCaseToIrs(cerebralTest);
   it('verifies docket entries exist for petition, APW, DISC and RQT for a served case', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     expect(formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
@@ -95,63 +95,63 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       },
     ]);
 
-    integrationTest.docketNumber = null;
+    cerebralTest.docketNumber = null;
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(
-    integrationTest,
+    cerebralTest,
     fakeFile,
     'Birmingham, Alabama',
     false,
   );
 
-  loginAs(integrationTest, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('files an initial filing type document AFTER a paper petition is added but not served', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: 1,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: 1,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: 2018,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFileSize',
       value: 100,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'RQT',
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'trialLocation',
       value: 'Little Rock, AR',
     });
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: `filersMap.${contactPrimary.contactId}`,
@@ -159,71 +159,71 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       },
     );
 
-    await integrationTest.runSequence('submitPaperFilingSequence', {
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     //4654- docket entries for initial filing type documents are not created until after the case has been served
     expect(formattedDocketEntriesOnDocketRecord[4]).toBeUndefined();
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('serves the case', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    await integrationTest.runSequence('serveCaseToIrsSequence');
+    await cerebralTest.runSequence('serveCaseToIrsSequence');
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('files an initial filing type document AFTER a paper petition is added and is served', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: 1,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: 1,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: 2018,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFileSize',
       value: 100,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'RQT',
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'trialLocation',
       value: 'Little Rock, AR',
     });
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: `filersMap.${contactPrimary.contactId}`,
@@ -231,12 +231,12 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       },
     );
 
-    await integrationTest.runSequence('submitPaperFilingSequence', {
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     //4654- docket entries for initial (un-served and served) filing type documents are created when case has been served
     expect(formattedDocketEntriesOnDocketRecord[4]).toMatchObject({
@@ -247,63 +247,63 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(integrationTest, 'floater@example.com');
+  loginAs(cerebralTest, 'floater@example.com');
   it('allows access to the floater user to view the case detail', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
   });
 
-  loginAs(integrationTest, 'general@example.com');
+  loginAs(cerebralTest, 'general@example.com');
   it('allows access to the general user to view the case detail', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
   });
 
-  loginAs(integrationTest, 'reportersOffice@example.com');
+  loginAs(cerebralTest, 'reportersOffice@example.com');
   it('allows access to the reportersOffice user to view the case detail', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('updates the fee payment status on case detail and verifies minute entry on the docket record', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('gotoEditCaseDetailsSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoEditCaseDetailsSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentStatus',
       value: PAYMENT_STATUS.PAID,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentMethod',
       value: 'check',
     });
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateYear',
       value: '2018',
     });
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateMonth',
       value: '12',
     });
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateDay',
       value: '24',
     });
 
-    await integrationTest.runSequence('updateCaseDetailsSequence');
+    await cerebralTest.runSequence('updateCaseDetailsSequence');
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const feeEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.eventCode === 'FEE',
@@ -316,26 +316,26 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkUploadsACourtIssuedDocument(integrationTest, fakeFile);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
   it('verifies the docket record after filing an unservable document type', async () => {
-    const uploadedDocument = integrationTest.draftOrders[0];
+    const uploadedDocument = cerebralTest.draftOrders[0];
 
     await createCourtIssuedDocketEntry({
+      cerebralTest,
       docketEntryId: uploadedDocument.docketEntryId,
-      docketNumber: integrationTest.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
       eventCode: 'HEAR',
       filingDate: {
         day: '1',
         month: '1',
         year: '2020',
       },
-      integrationTest,
       trialLocation: 'Birmingham, AL',
     });
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const docketEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === uploadedDocument.docketEntryId,
@@ -351,18 +351,18 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(integrationTest, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(integrationTest, 1);
-  docketClerkSignsOrder(integrationTest, 1);
-  docketClerkAddsDocketEntryFromOrder(integrationTest, 1);
+  docketClerkViewsDraftOrder(cerebralTest, 1);
+  docketClerkSignsOrder(cerebralTest, 1);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
   it('verifies the docket record after adding a draft order to the docket record (not served)', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const orderEntry = formattedDocketEntriesOnDocketRecord[8];
 
@@ -375,20 +375,20 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(integrationTest, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something else',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
 
-  docketClerkViewsDraftOrder(integrationTest, 2);
-  docketClerkSignsOrder(integrationTest, 2);
-  docketClerkAddsDocketEntryFromOrder(integrationTest, 2);
-  docketClerkServesDocument(integrationTest, 2);
+  docketClerkViewsDraftOrder(cerebralTest, 2);
+  docketClerkSignsOrder(cerebralTest, 2);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
+  docketClerkServesDocument(cerebralTest, 2);
   it('verifies the docket record after adding a draft order to the docket record and serving', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const orderEntry = formattedDocketEntriesOnDocketRecord[8];
 
@@ -401,47 +401,47 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('verifies the docket record after filing a paper document (without serving)', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: 1,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: 2,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: 2018,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFileSize',
       value: 100,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'A',
     });
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: `filersMap.${contactPrimary.contactId}`,
@@ -449,16 +449,16 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       },
     );
 
-    await integrationTest.runSequence('submitPaperFilingSequence', {
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const entry = formattedDocketEntriesOnDocketRecord[6];
 
-    integrationTest.docketEntryId = entry.docketEntryId;
+    cerebralTest.docketEntryId = entry.docketEntryId;
 
     expect(entry.index).toBeUndefined();
     expect(entry).toMatchObject({
@@ -469,24 +469,24 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   it('verifies the docket record after serving a paper filing', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'openConfirmServePaperFiledDocumentSequence',
       {
-        docketEntryId: integrationTest.docketEntryId,
+        docketEntryId: cerebralTest.docketEntryId,
       },
     );
 
-    await integrationTest.runSequence('servePaperFiledDocumentSequence');
+    await cerebralTest.runSequence('servePaperFiledDocumentSequence');
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const servedEntry = formattedDocketEntriesOnDocketRecord.find(
-      entry => entry.docketEntryId === integrationTest.docketEntryId,
+      entry => entry.docketEntryId === cerebralTest.docketEntryId,
     );
 
     expect(servedEntry).toMatchObject({
@@ -499,13 +499,13 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   it('verifies the docket record after filing a petition electronically', async () => {
-    const caseDetail = await uploadPetition(integrationTest, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       ownershipDisclosureFileId: '2da6d239-555a-40e8-af81-1949c8270cd7',
     });
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     expect(formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
@@ -530,21 +530,21 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     ]);
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkServesPetitionFromDocumentView(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   const today = applicationContext.getUtilities().formatNow('MMDDYYYY');
   const [todayMonth, todayDay, todayYear] = today.split('/');
 
-  docketClerkAddsDocketEntryWithoutFile(integrationTest, {
+  docketClerkAddsDocketEntryWithoutFile(cerebralTest, {
     dateReceivedDay: todayDay,
     dateReceivedMonth: todayMonth,
     dateReceivedYear: todayYear,
   });
   it('verifies the docket record after filing a paper document without a file', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     expect(formattedDocketEntriesOnDocketRecord.length).toEqual(4);
     const entry = formattedDocketEntriesOnDocketRecord[3];
@@ -559,11 +559,11 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
-  petitionerFilesADocumentForCase(integrationTest, fakeFile);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerFilesADocumentForCase(cerebralTest, fakeFile);
   it('verifies the docket record after filing a document electronically after serving the petition', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const entry = formattedDocketEntriesOnDocketRecord[3];
 
@@ -576,11 +576,11 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkAddsTrackedDocketEntry(integrationTest, fakeFile);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAddsTrackedDocketEntry(cerebralTest, fakeFile);
   it('verifies the docket record after filing a tracked, paper-filed docket entry (APPL)', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const entry = formattedDocketEntriesOnDocketRecord.find(
       docketEntry => docketEntry.eventCode === 'APPL',
@@ -597,14 +597,14 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
   docketClerkEditsServiceIndicatorForPetitioner(
-    integrationTest,
+    cerebralTest,
     SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
   );
 
-  docketClerkAddsTrackedDocketEntry(integrationTest, fakeFile, true);
+  docketClerkAddsTrackedDocketEntry(cerebralTest, fakeFile, true);
   it('verifies the docket record after filing a tracked, paper-filed docket entry (APPL) on a case with paper service parties', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const entry = formattedDocketEntriesOnDocketRecord.find(
       docketEntry => docketEntry.eventCode === 'APPL',

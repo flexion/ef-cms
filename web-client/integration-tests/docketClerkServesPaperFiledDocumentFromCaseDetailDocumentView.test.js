@@ -3,8 +3,8 @@ import { docketClerkServesDocumentFromCaseDetailDocumentView } from './journey/d
 import { docketClerkViewsCaseDetailDocumentView } from './journey/docketClerkViewsCaseDetailDocumentView';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 
-const integrationTest = setupTest();
-integrationTest.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Docket Clerk Serves Paper Filed Document From Case Detail Documents View', () => {
   beforeAll(() => {
@@ -12,21 +12,18 @@ describe('Docket Clerk Serves Paper Filed Document From Case Detail Documents Vi
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(integrationTest);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'docketclerk1@example.com');
-  docketClerkAddsPaperFiledDocketEntryAndSavesForLater(
-    integrationTest,
-    fakeFile,
-  );
-  docketClerkServesDocumentFromCaseDetailDocumentView(integrationTest);
-  docketClerkViewsCaseDetailDocumentView(integrationTest);
+  loginAs(cerebralTest, 'docketclerk1@example.com');
+  docketClerkAddsPaperFiledDocketEntryAndSavesForLater(cerebralTest, fakeFile);
+  docketClerkServesDocumentFromCaseDetailDocumentView(cerebralTest);
+  docketClerkViewsCaseDetailDocumentView(cerebralTest);
 });

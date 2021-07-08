@@ -4,13 +4,13 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkServesOrderWithPaperService = (
-  integrationTest,
+  cerebralTest,
   draftOrderIndex,
 ) => {
   return it('Docket Clerk serves the order after the docket entry has been created (with parties with paper service)', async () => {
-    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -18,26 +18,21 @@ export const docketClerkServesOrderWithPaperService = (
 
     expect(orderDocument).toBeTruthy();
 
-    await integrationTest.runSequence(
-      'gotoEditCourtIssuedDocketEntrySequence',
-      {
-        docketEntryId: orderDocument.docketEntryId,
-        docketNumber: integrationTest.docketNumber,
-      },
-    );
+    await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+      docketEntryId: orderDocument.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
+    });
 
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'CourtIssuedDocketEntry',
     );
 
-    await integrationTest.runSequence(
-      'openConfirmInitiateServiceModalSequence',
-    );
+    await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
 
     const modalHelper = runCompute(
       withAppContextDecorator(confirmInitiateServiceModalHelper),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
@@ -47,13 +42,11 @@ export const docketClerkServesOrderWithPaperService = (
         name: 'Daenerys Stormborn, Petitioner',
       },
     ]);
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'serveCourtIssuedDocumentFromDocketEntrySequence',
     );
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'PrintPaperService',
-    );
-    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
+    expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
   });
 };

@@ -1,50 +1,48 @@
 import { fakeFile1 } from '../helpers';
 import axios from 'axios';
 
-export const userEditsCorrespondence = (integrationTest, user) =>
+export const userEditsCorrespondence = (cerebralTest, user) =>
   it(`${user} edits the documentTitle for a correspondence`, async () => {
-    const { docketNumber } = integrationTest.getState('caseDetail');
-    let docketEntryId = integrationTest.getState('docketEntryId');
+    const { docketNumber } = cerebralTest.getState('caseDetail');
+    let docketEntryId = cerebralTest.getState('docketEntryId');
 
-    await integrationTest.runSequence('openCaseDocumentDownloadUrlSequence', {
+    await cerebralTest.runSequence('openCaseDocumentDownloadUrlSequence', {
       docketEntryId,
       docketNumber,
       isForIFrame: true,
     });
 
-    let iframeSrc = integrationTest.getState('iframeSrc');
+    let iframeSrc = cerebralTest.getState('iframeSrc');
     let response = await axios.get(iframeSrc, { contentType: 'blob' });
 
     const initialDocumentLength = response.data.length;
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'documentTitle',
       value: 'My edited correspondence',
     });
 
-    await integrationTest.runSequence('clearExistingDocumentSequence');
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('clearExistingDocumentSequence');
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile1,
     });
 
-    await integrationTest.runSequence('editCorrespondenceDocumentSequence');
+    await cerebralTest.runSequence('editCorrespondenceDocumentSequence');
 
     response = await axios.get(iframeSrc, { contentType: 'blob' });
     const updatedDocumentLength = response.data.length;
 
     expect(initialDocumentLength).not.toEqual(updatedDocumentLength);
 
-    expect(integrationTest.getState('caseDetail.correspondence')).toEqual(
+    expect(cerebralTest.getState('caseDetail.correspondence')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           correspondenceId:
-            integrationTest.correspondenceDocument.correspondenceId,
+            cerebralTest.correspondenceDocument.correspondenceId,
           documentTitle: 'My edited correspondence',
         }),
       ]),
     );
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
   });

@@ -7,34 +7,34 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const headerHelper = withAppContextDecorator(headerHelperComputed);
 
 export const userLogsInAndChecksVerifiedEmailAddress = (
-  integrationTest,
+  cerebralTest,
   user,
   mockUpdatedEmail,
 ) =>
   it(`${user} logs in and checks verified email address of ${mockUpdatedEmail}`, async () => {
-    const userFromState = integrationTest.getState('user');
+    const userFromState = cerebralTest.getState('user');
 
     expect(userFromState.email).toEqual(mockUpdatedEmail);
 
     const header = runCompute(headerHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(header.showVerifyEmailWarningNotification).toBeFalsy();
 
     await refreshElasticsearchIndex();
 
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     if (user === 'petitioner') {
-      const contactPrimary = contactPrimaryFromState(integrationTest);
+      const contactPrimary = contactPrimaryFromState(cerebralTest);
       const petitionerEmail = contactPrimary.email;
 
       expect(petitionerEmail).toEqual(mockUpdatedEmail);
     } else {
-      const privatePractitioners = integrationTest.getState(
+      const privatePractitioners = cerebralTest.getState(
         'caseDetail.privatePractitioners',
       );
       const privatePractitioner = privatePractitioners.find(

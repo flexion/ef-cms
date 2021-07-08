@@ -3,71 +3,67 @@ import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = EditPetitionerCounselFactory;
 
-export const petitionsClerkEditsPractitionerOnCase = integrationTest => {
+export const petitionsClerkEditsPractitionerOnCase = cerebralTest => {
   return it('Petitions clerk edits a practitioner on a case', async () => {
     expect(
-      integrationTest.getState('caseDetail.privatePractitioners').length,
+      cerebralTest.getState('caseDetail.privatePractitioners').length,
     ).toEqual(2);
 
-    const barNumber = integrationTest.getState(
+    const barNumber = cerebralTest.getState(
       'caseDetail.privatePractitioners.1.barNumber',
     );
 
-    await integrationTest.runSequence('gotoEditPetitionerCounselSequence', {
+    await cerebralTest.runSequence('gotoEditPetitionerCounselSequence', {
       barNumber,
-      docketNumber: integrationTest.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
-    const contactSecondary = contactSecondaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    const contactSecondary = contactSecondaryFromState(cerebralTest);
 
     expect(
-      integrationTest.getState(
-        `form.representingMap.${contactPrimary.contactId}`,
-      ),
+      cerebralTest.getState(`form.representingMap.${contactPrimary.contactId}`),
     ).toBeFalsy();
     expect(
-      integrationTest.getState(
+      cerebralTest.getState(
         `form.representingMap.${contactSecondary.contactId}`,
       ),
     ).toBeTruthy();
-    expect(integrationTest.getState('validationErrors')).toEqual({});
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'EditPetitionerCounsel',
     );
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: `representingMap.${contactSecondary.contactId}`,
       value: false,
     });
 
-    await integrationTest.runSequence('submitEditPetitionerCounselSequence');
+    await cerebralTest.runSequence('submitEditPetitionerCounselSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       representing: VALIDATION_ERROR_MESSAGES.representing,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: `representingMap.${contactPrimary.contactId}`,
       value: true,
     });
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: `representingMap.${contactSecondary.contactId}`,
       value: true,
     });
 
-    await integrationTest.runSequence('submitEditPetitionerCounselSequence');
+    await cerebralTest.runSequence('submitEditPetitionerCounselSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     expect(
-      integrationTest.getState('caseDetail.privatePractitioners.length'),
+      cerebralTest.getState('caseDetail.privatePractitioners.length'),
     ).toEqual(2);
 
     expect(
-      integrationTest.getState(
-        'caseDetail.privatePractitioners.1.representing',
-      ),
+      cerebralTest.getState('caseDetail.privatePractitioners.1.representing'),
     ).toEqual([contactSecondary.contactId, contactPrimary.contactId]);
   });
 };

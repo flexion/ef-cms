@@ -1,22 +1,21 @@
 export const petitionsClerkAddsScannedBatch = (
-  integrationTest,
+  cerebralTest,
   { scannerSourceIndex, scannerSourceName },
 ) => {
   return it('Petitions clerk adds a batch of scanned documents', async () => {
-    await integrationTest.runSequence('startScanSequence', {
+    await cerebralTest.runSequence('startScanSequence', {
       scannerSourceIndex,
       scannerSourceName,
     });
 
-    const selectedDocumentType = integrationTest.getState(
+    const selectedDocumentType = cerebralTest.getState(
       'currentViewMetadata.documentSelectedForScan',
     );
 
     expect(
-      integrationTest.getState(`scanner.batches.${selectedDocumentType}`)
-        .length,
+      cerebralTest.getState(`scanner.batches.${selectedDocumentType}`).length,
     ).toBeGreaterThan(0);
-    expect(Object.keys(integrationTest.getState('scanner.batches'))).toEqual([
+    expect(Object.keys(cerebralTest.getState('scanner.batches'))).toEqual([
       selectedDocumentType,
     ]);
   });

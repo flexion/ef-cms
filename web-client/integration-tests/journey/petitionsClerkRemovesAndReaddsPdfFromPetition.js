@@ -1,58 +1,58 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 export const petitionsClerkRemovesAndReaddsPdfFromPetition = (
-  integrationTest,
+  cerebralTest,
   fakeFile,
 ) => {
   const documentToRemoveAndReAdd = 'applicationForWaiverOfFilingFeeFile';
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
 
   return it('Petitions Clerk removes and readds PDF from petition', async () => {
-    integrationTest.setState(
+    cerebralTest.setState(
       'currentViewMetadata.documentSelectedForPreview',
       documentToRemoveAndReAdd,
     );
-    await integrationTest.runSequence('setDocumentForPreviewSequence');
+    await cerebralTest.runSequence('setDocumentForPreviewSequence');
 
-    const docketEntryIdToDelete = integrationTest.getState('docketEntryId');
+    const docketEntryIdToDelete = cerebralTest.getState('docketEntryId');
     expect(docketEntryIdToDelete).toBeDefined();
-    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
 
-    await integrationTest.runSequence('deleteUploadedPdfSequence');
+    await cerebralTest.runSequence('deleteUploadedPdfSequence');
 
-    const deletedDocument = integrationTest
+    const deletedDocument = cerebralTest
       .getState('form.docketEntries')
       .find(doc => doc.docketEntryId === docketEntryIdToDelete);
     expect(deletedDocument).toBeUndefined();
-    expect(integrationTest.getState('pdfPreviewUrl')).toBeUndefined();
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeUndefined();
 
-    await integrationTest.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       applicationForWaiverOfFilingFeeFile:
         'Upload or scan an Application for Waiver of Filing Fee (APW)',
     });
 
-    expect(integrationTest.getState('form.docketEntries')).toEqual(
+    expect(cerebralTest.getState('form.docketEntries')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ documentType: 'Petition', eventCode: 'P' }),
       ]),
     );
 
-    await integrationTest.runSequence('setDocumentForUploadSequence', {
+    await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'applicationForWaiverOfFilingFeeFile',
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
     expect(
-      integrationTest.getState('form')[documentToRemoveAndReAdd],
+      cerebralTest.getState('form')[documentToRemoveAndReAdd],
     ).toBeDefined();
 
-    await integrationTest.runSequence('saveSavedCaseForLaterSequence');
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    const newApwFileDocketEntryId = integrationTest
+    const newApwFileDocketEntryId = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(
         doc =>

@@ -4,7 +4,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
-  integrationTest,
+  cerebralTest,
   draftOrderIndex,
 ) => {
   return it('Docket Clerk adds a docket entry from an Order of Dismissal', async () => {
@@ -14,11 +14,11 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    const { docketEntryId } = integrationTest.draftOrders[draftOrderIndex];
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -26,28 +26,28 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
 
     expect(draftOrderDocument).toBeTruthy();
 
-    await integrationTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
       docketEntryId: draftOrderDocument.docketEntryId,
-      docketNumber: integrationTest.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
     helperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    expect(integrationTest.getState('form.eventCode')).toEqual('OD');
-    expect(integrationTest.getState('form.documentType')).toEqual(
+    expect(cerebralTest.getState('form.eventCode')).toEqual('OD');
+    expect(cerebralTest.getState('form.documentType')).toEqual(
       'Order of Dismissal',
     );
     expect(helperComputed.showJudge).toBeTruthy();
-    expect(integrationTest.getState('form.judge')).toBeFalsy();
+    expect(cerebralTest.getState('form.judge')).toBeFalsy();
     expect(helperComputed.showFreeText).toBeTruthy();
-    expect(integrationTest.getState('form.freeText')).toBeFalsy();
+    expect(cerebralTest.getState('form.freeText')).toBeFalsy();
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'judge',
@@ -55,7 +55,7 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'freeText',
@@ -63,7 +63,7 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'attachments',
@@ -71,24 +71,24 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
       },
     );
 
-    expect(integrationTest.getState('form.generatedDocumentTitle')).toContain(
+    expect(cerebralTest.getState('form.generatedDocumentTitle')).toContain(
       'Judge Buch for Something',
     );
 
-    await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(integrationTest.getState('alertSuccess').message).toEqual(
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to docket record.',
     );
 
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 

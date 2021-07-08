@@ -4,16 +4,16 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const petitionerFilesANonstardardDDocumentForCase = (
-  integrationTest,
+  cerebralTest,
   fakeFile,
 ) => {
   return it('Petitioner files a nonstandard d document for case', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('gotoFileDocumentSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const documentToSelect = {
@@ -25,7 +25,7 @@ export const petitionerFilesANonstardardDDocumentForCase = (
     };
 
     for (const key of Object.keys(documentToSelect)) {
-      await integrationTest.runSequence(
+      await cerebralTest.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
           key,
@@ -34,7 +34,7 @@ export const petitionerFilesANonstardardDDocumentForCase = (
       );
     }
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'certificateOfService',
@@ -42,7 +42,7 @@ export const petitionerFilesANonstardardDDocumentForCase = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'hasSupportingDocuments',
@@ -50,7 +50,7 @@ export const petitionerFilesANonstardardDDocumentForCase = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'primaryDocumentFile',
@@ -58,7 +58,7 @@ export const petitionerFilesANonstardardDDocumentForCase = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'serviceDateMonth',
@@ -66,7 +66,7 @@ export const petitionerFilesANonstardardDDocumentForCase = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'serviceDateDay',
@@ -74,7 +74,7 @@ export const petitionerFilesANonstardardDDocumentForCase = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'serviceDateYear',
@@ -82,31 +82,31 @@ export const petitionerFilesANonstardardDDocumentForCase = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'previousDocument',
-        value: integrationTest.previousDocumentId,
+        value: cerebralTest.previousDocumentId,
       },
     );
 
-    await integrationTest.runSequence('validateSelectDocumentTypeSequence');
+    await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(integrationTest.getState('form.documentType')).toEqual(
+    expect(cerebralTest.getState('form.documentType')).toEqual(
       'Certificate of Service',
     );
 
     runCompute(withAppContextDecorator(formattedCaseDetail), {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: `filersMap.${contactPrimary.contactId}`,
@@ -114,12 +114,10 @@ export const petitionerFilesANonstardardDDocumentForCase = (
       },
     );
 
-    await integrationTest.runSequence(
-      'reviewExternalDocumentInformationSequence',
-    );
+    await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('submitExternalDocumentSequence');
+    await cerebralTest.runSequence('submitExternalDocumentSequence');
   });
 };

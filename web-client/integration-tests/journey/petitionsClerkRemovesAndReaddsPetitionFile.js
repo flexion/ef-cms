@@ -4,7 +4,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const petitionsClerkRemovesAndReaddsPetitionFile = (
-  integrationTest,
+  cerebralTest,
   fakeFile,
 ) => {
   const formattedWorkQueue = withAppContextDecorator(
@@ -15,61 +15,61 @@ export const petitionsClerkRemovesAndReaddsPetitionFile = (
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
 
   return it('Petitions Clerk removes and readds petition file', async () => {
-    integrationTest.setState(
+    cerebralTest.setState(
       'currentViewMetadata.documentSelectedForPreview',
       documentToRemoveAndReAdd,
     );
-    await integrationTest.runSequence('setDocumentForPreviewSequence');
+    await cerebralTest.runSequence('setDocumentForPreviewSequence');
 
-    const docketEntryIdToReplace = integrationTest.getState('docketEntryId');
-    const previousPetitionDocument = integrationTest
+    const docketEntryIdToReplace = cerebralTest.getState('docketEntryId');
+    const previousPetitionDocument = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(entry => entry.docketEntryId === docketEntryIdToReplace);
-    const previousDocketRecordEntry = integrationTest
+    const previousDocketRecordEntry = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(entry => entry.docketEntryId === docketEntryIdToReplace);
     const previousPetitionFormattedWorkItem = runCompute(formattedWorkQueue, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     }).find(item => item.docketEntry.docketEntryId === docketEntryIdToReplace);
 
     expect(docketEntryIdToReplace).toBeDefined();
-    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
 
-    await integrationTest.runSequence('deleteUploadedPdfSequence');
+    await cerebralTest.runSequence('deleteUploadedPdfSequence');
 
-    const deletedDocument = integrationTest
+    const deletedDocument = cerebralTest
       .getState('form.docketEntries')
       .find(doc => doc.docketEntryId === docketEntryIdToReplace);
     expect(deletedDocument).toBeUndefined();
-    expect(integrationTest.getState('pdfPreviewUrl')).toBeUndefined();
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeUndefined();
 
-    await integrationTest.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       petitionFile: 'Upload or scan a Petition',
     });
 
-    await integrationTest.runSequence('setDocumentForUploadSequence', {
+    await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'petitionFile',
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
     expect(
-      integrationTest.getState('form')[documentToRemoveAndReAdd],
+      cerebralTest.getState('form')[documentToRemoveAndReAdd],
     ).toBeDefined();
 
-    await integrationTest.runSequence('saveSavedCaseForLaterSequence');
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    const updatedPetitionDocument = integrationTest
+    const updatedPetitionDocument = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(doc => doc.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode);
-    const updatedDocketRecordEntry = integrationTest
+    const updatedDocketRecordEntry = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(entry => entry.docketEntryId === docketEntryIdToReplace);
     const updatedPetitionFormattedWorkItem = runCompute(formattedWorkQueue, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     }).find(item => item.docketEntry.docketEntryId === docketEntryIdToReplace);
 
     expect(previousPetitionDocument).toEqual(updatedPetitionDocument);

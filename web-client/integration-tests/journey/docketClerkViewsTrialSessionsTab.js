@@ -8,24 +8,24 @@ const formattedTrialSessions = withAppContextDecorator(
 );
 
 export const docketClerkViewsTrialSessionsTab = (
-  integrationTest,
+  cerebralTest,
   overrides = {},
 ) => {
   const status = overrides.tab || 'Open';
   return it(`Docket clerk views ${status} Trial Sessions tab`, async () => {
-    await integrationTest.runSequence('gotoTrialSessionsSequence', {
+    await cerebralTest.runSequence('gotoTrialSessionsSequence', {
       query: {
         status,
       },
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual('TrialSessions');
+    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
     expect(
-      integrationTest.getState('screenMetadata.trialSessionFilters.status'),
+      cerebralTest.getState('screenMetadata.trialSessionFilters.status'),
     ).toEqual(status);
 
     const formatted = runCompute(formattedTrialSessions, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     const trialSessionsHelper = withAppContextDecorator(
@@ -33,7 +33,7 @@ export const docketClerkViewsTrialSessionsTab = (
     );
 
     const helper = runCompute(trialSessionsHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     const legacyJudge = helper.trialSessionJudges.find(
@@ -51,7 +51,7 @@ export const docketClerkViewsTrialSessionsTab = (
     let foundSession;
     filteredSessions.some(trialSession => {
       trialSession.sessions.some(session => {
-        if (session.trialSessionId === integrationTest.trialSessionId) {
+        if (session.trialSessionId === cerebralTest.trialSessionId) {
           foundSession = session;
           return true;
         }

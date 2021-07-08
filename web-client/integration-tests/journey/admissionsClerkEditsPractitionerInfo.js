@@ -1,64 +1,62 @@
 const { refreshElasticsearchIndex } = require('../helpers');
 
-export const admissionsClerkEditsPractitionerInfo = integrationTest => {
+export const admissionsClerkEditsPractitionerInfo = cerebralTest => {
   return it('admissions clerk edits practitioner information', async () => {
     await refreshElasticsearchIndex();
 
-    await integrationTest.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: integrationTest.barNumber,
+    await cerebralTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: cerebralTest.barNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'EditPractitionerUser',
     );
-    expect(integrationTest.getState('form.barNumber')).toEqual(
-      integrationTest.barNumber,
+    expect(cerebralTest.getState('form.barNumber')).toEqual(
+      cerebralTest.barNumber,
     );
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'firstName',
       value: 'Ben',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'middleName',
       value: 'Leighton',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'lastName',
       value: 'Matlock',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
       value: '123 Legal Way',
     });
 
-    await integrationTest.runSequence('submitUpdatePractitionerUserSequence');
+    await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     await refreshElasticsearchIndex(5000);
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'PractitionerDetail',
+    expect(cerebralTest.getState('currentPage')).toEqual('PractitionerDetail');
+    expect(cerebralTest.getState('practitionerDetail.barNumber')).toEqual(
+      cerebralTest.barNumber,
     );
-    expect(integrationTest.getState('practitionerDetail.barNumber')).toEqual(
-      integrationTest.barNumber,
-    );
-    expect(integrationTest.getState('practitionerDetail.name')).toEqual(
+    expect(cerebralTest.getState('practitionerDetail.name')).toEqual(
       'Ben Leighton Matlock',
     );
     expect(
-      integrationTest.getState('practitionerDetail.contact.address1'),
+      cerebralTest.getState('practitionerDetail.contact.address1'),
     ).toEqual('123 Legal Way');
 
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const caseDetail = integrationTest.getState('caseDetail');
+    const caseDetail = cerebralTest.getState('caseDetail');
     const noticeDocument = caseDetail.docketEntries.find(
       document => document.documentType === 'Notice of Change of Address',
     );

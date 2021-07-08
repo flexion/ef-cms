@@ -1,23 +1,23 @@
 export const petitionsClerkDeletesMultipleScannedBatches = (
-  integrationTest,
+  cerebralTest,
   { numBatches },
 ) => {
   return it('Petitions clerk deletes multiple batches', async () => {
-    const selectedDocumentType = integrationTest.getState(
+    const selectedDocumentType = cerebralTest.getState(
       'currentViewMetadata.documentSelectedForScan',
     );
-    const batches = integrationTest.getState(
+    const batches = cerebralTest.getState(
       `scanner.batches.${selectedDocumentType}`,
     );
 
     expect(batches).toHaveLength(numBatches);
 
     for (let i = 0; i < numBatches; i++) {
-      await integrationTest.runSequence('openConfirmDeleteBatchModalSequence', {
+      await cerebralTest.runSequence('openConfirmDeleteBatchModalSequence', {
         batchIndexToDelete: 0,
       });
 
-      await integrationTest.runSequence('removeBatchSequence');
+      await cerebralTest.runSequence('removeBatchSequence');
     }
 
     expect(batches).toHaveLength(0);

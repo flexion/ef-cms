@@ -1,15 +1,15 @@
 export const petitionsClerkSavesSignatureForDraftDocument = (
-  integrationTest,
+  cerebralTest,
   title,
 ) => {
   return it('Petitions clerk saves signature for draft document', async () => {
-    await integrationTest.runSequence('saveDocumentSigningSequence', {
+    await cerebralTest.runSequence('saveDocumentSigningSequence', {
       gotoAfterSigning: 'DocumentDetail',
     });
 
-    expect(integrationTest.getState('draftDocumentViewerDocketEntryId')).toBe(
-      integrationTest.docketEntryId,
+    expect(cerebralTest.getState('draftDocumentViewerDocketEntryId')).toBe(
+      cerebralTest.docketEntryId,
     );
-    expect(integrationTest.getState('alertSuccess.message')).toEqual(title);
+    expect(cerebralTest.getState('alertSuccess.message')).toEqual(title);
   });
 };

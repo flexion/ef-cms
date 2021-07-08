@@ -8,7 +8,7 @@ import { docketClerkDeletesCalendarNote } from './journey/docketClerkDeletesCale
 import { docketClerkViewsTrialSessionWithNote } from './journey/docketClerkViewsTrialSessionWithNote';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('case trial calendar notes journey', () => {
   beforeAll(() => {
@@ -16,7 +16,7 @@ describe('case trial calendar notes journey', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   // eslint-disable-next-line @miovision/disallow-date/no-static-date
@@ -28,28 +28,28 @@ describe('case trial calendar notes journey', () => {
     trialLocation: trialLocation1,
   };
 
-  integrationTest.createdTrialSessions = [];
+  cerebralTest.createdTrialSessions = [];
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(integrationTest, overrides1);
-  docketClerkViewsTrialSessionList(integrationTest);
-  docketClerkViewsNewTrialSession(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, overrides1);
+  docketClerkViewsTrialSessionList(cerebralTest);
+  docketClerkViewsNewTrialSession(cerebralTest);
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('creates a case', async () => {
-    const caseDetail = await uploadPetition(integrationTest, overrides1);
+    const caseDetail = await uploadPetition(cerebralTest, overrides1);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkManuallyAddsCaseToTrialSessionWithoutNote(integrationTest);
-  docketClerkViewsTrialSessionWithNote(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkManuallyAddsCaseToTrialSessionWithoutNote(cerebralTest);
+  docketClerkViewsTrialSessionWithNote(cerebralTest);
 
-  docketClerkAddEditsCalendarNote(integrationTest, 'adds');
-  docketClerkViewsTrialSessionWithNote(integrationTest);
-  docketClerkAddEditsCalendarNote(integrationTest, 'edits');
-  docketClerkDeletesCalendarNote(integrationTest);
+  docketClerkAddEditsCalendarNote(cerebralTest, 'adds');
+  docketClerkViewsTrialSessionWithNote(cerebralTest);
+  docketClerkAddEditsCalendarNote(cerebralTest, 'edits');
+  docketClerkDeletesCalendarNote(cerebralTest);
 
-  docketClerkViewsTrialSessionWithNote(integrationTest);
+  docketClerkViewsTrialSessionWithNote(cerebralTest);
 });

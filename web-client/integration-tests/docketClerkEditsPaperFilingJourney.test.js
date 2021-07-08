@@ -7,7 +7,7 @@ import {
   wait,
 } from './helpers';
 import { docketClerkAddsMiscellaneousPaperFiling } from './journey/docketClerkAddsMiscellaneousPaperFiling';
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Docket Clerk edits a paper filing journey', () => {
   beforeAll(() => {
@@ -15,23 +15,23 @@ describe('Docket Clerk edits a paper filing journey', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('create case', async () => {
-    const caseDetail = await uploadPetition(integrationTest);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('create a paper-filed docket entry', async () => {
-    await integrationTest.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('submitPaperFilingSequence', {
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -42,46 +42,46 @@ describe('Docket Clerk edits a paper filing journey', () => {
       'filers',
     ];
 
-    expect(Object.keys(integrationTest.getState('validationErrors'))).toEqual(
+    expect(Object.keys(cerebralTest.getState('validationErrors'))).toEqual(
       paperFilingValidationErrors,
     );
 
-    await integrationTest.runSequence('setDocumentForUploadSequence', {
+    await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'primaryDocumentFile',
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
-    expect(Object.keys(integrationTest.getState('validationErrors'))).toEqual(
+    expect(Object.keys(cerebralTest.getState('validationErrors'))).toEqual(
       paperFilingValidationErrors,
     );
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: 1,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: 1,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: 2018,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'A',
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'trialLocation',
       value: 'Little Rock, AR',
     });
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: `filersMap.${contactPrimary.contactId}`,
@@ -89,30 +89,28 @@ describe('Docket Clerk edits a paper filing journey', () => {
       },
     );
 
-    await integrationTest.runSequence('submitPaperFilingSequence', {
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const caseDocument = integrationTest.getState('caseDetail.docketEntries.0');
+    const caseDocument = cerebralTest.getState('caseDetail.docketEntries.0');
     expect(caseDocument).toMatchObject({
       documentTitle: 'Answer',
       documentType: 'Answer',
       eventCode: 'A',
       isFileAttached: true,
     });
-    integrationTest.docketEntryId = caseDocument.docketEntryId;
+    cerebralTest.docketEntryId = caseDocument.docketEntryId;
   });
 
   it('open modal to serve paper-filed document (but do not serve)', async () => {
-    const caseDocument = integrationTest.getState('caseDetail.docketEntries.0');
+    const caseDocument = cerebralTest.getState('caseDetail.docketEntries.0');
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'changeTabAndSetViewerDocumentToDisplaySequence',
       {
         docketRecordTab: 'documentView',
@@ -120,63 +118,61 @@ describe('Docket Clerk edits a paper filing journey', () => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'openConfirmServePaperFiledDocumentSequence',
       {
-        docketEntryId: integrationTest.docketEntryId,
+        docketEntryId: cerebralTest.docketEntryId,
       },
     );
 
     expect(
-      integrationTest.getState('viewerDocumentToDisplay.documentTitle'),
+      cerebralTest.getState('viewerDocumentToDisplay.documentTitle'),
     ).toBeDefined();
   });
 
   it('edit paper-filed docket entry, replacing PDF', async () => {
-    await integrationTest.runSequence('gotoEditPaperFilingSequence', {
-      docketEntryId: integrationTest.docketEntryId,
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoEditPaperFilingSequence', {
+      docketEntryId: cerebralTest.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual('PaperFiling');
-    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
+    expect(cerebralTest.getState('currentPage')).toEqual('PaperFiling');
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
     expect(
-      integrationTest.getState('currentViewMetadata.documentUploadMode'),
+      cerebralTest.getState('currentViewMetadata.documentUploadMode'),
     ).toEqual('preview');
 
-    await integrationTest.runSequence('removeScannedPdfSequence');
+    await cerebralTest.runSequence('removeScannedPdfSequence');
     await wait(200);
 
     expect(
-      integrationTest.getState('currentViewMetadata.documentUploadMode'),
+      cerebralTest.getState('currentViewMetadata.documentUploadMode'),
     ).toEqual('scan');
 
-    await integrationTest.runSequence('submitPaperFilingSequence');
+    await cerebralTest.runSequence('submitPaperFilingSequence');
 
-    expect(Object.keys(integrationTest.getState('validationErrors'))).toEqual([
+    expect(Object.keys(cerebralTest.getState('validationErrors'))).toEqual([
       'primaryDocumentFile',
     ]);
 
-    await integrationTest.runSequence('setDocumentForUploadSequence', {
+    await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'primaryDocumentFile',
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual('PaperFiling');
-    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
-    expect(integrationTest.getState('form.primaryDocumentFile')).toBeDefined();
+    expect(cerebralTest.getState('currentPage')).toEqual('PaperFiling');
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
+    expect(cerebralTest.getState('form.primaryDocumentFile')).toBeDefined();
     expect(
-      integrationTest.getState('currentViewMetadata.documentUploadMode'),
+      cerebralTest.getState('currentViewMetadata.documentUploadMode'),
     ).toEqual('preview');
 
-    await integrationTest.runSequence('submitPaperFilingSequence');
+    await cerebralTest.runSequence('submitPaperFilingSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
   });
 
-  docketClerkAddsMiscellaneousPaperFiling(integrationTest, fakeFile);
+  docketClerkAddsMiscellaneousPaperFiling(cerebralTest, fakeFile);
 });

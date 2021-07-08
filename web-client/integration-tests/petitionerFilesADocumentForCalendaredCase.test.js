@@ -14,7 +14,7 @@ import {
 import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('petitioner files document', () => {
   beforeAll(() => {
@@ -22,48 +22,48 @@ describe('petitioner files document', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(integrationTest);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
   const trialLocation = `Jacksonville, Florida, ${Date.now()}`;
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(integrationTest, { trialLocation });
-  docketClerkViewsTrialSessionList(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, { trialLocation });
+  docketClerkViewsTrialSessionList(cerebralTest);
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkSetsATrialSessionsSchedule(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
   it('manually add the case to the session', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    await integrationTest.runSequence('openAddToTrialModalSequence');
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('openAddToTrialModalSequence');
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'trialSessionId',
-      value: integrationTest.trialSessionId,
+      value: cerebralTest.trialSessionId,
     });
 
-    await integrationTest.runSequence('addCaseToTrialSessionSequence');
+    await cerebralTest.runSequence('addCaseToTrialSessionSequence');
     await wait(1000);
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
-  petitionerFilesDocumentForCase(integrationTest, fakeFile);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerFilesDocumentForCase(cerebralTest, fakeFile);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkViewsSectionInboxHighPriority(integrationTest);
-  docketClerkRemovesCaseFromTrial(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkViewsSectionInboxHighPriority(cerebralTest);
+  docketClerkRemovesCaseFromTrial(cerebralTest);
 
   it('refresh elasticsearch index', async () => {
     await refreshElasticsearchIndex();
   });
 
-  docketClerkViewsSectionInboxNotHighPriority(integrationTest);
+  docketClerkViewsSectionInboxNotHighPriority(cerebralTest);
 });

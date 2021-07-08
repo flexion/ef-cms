@@ -11,7 +11,7 @@ import { petitionerVerifiesConsolidatedCases } from './journey/petitionerVerifie
 import { petitionerVerifiesUnconsolidatedCases } from './journey/petitionerVerifiesUnconsolidatedCases';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 const trialLocation = `Boise, Idaho, ${Date.now()}`;
 
 const overrides = {
@@ -25,57 +25,57 @@ describe('Case Consolidation Journey', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
 
   it('login as a petitioner and create the lead case', async () => {
-    const caseDetail = await uploadPetition(integrationTest, overrides);
+    const caseDetail = await uploadPetition(cerebralTest, overrides);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = integrationTest.leadDocketNumber =
+    cerebralTest.docketNumber = cerebralTest.leadDocketNumber =
       caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
 
   it('login as a petitioner and create a case that cannot be consolidated with the lead case', async () => {
     //not passing in overrides to preferredTrialCity to ensure case cannot be consolidated
-    const caseDetail = await uploadPetition(integrationTest);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumberDifferentPlaceOfTrial = caseDetail.docketNumber;
+    cerebralTest.docketNumberDifferentPlaceOfTrial = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(integrationTest);
-  docketClerkOpensCaseConsolidateModal(integrationTest);
-  docketClerkSearchesForCaseToConsolidateWith(integrationTest);
-  docketClerkConsolidatesCaseThatCannotBeConsolidated(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
+  docketClerkOpensCaseConsolidateModal(cerebralTest);
+  docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
+  docketClerkConsolidatesCaseThatCannotBeConsolidated(cerebralTest);
 
   it('login as a petitioner and create the case to consolidate with', async () => {
-    integrationTest.docketNumberDifferentPlaceOfTrial = null;
-    const caseDetail = await uploadPetition(integrationTest, overrides);
+    cerebralTest.docketNumberDifferentPlaceOfTrial = null;
+    const caseDetail = await uploadPetition(cerebralTest, overrides);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(integrationTest);
-  docketClerkOpensCaseConsolidateModal(integrationTest);
-  docketClerkSearchesForCaseToConsolidateWith(integrationTest);
-  docketClerkConsolidatesCases(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
+  docketClerkOpensCaseConsolidateModal(cerebralTest);
+  docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
+  docketClerkConsolidatesCases(cerebralTest);
 
-  loginAs(integrationTest, 'petitioner@example.com');
-  petitionerViewsDashboard(integrationTest);
-  petitionerVerifiesConsolidatedCases(integrationTest);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerViewsDashboard(cerebralTest);
+  petitionerVerifiesConsolidatedCases(cerebralTest);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkUnconsolidatesCase(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUnconsolidatesCase(cerebralTest);
 
-  loginAs(integrationTest, 'petitioner@example.com');
-  petitionerViewsDashboard(integrationTest);
-  petitionerVerifiesUnconsolidatedCases(integrationTest);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerViewsDashboard(cerebralTest);
+  petitionerVerifiesUnconsolidatedCases(cerebralTest);
 });

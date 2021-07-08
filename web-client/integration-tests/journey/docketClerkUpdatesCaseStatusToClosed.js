@@ -1,37 +1,37 @@
 import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const docketClerkUpdatesCaseStatusToClosed = integrationTest => {
+export const docketClerkUpdatesCaseStatusToClosed = cerebralTest => {
   return it('Docket clerk updates case status to closed', async () => {
-    integrationTest.setState('caseDetail', {});
+    cerebralTest.setState('caseDetail', {});
 
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const currentStatus = integrationTest.getState('caseDetail.status');
+    const currentStatus = cerebralTest.getState('caseDetail.status');
 
-    await integrationTest.runSequence('openUpdateCaseModalSequence');
+    await cerebralTest.runSequence('openUpdateCaseModalSequence');
 
-    expect(integrationTest.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'UpdateCaseModalDialog',
     );
 
-    expect(integrationTest.getState('modal.caseStatus')).toEqual(currentStatus);
+    expect(cerebralTest.getState('modal.caseStatus')).toEqual(currentStatus);
 
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'caseStatus',
       value: CASE_STATUS_TYPES.closed,
     });
 
-    await integrationTest.runSequence('submitUpdateCaseModalSequence');
+    await cerebralTest.runSequence('submitUpdateCaseModalSequence');
 
     await refreshElasticsearchIndex();
 
-    expect(integrationTest.getState('caseDetail.status')).toEqual(
+    expect(cerebralTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.closed,
     );
 
-    expect(integrationTest.getState('modal')).toEqual({});
+    expect(cerebralTest.getState('modal')).toEqual({});
   });
 };

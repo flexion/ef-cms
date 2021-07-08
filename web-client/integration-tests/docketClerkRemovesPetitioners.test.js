@@ -7,8 +7,8 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const integrationTest = setupTest();
-integrationTest.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Docket Clerk removes petitioners journey', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -18,13 +18,13 @@ describe('Docket Clerk removes petitioners journey', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
 
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(integrationTest, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -37,27 +37,27 @@ describe('Docket Clerk removes petitioners journey', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   const overrides = {
     contactType: 'intervenor',
     name: 'Test Intervenor',
   };
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkAddsPetitionerToCase(integrationTest, overrides);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAddsPetitionerToCase(cerebralTest, overrides);
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkAddsPractitionersToCase(integrationTest, true);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkRemovesIntervenorFromCase(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkRemovesIntervenorFromCase(cerebralTest);
 
-  docketClerkVerifiesPractitionerStillExistsOnCase(integrationTest);
+  docketClerkVerifiesPractitionerStillExistsOnCase(cerebralTest);
 
-  docketClerkRemovesPetitionerFromCase(integrationTest);
+  docketClerkRemovesPetitionerFromCase(cerebralTest);
 });

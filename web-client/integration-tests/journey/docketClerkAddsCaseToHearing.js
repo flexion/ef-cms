@@ -7,44 +7,44 @@ const formattedCaseDetail = withAppContextDecorator(
 );
 
 export const docketClerkAddsCaseToHearing = (
-  integrationTest,
+  cerebralTest,
   notes = 'test note for hearing',
   index = 1,
 ) => {
   return it('docket clerk adds case to hearing', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('openSetForHearingModalSequence');
+    await cerebralTest.runSequence('openSetForHearingModalSequence');
 
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'showAllLocations',
       value: true,
     });
 
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'trialSessionId',
-      value: integrationTest.createdTrialSessions[index],
+      value: cerebralTest.createdTrialSessions[index],
     });
 
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'calendarNotes',
       value: notes,
     });
 
-    await integrationTest.runSequence('setForHearingSequence');
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('setForHearingSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     const formattedCase = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(formattedCase.hearings).toMatchObject([
       {
         addedToSessionAt: expect.anything(),
         calendarNotes: notes,
-        trialSessionId: integrationTest.createdTrialSessions[index],
+        trialSessionId: cerebralTest.createdTrialSessions[index],
       },
     ]);
   });

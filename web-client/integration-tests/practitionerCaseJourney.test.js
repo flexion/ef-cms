@@ -25,7 +25,7 @@ import { practitionerViewsCaseDetailWithPublicOrder } from './journey/practition
 import { practitionerViewsDashboard } from './journey/practitionerViewsDashboard';
 import { practitionerViewsDashboardBeforeAddingCase } from './journey/practitionerViewsDashboardBeforeAddingCase';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Practitioner requests access to case', () => {
@@ -34,28 +34,28 @@ describe('Practitioner requests access to case', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   //tests for practitioner starting a new case
-  loginAs(integrationTest, 'privatePractitioner@example.com');
-  practitionerCreatesNewCase(integrationTest, fakeFile);
-  practitionerViewsCaseDetailOfOwnedCase(integrationTest);
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  practitionerCreatesNewCase(cerebralTest, fakeFile);
+  practitionerViewsCaseDetailOfOwnedCase(cerebralTest);
 
   // verify petition filed by private practitioner can be found in petitions Section Document QC
-  loginAs(integrationTest, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('Petitions clerk views Section Document QC', async () => {
-    await integrationTest.runSequence('navigateToPathSequence', {
+    await cerebralTest.runSequence('navigateToPathSequence', {
       path: '/document-qc/section/inbox',
     });
-    const workQueueToDisplay = integrationTest.getState('workQueueToDisplay');
+    const workQueueToDisplay = cerebralTest.getState('workQueueToDisplay');
 
     expect(workQueueToDisplay.queue).toEqual('section');
     expect(workQueueToDisplay.box).toEqual('inbox');
 
-    const inbox = await getFormattedDocumentQCSectionInbox(integrationTest);
+    const inbox = await getFormattedDocumentQCSectionInbox(cerebralTest);
     const found = inbox.find(
-      workItem => workItem.docketNumber === integrationTest.docketNumber,
+      workItem => workItem.docketNumber === cerebralTest.docketNumber,
     );
 
     expect(found).toBeTruthy();
@@ -63,9 +63,9 @@ describe('Practitioner requests access to case', () => {
 
   //tests for practitioner requesting access to existing case
   //petitioner must first create a case for practitioner to request access to
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case #1', async () => {
-    const caseDetail = await uploadPetition(integrationTest, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -78,24 +78,24 @@ describe('Practitioner requests access to case', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'privatePractitioner@example.com');
-  practitionerSearchesForNonexistentCase(integrationTest);
-  practitionerViewsDashboardBeforeAddingCase(integrationTest);
-  practitionerSearchesForCase(integrationTest);
-  practitionerViewsCaseDetail(integrationTest, false);
-  practitionerRequestsAccessToCase(integrationTest, fakeFile);
-  practitionerViewsDashboard(integrationTest);
-  practitionerViewsCaseDetailOfOwnedCase(integrationTest);
-  practitionerFilesDocumentForOwnedCase(integrationTest, fakeFile);
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  practitionerSearchesForNonexistentCase(cerebralTest);
+  practitionerViewsDashboardBeforeAddingCase(cerebralTest);
+  practitionerSearchesForCase(cerebralTest);
+  practitionerViewsCaseDetail(cerebralTest, false);
+  practitionerRequestsAccessToCase(cerebralTest, fakeFile);
+  practitionerViewsDashboard(cerebralTest);
+  practitionerViewsCaseDetailOfOwnedCase(cerebralTest);
+  practitionerFilesDocumentForOwnedCase(cerebralTest, fakeFile);
 
   //tests for practitioner requesting access to existing case
   //petitioner must first create a case for practitioner to request access to
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case #2', async () => {
-    const caseDetail = await uploadPetition(integrationTest, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -108,28 +108,28 @@ describe('Practitioner requests access to case', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
   // create and serve an order that the privatePractitioner
   // should be able to view even when they are not associated with the case
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkCreateOrder(integrationTest);
-  petitionsClerkSignsOrder(integrationTest);
-  petitionsClerkAddsDocketEntryFromOrder(integrationTest);
-  petitionsClerkServesOrder(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreateOrder(cerebralTest);
+  petitionsClerkSignsOrder(cerebralTest);
+  petitionsClerkAddsDocketEntryFromOrder(cerebralTest);
+  petitionsClerkServesOrder(cerebralTest);
 
-  loginAs(integrationTest, 'privatePractitioner@example.com');
-  practitionerSearchesForCase(integrationTest);
-  practitionerViewsCaseDetailWithPublicOrder(integrationTest);
-  practitionerRequestsPendingAccessToCase(integrationTest, fakeFile);
-  practitionerViewsCaseDetailOfPendingCase(integrationTest);
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  practitionerSearchesForCase(cerebralTest);
+  practitionerViewsCaseDetailWithPublicOrder(cerebralTest);
+  practitionerRequestsPendingAccessToCase(cerebralTest, fakeFile);
+  practitionerViewsCaseDetailOfPendingCase(cerebralTest);
 
-  loginAs(integrationTest, 'irsPractitioner@example.com');
-  irsPractitionerViewsPetitionerInfoForUnassociatedCase(integrationTest);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  irsPractitionerViewsPetitionerInfoForUnassociatedCase(cerebralTest);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkSealsCase(integrationTest);
-  loginAs(integrationTest, 'irsPractitioner@example.com');
-  irsPractitionerViewsPetitionerInfoForUnassociatedCase(integrationTest, true); // passing flag for isSealed
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkSealsCase(cerebralTest);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  irsPractitionerViewsPetitionerInfoForUnassociatedCase(cerebralTest, true); // passing flag for isSealed
 });

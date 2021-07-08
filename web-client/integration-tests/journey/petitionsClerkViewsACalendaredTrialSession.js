@@ -1,14 +1,14 @@
 export const petitionsClerkViewsACalendaredTrialSession = (
-  integrationTest,
+  cerebralTest,
   expectedCount,
 ) => {
   return it('Petitions Clerk Views A Calendared Trial Session', async () => {
-    await integrationTest.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: integrationTest.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
-    expect(integrationTest.getState('trialSession.isCalendared')).toEqual(true);
-    expect(integrationTest.getState('trialSession.caseOrder').length).toEqual(
+    expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(true);
+    expect(cerebralTest.getState('trialSession.caseOrder').length).toEqual(
       expectedCount,
     );
   });

@@ -7,16 +7,16 @@ const formattedCaseMessages = withAppContextDecorator(
 );
 
 export const petitionsClerkViewsInProgressMessagesOnCaseDetail =
-  integrationTest => {
+  cerebralTest => {
     return it('petitions clerk views in-progress messages on the case detail page', async () => {
-      await integrationTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber: integrationTest.docketNumber,
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: cerebralTest.docketNumber,
       });
 
-      expect(integrationTest.getState('caseDetail.messages').length).toEqual(4);
+      expect(cerebralTest.getState('caseDetail.messages').length).toEqual(4);
 
       const messagesFormatted = runCompute(formattedCaseMessages, {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       });
       expect(messagesFormatted.inProgressMessages.length).toEqual(2);
       expect(messagesFormatted.completedMessages.length).toEqual(0);

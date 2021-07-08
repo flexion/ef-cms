@@ -4,24 +4,21 @@ import { workQueueHelper as workQueueHelperComputed } from '../../src/presenter/
 
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
-export const petitionsClerkViewsMyDocumentQC = (
-  integrationTest,
-  storeCount,
-) => {
+export const petitionsClerkViewsMyDocumentQC = (cerebralTest, storeCount) => {
   return it('Petitions clerk views My Document QC', async () => {
-    await integrationTest.runSequence('navigateToPathSequence', {
+    await cerebralTest.runSequence('navigateToPathSequence', {
       path: '/document-qc/my/inbox',
     });
-    const workQueueToDisplay = integrationTest.getState('workQueueToDisplay');
+    const workQueueToDisplay = cerebralTest.getState('workQueueToDisplay');
 
     expect(workQueueToDisplay.queue).toEqual('my');
     expect(workQueueToDisplay.box).toEqual('inbox');
 
     if (storeCount) {
       const helper = await runCompute(workQueueHelper, {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       });
-      integrationTest.petitionsClerkMyDocumentQCInboxCount =
+      cerebralTest.petitionsClerkMyDocumentQCInboxCount =
         helper.individualInboxCount;
     }
   });

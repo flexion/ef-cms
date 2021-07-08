@@ -1,28 +1,26 @@
-export const docketClerkSignsUploadedCourtIssuedDocument = integrationTest => {
+export const docketClerkSignsUploadedCourtIssuedDocument = cerebralTest => {
   return it('Docket Clerk signs an uploaded court issued document', async () => {
-    await integrationTest.runSequence('gotoSignOrderSequence', {
-      docketEntryId: integrationTest.docketEntryId,
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoSignOrderSequence', {
+      docketEntryId: cerebralTest.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual('SignOrder');
+    expect(cerebralTest.getState('currentPage')).toEqual('SignOrder');
 
-    await integrationTest.runSequence('setPDFSignatureDataSequence', {
+    await cerebralTest.runSequence('setPDFSignatureDataSequence', {
       signatureData: {
         scale: 1,
         x: 100,
         y: 100,
       },
     });
-    await integrationTest.runSequence('saveDocumentSigningSequence');
+    await cerebralTest.runSequence('saveDocumentSigningSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'CaseDetailInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const caseDocument = integrationTest
+    const caseDocument = cerebralTest
       .getState('caseDetail.docketEntries')
-      .find(d => d.docketEntryId === integrationTest.docketEntryId);
+      .find(d => d.docketEntryId === cerebralTest.docketEntryId);
 
     expect(caseDocument.signedAt).toBeTruthy();
   });

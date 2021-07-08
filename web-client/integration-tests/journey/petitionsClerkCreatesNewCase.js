@@ -7,218 +7,211 @@ const { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES, PAYMENT_STATUS } =
   applicationContext.getConstants();
 
 export const petitionsClerkCreatesNewCase = (
-  integrationTest,
+  cerebralTest,
   fakeFile,
   trialLocation = 'Birmingham, Alabama',
   shouldServe = true,
 ) => {
   return it('Petitions clerk creates a new case', async () => {
-    await integrationTest.runSequence('gotoStartCaseWizardSequence');
-    expect(integrationTest.getState('form.hasVerifiedIrsNotice')).toEqual(
-      false,
-    );
+    await cerebralTest.runSequence('gotoStartCaseWizardSequence');
+    expect(cerebralTest.getState('form.hasVerifiedIrsNotice')).toEqual(false);
 
-    await integrationTest.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
-    expect(integrationTest.getState('alertError.title')).toEqual(
+    expect(cerebralTest.getState('alertError.title')).toEqual(
       'Please correct the following errors on the page:',
     );
 
-    expect(integrationTest.getState('validationErrors.caseCaption')).toEqual(
+    expect(cerebralTest.getState('validationErrors.caseCaption')).toEqual(
       VALIDATION_ERROR_MESSAGES.caseCaption,
     );
 
-    expect(integrationTest.getState('validationErrors.receivedAt')).toEqual(
+    expect(cerebralTest.getState('validationErrors.receivedAt')).toEqual(
       VALIDATION_ERROR_MESSAGES.receivedAt[1],
     );
 
-    expect(integrationTest.getState('validationErrors.petitionFile')).toEqual(
+    expect(cerebralTest.getState('validationErrors.petitionFile')).toEqual(
       VALIDATION_ERROR_MESSAGES.petitionFile,
     );
 
     expect(
-      integrationTest.getState('validationErrors.requestForPlaceOfTrialFile'),
+      cerebralTest.getState('validationErrors.requestForPlaceOfTrialFile'),
     ).toBeUndefined();
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'receivedAtMonth',
       value: '01',
     });
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'receivedAtDay',
       value: '01',
     });
     const receivedAtYear = '2001';
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'receivedAtYear',
       value: receivedAtYear,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'mailingDate',
       value: 'Some Day',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'caseCaption',
       value:
         'Daenerys Stormborn, Deceased, Daenerys Stormborn, Surviving Spouse, Petitioner',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
       value: trialLocation,
     });
 
-    await integrationTest.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(
-      integrationTest.getState('validationErrors.requestForPlaceOfTrialFile'),
+      cerebralTest.getState('validationErrors.requestForPlaceOfTrialFile'),
     ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile);
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'petitionFile',
       value: fakeFile,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'petitionFileSize',
       value: 1,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'stinFile',
       value: fakeFile,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'stinFileSize',
       value: 1,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'ownershipDisclosureFile',
       value: fakeFile,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'ownershipDisclosureFileSize',
       value: 1,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'requestForPlaceOfTrialFile',
       value: fakeFile,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'requestForPlaceOfTrialFileSize',
       value: 1,
     });
 
-    await integrationTest.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(
-      integrationTest.getState('validationErrors.requestForPlaceOfTrialFile'),
+      cerebralTest.getState('validationErrors.requestForPlaceOfTrialFile'),
     ).toBeUndefined();
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'applicationForWaiverOfFilingFeeFile',
       value: fakeFile,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'applicationForWaiverOfFilingFeeFileSize',
       value: 1,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'procedureType',
       value: 'Small',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: CASE_TYPES_MAP.deficiency,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'partyType',
       value: PARTY_TYPES.petitioner,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.countryType',
       value: COUNTRY_TYPES.INTERNATIONAL,
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.country',
       value: 'Switzerland',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
       value: 'Daenerys Stormborn',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
       value: '123 Abc Ln',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.city',
       value: 'Cityville',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.postalCode',
       value: '23-skidoo',
     });
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.phone',
       value: '1234567890',
     });
 
-    await integrationTest.runSequence(
-      'updatePetitionPaymentFormValueSequence',
-      {
-        key: 'petitionPaymentStatus',
-        value: PAYMENT_STATUS.UNPAID,
-      },
-    );
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'petitionPaymentStatus',
+      value: PAYMENT_STATUS.UNPAID,
+    });
 
-    await integrationTest.runSequence('validatePetitionFromPaperSequence');
-    expect(integrationTest.getState('alertError')).toBeUndefined();
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('validatePetitionFromPaperSequence');
+    expect(cerebralTest.getState('alertError')).toBeUndefined();
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'ReviewSavedPetition',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
 
-    const docketNumber = integrationTest.getState('caseDetail.docketNumber');
+    const docketNumber = cerebralTest.getState('caseDetail.docketNumber');
     const receivedDocketNumberYear = docketNumber.slice(-2);
     const expectedDocketNumberYear = receivedAtYear.slice(-2);
     expect(receivedDocketNumberYear).toBe(expectedDocketNumberYear);
 
     if (shouldServe) {
-      await integrationTest.runSequence('serveCaseToIrsSequence');
+      await cerebralTest.runSequence('serveCaseToIrsSequence');
     }
 
-    await integrationTest.runSequence('gotoCaseDetailSequence');
+    await cerebralTest.runSequence('gotoCaseDetailSequence');
 
-    integrationTest.docketNumber = integrationTest.getState(
+    cerebralTest.docketNumber = cerebralTest.getState(
       'caseDetail.docketNumber',
     );
-    expect(integrationTest.getState('caseDetail.preferredTrialCity')).toEqual(
+    expect(cerebralTest.getState('caseDetail.preferredTrialCity')).toEqual(
       trialLocation,
     );
-    if (integrationTest.casesReadyForTrial) {
-      integrationTest.casesReadyForTrial.push(integrationTest.docketNumber);
+    if (cerebralTest.casesReadyForTrial) {
+      cerebralTest.casesReadyForTrial.push(cerebralTest.docketNumber);
     }
   });
 };

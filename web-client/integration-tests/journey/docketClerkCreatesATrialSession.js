@@ -4,17 +4,17 @@ import { TrialSession } from '../../../shared/src/business/entities/trialSession
 const errorMessages = TrialSession.VALIDATION_ERROR_MESSAGES;
 
 export const docketClerkCreatesATrialSession = (
-  integrationTest,
+  cerebralTest,
   overrides = {},
 ) => {
   return it('Docket clerk starts a trial session', async () => {
-    await integrationTest.runSequence('gotoAddTrialSessionSequence');
+    await cerebralTest.runSequence('gotoAddTrialSessionSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('submitTrialSessionSequence');
+    await cerebralTest.runSequence('submitTrialSessionSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       maxCases: errorMessages.maxCases,
       sessionType: errorMessages.sessionType,
       startDate: errorMessages.startDate[1],
@@ -23,57 +23,57 @@ export const docketClerkCreatesATrialSession = (
       trialLocation: errorMessages.trialLocation,
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'proceedingType',
       value: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'maxCases',
       value: overrides.maxCases || 100,
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'sessionType',
       value: overrides.sessionType || 'Hybrid',
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'month',
       value: '13',
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'day',
       value: '12',
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'year',
       value: '2025',
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'address1',
       value: '123 Flavor Ave',
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'city',
       value: 'Seattle',
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'state',
       value: 'WA',
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'postalCode',
       value: '98101',
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'judge',
       value: overrides.judge || {
         name: 'Cohen',
@@ -82,50 +82,50 @@ export const docketClerkCreatesATrialSession = (
     });
 
     if (overrides.trialClerk) {
-      await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+      await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
         key: 'trialClerk',
         value: overrides.trialClerk,
       });
     }
 
-    await integrationTest.runSequence('validateTrialSessionSequence');
+    await cerebralTest.runSequence('validateTrialSessionSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       startDate: errorMessages.startDate[1],
       term: errorMessages.term,
       trialLocation: errorMessages.trialLocation,
     });
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'month',
       value: '12',
     });
 
-    await integrationTest.runSequence('validateTrialSessionSequence');
+    await cerebralTest.runSequence('validateTrialSessionSequence');
 
-    expect(integrationTest.getState('form.term')).toEqual('Fall');
-    expect(integrationTest.getState('form.termYear')).toEqual('2025');
+    expect(cerebralTest.getState('form.term')).toEqual('Fall');
+    expect(cerebralTest.getState('form.termYear')).toEqual('2025');
 
-    await integrationTest.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',
       value: overrides.trialLocation || 'Seattle, Washington',
     });
 
-    await integrationTest.runSequence('validateTrialSessionSequence');
+    await cerebralTest.runSequence('validateTrialSessionSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('submitTrialSessionSequence');
+    await cerebralTest.runSequence('submitTrialSessionSequence');
 
-    expect(integrationTest.getState('alertSuccess')).toEqual({
+    expect(cerebralTest.getState('alertSuccess')).toEqual({
       message: 'Trial session added.',
     });
 
-    const lastCreatedTrialSessionId = integrationTest.getState(
+    const lastCreatedTrialSessionId = cerebralTest.getState(
       'lastCreatedTrialSessionId',
     );
     expect(lastCreatedTrialSessionId).toBeDefined();
 
-    integrationTest.lastCreatedTrialSessionId = lastCreatedTrialSessionId;
+    cerebralTest.lastCreatedTrialSessionId = lastCreatedTrialSessionId;
   });
 };

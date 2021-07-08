@@ -7,7 +7,7 @@ import {
 import { practitionerUpdatesAddress } from './journey/practitionerUpdatesAddress';
 import { practitionerViewsCaseDetailNoticeOfChangeOfAddress } from './journey/practitionerViewsCaseDetailNoticeOfChangeOfAddress';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 
 describe('Modify Practitioner Contact Information', () => {
   beforeAll(() => {
@@ -15,22 +15,22 @@ describe('Modify Practitioner Contact Information', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   let caseDetail;
-  integrationTest.createdDocketNumbers = [];
+  cerebralTest.createdDocketNumbers = [];
 
   for (let i = 0; i < 3; i++) {
-    loginAs(integrationTest, 'privatePractitioner2@example.com');
+    loginAs(cerebralTest, 'privatePractitioner2@example.com');
     it('login as a practitioner and create 3 cases', async () => {
       caseDetail = await uploadPetition(
-        integrationTest,
+        cerebralTest,
         {},
         'privatePractitioner2@example.com',
       );
       expect(caseDetail.docketNumber).toBeDefined();
-      integrationTest.createdDocketNumbers.push(caseDetail.docketNumber);
+      cerebralTest.createdDocketNumbers.push(caseDetail.docketNumber);
     });
   }
 
@@ -38,9 +38,9 @@ describe('Modify Practitioner Contact Information', () => {
     await refreshElasticsearchIndex();
   });
 
-  practitionerUpdatesAddress(integrationTest);
+  practitionerUpdatesAddress(cerebralTest);
 
   for (let i = 0; i < 3; i++) {
-    practitionerViewsCaseDetailNoticeOfChangeOfAddress(integrationTest, i);
+    practitionerViewsCaseDetailNoticeOfChangeOfAddress(cerebralTest, i);
   }
 });

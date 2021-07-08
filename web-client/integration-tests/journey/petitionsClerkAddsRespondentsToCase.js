@@ -6,53 +6,49 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const petitionsClerkAddsRespondentsToCase = integrationTest => {
+export const petitionsClerkAddsRespondentsToCase = cerebralTest => {
   return it('Petitions clerk manually adds multiple irsPractitioners to case', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('caseDetail.irsPractitioners')).toEqual([]);
+    expect(cerebralTest.getState('caseDetail.irsPractitioners')).toEqual([]);
 
-    await integrationTest.runSequence('openAddIrsPractitionerModalSequence');
+    await cerebralTest.runSequence('openAddIrsPractitionerModalSequence');
 
     expect(
-      integrationTest.getState('validationErrors.respondentSearchError'),
+      cerebralTest.getState('validationErrors.respondentSearchError'),
     ).toBeDefined();
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'respondentSearch',
       value: 'RT6789',
     });
 
-    await integrationTest.runSequence('openAddIrsPractitionerModalSequence');
+    await cerebralTest.runSequence('openAddIrsPractitionerModalSequence');
 
     expect(
-      integrationTest.getState('validationErrors.respondentSearchError'),
+      cerebralTest.getState('validationErrors.respondentSearchError'),
     ).toBeUndefined();
-    expect(integrationTest.getState('modal.respondentMatches.length')).toEqual(
-      1,
-    );
+    expect(cerebralTest.getState('modal.respondentMatches.length')).toEqual(1);
 
     //default selected because there was only 1 match
-    let respondentMatch = integrationTest.getState('modal.respondentMatches.0');
-    expect(integrationTest.getState('modal.user.userId')).toEqual(
+    let respondentMatch = cerebralTest.getState('modal.respondentMatches.0');
+    expect(cerebralTest.getState('modal.user.userId')).toEqual(
       respondentMatch.userId,
     );
 
-    await integrationTest.runSequence(
-      'associateIrsPractitionerWithCaseSequence',
+    await cerebralTest.runSequence('associateIrsPractitionerWithCaseSequence');
+
+    expect(cerebralTest.getState('caseDetail.irsPractitioners.length')).toEqual(
+      1,
+    );
+    expect(cerebralTest.getState('caseDetail.irsPractitioners.0.name')).toEqual(
+      respondentMatch.name,
     );
 
-    expect(
-      integrationTest.getState('caseDetail.irsPractitioners.length'),
-    ).toEqual(1);
-    expect(
-      integrationTest.getState('caseDetail.irsPractitioners.0.name'),
-    ).toEqual(respondentMatch.name);
-
     let formatted = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(formatted.irsPractitioners.length).toEqual(1);
@@ -61,32 +57,28 @@ export const petitionsClerkAddsRespondentsToCase = integrationTest => {
     );
 
     //add a second respondent
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'respondentSearch',
       value: 'RT0987',
     });
-    await integrationTest.runSequence('openAddIrsPractitionerModalSequence');
+    await cerebralTest.runSequence('openAddIrsPractitionerModalSequence');
 
-    expect(integrationTest.getState('modal.respondentMatches.length')).toEqual(
-      1,
-    );
-    respondentMatch = integrationTest.getState('modal.respondentMatches.0');
-    expect(integrationTest.getState('modal.user.userId')).toEqual(
+    expect(cerebralTest.getState('modal.respondentMatches.length')).toEqual(1);
+    respondentMatch = cerebralTest.getState('modal.respondentMatches.0');
+    expect(cerebralTest.getState('modal.user.userId')).toEqual(
       respondentMatch.userId,
     );
 
-    await integrationTest.runSequence(
-      'associateIrsPractitionerWithCaseSequence',
+    await cerebralTest.runSequence('associateIrsPractitionerWithCaseSequence');
+    expect(cerebralTest.getState('caseDetail.irsPractitioners.length')).toEqual(
+      2,
     );
-    expect(
-      integrationTest.getState('caseDetail.irsPractitioners.length'),
-    ).toEqual(2);
-    expect(
-      integrationTest.getState('caseDetail.irsPractitioners.1.name'),
-    ).toEqual(respondentMatch.name);
+    expect(cerebralTest.getState('caseDetail.irsPractitioners.1.name')).toEqual(
+      respondentMatch.name,
+    );
 
     formatted = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(formatted.irsPractitioners.length).toEqual(2);

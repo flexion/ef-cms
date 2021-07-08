@@ -5,19 +5,19 @@ import { fileDocumentHelper } from '../../src/presenter/computeds/fileDocumentHe
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const petitionerFilesAmendedMotion = (integrationTest, fakeFile) => {
+export const petitionerFilesAmendedMotion = (cerebralTest, fakeFile) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('petitioner files amended motion', async () => {
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence('gotoFileDocumentSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'category',
@@ -25,28 +25,28 @@ export const petitionerFilesAmendedMotion = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'documentType',
         value: 'Amended',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'documentTitle',
         value: '[First, Second, etc.] Amended [Document Name]',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'eventCode',
         value: 'AMAT',
       },
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'scenario',
@@ -54,20 +54,20 @@ export const petitionerFilesAmendedMotion = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'ordinalValue',
         value: 'First',
       },
     );
-    const caseDetail = integrationTest.getState('caseDetail');
+    const caseDetail = cerebralTest.getState('caseDetail');
     const previousDocument = caseDetail.docketEntries.find(
       document =>
         document.documentTitle ===
         'Motion for Leave to File Out of Time Statement Anything',
     );
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'previousDocument',
@@ -75,13 +75,13 @@ export const petitionerFilesAmendedMotion = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('wizardStep')).toEqual('FileDocument');
+    expect(cerebralTest.getState('wizardStep')).toEqual('FileDocument');
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'primaryDocumentFile',
@@ -89,9 +89,9 @@ export const petitionerFilesAmendedMotion = (integrationTest, fakeFile) => {
       },
     );
 
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: `filersMap.${contactPrimary.contactId}`,
@@ -99,21 +99,19 @@ export const petitionerFilesAmendedMotion = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
-      'reviewExternalDocumentInformationSequence',
-    );
+    await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       objections: VALIDATION_ERROR_MESSAGES.objections,
     });
 
     const helper = runCompute(withAppContextDecorator(fileDocumentHelper), {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.primaryDocument.showObjection).toEqual(true);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
         key: 'objections',
@@ -121,12 +119,10 @@ export const petitionerFilesAmendedMotion = (integrationTest, fakeFile) => {
       },
     );
 
-    await integrationTest.runSequence(
-      'reviewExternalDocumentInformationSequence',
-    );
+    await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await integrationTest.runSequence('submitExternalDocumentSequence');
+    await cerebralTest.runSequence('submitExternalDocumentSequence');
   });
 };

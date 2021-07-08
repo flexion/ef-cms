@@ -11,26 +11,26 @@ const formattedMessageDetail = withAppContextDecorator(
   formattedMessageDetailComputed,
 );
 
-export const docketClerkAddsDocketEntryFromMessage = integrationTest => {
+export const docketClerkAddsDocketEntryFromMessage = cerebralTest => {
   return it('docket clerk adds docket entry for order from a message', async () => {
-    await integrationTest.runSequence('gotoMessageDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
-      parentMessageId: integrationTest.parentMessageId,
+    await cerebralTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      parentMessageId: cerebralTest.parentMessageId,
     });
 
     let messageDetailFormatted = runCompute(formattedMessageDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
     const orderDocument = messageDetailFormatted.attachments[1];
     expect(orderDocument.documentTitle).toEqual('Order');
 
-    await integrationTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
       docketEntryId: orderDocument.documentId,
-      docketNumber: integrationTest.docketNumber,
-      redirectUrl: `/messages/${integrationTest.docketNumber}/message-detail/${integrationTest.parentMessageId}`,
+      docketNumber: cerebralTest.docketNumber,
+      redirectUrl: `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'freeText',
@@ -38,7 +38,7 @@ export const docketClerkAddsDocketEntryFromMessage = integrationTest => {
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'serviceStamp',
@@ -46,14 +46,14 @@ export const docketClerkAddsDocketEntryFromMessage = integrationTest => {
       },
     );
 
-    await integrationTest.runSequence('submitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('currentPage')).toEqual('MessageDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('MessageDetail');
 
     const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
     const caseOrderDocketEntry =
       caseDetailFormatted.formattedDocketEntries.find(

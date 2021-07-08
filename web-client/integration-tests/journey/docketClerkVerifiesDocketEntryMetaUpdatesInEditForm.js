@@ -1,12 +1,12 @@
 export const docketClerkVerifiesDocketEntryMetaUpdatesInEditForm =
-  integrationTest => {
+  cerebralTest => {
     return it('docket clerk verifies docket entry meta updates in edit form', async () => {
-      expect(integrationTest.getState('currentPage')).toEqual(
+      expect(cerebralTest.getState('currentPage')).toEqual(
         'EditDocketEntryMeta',
       );
 
-      expect(integrationTest.getState('form.hasOtherFilingParty')).toBe(true);
-      expect(integrationTest.getState('form.otherFilingParty')).toBe(
+      expect(cerebralTest.getState('form.hasOtherFilingParty')).toBe(true);
+      expect(cerebralTest.getState('form.otherFilingParty')).toBe(
         'Brianna Noble',
       );
     });

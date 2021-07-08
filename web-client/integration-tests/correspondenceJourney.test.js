@@ -11,7 +11,7 @@ import { userNavigatesToEditCorrespondence } from './journey/userNavigatesToEdit
 describe('Adds correspondence to a case', () => {
   let caseDetail;
 
-  const integrationTest = setupTest();
+  const cerebralTest = setupTest();
 
   const firstCorrespondenceTitle = 'My first correspondence';
   const secondCorrespondenceTitle = 'My second correspondence';
@@ -21,74 +21,70 @@ describe('Adds correspondence to a case', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('create case', async () => {
-    caseDetail = await uploadPetition(integrationTest);
+    caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  userNavigatesToAddCorrespondence(integrationTest, 'DocketClerk');
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  userNavigatesToAddCorrespondence(cerebralTest, 'DocketClerk');
+  userAddsCorrespondence(cerebralTest, firstCorrespondenceTitle, 'DocketClerk');
   userAddsCorrespondence(
-    integrationTest,
-    firstCorrespondenceTitle,
-    'DocketClerk',
-  );
-  userAddsCorrespondence(
-    integrationTest,
+    cerebralTest,
     secondCorrespondenceTitle,
     'DocketClerk',
   );
   userNavigatesToEditCorrespondence(
-    integrationTest,
+    cerebralTest,
     firstCorrespondenceTitle,
     'DocketClerk',
   );
-  docketClerkCreatesMessageWithCorrespondence(integrationTest);
-  docketClerkViewsMessageWithCorrespondence(integrationTest);
+  docketClerkCreatesMessageWithCorrespondence(cerebralTest);
+  docketClerkViewsMessageWithCorrespondence(cerebralTest);
   userNavigatesToEditCorrespondence(
-    integrationTest,
+    cerebralTest,
     firstCorrespondenceTitle,
     'DocketClerk',
   );
-  userEditsCorrespondence(integrationTest, 'DocketClerk');
-  docketClerkDeletesCorrespondence(integrationTest, firstCorrespondenceTitle);
+  userEditsCorrespondence(cerebralTest, 'DocketClerk');
+  docketClerkDeletesCorrespondence(cerebralTest, firstCorrespondenceTitle);
 
-  loginAs(integrationTest, 'admissionsclerk@example.com');
-  userNavigatesToAddCorrespondence(integrationTest, 'AdmissionsClerk');
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
+  userNavigatesToAddCorrespondence(cerebralTest, 'AdmissionsClerk');
   userAddsCorrespondence(
-    integrationTest,
+    cerebralTest,
     firstCorrespondenceTitle,
     'AdmissionsClerk',
   );
   userNavigatesToEditCorrespondence(
-    integrationTest,
+    cerebralTest,
     firstCorrespondenceTitle,
     'AdmissionsClerk',
   );
-  userEditsCorrespondence(integrationTest, 'AdmissionsClerk');
+  userEditsCorrespondence(cerebralTest, 'AdmissionsClerk');
   userDeletesCorrespondence(
-    integrationTest,
+    cerebralTest,
     firstCorrespondenceTitle,
     'AdmissionsClerk',
   );
 
-  loginAs(integrationTest, 'general@example.com');
-  userNavigatesToAddCorrespondence(integrationTest, 'General user');
+  loginAs(cerebralTest, 'general@example.com');
+  userNavigatesToAddCorrespondence(cerebralTest, 'General user');
   userAddsCorrespondence(
-    integrationTest,
+    cerebralTest,
     firstCorrespondenceTitle,
     'General user',
   );
   userNavigatesToEditCorrespondence(
-    integrationTest,
+    cerebralTest,
     firstCorrespondenceTitle,
     'General user',
   );
-  userEditsCorrespondence(integrationTest, 'General user');
-  userDeletesCorrespondence(integrationTest, firstCorrespondenceTitle);
+  userEditsCorrespondence(cerebralTest, 'General user');
+  userDeletesCorrespondence(cerebralTest, firstCorrespondenceTitle);
 });

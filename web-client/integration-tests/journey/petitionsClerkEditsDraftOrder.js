@@ -7,7 +7,7 @@ const formattedCaseDetail = withAppContextDecorator(
 );
 
 export const petitionsClerkEditsDraftOrder = (
-  integrationTest,
+  cerebralTest,
   {
     currentRichText = '<p>This is a test order.</p>',
     setRichText = '<p>This is an edited test order.</p>',
@@ -15,30 +15,30 @@ export const petitionsClerkEditsDraftOrder = (
 ) => {
   return it('Petitions Clerk edits draft order', async () => {
     const formatted = runCompute(formattedCaseDetail, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     const draftOrder = formatted.draftDocuments[0];
 
-    await integrationTest.runSequence('gotoEditOrderSequence', {
+    await cerebralTest.runSequence('gotoEditOrderSequence', {
       docketEntryIdToEdit: draftOrder.docketEntryId,
       docketNumber: draftOrder.docketNumber,
     });
 
-    expect(integrationTest.getState('form.richText')).toEqual(currentRichText);
+    expect(cerebralTest.getState('form.richText')).toEqual(currentRichText);
 
-    integrationTest.setState('form.richText', setRichText);
-    await integrationTest.runSequence('submitCourtIssuedOrderSequence');
+    cerebralTest.setState('form.richText', setRichText);
+    await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
-    await integrationTest.runSequence('gotoEditOrderSequence', {
+    await cerebralTest.runSequence('gotoEditOrderSequence', {
       docketEntryIdToEdit: draftOrder.docketEntryId,
       docketNumber: draftOrder.docketNumber,
     });
 
-    expect(integrationTest.getState('form.richText')).toEqual(setRichText);
+    expect(cerebralTest.getState('form.richText')).toEqual(setRichText);
 
-    await integrationTest.runSequence('submitCourtIssuedOrderSequence');
+    await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual('SignOrder');
+    expect(cerebralTest.getState('currentPage')).toEqual('SignOrder');
   });
 };

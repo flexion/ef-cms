@@ -1,9 +1,9 @@
-export const respondentViewsCaseDetailOfUnassociatedCase = integrationTest => {
+export const respondentViewsCaseDetailOfUnassociatedCase = cerebralTest => {
   return it('Respondent views case detail of unassociated case', async () => {
-    integrationTest.setState('caseDetail', {});
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(integrationTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
   });
 };

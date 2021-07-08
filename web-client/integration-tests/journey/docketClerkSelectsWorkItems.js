@@ -1,20 +1,20 @@
-export const docketClerkSelectsWorkItems = integrationTest => {
+export const docketClerkSelectsWorkItems = cerebralTest => {
   return it('Docket clerk selects some work items', async () => {
-    const unassignedWorkItem = integrationTest
+    const unassignedWorkItem = cerebralTest
       .getState('workQueue')
       .find(
         workItem =>
           !workItem.assigneeId &&
-          workItem.docketNumber === integrationTest.docketNumber,
+          workItem.docketNumber === cerebralTest.docketNumber,
       );
 
     expect(unassignedWorkItem).toBeDefined();
-    expect(integrationTest.getState('selectedWorkItems').length).toEqual(0);
-    await integrationTest.runSequence('selectWorkItemSequence', {
+    expect(cerebralTest.getState('selectedWorkItems').length).toEqual(0);
+    await cerebralTest.runSequence('selectWorkItemSequence', {
       workItem: unassignedWorkItem,
     });
-    const selectedWorkItems = integrationTest.getState('selectedWorkItems');
+    const selectedWorkItems = cerebralTest.getState('selectedWorkItems');
     expect(selectedWorkItems.length).toEqual(1);
-    integrationTest.selectedWorkItem = selectedWorkItems[0];
+    cerebralTest.selectedWorkItem = selectedWorkItems[0];
   });
 };

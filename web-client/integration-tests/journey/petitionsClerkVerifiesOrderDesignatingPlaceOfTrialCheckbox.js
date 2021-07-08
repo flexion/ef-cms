@@ -1,21 +1,19 @@
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 
 export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
-  integrationTest,
+  cerebralTest,
   fakeFile,
 ) => {
   return it('Petitions clerk verifies that the Order Designating Place of Trial checkbox is correctly checked and unchecked', async () => {
-    await integrationTest.runSequence('gotoStartCaseWizardSequence');
+    await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'StartCaseInternal',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('StartCaseInternal');
 
     expect(
-      integrationTest.getState('form.orderDesignatingPlaceOfTrial'),
+      cerebralTest.getState('form.orderDesignatingPlaceOfTrial'),
     ).toBeTruthy();
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateOrderForDesignatingPlaceOfTrialSequence',
       {
         key: 'orderDesignatingPlaceOfTrial',
@@ -23,14 +21,14 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
       },
     );
 
-    await integrationTest.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
-    expect(integrationTest.getState('validationErrors')).toMatchObject({
+    expect(cerebralTest.getState('validationErrors')).toMatchObject({
       chooseAtLeastOneValue:
         CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateOrderForDesignatingPlaceOfTrialSequence',
       {
         key: 'orderDesignatingPlaceOfTrial',
@@ -38,7 +36,7 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
       },
     );
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateOrderForDesignatingPlaceOfTrialSequence',
       {
         key: 'preferredTrialCity',
@@ -47,10 +45,10 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
     );
 
     expect(
-      integrationTest.getState('form.orderDesignatingPlaceOfTrial'),
+      cerebralTest.getState('form.orderDesignatingPlaceOfTrial'),
     ).toBeFalsy();
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'updateOrderForDesignatingPlaceOfTrialSequence',
       {
         key: 'preferredTrialCity',
@@ -59,66 +57,66 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
     );
 
     expect(
-      integrationTest.getState('form.orderDesignatingPlaceOfTrial'),
+      cerebralTest.getState('form.orderDesignatingPlaceOfTrial'),
     ).toBeTruthy();
 
     // simulate switching to RQT document tab
-    await integrationTest.runSequence('cerebralBindSimpleSetStateSequence', {
+    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
       key: 'currentViewMetadata.documentSelectedForScan',
       value: 'requestForPlaceOfTrialFile',
     });
 
-    await integrationTest.runSequence('setDocumentUploadModeSequence', {
+    await cerebralTest.runSequence('setDocumentUploadModeSequence', {
       documentUploadMode: 'upload',
     });
 
-    await integrationTest.runSequence('setDocumentForUploadSequence', {
+    await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'requestForPlaceOfTrialFile',
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
     expect(
-      integrationTest.getState('form.orderDesignatingPlaceOfTrial'),
+      cerebralTest.getState('form.orderDesignatingPlaceOfTrial'),
     ).toBeFalsy();
 
-    await integrationTest.runSequence('openConfirmDeletePDFModalSequence');
+    await cerebralTest.runSequence('openConfirmDeletePDFModalSequence');
 
-    expect(integrationTest.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'ConfirmDeletePDFModal',
     );
 
-    await integrationTest.runSequence('removeScannedPdfSequence');
+    await cerebralTest.runSequence('removeScannedPdfSequence');
 
     expect(
-      integrationTest.getState('form.requestForPlaceOfTrialFile'),
+      cerebralTest.getState('form.requestForPlaceOfTrialFile'),
     ).toBeUndefined();
     expect(
-      integrationTest.getState('form.orderDesignatingPlaceOfTrial'),
+      cerebralTest.getState('form.orderDesignatingPlaceOfTrial'),
     ).toBeTruthy();
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'orderDesignatingPlaceOfTrial',
       value: false,
     });
 
-    await integrationTest.runSequence('cerebralBindSimpleSetStateSequence', {
+    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
       key: 'currentViewMetadata.documentSelectedForScan',
       value: 'petitionFile',
     });
 
-    await integrationTest.runSequence('setDocumentUploadModeSequence', {
+    await cerebralTest.runSequence('setDocumentUploadModeSequence', {
       documentUploadMode: 'upload',
     });
 
-    await integrationTest.runSequence('setDocumentForUploadSequence', {
+    await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'petitionFile',
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
     expect(
-      integrationTest.getState('form.orderDesignatingPlaceOfTrial'),
+      cerebralTest.getState('form.orderDesignatingPlaceOfTrial'),
     ).toBeFalsy();
   });
 };

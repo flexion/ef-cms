@@ -4,46 +4,44 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const judgeViewsTrialSessionWorkingCopy = (
-  integrationTest,
+  cerebralTest,
   checkCase,
   calendarNote,
 ) => {
   const { DOCKET_SECTION } = applicationContext.getConstants();
 
   return it('Judge views trial session working copy', async () => {
-    await integrationTest.runSequence('gotoTrialSessionWorkingCopySequence', {
-      trialSessionId: integrationTest.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionWorkingCopySequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
     const trialSessionFormatted = runCompute(
       withAppContextDecorator(formattedTrialSessionDetails),
       {
-        state: integrationTest.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    expect(integrationTest.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'TrialSessionWorkingCopy',
     );
     expect(
-      integrationTest.getState('trialSessionWorkingCopy.trialSessionId'),
-    ).toEqual(integrationTest.trialSessionId);
+      cerebralTest.getState('trialSessionWorkingCopy.trialSessionId'),
+    ).toEqual(cerebralTest.trialSessionId);
     expect(
-      integrationTest.getState('trialSessionWorkingCopy.filters.showAll'),
+      cerebralTest.getState('trialSessionWorkingCopy.filters.showAll'),
     ).toEqual(true);
-    expect(integrationTest.getState('trialSessionWorkingCopy.sort')).toEqual(
+    expect(cerebralTest.getState('trialSessionWorkingCopy.sort')).toEqual(
       DOCKET_SECTION,
     );
-    expect(
-      integrationTest.getState('trialSessionWorkingCopy.sortOrder'),
-    ).toEqual('asc');
-    expect(integrationTest.getState('trialSession.caseOrder').length).toEqual(
-      1,
+    expect(cerebralTest.getState('trialSessionWorkingCopy.sortOrder')).toEqual(
+      'asc',
     );
+    expect(cerebralTest.getState('trialSession.caseOrder').length).toEqual(1);
 
     if (checkCase) {
       const foundCase = trialSessionFormatted.caseOrder.find(
-        _case => _case.docketNumber == integrationTest.docketNumber,
+        _case => _case.docketNumber == cerebralTest.docketNumber,
       );
 
       expect(foundCase).toBeTruthy();

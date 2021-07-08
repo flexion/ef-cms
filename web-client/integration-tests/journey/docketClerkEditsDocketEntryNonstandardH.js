@@ -5,70 +5,70 @@ import {
   getPetitionDocumentForCase,
 } from '../helpers';
 
-export const docketClerkEditsDocketEntryNonstandardH = integrationTest => {
+export const docketClerkEditsDocketEntryNonstandardH = cerebralTest => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard H scenario', async () => {
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const { docketEntryId } = formattedDocketEntriesOnDocketRecord[0];
     const petitionDocument = getPetitionDocumentForCase(
-      integrationTest.getState('caseDetail'),
+      cerebralTest.getState('caseDetail'),
     );
     expect(docketEntryId).toBeDefined();
     expect(petitionDocument.docketEntryId).toBeDefined();
 
     const docketEntriesBefore = formattedDocketEntriesOnDocketRecord.length;
 
-    await integrationTest.runSequence('gotoEditPaperFilingSequence', {
+    await cerebralTest.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId,
-      docketNumber: integrationTest.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual('PaperFiling');
-    expect(integrationTest.getState('docketEntryId')).toEqual(docketEntryId);
+    expect(cerebralTest.getState('currentPage')).toEqual('PaperFiling');
+    expect(cerebralTest.getState('docketEntryId')).toEqual(docketEntryId);
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'M115',
     });
 
-    await integrationTest.runSequence('submitPaperFilingSequence', {
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       objections: VALIDATION_ERROR_MESSAGES.objections,
       secondaryDocument: VALIDATION_ERROR_MESSAGES.secondaryDocument,
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'objections',
       value: OBJECTIONS_OPTIONS_MAP.YES,
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'secondaryDocument.eventCode',
       value: 'AMAT',
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'secondaryDocument.ordinalValue',
       value: 'First',
     });
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'secondaryDocument.previousDocument',
       value: petitionDocument.docketEntryId,
     });
 
-    await integrationTest.runSequence('submitPaperFilingSequence', {
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(integrationTest));
+      await getFormattedDocketEntriesForTest(cerebralTest));
 
     const docketEntriesAfter = formattedDocketEntriesOnDocketRecord.length;
 

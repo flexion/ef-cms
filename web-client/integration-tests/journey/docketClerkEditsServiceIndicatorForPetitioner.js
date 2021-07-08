@@ -2,32 +2,32 @@ import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/E
 import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkEditsServiceIndicatorForPetitioner = (
-  integrationTest,
+  cerebralTest,
   expectedServiceIndicator = null,
 ) => {
   return it('docket clerk edits service indicator for a petitioner', async () => {
-    let contactPrimary = contactPrimaryFromState(integrationTest);
+    let contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',
       {
         contactId: contactPrimary.contactId,
-        docketNumber: integrationTest.docketNumber,
+        docketNumber: cerebralTest.docketNumber,
       },
     );
 
-    expect(integrationTest.getState('form.contact.serviceIndicator')).toEqual(
+    expect(cerebralTest.getState('form.contact.serviceIndicator')).toEqual(
       expectedServiceIndicator || SERVICE_INDICATOR_TYPES.SI_NONE,
     );
 
-    await integrationTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.serviceIndicator',
       value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 
-    await integrationTest.runSequence('submitEditPetitionerSequence');
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
 
-    contactPrimary = contactPrimaryFromState(integrationTest);
+    contactPrimary = contactPrimaryFromState(cerebralTest);
 
     expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,

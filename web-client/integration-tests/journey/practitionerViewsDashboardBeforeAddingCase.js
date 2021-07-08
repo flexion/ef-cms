@@ -1,7 +1,7 @@
-export const practitionerViewsDashboardBeforeAddingCase = integrationTest => {
+export const practitionerViewsDashboardBeforeAddingCase = cerebralTest => {
   return it('Practitioner views dashboard before adding the case', async () => {
-    await integrationTest.runSequence('gotoDashboardSequence');
-    expect(integrationTest.getState('currentPage')).toEqual(
+    await cerebralTest.runSequence('gotoDashboardSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'DashboardPractitioner',
     );
   });

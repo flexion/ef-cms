@@ -1,28 +1,26 @@
 export const docketClerkServesDocumentFromCaseDetailDocumentView =
-  integrationTest => {
+  cerebralTest => {
     return it('Docketclerk serves document from case detail document view', async () => {
-      await integrationTest.runSequence(
+      await cerebralTest.runSequence(
         'openConfirmServeCourtIssuedDocumentSequence',
         {
-          docketEntryId: integrationTest.docketEntryId,
-          redirectUrl: `/case-detail/${integrationTest.docketNumber}/document-view?docketEntryId=${integrationTest.docketEntryId}`,
+          docketEntryId: cerebralTest.docketEntryId,
+          redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${cerebralTest.docketEntryId}`,
         },
       );
 
-      expect(integrationTest.getState('modal.showModal')).toEqual(
+      expect(cerebralTest.getState('modal.showModal')).toEqual(
         'ConfirmInitiateCourtIssuedDocumentServiceModal',
       );
 
-      await integrationTest.runSequence('serveCourtIssuedDocumentSequence');
+      await cerebralTest.runSequence('serveCourtIssuedDocumentSequence');
 
-      expect(integrationTest.getState('alertSuccess')).toEqual({
+      expect(cerebralTest.getState('alertSuccess')).toEqual({
         message: 'Document served. ',
       });
 
       expect(
-        integrationTest.getState(
-          'currentViewMetadata.caseDetail.docketRecordTab',
-        ),
+        cerebralTest.getState('currentViewMetadata.caseDetail.docketRecordTab'),
       ).toEqual('documentView');
     });
   };

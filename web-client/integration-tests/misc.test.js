@@ -5,28 +5,24 @@ import { presenter } from '../src/presenter/presenter';
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = { route: () => {} };
 
-const integrationTest = CerebralTest(presenter);
+const cerebralTest = CerebralTest(presenter);
 
 describe('Miscellaneous', () => {
   it('Handles routing', async () => {
-    await integrationTest.runSequence('gotoStyleGuideSequence');
-    expect(integrationTest.getState('currentPage')).toEqual('StyleGuide');
+    await cerebralTest.runSequence('gotoStyleGuideSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('StyleGuide');
   });
 
   it('Toggles USA Banner Content', async () => {
-    await integrationTest.runSequence('toggleUsaBannerDetailsSequence');
-    expect(integrationTest.getState('header.showUsaBannerDetails')).toEqual(
-      true,
-    );
-    await integrationTest.runSequence('toggleUsaBannerDetailsSequence');
-    expect(integrationTest.getState('header.showUsaBannerDetails')).toEqual(
-      false,
-    );
+    await cerebralTest.runSequence('toggleUsaBannerDetailsSequence');
+    expect(cerebralTest.getState('header.showUsaBannerDetails')).toEqual(true);
+    await cerebralTest.runSequence('toggleUsaBannerDetailsSequence');
+    expect(cerebralTest.getState('header.showUsaBannerDetails')).toEqual(false);
   });
 
   it('Toggles Beta Bar Visibility', async () => {
-    expect(integrationTest.getState('header.showBetaBar')).toEqual(true);
-    await integrationTest.runSequence('toggleBetaBarSequence');
-    expect(integrationTest.getState('header.showBetaBar')).toEqual(false);
+    expect(cerebralTest.getState('header.showBetaBar')).toEqual(true);
+    await cerebralTest.runSequence('toggleBetaBarSequence');
+    expect(cerebralTest.getState('header.showBetaBar')).toEqual(false);
   });
 });

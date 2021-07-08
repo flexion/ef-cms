@@ -1,83 +1,80 @@
 import { setBatchPages } from './helpers';
 
 export const addBatchesForScanning = (
-  integrationTest,
+  cerebralTest,
   { scannerSourceIndex, scannerSourceName },
 ) => {
   return it('Adds a batch of scanned documents', async () => {
-    await integrationTest.runSequence('startScanSequence', {
+    await cerebralTest.runSequence('startScanSequence', {
       scannerSourceIndex,
       scannerSourceName,
     });
 
-    const selectedDocumentType = integrationTest.getState(
+    const selectedDocumentType = cerebralTest.getState(
       'currentViewMetadata.documentSelectedForScan',
     );
 
     expect(
-      integrationTest.getState(`scanner.batches.${selectedDocumentType}`)
-        .length,
+      cerebralTest.getState(`scanner.batches.${selectedDocumentType}`).length,
     ).toBeGreaterThan(0);
-    expect(Object.keys(integrationTest.getState('scanner.batches'))).toEqual([
+    expect(Object.keys(cerebralTest.getState('scanner.batches'))).toEqual([
       selectedDocumentType,
     ]);
   });
 };
-export const createPDFFromScannedBatches = integrationTest => {
+export const createPDFFromScannedBatches = cerebralTest => {
   return it('Creates a PDF from added batches', async () => {
-    const selectedDocumentType = integrationTest.getState(
+    const selectedDocumentType = cerebralTest.getState(
       'currentViewMetadata.documentSelectedForScan',
     );
 
-    setBatchPages({ integrationTest });
+    setBatchPages({ cerebralTest });
 
-    await integrationTest.runSequence('generatePdfFromScanSessionSequence', {
+    await cerebralTest.runSequence('generatePdfFromScanSessionSequence', {
       documentType: selectedDocumentType,
       documentUploadMode: 'preview',
     });
 
     expect(
-      integrationTest.getState(`form.${selectedDocumentType}Size`),
+      cerebralTest.getState(`form.${selectedDocumentType}Size`),
     ).toBeGreaterThan(0);
-    expect(
-      integrationTest.getState(`form.${selectedDocumentType}`),
-    ).toBeDefined();
+    expect(cerebralTest.getState(`form.${selectedDocumentType}`)).toBeDefined();
   });
 };
 
 export const selectScannerSource = (
-  integrationTest,
+  cerebralTest,
   { scannerSourceIndex, scannerSourceName },
 ) => {
   return it('Selects a scanner', async () => {
-    await integrationTest.runSequence('openChangeScannerSourceModalSequence');
+    await cerebralTest.runSequence('openChangeScannerSourceModalSequence');
 
-    expect(integrationTest.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'SelectScannerSourceModal',
     );
 
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'scanner',
       value: scannerSourceName,
     });
 
-    await integrationTest.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'index',
       value: scannerSourceIndex,
     });
 
-    await integrationTest.runSequence('selectScannerSequence', {
+    await cerebralTest.runSequence('selectScannerSequence', {
       scannerSourceIndex,
       scannerSourceName,
     });
 
-    expect(integrationTest.getState('scanner.scannerSourceIndex')).toEqual(
+    expect(cerebralTest.getState('scanner.scannerSourceIndex')).toEqual(
       scannerSourceIndex,
     );
-    expect(integrationTest.getState('scanner.scannerSourceName')).toEqual(
+    expect(cerebralTest.getState('scanner.scannerSourceName')).toEqual(
       scannerSourceName,
     );
 
-    expect(integrationTest.getState('modal')).toMatchObject({});
+    expect(cerebralTest.getState('modal')).toMatchObject({});
   });
 };

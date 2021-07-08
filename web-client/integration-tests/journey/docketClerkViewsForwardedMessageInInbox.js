@@ -1,14 +1,14 @@
-export const docketClerkViewsForwardedMessageInInbox = integrationTest => {
+export const docketClerkViewsForwardedMessageInInbox = cerebralTest => {
   return it('docket clerk views the forwarded message they were sent in their inbox', async () => {
-    await integrationTest.runSequence('gotoMessagesSequence', {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });
 
-    const messages = integrationTest.getState('messages');
+    const messages = cerebralTest.getState('messages');
 
     const foundMessage = messages.find(
-      message => message.subject === integrationTest.testMessageSubject,
+      message => message.subject === cerebralTest.testMessageSubject,
     );
 
     expect(foundMessage).toBeDefined();

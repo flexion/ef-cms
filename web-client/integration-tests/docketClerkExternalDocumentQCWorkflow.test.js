@@ -19,7 +19,7 @@ import {
   wait,
 } from './helpers';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Create a work item', () => {
@@ -28,7 +28,7 @@ describe('Create a work item', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   let caseDetail;
@@ -37,21 +37,21 @@ describe('Create a work item', () => {
   let notificationsBefore;
   let decisionWorkItem;
 
-  loginAs(integrationTest, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
 
   it('login as the docketclerk and cache the initial inbox counts', async () => {
-    await getFormattedDocumentQCMyInbox(integrationTest);
-    qcMyInboxCountBefore = getIndividualInboxCount(integrationTest);
+    await getFormattedDocumentQCMyInbox(cerebralTest);
+    qcMyInboxCountBefore = getIndividualInboxCount(cerebralTest);
 
-    await getFormattedDocumentQCSectionInbox(integrationTest);
-    qcSectionInboxCountBefore = getSectionInboxCount(integrationTest);
+    await getFormattedDocumentQCSectionInbox(cerebralTest);
+    qcSectionInboxCountBefore = getSectionInboxCount(cerebralTest);
 
-    notificationsBefore = getNotifications(integrationTest);
+    notificationsBefore = getNotifications(cerebralTest);
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a tax payer and create a case', async () => {
-    caseDetail = await uploadPetition(integrationTest, {
+    caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
@@ -63,25 +63,25 @@ describe('Create a work item', () => {
       },
       partyType: PARTY_TYPES.petitionerSpouse,
     });
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
     expect(caseDetail.docketNumber).toBeDefined();
   });
 
   it('petitioner uploads the external documents', async () => {
-    await integrationTest.runSequence('gotoFileDocumentSequence', {
+    await cerebralTest.runSequence('gotoFileDocumentSequence', {
       docketNumber: caseDetail.docketNumber,
     });
 
-    await uploadExternalDecisionDocument(integrationTest);
-    await uploadExternalDecisionDocument(integrationTest);
-    await uploadExternalRatificationDocument(integrationTest);
-    await uploadExternalRatificationDocument(integrationTest);
+    await uploadExternalDecisionDocument(cerebralTest);
+    await uploadExternalDecisionDocument(cerebralTest);
+    await uploadExternalRatificationDocument(cerebralTest);
+    await uploadExternalRatificationDocument(cerebralTest);
   });
 
-  loginAs(integrationTest, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('login as the docketclerk and verify there are 4 document qc section inbox entries', async () => {
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      integrationTest,
+      cerebralTest,
     );
 
     decisionWorkItem = documentQCSectionInbox.find(
@@ -94,25 +94,23 @@ describe('Create a work item', () => {
       },
     });
 
-    const qcSectionInboxCountAfter = getSectionInboxCount(integrationTest);
+    const qcSectionInboxCountAfter = getSectionInboxCount(cerebralTest);
     expect(qcSectionInboxCountAfter).toEqual(qcSectionInboxCountBefore + 4);
   });
 
   it('have the docketclerk assign those 4 items to self', async () => {
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      integrationTest,
+      cerebralTest,
     );
     const decisionWorkItems = documentQCSectionInbox.filter(
       workItem => workItem.docketNumber === caseDetail.docketNumber,
     );
-    await assignWorkItems(integrationTest, 'docketclerk', decisionWorkItems);
+    await assignWorkItems(cerebralTest, 'docketclerk', decisionWorkItems);
   });
 
   it('verify the docketclerk has 4 messages in document qc my inbox', async () => {
     await refreshElasticsearchIndex();
-    const documentQCMyInbox = await getFormattedDocumentQCMyInbox(
-      integrationTest,
-    );
+    const documentQCMyInbox = await getFormattedDocumentQCMyInbox(cerebralTest);
     decisionWorkItem = findWorkItemByDocketNumber(
       documentQCMyInbox,
       caseDetail.docketNumber,
@@ -123,54 +121,52 @@ describe('Create a work item', () => {
         userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
-    const qcMyInboxCountAfter = getIndividualInboxCount(integrationTest);
+    const qcMyInboxCountAfter = getIndividualInboxCount(cerebralTest);
     expect(qcMyInboxCountAfter).toEqual(qcMyInboxCountBefore + 4);
   });
 
   it('verify the docketclerk has the expected unread count', async () => {
     await refreshElasticsearchIndex();
-    const notifications = getNotifications(integrationTest);
+    const notifications = getNotifications(cerebralTest);
     expect(notifications).toMatchObject({
       qcUnreadCount: notificationsBefore.qcUnreadCount + 4,
     });
   });
 
   it('docket clerk QCs a document, updates the document title, and generates a Notice of Docket Change', async () => {
-    await integrationTest.runSequence('gotoDocketEntryQcSequence', {
+    await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: decisionWorkItem.docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
 
     await wait(1000);
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'A',
     });
 
-    await integrationTest.runSequence('completeDocketEntryQCSequence');
+    await cerebralTest.runSequence('completeDocketEntryQCSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     await refreshElasticsearchIndex();
 
-    const documentQCMyInbox = await getFormattedDocumentQCMyInbox(
-      integrationTest,
-    );
+    const documentQCMyInbox = await getFormattedDocumentQCMyInbox(cerebralTest);
 
     const foundInMyInbox = documentQCMyInbox.find(workItem => {
       return workItem.workItemId === decisionWorkItem.workItemId;
     });
 
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      integrationTest,
+      cerebralTest,
     );
 
     const foundInSectionInbox = documentQCSectionInbox.find(workItem => {
       return workItem.workItemId === decisionWorkItem.workItemId;
     });
 
-    const noticeDocketEntry = integrationTest
+    const noticeDocketEntry = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(doc => doc.documentType === 'Notice of Docket Change');
 
@@ -182,17 +178,17 @@ describe('Create a work item', () => {
     expect(noticeDocketEntry.processingStatus).toEqual(
       DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     );
-    expect(integrationTest.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'PaperServiceConfirmModal',
     );
 
-    await integrationTest.runSequence('navigateToPrintPaperServiceSequence');
-    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
+    await cerebralTest.runSequence('navigateToPrintPaperServiceSequence');
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
   });
 
   it('docket clerk completes QC of a document and sends a message', async () => {
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      integrationTest,
+      cerebralTest,
     );
 
     decisionWorkItem = documentQCSectionInbox.find(
@@ -206,37 +202,35 @@ describe('Create a work item', () => {
       },
     });
 
-    await integrationTest.runSequence('gotoDocketEntryQcSequence', {
+    await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: decisionWorkItem.docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual('DocketEntryQc');
+    expect(cerebralTest.getState('currentPage')).toEqual('DocketEntryQc');
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'A',
     });
 
-    integrationTest.setState('modal.showModal', '');
+    cerebralTest.setState('modal.showModal', '');
 
-    await integrationTest.runSequence(
-      'openCompleteAndSendMessageModalSequence',
-    );
+    await cerebralTest.runSequence('openCompleteAndSendMessageModalSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'CreateMessageModalDialog',
     );
 
-    expect(integrationTest.getState('modal.form.subject')).toEqual('Answer');
+    expect(cerebralTest.getState('modal.form.subject')).toEqual('Answer');
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'completeDocketEntryQCAndSendMessageSequence',
     );
 
-    let errors = integrationTest.getState('validationErrors');
+    let errors = cerebralTest.getState('validationErrors');
 
     expect(errors).toEqual({
       message: 'Enter a message',
@@ -247,66 +241,66 @@ describe('Create a work item', () => {
     const updatedDocumentTitle = 'Motion in Limine';
     const messageBody = 'This is a message in a bottle';
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'documentTitle',
       value: updatedDocumentTitle,
     });
 
-    await integrationTest.runSequence('updateModalFormValueSequence', {
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'message',
       value: messageBody,
     });
 
-    await integrationTest.runSequence('updateModalFormValueSequence', {
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'toSection',
       value: 'petitions',
     });
 
-    await integrationTest.runSequence('updateModalFormValueSequence', {
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
       value: '7805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'completeDocketEntryQCAndSendMessageSequence',
     );
 
     await refreshElasticsearchIndex();
 
-    errors = integrationTest.getState('validationErrors');
+    errors = cerebralTest.getState('validationErrors');
 
     expect(errors).toEqual({});
 
-    expect(integrationTest.getState('alertSuccess')).toMatchObject({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Motion in Limine QC completed and message sent.',
     });
 
-    expect(integrationTest.getState('currentPage')).toBe('WorkQueue');
+    expect(cerebralTest.getState('currentPage')).toBe('WorkQueue');
 
     const myOutbox = (
-      await getFormattedDocumentQCMyOutbox(integrationTest)
+      await getFormattedDocumentQCMyOutbox(cerebralTest)
     ).filter(item => item.docketNumber === caseDetail.docketNumber);
     const qcDocumentTitleMyOutbox = myOutbox[0].docketEntry.documentTitle;
 
     expect(qcDocumentTitleMyOutbox).toBe(updatedDocumentTitle);
 
-    const formattedCaseMessages = await getCaseMessagesForCase(integrationTest);
+    const formattedCaseMessages = await getCaseMessagesForCase(cerebralTest);
     const qcDocumentMessage =
       formattedCaseMessages.inProgressMessages[0].message;
 
     expect(qcDocumentMessage).toBe(messageBody);
 
-    expect(integrationTest.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'PaperServiceConfirmModal',
     );
 
-    await integrationTest.runSequence('navigateToPrintPaperServiceSequence');
-    expect(integrationTest.getState('pdfPreviewUrl')).toBeDefined();
+    await cerebralTest.runSequence('navigateToPrintPaperServiceSequence');
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
   });
 
   it('docket clerk completes QC of a document, updates freeText, and sends a message', async () => {
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      integrationTest,
+      cerebralTest,
     );
 
     const ratificationWorkItem = documentQCSectionInbox.find(
@@ -320,77 +314,75 @@ describe('Create a work item', () => {
       },
     });
 
-    await integrationTest.runSequence('gotoDocketEntryQcSequence', {
+    await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: ratificationWorkItem.docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual('DocketEntryQc');
+    expect(cerebralTest.getState('currentPage')).toEqual('DocketEntryQc');
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'freeText',
       value: 'break the test',
     });
 
-    integrationTest.setState('modal.showModal', '');
+    cerebralTest.setState('modal.showModal', '');
 
-    await integrationTest.runSequence(
-      'openCompleteAndSendMessageModalSequence',
-    );
+    await cerebralTest.runSequence('openCompleteAndSendMessageModalSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'CreateMessageModalDialog',
     );
 
     const updatedDocumentTitle = 'Ratification of break the test';
 
-    expect(integrationTest.getState('modal.form.subject')).toEqual(
+    expect(cerebralTest.getState('modal.form.subject')).toEqual(
       updatedDocumentTitle,
     );
 
     const messageBody = 'This is a message in a bottle';
 
-    await integrationTest.runSequence('updateModalFormValueSequence', {
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'message',
       value: messageBody,
     });
 
-    await integrationTest.runSequence('updateModalFormValueSequence', {
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'toSection',
       value: 'petitions',
     });
 
-    await integrationTest.runSequence('updateModalFormValueSequence', {
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
       value: '7805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'completeDocketEntryQCAndSendMessageSequence',
     );
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(integrationTest.getState('alertSuccess')).toMatchObject({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: `${updatedDocumentTitle} QC completed and message sent.`,
     });
 
-    expect(integrationTest.getState('currentPage')).toBe('WorkQueue');
+    expect(cerebralTest.getState('currentPage')).toBe('WorkQueue');
 
     const myOutbox = (
-      await getFormattedDocumentQCMyOutbox(integrationTest)
+      await getFormattedDocumentQCMyOutbox(cerebralTest)
     ).filter(item => item.docketNumber === caseDetail.docketNumber);
     const qcDocumentTitleMyOutbox = myOutbox[0].docketEntry.documentTitle;
 
     expect(qcDocumentTitleMyOutbox).toBe(updatedDocumentTitle);
 
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const docketEntries = integrationTest.getState('caseDetail.docketEntries');
+    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
 
     const ratificationDocketEntry = docketEntries.find(
       d => d.docketEntryId === ratificationWorkItem.docketEntry.docketEntryId,
@@ -411,7 +403,7 @@ describe('Create a work item', () => {
 
   it('docket clerk updates freeText and completes QC', async () => {
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      integrationTest,
+      cerebralTest,
     );
 
     const ratificationWorkItem = documentQCSectionInbox.find(
@@ -425,54 +417,54 @@ describe('Create a work item', () => {
       },
     });
 
-    await integrationTest.runSequence('gotoDocketEntryQcSequence', {
+    await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: ratificationWorkItem.docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual('DocketEntryQc');
+    expect(cerebralTest.getState('currentPage')).toEqual('DocketEntryQc');
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'freeText',
       value: '',
     });
 
-    await integrationTest.runSequence('completeDocketEntryQCSequence');
+    await cerebralTest.runSequence('completeDocketEntryQCSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       freeText: 'Provide an answer',
     });
 
-    await integrationTest.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'freeText',
       value: 'striking realism, neutrality, dynamics and clarity',
     });
 
-    await integrationTest.runSequence('completeDocketEntryQCSequence');
+    await cerebralTest.runSequence('completeDocketEntryQCSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     const updatedDocumentTitle =
       'Ratification of striking realism, neutrality, dynamics and clarity';
 
-    expect(integrationTest.getState('alertSuccess')).toMatchObject({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: `${updatedDocumentTitle} has been completed.`,
     });
 
-    expect(integrationTest.getState('currentPage')).toBe('WorkQueue');
+    expect(cerebralTest.getState('currentPage')).toBe('WorkQueue');
 
     const myOutbox = (
-      await getFormattedDocumentQCMyOutbox(integrationTest)
+      await getFormattedDocumentQCMyOutbox(cerebralTest)
     ).filter(item => item.docketNumber === caseDetail.docketNumber);
     const qcDocumentTitleMyOutbox = myOutbox[0].docketEntry.documentTitle;
 
     expect(qcDocumentTitleMyOutbox).toBe(updatedDocumentTitle);
 
-    await integrationTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const docketEntries = integrationTest.getState('caseDetail.docketEntries');
+    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
 
     const ratificationDocketEntry = docketEntries.find(
       d => d.docketEntryId === ratificationWorkItem.docketEntry.docketEntryId,

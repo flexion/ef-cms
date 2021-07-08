@@ -15,8 +15,8 @@ import { privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully } from 
 import { privatePractitionerSeesStrickenDocketEntry } from './journey/privatePractitionerSeesStrickenDocketEntry';
 import { userSearchesForStrickenDocument } from './journey/userSearchesForStrickenDocument';
 
-const integrationTest = setupTest();
-integrationTest.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 console.error = () => null;
 
 describe("Docket Clerk Edits a Docket Entry's Meta", () => {
@@ -25,48 +25,46 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(integrationTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(integrationTest);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
-  petitionerFilesADocumentForCase(integrationTest, fakeFile);
+  petitionerFilesADocumentForCase(cerebralTest, fakeFile);
 
-  loginAs(integrationTest, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(integrationTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  docketClerkChecksDocketEntryEditLink(integrationTest);
-  docketClerkQCsDocketEntry(integrationTest);
-  docketClerkChecksDocketEntryEditLink(integrationTest, { value: true });
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkChecksDocketEntryEditLink(cerebralTest);
+  docketClerkQCsDocketEntry(cerebralTest);
+  docketClerkChecksDocketEntryEditLink(cerebralTest, { value: true });
 
-  docketClerkNavigatesToEditDocketEntryMeta(integrationTest, 3);
-  docketClerkStrikesDocketEntry(integrationTest, 3);
+  docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 3);
+  docketClerkStrikesDocketEntry(cerebralTest, 3);
 
-  docketClerkCreatesAnOrder(integrationTest, {
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order that is stricken',
     eventCode: 'O',
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
-  docketClerkSignsOrder(integrationTest, 0);
-  docketClerkAddsDocketEntryFromOrder(integrationTest, 0);
-  docketClerkServesDocument(integrationTest, 0);
-  docketClerkNavigatesToEditDocketEntryMetaForCourtIssued(integrationTest, 4);
-  docketClerkStrikesDocketEntry(integrationTest, 4);
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+  docketClerkServesDocument(cerebralTest, 0);
+  docketClerkNavigatesToEditDocketEntryMetaForCourtIssued(cerebralTest, 4);
+  docketClerkStrikesDocketEntry(cerebralTest, 4);
 
-  loginAs(integrationTest, 'privatePractitioner@example.com');
-  practitionerViewsCaseDetail(integrationTest, false);
-  privatePractitionerSeesStrickenDocketEntry(integrationTest, 4);
-  privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully(
-    integrationTest,
-  );
-  userSearchesForStrickenDocument(integrationTest);
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  practitionerViewsCaseDetail(cerebralTest, false);
+  privatePractitionerSeesStrickenDocketEntry(cerebralTest, 4);
+  privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully(cerebralTest);
+  userSearchesForStrickenDocument(cerebralTest);
 
-  loginAs(integrationTest, 'docketclerk@example.com');
-  userSearchesForStrickenDocument(integrationTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  userSearchesForStrickenDocument(cerebralTest);
 });
