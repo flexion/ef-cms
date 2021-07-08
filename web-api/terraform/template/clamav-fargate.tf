@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
 #####
 # VPC and subnets
 #####
@@ -20,7 +16,7 @@ module "alb" {
   source  = "umotif-public/alb/aws"
   version = "~> 2.0"
 
-  name_prefix        = "clamav_fargate_lb_${var.environment}"
+  name_prefix        = "clamav-fargate-lb-${var.environment}"
   load_balancer_type = "application"
   internal           = false
   vpc_id             = data.aws_vpc.default.id
@@ -64,7 +60,7 @@ resource "aws_security_group_rule" "task_ingress_80" {
 # ECS cluster and fargate
 #####
 resource "aws_ecs_cluster" "clamav_ecs_cluster" {
-  name               = "clamav_fargate_cluster_${var.environment}"
+  name               = "clamav-fargate-cluster-${var.environment}"
   capacity_providers = ["FARGATE"]
 
   default_capacity_provider_strategy {
@@ -78,14 +74,13 @@ resource "aws_ecs_cluster" "clamav_ecs_cluster" {
 }
 
 module "fargate" {
-  source = "../../"
-
-  name_prefix        = "clamav_fargate_${var.environment}"
+  source = "umotif-public/ecs-fargate/aws"
+  version = "~> 6.1.0"
+  
+  name_prefix        = "clamav-fargate-${var.environment}"
   vpc_id             = data.aws_vpc.default.id
   private_subnet_ids = data.aws_subnet_ids.all.ids
-  cluster_id         = aws_ecs_cluster.cluster.id
-
-  platform_version = "1.4.0"
+  cluster_id         = aws_ecs_cluster.clamav_ecs_cluster.id
 
   task_container_image   = "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/clamav_spike:latest"
   task_definition_cpu    = 256
@@ -96,10 +91,15 @@ module "fargate" {
 
   target_groups = [
     {
-      target_group_name = "clamav_target_group_${var.environment}"
+      target_group_name = "clamav-target-group-${var.environment}"
       container_port    = 80
     }
   ]
+
+  health_check = {
+    port = "80"
+    path = "/"
+  }
 
   capacity_provider_strategy = [
     {
