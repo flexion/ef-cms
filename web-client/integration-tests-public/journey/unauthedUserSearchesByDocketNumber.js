@@ -1,52 +1,52 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 
-export const unauthedUserSearchesByDocketNumber = (integrationTest, params) => {
+export const unauthedUserSearchesByDocketNumber = (cerebralTest, params) => {
   return it('Search for cases by docket number', async () => {
     let searchResults;
     const queryParams = {
       docketNumber: params.docketNumber,
     };
-    integrationTest.docketNumber = params.docketNumber;
+    cerebralTest.docketNumber = params.docketNumber;
 
-    await integrationTest.runSequence('updateAdvancedSearchFormValueSequence', {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByDocketNumber',
       key: 'docketNumber',
       value: '123-xx',
     });
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'submitPublicCaseDocketNumberSearchSequence',
       {},
     );
-    searchResults = integrationTest.getState(
+    searchResults = cerebralTest.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
     expect(searchResults).toEqual([]);
-    expect(integrationTest.currentRouteUrl.indexOf('/case-detail')).toEqual(-1);
+    expect(cerebralTest.currentRouteUrl.indexOf('/case-detail')).toEqual(-1);
 
-    await integrationTest.runSequence('clearAdvancedSearchFormSequence', {
+    await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
       formType: 'caseSearchByDocketNumber',
     });
     expect(
-      integrationTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`),
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`),
     ).toBeUndefined();
     expect(
-      integrationTest.getState('advancedSearchForm.caseSearchByDocketNumber'),
+      cerebralTest.getState('advancedSearchForm.caseSearchByDocketNumber'),
     ).toEqual({});
 
-    await integrationTest.runSequence('updateAdvancedSearchFormValueSequence', {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByDocketNumber',
       key: 'docketNumber',
       value: queryParams.docketNumber,
     });
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'submitPublicCaseDocketNumberSearchSequence',
       {},
     );
-    searchResults = integrationTest.getState(
+    searchResults = cerebralTest.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
     expect(
-      integrationTest.currentRouteUrl.indexOf(
+      cerebralTest.currentRouteUrl.indexOf(
         `/case-detail/${params.docketNumber}`,
       ),
     ).toEqual(0);

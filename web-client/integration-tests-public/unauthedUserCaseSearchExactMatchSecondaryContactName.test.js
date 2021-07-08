@@ -10,7 +10,7 @@ import { setupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import faker from 'faker';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES } = applicationContext.getConstants();
 
@@ -50,7 +50,7 @@ function createCaseWithSecondaryName(name) {
       });
 
       afterAll(() => {
-        integrationTest.closeSocket();
+        cerebralTest.closeSocket();
       });
 
       loginAs(testClient, 'petitioner@example.com');
@@ -62,7 +62,7 @@ function createCaseWithSecondaryName(name) {
         });
 
         expect(caseDetail.docketNumber).toBeDefined();
-        integrationTest.docketNumber = caseDetail.docketNumber;
+        cerebralTest.docketNumber = caseDetail.docketNumber;
         testClient.docketNumber = caseDetail.docketNumber;
         createdDocketNumbers.push(caseDetail.docketNumber);
       });
@@ -76,7 +76,7 @@ function createCaseWithSecondaryName(name) {
 }
 
 describe('Petitioner searches for exact name match', () => {
-  unauthedUserNavigatesToPublicSite(integrationTest);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
 
   it('returns search results we expect in the correct order', async () => {
     const queryParams = {
@@ -85,16 +85,13 @@ describe('Petitioner searches for exact name match', () => {
       petitionerName: searchTerm,
     };
 
-    integrationTest.setState(
-      'advancedSearchForm.caseSearchByName',
-      queryParams,
-    );
-    await integrationTest.runSequence(
+    cerebralTest.setState('advancedSearchForm.caseSearchByName', queryParams);
+    await cerebralTest.runSequence(
       'submitPublicCaseAdvancedSearchSequence',
       {},
     );
 
-    const searchResults = integrationTest.getState(
+    const searchResults = cerebralTest.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
 

@@ -1,7 +1,7 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
-export const unauthedUserSearchesForSealedCaseByName = integrationTest => {
+export const unauthedUserSearchesForSealedCaseByName = cerebralTest => {
   return it('Search for sealed case by name', async () => {
     await refreshElasticsearchIndex(3000);
 
@@ -9,17 +9,14 @@ export const unauthedUserSearchesForSealedCaseByName = integrationTest => {
       petitionerName: 'NOTAREALNAMEFORTESTINGPUBLIC',
     };
 
-    integrationTest.setState(
-      'advancedSearchForm.caseSearchByName',
-      queryParams,
-    );
+    cerebralTest.setState('advancedSearchForm.caseSearchByName', queryParams);
 
-    await integrationTest.runSequence(
+    await cerebralTest.runSequence(
       'submitPublicCaseAdvancedSearchSequence',
       {},
     );
 
-    const searchResults = integrationTest.getState(
+    const searchResults = cerebralTest.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
     expect(searchResults.length).toEqual(0);

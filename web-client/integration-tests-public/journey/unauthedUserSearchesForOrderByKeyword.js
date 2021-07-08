@@ -2,41 +2,37 @@ import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/Enti
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
 export const unauthedUserSearchesForOrderByKeyword = (
-  integrationTest,
+  cerebralTest,
   testClient,
 ) => {
   return it('Search for order by keyword', async () => {
     await refreshElasticsearchIndex();
 
-    integrationTest.setState('advancedSearchForm', {
+    cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
         keyword: 'osteodontolignikeratic',
         startDate: '1000-01-01',
       },
     });
 
-    await integrationTest.runSequence(
-      'submitPublicOrderAdvancedSearchSequence',
-    );
+    await cerebralTest.runSequence('submitPublicOrderAdvancedSearchSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
     expect(
-      integrationTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
     ).toEqual([]);
 
-    integrationTest.setState('advancedSearchForm', {
+    cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
         keyword: 'dismissed',
         startDate: '1000-01-01',
       },
     });
 
-    await integrationTest.runSequence(
-      'submitPublicOrderAdvancedSearchSequence',
-    );
+    await cerebralTest.runSequence('submitPublicOrderAdvancedSearchSequence');
 
     expect(
-      integrationTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
     ).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -45,7 +41,7 @@ export const unauthedUserSearchesForOrderByKeyword = (
       ]),
     );
     expect(
-      integrationTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
     ).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({

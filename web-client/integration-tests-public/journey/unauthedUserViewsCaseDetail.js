@@ -4,7 +4,7 @@ import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../../
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const unauthedUserViewsCaseDetail = integrationTest => {
+export const unauthedUserViewsCaseDetail = cerebralTest => {
   const publicCaseDetailHelper = withAppContextDecorator(
     publicCaseDetailHelperComputed,
     applicationContextPublic,
@@ -12,18 +12,16 @@ export const unauthedUserViewsCaseDetail = integrationTest => {
   const { INITIAL_DOCUMENT_TYPES } = applicationContextPublic.getConstants();
 
   return it('View case detail', async () => {
-    await integrationTest.runSequence('gotoPublicCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoPublicCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(
-      integrationTest.currentRouteUrl.includes('/case-detail'),
-    ).toBeTruthy();
-    const contactPrimary = contactPrimaryFromState(integrationTest);
+    expect(cerebralTest.currentRouteUrl.includes('/case-detail')).toBeTruthy();
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.name).toBeDefined();
     expect(contactPrimary.address1).toBeUndefined();
 
     const helper = runCompute(publicCaseDetailHelper, {
-      state: integrationTest.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.formattedDocketEntriesOnDocketRecord.length).toEqual(5);

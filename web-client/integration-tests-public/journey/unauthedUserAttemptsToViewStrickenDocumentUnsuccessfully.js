@@ -1,10 +1,10 @@
 export const unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully =
-  integrationTest => {
+  cerebralTest => {
     return it('View stricken document unsuccessfully', async () => {
       await expect(
-        integrationTest.runSequence('openCaseDocumentDownloadUrlSequence', {
-          docketEntryId: integrationTest.docketEntryId,
-          docketNumber: integrationTest.docketNumber,
+        cerebralTest.runSequence('openCaseDocumentDownloadUrlSequence', {
+          docketEntryId: cerebralTest.docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
           isPublic: true,
         }),
       ).rejects.toThrow('Unauthorized to access private document');

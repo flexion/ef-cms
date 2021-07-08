@@ -1,9 +1,9 @@
 export const unauthedUserViewsPrintableDocketRecordForSealedCase =
-  integrationTest => {
+  cerebralTest => {
     return it('View printable docket record for a sealed case', async () => {
       await expect(
-        integrationTest.runSequence('gotoPublicPrintableDocketRecordSequence', {
-          docketNumber: integrationTest.docketNumber,
+        cerebralTest.runSequence('gotoPublicPrintableDocketRecordSequence', {
+          docketNumber: cerebralTest.docketNumber,
         }),
       ).rejects.toThrow('Unauthorized to view sealed case.');
     });

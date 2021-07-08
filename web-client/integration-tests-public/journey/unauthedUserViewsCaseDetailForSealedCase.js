@@ -1,17 +1,17 @@
-export const unauthedUserViewsCaseDetailForSealedCase = integrationTest => {
+export const unauthedUserViewsCaseDetailForSealedCase = cerebralTest => {
   return it('View case detail for a sealed case', async () => {
-    await integrationTest.runSequence('gotoPublicCaseDetailSequence', {
-      docketNumber: integrationTest.docketNumber,
+    await cerebralTest.runSequence('gotoPublicCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(integrationTest.getState('currentPage')).toEqual('PublicCaseDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('PublicCaseDetail');
 
-    expect(integrationTest.getState('caseDetail.isSealed')).toBeTruthy();
-    expect(integrationTest.getState('caseDetail.docketNumber')).toBeDefined();
+    expect(cerebralTest.getState('caseDetail.isSealed')).toBeTruthy();
+    expect(cerebralTest.getState('caseDetail.docketNumber')).toBeDefined();
 
     //this user should NOT see any case details because they are not associated with the case
-    expect(integrationTest.getState('caseDetail.sealedDate')).toBeUndefined();
-    expect(integrationTest.getState('caseDetail.caseCaption')).toBeUndefined();
-    expect(integrationTest.getState('caseDetail.docketEntries')).toEqual([]);
+    expect(cerebralTest.getState('caseDetail.sealedDate')).toBeUndefined();
+    expect(cerebralTest.getState('caseDetail.caseCaption')).toBeUndefined();
+    expect(cerebralTest.getState('caseDetail.docketEntries')).toEqual([]);
   });
 };

@@ -1,29 +1,27 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
-export const unauthedUserSearchesForOpinionByKeyword = integrationTest => {
+export const unauthedUserSearchesForOpinionByKeyword = cerebralTest => {
   return it('Search for opinion by keyword', async () => {
     await refreshElasticsearchIndex();
 
-    integrationTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
 
-    integrationTest.setState('advancedSearchForm', {
+    cerebralTest.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'osteodontolignikeratic',
         startDate: '2001-01-01',
       },
     });
 
-    await integrationTest.runSequence(
-      'submitPublicOpinionAdvancedSearchSequence',
-    );
+    await cerebralTest.runSequence('submitPublicOpinionAdvancedSearchSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
     expect(
-      integrationTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
     ).toEqual([]);
 
-    integrationTest.setState('advancedSearchForm', {
+    cerebralTest.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'opinion',
         opinionType: 'Memorandum Opinion',
@@ -31,17 +29,15 @@ export const unauthedUserSearchesForOpinionByKeyword = integrationTest => {
       },
     });
 
-    await integrationTest.runSequence(
-      'submitPublicOpinionAdvancedSearchSequence',
-    );
+    await cerebralTest.runSequence('submitPublicOpinionAdvancedSearchSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
     expect(
-      integrationTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
     ).toEqual([]);
 
     // search for an opinion on a sealed case
-    integrationTest.setState('advancedSearchForm', {
+    cerebralTest.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'opinion',
         opinionType: 'T.C. Opinion',
@@ -49,12 +45,10 @@ export const unauthedUserSearchesForOpinionByKeyword = integrationTest => {
       },
     });
 
-    await integrationTest.runSequence(
-      'submitPublicOpinionAdvancedSearchSequence',
-    );
+    await cerebralTest.runSequence('submitPublicOpinionAdvancedSearchSequence');
 
     expect(
-      integrationTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
     ).toEqual(
       expect.arrayContaining([
         expect.objectContaining({

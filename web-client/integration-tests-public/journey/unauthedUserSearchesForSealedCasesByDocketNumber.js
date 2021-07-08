@@ -1,29 +1,26 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 
 export const unauthedUserSearchesForSealedCasesByDocketNumber =
-  integrationTest => {
+  cerebralTest => {
     return it('Search for a sealed case by docket number', async () => {
-      integrationTest.currentRouteUrl = '';
-      integrationTest.setState('caseSearchByDocketNumber', {});
+      cerebralTest.currentRouteUrl = '';
+      cerebralTest.setState('caseSearchByDocketNumber', {});
 
-      await integrationTest.runSequence(
-        'updateAdvancedSearchFormValueSequence',
-        {
-          formType: 'caseSearchByDocketNumber',
-          key: 'docketNumber',
-          value: integrationTest.docketNumber,
-        },
-      );
+      await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
+        formType: 'caseSearchByDocketNumber',
+        key: 'docketNumber',
+        value: cerebralTest.docketNumber,
+      });
 
-      await integrationTest.runSequence(
+      await cerebralTest.runSequence(
         'submitPublicCaseDocketNumberSearchSequence',
       );
 
       expect(
-        integrationTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`),
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`),
       ).toEqual([]);
-      expect(integrationTest.currentRouteUrl).toBe(
-        `/case-detail/${integrationTest.docketNumber}`,
+      expect(cerebralTest.currentRouteUrl).toBe(
+        `/case-detail/${cerebralTest.docketNumber}`,
       );
     });
   };

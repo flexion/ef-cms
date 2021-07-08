@@ -19,7 +19,7 @@ import { unauthedUserSearchesByMeta } from './journey/unauthedUserSearchesByMeta
 import { unauthedUserViewsCaseDetail } from './journey/unauthedUserViewsCaseDetail';
 import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserViewsPrintableDocketRecord';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
@@ -31,7 +31,7 @@ describe('Petitioner creates case to search for', () => {
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   loginAs(testClient, 'petitioner@example.com');
@@ -50,7 +50,7 @@ describe('Petitioner creates case to search for', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    integrationTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
     testClient.docketNumber = caseDetail.docketNumber;
   });
 });
@@ -108,9 +108,9 @@ describe('Docket clerk creates and serves a Stipulated Decision (should not be v
 });
 
 describe('Unauthed user searches for a case and views a case detail page', () => {
-  unauthedUserNavigatesToPublicSite(integrationTest);
-  unauthedUserSearchesByMeta(integrationTest);
-  unauthedUserSearchesByDocketNumber(integrationTest, testClient);
-  unauthedUserViewsCaseDetail(integrationTest);
-  unauthedUserViewsPrintableDocketRecord(integrationTest);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
+  unauthedUserSearchesByMeta(cerebralTest);
+  unauthedUserSearchesByDocketNumber(cerebralTest, testClient);
+  unauthedUserViewsCaseDetail(cerebralTest);
+  unauthedUserViewsPrintableDocketRecord(cerebralTest);
 });

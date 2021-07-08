@@ -1,14 +1,12 @@
 import { DocumentSearch } from '../../../shared/src/business/entities/documents/DocumentSearch';
 
-export const unauthedUserInvalidSearchForOpinion = integrationTest => {
+export const unauthedUserInvalidSearchForOpinion = cerebralTest => {
   return it('Search for opinion without a keyword', async () => {
-    await integrationTest.runSequence('gotoPublicSearchSequence');
+    await cerebralTest.runSequence('gotoPublicSearchSequence');
 
-    await integrationTest.runSequence(
-      'submitPublicOpinionAdvancedSearchSequence',
-    );
+    await cerebralTest.runSequence('submitPublicOpinionAdvancedSearchSequence');
 
-    expect(integrationTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       keyword: DocumentSearch.VALIDATION_ERROR_MESSAGES.keyword,
     });
   });

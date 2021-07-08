@@ -1,24 +1,24 @@
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
-export const unauthedUserViewsTodaysOrders = (integrationTest, testClient) => {
+export const unauthedUserViewsTodaysOrders = (cerebralTest, testClient) => {
   return it('should view todays orders', async () => {
     await refreshElasticsearchIndex();
 
-    await integrationTest.runSequence('gotoTodaysOrdersSequence', {});
+    await cerebralTest.runSequence('gotoTodaysOrdersSequence', {});
 
     //verifying that todays orders are sorted by most recent servedAt date
-    expect(integrationTest.getState('todaysOrders.results')[0]).toMatchObject({
-      documentTitle: integrationTest.documentTitle2,
+    expect(cerebralTest.getState('todaysOrders.results')[0]).toMatchObject({
+      documentTitle: cerebralTest.documentTitle2,
       documentType: 'Order',
       numberOfPages: 1,
     });
-    expect(integrationTest.getState('todaysOrders.results')[1]).toMatchObject({
-      documentTitle: integrationTest.documentTitle1,
+    expect(cerebralTest.getState('todaysOrders.results')[1]).toMatchObject({
+      documentTitle: cerebralTest.documentTitle1,
       documentType: 'Order',
       numberOfPages: 1,
     });
 
-    await integrationTest.runSequence('openCaseDocumentDownloadUrlSequence', {
+    await cerebralTest.runSequence('openCaseDocumentDownloadUrlSequence', {
       docketEntryId: testClient.docketEntryId,
       docketNumber: testClient.docketNumber,
       isPublic: true,

@@ -1,12 +1,12 @@
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
-export const unauthedUserViewsTodaysOpinions = integrationTest => {
+export const unauthedUserViewsTodaysOpinions = cerebralTest => {
   return it('should view todays opinions', async () => {
     await refreshElasticsearchIndex();
 
-    await integrationTest.runSequence('gotoTodaysOpinionsSequence', {});
+    await cerebralTest.runSequence('gotoTodaysOpinionsSequence', {});
 
-    const todaysOpinions = integrationTest.getState('todaysOpinions');
+    const todaysOpinions = cerebralTest.getState('todaysOpinions');
 
     expect(todaysOpinions).toEqual(
       expect.arrayContaining([
@@ -23,7 +23,7 @@ export const unauthedUserViewsTodaysOpinions = integrationTest => {
     );
 
     for (let todaysOpinion of todaysOpinions) {
-      await integrationTest.runSequence('openCaseDocumentDownloadUrlSequence', {
+      await cerebralTest.runSequence('openCaseDocumentDownloadUrlSequence', {
         docketEntryId: todaysOpinion.docketEntryId,
         docketNumber: todaysOpinion.docketNumber,
         isPublic: true,

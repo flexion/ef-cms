@@ -4,7 +4,7 @@ import { setupTest } from './helpers';
 import { setupTest as setupTestClient } from '../integration-tests/helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES } = applicationContext.getConstants();
 
@@ -13,10 +13,10 @@ testClient.draftOrders = [];
 // user searches for case by "ZeroMatches DoNotMatchThis"
 describe('Petitioner searches for exact name match', () => {
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  unauthedUserNavigatesToPublicSite(integrationTest);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
 
   it('returns zero search results when there are no matches', async () => {
     const queryParams = {
@@ -25,16 +25,13 @@ describe('Petitioner searches for exact name match', () => {
       petitionerName: 'ZeroMatches DoNotMatchThis',
     };
 
-    integrationTest.setState(
-      'advancedSearchForm.caseSearchByName',
-      queryParams,
-    );
-    await integrationTest.runSequence(
+    cerebralTest.setState('advancedSearchForm.caseSearchByName', queryParams);
+    await cerebralTest.runSequence(
       'submitPublicCaseAdvancedSearchSequence',
       {},
     );
 
-    const searchResults = integrationTest.getState(
+    const searchResults = cerebralTest.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
 

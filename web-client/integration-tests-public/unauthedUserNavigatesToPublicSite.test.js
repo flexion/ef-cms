@@ -1,7 +1,7 @@
 import { setupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 describe('Unauthed user navigates to public site', () => {
-  unauthedUserNavigatesToPublicSite(integrationTest);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
 });

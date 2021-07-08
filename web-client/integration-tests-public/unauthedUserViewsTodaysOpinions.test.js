@@ -15,7 +15,7 @@ import { setupTest } from './helpers';
 import { unauthedUserViewsTodaysOpinions } from './journey/unauthedUserViewsTodaysOpinions';
 import { unauthedUserViewsTodaysOrdersWithoutBenchOpinion } from './journey/unauthedUserViewsTodaysOrdersWithoutBenchOpinion';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 const testClient = setupTestClient();
 
 testClient.draftOrders = [];
@@ -23,11 +23,11 @@ testClient.draftOrders = [];
 describe('Unauthed user views todays opinions', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    integrationTest.draftOrders = [];
+    cerebralTest.draftOrders = [];
   });
 
   afterAll(() => {
-    integrationTest.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   loginAs(testClient, 'petitioner@example.com');
@@ -61,12 +61,12 @@ describe('Unauthed user views todays opinions', () => {
   docketClerkAddsOSTDocketEntryFromOrder(testClient, 1);
   docketClerkServesDocument(testClient, 1);
 
-  unauthedUserViewsTodaysOpinions(integrationTest);
-  unauthedUserViewsTodaysOrdersWithoutBenchOpinion(integrationTest);
+  unauthedUserViewsTodaysOpinions(cerebralTest);
+  unauthedUserViewsTodaysOrdersWithoutBenchOpinion(cerebralTest);
 
   // opinions for sealed cases should still be public
   loginAs(testClient, 'docketclerk@example.com');
   docketClerkSealsCase(testClient);
 
-  unauthedUserViewsTodaysOpinions(integrationTest);
+  unauthedUserViewsTodaysOpinions(cerebralTest);
 });

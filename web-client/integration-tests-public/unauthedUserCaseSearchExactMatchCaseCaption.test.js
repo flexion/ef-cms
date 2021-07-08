@@ -10,7 +10,7 @@ import { setupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import faker from 'faker';
 
-const integrationTest = setupTest();
+const cerebralTest = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES } = applicationContext.getConstants();
 
@@ -39,7 +39,7 @@ function createCaseWithCaption(captionString) {
       });
 
       afterAll(() => {
-        integrationTest.closeSocket();
+        cerebralTest.closeSocket();
       });
 
       loginAs(testClient, 'petitioner@example.com');
@@ -48,7 +48,7 @@ function createCaseWithCaption(captionString) {
         const caseDetail = await uploadPetition(testClient);
 
         expect(caseDetail.docketNumber).toBeDefined();
-        integrationTest.docketNumber = caseDetail.docketNumber;
+        cerebralTest.docketNumber = caseDetail.docketNumber;
         testClient.docketNumber = caseDetail.docketNumber;
         createdDocketNumbers.push(caseDetail.docketNumber);
       });
@@ -57,9 +57,9 @@ function createCaseWithCaption(captionString) {
 
       loginAs(testClient, 'docketclerk@example.com');
 
-      it(`updates the case caption for ${integrationTest.docketNumber} to ${newCaseCaption}`, async () => {
+      it(`updates the case caption for ${cerebralTest.docketNumber} to ${newCaseCaption}`, async () => {
         await testClient.runSequence('gotoCaseDetailSequence', {
-          docketNumber: integrationTest.docketNumber,
+          docketNumber: cerebralTest.docketNumber,
         });
 
         await testClient.runSequence('openUpdateCaseModalSequence');
@@ -84,7 +84,7 @@ function createCaseWithCaption(captionString) {
 }
 
 describe('Petitioner searches for exact name match', () => {
-  unauthedUserNavigatesToPublicSite(integrationTest);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
 
   it(`returns search results for ${captionSearchTerm} we expect in the correct order`, async () => {
     const queryParams = {
@@ -93,16 +93,13 @@ describe('Petitioner searches for exact name match', () => {
       petitionerName: captionSearchTerm,
     };
 
-    integrationTest.setState(
-      'advancedSearchForm.caseSearchByName',
-      queryParams,
-    );
-    await integrationTest.runSequence(
+    cerebralTest.setState('advancedSearchForm.caseSearchByName', queryParams);
+    await cerebralTest.runSequence(
       'submitPublicCaseAdvancedSearchSequence',
       {},
     );
 
-    const searchResults = integrationTest.getState(
+    const searchResults = cerebralTest.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
 
