@@ -23,7 +23,7 @@ describe('gotoDocketEntryQcSequence', () => {
     servedAt: '2019-06-19T17:29:13.120Z',
   };
 
-  let integrationTest;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -31,7 +31,7 @@ describe('gotoDocketEntryQcSequence', () => {
     presenter.sequences = {
       gotoDocketEntryQcSequence,
     };
-    integrationTest = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
 
     applicationContext.getUseCases().getCaseInteractor.mockReturnValue({
       ...MOCK_CASE,
@@ -41,12 +41,12 @@ describe('gotoDocketEntryQcSequence', () => {
   });
 
   it('should set up state for qcing docket entry', async () => {
-    await integrationTest.runSequence('gotoDocketEntryQcSequence', {
+    await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: mockDocketEntryId,
       docketNumber: mockDocketNumber,
     });
 
-    expect(integrationTest.getState()).toMatchObject({
+    expect(cerebralTest.getState()).toMatchObject({
       docketEntryId: mockDocketEntryId,
       form: {
         ...mockDocketEntry,

@@ -5,33 +5,33 @@ import { presenter } from '../presenter-mock';
 
 describe('openAddEditCalendarNoteModalSequence', () => {
   const mockNote = 'A note.';
-  let integrationTest;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       openAddEditCalendarNoteModalSequence,
     };
-    integrationTest = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
   });
 
   it('should set modal.note from props.note and modal.isEditing to true', async () => {
-    await integrationTest.runSequence('openAddEditCalendarNoteModalSequence', {
+    await cerebralTest.runSequence('openAddEditCalendarNoteModalSequence', {
       note: mockNote,
     });
 
-    expect(integrationTest.getState('modal')).toMatchObject({
+    expect(cerebralTest.getState('modal')).toMatchObject({
       isEditing: true,
       note: mockNote,
     });
   });
 
   it('set modal.showModal to AddEditCalendarNoteModal', async () => {
-    await integrationTest.runSequence('openAddEditCalendarNoteModalSequence', {
+    await cerebralTest.runSequence('openAddEditCalendarNoteModalSequence', {
       note: mockNote,
     });
 
-    expect(integrationTest.getState('modal.showModal')).toBe(
+    expect(cerebralTest.getState('modal.showModal')).toBe(
       'AddEditCalendarNoteModal',
     );
   });

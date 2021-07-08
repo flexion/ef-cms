@@ -7,7 +7,7 @@ import { loadPdfSequence } from '../../sequences/PDFPreviewModal/loadPdfSequence
 import { presenter } from '../../presenter-mock';
 
 describe('loadPdfSequence', () => {
-  let integrationTest;
+  let cerebralTest;
 
   global.Blob = function () {};
 
@@ -46,16 +46,16 @@ describe('loadPdfSequence', () => {
     presenter.sequences = {
       loadPdfSequence,
     };
-    integrationTest = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
   });
 
   it('should load the expected objects onto the store', async () => {
-    integrationTest.setState('pdfPreviewModal', {});
+    cerebralTest.setState('pdfPreviewModal', {});
 
-    await integrationTest.runSequence('loadPdfSequence', {
+    await cerebralTest.runSequence('loadPdfSequence', {
       file: testPdfDoc,
     });
 
-    expect(integrationTest.getState('pdfPreviewUrl')).toBe('some url');
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBe('some url');
   });
 });

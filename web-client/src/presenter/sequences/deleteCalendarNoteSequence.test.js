@@ -12,7 +12,7 @@ describe('deleteCalendarNoteSequence', () => {
     docketNumber: mockDocketNumber,
   };
 
-  let integrationTest;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -20,7 +20,7 @@ describe('deleteCalendarNoteSequence', () => {
     presenter.sequences = {
       deleteCalendarNoteSequence,
     };
-    integrationTest = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
 
     applicationContext
       .getUseCases()
@@ -29,12 +29,12 @@ describe('deleteCalendarNoteSequence', () => {
         trialSessionId: mockTrialSessionId,
       });
 
-    integrationTest.setState('caseDetail', {
+    cerebralTest.setState('caseDetail', {
       docketNumber: mockDocketNumber,
       trialSessionId: mockTrialSessionId,
     });
 
-    integrationTest.setState('trialSessions', [
+    cerebralTest.setState('trialSessions', [
       {
         caseOrder: [{ ...caseOrderItemWithoutNote, calendarNote: 'delete me' }],
         trialSessionId: mockTrialSessionId,
@@ -43,9 +43,9 @@ describe('deleteCalendarNoteSequence', () => {
   });
 
   it('should update state.trialSessions after deleting the note on the specified trialSession', async () => {
-    await integrationTest.runSequence('deleteCalendarNoteSequence');
+    await cerebralTest.runSequence('deleteCalendarNoteSequence');
 
-    expect(integrationTest.getState('trialSessions')).toEqual([
+    expect(cerebralTest.getState('trialSessions')).toEqual([
       {
         caseOrder: [{ calendarNote: null, docketNumber: mockDocketNumber }],
         trialSessionId: mockTrialSessionId,

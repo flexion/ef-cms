@@ -6,7 +6,7 @@ import { presenter } from '../presenter-mock';
 const { CHAMBERS_SECTION } = applicationContext.getConstants();
 
 describe('gotoPrintablePendingReportForCaseSequence', () => {
-  let integrationTest;
+  let cerebralTest;
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue({
       section: CHAMBERS_SECTION,
@@ -31,23 +31,21 @@ describe('gotoPrintablePendingReportForCaseSequence', () => {
     presenter.sequences = {
       gotoPrintablePendingReportForCaseSequence,
     };
-    integrationTest = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
   });
   it('Should show the Printable Pending Report page', async () => {
-    integrationTest.setState('currentPage', 'SomeOtherPage');
-    await integrationTest.runSequence(
+    cerebralTest.setState('currentPage', 'SomeOtherPage');
+    await cerebralTest.runSequence(
       'gotoPrintablePendingReportForCaseSequence',
       {
         docketNumber: '101-21',
       },
     );
-    expect(integrationTest.getState('currentPage')).toBe(
-      'SimplePdfPreviewPage',
-    );
-    expect(integrationTest.getState('pdfPreviewUrl')).toBe(
+    expect(cerebralTest.getState('currentPage')).toBe('SimplePdfPreviewPage');
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBe(
       'http://example.com/mock-pdf-url',
     );
-    expect(integrationTest.getState('screenMetadata.headerTitle')).toBe(
+    expect(cerebralTest.getState('screenMetadata.headerTitle')).toBe(
       'Pending Report',
     );
   });

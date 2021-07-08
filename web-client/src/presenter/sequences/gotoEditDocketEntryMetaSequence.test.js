@@ -24,7 +24,7 @@ describe('gotoEditDocketEntryMetaSequence', () => {
     lodged: false,
   };
 
-  let integrationTest;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -32,7 +32,7 @@ describe('gotoEditDocketEntryMetaSequence', () => {
     presenter.sequences = {
       gotoEditDocketEntryMetaSequence,
     };
-    integrationTest = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
 
     applicationContext.getUseCases().getCaseInteractor.mockReturnValue({
       ...MOCK_CASE,
@@ -55,12 +55,12 @@ describe('gotoEditDocketEntryMetaSequence', () => {
   });
 
   it('should set up state for editing court issued docket entry', async () => {
-    await integrationTest.runSequence('gotoEditDocketEntryMetaSequence', {
+    await cerebralTest.runSequence('gotoEditDocketEntryMetaSequence', {
       docketNumber: mockDocketNumber,
       docketRecordIndex: 1,
     });
 
-    expect(integrationTest.getState()).toMatchObject({
+    expect(cerebralTest.getState()).toMatchObject({
       docketEntryId: mockDocketEntryId,
       docketRecordIndex: 1,
       form: {

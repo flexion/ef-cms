@@ -5,7 +5,7 @@ import { gotoReviewSavedPetitionSequence } from '../sequences/gotoReviewSavedPet
 import { presenter } from '../presenter-mock';
 
 describe('gotoReviewSavedPetitionSequence', () => {
-  let integrationTest;
+  let cerebralTest;
   let PARTY_TYPES;
 
   ({ PARTY_TYPES } = applicationContext.getConstants());
@@ -23,47 +23,45 @@ describe('gotoReviewSavedPetitionSequence', () => {
     presenter.sequences = {
       gotoReviewSavedPetitionSequence,
     };
-    integrationTest = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
   });
 
   it('Should set state.caseDetail and state.form to the mock case', async () => {
-    integrationTest.setState('currentPage', 'SomeOtherPage');
-    integrationTest.setState('form', { partyType: 'petitioner' });
-    integrationTest.setState('caseDetail', {
+    cerebralTest.setState('currentPage', 'SomeOtherPage');
+    cerebralTest.setState('form', { partyType: 'petitioner' });
+    cerebralTest.setState('caseDetail', {
       docketNumber: '199-99',
       partyType: PARTY_TYPES.petitioner,
     });
 
-    await integrationTest.runSequence('gotoReviewSavedPetitionSequence', {
+    await cerebralTest.runSequence('gotoReviewSavedPetitionSequence', {
       docketNumber: '105-15',
     });
 
     expect(
       applicationContext.getUseCases().getCaseInteractor,
     ).toHaveBeenCalled();
-    expect(integrationTest.getState('currentPage')).toEqual(
-      'ReviewSavedPetition',
-    );
-    expect(integrationTest.getState('caseDetail')).toMatchObject(mockCase);
-    expect(integrationTest.getState('form')).toMatchObject(mockCase);
+    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
+    expect(cerebralTest.getState('caseDetail')).toMatchObject(mockCase);
+    expect(cerebralTest.getState('form')).toMatchObject(mockCase);
   });
 
   it('should not unset state.caseDetail.petitioners in the ignore path', async () => {
     const mockDocketNumber = '199-99';
     const mockPetitioner = MOCK_CASE.petitioners[0];
 
-    integrationTest.setState('form', { partyType: 'petitioner' });
-    integrationTest.setState('caseDetail', {
+    cerebralTest.setState('form', { partyType: 'petitioner' });
+    cerebralTest.setState('caseDetail', {
       docketNumber: mockDocketNumber,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [mockPetitioner],
     });
 
-    await integrationTest.runSequence('gotoReviewSavedPetitionSequence', {
+    await cerebralTest.runSequence('gotoReviewSavedPetitionSequence', {
       docketNumber: mockDocketNumber,
     });
 
-    expect(integrationTest.getState('caseDetail.petitioners')).toEqual([
+    expect(cerebralTest.getState('caseDetail.petitioners')).toEqual([
       mockPetitioner,
     ]);
   });

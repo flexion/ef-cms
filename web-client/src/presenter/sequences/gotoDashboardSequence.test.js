@@ -12,14 +12,14 @@ describe('gotoDashboardSequence', () => {
   const openCases = [{ docketNumber: '111-22' }];
   const closedCases = [{ docketNumber: '333-44' }];
 
-  let integrationTest;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       gotoDashboardSequence,
     };
-    integrationTest = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
 
     applicationContext.getUseCases().getUserInteractor.mockReturnValue(user);
 
@@ -35,9 +35,9 @@ describe('gotoDashboardSequence', () => {
   it('should set up state for petitioner going to dashboard', async () => {
     applicationContext.getCurrentUser.mockReturnValue(user);
 
-    await integrationTest.runSequence('gotoDashboardSequence');
+    await cerebralTest.runSequence('gotoDashboardSequence');
 
-    expect(integrationTest.getState()).toMatchObject({
+    expect(cerebralTest.getState()).toMatchObject({
       closedCases,
       openCases,
       user,
