@@ -245,6 +245,28 @@ resource "aws_iam_policy" "circle_ci_policy" {
       "Resource": [
         "*"
       ]
+    },
+    {
+      "Action": [
+        "ecs:CreateCluster",
+        "ecs:DescribeClusters",
+        "ecs:RegisterTaskDefinition"
+      ],
+      "Resource": [
+        "*"
+      ],
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "iam:CreateRole",
+        "iam:PutRolePolicy"
+      ],
+      "Resource": [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/clamav-fargate-*-task-execution-role",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/clamav-fargate-*-task-role"
+      ],
+      "Effect": "Allow"
     }
   ]
 }
