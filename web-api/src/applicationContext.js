@@ -236,6 +236,11 @@ const {
   deleteDocumentFromS3,
 } = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
 const {
+  deleteKeyCount,
+  incrementKeyCount,
+  setExpiresAt,
+} = require('../../shared/src/persistence/dynamo/helpers/store');
+const {
   deleteRecord,
 } = require('../../shared/src/persistence/elasticsearch/deleteRecord');
 const {
@@ -499,6 +504,10 @@ const {
 const {
   getEligibleCasesForTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
+const {
+  getEnvironment,
+  getUniqueId,
+} = require('../../shared/src/sharedAppContext.js');
 const {
   getFirstSingleCaseRecord,
 } = require('../../shared/src/persistence/elasticsearch/getFirstSingleCaseRecord');
@@ -1144,7 +1153,6 @@ const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
-const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
 const { Message } = require('../../shared/src/business/entities/Message');
 const { scan } = require('../../shared/src/persistence/dynamodbClientService');
 const { User } = require('../../shared/src/business/entities/User');
@@ -1199,13 +1207,54 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
 
 const getDynamoClient = ({ useMasterRegion = false } = {}) => {
   const type = useMasterRegion ? 'master' : 'region';
+
+  const mainRegion = environment.region;
+  const fallbackRegion =
+    environment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
+  const mainRegionEndpoint = `dynamodb.${mainRegion}.amazonaws.com`;
+  const fallbackRegionEndpoint = `dynamodb.${fallbackRegion}.amazonaws.com`;
+
   if (!dynamoCache[type]) {
-    dynamoCache[type] = new DynamoDB({
+    const mainRegionDB = new DynamoDB({
       endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint
-        : environment.dynamoDbEndpoint,
-      region: useMasterRegion ? environment.masterRegion : environment.region,
+        ? environment.masterDynamoDbEndpoint // east
+        : mainRegionEndpoint,
+      region: useMasterRegion ? environment.masterRegion : mainRegion,
     });
+
+    const fallbackRegionDB = new DynamoDB({
+      endpoint: useMasterRegion
+        ? fallbackRegionEndpoint // east
+        : environment.masterDynamoDbEndpoint, // east
+      region: useMasterRegion ? fallbackRegion : environment.masterRegion,
+    });
+
+    const fallbackHandler = key => params => {
+      return new Promise((resolve, reject) => {
+        mainRegionDB[key](params)
+          .catch(err => {
+            if (
+              err.code === 'ResourceNotFoundException' ||
+              err.statusCode === 503
+            ) {
+              return fallbackRegionDB[key](params);
+            }
+            throw err;
+          })
+          .then(resolve)
+          .catch(reject);
+      });
+    };
+
+    dynamoCache[type] = {
+      batchGet: fallbackHandler('batchGet'),
+      batchWrite: fallbackHandler('batchWrite'),
+      get: fallbackHandler('get'),
+      put: fallbackHandler('put'),
+      query: fallbackHandler('query'),
+      scan: fallbackHandler('scan'),
+      update: fallbackHandler('update'),
+    };
   }
   return dynamoCache[type];
 };
@@ -1283,9 +1332,11 @@ const gatewayMethods = {
     createTrialSession,
     createTrialSessionWorkingCopy,
     createUser,
+    deleteKeyCount,
     fetchPendingItems,
     getSesStatus,
     incrementCounter,
+    incrementKeyCount,
     markMessageThreadRepliedTo,
     persistUser,
     putWorkItemInOutbox,
@@ -1295,6 +1346,7 @@ const gatewayMethods = {
     saveUserConnection,
     saveWorkItem,
     saveWorkItemForDocketClerkFilingExternalDocument,
+    setExpiresAt,
     setMessageAsRead,
     setPriorityOnAllWorkItems,
     updateCase,
@@ -1559,6 +1611,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getEntityByName: name => {
       return entitiesByName[name];
     },
+    getEnvironment,
     getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getNodeSass: () => {
