@@ -8,7 +8,7 @@ import { getPendingEmailsOnCaseAction } from '../../actions/getPendingEmailsOnCa
 import { setAlertSuccessAction } from '../../actions/setAlertSuccessAction';
 import { setCaseAction } from '../../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../../actions/setCasePropFromStateAction';
-import { setPendingEmailsForPetitionersOnCaseAction } from '../../actions/setPendingEmailsForPetitionersOnCaseAction';
+import { setPendingEmailsOnCaseAction } from '../../actions/setPendingEmailsOnCaseAction';
 import { setRepresentingFromRepresentingMapActionFactory } from '../../actions/setRepresentingFromRepresentingMapActionFactory';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/sequenceHelpers';
@@ -16,8 +16,8 @@ import { startShowValidationAction } from '../../actions/startShowValidationActi
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 import { validateAddPrivatePractitionerAction } from '../../actions/caseAssociation/validateAddPrivatePractitionerAction';
 
-export const associatePrivatePractitionerWithCaseSequence = showProgressSequenceDecorator(
-  [
+export const associatePrivatePractitionerWithCaseSequence =
+  showProgressSequenceDecorator([
     startShowValidationAction,
     setRepresentingFromRepresentingMapActionFactory('modal'),
     validateAddPrivatePractitionerAction,
@@ -37,10 +37,9 @@ export const associatePrivatePractitionerWithCaseSequence = showProgressSequence
             getCaseAction,
             setCaseAction,
             getPendingEmailsOnCaseAction,
-            setPendingEmailsForPetitionersOnCaseAction,
+            setPendingEmailsOnCaseAction,
           ],
         },
       ],
     },
-  ],
-);
+  ]);

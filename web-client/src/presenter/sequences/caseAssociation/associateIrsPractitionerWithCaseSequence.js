@@ -8,15 +8,15 @@ import { getPendingEmailsOnCaseAction } from '../../actions/getPendingEmailsOnCa
 import { setAlertSuccessAction } from '../../actions/setAlertSuccessAction';
 import { setCaseAction } from '../../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../../actions/setCasePropFromStateAction';
-import { setPendingEmailsForPetitionersOnCaseAction } from '../../actions/setPendingEmailsForPetitionersOnCaseAction';
+import { setPendingEmailsOnCaseAction } from '../../actions/setPendingEmailsOnCaseAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 import { validateAddIrsPractitionerAction } from '../../actions/caseAssociation/validateAddIrsPractitionerAction';
 
-export const associateIrsPractitionerWithCaseSequence = showProgressSequenceDecorator(
-  [
+export const associateIrsPractitionerWithCaseSequence =
+  showProgressSequenceDecorator([
     startShowValidationAction,
     validateAddIrsPractitionerAction,
     {
@@ -35,10 +35,9 @@ export const associateIrsPractitionerWithCaseSequence = showProgressSequenceDeco
             getCaseAction,
             setCaseAction,
             getPendingEmailsOnCaseAction,
-            setPendingEmailsForPetitionersOnCaseAction,
+            setPendingEmailsOnCaseAction,
           ],
         },
       ],
     },
-  ],
-);
+  ]);
