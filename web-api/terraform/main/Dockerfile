@@ -16,6 +16,8 @@ RUN npm init -y
 RUN npm i aws-sdk tmp --save
 RUN DEBIAN_FRONTEND=noninteractive sh -c 'apt install -y awscli'
 
+RUN npm i pug -g
+
 RUN apt install -y clamav clamav-daemon
 
 RUN mkdir /var/run/clamav && \
@@ -25,7 +27,7 @@ RUN mkdir /var/run/clamav && \
 RUN freshclam
 
 COPY ./clamd.conf /etc/clamav/clamd.conf
-COPY ./worker.js .
+COPY ./dist/worker.js .
 ADD ./run.sh ./run.sh
 
 CMD ["bash", "./run.sh"]

@@ -7,6 +7,9 @@ set -e
 
 ENVIRONMENT=$1
 
+# create the bundle
+npm run build:fargate
+
 # get aws account id if it does not exist in env var
 AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID:-$(aws sts get-caller-identity --query "Account" --output text)}
 
