@@ -2,18 +2,26 @@ const createApplicationContext = require('../../src/applicationContext');
 const applicationContext = createApplicationContext({});
 const { scanMessages } = require('./worker.helper');
 
-const main = () => {
-  applicationContext.logger.info('ClamAV listener started');
-  setTimeout(async function () {
-    applicationContext.logger.info('Getting messages');
-    const messages = await applicationContext
-      .getPersistenceGateway()
-      .getMessages({
-        appContext: applicationContext,
-      });
-    applicationContext.logger.info(messages.length + ' messages found');
-    await scanMessages({ appContext: applicationContext, messages });
-  }, 10 * 1000);
-};
+const { Consumer } = require('sqs-consumer');
 
-main();
+const app = Consumer.create({
+  handleMessage: async message => {
+    // any errors thrown here will be left in the sqs queue
+    await scanMessages({
+      applicationContext,
+      messages: [message],
+    });
+  },
+  queueUrl: applicationContext.environment.virusScanQueueUrl,
+});
+
+app.on('error', err => {
+  applicationContext.logger.error('Failed to scan', err);
+});
+
+app.on('processing_error', err => {
+  applicationContext.logger.error('Failed to process the scan event', err);
+});
+
+applicationContext.logger.info('ClamAV listener started');
+app.start();

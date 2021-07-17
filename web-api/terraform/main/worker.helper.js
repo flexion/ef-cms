@@ -6,13 +6,7 @@ export const scanMessages = ({ applicationContext, messages }) => {
         key: applicationContext
           .getPersistenceGateway()
           .getDocumentIdFromSQSMessage(message),
-        scanCompleteCallback: applicationContext
-          .getPersistenceGateway()
-          .deleteMessage({
-            applicationContext,
-            message,
-            queueUrl: applicationContext.environment.virusScanQueueUrl,
-          }),
+        scanCompleteCallback: () => null, // sqs-consumer already deletes the message for us, we might want to remove this callback
       }),
   );
 
