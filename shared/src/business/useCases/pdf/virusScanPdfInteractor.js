@@ -1,4 +1,3 @@
-const fs = require('fs');
 const tmp = require('tmp');
 
 /**
@@ -23,6 +22,9 @@ exports.virusScanPdfInteractor = async (applicationContext, { key }) => {
     mode: 0o644,
     tmpdir: process.env.TMP_PATH,
   });
+
+  const fs = applicationContext.getFileSystem();
+
   fs.writeSync(inputPdf.fd, Buffer.from(pdfData));
   fs.closeSync(inputPdf.fd);
 
@@ -38,7 +40,21 @@ exports.virusScanPdfInteractor = async (applicationContext, { key }) => {
         Key: key,
       })
       .promise();
-
+  } catch (e) {
+    if (e.code === 1) {
+      applicationContext.logger.info('File was infected', e);
+      await applicationContext
+        .getStorageClient()
+        .deleteObject({
+          Bucket: applicationContext.environment.quarantineBucketName,
+          Key: key,
+        })
+        .promise();
+    } else {
+      applicationContext.logger.error('Failed to scan', e);
+      throw e;
+    }
+  } finally {
     await applicationContext
       .getStorageClient()
       .deleteObject({
@@ -46,17 +62,8 @@ exports.virusScanPdfInteractor = async (applicationContext, { key }) => {
         Key: key,
       })
       .promise();
-  } catch (e) {
-    if (e.code === 1) {
-      applicationContext.logger.info('File was infected', e);
-    } else {
-      applicationContext.logger.error('Failed to scan', e);
-      applicationContext.logger.info(`Removing tmp file ${inputPdf.name}`);
-      fs.unlinkSync(`${inputPdf.name}`);
-      throw e;
-    }
-  } finally {
+
     applicationContext.logger.info(`Removing tmp file ${inputPdf.name}`);
-    fs.unlinkSync(`${inputPdf.name}`);
+    fs.unlinkSync(inputPdf.name);
   }
 };

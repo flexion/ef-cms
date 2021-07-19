@@ -570,6 +570,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getEntityByName: jest.fn(),
     getEnvironment: jest.fn(),
     getFileReaderInstance: jest.fn(),
+    getFileSystem: jest.fn().mockReturnValue(require('fs')),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getIrsSuperuserEmail: jest.fn(),
     getLogger: jest.fn().mockReturnValue({

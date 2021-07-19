@@ -5,6 +5,7 @@ const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/ba
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
+const fs = require('fs');
 const pdfLib = require('pdf-lib');
 const pug = require('pug');
 const sass = require('sass');
@@ -1625,6 +1626,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       return entitiesByName[name];
     },
     getEnvironment,
+    getFileSystem: () => fs,
     getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMessagingClient: () => {
