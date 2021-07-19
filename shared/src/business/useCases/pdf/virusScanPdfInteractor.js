@@ -51,10 +51,12 @@ exports.virusScanPdfInteractor = async (applicationContext, { key }) => {
       applicationContext.logger.info('File was infected', e);
     } else {
       applicationContext.logger.error('Failed to scan', e);
-      fs.unlinkSync(inputPdf.fd);
+      applicationContext.logger.info(`Removing tmp file ${inputPdf.name}`);
+      fs.unlinkSync(`${inputPdf.name}`);
       throw e;
     }
   } finally {
-    fs.unlinkSync(inputPdf.fd);
+    applicationContext.logger.info(`Removing tmp file ${inputPdf.name}`);
+    fs.unlinkSync(`${inputPdf.name}`);
   }
 };
