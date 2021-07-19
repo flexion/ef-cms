@@ -7,6 +7,7 @@ const { Consumer } = require('sqs-consumer');
 const app = Consumer.create({
   handleMessage: async message => {
     // any errors thrown here will be left in the sqs queue
+    applicationContext.logger.info('Message received', message);
     await scanMessages({
       applicationContext,
       messages: [message],
@@ -21,6 +22,9 @@ app.on('error', err => {
 
 app.on('processing_error', err => {
   applicationContext.logger.error('Failed to process the scan event', err);
+  if (err.message.includes('clam')) {
+    throw err;
+  }
 });
 
 applicationContext.logger.info('ClamAV listener started');

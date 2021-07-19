@@ -10,10 +10,7 @@ const tmp = require('tmp');
  * @param {object} providers.scanCompleteCallback to execute after scanning completes
  * @returns {Promise} resolves when complete
  */
-exports.virusScanPdfInteractor = async (
-  applicationContext,
-  { key, scanCompleteCallback },
-) => {
+exports.virusScanPdfInteractor = async (applicationContext, { key }) => {
   let { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
@@ -49,14 +46,15 @@ exports.virusScanPdfInteractor = async (
         Key: key,
       })
       .promise();
-
-    await scanCompleteCallback();
   } catch (e) {
     if (e.code === 1) {
-      await scanCompleteCallback();
       applicationContext.logger.info('File was infected', e);
     } else {
       applicationContext.logger.error('Failed to scan', e);
+      fs.unlinkSync(inputPdf.fd);
+      throw e;
     }
+  } finally {
+    fs.unlinkSync(inputPdf.fd);
   }
 };
