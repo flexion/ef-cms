@@ -1671,6 +1671,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
       return pug;
     },
     getQuarantineBucketName: () => {
+      if (environment.stage === 'local') {
+        return environment.documentsBucketName;
+      }
       return environment.quarantineBucketName;
     },
     getScannerResourceUri: () => {
