@@ -48,11 +48,6 @@ exports.uploadExternalDocumentsInteractor = async (
 
     await applicationContext
       .getUseCases()
-      .virusScanPdfInteractor(applicationContext, {
-        key,
-      });
-    await applicationContext
-      .getUseCases()
       .validatePdfInteractor(applicationContext, {
         key,
       });
