@@ -26,7 +26,8 @@ resource "aws_lambda_event_source_mapping" "streams_mapping" {
   count                          = var.create_streams
   event_source_arn               = var.stream_arn
   function_name                  = aws_lambda_function.zip_streams[0].arn
-  starting_position              = "LATEST"
+  starting_position              = "AT_TIMESTAMP"
+  starting_position_timestamp    = timeadd(timestamp(), "-10m")
   bisect_batch_on_function_error = "true"
   batch_size                     = "100"
 }
