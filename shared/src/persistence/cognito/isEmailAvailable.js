@@ -10,6 +10,6 @@ exports.isEmailAvailable = async ({ applicationContext, email }) => {
   } catch (e) {
     return true;
   }
-  //If an error is not thrown, we can assume a user was found
+  // If an error is not thrown, we can assume a user was found
   return false;
 };
