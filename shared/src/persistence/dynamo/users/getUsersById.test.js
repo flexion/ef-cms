@@ -1,7 +1,8 @@
-const client = require('../../dynamodbClientService');
+jest.mock('../../dynamodbClientService');
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const { batchGet } = require('../../dynamodbClientService');
 const { getUsersById } = require('./getUsersById');
 
 const mockUser1 = {
@@ -26,7 +27,7 @@ const mockUserIds = [
 
 describe('getUsersById', () => {
   beforeEach(() => {
-    client.batchGet = jest.fn().mockReturnValue([
+    batchGet.mockReturnValue([
       {
         ...mockUser1,
         pk: `user|${mockUser1.userId}`,
