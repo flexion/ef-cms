@@ -8,6 +8,10 @@ presenter.providers.router = { route: () => {} };
 const cerebralTest = CerebralTest(presenter);
 
 describe('Miscellaneous', () => {
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
+
   it('Handles routing', async () => {
     await cerebralTest.runSequence('gotoStyleGuideSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('StyleGuide');

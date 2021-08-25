@@ -1,6 +1,17 @@
-import { embedWithLegalIpsumText, getTextByCount, gotoRoute } from './helpers';
+import {
+  embedWithLegalIpsumText,
+  getTextByCount,
+  gotoRoute,
+  setupTest,
+} from './helpers';
+
+const cerebralTest = setupTest();
 
 describe('helpers', () => {
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
+
   describe('gotoRoute', () => {
     it('should invoke the expected documents route definition', async () => {
       const cbSpy = jest.fn().mockResolvedValue('awesome');
