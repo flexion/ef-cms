@@ -7,5 +7,9 @@ describe('Unauthed user navigates to public site', () => {
     cerebralTest.closeSocket();
   });
 
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
+
   unauthedUserNavigatesToPublicSite(cerebralTest);
 });
