@@ -3,5 +3,9 @@ import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigat
 
 const cerebralTest = setupTest();
 describe('Unauthed user navigates to public site', () => {
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
+
   unauthedUserNavigatesToPublicSite(cerebralTest);
 });

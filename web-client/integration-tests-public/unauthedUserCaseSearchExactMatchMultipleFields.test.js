@@ -136,6 +136,10 @@ describe('Create and serve a case to test contactSecondary.name', () => {
       jest.setTimeout(30000);
     });
 
+    afterAll(() => {
+      cerebralTest.closeSocket();
+    });
+
     loginAs(testClient, 'petitioner@example.com');
 
     it('Create case', async () => {
@@ -168,6 +172,10 @@ describe('Create and serve a case to test caseCaption', () => {
       jest.setTimeout(30000);
     });
 
+    afterAll(() => {
+      cerebralTest.closeSocket();
+    });
+
     loginAs(testClient, 'petitioner@example.com');
 
     it('Create case', async () => {
@@ -193,6 +201,10 @@ describe('Create and serve a case to test contactPrimary.name with terms out of 
   describe('Petitioner creates case', () => {
     beforeAll(() => {
       jest.setTimeout(30000);
+    });
+
+    afterAll(() => {
+      cerebralTest.closeSocket();
     });
 
     loginAs(testClient, 'petitioner@example.com');
@@ -221,6 +233,10 @@ describe('Create and serve a case to test contactPrimary.name with terms out of 
 });
 
 describe('Petitioner searches for exact name match', () => {
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
+
   unauthedUserNavigatesToPublicSite(cerebralTest);
 
   it(`returns search results we expect in the correct order when searching for "${firstName} ${lastName}"`, async () => {
