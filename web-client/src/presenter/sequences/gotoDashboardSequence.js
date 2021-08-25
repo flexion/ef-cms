@@ -22,6 +22,7 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserAction } from '../actions/setUserAction';
 import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
+import { stopWebSocketConnectionAction } from '../actions/WebSocketConnection/stopWebSocketConnectionAction';
 import { takePathForRoles } from './takePathForRoles';
 
 const { USER_ROLES } = getConstants();
@@ -37,6 +38,7 @@ const goToDashboard = [
   setUserAction,
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
+  stopWebSocketConnectionAction,
   startWebSocketConnectionAction,
   {
     error: [setShowModalFactoryAction('WebSocketErrorModal')],
