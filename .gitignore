@@ -12,6 +12,7 @@
 .vscode
 **/*_.js
 /policy.json
+artillery/tokens.csv
 artillery/private-app-report.json
 artillery/private-advanced-order.json
 aws.json
