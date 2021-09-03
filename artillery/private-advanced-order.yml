@@ -14,6 +14,8 @@ config:
     - path: "tokens.csv"
       fields:
         - "token"
+  # http:
+  #   pool: 10 # max number of users
 
 scenarios:
   - name: "Advanced Order Search"
