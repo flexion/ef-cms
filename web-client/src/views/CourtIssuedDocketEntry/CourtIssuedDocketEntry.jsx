@@ -60,11 +60,12 @@ export const CourtIssuedDocketEntry = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          {isEditingDocketEntry && (
-            <Hint exclamation fullWidth>
-              This docket entry has not been served on the parties.
-            </Hint>
-          )}
+          {!addCourtIssuedDocketEntryHelper.showServiceWarning &&
+            isEditingDocketEntry && (
+              <Hint exclamation fullWidth>
+                This docket entry has not been served on the parties.
+              </Hint>
+            )}
 
           {addCourtIssuedDocketEntryHelper.showServiceWarning && (
             <WarningNotificationComponent
@@ -72,6 +73,8 @@ export const CourtIssuedDocketEntry = connect(
                 message:
                   'Document cannot be served until the Petition is served.',
               }}
+              dismissable={false}
+              scrollToTop={false}
             />
           )}
           <div className="grid-row grid-gap">

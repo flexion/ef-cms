@@ -79,6 +79,7 @@ const {
   bulkIndexRecords,
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const {
+  calculateDifferenceInDays,
   calculateISODate,
   createISODateString,
   formatDateString,
@@ -547,6 +548,12 @@ const {
 const {
   getJudgesForPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getJudgesForPublicSearchInteractor');
+const {
+  getMaintenanceMode,
+} = require('../../shared/src/persistence/dynamo/deployTable/getMaintenanceMode');
+const {
+  getMaintenanceModeInteractor,
+} = require('../../shared/src/business/useCases/getMaintenanceModeInteractor');
 const {
   getMessageById,
 } = require('../../shared/src/persistence/dynamo/messages/getMessageById');
@@ -1078,6 +1085,9 @@ const {
   updatePrivatePractitionerOnCase,
 } = require('../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase');
 const {
+  updateMaintenanceMode,
+} = require('../../shared/src/persistence/dynamo/deployTable/updateMaintenanceMode');
+const {
   updateMessage,
 } = require('../../shared/src/persistence/dynamo/messages/updateMessage');
 const {
@@ -1355,6 +1365,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
+    getMaintenanceMode,
     getSesStatus,
     incrementCounter,
     incrementKeyCount,
@@ -1376,6 +1387,7 @@ const gatewayMethods = {
     updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
     updateIrsPractitionerOnCase,
+    updateMaintenanceMode,
     updateMessage,
     updatePractitionerUser,
     updatePrivatePractitionerOnCase,
@@ -1849,6 +1861,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getIrsPractitionersBySearchKeyInteractor,
         getJudgeForUserChambersInteractor,
         getJudgesForPublicSearchInteractor,
+        getMaintenanceModeInteractor,
         getMessageThreadInteractor,
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
@@ -1950,6 +1963,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getUtilities: () => {
       return {
+        calculateDifferenceInDays,
         calculateISODate,
         compareCasesByDocketNumber,
         compareISODateStrings,

@@ -12,9 +12,12 @@ exports.sendMaintenanceNotificationsLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .sendMaintenanceNotificationsInteractor(applicationContext);
+        .sendMaintenanceNotificationsInteractor(applicationContext, {
+          maintenanceMode: event.maintenanceMode,
+        });
     },
     {
+      bypassMaintenanceCheck: true,
       user: {},
     },
   );

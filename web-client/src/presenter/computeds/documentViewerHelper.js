@@ -62,10 +62,11 @@ export const documentViewerHelper = (get, applicationContext) => {
   const showUnservedPetitionWarning =
     !isPetitionServed &&
     showNotServed &&
-    isCourtIssuedDocument &&
+    !formattedDocumentToDisplay.isPetition &&
     permissions.SERVE_DOCUMENT;
 
   const showServePaperFiledDocumentButton =
+    isPetitionServed &&
     showNotServed &&
     !isCourtIssuedDocument &&
     !formattedDocumentToDisplay.isPetition &&
