@@ -6,7 +6,18 @@
  * @param {object} providers.socket the socket object
  * @returns {Promise<*>} the success or error path
  */
-export const startWebSocketConnectionAction = async ({ path, socket }) => {
+export const startWebSocketConnectionAction = async ({
+  applicationContext,
+  path,
+  socket,
+}) => {
+  const { USER_ROLES } = applicationContext.getConstants();
+  const user = applicationContext.getCurrentUser();
+
+  if (user.role === USER_ROLES.irsPractitioner) {
+    return path.success();
+  }
+
   try {
     await socket.start();
     return path.success();
