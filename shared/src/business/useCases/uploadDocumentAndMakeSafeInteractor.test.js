@@ -69,8 +69,7 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().validatePdfInteractor.mock.calls[0][0]
-        .key,
+      applicationContext.getUseCaseHelpers().validatePdf.mock.calls[0][0].key,
     ).toEqual(mockDocument.key);
   });
 });

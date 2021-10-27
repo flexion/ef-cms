@@ -1170,6 +1170,9 @@ const {
   UserCaseNote,
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
 const {
+  validatePdf,
+} = require('../../shared/src/business/useCaseHelper/pdf/validatePdf');
+const {
   validatePdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
 const {
@@ -1784,6 +1787,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateInitialFilingDocuments,
         updateTrialDateOnWorkItems,
         updateUserRecords,
+        validatePdf,
       };
     },
     getUseCases: () => {

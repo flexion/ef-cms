@@ -54,8 +54,8 @@ exports.uploadExternalDocumentsInteractor = async (
         key,
       });
     await applicationContext
-      .getUseCases()
-      .validatePdfInteractor(applicationContext, {
+      .getUseCaseHelpers()
+      .validatePdf(applicationContext, {
         key,
       });
 

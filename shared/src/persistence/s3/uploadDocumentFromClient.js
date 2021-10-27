@@ -11,7 +11,7 @@ const getUploadPolicy = async ({ applicationContext, key }) => {
 
 exports.uploadDocumentFromClient = async ({
   applicationContext,
-  document,
+  doc,
   key,
   onUploadProgress = () => {},
 }) => {
@@ -22,7 +22,7 @@ exports.uploadDocumentFromClient = async ({
   });
   await applicationContext.getPersistenceGateway().uploadPdfFromClient({
     applicationContext,
-    file: document,
+    file: doc,
     key: docId,
     onUploadProgress,
     policy,
