@@ -11,7 +11,7 @@ export const featureFlagHelper = (get, applicationContext) => {
   );
 
   const isInternalOrderSearchEnabled = get(
-    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH],
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH.key],
   );
 
   let isOrderSearchEnabledForRole = false;
@@ -19,7 +19,7 @@ export const featureFlagHelper = (get, applicationContext) => {
     isOrderSearchEnabledForRole = isInternalOrderSearchEnabled;
   } else {
     isOrderSearchEnabledForRole = get(
-      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH],
+      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key],
     );
   }
 
