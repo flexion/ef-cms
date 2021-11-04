@@ -125,10 +125,8 @@ describe('featureFlagHelper', () => {
     });
   });
 
-  describe('isOpinionSearchEnabled', () => {
-    it('should be true when the advanced_opinion_search feature is enabled', () => {
-      applicationContext.isFeatureEnabled.mockReturnValue(true);
-
+  describe('isInternalOpinionSearchEnabled', () => {
+    it('should be true when the internal-opinion-search-enabled feature is enabled', () => {
       const featureFlagHelper = withAppContextDecorator(
         featureFlagHelperComputed,
         {
@@ -137,17 +135,18 @@ describe('featureFlagHelper', () => {
       );
 
       const result = runCompute(featureFlagHelper, {
-        state: { user: mockExternalUser },
+        state: {
+          isInternalOpinionSearchEnabled: true,
+          user: mockExternalUser,
+        },
       });
 
       expect(result).toMatchObject({
-        isOpinionSearchEnabled: true,
+        isInternalOpinionSearchEnabled: true,
       });
     });
 
     it('should be false when the advanced_opinion_search feature is NOT enabled', () => {
-      applicationContext.isFeatureEnabled.mockReturnValue(false);
-
       const featureFlagHelper = withAppContextDecorator(
         featureFlagHelperComputed,
         {
@@ -156,11 +155,14 @@ describe('featureFlagHelper', () => {
       );
 
       const result = runCompute(featureFlagHelper, {
-        state: { user: mockExternalUser },
+        state: {
+          isInternalOpinionSearchEnabled: false,
+          user: mockExternalUser,
+        },
       });
 
       expect(result).toMatchObject({
-        isOpinionSearchEnabled: false,
+        isInternalOpinionSearchEnabled: false,
       });
     });
   });
