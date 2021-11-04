@@ -544,6 +544,12 @@ const {
   getInboxMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/messages/getInboxMessagesForUserInteractor');
 const {
+  getInternalOpinionSearchEnabled,
+} = require('../../shared/src/persistence/dynamo/deployTable/getInternalOpinionSearchEnabled');
+const {
+  getInternalOpinionSearchEnabledInteractor,
+} = require('../../shared/src/business/useCases/search/getInternalOpinionSearchEnabledInteractor');
+const {
   getInternalOrderSearchEnabled,
 } = require('../../shared/src/persistence/dynamo/deployTable/getInternalOrderSearchEnabled');
 const {
@@ -1455,6 +1461,7 @@ const gatewayMethods = {
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
+  getInternalOpinionSearchEnabled,
   getInternalOrderSearchEnabled,
   getInternalUsers,
   getLimiterByKey,
@@ -1874,6 +1881,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getHealthCheckInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
+        getInternalOpinionSearchEnabledInteractor,
         getInternalOrderSearchEnabledInteractor,
         getInternalUsersInteractor,
         getIrsPractitionersBySearchKeyInteractor,
