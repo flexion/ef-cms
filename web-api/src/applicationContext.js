@@ -523,6 +523,9 @@ const {
   getUniqueId,
 } = require('../../shared/src/sharedAppContext.js');
 const {
+  getExternalOrderSearchEnabled,
+} = require('../../shared/src/persistence/dynamo/deployTable/getExternalOrderSearchEnabled');
+const {
   getExternalOrderSearchEnabledInteractor,
 } = require('../../shared/src/business/useCases/search/getExternalOrderSearchEnabledInteractor');
 const {
@@ -1372,6 +1375,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
+    getExternalOrderSearchEnabled,
     getMaintenanceMode,
     getSesStatus,
     incrementCounter,
@@ -1866,17 +1870,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getDocumentQCServedForUserInteractor,
         getDownloadPolicyUrlInteractor,
         getEligibleCasesForTrialSessionInteractor,
-        getExternalOrderSearchEnabledInteractor: applicationContext =>
-          environment.stage === 'local'
-            ? true
-            : getExternalOrderSearchEnabledInteractor(applicationContext),
+        getExternalOrderSearchEnabledInteractor,
         getHealthCheckInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
-        getInternalOrderSearchEnabledInteractor: applicationContext =>
-          environment.stage === 'local'
-            ? true
-            : getInternalOrderSearchEnabledInteractor(applicationContext),
+        getInternalOrderSearchEnabledInteractor,
         getInternalUsersInteractor,
         getIrsPractitionersBySearchKeyInteractor,
         getJudgeForUserChambersInteractor,
