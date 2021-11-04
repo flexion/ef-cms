@@ -29,7 +29,7 @@ export const gotoAdvancedSearchSequence =
     {
       no: [
         getFeatureFlagValueFactoryAction(
-          getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key,
+          getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH,
         ),
         {
           no: [setAlertWarningAction],
@@ -38,13 +38,15 @@ export const gotoAdvancedSearchSequence =
       ],
       yes: [
         getFeatureFlagValueFactoryAction(
-          getConstants().ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH.key,
+          getConstants().ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH,
         ),
         {
           no: [setAlertWarningAction],
           yes: [],
         },
-        getFeatureFlagValueFactoryAction('internal-opinion-search-enabled'),
+        getFeatureFlagValueFactoryAction(
+          getConstants().ALLOWLIST_FEATURE_FLAGS.INTERNAL_OPINION_SEARCH,
+        ),
         {
           no: [setAlertWarningAction],
           yes: [],
