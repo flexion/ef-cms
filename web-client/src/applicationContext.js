@@ -181,6 +181,7 @@ import { getExternalOrderSearchEnabledInteractor } from '../../shared/src/proxie
 import { getFormattedPartiesNameAndTitle } from '../../shared/src/business/utilities/getFormattedPartiesNameAndTitle';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getInboxMessagesForUserProxy';
+import { getInternalOpinionSearchEnabledInteractor } from '../../shared/src/proxies/search/getInternalOpinionSearchEnabledProxy';
 import { getInternalOrderSearchEnabledInteractor } from '../../shared/src/proxies/search/getInternalOrderSearchEnabledProxy';
 import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsersProxy';
 import { getIrsPractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getIrsPractitionersBySearchKeyProxy';
@@ -415,6 +416,7 @@ const allUseCases = {
   getHealthCheckInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,
+  getInternalOpinionSearchEnabledInteractor,
   getInternalOrderSearchEnabledInteractor,
   getInternalUsersInteractor,
   getIrsPractitionersBySearchKeyInteractor,

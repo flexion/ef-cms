@@ -207,6 +207,9 @@ const {
   getInboxMessagesForUserLambda,
 } = require('./messages/getInboxMessagesForUserLambda');
 const {
+  getInternalOpinionSearchEnabledLambda,
+} = require('./search/getInternalOpinionSearchEnabledLambda');
+const {
   getInternalOrderSearchEnabledLambda,
 } = require('./search/getInternalOrderSearchEnabledLambda');
 const {
@@ -902,6 +905,12 @@ app.get(
   app.get(
     '/search/internal-order-search-enabled',
     lambdaWrapper(getInternalOrderSearchEnabledLambda),
+  );
+}
+{
+  app.get(
+    '/search/internal-opinion-search-enabled',
+    lambdaWrapper(getInternalOpinionSearchEnabledLambda),
   );
 }
 {
