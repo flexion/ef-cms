@@ -1,5 +1,6 @@
 import {
   ADVANCED_SEARCH_OPINION_TYPES,
+  ADVANCED_SEARCH_OPINION_TYPES_LIST,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
@@ -10,6 +11,7 @@ import {
   INITIAL_DOCUMENT_TYPES,
   MAX_SEARCH_RESULTS,
   OBJECTIONS_OPTIONS_MAP,
+  OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
   ROLES,
@@ -17,6 +19,7 @@ import {
   TODAYS_ORDERS_SORTS,
   TODAYS_ORDERS_SORT_DEFAULT,
   TRANSCRIPT_EVENT_CODE,
+  TRIAL_SESSION_SCOPE_TYPES,
   US_STATES,
   US_STATES_OTHER,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -25,6 +28,12 @@ import {
   getContactPrimary,
   getContactSecondary,
 } from '../../shared/src/business/entities/cases/Case';
+import {
+  ERROR_MAP_429,
+  getCognitoLoginUrl,
+  getEnvironment,
+  getPublicSiteUrl,
+} from '../../shared/src/sharedAppContext.js';
 import { User } from '../../shared/src/business/entities/User';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
@@ -38,12 +47,10 @@ import {
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
-import {
-  getCognitoLoginUrl,
-  getPublicSiteUrl,
-} from '../../shared/src/sharedAppContext.js';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
+import { getExternalOrderSearchEnabledInteractor } from '../../shared/src/proxies/search/getExternalOrderSearchEnabledProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
+import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
@@ -72,6 +79,7 @@ const allUseCases = {
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor: getPublicCaseInteractor,
   getDocumentDownloadUrlInteractor,
+  getExternalOrderSearchEnabledInteractor,
   getHealthCheckInteractor,
   getMaintenanceModePublicInteractor,
   getPublicJudgesInteractor,
@@ -87,6 +95,7 @@ tryCatchDecorator(allUseCases);
 
 const frozenConstants = deepFreeze({
   ADVANCED_SEARCH_OPINION_TYPES,
+  ADVANCED_SEARCH_OPINION_TYPES_LIST,
   ADVANCED_SEARCH_TABS,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
@@ -94,16 +103,19 @@ const frozenConstants = deepFreeze({
   DATE_RANGE_SEARCH_OPTIONS,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  ERROR_MAP_429,
   EVENT_CODES_VISIBLE_TO_PUBLIC,
   INITIAL_DOCUMENT_TYPES,
   MAX_SEARCH_RESULTS,
   OBJECTIONS_OPTIONS_MAP,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+  OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
   ORDER_EVENT_CODES,
   STIPULATED_DECISION_EVENT_CODE,
   TODAYS_ORDERS_SORT_DEFAULT,
   TODAYS_ORDERS_SORTS,
   TRANSCRIPT_EVENT_CODE,
+  TRIAL_SESSION_SCOPE_TYPES,
   US_STATES,
   US_STATES_OTHER,
   USER_ROLES: ROLES,
@@ -155,6 +167,9 @@ const applicationContextPublic = {
       isInternalUser: User.isInternalUser,
       sortDocketEntries,
     };
+  },
+  isFeatureEnabled: featureName => {
+    return getIsFeatureEnabled(featureName, {}, getEnvironment().stage);
   },
 };
 
