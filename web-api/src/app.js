@@ -198,20 +198,14 @@ const {
   getEligibleCasesForTrialSessionLambda,
 } = require('./trialSessions/getEligibleCasesForTrialSessionLambda');
 const {
-  getExternalOrderSearchEnabledLambda,
-} = require('./search/getExternalOrderSearchEnabledLambda');
+  getFeatureFlagValueLambda,
+} = require('./featureFlag/getFeatureFlagValueLambda');
 const {
   getInboxMessagesForSectionLambda,
 } = require('./messages/getInboxMessagesForSectionLambda');
 const {
   getInboxMessagesForUserLambda,
 } = require('./messages/getInboxMessagesForUserLambda');
-const {
-  getInternalOpinionSearchEnabledLambda,
-} = require('./search/getInternalOpinionSearchEnabledLambda');
-const {
-  getInternalOrderSearchEnabledLambda,
-} = require('./search/getInternalOrderSearchEnabledLambda');
 const {
   getIrsPractitionersBySearchKeyLambda,
 } = require('./users/getIrsPractitionersBySearchKeyLambda');
@@ -899,28 +893,6 @@ app.get(
 }
 
 /**
- * search
- */
-{
-  app.get(
-    '/search/internal-order-search-enabled',
-    lambdaWrapper(getInternalOrderSearchEnabledLambda),
-  );
-}
-{
-  app.get(
-    '/search/internal-opinion-search-enabled',
-    lambdaWrapper(getInternalOpinionSearchEnabledLambda),
-  );
-}
-{
-  app.get(
-    '/search/external-order-search-enabled',
-    lambdaWrapper(getExternalOrderSearchEnabledLambda),
-  );
-}
-
-/**
  * sections
  */
 app.get(
@@ -1102,5 +1074,10 @@ app.get(
  * maintenance-mode
  */
 app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
+
+/**
+ * feature-flag
+ */
+app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
 
 exports.app = app;

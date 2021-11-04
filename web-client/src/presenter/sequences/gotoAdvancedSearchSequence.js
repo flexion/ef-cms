@@ -1,9 +1,7 @@
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { defaultAdvancedSearchFormAction } from '../actions/AdvancedSearch/defaultAdvancedSearchFormAction';
-import { getExternalOrderSearchEnabledAction } from '../actions/getExternalOrderSearchEnabledAction';
-import { getInternalOpinionSearchEnabledAction } from '../actions/getInternalOpinionSearchEnabledAction';
-import { getInternalOrderSearchEnabledAction } from '../actions/getInternalOrderSearchEnabledAction';
+import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { getOpinionTypesAction } from '../actions/getOpinionTypesAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isInternalUserAction } from '../actions/isInternalUserAction';
@@ -29,19 +27,19 @@ export const gotoAdvancedSearchSequence =
     isInternalUserAction,
     {
       no: [
-        getExternalOrderSearchEnabledAction,
+        getFeatureFlagValueFactoryAction('external-order-search-enabled'),
         {
           no: [setAlertWarningAction],
           yes: [],
         },
       ],
       yes: [
-        getInternalOrderSearchEnabledAction,
+        getFeatureFlagValueFactoryAction('internal-order-search-enabled'),
         {
           no: [setAlertWarningAction],
           yes: [],
         },
-        getInternalOpinionSearchEnabledAction,
+        getFeatureFlagValueFactoryAction('internal-opinion-search-enabled'),
         {
           no: [setAlertWarningAction],
           yes: [],

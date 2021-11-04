@@ -523,11 +523,11 @@ const {
   getUniqueId,
 } = require('../../shared/src/sharedAppContext.js');
 const {
-  getExternalOrderSearchEnabled,
-} = require('../../shared/src/persistence/dynamo/deployTable/getExternalOrderSearchEnabled');
+  getFeatureFlagValue,
+} = require('../../shared/src/persistence/dynamo/deployTable/getFeatureFlagValue');
 const {
-  getExternalOrderSearchEnabledInteractor,
-} = require('../../shared/src/business/useCases/search/getExternalOrderSearchEnabledInteractor');
+  getFeatureFlagValueInteractor,
+} = require('../../shared/src/business/useCases/featureFlag/getFeatureFlagValueInteractor');
 const {
   getFirstSingleCaseRecord,
 } = require('../../shared/src/persistence/elasticsearch/getFirstSingleCaseRecord');
@@ -543,18 +543,6 @@ const {
 const {
   getInboxMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/messages/getInboxMessagesForUserInteractor');
-const {
-  getInternalOpinionSearchEnabled,
-} = require('../../shared/src/persistence/dynamo/deployTable/getInternalOpinionSearchEnabled');
-const {
-  getInternalOpinionSearchEnabledInteractor,
-} = require('../../shared/src/business/useCases/search/getInternalOpinionSearchEnabledInteractor');
-const {
-  getInternalOrderSearchEnabled,
-} = require('../../shared/src/persistence/dynamo/deployTable/getInternalOrderSearchEnabled');
-const {
-  getInternalOrderSearchEnabledInteractor,
-} = require('../../shared/src/business/useCases/search/getInternalOrderSearchEnabledInteractor');
 const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
@@ -1381,7 +1369,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
-    getExternalOrderSearchEnabled,
+    getFeatureFlagValue,
     getMaintenanceMode,
     getSesStatus,
     incrementCounter,
@@ -1461,8 +1449,6 @@ const gatewayMethods = {
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
-  getInternalOpinionSearchEnabled,
-  getInternalOrderSearchEnabled,
   getInternalUsers,
   getLimiterByKey,
   getMessageById,
@@ -1877,12 +1863,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getDocumentQCServedForUserInteractor,
         getDownloadPolicyUrlInteractor,
         getEligibleCasesForTrialSessionInteractor,
-        getExternalOrderSearchEnabledInteractor,
+        getFeatureFlagValueInteractor,
         getHealthCheckInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
-        getInternalOpinionSearchEnabledInteractor,
-        getInternalOrderSearchEnabledInteractor,
         getInternalUsersInteractor,
         getIrsPractitionersBySearchKeyInteractor,
         getJudgeForUserChambersInteractor,
