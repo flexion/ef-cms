@@ -39,9 +39,11 @@ exports.handler = (awsEvent, handlerContext, callback) => {
   const s3Url = 'https://s3.us-east-1.amazonaws.com';
   const statuspageUrl = 'https://lynmjtcq5px1.statuspage.io';
   const pdfjsExpressUrl = 'https://*.pdfjs.express';
+  const blobSubdomainUrl = `blob:${subdomainsUrl}`;
+
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
-    `connect-src ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${pdfjsExpressUrl}`,
+    `connect-src ${blobSubdomainUrl} ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${pdfjsExpressUrl}`,
     "default-src 'none'",
     "manifest-src 'self'",
     `form-action ${applicationUrl} ${subdomainsUrl}`,
