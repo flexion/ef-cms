@@ -12,6 +12,7 @@ exports.generatePdfFromHtmlInteractor = async (
   applicationContext,
   {
     contentHtml,
+    css = '',
     displayHeaderFooter = true,
     docketNumber,
     footerHtml,
@@ -57,7 +58,7 @@ exports.generatePdfFromHtmlInteractor = async (
       displayHeaderFooter,
       footerTemplate,
       format: 'Letter',
-      headerTemplate,
+      headerTemplate: css + headerTemplate,
       margin: {
         bottom: '100px',
         top: '80px',

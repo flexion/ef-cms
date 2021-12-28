@@ -1,6 +1,6 @@
 const {
   generateHTMLTemplateForPDF,
-  // getCompiledCSS,
+  getCompiledCSS,
 } = require('../generateHTMLTemplateForPDF');
 const {
   reactTemplateGenerator,
@@ -39,7 +39,7 @@ const order = async ({ applicationContext, data }) => {
     },
   });
 
-  // const css = await getCompiledCSS({ applicationContext });
+  const css = await getCompiledCSS({ applicationContext });
 
   const headerHtml = reactTemplateGenerator({
     componentName: 'PageMetaHeaderDocket',
@@ -52,6 +52,7 @@ const order = async ({ applicationContext, data }) => {
     .getUseCases()
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
+      css,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
       headerHtml,

@@ -37,7 +37,7 @@ const generateHTMLTemplateForPDF = async ({
     options,
   });
 
-  return { css, html };
+  return html;
 };
 
 // TODO: temp hack to test a theory
