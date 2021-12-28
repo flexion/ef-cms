@@ -6,7 +6,6 @@ export const PageMetaHeaderDocket = ({ docketNumber }) => {
       <div
         style={{
           float: 'left',
-          fontFamily: "'nimbus_roman', serif",
           fontSize: '12px',
           transform: 'scale(0.75)',
         }}
@@ -16,7 +15,6 @@ export const PageMetaHeaderDocket = ({ docketNumber }) => {
       <div
         style={{
           float: 'right',
-          fontFamily: "'nimbus_roman', serif",
           fontSize: '12px',
           transform: 'scale(0.75)',
         }}
