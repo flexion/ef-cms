@@ -32,7 +32,6 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
 import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
-
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
@@ -81,6 +80,26 @@ const appPublic = {
 
     presenter.state.constants = applicationContext.getConstants();
 
+    // create conditional for checking initial value of localstorage for both form info and tab location
+
+    const advancedSearchTab = applicationContext
+      .getUseCases()
+      .getItemInteractor(applicationContext, { key: 'advancedSearchTab' });
+
+    if (advancedSearchTab) {
+      presenter.state.advancedSearchTab = advancedSearchTab;
+    }
+
+    const advancedSearchForm = applicationContext
+      .getUseCases()
+      .getItemInteractor(applicationContext, { key: 'advancedSearchForm' });
+
+    if (advancedSearchForm) {
+      presenter.state.advancedSearchForm = advancedSearchForm;
+    }
+
+    console.log('***presenterAST', presenter.state.advancedSearchTab);
+
     presenter.providers.router = {
       back,
       createObjectURL,
@@ -90,6 +109,20 @@ const appPublic = {
     };
 
     const cerebralApp = App(presenter, debugTools);
+
+    applicationContext
+      .getUseCases()
+      .getCurrentVersionInteractor(applicationContext)
+      .then(version => {
+        setInterval(async () => {
+          const currentVersion = await applicationContext
+            .getUseCases()
+            .getCurrentVersionInteractor(applicationContext);
+          if (currentVersion !== version) {
+            await cerebralApp.getSequence('persistFormsOnReloadSequence')();
+          }
+        }, 10000);
+      });
 
     router.initialize(cerebralApp);
 
