@@ -1,9 +1,5 @@
-const {
-  generateHTMLTemplateForPDF,
-  getCompiledCSS,
-} = require('./generateHTMLTemplateForPDF');
+const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
 module.exports = {
   generateHTMLTemplateForPDF,
-  getCompiledCSS,
 };

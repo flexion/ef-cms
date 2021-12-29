@@ -40,27 +40,6 @@ const generateHTMLTemplateForPDF = async ({
   return html;
 };
 
-// TODO: temp hack to test a theory
-const getCompiledCSS = async ({ applicationContext }) => {
-  const sassContent = require('../htmlGenerator/index.scss_');
-  const sass = applicationContext.getNodeSass();
-
-  const { css } = await new Promise((resolve, reject) => {
-    sass.render({ data: sassContent }, (err, result) => {
-      if (err) {
-        applicationContext.logger.error(
-          'Error compiling SASS to CSS while generating PDF',
-          err,
-        );
-        return reject(err);
-      }
-      return resolve(result);
-    });
-  });
-  return css;
-};
-
 module.exports = {
   generateHTMLTemplateForPDF,
-  getCompiledCSS,
 };
