@@ -582,7 +582,11 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            docker build -t efcms -f Dockerfile .
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
+              docker build -t efcms -f Dockerfile .
+            fi
       - run:
           name: Deploy Migration Cron Lambda
           command: |
@@ -843,20 +847,20 @@ workflows:
 
   build-and-deploy:
     jobs:
-      # - build-client-integration:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-pa11y:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-pa11y-public:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-pa11y-public-search:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-cypress:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-cypress-smoketests-local:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-cypress-public:
-      #     <<: *build-and-deploy-defaults
+      - build-client-integration:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y-public:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y-public-search:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress-smoketests-local:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress-public:
+          <<: *build-and-deploy-defaults
       - deploy:
           # requires:
           #   - build-client-integration
@@ -881,64 +885,64 @@ workflows:
                 - experimental5
                 - dawson
                 - migration
-      # - migrate:
-      #     requires:
-      #       - deploy
-      #     filters:
-      #       branches:
-      #         only:
-      #           - develop
-      #           - irs
-      #           - staging
-      #           - test
-      #           - experimental1
-      #           - experimental2
-      #           - experimental3
-      #           - experimental4
-      #           - experimental5
-      #           - migration
-      # - wait-for-reindex:
-      #     type: approval
-      #     requires:
-      #       - migrate
-      # - disable-reindex-cron:
-      #     requires:
-      #       - wait-for-reindex
-      # - smoketests:
-      #     requires:
-      #       - disable-reindex-cron
-      #     filters:
-      #       branches:
-      #         only:
-      #           - develop
-      #           - irs
-      #           - staging
-      #           - test
-      #           - experimental1
-      #           - experimental2
-      #           - experimental3
-      #           - experimental4
-      #           - experimental5
-      #           - migration
-      # - smoketests-readonly:
-      #     requires:
-      #       - smoketests
-      #     filters:
-      #       branches:
-      #         only:
-      #           - develop
-      #           - irs
-      #           - staging
-      #           - test
-      #           - experimental1
-      #           - experimental2
-      #           - experimental3
-      #           - experimental4
-      #           - experimental5
-      #           - migration
-      - switch-colors:
+      - migrate:
           requires:
             - deploy
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - wait-for-reindex:
+          type: approval
+          requires:
+            - migrate
+      - disable-reindex-cron:
+          requires:
+            - wait-for-reindex
+      - smoketests:
+          requires:
+            - disable-reindex-cron
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - smoketests-readonly:
+          requires:
+            - smoketests
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - switch-colors:
+          requires:
+            - smoketests-readonly
           filters:
             branches:
               only:
