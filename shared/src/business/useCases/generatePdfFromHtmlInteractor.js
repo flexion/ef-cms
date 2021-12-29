@@ -33,7 +33,7 @@ exports.generatePdfFromHtmlInteractor = async (
 
     const headerContent = overwriteHeader
       ? `${headerHtml || ''}`
-      : ` <div style="font-size: 8px; float: right;">
+      : ` <div style="font-size: 8px; font-family: sans-serif; float: right;">
               Page <span class="pageNumber"></span>
               of <span class="totalPages"></span>
             </div>
@@ -42,7 +42,7 @@ exports.generatePdfFromHtmlInteractor = async (
             </div>`;
 
     const headerTemplate = `
-          <div style="font-size: 8px; width: 100%; margin: 0px 40px; margin-top: 25px;">
+          <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
             ${headerContent}
           </div>
     `;
