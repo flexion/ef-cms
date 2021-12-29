@@ -581,13 +581,7 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-<<<<<<< HEAD
             docker build -t efcms -f Dockerfile .
-=======
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker build -t efcms -f Dockerfile .
-            fi
->>>>>>> 8516-seamless-deploy
       - run:
           name: Deploy Migration Cron Lambda
           command: |
