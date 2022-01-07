@@ -22,7 +22,7 @@ commands:
       - run:
           name: Install Cypress dependency
           command: |
-            echo ls ../.cache/Cypress/
+            echo ls $(../.cache/Cypress/)
             if [ ! -d ../.cache/Cypress/ ]; then
               echo Installing Cypress
               ./node_modules/.bin/cypress install
