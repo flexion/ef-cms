@@ -14,12 +14,11 @@ commands:
       - run:
           name: Install node dependencies
           command: |
-            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
-            if [ ! -d node_modules -o ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
+            if [ -d node_modules -a -d /root/.cache/Cypress/ ]; then
+              echo package.json and package-lock.json are unchanged. Using cached dependency folders.             
+            else
               echo $(pwd)
               npm ci
-            else
-              echo package.json and package-lock.json are unchanged. Using cached dependency folders.             
             fi
       - run:
           name: Reset package-lock
