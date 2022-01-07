@@ -13,7 +13,7 @@ commands:
             - v8-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
-          command: '[ ! -d node_modules -o ! -d /.cache/Cypress ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
+          command: '[ -d node_modules && -d /.cache/Cypress ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
       - run:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
