@@ -22,7 +22,7 @@ commands:
       - run:
           name: Install Cypress dependency
           command: |
-            if [ ! -d /root/.cache/Cypress/ ]; then
+            if [ ! -d ../.cache/Cypress/ ]; then
               ./node_modules/.bin/cypress install
             else
               echo Found cached Cypress version. Using cached Cypress folder.             
