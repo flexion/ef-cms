@@ -14,7 +14,7 @@ commands:
       - run:
           name: Install node dependencies
           command: |
-            if [ ! -d node_modules ] || [ -d node_modules ]; then
+            if [ ! -d node_modules ]; then
               echo $(pwd)
               npm ci
             else
