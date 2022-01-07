@@ -273,7 +273,7 @@ jobs:
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
-      - npm-install
+      - npm-and-cypress-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -318,7 +318,7 @@ jobs:
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
-      - npm-install
+      - npm-and-cypress-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -367,7 +367,7 @@ jobs:
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
-      - npm-install
+      - npm-and-cypress-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
