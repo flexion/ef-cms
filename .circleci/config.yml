@@ -15,9 +15,9 @@ commands:
           name: Install node dependencies
           command: |
             if [ -d node_modules ] && [ -d Cypress ]; then
-              echo pwd
               echo package.json and package-lock.json are unchanged. Using cached dependency folders.
             else
+              echo pwd
               npm ci
             fi
       - run:
