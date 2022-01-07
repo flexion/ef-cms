@@ -14,7 +14,7 @@ commands:
       - run:
           name: Install node dependencies
           command: |
-            if [ ! -d node_modules ] || [ ! -d ../.cache/Cypress/ ]; then
+            if [ ! -d node_modules ] || [ ! -d ../.cache/thisdoesnotexist/ ]; then
               echo $(pwd)
               npm ci
             else
