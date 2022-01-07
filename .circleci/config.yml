@@ -14,11 +14,19 @@ commands:
       - run:
           name: Install node dependencies
           command: |
-            if [ ! -d /root/.cache/Cypress/ ]; then
-              echo $(pwd)
+            if [ ! -d node_modules ]; then
               npm ci
             else
-              echo package.json and package-lock.json are unchanged. Using cached dependency folders.             
+              echo package.json and package-lock.json are unchanged. Using cached node_modules folder.             
+            fi
+      - run:
+          name: Install Cypress dependency
+          command: |
+            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
+            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
+              ./node_modules/.bin/cypress install
+            else
+              echo Found cached Cypress version. Using cached Cypress folder.             
             fi
       - run:
           name: Reset package-lock
@@ -282,10 +290,6 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
-            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
-              ./node_modules/.bin/cypress install
-            fi
             npx --no-install run-p start:api:ci start:client:ci start:public:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             URL=http://localhost:4000/api/swagger ./wait-until.sh
