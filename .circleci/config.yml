@@ -22,8 +22,7 @@ commands:
       - run:
           name: Install Cypress dependency
           command: |
-            cd ../
-            if [ ! -d .cache/Cypress ]; then
+            if [ ! -d ~/.cache/Cypress ]; then
               echo Installing Cypress
               ./project/node_modules/.bin/cypress install
             else
