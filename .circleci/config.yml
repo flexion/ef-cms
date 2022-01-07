@@ -24,7 +24,6 @@ commands:
           command: |
             ls -l ~/.cache/Cypress
             ls -l ../.cache/Cypress
-            ls -l /root/.cache/Cypress
             if [ ! -d ../.cache/Cypress/ ]; then
               echo Installing Cypress
               ./node_modules/.bin/cypress install
