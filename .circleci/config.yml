@@ -25,7 +25,7 @@ commands:
             cd ../
             if [ ! -d .cache/Cypress/ ]; then
               echo Installing Cypress
-              ./node_modules/.bin/cypress install
+              cypress install
             else
               echo Found cached Cypress version. Using cached Cypress folder.             
             fi
