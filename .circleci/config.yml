@@ -14,7 +14,7 @@ commands:
       - run:
           name: Install node dependencies
           command: |
-            if [ -d node_modules ] && [ -d Cypress ]; then
+            if [ -d node_modules ] && [ -d /root/.cache/Cypress ]; then
               echo package.json and package-lock.json are unchanged. Using cached dependency folders.
             else
               echo $(pwd)
