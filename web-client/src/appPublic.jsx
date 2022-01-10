@@ -45,6 +45,7 @@ import ReactDOM from 'react-dom';
 const appPublic = {
   initialize: (applicationContext, debugTools) => {
     const withAppContextDecorator = (f, context) => {
+      console.log(Date.now());
       return get => f(get, context || applicationContext);
     };
 

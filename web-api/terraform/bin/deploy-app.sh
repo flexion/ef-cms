@@ -2,7 +2,15 @@
 
 ENVIRONMENT=$1
 
-[ -z "${CIRCLE_BRANCH}" ] && echo "You must have CIRCLE_BRANCH set in your environment" && exit 1
+aws s3 cp s3://flexion-ef-cms-environments/${ENVIRONMENT}.env .env
+unamestr=$(uname)
+if [ "$unamestr" = 'Linux' ]; then
+  export $(grep -v '^#' .env | xargs -d '\n')
+elif [ "$unamestr" = 'Darwin' ]; then
+  export $(grep -v '^#' .env | xargs -0)
+fi
+
+#[ -z "${CIRCLE_BRANCH}" ] && echo "You must have CIRCLE_BRANCH set in your environment" && exit 1
 [ -z "${COGNITO_SUFFIX}" ] && echo "You must have COGNITO_SUFFIX set in your environment" && exit 1
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
 [ -z "${DISABLE_EMAILS}" ] && echo "You must have DISABLE_EMAILS set in your environment" && exit 1
@@ -17,7 +25,7 @@ ENVIRONMENT=$1
 
 echo "Running terraform with the following environment configs:"
 echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
-echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
+#echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
 echo "  - COGNITO_SUFFIX=${COGNITO_SUFFIX}"
 echo "  - DEPLOYING_COLOR=${DEPLOYING_COLOR}"
 echo "  - DISABLE_EMAILS=${DISABLE_EMAILS}"
@@ -111,6 +119,6 @@ export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
 export TF_VAR_zone_name=$ZONE_NAME
 
-terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan
 terraform apply -auto-approve execution-plan

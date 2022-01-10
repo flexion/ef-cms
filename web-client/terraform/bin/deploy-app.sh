@@ -3,9 +3,19 @@
 ENVIRONMENT=$1
 
 [ -z "${ENVIRONMENT}" ] && echo "You must have ENVIRONMENT set in your environment" && exit 1
+[ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
+echo "  - ZONE_NAME=${ZONE_NAME}"
+
+aws s3 cp s3://flexion-ef-cms-environments/${ENVIRONMENT}.env .env
+unamestr=$(uname)
+if [ "$unamestr" = 'Linux' ]; then
+  export $(grep -v '^#' .env | xargs -d '\n')
+elif [ "$unamestr" = 'FreeBSD' ]; then
+  export $(grep -v '^#' .env | xargs -0)
+fi
 
 ../../../scripts/verify-terraform-version.sh
 
@@ -49,6 +59,6 @@ export TF_VAR_statuspage_dns_record=$STATUSPAGE_DNS_RECORD
 export TF_VAR_zone_name=$ZONE_NAME
 export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
 
-terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan
 terraform apply -auto-approve
