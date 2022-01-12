@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 ENVIRONMENT=$1
+ZONE_NAME=$2
 
 [ -z "${ENVIRONMENT}" ] && echo "You must have ENVIRONMENT set in your environment" && exit 1
 
@@ -31,23 +32,9 @@ fi
 
 set -eo pipefail
 
-DYNAMSOFT_URL="https://dynamsoft-lib.${EFCMS_DOMAIN}"
-
-if [[ -z "${IS_DYNAMSOFT_ENABLED}" ]]
-then
-  IS_DYNAMSOFT_ENABLED="1"
-fi
-
 export TF_PLUGIN_CACHE_DIR=./terraform-cache
-export TF_VAR_dns_domain=$EFCMS_DOMAIN
-export TF_VAR_dynamsoft_product_keys=$DYNAMSOFT_PRODUCT_KEYS
-export TF_VAR_dynamsoft_s3_zip_path=$DYNAMSOFT_S3_ZIP_PATH
-export TF_VAR_dynamsoft_url=$DYNAMSOFT_URL
 export TF_VAR_environment=$ENVIRONMENT
-export TF_VAR_is_dynamsoft_enabled=$IS_DYNAMSOFT_ENABLED
 export TF_VAR_statuspage_dns_record=$STATUSPAGE_DNS_RECORD
-export TF_VAR_zone_name=$ZONE_NAME
-export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan

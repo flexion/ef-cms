@@ -2,7 +2,6 @@
 
 ENVIRONMENT=$1
 
-[ -z "${CIRCLE_BRANCH}" ] && echo "You must have CIRCLE_BRANCH set in your environment" && exit 1
 [ -z "${COGNITO_SUFFIX}" ] && echo "You must have COGNITO_SUFFIX set in your environment" && exit 1
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
 [ -z "${DISABLE_EMAILS}" ] && echo "You must have DISABLE_EMAILS set in your environment" && exit 1
@@ -17,7 +16,6 @@ ENVIRONMENT=$1
 
 echo "Running terraform with the following environment configs:"
 echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
-echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
 echo "  - COGNITO_SUFFIX=${COGNITO_SUFFIX}"
 echo "  - DEPLOYING_COLOR=${DEPLOYING_COLOR}"
 echo "  - DISABLE_EMAILS=${DISABLE_EMAILS}"

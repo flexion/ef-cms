@@ -11,12 +11,22 @@ terraform {
   }
 }
 
+data "aws_secretsmanager_secret_version" "secrets" {
+  secret_id = "${var.environment}_deploy"
+}
+
+locals {
+  deploy_vars = jsondecode(
+    data.aws_secretsmanager_secret_version.secrets.secret_string
+  )
+}
+
 module "environment" {
   source = "../common"
 
-  zone_name              = var.zone_name
+  zone_name              = local.deploy_vars.ZONE_NAME
   environment            = var.environment
-  dns_domain             = var.dns_domain
+  dns_domain             = local.deploy_vars.EFCMS_DOMAIN
   cloudfront_default_ttl = var.cloudfront_default_ttl
   cloudfront_max_ttl     = var.cloudfront_max_ttl
 
@@ -37,41 +47,41 @@ provider "aws" {
 }
 
 data "aws_route53_zone" "zone" {
-  name = "${var.zone_name}."
+  name = "${local.deploy_vars.ZONE_NAME}."
 }
 
 module "dynamsoft_us_east" {
   source = "../dynamsoft"
 
   environment = var.environment
-  dns_domain  = var.dns_domain
+  dns_domain  = local.deploy_vars.EFCMS_DOMAIN
   providers = {
     aws = aws.us-east-1
   }
-  zone_name              = var.zone_name
+  zone_name              = local.deploy_vars.ZONE_NAME
   ami                    = "ami-0a313d6098716f372"
   availability_zones     = ["us-east-1a"]
-  is_dynamsoft_enabled   = var.is_dynamsoft_enabled
-  dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
-  dynamsoft_url          = var.dynamsoft_url
-  dynamsoft_product_keys = var.dynamsoft_product_keys
+  is_dynamsoft_enabled   = local.deploy_vars.IS_DYNAMSOFT_ENABLED
+  dynamsoft_s3_zip_path  = local.deploy_vars.DYNAMSOFT_S3_ZIP_PATH
+  dynamsoft_url          = local.deploy_vars.DYNAMSOFT_URL
+  dynamsoft_product_keys = local.deploy_vars.DYNAMSOFT_PRODUCT_KEYS
 }
 
 module "dynamsoft_us_west" {
   source = "../dynamsoft"
 
   environment = var.environment
-  dns_domain  = var.dns_domain
+  dns_domain  = local.deploy_vars.EFCMS_DOMAIN
   providers = {
     aws = aws.us-west-1
   }
-  zone_name              = var.zone_name
+  zone_name              = local.deploy_vars.ZONE_NAME
   ami                    = "ami-06397100adf427136"
   availability_zones     = ["us-west-1a"]
-  is_dynamsoft_enabled   = var.is_dynamsoft_enabled
-  dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
-  dynamsoft_url          = var.dynamsoft_url
-  dynamsoft_product_keys = var.dynamsoft_product_keys
+  is_dynamsoft_enabled   = local.deploy_vars.IS_DYNAMSOFT_ENABLED
+  dynamsoft_s3_zip_path  = local.deploy_vars.DYNAMSOFT_S3_ZIP_PATH
+  dynamsoft_url          = local.deploy_vars.DYNAMSOFT_URL
+  dynamsoft_product_keys = local.deploy_vars.DYNAMSOFT_PRODUCT_KEYS
 }
 
 
@@ -93,11 +103,11 @@ resource "aws_route53_record" "record_certs" {
 
 
 resource "aws_route53_record" "record_east_www" {
-  name           = "dynamsoft-lib.${var.dns_domain}"
+  name           = "dynamsoft-lib.${local.deploy_vars.EFCMS_DOMAIN}"
   type           = "CNAME"
   zone_id        = data.aws_route53_zone.zone.zone_id
   set_identifier = "us-east-1"
-  count          = var.is_dynamsoft_enabled
+  count          = local.deploy_vars.IS_DYNAMSOFT_ENABLED
   records = [
     module.dynamsoft_us_east.dns_name,
   ]
@@ -108,11 +118,11 @@ resource "aws_route53_record" "record_east_www" {
 }
 
 resource "aws_route53_record" "record_west_www" {
-  name           = "dynamsoft-lib.${var.dns_domain}"
+  name           = "dynamsoft-lib.${local.deploy_vars.EFCMS_DOMAIN}"
   type           = "CNAME"
   zone_id        = data.aws_route53_zone.zone.zone_id
   set_identifier = "us-west-1"
-  count          = var.is_dynamsoft_enabled
+  count          = local.deploy_vars.IS_DYNAMSOFT_ENABLED
   records = [
     module.dynamsoft_us_west.dns_name
   ]
@@ -136,7 +146,7 @@ resource "aws_acm_certificate_validation" "dns_validation_west" {
 
 resource "aws_route53_record" "statuspage" {
   count   = var.statuspage_dns_record != "" ? 1 : 0
-  name    = "status.${var.dns_domain}"
+  name    = "status.${local.deploy_vars.EFCMS_DOMAIN}"
   type    = "CNAME"
   zone_id = data.aws_route53_zone.zone.zone_id
   ttl     = 60
@@ -151,7 +161,7 @@ data "aws_sns_topic" "system_health_alarms" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "public_ui_health_check" {
-  alarm_name          = "${var.dns_domain} is accessible over HTTPS"
+  alarm_name          = "${local.deploy_vars.EFCMS_DOMAIN} is accessible over HTTPS"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
   comparison_operator = "LessThanThreshold"
@@ -159,7 +169,7 @@ resource "aws_cloudwatch_metric_alarm" "public_ui_health_check" {
   threshold           = "1"
   evaluation_periods  = "2"
   period              = "60"
-  count               = var.enable_health_checks
+  count               = local.deploy_vars.ENABLE_HEALTH_CHECKS
 
   dimensions = {
     HealthCheckId = aws_route53_health_check.public_ui_health_check[0].id
@@ -171,10 +181,10 @@ resource "aws_cloudwatch_metric_alarm" "public_ui_health_check" {
 }
 
 resource "aws_route53_health_check" "public_ui_health_check" {
-  fqdn              = var.dns_domain
+  fqdn              = local.deploy_vars.EFCMS_DOMAIN
   port              = 443
   type              = "HTTPS"
-  count             = var.enable_health_checks
+  count             = local.deploy_vars.ENABLE_HEALTH_CHECKS
   resource_path     = "/"
   failure_threshold = "3"
   request_interval  = "30"
@@ -182,7 +192,7 @@ resource "aws_route53_health_check" "public_ui_health_check" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ui_health_check" {
-  alarm_name          = "app.${var.dns_domain} is accessible over HTTPS"
+  alarm_name          = "app.${local.deploy_vars.EFCMS_DOMAIN} is accessible over HTTPS"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
   comparison_operator = "LessThanThreshold"
@@ -190,7 +200,7 @@ resource "aws_cloudwatch_metric_alarm" "ui_health_check" {
   threshold           = "1"
   evaluation_periods  = "2"
   period              = "60"
-  count               = var.enable_health_checks
+  count               = local.deploy_vars.ENABLE_HEALTH_CHECKS
   dimensions = {
     HealthCheckId = aws_route53_health_check.ui_health_check[0].id
   }
@@ -201,9 +211,9 @@ resource "aws_cloudwatch_metric_alarm" "ui_health_check" {
 }
 
 resource "aws_route53_health_check" "ui_health_check" {
-  fqdn              = "app.${var.dns_domain}"
+  fqdn              = "app.${local.deploy_vars.EFCMS_DOMAIN}"
   port              = 443
-  count             = var.enable_health_checks
+  count             = local.deploy_vars.ENABLE_HEALTH_CHECKS
   type              = "HTTPS"
   resource_path     = "/"
   failure_threshold = "3"
@@ -212,12 +222,12 @@ resource "aws_route53_health_check" "ui_health_check" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "status_health_check" {
-  alarm_name          = "${var.dns_domain} health check endpoint"
+  alarm_name          = "${local.deploy_vars.EFCMS_DOMAIN} health check endpoint"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
   comparison_operator = "LessThanThreshold"
   statistic           = "Minimum"
-  count               = var.enable_health_checks
+  count               = local.deploy_vars.ENABLE_HEALTH_CHECKS
   threshold           = "1"
   evaluation_periods  = "2"
   period              = "60"
@@ -232,13 +242,13 @@ resource "aws_cloudwatch_metric_alarm" "status_health_check" {
 }
 
 resource "aws_route53_health_check" "status_health_check" {
-  fqdn               = "public-api.${var.dns_domain}"
+  fqdn               = "public-api.${local.deploy_vars.EFCMS_DOMAIN}"
   port               = 443
   type               = "HTTPS_STR_MATCH"
   resource_path      = "/public-api/health"
   failure_threshold  = "3"
   request_interval   = "30"
-  count              = var.enable_health_checks
+  count              = local.deploy_vars.ENABLE_HEALTH_CHECKS
   invert_healthcheck = true
   search_string      = "false"                                 # Search for any JSON property returning "false"
   regions            = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
