@@ -104,7 +104,7 @@ Refactoring backlog: <https://trello.com/b/9tgrIFfA/ef-cms-opex-devex>
 
 ### Refactoring Backlog
 
-TODO
+TODO -
 
 ## Tech Rotations
 
