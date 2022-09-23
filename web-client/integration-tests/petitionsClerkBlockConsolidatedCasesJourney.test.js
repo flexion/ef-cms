@@ -32,7 +32,9 @@ describe('Manually block consolidated cases', () => {
   const trialLocation = `Charleston, West Virginia, ${Date.now()}`;
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation);
+  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation, true, {
+    procedureType: 'Regular',
+  });
 
   it('creates lead case', () => {
     const caseDetail = cerebralTest.getState('caseDetail');
@@ -43,10 +45,11 @@ describe('Manually block consolidated cases', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSetsCaseReadyForTrial(cerebralTest);
-  loginAs(cerebralTest, 'docketclerk@example.com');
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation);
+  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation, true, {
+    procedureType: 'Regular',
+  });
 
   it('should set member case docket number', () => {
     memberCaseDocketNumber = cerebralTest.docketNumber;
