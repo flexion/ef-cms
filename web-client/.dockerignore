@@ -1,7 +1,0 @@
-.nyc_output
-.scannerwork
-coverage
-dist
-node_modules
-terraform/common/.terraform
-terraform/main/.terraform

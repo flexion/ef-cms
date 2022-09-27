@@ -1,8 +1,0 @@
-.cache
-.dynamodb
-.nyc_output
-coverage
-dist
-node_modules
-terraform/main/.terraform
-terraform/template/.terraform

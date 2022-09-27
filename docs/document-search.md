@@ -1,1 +1,0 @@
-This part of the documentation is to explain the purpose of our advanced document search, what users need it for, and some scenarios users might use it for.
