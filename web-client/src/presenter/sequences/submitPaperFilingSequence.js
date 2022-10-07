@@ -5,6 +5,7 @@ import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocume
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
+import { getDocketEntryIdAction } from '../actions/DocketEntry/getDocketEntryIdAction';
 import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
 import { getShouldGoToPaperServiceAction } from '../actions/DocketEntry/getShouldGoToPaperServiceAction';
 import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
@@ -36,10 +37,12 @@ const savePaperFilingMultiDocketableFlow = [
   closeFileUploadStatusModalAction,
   setWaitingForResponseAction,
   getDocketNumbersForConsolidatedServiceAction,
+  getDocketEntryIdAction,
   submitPaperFilingAction,
 ];
 
 const savePaperFilingNotMultiDocketableFlow = [
+  getDocketEntryIdAction,
   submitPaperFilingAction,
   setCaseAction,
   closeFileUploadStatusModalAction,

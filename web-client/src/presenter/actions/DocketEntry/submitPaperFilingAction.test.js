@@ -25,7 +25,7 @@ describe('submitPaperFilingAction', () => {
         presenter,
       },
       props: {
-        primaryDocumentFileId: mockDocketEntryId,
+        docketEntryId: mockDocketEntryId,
       },
       state: {
         caseDetail,
@@ -80,6 +80,7 @@ describe('submitPaperFilingAction', () => {
         presenter,
       },
       props: {
+        docketEntryId: mockDocketEntryId,
         docketNumbers,
         isSavingForLater: true,
       },
@@ -122,11 +123,11 @@ describe('submitPaperFilingAction', () => {
         presenter,
       },
       props: {
+        docketEntryId: mockDocketEntryId,
         isSavingForLater: true,
       },
       state: {
         caseDetail,
-        docketEntryId: 'document-id-123',
         form: {
           isFileAttached: true,
           primaryDocumentFile: {},
@@ -149,7 +150,7 @@ describe('submitPaperFilingAction', () => {
     ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
-      docketEntryId: 'document-id-123',
+      docketEntryId: mockDocketEntryId,
       docketNumber: caseDetail.docketNumber,
       overridePaperServiceAddress: true,
     });
@@ -165,13 +166,12 @@ describe('submitPaperFilingAction', () => {
         presenter,
       },
       props: {
+        docketEntryId: mockDocketEntryId,
         docketNumbers,
         isSavingForLater: true,
       },
       state: {
         caseDetail,
-        docketEntryId: 'document-id-123',
-        document: '123-456-789-abc',
         form: {},
         isEditingDocketEntry: true,
       },
@@ -191,7 +191,7 @@ describe('submitPaperFilingAction', () => {
     ).not.toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
-      docketEntryId: 'document-id-123',
+      docketEntryId: mockDocketEntryId,
       docketNumber: caseDetail.docketNumber,
       overridePaperServiceAddress: true,
     });
@@ -212,13 +212,12 @@ describe('submitPaperFilingAction', () => {
         presenter,
       },
       props: {
+        docketEntryId: mockDocketEntryId,
         docketNumbers,
         isSavingForLater: false,
       },
       state: {
         caseDetail,
-        docketEntryId: 'document-id-123',
-        document: '123-456-789-abc',
         form: {
           isFileAttached: true,
         },
@@ -240,7 +239,7 @@ describe('submitPaperFilingAction', () => {
     ).not.toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
-      docketEntryId: 'document-id-123',
+      docketEntryId: mockDocketEntryId,
       docketNumber: caseDetail.docketNumber,
       overridePaperServiceAddress: true,
     });

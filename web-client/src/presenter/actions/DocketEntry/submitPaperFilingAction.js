@@ -15,7 +15,7 @@ export const submitPaperFilingAction = async ({
   get,
   props,
 }) => {
-  const { docketNumbers, isSavingForLater, primaryDocumentFileId } = props;
+  const { docketEntryId, docketNumbers, isSavingForLater } = props;
   const { docketNumber } = get(state.caseDetail);
   const isFileAttachedNow = get(state.form.primaryDocumentFile);
   const clientConnectionId = get(state.clientConnectionId);
@@ -23,15 +23,6 @@ export const submitPaperFilingAction = async ({
   const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
 
   let caseDetail;
-  let docketEntryId;
-
-  if (isEditingDocketEntry) {
-    docketEntryId = get(state.docketEntryId);
-  } else if (isFileAttached) {
-    docketEntryId = primaryDocumentFileId;
-  } else {
-    docketEntryId = applicationContext.getUniqueId();
-  }
 
   let documentMetadata = omit(
     {
