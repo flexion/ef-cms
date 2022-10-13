@@ -29,12 +29,12 @@ export const serveDocumentCompleteSequence = [
   isPrintPreviewPreparedAction,
   {
     no: [
+      getCaseAction,
+      setCaseAction,
       followRedirectAction,
       {
         default: [navigateToCaseDetailAction],
         success: [
-          getCaseAction,
-          setCaseAction,
           getConsolidatedCasesByCaseAction,
           setConsolidatedCasesForCaseAction,
           setDocumentToDisplayFromDocumentIdAction,
