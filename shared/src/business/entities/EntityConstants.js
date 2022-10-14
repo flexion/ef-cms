@@ -62,6 +62,11 @@ const ALLOWLIST_FEATURE_FLAGS = {
       'The ability to add multiple docket entries to an order is disabled.',
     key: 'consolidated-cases-add-docket-numbers',
   },
+  CONSOLIDATED_CASES_PARTY_ASSOCIATION: {
+    disabledMessage:
+      'Parties to consolidated group member cases are not being treated as associated.',
+    key: 'consolidated-cases-party-association',
+  },
   CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES: {
     disabledMessage:
       'Docket entries are not being duplicated across consolidated cases temporarily.',

@@ -14,6 +14,7 @@ export const CaseListPetitioner = connect(
       sequences.clearOpenClosedCasesCurrentPageSequence,
     closedTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.CLOSED,
     externalUserCasesHelper: state.externalUserCasesHelper,
+    featureFlagHelper: state.featureFlagHelper,
     openTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.OPEN,
     setCaseTypeToDisplaySequence: sequences.setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
@@ -24,6 +25,7 @@ export const CaseListPetitioner = connect(
     clearOpenClosedCasesCurrentPageSequence,
     closedTab,
     externalUserCasesHelper,
+    featureFlagHelper,
     openTab,
     setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence,
@@ -75,9 +77,11 @@ export const CaseListPetitioner = connect(
                 <tbody>
                   {cases.map(item => (
                     <CaseListRowExternal
-                      onlyLinkIfRequestedUserAssociated
                       formattedCase={item}
                       key={item.docketNumber}
+                      onlyLinkIfRequestedUserAssociated={
+                        !featureFlagHelper.consolidatedCasesPartyAssociation
+                      }
                     />
                   ))}
                 </tbody>
@@ -119,6 +123,7 @@ export const CaseListPetitioner = connect(
                   >
                     {renderCaseListTable({
                       cases: externalUserCasesHelper.openCaseResults,
+                      featureFlagHelper,
                       showLoadMore:
                         externalUserCasesHelper.showLoadMoreOpenCases,
                       showMoreResultsSequence: showMoreOpenCasesSequence,
@@ -132,6 +137,7 @@ export const CaseListPetitioner = connect(
                   >
                     {renderCaseListTable({
                       cases: externalUserCasesHelper.closedCaseResults,
+                      featureFlagHelper,
                       showLoadMore:
                         externalUserCasesHelper.showLoadMoreClosedCases,
                       showMoreResultsSequence: showMoreClosedCasesSequence,
@@ -171,6 +177,7 @@ export const CaseListPetitioner = connect(
               {caseType === closedTab &&
                 renderCaseListTable({
                   cases: externalUserCasesHelper.closedCaseResults,
+                  featureFlagHelper,
                   showLoadMore: externalUserCasesHelper.showLoadMoreClosedCases,
                   showMoreResultsSequence: showMoreClosedCasesSequence,
                   tabName: closedTab,
@@ -178,6 +185,7 @@ export const CaseListPetitioner = connect(
               {caseType === openTab &&
                 renderCaseListTable({
                   cases: externalUserCasesHelper.openCaseResults,
+                  featureFlagHelper,
                   showLoadMore: externalUserCasesHelper.showLoadMoreOpenCases,
                   showMoreResultsSequence: showMoreOpenCasesSequence,
                   tabName: openTab,

@@ -40,7 +40,14 @@ export const featureFlagHelper = (get, applicationContext) => {
     );
   }
 
+  const consolidatedCasesPartyAssociation = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PARTY_ASSOCIATION.key
+    ],
+  );
+
   return {
+    consolidatedCasesPartyAssociation,
     consolidatedCasesPropagateDocketEntries,
     isOpinionSearchEnabledForRole,
     isOrderSearchEnabledForRole,
