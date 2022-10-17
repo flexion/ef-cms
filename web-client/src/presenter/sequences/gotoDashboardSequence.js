@@ -16,6 +16,7 @@ import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionD
 import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
+import { setAssociatedCasesForPetitionerAction } from '../actions/Dashboard/setAssociatedCasesForPetitionerAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
@@ -96,6 +97,7 @@ const goToDashboard = [
                 petitioner: [
                   setDefaultCaseTypeToDisplayAction,
                   getOpenAndClosedCasesForUserAction,
+                  setAssociatedCasesForPetitionerAction,
                   getFeatureFlagValueFactoryAction(
                     getConstants().ALLOWLIST_FEATURE_FLAGS
                       .CONSOLIDATED_CASES_PARTY_ASSOCIATION,
