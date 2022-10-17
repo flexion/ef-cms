@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { state } from 'cerebral';
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
@@ -127,6 +128,7 @@ export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
   entry,
+  get,
   isExternalUser,
   permissions,
   userAssociatedWithCase,
@@ -138,7 +140,31 @@ export const getFormattedDocketEntry = ({
     INITIAL_DOCUMENT_TYPES,
   } = applicationContext.getConstants();
 
-  const userHasAccessToCase = !isExternalUser || userAssociatedWithCase;
+  let userAssociatedThroughConsolidation = false;
+
+  const consolidatedCaseDocketNumbers =
+    get(state.consolidatedCaseDocketNumbers) || [];
+
+  if (consolidatedCaseDocketNumbers.length > 0) {
+    userAssociatedThroughConsolidation = consolidatedCaseDocketNumbers.find(
+      consolidateCaseDocketNumber =>
+        consolidateCaseDocketNumber === docketNumber,
+    );
+  }
+
+  console.log(
+    `userAssociatedThroughConsolidation #${docketNumber}***: ${userAssociatedThroughConsolidation}`,
+  );
+
+  const userHasAccessToCase =
+    !isExternalUser ||
+    userAssociatedWithCase ||
+    userAssociatedThroughConsolidation;
+
+  console.log(
+    `userHasAccessToCase #${docketNumber}***: ${userHasAccessToCase}`,
+  );
+
   const userHasAccessToDocument = entry.isAvailableToUser;
 
   const formattedResult = {
@@ -257,6 +283,7 @@ export const formattedDocketEntries = (get, applicationContext) => {
     .isExternalUser(user.role);
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
+
   const { docketRecordFilter } = get(state.sessionMetadata);
   const {
     DOCKET_RECORD_FILTER_OPTIONS,
@@ -302,6 +329,7 @@ export const formattedDocketEntries = (get, applicationContext) => {
       applicationContext,
       docketNumber,
       entry,
+      get,
       isExternalUser,
       permissions,
       userAssociatedWithCase,
