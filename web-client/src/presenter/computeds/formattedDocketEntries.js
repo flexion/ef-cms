@@ -152,18 +152,10 @@ export const getFormattedDocketEntry = ({
     );
   }
 
-  console.log(
-    `userAssociatedThroughConsolidation #${docketNumber}***: ${userAssociatedThroughConsolidation}`,
-  );
-
   const userHasAccessToCase =
     !isExternalUser ||
     userAssociatedWithCase ||
     userAssociatedThroughConsolidation;
-
-  console.log(
-    `userHasAccessToCase #${docketNumber}***: ${userHasAccessToCase}`,
-  );
 
   const userHasAccessToDocument = entry.isAvailableToUser;
 
