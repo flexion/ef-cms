@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 type TCaseDeadline = {
   associatedJudge: string;
   caseDeadlineId: number;
