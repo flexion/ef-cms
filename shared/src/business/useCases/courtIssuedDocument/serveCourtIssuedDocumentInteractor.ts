@@ -10,7 +10,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { createISODateString } from '../../utilities/DateHandler';
+
 const { DOCUMENT_SERVED_MESSAGES } = require('../../entities/EntityConstants');
 
 /**
@@ -160,7 +160,6 @@ export const serveCourtIssuedDocumentInteractor = async (
         const docketEntryEntity = new DocketEntry(
           {
             ...docketEntryToServe,
-            filingDate: createISODateString(),
             isOnDocketRecord: true,
           },
           {

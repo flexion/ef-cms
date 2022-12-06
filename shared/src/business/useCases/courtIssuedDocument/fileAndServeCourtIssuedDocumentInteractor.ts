@@ -10,7 +10,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { createISODateString } from '../../utilities/DateHandler';
+
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
@@ -173,7 +173,6 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
               docketNumber: caseEntity.docketNumber,
             }),
             eventCode: form.eventCode,
-            filingDate: createISODateString(),
             freeText: form.freeText,
             isDraft: false,
             isFileAttached: true,

@@ -235,6 +235,10 @@ DocketEntry.prototype.setAsServed = function (servedParties = null) {
   this.servedAt = createISODateString();
   this.draftOrderState = null;
 
+  if (this.isCourtIssued()) {
+    this.filingDate = this.servedAt;
+  }
+
   if (servedParties) {
     this.servedParties = servedParties;
     this.servedPartiesCode = getServedPartiesCode(servedParties);

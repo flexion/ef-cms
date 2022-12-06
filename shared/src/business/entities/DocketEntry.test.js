@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const {
   DOCUMENT_RELATIONSHIPS,
   INITIAL_DOCUMENT_TYPES,
@@ -544,6 +545,73 @@ describe('DocketEntry entity', () => {
           eventCode: undefined,
           isDraft: true,
           judgeUserId: mockJudgeUserId,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+      expect(docketEntry.isValid()).toBeTruthy();
+    });
+  });
+
+  describe('filingDate', () => {
+    it('a court issued docket entry should be invalid if the docket entry is served, but the filing date does not match the servedAt timestamp', () => {
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          eventCode: 'O',
+          filingDate: '2020-07-16T19:28:29.675Z',
+          servedAt: '2020-07-17T19:28:29.675Z',
+          servedParties: [],
+          signedAt: '2020-07-16T19:28:29.675Z',
+          signedByUserId: '2f5e035c-efa8-49e4-ba69-daf8a166a98f',
+          signedJudgeName: 'Judge Colvin',
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+      expect(docketEntry.isValid()).toBeFalsy();
+    });
+
+    it('a court issued docket entry is valid when the docket entry is served and the filing date does matches the servedAt timestamp', () => {
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          eventCode: 'O',
+          filingDate: '2020-07-17T19:28:29.675Z',
+          servedAt: '2020-07-17T19:28:29.675Z',
+          servedParties: [],
+          signedAt: '2020-07-16T19:28:29.675Z',
+          signedByUserId: '2f5e035c-efa8-49e4-ba69-daf8a166a98f',
+          signedJudgeName: 'Judge Colvin',
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+      expect(docketEntry.isValid()).toBeTruthy();
+    });
+
+    it('a court issued docket entry has not been served should be valid when the filingDate is in the past', () => {
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          eventCode: 'O',
+          filingDate: '2020-07-17T19:28:29.675Z',
+          isDraft: true,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+      docketEntry.validate();
+      expect(docketEntry.isValid()).toBeTruthy();
+    });
+
+    it('a non court issued docket entry should be valid when filingDate is in the past', () => {
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          eventCode: 'AAPN',
+          filingDate: '2020-07-10T19:28:29.675Z',
+          servedAt: '2020-07-17T19:28:29.675Z',
+          servedParties: [],
+          signedAt: '2020-07-16T19:28:29.675Z',
+          signedByUserId: '2f5e035c-efa8-49e4-ba69-daf8a166a98f',
+          signedJudgeName: 'Judge Colvin',
         },
         { applicationContext, petitioners: MOCK_PETITIONERS },
       );

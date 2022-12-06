@@ -356,33 +356,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     expect(expectedDocketEntry.isOnDocketRecord).toBe(true);
   });
 
-  it('should set the filingDate to be today even if it was already set on the past', async () => {
-    const mockForm = {
-      attachments: true,
-      date: '2009-03-01T21:40:46.415Z',
-      documentType: 'Order',
-      eventCode: 'O',
-      freeText: 'Hurry! This is urgent',
-      generatedDocumentTitle: 'Important Filing',
-      scenario: 'Standard',
-      serviceStamp: 'Blah blah blah',
-    };
-    caseRecord.docketEntries[0].filingDate = '2009-03-01T21:40:46.415Z';
-
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [caseRecord.docketNumber],
-      form: mockForm,
-      subjectCaseDocketNumber: caseRecord.docketNumber,
-    });
-
-    const expectedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity;
-    expect(expectedDocketEntry.filingDate).toEqual(MOCK_DATE);
-  });
-
   it('should mark the docketEntry as NOT a draft', async () => {
     const mockForm = {
       attachments: true,
