@@ -23,6 +23,9 @@ describe('migrateItems', () => {
         filingDate: undefined,
         servedAt: mockServedAt,
         servedParties: [],
+        signedAt: '2020-07-17T19:28:29.675Z',
+        signedByUserId: 'a3b77e98-4cf6-4fb4-b8c0-f5f90fd68f3c',
+        signedJudgeName: 'Judge Armen',
       },
     ];
 
@@ -48,6 +51,9 @@ describe('migrateItems', () => {
           role: 'irsSuperuser',
         },
       ],
+      signedAt: '2020-07-17T19:28:29.675Z',
+      signedByUserId: 'a3b77e98-4cf6-4fb4-b8c0-f5f90fd68f3c',
+      signedJudgeName: 'Judge Armen',
     };
 
     const items = [
@@ -65,55 +71,107 @@ describe('migrateItems', () => {
       filingDate: mockServedAt,
     });
   });
-});
 
-it('should NOT modify any properties on a non-docket entry', async () => {
-  const items = [
-    {
+  it('should NOT modify any properties on a non-docket entry', async () => {
+    const items = [
+      {
+        pk: `case|${MOCK_CASE.docketNumber}`,
+        sk: `case|${MOCK_CASE.docketNumber}`,
+        ...MOCK_CASE,
+      },
+    ];
+
+    const results = await migrateItems(items);
+
+    expect(results[0]).toMatchObject({
       pk: `case|${MOCK_CASE.docketNumber}`,
       sk: `case|${MOCK_CASE.docketNumber}`,
       ...MOCK_CASE,
-    },
-  ];
-
-  const results = await migrateItems(items);
-
-  expect(results[0]).toMatchObject({
-    pk: `case|${MOCK_CASE.docketNumber}`,
-    sk: `case|${MOCK_CASE.docketNumber}`,
-    ...MOCK_CASE,
+    });
   });
-});
 
-it('should NOT modify any properties on a not-court-issued docket entry', async () => {
-  const mockServedAt = '2020-07-17T19:28:29.675Z';
-  const mockDocketEntry = {
-    ...MOCK_DOCUMENTS[0],
-    eventCode: 'A',
-    filedBy: 'Bernard Lowe, Petitioner',
-    filingDate: undefined,
-    servedAt: mockServedAt,
-    servedParties: [
+  it('should NOT modify any properties on a not-court-issued docket entry', async () => {
+    const mockServedAt = '2020-07-17T19:28:29.675Z';
+    const mockDocketEntry = {
+      ...MOCK_DOCUMENTS[0],
+      eventCode: 'A',
+      filedBy: 'Bernard Lowe, Petitioner',
+      filingDate: undefined,
+      servedAt: mockServedAt,
+      servedParties: [
+        {
+          name: 'Bernard Lowe',
+        },
+        {
+          name: 'IRS',
+          role: 'irsSuperuser',
+        },
+      ],
+    };
+    const items = [
       {
-        name: 'Bernard Lowe',
+        pk: `case|${MOCK_CASE.docketNumber}`,
+        sk: 'docket-entry|83b77e98-4cf6-4fb4-b8c0-f5f90fd68f3c',
+        ...mockDocketEntry,
       },
-      {
-        name: 'IRS',
-        role: 'irsSuperuser',
-      },
-    ],
-  };
-  const items = [
-    {
+    ];
+
+    const results = await migrateItems(items);
+
+    expect(results[0]).toMatchObject({
       pk: `case|${MOCK_CASE.docketNumber}`,
       sk: 'docket-entry|83b77e98-4cf6-4fb4-b8c0-f5f90fd68f3c',
       ...mockDocketEntry,
-    },
-  ];
+    });
+  });
 
-  const results = await migrateItems(items);
+  it('should NOT modify any properties on a unserved court-issued docket entry', async () => {
+    const mockDocketEntry = {
+      ...MOCK_DOCUMENTS[0],
+      eventCode: 'O',
+      filedBy: 'Bernard Lowe, Petitioner',
+      filingDate: '2020-07-17T19:28:29.675Z',
+      servedAt: undefined,
+    };
+    const items = [
+      {
+        pk: `case|${MOCK_CASE.docketNumber}`,
+        sk: 'docket-entry|83b77e98-4cf6-4fb4-b8c0-f5f90fd68f3c',
+        ...mockDocketEntry,
+      },
+    ];
 
-  expect(results[0]).toMatchObject({
-    ...mockDocketEntry,
+    const results = await migrateItems(items);
+
+    expect(results[0]).toMatchObject({
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      sk: 'docket-entry|83b77e98-4cf6-4fb4-b8c0-f5f90fd68f3c',
+      ...mockDocketEntry,
+    });
+  });
+
+  it('should NOT modify any properties on a unservable court-issued docket entry', async () => {
+    const mockDocketEntry = {
+      ...MOCK_DOCUMENTS[0],
+      eventCode: 'TE',
+      filedBy: 'Bernard Lowe, Petitioner',
+      filingDate: '2020-07-17T19:28:29.675Z',
+      servedAt: undefined,
+    };
+    const items = [
+      {
+        pk: `case|${MOCK_CASE.docketNumber}`,
+        sk: 'docket-entry|83b77e98-4cf6-4fb4-b8c0-f5f90fd68f3c',
+        ...mockDocketEntry,
+      },
+    ];
+
+    const results = await migrateItems(items);
+
+    expect(results[0]).toMatchObject({
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      sk: 'docket-entry|83b77e98-4cf6-4fb4-b8c0-f5f90fd68f3c',
+      ...mockDocketEntry,
+    });
   });
 });

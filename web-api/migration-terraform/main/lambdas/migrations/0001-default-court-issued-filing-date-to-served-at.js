@@ -16,6 +16,7 @@ const migrateItems = items => {
       if (docketEntry.isCourtIssued() && docketEntry.isServed()) {
         docketEntry.filingDate = docketEntry.servedAt;
         Object.assign(item, docketEntry);
+        docketEntry.validateWithLogging(applicationContext);
       }
     }
     itemsAfter.push(item);
