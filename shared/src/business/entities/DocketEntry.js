@@ -445,6 +445,10 @@ const isServed = function (rawDocketEntry) {
   return !!rawDocketEntry.servedAt || !!rawDocketEntry.isLegacyServed;
 };
 
+DocketEntry.prototype.isServed = function () {
+  return isServed(this);
+};
+
 /**
  * Determines the servedPartiesCode based on the given servedParties
  *
