@@ -49,7 +49,7 @@ describe('Practitioner requests access to case', () => {
   });
 
   //tests for practitioner starting a new case
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
   practitionerCreatesNewCase(cerebralTest, fakeFile);
   practitionerViewsCaseDetailOfOwnedCase(cerebralTest);
 
@@ -91,7 +91,7 @@ describe('Practitioner requests access to case', () => {
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
   practitionerSearchesForNonexistentCase(cerebralTest);
   practitionerViewsDashboardBeforeAddingCase(cerebralTest);
   practitionerSearchesForCase(cerebralTest);
@@ -101,7 +101,7 @@ describe('Practitioner requests access to case', () => {
   practitionerViewsCaseDetailOfOwnedCase(cerebralTest);
   practitionerFilesDocumentForOwnedCase(cerebralTest, fakeFile);
 
-  loginAs(cerebralTest, 'privatePractitioner4@example.com');
+  loginAs(cerebralTest, 'privatepractitioner4@example.com');
   it('Practitioner requests access to case using "Notice of Election to Intervene" document type', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -214,23 +214,23 @@ describe('Practitioner requests access to case', () => {
   petitionsClerkAddsDocketEntryFromOrder(cerebralTest);
   petitionsClerkServesOrder(cerebralTest);
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
   practitionerSearchesForCase(cerebralTest);
   practitionerViewsCaseDetailWithPublicOrder(cerebralTest);
   practitionerRequestsPendingAccessToCase(cerebralTest, fakeFile);
   practitionerViewsCaseDetailOfPendingCase(cerebralTest);
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   irsPractitionerViewsPetitionerInfoForUnassociatedCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSealsCase(cerebralTest);
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   irsPractitionerViewsPetitionerInfoForUnassociatedCase(cerebralTest, true); // passing flag for isSealed
 
   loginAs(cerebralTest, 'petitioner1@example.com');
   petitionerSearchesForUnassociatedSealedCase(cerebralTest);
 
-  loginAs(cerebralTest, 'privatePractitioner3@example.com');
+  loginAs(cerebralTest, 'privatepractitioner3@example.com');
   practitionerSearchesForUnassociatedSealedCase(cerebralTest);
 });

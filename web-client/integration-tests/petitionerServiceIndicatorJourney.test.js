@@ -114,7 +114,7 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(contactPrimary.serviceIndicator).toEqual('Electronic');
   });
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   it('IRS Practitioner verifies service indicator is electronic', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -154,7 +154,7 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(contactPrimary.serviceIndicator).toEqual('Electronic');
   });
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   it('IRS Practitioner verifies service indicator for contact is electronic, with sealed address', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -185,7 +185,7 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(contactPrimary.serviceIndicator).toEqual('None');
   });
 
-  loginAs(cerebralTest, 'irsPractitioner1@example.com'); // unassociated practitioner
+  loginAs(cerebralTest, 'irspractitioner1@example.com'); // unassociated practitioner
   it('IRS Practitioner verifies service indicator for contact shows none with sealed address', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -228,7 +228,7 @@ describe('Petitioner Service Indicator Journey', () => {
   });
 
   // verify Paper for irsPractitioner
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   it('IRS Practitioner verifies service indicator for contact is paper, with sealed address', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -313,7 +313,7 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(contactPrimary.email).toBeDefined();
   });
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   it('IRS Practitioner verifies service indicator for contact is electronic, with sealed address', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,

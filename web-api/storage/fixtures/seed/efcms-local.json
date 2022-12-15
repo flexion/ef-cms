@@ -112,7 +112,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatePractitioner@example.com"
+        "email": "privatepractitioner@example.com"
       }
     ],
     "isPaper": true,
@@ -236,7 +236,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatePractitioner@example.com"
+        "email": "privatepractitioner@example.com"
       }
     ],
     "attachments": false,
@@ -345,7 +345,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatePractitioner@example.com"
+        "email": "privatepractitioner@example.com"
       }
     ],
     "isStricken": false,
@@ -423,7 +423,7 @@
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Private Practitioner",
     "pk": "case|105-20",
-    "email": "privatePractitioner@example.com"
+    "email": "privatepractitioner@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -1128,7 +1128,7 @@
     "firmName": "Law Offices of Rivas and Kathy Gee",
     "pk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
     "originalBarState": "FL",
-    "email": "privatePractitioner4@example.com"
+    "email": "privatepractitioner4@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -2896,7 +2896,7 @@
     "section": "ashfordsChambers",
     "pk": "user|dabbad01-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad01-18d0-43ec-bafb-654e83405416",
-    "email": "judgeAshford@example.com"
+    "email": "judgeashford@example.com"
   },
   {
     "sk": "case|102-20",
@@ -4017,7 +4017,7 @@
     "section": "reportersOffice",
     "pk": "user|27fc1b7c-5386-4dd1-bfbe-c2b4ae8d459f",
     "userId": "27fc1b7c-5386-4dd1-bfbe-c2b4ae8d459f",
-    "email": "reportersOffice@example.com"
+    "email": "reportersoffice@example.com"
   },
   {
     "sk": "external-order-search-enabled",
@@ -4032,12 +4032,12 @@
   {
     "sk": "b2a1d128-784f-4dfb-a2a4-deb138b85542",
     "template": "{\"docketNumber\":\"129-20\",\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 20217</div><div style=\\\"margin-top:15px\\\">November 30, 2020</div></div></div><br/><br/><p>A new Petition has been served:</p><div id=\\\"case-information\\\"><div>Case Information:</div><div>Docket Number: <!-- -->129-20</div><div>Case Title: <!-- -->Valentine Holman</div><div>Requested Place of Trial: <!-- -->Tampa, Florida</div></div><br/><div id=\\\"document-information\\\"><div>Document Information:</div><div>Document Name: <!-- -->Petition</div><div>Docket Entry No.: <!-- -->1</div><div>Filed Date: <!-- -->01/20/20</div><div>25-Sep-1995</div><div>Served: <!-- -->11/30/20 5:58 pm ET</div></div><br/><div id=\\\"petitioner-information\\\"><div>Petitioner Information:</div><div>Valentine Holman</div><div><div>71 East Green Nobel Lane</div><div>Sed eligendi exercit</div><div>Soluta voluptas eius</div><div><span>Consequatur cum ven<!-- -->, </span><span>CO<!-- --> </span><span>93000</span></div><div>+1 (677) 974-4448</div></div><div>Service: <!-- -->Paper</div></div><p>To view this document,<!-- --> <a href=\\\"https://app.exp2.ustc-case-mgmt.flexion.us\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->129-20</div><div>docketEntryNo: <!-- -->1</div><div>docketEntryId: <!-- -->1a92894e-83a5-48ba-9994-3ada44235deb</div><div>eventCode: <!-- -->P</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
-    "pk": "email-irsSuperuser@example.com"
+    "pk": "email-irssuperuser@example.com"
   },
   {
     "sk": "fcf2f9c6-13e3-4664-82a2-fbc4b9ab3af0",
     "template": "{\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 20217</div><div style=\\\"margin-top:15px\\\">November 30, 2020</div></div></div><br/><br/><p>Dear <!-- -->IRS<!-- -->,</p><p>A document has been served on your Tax Court case:</p><div id=\\\"case-information\\\"><div>Docket Number: <!-- -->129-20</div><div>Case Title: <!-- -->Valentine Holman</div></div><br/><div id=\\\"document-information\\\"><div>Document Type: <!-- -->Request for Place of Trial at Tampa, Florida</div><div>Docket Entry No.: <!-- -->2</div><div>Filed by: <!-- -->Petr. Valentine Holman</div><div>Served: <!-- -->11/30/20 5:58 pm ET</div></div><br/><p>To view this document,<!-- --> <a href=\\\"https://app.exp2.ustc-case-mgmt.flexion.us\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->129-20</div><div>docketEntryNo: <!-- -->2</div><div>docketEntryId: <!-- -->6d83425c-8ef3-4c66-b776-6c7957c53f4d</div><div>eventCode: <!-- -->RQT</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
-    "pk": "email-irsSuperuser@example.com"
+    "pk": "email-irssuperuser@example.com"
   },
   {
     "sk": "docketNumberCounter-2019",
@@ -5689,7 +5689,7 @@
     "name": "Test IRS Practitioner",
     "pk": "case|999-15",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irsPractitioner@example.com"
+    "email": "irspractitioner@example.com"
   },
   {
     "role": "privatePractitioner",
@@ -5711,7 +5711,7 @@
     "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|999-15",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "privatePractitioner@example.com"
+    "email": "privatepractitioner@example.com"
   },
   {
     "associatedJudge": "Colvin",
@@ -6027,7 +6027,7 @@
     "section": "pughsChambers",
     "pk": "user|9fbae83a-a55b-4132-96df-e04a8ee675e3",
     "userId": "9fbae83a-a55b-4132-96df-e04a8ee675e3",
-    "email": "pughsChambers@example.com"
+    "email": "pughschambers@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -6156,7 +6156,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatePractitioner@example.com"
+          "email": "privatepractitioner@example.com"
         }
       ],
       "attachments": false,
@@ -6850,7 +6850,7 @@
     "section": "buchsChambers",
     "pk": "user|49421c68-0c09-4b4b-b32c-a535279be8d0",
     "userId": "49421c68-0c09-4b4b-b32c-a535279be8d0",
-    "email": "buchsChambers@example.com"
+    "email": "buchschambers@example.com"
   },
   {
     "role": "trialclerk",
@@ -6977,7 +6977,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatePractitioner@example.com"
+          "email": "privatepractitioner@example.com"
         }
       ],
       "attachments": false,
@@ -10039,7 +10039,7 @@
     "employer": "IRS",
     "pk": "user|726c38b1-1432-49b3-9383-77a998c0ba4f",
     "originalBarState": "TN",
-    "email": "irsPractitioner4@example.com"
+    "email": "irspractitioner4@example.com"
   },
   {
     "sk": "user|5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
@@ -10322,7 +10322,7 @@
     "section": "cohensChambers",
     "pk": "user|0bd3bc49-4e46-4caa-adeb-4960c56e17c8",
     "userId": "0bd3bc49-4e46-4caa-adeb-4960c56e17c8",
-    "email": "cohensChambers@example.com"
+    "email": "cohenschambers@example.com"
   },
   {
     "admissionsStatus": "Inactive",
@@ -10353,7 +10353,7 @@
     "middleName": "Inactive",
     "pk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
     "originalBarState": "CA",
-    "email": "inactivePractitioner@example.com"
+    "email": "inactivepractitioner@example.com"
   },
   {
     "sk": "user|817b48c5-d4e5-4544-9e11-9ba0102918f4",
@@ -10416,7 +10416,7 @@
     "firmName": "Lilah, Lilah",
     "pk": "user|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
     "originalBarState": "N/A",
-    "email": "privatePractitioner2@example.com"
+    "email": "privatepractitioner2@example.com"
   },
   {
     "caseOrder": [
@@ -10489,7 +10489,7 @@
     "employer": "IRS",
     "pk": "user|2d9a7229-7d5a-459f-84ad-754504a9f10f",
     "originalBarState": "CO",
-    "email": "irsPractitioner2@example.com"
+    "email": "irspractitioner2@example.com"
   },
   {
     "sk": "case-deadline|ad1ddb24-f3c4-47b4-b10e-76d1d050b2ab",
@@ -10634,7 +10634,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatePractitioner@example.com"
+        "email": "privatepractitioner@example.com"
       }
     ],
     "isStricken": false,
@@ -10712,7 +10712,7 @@
     "name": "Test Private Practitioner",
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "case|105-19",
-    "email": "privatePractitioner@example.com"
+    "email": "privatepractitioner@example.com"
   },
   {
     "sk": "user-limiter-order-search|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
@@ -13038,7 +13038,7 @@
       },
       {
         "name": "Test IRS Practitioner",
-        "email": "irsPractitioner@example.com"
+        "email": "irspractitioner@example.com"
       }
     ],
     "isStricken": false,
@@ -13163,7 +13163,7 @@
       },
       {
         "name": "Test IRS Practitioner",
-        "email": "irsPractitioner@example.com"
+        "email": "irspractitioner@example.com"
       }
     ],
     "isStricken": false,
@@ -13211,7 +13211,7 @@
     "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "case|103-19",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irsPractitioner@example.com",
+    "email": "irspractitioner@example.com",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InJlc3BvbmRlbnQiLCJlbWFpbCI6InJlc3BvbmRlbnQiLCJuYW1lIjoiVGVzdCBSZXNwb25kZW50Iiwicm9sZSI6InJlc3BvbmRlbnQiLCJzZWN0aW9uIjoicGV0aXRpb25zIiwidXNlcklkIjoicmVzcG9uZGVudCIsImlhdCI6MTU1MTQ4MDgzOH0.U72pP7ZEwQkQIzlhpKvaEdMbcQhCjSLQbp0FP06LKao"
   },
   {
@@ -13278,7 +13278,7 @@
     "section": "foleysChambers",
     "pk": "user|659789b4-acc5-40b7-9318-3354e7eb8604",
     "userId": "659789b4-acc5-40b7-9318-3354e7eb8604",
-    "email": "judgeFoley@example.com"
+    "email": "judgefoley@example.com"
   },
   {
     "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
@@ -13412,11 +13412,11 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatePractitioner@example.com"
+        "email": "privatepractitioner@example.com"
       },
       {
         "name": "Test IRS Practitioner",
-        "email": "irsPractitioner@example.com"
+        "email": "irspractitioner@example.com"
       }
     ],
     "isStricken": false,
@@ -13508,11 +13508,11 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatePractitioner@example.com"
+        "email": "privatepractitioner@example.com"
       },
       {
         "name": "Test IRS Practitioner",
-        "email": "irsPractitioner@example.com"
+        "email": "irspractitioner@example.com"
       }
     ],
     "attachments": false,
@@ -13556,11 +13556,11 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatePractitioner@example.com"
+        "email": "privatepractitioner@example.com"
       },
       {
         "name": "Test IRS Practitioner",
-        "email": "irsPractitioner@example.com"
+        "email": "irspractitioner@example.com"
       }
     ],
     "isStricken": false,
@@ -13611,7 +13611,7 @@
     "section": "irsPractitioner",
     "pk": "case|107-19",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irsPractitioner@example.com"
+    "email": "irspractitioner@example.com"
   },
   {
     "role": "privatePractitioner",
@@ -13635,7 +13635,7 @@
     "name": "Test Private Practitioner",
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "case|107-19",
-    "email": "privatePractitioner@example.com"
+    "email": "privatepractitioner@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -13690,7 +13690,7 @@
     "section": "mowryChambers",
     "pk": "user|09b7c6c9-2d9e-43a5-83a4-096ae5362725",
     "userId": "09b7c6c9-2d9e-43a5-83a4-096ae5362725",
-    "email": "judgeMowry@example.com"
+    "email": "judgemowry@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -14158,7 +14158,7 @@
     "section": "buchsChambers",
     "pk": "user|dabbad02-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
-    "email": "judgeBuch@example.com"
+    "email": "judgebuch@example.com"
   },
   {
     "associatedJudge": "Buch",
@@ -14596,7 +14596,7 @@
     "employer": "IRS",
     "pk": "user|5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
     "originalBarState": "NV",
-    "email": "irsPractitioner3@example.com"
+    "email": "irspractitioner3@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -14922,7 +14922,7 @@
     "section": "colvinsChambers",
     "pk": "user|9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
     "userId": "9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
-    "email": "colvinsChambers@example.com"
+    "email": "colvinschambers@example.com"
   },
   {
     "sk": "user|2d9a7229-7d5a-459f-84ad-754504a9f10f",
@@ -16397,7 +16397,7 @@
     "section": "carluzzosChambers",
     "pk": "user|8c0902ab-d156-4cca-b80d-43f595aa5ab0",
     "userId": "8c0902ab-d156-4cca-b80d-43f595aa5ab0",
-    "email": "carluzzosChambers@example.com"
+    "email": "carluzzoschambers@example.com"
   },
   {
     "sk": "dabbad02-18d0-43ec-bafb-654e83405416",
@@ -16432,7 +16432,7 @@
     "section": "cohensChambers",
     "pk": "user|dabbad04-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
-    "email": "judgeCohen@example.com"
+    "email": "judgecohen@example.com"
   },
   {
     "sk": "user|9f25dc2c-764a-435c-86dd-323e53634537",
@@ -16446,7 +16446,7 @@
     "section": "urdasChambers",
     "pk": "user|44f02385-e4c6-49f9-a554-ecf93531d8a3",
     "userId": "44f02385-e4c6-49f9-a554-ecf93531d8a3",
-    "email": "urdasChambers@example.com"
+    "email": "urdaschambers@example.com"
   },
   {
     "sk": "user|09b7c6c9-2d9e-43a5-83a4-096ae5362725",
@@ -16526,7 +16526,7 @@
     "section": "irsSuperuser",
     "pk": "user|02c9b614-e498-4dae-b0f5-751b9ab5e8b3",
     "userId": "02c9b614-e498-4dae-b0f5-751b9ab5e8b3",
-    "email": "irsSuperuser@example.com"
+    "email": "irssuperuser@example.com"
   },
   {
     "caseOrder": [],
@@ -17915,7 +17915,7 @@
     "section": "urdasChambers",
     "pk": "user|dabbad0a-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad0a-18d0-43ec-bafb-654e83405416",
-    "email": "judgeUrda@example.com"
+    "email": "judgeurda@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -19111,7 +19111,7 @@
     "middleName": "IRS",
     "pk": "user|5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
     "originalBarState": "AR",
-    "email": "irsPractitioner1@example.com"
+    "email": "irspractitioner1@example.com"
   },
   {
     "sk": "user|a6318a31-8aa4-4002-a7b0-1192af19dbb9",
@@ -19181,7 +19181,7 @@
     "firmName": "GW Law Offices",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
     "originalBarState": "MD",
-    "email": "privatePractitioner@example.com"
+    "email": "privatepractitioner@example.com"
   },
   {
     "sk": "user|23dd8806-c0c7-4265-81f0-5f264ef78248",
@@ -19217,7 +19217,7 @@
     "firmName": "Bogus Barristers",
     "pk": "user|a6318a31-8aa4-4002-a7b0-1192af19dbb9",
     "originalBarState": "OR",
-    "email": "privatePractitioner99@example.com"
+    "email": "privatepractitioner99@example.com"
   },
   {
     "sk": "user|a6318a31-8aa4-4002-a7b0-1192af19dbb9",
@@ -19260,7 +19260,7 @@
     "section": "pughsChambers",
     "pk": "user|dabbad06-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad06-18d0-43ec-bafb-654e83405416",
-    "email": "judgePugh@example.com"
+    "email": "judgepugh@example.com"
   },
   {
     "sk": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -19293,7 +19293,7 @@
     "section": "colvinsChambers",
     "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "email": "judgeColvin@example.com"
+    "email": "judgecolvin@example.com"
   },
   {
     "sk": "user|b3e1941f-230a-47bb-80ec-6b561c1765cd",
@@ -20057,11 +20057,11 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatePractitioner1@example.com"
+        "email": "privatepractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
-        "email": "irsPractitioner@example.com"
+        "email": "irspractitioner@example.com"
       }
     ],
     "isStricken": false,
@@ -20166,7 +20166,7 @@
     "section": "irsPractitioner",
     "pk": "case|102-20",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irsPractitioner@example.com"
+    "email": "irspractitioner@example.com"
   },
   {
     "role": "privatePractitioner",
@@ -20190,17 +20190,17 @@
     "name": "Test Private Practitioner",
     "sk": "privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "pk": "case|102-20",
-    "email": "privatePractitioner1@example.com"
+    "email": "privatepractitioner1@example.com"
   },
   {
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatePractitioner1@example.com"
+        "email": "privatepractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
-        "email": "irsPractitioner@example.com"
+        "email": "irspractitioner@example.com"
       }
     ],
     "isStricken": false,
@@ -23059,7 +23059,7 @@
     "section": "ashfordsChambers",
     "pk": "user|817b48c5-d4e5-4544-9e11-9ba0102918f4",
     "userId": "817b48c5-d4e5-4544-9e11-9ba0102918f4",
-    "email": "ashfordsChambers@example.com"
+    "email": "ashfordschambers@example.com"
   },
   {
     "sk": "dabbad03-18d0-43ec-bafb-654e83405416",
@@ -23482,7 +23482,7 @@
     "section": "legacyJudgesChambers",
     "pk": "user|dadbad42-18d0-43ec-bafb-654e83405416",
     "userId": "dadbad42-18d0-43ec-bafb-654e83405416",
-    "email": "judgeFieri@example.com"
+    "email": "judgefieri@example.com"
   },
   {
     "sk": "pdfjs-express-viewer-enabled",
@@ -23745,7 +23745,7 @@
     "section": "gustafsonsChambers",
     "pk": "user|3ce1dad5-87ee-4b00-a4fb-f7f80296a5c2",
     "userId": "3ce1dad5-87ee-4b00-a4fb-f7f80296a5c2",
-    "email": "gustafsonsChambers@example.com"
+    "email": "gustafsonschambers@example.com"
   },
   {
     "sk": "user-limiter-order-search|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
@@ -24021,7 +24021,7 @@
     "firmName": "Bogus Barristers",
     "pk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "originalBarState": "OR",
-    "email": "privatePractitioner1@example.com"
+    "email": "privatepractitioner1@example.com"
   },
   {
     "sk": "user|09b7c6c9-2d9e-43a5-83a4-096ae5362725",
@@ -24416,7 +24416,7 @@
     "section": "carluzzosChambers",
     "pk": "user|dabbad03-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
-    "email": "judgeCarluzzo@example.com"
+    "email": "judgecarluzzo@example.com"
   },
   {
     "createdAt": "2020-01-21T16:41:39.474Z",
@@ -24480,7 +24480,7 @@
     "middleName": "IRS",
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "originalBarState": "MD",
-    "email": "irsPractitioner@example.com"
+    "email": "irspractitioner@example.com"
   },
   {
     "role": "adc",
@@ -24881,7 +24881,7 @@
     "firmName": "Iron Law",
     "pk": "user|9f25dc2c-764a-435c-86dd-323e53634537",
     "originalBarState": "TX",
-    "email": "privatePractitioner3@example.com"
+    "email": "privatepractitioner3@example.com"
   },
   {
     "sk": "case|104-20",
@@ -25469,7 +25469,7 @@
     "section": "gustafsonsChambers",
     "pk": "user|dabbad05-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad05-18d0-43ec-bafb-654e83405416",
-    "email": "judgeGustafson@example.com"
+    "email": "judgegustafson@example.com"
   },
   {
     "sk": "user|9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
@@ -26064,14 +26064,14 @@
     "firmName": "GW Law Offices",
     "pk": "case|103-20",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "privatePractitioner@example.com"
+    "email": "privatepractitioner@example.com"
   },
   {
     "stampData": {},
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatePractitioner@example.com"
+        "email": "privatepractitioner@example.com"
       }
     ],
     "attachments": false,

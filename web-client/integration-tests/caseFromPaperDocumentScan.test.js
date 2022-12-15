@@ -71,6 +71,6 @@ describe('Case from Paper Document Scan journey', () => {
   petitionsClerkCreatesNewCase(cerebralTest, fakeFile, undefined, false);
   petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   practitionerViewsCaseDetailWithPaperService(cerebralTest);
 });
