@@ -280,7 +280,7 @@ const gatewayMethods = {
   casePublicSearch: casePublicSearchPersistence,
   confirmAuthCode: process.env.IS_LOCAL
     ? (applicationContext, { code }) => {
-        const email = code.toLower();
+        const email = code.toLowerCase();
         const user = {
           ...userMap[email],
           sub: userMap[email].userId,
