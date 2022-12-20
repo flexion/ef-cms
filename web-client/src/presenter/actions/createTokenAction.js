@@ -1,6 +1,5 @@
 import { ActionError } from '../errors/ActionError';
 import { state } from 'cerebral';
-import { toLower } from 'lodash';
 import { userMap } from '../../../../shared/src/test/mockUserTokenMap';
 import jwt from 'jsonwebtoken';
 
@@ -14,7 +13,7 @@ import jwt from 'jsonwebtoken';
  * @returns {object} the jwt token
  */
 export const createTokenAction = ({ applicationContext, get, props }) => {
-  const name = toLower(props.token || get(state.form.name));
+  const name = props.token || get(state.form.name);
   if (!userMap[name]) {
     throw new ActionError(`Username "${name}" not found in mock logins.`);
   }
