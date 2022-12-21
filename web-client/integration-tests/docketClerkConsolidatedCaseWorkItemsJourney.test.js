@@ -31,7 +31,7 @@ describe('Docket clerk consolidated case work item journey', () => {
     leadCaseDocketNumber,
   );
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
 
   practitionerFilesDocumentForOwnedCase(
     cerebralTest,
@@ -79,7 +79,7 @@ describe('Docket clerk consolidated case work item journey', () => {
     consolidatedCaseDocketNumber,
   );
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner@example.com');
 
   practitionerFilesDocumentForOwnedCase(
     cerebralTest,

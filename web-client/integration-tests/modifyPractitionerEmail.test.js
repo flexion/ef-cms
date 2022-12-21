@@ -23,7 +23,7 @@ describe('Modify Practitioner Email', () => {
 
   let caseDetail;
   cerebralTest.createdDocketNumbers = [];
-  const practitionerEmail = 'privatePractitioner2@example.com';
+  const practitionerEmail = 'privatepractitioner2@example.com';
 
   loginAs(cerebralTest, practitionerEmail);
   it('practitioner creates a case', async () => {

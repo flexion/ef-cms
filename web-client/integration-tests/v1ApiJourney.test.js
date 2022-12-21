@@ -12,7 +12,7 @@ describe('View and manage the deadlines of a case', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
 
-    const loginUsername = 'irsSuperuser@example.com';
+    const loginUsername = 'irssuperuser@example.com';
     if (!userMap[loginUsername]) {
       throw new Error(`Unable to log into test as ${loginUsername}`);
     }

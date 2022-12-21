@@ -57,7 +57,7 @@ describe('Case journey', () => {
   petitionsClerkUpdatesCaseDetail(cerebralTest);
   petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irspractitioner@example.com');
   respondentViewsDashboard(cerebralTest);
   const documentCountPreStipDecision = 6;
   respondentAddsAnswer(cerebralTest, fakeFile, {

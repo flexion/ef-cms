@@ -20,7 +20,7 @@ describe('Chambers dashboard', () => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'colvinsChambers@example.com');
+  loginAs(cerebralTest, 'colvinschambers@example.com');
   chambersViewsTrialSessionWorkingCopy(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -56,7 +56,7 @@ describe('Chambers dashboard', () => {
     filedByPractitioner: true,
   });
 
-  loginAs(cerebralTest, 'cohensChambers@example.com');
+  loginAs(cerebralTest, 'cohenschambers@example.com');
   it('chambers user verifies PTM column and value for cases', async () => {
     await cerebralTest.runSequence('gotoTrialSessionWorkingCopySequence', {
       trialSessionId: cerebralTest.trialSessionId,
