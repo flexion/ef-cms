@@ -14,18 +14,19 @@ export const updateMessageModalAfterQCAction = ({
 }) => {
   store.set(state.modal.validationErrors, {});
 
+  const docketEntry = get(state.form);
   const docketEntryId = get(state.docketEntryId);
-  const documentMetadata = get(state.form);
-  const documentTitle = applicationContext
-    .getUtilities()
-    .getDescriptionDisplay(documentMetadata);
 
-  store.set(state.modal.form.subject, documentTitle);
+  const generatedDocumentTitle = applicationContext
+    .getUtilities()
+    .getDocumentTitleWithAdditionalInfo({ docketEntry });
+
+  store.set(state.modal.form.subject, generatedDocumentTitle);
 
   store.set(state.modal.form.attachments, [
     {
       documentId: docketEntryId,
-      documentTitle,
+      documentTitle: generatedDocumentTitle,
     },
   ]);
 };

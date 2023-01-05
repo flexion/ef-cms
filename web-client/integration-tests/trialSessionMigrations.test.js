@@ -1,7 +1,4 @@
-import {
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import {
   loginAs,
@@ -12,12 +9,18 @@ import {
 import { petitionsClerkManuallyAddsCaseToCalendaredTrialSession } from './journey/petitionsClerkManuallyAddsCaseToCalendaredTrialSession';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
+const cerebralTest = setupTest();
+
+let caseDetail;
+
 describe('Trial session migration journey', () => {
-  const cerebralTest = setupTest();
+  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
   const trialLocation = 'Memphis, Tennessee';
 
-  let caseDetail;
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   beforeEach(async () => {
     await refreshElasticsearchIndex();

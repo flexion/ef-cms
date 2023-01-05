@@ -5,10 +5,13 @@ import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
-describe('View and manage the deadlines of a case', () => {
-  const cerebralTest = setupTest();
+const cerebralTest = setupTest();
+let userToken;
 
-  let userToken;
+describe('View and manage the deadlines of a case', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

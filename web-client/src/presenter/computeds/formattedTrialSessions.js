@@ -38,7 +38,12 @@ export const sessionSorter = (sessionList, dateSort = 'asc') => {
   );
 };
 
-export const filterFormattedSessionsByStatus = trialTerms => {
+export const filterFormattedSessionsByStatus = (
+  trialTerms,
+  applicationContext,
+) => {
+  const { getTrialSessionStatus } = applicationContext.getUtilities();
+
   const sessionSort = {
     All: 'desc',
     Closed: 'desc',
@@ -72,10 +77,8 @@ export const filterFormattedSessionsByStatus = trialTerms => {
 
   trialTerms.forEach(trialTerm => {
     trialTerm.sessions.forEach(session => {
-      const termIndex = initTermIndex(
-        trialTerm,
-        filteredbyStatusType[session.sessionStatus],
-      );
+      const status = getTrialSessionStatus({ applicationContext, session });
+      const termIndex = initTermIndex(trialTerm, filteredbyStatusType[status]);
 
       if (!session.judge) {
         session.judge = {
@@ -84,9 +87,8 @@ export const filterFormattedSessionsByStatus = trialTerms => {
         };
       }
       // Add session status to filtered session
-      filteredbyStatusType[session.sessionStatus][termIndex].sessions.push(
-        session,
-      );
+      session.sessionStatus = status;
+      filteredbyStatusType[status][termIndex].sessions.push(session);
 
       // Push to all
       const allTermIndex = initTermIndex(trialTerm, filteredbyStatusType.All);
@@ -177,7 +179,10 @@ export const formattedTrialSessions = (get, applicationContext) => {
   }
 
   return {
-    filteredTrialSessions: filterFormattedSessionsByStatus(formattedSessions),
+    filteredTrialSessions: filterFormattedSessionsByStatus(
+      formattedSessions,
+      applicationContext,
+    ),
     formattedSessions,
     sessionsByTerm,
     showSwingSessionList: get(state.form.swingSession),

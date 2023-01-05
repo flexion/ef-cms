@@ -10,10 +10,6 @@ describe('getCasesByUserId', () => {
   const userId = 'user-id-123';
 
   it('obtains all cases associated with the given user', async () => {
-    applicationContext.getSearchClient().search.mockReturnValue({
-      body: {},
-    });
-
     await getCasesByUserId({
       applicationContext,
       userId,
@@ -45,11 +41,9 @@ describe('getCasesByUserId', () => {
 
   it('should warn if total search results exceeds MAX_ELASTICSEARCH_PAGINATION', async () => {
     applicationContext.getSearchClient().search.mockReturnValue({
-      body: {
-        hits: {
-          total: {
-            value: MAX_ELASTICSEARCH_PAGINATION + 1,
-          },
+      hits: {
+        total: {
+          value: MAX_ELASTICSEARCH_PAGINATION + 1,
         },
       },
     });

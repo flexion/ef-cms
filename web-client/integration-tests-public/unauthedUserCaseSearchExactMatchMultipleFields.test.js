@@ -64,6 +64,10 @@ const updateCaseCaption = (docketNumber, caseCaption) => {
 };
 
 describe('Create and serve a case to test contactPrimary.name', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     testClient.closeSocket();
   });
@@ -95,6 +99,10 @@ describe('Create and serve a case to test contactPrimary.name', () => {
 });
 
 describe('Create and serve a case to test contactPrimary.secondaryName', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     testClient.closeSocket();
   });
@@ -127,6 +135,10 @@ describe('Create and serve a case to test contactPrimary.secondaryName', () => {
 });
 
 describe('Create and serve a case to test contactSecondary.name', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     testClient.closeSocket();
   });
@@ -159,6 +171,10 @@ describe('Create and serve a case to test contactSecondary.name', () => {
 });
 
 describe('Create and serve a case to test caseCaption', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     testClient.closeSocket();
   });
@@ -186,6 +202,10 @@ describe('Create and serve a case to test caseCaption', () => {
 });
 
 describe('Create and serve a case to test contactPrimary.name with terms out of order that shows last in search results', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     testClient.closeSocket();
   });

@@ -1,9 +1,12 @@
+import {
+  CASE_STATUS_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '../../../errors/errors';
@@ -34,7 +37,7 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
       updatedTrialSessionEntity.proceedingType ===
         TRIAL_SESSION_PROCEEDING_TYPES.remote &&
       updatedTrialSessionEntity.isCalendared &&
-      !caseEntity.isClosed();
+      caseEntity.status !== CASE_STATUS_TYPES.closed;
 
     if (shouldSetNoticeOfChangeToRemoteProceeding) {
       await applicationContext
@@ -54,7 +57,7 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
       updatedTrialSessionEntity.proceedingType ===
         TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
       updatedTrialSessionEntity.isCalendared &&
-      !caseEntity.isClosed();
+      caseEntity.status !== CASE_STATUS_TYPES.closed;
 
     if (shouldSetNoticeOfChangeToInPersonProceeding) {
       await applicationContext
@@ -75,7 +78,7 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
       updatedTrialSessionEntity.judge &&
       currentTrialSession.judge.userId !==
         updatedTrialSessionEntity.judge.userId &&
-      !caseEntity.isClosed();
+      caseEntity.status !== CASE_STATUS_TYPES.closed;
 
     if (shouldIssueNoticeOfChangeOfTrialJudge) {
       await applicationContext

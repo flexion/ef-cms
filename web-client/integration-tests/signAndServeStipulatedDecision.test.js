@@ -7,15 +7,19 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { respondentUploadsProposedStipulatedDecision } from './journey/respondentUploadsProposedStipulatedDecision';
 
-describe('a user signs and serves a stipulated decision', () => {
-  const cerebralTest = setupTest({
-    useCases: {
-      loadPDFForSigningInteractor: () => {
-        return new Promise(resolve => {
-          resolve(null);
-        });
-      },
+const cerebralTest = setupTest({
+  useCases: {
+    loadPDFForSigningInteractor: () => {
+      return new Promise(resolve => {
+        resolve(null);
+      });
     },
+  },
+});
+
+describe('a user signs and serves a stipulated decision', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
   });
 
   afterAll(() => {

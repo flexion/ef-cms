@@ -1,11 +1,15 @@
 const AWS = require('aws-sdk');
-const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
-const { Client } = require('@opensearch-project/opensearch');
+const { EnvironmentCredentials } = AWS;
 const { getVersion } = require('../../shared/admin-tools/util');
 
 const es = new AWS.ES({
   region: 'us-east-1',
 });
+const connectionClass = require('http-aws-es');
+const elasticsearch = require('elasticsearch');
+const {
+  ELASTICSEARCH_API_VERSION,
+} = require('../elasticsearch/elasticsearch-settings');
 
 const getHost = async DomainName => {
   try {
@@ -28,28 +32,23 @@ const getHost = async DomainName => {
  * @param {String} providers.version The name of the currently deployed stack (alpha or beta)
  * @returns {elasticsearch.Client} An instance of an Elasticsearch Client
  */
-
 const getClient = async ({ environmentName, version }) => {
   version = version || (await getVersion());
   const domainName = `efcms-search-${environmentName}-${version}`;
   const host = await getHost(domainName);
-
-  return new Client({
-    ...AwsSigv4Signer({
-      getCredentials: () =>
-        new Promise((resolve, reject) => {
-          AWS.config.getCredentials((err, credentials) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(credentials);
-            }
-          });
-        }),
-
+  const credentials = new EnvironmentCredentials('AWS');
+  return new elasticsearch.Client({
+    amazonES: {
+      credentials,
       region: 'us-east-1',
-    }),
-    node: `https://${host}:443`,
+    },
+    apiVersion: ELASTICSEARCH_API_VERSION,
+    awsConfig: new AWS.Config({ region: 'us-east-1' }),
+    connectionClass,
+    host,
+    log: 'warning',
+    port: 443,
+    protocol: 'https',
   });
 };
 

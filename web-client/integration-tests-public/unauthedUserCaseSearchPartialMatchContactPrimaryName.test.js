@@ -1,7 +1,5 @@
-import {
-  ADVANCED_SEARCH_TABS,
-  COUNTRY_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   loginAs,
   setupTest as setupTestClient,
@@ -14,6 +12,7 @@ const { faker } = require('@faker-js/faker');
 
 const cerebralTest = setupTest();
 const testClient = setupTestClient();
+const { COUNTRY_TYPES } = applicationContext.getConstants();
 
 testClient.draftOrders = [];
 
@@ -53,6 +52,10 @@ caseNamesToCreate.forEach(createCase);
  */
 function createCase(name) {
   describe(`Create and serve a case for ${name}`, () => {
+    beforeAll(() => {
+      jest.setTimeout(30000);
+    });
+
     afterAll(() => {
       testClient.closeSocket();
     });

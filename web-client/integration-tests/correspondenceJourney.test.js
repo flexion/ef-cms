@@ -9,12 +9,16 @@ import { userNavigatesToAddCorrespondence } from './journey/userNavigatesToAddCo
 import { userNavigatesToEditCorrespondence } from './journey/userNavigatesToEditCorrespondence';
 
 describe('Adds correspondence to a case', () => {
+  let caseDetail;
+
   const cerebralTest = setupTest();
 
   const firstCorrespondenceTitle = 'My first correspondence';
   const secondCorrespondenceTitle = 'My second correspondence';
 
-  let caseDetail;
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

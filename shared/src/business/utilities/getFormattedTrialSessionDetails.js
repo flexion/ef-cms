@@ -1,5 +1,8 @@
-const { compact, partition } = require('lodash');
-const { PARTIES_CODES } = require('../entities/EntityConstants');
+const {
+  PARTIES_CODES,
+  TRIAL_SESSION_SCOPE_TYPES,
+} = require('../entities/EntityConstants');
+const { compact, isEmpty, isEqual, partition } = require('lodash');
 
 exports.setPretrialMemorandumFiler = ({ caseItem }) => {
   let filingPartiesCode;
@@ -118,7 +121,7 @@ const compareCasesByDocketNumber = (a, b) => {
 exports.compareCasesByDocketNumberFactory = compareCasesByDocketNumberFactory;
 exports.compareCasesByDocketNumber = compareCasesByDocketNumber;
 
-exports.getFormattedTrialSessionDetails = ({
+exports.formattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
 }) => {
@@ -172,6 +175,11 @@ exports.getFormattedTrialSessionDetails = ({
   trialSession.formattedTerm = `${
     trialSession.term
   } ${trialSession.termYear.substr(-2)}`;
+
+  trialSession.computedStatus = exports.getTrialSessionStatus({
+    applicationContext,
+    session: trialSession,
+  });
 
   trialSession.formattedStartDate = applicationContext
     .getUtilities()
@@ -235,4 +243,26 @@ exports.getFormattedTrialSessionDetails = ({
     .replace(/,/g, '');
 
   return trialSession;
+};
+
+exports.getTrialSessionStatus = ({ applicationContext, session }) => {
+  const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
+
+  const allCases = session.caseOrder || [];
+  const inactiveCases = allCases.filter(
+    sessionCase => sessionCase.removedFromTrial === true,
+  );
+
+  if (
+    session.isClosed ||
+    (!isEmpty(allCases) &&
+      isEqual(allCases, inactiveCases) &&
+      session.sessionScope !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote)
+  ) {
+    return SESSION_STATUS_GROUPS.closed;
+  } else if (session.isCalendared) {
+    return SESSION_STATUS_GROUPS.open;
+  } else {
+    return SESSION_STATUS_GROUPS.new;
+  }
 };

@@ -6,9 +6,12 @@ const { find } = require('lodash');
 
 exports.handler = async () => {
   const migrateFlag = process.env.MIGRATE_FLAG;
+  const reindexFlag = process.env.REINDEX_FLAG;
 
-  if (migrateFlag === 'true') {
-    console.log(`Migrate flag is ${migrateFlag}`);
+  if (migrateFlag === 'true' || reindexFlag === 'true') {
+    console.log(
+      `Migrate flag is ${migrateFlag} and reindex flag is ${reindexFlag}`,
+    );
     const environmentName = process.env.ENVIRONMENT;
     const isReindexFinished = await isReindexComplete(environmentName);
 

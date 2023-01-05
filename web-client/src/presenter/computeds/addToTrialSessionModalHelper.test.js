@@ -13,14 +13,12 @@ describe('addToTrialSessionModalHelper', () => {
 
   const trialSessions = [
     {
-      sessionStatus: 'Open',
       sessionType: 'Small',
       startDate: '2019-05-01T21:40:46.415Z',
       trialLocation: 'Boise, Idaho',
       trialSessionId: '4',
     },
     {
-      sessionStatus: 'Open',
       sessionType: 'Regular',
       startDate: '2019-03-01T21:40:46.415Z',
       trialLocation: 'Birmingham, Alabama',
@@ -28,7 +26,6 @@ describe('addToTrialSessionModalHelper', () => {
     },
     {
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
-      sessionStatus: 'Open',
       sessionType: 'Regular',
       startDate: '2022-03-01T21:40:46.415Z',
       trialLocation: 'Standalone Remote',
@@ -36,7 +33,6 @@ describe('addToTrialSessionModalHelper', () => {
     },
     {
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
-      sessionStatus: 'Open',
       sessionType: 'Hybrid',
       startDate: '2018-02-01T21:40:46.415Z',
       trialLocation: 'Mobile, Alabama',
@@ -44,14 +40,12 @@ describe('addToTrialSessionModalHelper', () => {
     },
     {
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
-      sessionStatus: 'Open',
       sessionType: 'Special',
       startDate: '2019-01-01T21:40:46.415Z',
       trialLocation: 'Birmingham, Alabama',
       trialSessionId: '3',
     },
     {
-      sessionStatus: 'Open',
       sessionType: 'Motion/Hearing',
       startDate: '2018-12-01T21:40:46.415Z',
       trialLocation: 'Mobile, Alabama',

@@ -8,8 +8,12 @@ import { docketClerkDeletesCalendarNote } from './journey/docketClerkDeletesCale
 import { docketClerkViewsTrialSessionWithNote } from './journey/docketClerkViewsTrialSessionWithNote';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
+const cerebralTest = setupTest();
+
 describe('case trial calendar notes journey', () => {
-  const cerebralTest = setupTest();
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

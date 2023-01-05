@@ -4,7 +4,7 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { shouldGenerateNoticesForCase } = require('./Case');
 
 describe('shouldGenerateNoticesForCase', () => {
-  it('should return the value of rawCase.shouldGenerateNotices when it is defined', () => {
+  it('returns true if the rawCase.shouldGenerateNotices value is defined and true', () => {
     expect(
       shouldGenerateNoticesForCase({
         ...MOCK_CASE,
@@ -13,7 +13,16 @@ describe('shouldGenerateNoticesForCase', () => {
     ).toEqual(true);
   });
 
-  it('should return true when the case has a status that is considered open (neither New nor Closed)', () => {
+  it('returns false if the rawCase.shouldGenerateNotices value is defined and false', () => {
+    expect(
+      shouldGenerateNoticesForCase({
+        ...MOCK_CASE,
+        shouldGenerateNotices: false,
+      }),
+    ).toEqual(false);
+  });
+
+  it('returns true if the case is in Open (neither New nor Closed) status', () => {
     expect(
       shouldGenerateNoticesForCase({
         ...MOCK_CASE,
@@ -22,7 +31,7 @@ describe('shouldGenerateNoticesForCase', () => {
     ).toEqual(true);
   });
 
-  it('should return false when the case status is New', () => {
+  it('returns false if the case is in NEW status', () => {
     expect(
       shouldGenerateNoticesForCase({
         ...MOCK_CASE,
@@ -31,7 +40,7 @@ describe('shouldGenerateNoticesForCase', () => {
     ).toEqual(false);
   });
 
-  it('should return false when the case was closed more than six months ago', () => {
+  it('returns false if the case is closed more than six months ago', () => {
     expect(
       shouldGenerateNoticesForCase({
         ...MOCK_CASE,
@@ -41,7 +50,7 @@ describe('shouldGenerateNoticesForCase', () => {
     ).toEqual(false);
   });
 
-  it('should return true when the case was closed within the last six months', () => {
+  it('returns true if the case is closed within the last six months', () => {
     expect(
       shouldGenerateNoticesForCase({
         ...MOCK_CASE,

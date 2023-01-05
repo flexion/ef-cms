@@ -20,11 +20,11 @@ import {
 } from '../../utilities/DateHandler';
 import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
-import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
+import { getDocumentTitle } from '../../utilities/getDocumentTitle';
+import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 
-export const needsNewCoversheet = ({
-  applicationContext,
+export const getNeedsNewCoversheet = ({
   currentDocketEntry,
   updatedDocketEntry,
 }) => {
@@ -37,12 +37,8 @@ export const needsNewCoversheet = ({
     currentDocketEntry.certificateOfService !==
     updatedDocketEntry.certificateOfService;
   const documentTitleUpdated =
-    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
-      docketEntry: currentDocketEntry,
-    }) !==
-    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
-      docketEntry: updatedDocketEntry,
-    });
+    getDocumentTitleWithAdditionalInfo({ docketEntry: currentDocketEntry }) !==
+    getDocumentTitleWithAdditionalInfo({ docketEntry: updatedDocketEntry });
 
   return (
     receivedAtUpdated || certificateOfServiceUpdated || documentTitleUpdated
@@ -145,18 +141,17 @@ export const completeDocketEntryQCInteractor = async (
   ).validate();
   updatedDocketEntry.setQCed(user);
 
-  let updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
+  let updatedDocumentTitle = getDocumentTitle({
     applicationContext,
     docketEntry: updatedDocketEntry,
   });
 
-  let currentDocumentTitle = getDocumentTitleForNoticeOfChange({
+  let currentDocumentTitle = getDocumentTitle({
     applicationContext,
     docketEntry: currentDocketEntry,
   });
 
-  const isNewCoverSheetNeeded = needsNewCoversheet({
-    applicationContext,
+  const needsNewCoversheet = getNeedsNewCoversheet({
     currentDocketEntry,
     updatedDocketEntry,
   });
@@ -351,7 +346,7 @@ export const completeDocketEntryQCInteractor = async (
     caseToUpdate: caseEntity,
   });
 
-  if (isNewCoverSheetNeeded) {
+  if (needsNewCoversheet) {
     await applicationContext
       .getUseCases()
       .addCoversheetInteractor(applicationContext, {

@@ -17,7 +17,7 @@ export const setForHearingModalHelper = (get, applicationContext) => {
   }
 
   const trialSessionsFilter = trialSession =>
-    SESSION_STATUS_GROUPS.open === trialSession.sessionStatus;
+    SESSION_STATUS_GROUPS.open === trialSession.computedStatus;
 
   let { trialSessionsFormatted, ...helperProps } = trialSessionsModalHelper({
     applicationContext,

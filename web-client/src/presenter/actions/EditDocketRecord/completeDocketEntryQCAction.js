@@ -18,7 +18,7 @@ export const completeDocketEntryQCAction = async ({
 }) => {
   const { docketNumber, leadDocketNumber } = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
-  const { overridePaperServiceAddress, qcCompletionAndMessageFlag } = props;
+  const { overridePaperServiceAddress } = props;
 
   let entryMetadata = omit(
     {
@@ -52,19 +52,13 @@ export const completeDocketEntryQCAction = async ({
     doc => doc.docketEntryId === docketEntryId,
   )[0];
 
-  const descriptionDisplay = applicationContext
+  const computedDocumentTitle = applicationContext
     .getUtilities()
-    .getDescriptionDisplay(updatedDocument);
-
-  const qcCompletedAndSentMessage = `${descriptionDisplay} QC completed and message sent.`;
-  const completedMessage = `${descriptionDisplay} has been completed.`;
-  const message = qcCompletionAndMessageFlag
-    ? qcCompletedAndSentMessage
-    : completedMessage;
+    .getDocumentTitleWithAdditionalInfo({ docketEntry: updatedDocument });
 
   return {
     alertSuccess: {
-      message,
+      message: `${computedDocumentTitle} has been completed.`,
       title: 'QC Completed',
     },
     caseDetail,

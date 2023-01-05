@@ -1,8 +1,12 @@
 import { setupTest } from './helpers';
 import { unauthedUserViewsHealthCheck } from './journey/unauthedUserViewsHealthCheck';
 
+const cerebralTest = setupTest();
+
 describe('Unauthed user views health check', () => {
-  const cerebralTest = setupTest();
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   unauthedUserViewsHealthCheck(cerebralTest);
 });

@@ -6,7 +6,7 @@ import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUse
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
-import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
+import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
 import { gotoMaintenanceSequence } from './gotoMaintenanceSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -70,7 +70,7 @@ const goToDashboard = [
                   getMessages,
                   getJudgeForCurrentUserAction,
                   setJudgeUserAction,
-                  getTrialSessionsForJudgeAction,
+                  getTrialSessionsAction,
                   setTrialSessionsAction,
                   setCurrentPageAction('DashboardChambers'),
                 ],
@@ -88,7 +88,7 @@ const goToDashboard = [
                 judge: [
                   setMessageInboxPropsAction,
                   getMessages,
-                  getTrialSessionsForJudgeAction,
+                  getTrialSessionsAction,
                   setTrialSessionsAction,
                   setCurrentPageAction('DashboardJudge'),
                 ],

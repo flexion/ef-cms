@@ -5,14 +5,16 @@ import {
 import { fakeFile, loginAs, setupTest, waitForExpectedItem } from './helpers';
 
 describe('Practitioner documentation journey', () => {
+  const barNumber = 'PT1234';
   const cerebralTest = setupTest();
 
-  const barNumber = 'PT1234';
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
   describe('Admissions Clerk uploads a practitioner document', () => {
     loginAs(cerebralTest, 'admissionsclerk@example.com');
 

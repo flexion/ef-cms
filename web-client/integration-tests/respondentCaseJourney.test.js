@@ -1,7 +1,4 @@
-import {
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { practitionerSearchesForUnassociatedSealedCase } from './journey/practitionerSearchesForUnassociatedSealedCase';
 import { respondent1ViewsCaseDetailOfAssociatedCase } from './journey/respondent1ViewsCaseDetailOfAssociatedCase';
@@ -15,8 +12,14 @@ import { respondentViewsCaseDetailOfAssociatedCase } from './journey/respondentV
 import { respondentViewsCaseDetailOfUnassociatedCase } from './journey/respondentViewsCaseDetailOfUnassociatedCase';
 import { respondentViewsDashboard } from './journey/respondentViewsDashboard';
 
+const cerebralTest = setupTest();
+
 describe('Respondent requests access to a case', () => {
-  const cerebralTest = setupTest();
+  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

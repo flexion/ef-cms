@@ -1,5 +1,5 @@
-import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { admissionsClerkAddsUnverifiedEmailToPetitioner } from './journey/admissionsClerkAddsUnverifiedEmailToPetitioner';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   callCognitoTriggerForPendingEmail,
   contactPrimaryFromState,
@@ -11,10 +11,16 @@ import { docketClerkQCsNoticeOfChange } from './journey/docketClerkQCsNoticeOfCh
 import { docketClerkViewsNoticeOfChangeOfAddress } from './journey/docketClerkViewsNoticeOfChangeOfAddress';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
+const cerebralTest = setupTest();
+
 describe('admissions clerk adds petitioner without existing cognito account to case', () => {
-  const cerebralTest = setupTest();
+  const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
   const EMAIL_TO_ADD = `new${Math.random()}@example.com`;
+
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

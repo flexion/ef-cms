@@ -43,7 +43,7 @@ describe('trialSessionHeaderHelper', () => {
 
     applicationContext
       .getUtilities()
-      .getFormattedTrialSessionDetails.mockImplementation(
+      .formattedTrialSessionDetails.mockImplementation(
         () => mockFormattedTrialSession,
       );
   });

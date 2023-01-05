@@ -15,6 +15,6 @@ export const petitionsClerkViewsNewTrialSession = cerebralTest => {
       },
     );
 
-    expect(trialSessionFormatted.sessionStatus).toEqual('New');
+    expect(trialSessionFormatted.computedStatus).toEqual('New');
   });
 };

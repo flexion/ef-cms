@@ -13,6 +13,10 @@ import axios from 'axios';
 describe('Invoke checkForReadyForTrialCasesLambda via http request', () => {
   const cerebralTest = setupTest();
 
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });

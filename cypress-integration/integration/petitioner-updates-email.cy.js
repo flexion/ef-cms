@@ -19,6 +19,10 @@ describe('Petitioner updates and verifies their email', () => {
     cy.wait(2000);
   });
 
+  beforeEach(() => {
+    Cypress.Cookies.preserveOnce('refreshToken');
+  });
+
   it('petitioner should be able to change their email', () => {
     const randomSuffix = parseInt(Math.random() * 100);
     goToMyAccount();

@@ -21,6 +21,13 @@ const formatTrialSessionsForHelper = (trialSessions, applicationContext) => {
     }
     trialSession.optionText = `${trialSession.trialLocation} ${trialSession.startDateFormatted} (${trialSession.sessionTypeFormatted})`;
 
+    trialSession.computedStatus = applicationContext
+      .getUtilities()
+      .getTrialSessionStatus({
+        applicationContext,
+        session: trialSession,
+      });
+
     return trialSession;
   });
 };
@@ -126,7 +133,7 @@ export const addToTrialSessionModalHelper = (get, applicationContext) => {
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
   const trialSessionsFilter = trialSession =>
     [SESSION_STATUS_GROUPS.new, SESSION_STATUS_GROUPS.open].includes(
-      trialSession.sessionStatus,
+      trialSession.computedStatus,
     );
 
   const hearings = get(state.caseDetail.hearings);
@@ -142,7 +149,7 @@ export const addToTrialSessionModalHelper = (get, applicationContext) => {
   if (trialSessionsFormatted) {
     trialSessionsFormatted = trialSessionsFormatted.filter(trialSession =>
       [SESSION_STATUS_GROUPS.new, SESSION_STATUS_GROUPS.open].includes(
-        trialSession.sessionStatus,
+        trialSession.computedStatus,
       ),
     );
   }

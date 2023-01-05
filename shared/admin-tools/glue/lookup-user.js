@@ -58,8 +58,7 @@ const lookupUsers = async () => {
       body: { query },
       index: 'efcms-user',
     });
-
-    return results.body.hits.hits.map(hit => {
+    return results.hits.hits.map(hit => {
       return {
         Email: hit['_source']['email'].S,
         Name: hit['_source']['name'].S,

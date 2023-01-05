@@ -51,9 +51,7 @@ const formatResults = body => {
 exports.search = async ({ applicationContext, searchParameters }) => {
   let body;
   try {
-    ({ body } = await applicationContext
-      .getSearchClient()
-      .search(searchParameters));
+    body = await applicationContext.getSearchClient().search(searchParameters);
   } catch (searchError) {
     applicationContext.logger.error(searchError);
     throw new Error('Search client encountered an error.');
@@ -84,8 +82,7 @@ exports.searchAll = async ({ applicationContext, searchParameters }) => {
   let search_after = [0];
   const sort = searchParameters.body?.sort || [{ 'pk.S': 'asc' }]; // sort is required for paginated queries
 
-  const expected = get(countQ, 'body.count', 0);
-
+  const expected = get(countQ, 'count', 0);
   let i = 0;
   let results = [];
   while (i < expected) {
@@ -99,7 +96,7 @@ exports.searchAll = async ({ applicationContext, searchParameters }) => {
       index,
       size,
     });
-    const hits = get(chunk, 'body.hits.hits', []);
+    const hits = get(chunk, 'hits.hits', []);
 
     if (hits.length > 0) {
       results = results.concat(hits);

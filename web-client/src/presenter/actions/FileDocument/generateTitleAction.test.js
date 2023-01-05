@@ -4,12 +4,12 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('generateTitleAction', () => {
-  const { generateExternalDocumentTitle } = applicationContext.getUtilities();
+  const { generateDocumentTitleInteractor } = applicationContext.getUseCases();
 
   presenter.providers.applicationContext = applicationContext;
 
-  it('should call generateExternalDocumentTitle with correct data for only a primary document', async () => {
-    generateExternalDocumentTitle.mockReturnValue(null);
+  it('should call generateDocumentTitle with correct data for only a primary document', async () => {
+    generateDocumentTitleInteractor.mockReturnValue(null);
     await runAction(generateTitleAction, {
       modules: {
         presenter,
@@ -22,15 +22,15 @@ describe('generateTitleAction', () => {
       },
     });
 
-    expect(generateExternalDocumentTitle.mock.calls.length).toEqual(1);
+    expect(generateDocumentTitleInteractor.mock.calls.length).toEqual(1);
     expect(
-      generateExternalDocumentTitle.mock.calls[0][1].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[0][1].documentMetadata
         .documentType,
     ).toEqual('Motion for Judgment on the Pleadings');
   });
 
-  it('should call generateExternalDocumentTitle with correct data for all documents', async () => {
-    generateExternalDocumentTitle.mockReturnValue(null);
+  it('should call generateDocumentTitle with correct data for all documents', async () => {
+    generateDocumentTitleInteractor.mockReturnValue(null);
     await runAction(generateTitleAction, {
       modules: {
         presenter,
@@ -48,11 +48,11 @@ describe('generateTitleAction', () => {
     });
 
     expect(
-      generateExternalDocumentTitle.mock.calls[0][1].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[0][1].documentMetadata
         .documentType,
     ).toEqual('Motion for Protective Order Pursuant to Rule 103');
     expect(
-      generateExternalDocumentTitle.mock.calls[1][1].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[1][1].documentMetadata
         .documentType,
     ).toEqual('Motion for Entry of Decision');
   });

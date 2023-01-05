@@ -10,7 +10,7 @@ const { getCaseInventoryReport } = require('./getCaseInventoryReport');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('getCaseInventoryReport', () => {
-  const searchSpy = jest.fn();
+  let searchSpy;
   const CASE_INVENTORY_MAX_PAGE_SIZE = 10;
 
   const mockDataOne = {
@@ -26,6 +26,7 @@ describe('getCaseInventoryReport', () => {
   };
 
   beforeEach(() => {
+    searchSpy = jest.fn();
     applicationContext.getConstants.mockReturnValue({
       CASE_INVENTORY_MAX_PAGE_SIZE,
     });
@@ -35,26 +36,20 @@ describe('getCaseInventoryReport', () => {
     applicationContext.getSearchClient.mockReturnValue({
       search: searchSpy,
     });
-
-    searchSpy.mockResolvedValue({
-      body: {},
-    });
   });
 
   it('calls search function with correct params when provided a judge and returns records', async () => {
     searchSpy.mockResolvedValue({
-      body: {
-        hits: {
-          hits: [
-            {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
-            },
-            {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
-            },
-          ],
-          total: { value: '2' },
-        },
+      hits: {
+        hits: [
+          {
+            _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
+          },
+          {
+            _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
+          },
+        ],
+        total: { value: '2' },
       },
     });
 
@@ -89,15 +84,13 @@ describe('getCaseInventoryReport', () => {
 
   it('calls search function with correct params when provided a status and returns records', async () => {
     searchSpy.mockResolvedValue({
-      body: {
-        hits: {
-          hits: [
-            {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
-            },
-          ],
-          total: { value: '1' },
-        },
+      hits: {
+        hits: [
+          {
+            _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
+          },
+        ],
+        total: { value: '1' },
       },
     });
 
@@ -127,18 +120,16 @@ describe('getCaseInventoryReport', () => {
 
   it('calls search function with correct params when provided a judge and status and returns records', async () => {
     searchSpy.mockResolvedValue({
-      body: {
-        hits: {
-          hits: [
-            {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
-            },
-            {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
-            },
-          ],
-          total: { value: '2' },
-        },
+      hits: {
+        hits: [
+          {
+            _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
+          },
+          {
+            _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
+          },
+        ],
+        total: { value: '2' },
       },
     });
 
@@ -176,6 +167,8 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with a default page size if one is not provided', async () => {
+    searchSpy.mockReset();
+
     await getCaseInventoryReport({
       applicationContext,
       associatedJudge: CHIEF_JUDGE,
@@ -188,6 +181,8 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with the given page size', async () => {
+    searchSpy.mockReset();
+
     await getCaseInventoryReport({
       applicationContext,
       associatedJudge: CHIEF_JUDGE,
@@ -199,6 +194,8 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with max page size if the given page size exceeds the max page size', async () => {
+    searchSpy.mockReset();
+
     await getCaseInventoryReport({
       applicationContext,
       associatedJudge: CHIEF_JUDGE,
@@ -212,6 +209,8 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with a default starting index (`from` param) of 0 if one is not provided', async () => {
+    searchSpy.mockReset();
+
     await getCaseInventoryReport({
       applicationContext,
       associatedJudge: CHIEF_JUDGE,
@@ -222,6 +221,8 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with the given starting index (`from` param)', async () => {
+    searchSpy.mockReset();
+
     await getCaseInventoryReport({
       applicationContext,
       associatedJudge: CHIEF_JUDGE,
@@ -234,12 +235,10 @@ describe('getCaseInventoryReport', () => {
 
   it('returns an empty array when no hits are returned from the search client', async () => {
     searchSpy.mockResolvedValue({
-      body: {
-        hits: {
-          hits: [],
-        },
-        total: { value: '0' },
+      hits: {
+        hits: [],
       },
+      total: { value: '0' },
     });
 
     const results = await getCaseInventoryReport({
@@ -247,11 +246,13 @@ describe('getCaseInventoryReport', () => {
       associatedJudge: CHIEF_JUDGE,
     });
 
+    expect(searchSpy).toHaveBeenCalled();
     expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
       {
         match_phrase: { 'associatedJudge.S': CHIEF_JUDGE },
       },
     ]);
+
     expect(results).toEqual({ foundCases: [], totalCount: 0 });
   });
 });

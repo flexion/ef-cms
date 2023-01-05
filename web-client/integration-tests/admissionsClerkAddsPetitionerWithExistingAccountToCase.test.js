@@ -1,4 +1,4 @@
-import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -9,10 +9,16 @@ import {
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
-describe('admissions clerk adds petitioner with existing cognito account to case', () => {
-  const cerebralTest = setupTest();
+const cerebralTest = setupTest();
 
-  const EMAIL_TO_ADD = 'petitioner4@example.com';
+describe('admissions clerk adds petitioner with existing cognito account to case', () => {
+  const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
+
+  const EMAIL_TO_ADD = 'petitioner2@example.com';
+
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -80,7 +86,7 @@ describe('admissions clerk adds petitioner with existing cognito account to case
     await refreshElasticsearchIndex();
   });
 
-  loginAs(cerebralTest, EMAIL_TO_ADD);
+  loginAs(cerebralTest, 'petitioner2@example.com');
   it('petitioner with existing account verifies case is added to dashboard', async () => {
     await cerebralTest.runSequence('gotoDashboardSequence');
 

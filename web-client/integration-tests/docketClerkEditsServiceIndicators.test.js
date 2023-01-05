@@ -18,6 +18,10 @@ import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsCler
 describe('Docket Clerk edits service indicators for petitioner, practitioner, and respondent', () => {
   const cerebralTest = setupTest();
 
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     cerebralTest.draftOrders = [];
     cerebralTest.closeSocket();

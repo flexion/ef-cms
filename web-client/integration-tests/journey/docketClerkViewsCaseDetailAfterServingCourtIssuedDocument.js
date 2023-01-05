@@ -29,7 +29,7 @@ export const docketClerkViewsCaseDetailAfterServingCourtIssuedDocument = (
       );
     } else {
       expect(cerebralTest.getState('caseDetail.status')).toEqual(
-        CASE_STATUS_TYPES.closedDismissed,
+        CASE_STATUS_TYPES.closed,
       );
       expect(cerebralTest.getState('caseDetail.highPriority')).toEqual(false);
     }

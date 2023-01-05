@@ -16,6 +16,5 @@ export const createMessageAction = async ({ applicationContext, get }) => {
     alertSuccess: {
       message: 'Your message has been sent.',
     },
-    qcCompletionAndMessageFlag: true,
   };
 };

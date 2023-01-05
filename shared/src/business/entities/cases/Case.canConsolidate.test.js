@@ -17,47 +17,14 @@ describe('canConsolidate', () => {
     );
   });
 
-  it('should return false when the case status is New', () => {
+  it('should fail when the pending case status is ineligible', () => {
     caseEntity.status = CASE_STATUS_TYPES.new;
-
     const result = caseEntity.canConsolidate();
 
     expect(result).toEqual(false);
   });
 
-  it('should return false when the case status is General Docket', () => {
-    caseEntity.status = CASE_STATUS_TYPES.generalDocket;
-
-    const result = caseEntity.canConsolidate();
-
-    expect(result).toEqual(false);
-  });
-
-  it('should return false when the case status is On Appeal', () => {
-    caseEntity.status = CASE_STATUS_TYPES.onAppeal;
-
-    const result = caseEntity.canConsolidate();
-
-    expect(result).toEqual(false);
-  });
-
-  it('should return false when the case status is Closed', () => {
-    caseEntity.status = CASE_STATUS_TYPES.closed;
-
-    const result = caseEntity.canConsolidate();
-
-    expect(result).toEqual(false);
-  });
-
-  it('should return false when the case status is Closed - Dismissed', () => {
-    caseEntity.status = CASE_STATUS_TYPES.closedDismissed;
-
-    const result = caseEntity.canConsolidate();
-
-    expect(result).toEqual(false);
-  });
-
-  it('should return true when a case has a case status that is eligible for consolidation', () => {
+  it('should pass when a case has an eligible case status', () => {
     const result = caseEntity.canConsolidate();
 
     expect(result).toEqual(true);

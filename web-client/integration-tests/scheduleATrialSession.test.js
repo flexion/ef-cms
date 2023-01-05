@@ -13,10 +13,16 @@ import { petitionsClerkViewsACalendaredTrialSession } from './journey/petitionsC
 import { petitionsClerkViewsATrialSessionsEligibleCases } from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
 import { petitionsClerkViewsATrialSessionsEligibleCasesWithManuallyAddedCase } from './journey/petitionsClerkViewsATrialSessionsEligibleCasesWithManuallyAddedCase';
 
-describe('Schedule A Trial Session', () => {
-  const cerebralTest = setupTest();
+const cerebralTest = setupTest();
 
-  cerebralTest.casesReadyForTrial = [];
+describe('Schedule A Trial Session', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
 
   const caseCount = 2;
   const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
@@ -30,11 +36,10 @@ describe('Schedule A Trial Session', () => {
     preferredTrialCity: trialLocation2,
     trialLocation: trialLocation2,
   };
-  const createdDocketNumbers = [];
 
-  afterAll(() => {
-    cerebralTest.closeSocket();
-  });
+  cerebralTest.casesReadyForTrial = [];
+
+  const createdDocketNumbers = [];
 
   const makeCaseReadyForTrial = (testSession, id, caseOverrides) => {
     loginAs(testSession, 'petitioner@example.com');

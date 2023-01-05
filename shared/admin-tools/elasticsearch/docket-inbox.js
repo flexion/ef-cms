@@ -40,5 +40,5 @@ const version = process.argv[3] || 'alpha';
     index: 'efcms-work-item',
   };
   const results = await esClient.count(query);
-  console.log(results.body);
+  console.log(results);
 })();

@@ -5,13 +5,14 @@ import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
+const cerebralTest = setupTest();
+let userToken;
+
 describe('View and manage the deadlines of a case', () => {
-  const cerebralTest = setupTest();
-
-  let userToken;
-
   beforeAll(() => {
-    const loginUsername = 'irsSuperuser@example.com';
+    jest.setTimeout(30000);
+
+    const loginUsername = 'irssuperuser@example.com';
     if (!userMap[loginUsername]) {
       throw new Error(`Unable to log into test as ${loginUsername}`);
     }

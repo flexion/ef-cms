@@ -1,4 +1,4 @@
-import { MessageResult } from '../../entities/MessageResult';
+import { Message } from '../../entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -30,7 +30,7 @@ export const getOutboxMessagesForUserInteractor = async (
       userId,
     });
 
-  return MessageResult.validateRawCollection(messages, {
+  return Message.validateRawCollection(messages, {
     applicationContext,
   });
 };

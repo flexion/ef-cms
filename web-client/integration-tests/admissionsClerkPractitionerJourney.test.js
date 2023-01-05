@@ -1,9 +1,4 @@
-import {
-  ADVANCED_SEARCH_TABS,
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-  SERVICE_INDICATOR_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
 import { admissionsClerkAddsNewPractitioner } from './journey/admissionsClerkAddsNewPractitioner';
 import { admissionsClerkAddsPractitionerEmail } from './journey/admissionsClerkAddsPractitionerEmail';
 import { admissionsClerkEditsPractitionerInfo } from './journey/admissionsClerkEditsPractitionerInfo';
@@ -11,6 +6,7 @@ import { admissionsClerkMigratesPractitionerWithoutEmail } from './journey/admis
 import { admissionsClerkSearchesForPractitionerByBarNumber } from './journey/admissionsClerkSearchesForPractitionerByBarNumber';
 import { admissionsClerkSearchesForPractitionersByName } from './journey/admissionsClerkSearchesForPractitionersByName';
 import { admissionsClerkVerifiesPractitionerServiceIndicator } from './journey/admissionsClerkVerifiesPractitionerServiceIndicator';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -21,11 +17,18 @@ import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkA
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
+const cerebralTest = setupTest({
+  constantsOverrides: {
+    CASE_SEARCH_PAGE_SIZE: 1,
+  },
+});
+
 describe('admissions clerk practitioner journey', () => {
-  const cerebralTest = setupTest({
-    constantsOverrides: {
-      CASE_SEARCH_PAGE_SIZE: 1,
-    },
+  const { COUNTRY_TYPES, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
+    applicationContext.getConstants();
+
+  beforeAll(() => {
+    jest.setTimeout(30000);
   });
 
   afterAll(() => {

@@ -5,8 +5,12 @@ import { docketClerkEditsTrialSession } from './journey/docketClerkEditsTrialSes
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest } from './helpers';
 
+const cerebralTest = setupTest();
+
 describe('Docket Clerk Creates A Trial', () => {
-  const cerebralTest = setupTest();
+  beforeEach(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

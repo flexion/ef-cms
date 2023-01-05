@@ -195,7 +195,7 @@ exports.getUserFromAuthHeader = event => {
  * extracts the connectionId from the event header or query parameters and returns
  *
  * @param {object} event the api gateway request event
- * @returns {string|void} the connectionId
+ * @returns {string} the connectionId
  */
 exports.getConnectionIdFromEvent = event => {
   if (

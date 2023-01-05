@@ -1,4 +1,4 @@
-import { CASE_TYPES_MAP } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -14,9 +14,10 @@ import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkView
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-describe('petitions clerk sets a trial session calendar', () => {
-  const cerebralTest = setupTest();
+const cerebralTest = setupTest();
 
+describe('petitions clerk sets a trial session calendar', () => {
+  const { CASE_TYPES_MAP } = applicationContext.getConstants();
   const trialLocation = `Denver, Colorado, ${Date.now()}`;
   const overrides = {
     maxCases: 2,
@@ -24,6 +25,10 @@ describe('petitions clerk sets a trial session calendar', () => {
     sessionType: 'Small',
     trialLocation,
   };
+
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

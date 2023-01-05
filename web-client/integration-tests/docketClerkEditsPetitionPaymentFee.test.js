@@ -5,8 +5,12 @@ import {
 } from '../../shared/src/business/entities/EntityConstants';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
+const cerebralTest = setupTest();
+
 describe('docket clerk edits a petition payment fee', () => {
-  const cerebralTest = setupTest();
+  beforeEach(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

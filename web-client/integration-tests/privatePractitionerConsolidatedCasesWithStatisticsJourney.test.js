@@ -8,14 +8,18 @@ import { petitionsClerkEditsPetitionInQCIRSNotice } from './journey/petitionsCle
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { privatePractitionerViewsOpenConsolidatedCases } from './journey/privatePractitionerViewsOpenConsolidatedCases';
 
-describe('private practitioner views consolidated cases with statistics (cerebralTest for bug 8473)', () => {
-  const cerebralTest = setupTest();
+const cerebralTest = setupTest();
 
-  const createdDocketNumbers = [];
+describe('private practitioner views consolidated cases with statistics (cerebralTest for bug 8473)', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
+
+  const createdDocketNumbers = [];
 
   for (let i = 0; i < 2; i++) {
     loginAs(cerebralTest, 'privatepractitioner@example.com');

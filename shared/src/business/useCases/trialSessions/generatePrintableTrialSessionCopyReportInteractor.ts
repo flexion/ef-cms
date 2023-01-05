@@ -1,4 +1,3 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -30,11 +29,11 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     sort,
     userHeading,
   }: {
-    filters: TPrintableTableFilters;
+    showCaseNotes: boolean;
+    filters: string[];
     formattedCases: TCase[];
     formattedTrialSession: TTrialSessionData;
     sessionNotes: string;
-    showCaseNotes: boolean;
     sort: string;
     userHeading: string;
   },
@@ -46,18 +45,11 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const areUpdatedTrialSessionTypesEnabled = await applicationContext
-    .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key,
-    });
-
   const pdf = await applicationContext
     .getDocumentGenerators()
     .printableWorkingCopySessionList({
       applicationContext,
       data: {
-        areUpdatedTrialSessionTypesEnabled,
         filters,
         formattedCases,
         formattedTrialSession,

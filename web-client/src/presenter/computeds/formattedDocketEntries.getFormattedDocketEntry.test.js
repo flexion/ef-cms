@@ -152,43 +152,29 @@ describe('getFormattedDocketEntry', () => {
   });
 
   describe('descriptionDisplay', () => {
-    it('should call getDescriptionDisplay and return only documentTitle with no other information', () => {
-      const expectedDescriptionDisplay = 'Answer';
-      const result = getFormattedDocketEntry({
-        ...baseParams,
-        entry: {
-          ...simpleDocketEntry,
-          additionalInfo: undefined,
-          documentTitle: 'Answer',
-        },
-      });
-
-      expect(
-        applicationContext.getUtilities().getDescriptionDisplay,
-      ).toHaveBeenCalled();
-      expect(result.descriptionDisplay).toEqual(expectedDescriptionDisplay);
-    });
-
-    it('should call getDescriptionDisplay if entry.documentTitle is set and return its result using document title and additional info', () => {
-      const additionalInfo = 'With Extra Things';
+    it('should call getDocumentTitleWithAdditionalInfo if entry.documentTitle is set and return its result as descriptionDisplay', () => {
+      const mockDescriptionDisplay = 'Answer With Extra Things';
+      applicationContext
+        .getUtilities()
+        .getDocumentTitleWithAdditionalInfo.mockReturnValue(
+          mockDescriptionDisplay,
+        );
 
       const result = getFormattedDocketEntry({
         ...baseParams,
         entry: {
           ...simpleDocketEntry,
-          addToCoversheet: true,
-          additionalInfo,
           documentTitle: 'Answer',
         },
       });
 
       expect(
-        applicationContext.getUtilities().getDescriptionDisplay,
+        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
       ).toHaveBeenCalled();
-      expect(result.descriptionDisplay).toEqual('Answer With Extra Things');
+      expect(result.descriptionDisplay).toEqual(mockDescriptionDisplay);
     });
 
-    it('should not call getDescriptionDisplay or set descriptionDisplay on result if entry.documentTitle is undefined', () => {
+    it('should not call getDocumentTitleWithAdditionalInfo or set descriptionDisplay on result if entry.documentTitle is undefined', () => {
       const result = getFormattedDocketEntry({
         ...baseParams,
         entry: {
@@ -198,7 +184,7 @@ describe('getFormattedDocketEntry', () => {
       });
 
       expect(
-        applicationContext.getUtilities().getDescriptionDisplay,
+        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
       ).not.toHaveBeenCalled();
       expect(result.descriptionDisplay).toBeUndefined();
     });

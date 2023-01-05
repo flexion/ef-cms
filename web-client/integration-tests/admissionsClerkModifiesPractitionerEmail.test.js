@@ -1,7 +1,4 @@
-import {
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -15,11 +12,15 @@ import { userLogsInAndChecksVerifiedEmailAddress } from './journey/userLogsInAnd
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
 const { faker } = require('@faker-js/faker');
 
+const cerebralTest = setupTest();
+
 describe('admissions clerk practitioner journey', () => {
-  const cerebralTest = setupTest();
+  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
     cerebralTest.barNumber = 'SC2222'; //privatePractitioner3
+
+    jest.setTimeout(30000);
   });
 
   afterAll(() => {

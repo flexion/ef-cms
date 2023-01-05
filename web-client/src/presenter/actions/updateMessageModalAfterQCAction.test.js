@@ -11,7 +11,7 @@ describe('updateMessageModalAfterQCAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('reset state.modal.validationErrors to an empty object', async () => {
+  it('set state.modal.validationErrors to an empty object', async () => {
     const result = await runAction(updateMessageModalAfterQCAction, {
       modules: { presenter },
       state: {
@@ -38,10 +38,6 @@ describe('updateMessageModalAfterQCAction', () => {
       },
     });
 
-    expect(
-      applicationContext.getUtilities().getDescriptionDisplay.mock.calls[0][0],
-    ).toMatchObject({ documentTitle: mockDocumentTitle });
-
     expect(result.state.modal.form.subject).toEqual(mockDocumentTitle);
   });
 
@@ -57,12 +53,26 @@ describe('updateMessageModalAfterQCAction', () => {
       },
     });
 
-    expect(
-      applicationContext.getUtilities().getDescriptionDisplay.mock.calls[0][0],
-    ).toMatchObject({ documentTitle: mockDocumentTitle });
-
     expect(result.state.modal.form.attachments).toEqual([
       { documentId: mockDocketEntryId, documentTitle: mockDocumentTitle },
     ]);
+  });
+
+  it('should call getDocumentTitleWithAdditionalInfo', async () => {
+    await runAction(updateMessageModalAfterQCAction, {
+      modules: { presenter },
+      state: {
+        docketEntryId: mockDocketEntryId,
+        form: {
+          documentTitle: mockDocumentTitle,
+        },
+        modal: { form: undefined },
+      },
+    });
+
+    expect(
+      applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo.mock
+        .calls[0][0],
+    ).toMatchObject({ docketEntry: { documentTitle: mockDocumentTitle } });
   });
 });

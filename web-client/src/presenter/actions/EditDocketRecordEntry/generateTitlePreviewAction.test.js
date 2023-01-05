@@ -6,11 +6,11 @@ import { runAction } from 'cerebral/test';
 presenter.providers.applicationContext = applicationContext;
 
 describe('generateTitlePreviewAction', () => {
-  it('should call generateExternalDocumentTitle with correct data for only a primary document', async () => {
+  it('should call generateDocumentTitle with correct data for only a primary document', async () => {
     const documentType = 'Motion for Judgment on the Pleadings';
     applicationContext
-      .getUtilities()
-      .generateExternalDocumentTitle.mockReturnValue(documentType);
+      .getUseCases()
+      .generateDocumentTitleInteractor.mockReturnValue(documentType);
 
     const result = await runAction(generateTitlePreviewAction, {
       modules: {
@@ -25,8 +25,8 @@ describe('generateTitlePreviewAction', () => {
     });
 
     expect(
-      applicationContext.getUtilities().generateExternalDocumentTitle.mock.calls
-        .length,
+      applicationContext.getUseCases().generateDocumentTitleInteractor.mock
+        .calls.length,
     ).toEqual(1);
     expect(result.state.screenMetadata.documentTitlePreview).toEqual(
       documentType,
@@ -36,8 +36,8 @@ describe('generateTitlePreviewAction', () => {
   it('should reset the document title back to the bracketed title', async () => {
     const documentType = 'Certificate of Service';
     applicationContext
-      .getUtilities()
-      .generateExternalDocumentTitle.mockReturnValue(
+      .getUseCases()
+      .generateDocumentTitleInteractor.mockReturnValue(
         'Certificate of Service 01/01/20',
       );
 
@@ -56,8 +56,8 @@ describe('generateTitlePreviewAction', () => {
     });
 
     expect(
-      applicationContext.getUtilities().generateExternalDocumentTitle.mock.calls
-        .length,
+      applicationContext.getUseCases().generateDocumentTitleInteractor.mock
+        .calls.length,
     ).toEqual(1);
     expect(result.state.screenMetadata.documentTitlePreview).toEqual(
       'Certificate of Service 01/01/20',
