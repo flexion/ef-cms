@@ -12,16 +12,17 @@ import { petitionsClerkViewCaseDeadline } from './journey/petitionsClerkViewCase
 import { petitionsClerkViewsCaseWithNoDeadlines } from './journey/petitionsClerkViewsCaseWithNoDeadlines';
 import { petitionsClerkViewsDeadlineReportForSingleCase } from './journey/petitionsClerkViewsDeadlineReportForSingleCase';
 
-describe('View and manage the deadlines of a case', () => {
-  const cerebralTest = setupTest({
-    constantsOverrides: {
-      DEADLINE_REPORT_PAGE_SIZE: 1,
-    },
-  });
+const cerebralTest = setupTest({
+  constantsOverrides: {
+    DEADLINE_REPORT_PAGE_SIZE: 1,
+  },
+});
 
+describe('View and manage the deadlines of a case', () => {
   const randomDay = `0${Math.floor(Math.random() * 9) + 1}`;
   const randomMonth = `0${Math.floor(Math.random() * 9) + 1}`;
   const randomYear = `200${Math.floor(Math.random() * 9) + 1}`;
+
   const overrides = {
     day: randomDay,
     month: randomMonth,
@@ -29,6 +30,7 @@ describe('View and manage the deadlines of a case', () => {
   };
 
   beforeAll(() => {
+    jest.setTimeout(30000);
     jest.spyOn(
       cerebralTest.applicationContext.getUseCases(),
       'createMessageInteractor',

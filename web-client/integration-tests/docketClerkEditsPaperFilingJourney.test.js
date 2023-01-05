@@ -14,6 +14,10 @@ import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsCler
 describe('Docket Clerk edits a paper filing journey', () => {
   const cerebralTest = setupTest();
 
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });

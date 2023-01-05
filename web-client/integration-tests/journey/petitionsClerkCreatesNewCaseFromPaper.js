@@ -13,7 +13,6 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     formOrdersAndNotices = {},
     paymentStatus = PAYMENT_STATUS.WAIVED,
   } = {},
-  formOverrides = [],
 ) => {
   const primaryContactName = {
     key: 'contactPrimary.name',
@@ -153,11 +152,6 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     formOrdersAndNotices.key &&
     formOrdersAndNotices.value
       ? [...formValues, formOrdersAndNotices]
-      : formValues;
-
-  formValues =
-    formOverrides && formOverrides.length > 0
-      ? [...formValues, ...formOverrides]
       : formValues;
 
   it('should default to parties tab when creating a new case', async () => {

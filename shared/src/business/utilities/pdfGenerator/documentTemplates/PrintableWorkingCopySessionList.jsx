@@ -6,12 +6,12 @@ import { SessionAssignmentsSection } from '../components/SessionAssignmentsSecti
 import { SessionNotesSection } from '../components/SessionNotesSection';
 import {
   generateCaseStatus,
+  generateSelectedFilterList,
   isMemberCase,
 } from '../../generateSelectedFilterList';
 import classNames from 'classnames';
 
 export const PrintableWorkingCopySessionList = ({
-  areUpdatedTrialSessionTypesEnabled,
   filters,
   formattedCases,
   formattedTrialSession,
@@ -24,6 +24,7 @@ export const PrintableWorkingCopySessionList = ({
     formattedTrialSession.formattedEstimatedEndDateFull
       ? `${formattedTrialSession.formattedStartDateFull} - ${formattedTrialSession.formattedEstimatedEndDateFull}`
       : `${formattedTrialSession.formattedStartDateFull}`;
+  const selectedFilters = generateSelectedFilterList(filters);
 
   return (
     <div className="printable-working-copy-list">
@@ -45,7 +46,7 @@ export const PrintableWorkingCopySessionList = ({
         <SessionNotesSection sessionNotes={sessionNotes} />
         <SelectedFiltersSection
           count={formattedCases.length}
-          selectedFilters={filters}
+          selectedFilters={selectedFilters}
         />
 
         <table>
@@ -109,12 +110,7 @@ export const PrintableWorkingCopySessionList = ({
                       ))}
                     </td>
                     <td>{formattedCase.filingPartiesCode}</td>
-                    <td>
-                      {generateCaseStatus(
-                        formattedCase.trialStatus,
-                        areUpdatedTrialSessionTypesEnabled,
-                      )}
-                    </td>
+                    <td>{generateCaseStatus(formattedCase.trialStatus)}</td>
                   </tr>
                   <tr className="border-bottom-0 border-top-0">
                     <td colSpan="1"></td>

@@ -9,6 +9,7 @@ import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCa
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCompleteDocketEntryAlertAction } from '../actions/DocketEntry/setCompleteDocketEntryAlertAction';
 import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -31,6 +32,7 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       clearScreenMetadataAction,
       clearUsersAction,
       clearModalAction,
+      setCompleteDocketEntryAlertAction,
       setSaveAlertsForNavigationAction,
       setCaseAction,
       setAlertSuccessAction,

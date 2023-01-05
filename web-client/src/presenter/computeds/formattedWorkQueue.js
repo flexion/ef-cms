@@ -135,6 +135,7 @@ export const formatWorkItem = ({
   );
 
   let descriptionDisplay = result.docketEntry.documentType;
+
   if (result.docketEntry.documentTitle) {
     descriptionDisplay = result.docketEntry.documentTitle;
     if (result.docketEntry.additionalInfo) {

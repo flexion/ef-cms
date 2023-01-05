@@ -99,12 +99,6 @@ module.exports = {
     'status.S': {
       type: 'keyword',
     },
-    'trialDate.S': {
-      type: 'date',
-    },
-    'trialLocation.S': {
-      type: 'keyword',
-    },
     'userId.S': {
       type: 'keyword',
     },

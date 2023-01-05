@@ -27,6 +27,10 @@ describe('Case Consolidation Journey', () => {
     trialLocation,
   };
 
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });

@@ -29,8 +29,8 @@ export const generateTitlePreviewAction = ({
     .formatDocketEntry(applicationContext, documentMetadata);
 
   let updatedDocumentTitle = applicationContext
-    .getUtilities()
-    .generateExternalDocumentTitle(applicationContext, {
+    .getUseCases()
+    .generateDocumentTitleInteractor(applicationContext, {
       documentMetadata,
     });
 

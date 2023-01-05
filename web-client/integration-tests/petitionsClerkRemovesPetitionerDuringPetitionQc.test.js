@@ -7,8 +7,12 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkEditsPetitionInQCPartyType } from './journey/petitionsClerkEditsPetitionInQCPartyType';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
+const cerebralTest = setupTest();
+
 describe('petitions clerk removes petitioner during petition QC', () => {
-  const cerebralTest = setupTest();
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

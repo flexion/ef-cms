@@ -4,50 +4,73 @@ import {
   ROLES,
 } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { docketClerkUser } from '../../../test/mockUsers';
 import { getDocumentQCInboxForUserInteractor } from './getDocumentQCInboxForUserInteractor';
 
 describe('getDocumentQCInboxForUserInteractor', () => {
-  it('should throw an error when the user does not have access retrieve work items', async () => {
+  let mockWorkItem = {
+    createdAt: '',
+    docketEntry: {
+      sentBy: 'petitioner',
+    },
+    docketNumber: '101-18',
+    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+    messages: [],
+    section: DOCKET_SECTION,
+    sentBy: 'docketclerk',
+  };
+
+  it('throws an error if the user does not have access to the work item', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
       userId: 'petitioner',
     });
+    applicationContext.getPersistenceGateway().getDocumentQCServedForSection =
+      () => mockWorkItem;
 
-    await expect(
-      getDocumentQCInboxForUserInteractor(applicationContext, {
-        userId: null,
-      }),
-    ).rejects.toThrow('Unauthorized');
+    let error;
+    try {
+      await getDocumentQCInboxForUserInteractor(applicationContext, {
+        userId: '123',
+      });
+    } catch (e) {
+      error = e;
+    }
+    expect(error).toBeDefined();
   });
 
-  it('should fetch the user from persistence', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+  it('fetches the authorized user', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.docketClerk,
+      userId: 'docketClerk',
+    });
 
     await getDocumentQCInboxForUserInteractor(applicationContext, {
-      userId: docketClerkUser.userId,
+      userId: 'docketClerk',
     });
 
     expect(
       applicationContext.getPersistenceGateway().getUserById.mock.calls[0][0]
         .userId,
-    ).toEqual(docketClerkUser.userId);
+    ).toEqual('docketClerk');
   });
 
-  it('should query workItems that are associated with the provided userId', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+  it('queries workItems for the given userId', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.docketClerk,
+      userId: 'docketClerk',
+    });
 
     await getDocumentQCInboxForUserInteractor(applicationContext, {
-      userId: docketClerkUser.userId,
+      userId: 'docketClerk',
     });
 
     expect(
       applicationContext.getPersistenceGateway().getDocumentQCInboxForUser.mock
         .calls[0][0].userId,
-    ).toEqual(docketClerkUser.userId);
+    ).toEqual('docketClerk');
   });
 
-  it('should filter the workItems for the provided user', async () => {
+  it('filters the returned workItems for the given user', async () => {
     const workItem = {
       assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
       assigneeName: 'bob',
@@ -60,10 +83,15 @@ describe('getDocumentQCInboxForUserInteractor', () => {
       sentBy: 'bob',
     };
 
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+    const mockUser = {
+      role: ROLES.docketClerk,
+      userId: 'docketClerk',
+    };
+
+    applicationContext.getCurrentUser.mockReturnValue(mockUser);
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+      .getUserById.mockReturnValue(mockUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -74,11 +102,14 @@ describe('getDocumentQCInboxForUserInteractor', () => {
       .filterWorkItemsForUser.mockImplementation(({ workItems }) => workItems);
 
     await getDocumentQCInboxForUserInteractor(applicationContext, {
-      userId: docketClerkUser.userId,
+      userId: 'docketClerk',
     });
 
     expect(
-      applicationContext.getUtilities().filterWorkItemsForUser,
-    ).toHaveBeenCalled();
+      applicationContext.getUtilities().filterWorkItemsForUser.mock.calls[0][0],
+    ).toEqual({
+      user: mockUser,
+      workItems: [workItem],
+    });
   });
 });

@@ -1,4 +1,5 @@
-import { Case, isClosed } from '../../entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import {
   ROLE_PERMISSIONS,
@@ -56,7 +57,9 @@ const batchDownloadTrialSessionInteractorHelper = async (
 
   const batchableSessionCases = allSessionCases
     .filter(
-      caseToFilter => !isClosed(caseToFilter) && !caseToFilter.removedFromTrial,
+      caseToFilter =>
+        caseToFilter.status !== CASE_STATUS_TYPES.closed &&
+        !caseToFilter.removedFromTrial,
     )
     .map(caseToBatch => {
       const caseTitle = Case.getCaseTitle(caseToBatch.caseCaption);

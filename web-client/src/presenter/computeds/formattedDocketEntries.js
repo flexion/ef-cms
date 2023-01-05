@@ -172,7 +172,11 @@ export const getFormattedDocketEntry = ({
   if (entry.documentTitle) {
     formattedResult.descriptionDisplay = applicationContext
       .getUtilities()
-      .getDescriptionDisplay(entry);
+      .getDocumentTitleWithAdditionalInfo({ docketEntry: entry });
+
+    if (entry.eventCode === 'OCS' && formattedResult.freeText) {
+      formattedResult.descriptionDisplay = `${formattedResult.freeText} - ${formattedResult.descriptionDisplay}`;
+    }
   }
 
   formattedResult.showDocumentProcessing =

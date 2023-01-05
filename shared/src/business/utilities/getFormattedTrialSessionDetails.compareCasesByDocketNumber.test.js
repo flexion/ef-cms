@@ -4,7 +4,7 @@ import {
   compareCasesByDocketNumberFactory,
 } from './getFormattedTrialSessionDetails';
 
-describe('getFormattedTrialSessionDetails.compareCasesByDocketNumber', () => {
+describe('formattedTrialSessionDetails.compareCasesByDocketNumber', () => {
   it('101-19 should come before 102-19', () => {
     const result = compareCasesByDocketNumber(
       {
@@ -54,7 +54,7 @@ describe('getFormattedTrialSessionDetails.compareCasesByDocketNumber', () => {
   });
 });
 
-describe('getFormattedTrialSessionDetails.compareCasesByDocketNumberFactory', () => {
+describe('formattedTrialSessionDetails.compareCasesByDocketNumberFactory', () => {
   it('101-19 should come before 102-19', () => {
     const result = compareCasesByDocketNumberFactory({
       allCases: [],

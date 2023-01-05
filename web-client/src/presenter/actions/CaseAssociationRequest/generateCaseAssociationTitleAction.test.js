@@ -40,8 +40,8 @@ describe('generateCaseAssociationTitleAction', () => {
 
   it('should set state.form.supportingDocumentMetadata.documentTitle when state.form.supportingDocumentMetadata is not empty', async () => {
     applicationContext
-      .getUtilities()
-      .generateExternalDocumentTitle.mockReturnValue(
+      .getUseCases()
+      .generateDocumentTitleInteractor.mockReturnValue(
         mockSupportingDocumentTitle,
       );
 

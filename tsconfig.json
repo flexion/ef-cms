@@ -7,8 +7,7 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "typeRoots": ["./node_modules/@types", "./types"],
-    "types": ["jest", "node"],
-    "target": "es6"
+    "types": ["jest", "node"]
   },
   "ts-node": {
     "files": true

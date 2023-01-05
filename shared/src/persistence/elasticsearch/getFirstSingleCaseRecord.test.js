@@ -4,11 +4,9 @@ const {
 const { getFirstSingleCaseRecord } = require('./getFirstSingleCaseRecord');
 
 describe('getFirstSingleCaseRecord', () => {
-  it('should search for the first single case record', async () => {
-    applicationContext.getSearchClient().search.mockReturnValue({
-      body: {},
-    });
+  beforeEach(() => {});
 
+  it('should search for the first single case record', async () => {
     await getFirstSingleCaseRecord({
       applicationContext,
     });

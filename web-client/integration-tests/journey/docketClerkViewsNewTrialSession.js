@@ -19,7 +19,7 @@ export const docketClerkViewsNewTrialSession = (
       },
     );
 
-    expect(trialSessionFormatted.sessionStatus).toEqual('New');
+    expect(trialSessionFormatted.computedStatus).toEqual('New');
 
     if (checkCase) {
       const foundCase = trialSessionFormatted.caseOrder.find(

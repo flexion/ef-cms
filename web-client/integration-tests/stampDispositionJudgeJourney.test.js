@@ -23,6 +23,10 @@ describe('Stamp disposition judge journey test', () => {
   const grantedMotionDocketEntryTitle = 'Motion GRANTED';
   const signedJudgeName = 'Mary Ann Cohen';
 
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });

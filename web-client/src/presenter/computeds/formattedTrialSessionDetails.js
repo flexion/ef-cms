@@ -1,14 +1,11 @@
-import {
-  SESSION_STATUS_TYPES,
-  SESSION_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { SESSION_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { isEmpty, isEqual } from 'lodash';
 import { state } from 'cerebral';
 
 export const formattedTrialSessionDetails = (get, applicationContext) => {
   const formattedTrialSession = applicationContext
     .getUtilities()
-    .getFormattedTrialSessionDetails({
+    .formattedTrialSessionDetails({
       applicationContext,
       trialSession: get(state.trialSession),
     });
@@ -18,9 +15,9 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       applicationContext.getConstants();
 
     formattedTrialSession.showOpenCases =
-      formattedTrialSession.sessionStatus === SESSION_STATUS_GROUPS.open;
+      formattedTrialSession.computedStatus === SESSION_STATUS_GROUPS.open;
     formattedTrialSession.showOnlyClosedCases =
-      formattedTrialSession.sessionStatus === SESSION_STATUS_GROUPS.closed;
+      formattedTrialSession.computedStatus === SESSION_STATUS_GROUPS.closed;
 
     if (formattedTrialSession.chambersPhoneNumber) {
       formattedTrialSession.chambersPhoneNumber = applicationContext
@@ -46,7 +43,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         trialDateInFuture && !formattedTrialSession.isCalendared;
       formattedTrialSession.canEdit =
         trialDateInFuture &&
-        formattedTrialSession.sessionStatus !== SESSION_STATUS_GROUPS.closed;
+        formattedTrialSession.computedStatus !== SESSION_STATUS_GROUPS.closed;
 
       const allCases = formattedTrialSession.caseOrder || [];
       const inactiveCases = allCases.filter(
@@ -60,7 +57,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         !trialDateInFuture &&
         formattedTrialSession.sessionScope ===
           TRIAL_SESSION_SCOPE_TYPES.standaloneRemote &&
-        formattedTrialSession.sessionStatus !== SESSION_STATUS_TYPES.closed
+        formattedTrialSession.isClosed !== true
       ) {
         formattedTrialSession.canClose = true;
       }

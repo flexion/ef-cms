@@ -20,6 +20,10 @@ import { unassociatedUserViewsCaseDetailForSealedCase } from './journey/unassoci
 describe('Docket Clerk seals a case', () => {
   const cerebralTest = setupTest();
 
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     cerebralTest.closeSocket();
     cerebralTest.draftOrders = [];

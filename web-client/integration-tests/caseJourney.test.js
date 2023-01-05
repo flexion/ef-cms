@@ -20,10 +20,11 @@ import { respondentAddsMotionWithBrief } from './journey/respondentAddsMotionWit
 import { respondentAddsStipulatedDecision } from './journey/respondentAddsStipulatedDecision';
 import { respondentViewsDashboard } from './journey/respondentViewsDashboard';
 
-describe('Case journey', () => {
-  const cerebralTest = setupTest();
+const cerebralTest = setupTest();
 
+describe('Case journey', () => {
   beforeEach(() => {
+    jest.setTimeout(30000);
     global.window = {
       ...global.window,
       localStorage: {

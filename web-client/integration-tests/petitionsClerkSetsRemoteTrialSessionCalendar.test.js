@@ -1,4 +1,4 @@
-import { CASE_TYPES_MAP } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesARemoteTrialSession } from './journey/docketClerkCreatesARemoteTrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
@@ -11,9 +11,10 @@ import { petitionsClerkViewsOpenTrialSession } from './journey/petitionsClerkVie
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-describe('petitions clerk sets a remote trial session calendar', () => {
-  const cerebralTest = setupTest();
+const cerebralTest = setupTest();
 
+describe('petitions clerk sets a remote trial session calendar', () => {
+  const { CASE_TYPES_MAP } = applicationContext.getConstants();
   const trialLocation = `Denver, Colorado, ${Date.now()}`;
   const overrides = {
     maxCases: 2,
@@ -21,6 +22,10 @@ describe('petitions clerk sets a remote trial session calendar', () => {
     sessionType: 'Small',
     trialLocation,
   };
+
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -44,7 +49,7 @@ describe('petitions clerk sets a remote trial session calendar', () => {
       },
     );
 
-    expect(trialSessionFormatted.sessionStatus).toEqual('Open');
+    expect(trialSessionFormatted.computedStatus).toEqual('Open');
   });
 
   describe('Create cases', () => {

@@ -1,4 +1,5 @@
-import { Case, isClosed } from '../entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { Case } from '../entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -47,7 +48,7 @@ export const generatePractitionerCaseListPdfInteractor = async (
 
   const [closedCases, openCases] = partition(
     Case.sortByDocketNumber(cases).reverse(),
-    theCase => isClosed(theCase),
+    theCase => theCase.status === CASE_STATUS_TYPES.closed,
   );
 
   const pdf = await applicationContext

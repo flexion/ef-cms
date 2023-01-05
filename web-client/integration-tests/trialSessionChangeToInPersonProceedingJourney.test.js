@@ -28,6 +28,10 @@ describe('petitions clerk sets a remote trial session calendar', () => {
     trialLocation,
   };
 
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });

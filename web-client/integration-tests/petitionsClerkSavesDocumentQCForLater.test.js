@@ -1,7 +1,4 @@
-import {
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -12,8 +9,14 @@ import { petitionsClerkReviewsPetitionAndSavesForLater } from './journey/petitio
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkViewsSectionInProgress } from './journey/petitionsClerkViewsSectionInProgress';
 
+const cerebralTest = setupTest();
+
 describe('Petitions Clerk Saves Document QC for Later', () => {
-  const cerebralTest = setupTest();
+  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+
+  beforeEach(() => {
+    jest.setTimeout(30000);
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

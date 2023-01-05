@@ -8,13 +8,13 @@ import {
 import { petitionsClerkCreatesACaseDeadline } from './journey/petitionsClerkCreatesACaseDeadline';
 import { petitionsClerkViewsDeadlineReport } from './journey/petitionsClerkViewsDeadlineReport';
 
-describe('Case deadline report journey', () => {
-  const cerebralTest = setupTest({
-    constantsOverrides: {
-      DEADLINE_REPORT_PAGE_SIZE: 1,
-    },
-  });
+const cerebralTest = setupTest({
+  constantsOverrides: {
+    DEADLINE_REPORT_PAGE_SIZE: 1,
+  },
+});
 
+describe('Case deadline report journey', () => {
   const randomDay = `1${Math.floor(Math.random() * 9) + 1}`;
   const randomYear = `200${Math.floor(Math.random() * 9) + 1}`;
 
@@ -25,6 +25,7 @@ describe('Case deadline report journey', () => {
   };
 
   beforeAll(() => {
+    jest.setTimeout(30000);
     cerebralTest.createdDocketNumbers = [];
   });
 

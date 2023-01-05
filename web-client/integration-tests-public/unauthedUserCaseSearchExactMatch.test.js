@@ -46,6 +46,10 @@ primaryContactNames.forEach(createCaseUsingPrimaryContactName);
  */
 function createCaseUsingPrimaryContactName(name) {
   describe(`Create and serve a case for ${name}`, () => {
+    beforeAll(() => {
+      jest.setTimeout(30000);
+    });
+
     afterAll(() => {
       testClient.closeSocket();
     });

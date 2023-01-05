@@ -31,12 +31,7 @@ const GET_PARENT_CASE = {
   has_parent: {
     inner_hits: {
       _source: {
-        includes: [
-          'leadDocketNumber',
-          'docketNumber',
-          'trialDate',
-          'trialLocation',
-        ],
+        includes: ['leadDocketNumber', 'docketNumber'],
       },
       name: 'case-mappings',
     },

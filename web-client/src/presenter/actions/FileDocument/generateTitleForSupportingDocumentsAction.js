@@ -21,8 +21,8 @@ export const generateTitleForSupportingDocumentsAction = ({
     for (let i = 0; i < supportingDocuments.length; i++) {
       if (!isEmpty(supportingDocuments[i])) {
         documentTitle = applicationContext
-          .getUtilities()
-          .generateExternalDocumentTitle(applicationContext, {
+          .getUseCases()
+          .generateDocumentTitleInteractor(applicationContext, {
             documentMetadata: supportingDocuments[i],
           });
         store.set(
@@ -38,8 +38,8 @@ export const generateTitleForSupportingDocumentsAction = ({
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
       if (!isEmpty(secondarySupportingDocuments[i])) {
         documentTitle = applicationContext
-          .getUtilities()
-          .generateExternalDocumentTitle(applicationContext, {
+          .getUseCases()
+          .generateDocumentTitleInteractor(applicationContext, {
             documentMetadata: secondarySupportingDocuments[i],
           });
         store.set(

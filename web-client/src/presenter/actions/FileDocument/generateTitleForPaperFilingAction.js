@@ -26,8 +26,8 @@ export const generateTitleForPaperFilingAction = ({
   }
 
   let documentTitle = applicationContext
-    .getUtilities()
-    .generateExternalDocumentTitle(applicationContext, {
+    .getUseCases()
+    .generateDocumentTitleInteractor(applicationContext, {
       documentMetadata,
     });
   store.set(state.form.documentTitle, documentTitle);

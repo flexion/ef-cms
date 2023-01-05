@@ -26,6 +26,10 @@ describe('Unauthed user views todays orders', () => {
   const privateTestClient = privateSetupTest();
   const publicTestClient = publicSetupTest();
 
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   afterAll(() => {
     privateTestClient.closeSocket();
     privateTestClient.draftOrders = [];

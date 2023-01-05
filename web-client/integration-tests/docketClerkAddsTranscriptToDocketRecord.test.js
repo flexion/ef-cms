@@ -1,4 +1,3 @@
-import { TRANSCRIPT_EVENT_CODE } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsTranscriptDocketEntryFromOrder } from './journey/docketClerkAddsTranscriptDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -10,13 +9,15 @@ import {
   uploadPetition,
 } from './helpers';
 
-describe('Docket Clerk Adds Transcript to Docket Record', () => {
-  const cerebralTest = setupTest();
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
-  cerebralTest.draftOrders = [];
+describe('Docket Clerk Adds Transcript to Docket Record', () => {
+  const { TRANSCRIPT_EVENT_CODE } = applicationContext.getConstants();
 
   beforeAll(() => {
     console.error = () => {};
+    jest.setTimeout(30000);
   });
 
   afterAll(() => {
