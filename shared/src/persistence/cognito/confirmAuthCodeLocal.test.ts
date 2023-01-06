@@ -24,6 +24,7 @@ describe('testing confirmAuthCodeLocal', () => {
     const result = confirmAuthCodeLocal({
       code: 'not a valid login',
     });
+
     expect(result).toMatchObject({
       alertError: {
         message: 'Login credentials not found.',
