@@ -4,11 +4,11 @@ import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocume
 import { docketEntryFileUploadSequenceDecorator } from '../utilities/docketEntryFileUploadSequenceDecorator';
 import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
-import { getCaseAction } from '../actions/getCaseAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
 import { getShouldGoToPaperServiceAction } from '../actions/DocketEntry/getShouldGoToPaperServiceAction';
+import { getWorkItemAction } from '../actions/WorkItem/getWorkItemAction';
 import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
 import { isCoversheetNeededAction } from '../actions/DocketEntry/isCoversheetNeededAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
@@ -17,7 +17,6 @@ import { isWorkItemAlreadyCompletedAction } from '../actions/WorkItem/isWorkItem
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
@@ -98,8 +97,7 @@ export const submitPaperFilingSequence = [
               },
             ],
             yes: [
-              getCaseAction,
-              setCaseAction,
+              getWorkItemAction,
               isWorkItemAlreadyCompletedAction,
               {
                 no: [

@@ -4,9 +4,9 @@ import { state } from 'cerebral';
  * Get work item by id from persistence
  *
  * @param {object} providers the providers object
- * @param {object} providers.path the cerebral path which is contains the next paths that can be invoked
- * @param {object} providers.path the cerebral path function
- * @returns {object} the list of section work items
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.get the cerebral get function
+ * @returns {object} work item
  */
 export const getWorkItemAction = async ({ applicationContext, get }) => {
   const docketEntryIdOfInterest = get(state.docketEntryId);
