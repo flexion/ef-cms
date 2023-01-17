@@ -1,13 +1,11 @@
 import { clearModalAction } from '../actions/clearModalAction';
-import { getCaseAction } from '../actions/getCaseAction';
+import { getWorkItemAction } from '../actions/WorkItem/getWorkItemAction';
 import { isWorkItemAlreadyCompletedAction } from '../actions/WorkItem/isWorkItemAlreadyCompletedAction';
 import { navigateToDocketQcAction } from '../actions/navigateToDocketQcAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const gotoCompleteDocketEntryQCSequence = [
-  getCaseAction,
-  setCaseAction,
+  getWorkItemAction,
   isWorkItemAlreadyCompletedAction,
   {
     no: [clearModalAction, navigateToDocketQcAction],

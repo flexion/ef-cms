@@ -3,8 +3,8 @@ import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/complet
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
-import { getCaseAction } from '../actions/getCaseAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
+import { getWorkItemAction } from '../actions/WorkItem/getWorkItemAction';
 import { isWorkItemAlreadyCompletedAction } from '../actions/WorkItem/isWorkItemAlreadyCompletedAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
@@ -26,8 +26,7 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 export const completeDocketEntryQCSequence = [
-  getCaseAction,
-  setCaseAction,
+  getWorkItemAction,
   isWorkItemAlreadyCompletedAction,
   {
     no: [

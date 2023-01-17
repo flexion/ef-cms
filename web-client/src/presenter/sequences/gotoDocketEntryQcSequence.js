@@ -5,6 +5,7 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { deconstructDatesToFormAction } from '../actions/EditDocketRecord/deconstructDatesToFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getShouldMarkReadAction } from '../actions/getShouldMarkReadAction';
+import { getWorkItemAction } from '../actions/WorkItem/getWorkItemAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isWorkItemAlreadyCompletedAction } from '../actions/WorkItem/isWorkItemAlreadyCompletedAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
@@ -35,6 +36,7 @@ export const gotoDocketEntryQc = startWebSocketConnectionSequenceDecorator([
   deconstructDatesToFormAction,
   updateDocketEntryWizardDataAction,
   setDocketEntryIdAction,
+  getWorkItemAction,
   isWorkItemAlreadyCompletedAction,
   {
     no: [],
