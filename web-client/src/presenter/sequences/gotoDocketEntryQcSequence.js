@@ -6,7 +6,7 @@ import { deconstructDatesToFormAction } from '../actions/EditDocketRecord/decons
 import { getCaseAction } from '../actions/getCaseAction';
 import { getShouldMarkReadAction } from '../actions/getShouldMarkReadAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
+import { isWorkItemAlreadyCompletedAction } from '../actions/WorkItem/isWorkItemAlreadyCompletedAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';

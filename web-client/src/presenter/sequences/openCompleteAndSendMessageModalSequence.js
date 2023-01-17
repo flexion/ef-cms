@@ -4,7 +4,7 @@ import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasS
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
-import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
+import { isWorkItemAlreadyCompletedAction } from '../actions/WorkItem/isWorkItemAlreadyCompletedAction';
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';

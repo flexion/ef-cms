@@ -13,7 +13,7 @@ import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
 import { isCoversheetNeededAction } from '../actions/DocketEntry/isCoversheetNeededAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { isFileAttachedAction } from '../actions/isFileAttachedAction';
-import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
+import { isWorkItemAlreadyCompletedAction } from '../actions/WorkItem/isWorkItemAlreadyCompletedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -89,9 +89,6 @@ export const submitPaperFilingSequence = [
           isEditingDocketEntryAction,
           {
             no: [
-              () => {
-                console.log('I AM NOT EDITING');
-              },
               isFileAttachedAction,
               {
                 no: addPaperFilingMultiDocketableFlow,
@@ -101,9 +98,6 @@ export const submitPaperFilingSequence = [
               },
             ],
             yes: [
-              () => {
-                console.log('I AM EDITING');
-              },
               getCaseAction,
               setCaseAction,
               isWorkItemAlreadyCompletedAction,

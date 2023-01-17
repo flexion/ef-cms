@@ -1,6 +1,6 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
+import { isWorkItemAlreadyCompletedAction } from '../actions/WorkItem/isWorkItemAlreadyCompletedAction';
 import { navigateToDocketQcAction } from '../actions/navigateToDocketQcAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
