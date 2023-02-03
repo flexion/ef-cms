@@ -32,29 +32,6 @@ type TPractitionerDocumentEntity = {
   toRawObject(): TPractitionerDocument;
 } & TPractitionerDocument;
 
-type WorkItem = {
-  createdAt: string;
-  assigneeId: string;
-  docketEntry: Partial<RawDocketEntry>;
-  assigneeName: string;
-  associatedJudge: string;
-  caseIsInProgress: boolean;
-  caseStatus: string;
-  caseTitle: string;
-  completedBy: string;
-  completedByUserId: string;
-  completedMessage: string;
-  docketNumberWithSuffix: string;
-  entityName: string;
-  highPriority: boolean;
-  isInitializeCase: boolean;
-  docketNumber: string;
-  workItemId: string;
-  completedAt: string;
-  updatedAt: string;
-  gsi1pk: string;
-};
-
 type TOutboxItem = {
   caseStatus: string;
   caseTitle: string;
@@ -69,7 +46,7 @@ type TOutboxItem = {
   section: string;
   trialDate: string;
   workItemId: string;
-} & WorkItem;
+} & WorkItemClass;
 
 type TOutboxItemEntity = {
   validate(): TOutboxItemEntity;

@@ -1,3 +1,4 @@
+import { WorkItemClass } from '../../../business/entities/WorkItem';
 import { put } from '../../dynamodbClientService';
 
 /**
@@ -13,7 +14,7 @@ export const saveWorkItem = ({
   workItem,
 }: {
   applicationContext: IApplicationContext;
-  workItem: WorkItem;
+  workItem: WorkItemClass;
 }) =>
   put({
     Item: {

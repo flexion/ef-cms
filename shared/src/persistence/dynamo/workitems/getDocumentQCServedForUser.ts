@@ -10,7 +10,7 @@ export const getDocumentQCServedForUser = ({
 }: {
   applicationContext: IApplicationContext;
   userId: string;
-}) => {
+}): Promise<RawWorkItem[]> => {
   const startOfDay = createISODateAtStartOfDayEST();
   const afterDate = calculateISODate({
     dateString: startOfDay,
@@ -29,5 +29,5 @@ export const getDocumentQCServedForUser = ({
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,
-  });
+  }) as any;
 };

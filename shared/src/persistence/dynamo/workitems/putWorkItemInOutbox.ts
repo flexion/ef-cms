@@ -1,8 +1,15 @@
+import { WorkItemClass } from '../../../business/entities/WorkItem';
 import { createSectionOutboxRecords } from './createSectionOutboxRecords';
 import { createUserOutboxRecord } from './createUserOutboxRecord';
 import { get } from '../../dynamodbClientService';
 
-export const putWorkItemInOutbox = async ({ applicationContext, workItem }) => {
+export const putWorkItemInOutbox = async ({
+  applicationContext,
+  workItem,
+}: {
+  applicationContext: IApplicationContext;
+  workItem: WorkItemClass;
+}) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const user = await get({

@@ -1,3 +1,4 @@
+import { WorkItemClass } from '../../../business/entities/WorkItem';
 import { deleteByGsi } from '../helpers/deleteByGsi';
 
 export const deleteWorkItem = ({
@@ -5,6 +6,6 @@ export const deleteWorkItem = ({
   workItem,
 }: {
   applicationContext: IApplicationContext;
-  workItem: WorkItem;
+  workItem: WorkItemClass;
 }) =>
   deleteByGsi({ applicationContext, gsi: `work-item|${workItem.workItemId}` });

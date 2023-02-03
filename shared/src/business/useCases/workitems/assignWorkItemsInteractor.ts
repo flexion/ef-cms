@@ -3,7 +3,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
-import { WorkItem } from '../../entities/WorkItem';
+import { WorkItem, WorkItemClass } from '../../entities/WorkItem';
 
 /**
  * getWorkItem
@@ -43,7 +43,7 @@ export const assignWorkItemsInteractor = async (
       workItemId,
     });
 
-  const workItemEntity: WorkItem = new WorkItem(workItemRecord, {
+  const workItemEntity: WorkItemClass = new WorkItem(workItemRecord, {
     applicationContext,
   });
 
