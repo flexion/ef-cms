@@ -1,4 +1,5 @@
-const AWS = require('aws-sdk');
+import { APIGateway } from '@aws-sdk/client-api-gateway';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const localUsers = require('./storage/fixtures/seed/users.json');
@@ -16,7 +17,7 @@ const getToken = async () => {
     return Promise.resolve(jwt.sign(user, 'secret'));
   }
 
-  const cognito = new AWS.CognitoIdentityServiceProvider({
+  const cognito = new CognitoIdentityProvider({
     region: process.env.REGION,
   });
 
@@ -29,12 +30,10 @@ const getToken = async () => {
 };
 
 const getServices = async () => {
-  const apigateway = new AWS.APIGateway({
+  const apigateway = new APIGateway({
     region: process.env.REGION,
   });
-  const { items: apis } = await apigateway
-    .getRestApis({ limit: 200 })
-    .promise();
+  const { items: apis } = await apigateway.getRestApis({ limit: 200 });
 
   return apis
     .filter(api =>

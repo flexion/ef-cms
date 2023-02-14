@@ -1,8 +1,8 @@
-const AWS = require('aws-sdk');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 const axios = require('axios');
 const { getUserToken } = require('./loadTestHelpers');
 
-const cognito = new AWS.CognitoIdentityServiceProvider({
+const cognito = new CognitoIdentityProvider({
   region: process.env.REGION,
 });
 

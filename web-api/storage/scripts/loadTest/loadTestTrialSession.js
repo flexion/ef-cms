@@ -1,4 +1,3 @@
-const AWS = require('aws-sdk');
 const axios = require('axios');
 const createApplicationContext = require('../../../src/applicationContext');
 const {
@@ -7,10 +6,12 @@ const {
   createTrialSession,
   getUserToken,
 } = require('./loadTestHelpers');
+import { APIGateway } from '@aws-sdk/client-api-gateway';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
 Error.stackTraceLimit = Infinity;
 
-const cognito = new AWS.CognitoIdentityServiceProvider({
+const cognito = new CognitoIdentityProvider({
   region: process.env.REGION,
 });
 
@@ -18,12 +19,10 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
   let petitionerUser;
   let docketClerkUser;
 
-  const apigateway = new AWS.APIGateway({
+  const apigateway = new APIGateway({
     region: process.env.REGION,
   });
-  const { items: apis } = await apigateway
-    .getRestApis({ limit: 200 })
-    .promise();
+  const { items: apis } = await apigateway.getRestApis({ limit: 200 });
 
   const services = apis
     .filter(api => api.name.includes(`gateway_api_${process.env.ENV}`))
