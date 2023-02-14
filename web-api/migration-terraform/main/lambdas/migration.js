@@ -1,12 +1,12 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 const { migrateRecords: migrations } = require('./migration-segments');
 
-const dynamodb = new AWS.DynamoDB({
+const dynamodb = new DynamoDB({
   maxRetries: 10,
   retryDelayOptions: { base: 300 },
 });
 
-const docClient = new AWS.DynamoDB.DocumentClient({
+const docClient = new DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
   service: dynamodb,
@@ -33,14 +33,14 @@ const processItems = async ({ documentClient, items, migrateRecords }) => {
 const getFilteredGlobalEvents = event => {
   const { Records } = event;
   return Records.filter(item => item.eventName !== 'REMOVE').map(item =>
-    AWS.DynamoDB.Converter.unmarshall(item.dynamodb.NewImage),
+    DynamoDB.Converter.unmarshall(item.dynamodb.NewImage),
   );
 };
 
 const getRemoveEvents = event => {
   const { Records } = event;
   return Records.filter(item => item.eventName === 'REMOVE').map(item =>
-    AWS.DynamoDB.Converter.unmarshall(item.dynamodb.OldImage),
+    DynamoDB.Converter.unmarshall(item.dynamodb.OldImage),
   );
 };
 

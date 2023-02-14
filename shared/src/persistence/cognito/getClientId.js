@@ -1,16 +1,17 @@
-const AWS = require('aws-sdk');
+const {
+  CognitoIdentityProvider,
+} = require('@aws-sdk/client-cognito-identity-provider');
 
 exports.getClientId = async ({ userPoolId }) => {
-  const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider(
-    { region: 'us-east-1' },
-  );
+  const cognitoIdentityServiceProvider = new CognitoIdentityProvider({
+    region: 'us-east-1',
+  });
 
-  const { UserPoolClients } = await cognitoIdentityServiceProvider
-    .listUserPoolClients({
+  const { UserPoolClients } =
+    await cognitoIdentityServiceProvider.listUserPoolClients({
       MaxResults: 1,
       UserPoolId: userPoolId,
-    })
-    .promise();
+    });
 
   return UserPoolClients[0].ClientId;
 };

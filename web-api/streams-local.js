@@ -1,4 +1,6 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDBStreams } from '@aws-sdk/client-dynamodb-streams';
+
 const { Writable } = require('stream');
 
 const config = {
@@ -13,8 +15,8 @@ const config = {
 const express = require('express');
 const app = express();
 
-const dynamodbClient = new AWS.DynamoDB(config);
-const dynamodbStreamsClient = new AWS.DynamoDBStreams(config);
+const dynamodbClient = new DynamoDB(config);
+const dynamodbStreamsClient = new DynamoDBStreams(config);
 
 const {
   processStreamRecordsLambda,
@@ -38,14 +40,11 @@ app.get('/isDone', (req, res) => {
     .describeTable({
       TableName: tableName,
     })
-    .promise()
     .then(results => results.Table.LatestStreamArn);
 
-  const { StreamDescription } = await dynamodbStreamsClient
-    .describeStream({
-      StreamArn: streamARN,
-    })
-    .promise();
+  const { StreamDescription } = await dynamodbStreamsClient.describeStream({
+    StreamArn: streamARN,
+  });
 
   const processShard = shard => {
     const readable = DynamoDBReadable(dynamodbStreamsClient, streamARN, {

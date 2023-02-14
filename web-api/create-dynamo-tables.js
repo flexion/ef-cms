@@ -1,6 +1,6 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 
-const dynamo = new AWS.DynamoDB({
+const dynamo = new DynamoDB({
   credentials: {
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',
@@ -11,11 +11,9 @@ const dynamo = new AWS.DynamoDB({
 
 const deleteTable = async tableName => {
   try {
-    return await dynamo
-      .deleteTable({
-        TableName: tableName,
-      })
-      .promise();
+    return await dynamo.deleteTable({
+      TableName: tableName,
+    });
   } catch (error) {
     // ResourceNotFoundException
     console.log('no table to delete');
@@ -27,124 +25,120 @@ const createEFCMSTable = async () => {
   await deleteTable('efcms-local');
   await deleteTable('efcms-local-1');
   console.log('Creating EFCMS Table');
-  await dynamo
-    .createTable({
-      AttributeDefinitions: [
-        {
-          AttributeName: 'pk',
-          AttributeType: 'S',
-        },
-        {
-          AttributeName: 'sk',
-          AttributeType: 'S',
-        },
-        {
-          AttributeName: 'gsi1pk',
-          AttributeType: 'S',
-        },
-      ],
-      GlobalSecondaryIndexes: [
-        {
-          IndexName: 'gsi1',
-          KeySchema: [
-            {
-              AttributeName: 'gsi1pk',
-              KeyType: 'HASH',
-            },
-            {
-              AttributeName: 'pk',
-              KeyType: 'RANGE',
-            },
-          ],
-          Projection: {
-            ProjectionType: 'ALL',
-          },
-          ProvisionedThroughput: {
-            ReadCapacityUnits: 1,
-            WriteCapacityUnits: 1,
-          },
-        },
-      ],
-      KeySchema: [
-        {
-          AttributeName: 'pk',
-          KeyType: 'HASH',
-        },
-        {
-          AttributeName: 'sk',
-          KeyType: 'RANGE',
-        },
-      ],
-      ProvisionedThroughput: {
-        ReadCapacityUnits: 1,
-        WriteCapacityUnits: 1,
+  await dynamo.createTable({
+    AttributeDefinitions: [
+      {
+        AttributeName: 'pk',
+        AttributeType: 'S',
       },
-      StreamSpecification: {
-        StreamEnabled: true,
-        StreamViewType: 'NEW_AND_OLD_IMAGES',
+      {
+        AttributeName: 'sk',
+        AttributeType: 'S',
       },
-      TableName: 'efcms-local',
-    })
-    .promise();
-  return await dynamo
-    .createTable({
-      AttributeDefinitions: [
-        {
-          AttributeName: 'pk',
-          AttributeType: 'S',
-        },
-        {
-          AttributeName: 'sk',
-          AttributeType: 'S',
-        },
-        {
-          AttributeName: 'gsi1pk',
-          AttributeType: 'S',
-        },
-      ],
-      GlobalSecondaryIndexes: [
-        {
-          IndexName: 'gsi1',
-          KeySchema: [
-            {
-              AttributeName: 'gsi1pk',
-              KeyType: 'HASH',
-            },
-            {
-              AttributeName: 'pk',
-              KeyType: 'RANGE',
-            },
-          ],
-          Projection: {
-            ProjectionType: 'ALL',
+      {
+        AttributeName: 'gsi1pk',
+        AttributeType: 'S',
+      },
+    ],
+    GlobalSecondaryIndexes: [
+      {
+        IndexName: 'gsi1',
+        KeySchema: [
+          {
+            AttributeName: 'gsi1pk',
+            KeyType: 'HASH',
           },
-          ProvisionedThroughput: {
-            ReadCapacityUnits: 1,
-            WriteCapacityUnits: 1,
+          {
+            AttributeName: 'pk',
+            KeyType: 'RANGE',
           },
+        ],
+        Projection: {
+          ProjectionType: 'ALL',
         },
-      ],
-      KeySchema: [
-        {
-          AttributeName: 'pk',
-          KeyType: 'HASH',
+        ProvisionedThroughput: {
+          ReadCapacityUnits: 1,
+          WriteCapacityUnits: 1,
         },
-        {
-          AttributeName: 'sk',
-          KeyType: 'RANGE',
-        },
-      ],
-      ProvisionedThroughput: {
-        ReadCapacityUnits: 1,
-        WriteCapacityUnits: 1,
       },
-      StreamSpecification: {
-        StreamEnabled: true,
-        StreamViewType: 'NEW_AND_OLD_IMAGES',
+    ],
+    KeySchema: [
+      {
+        AttributeName: 'pk',
+        KeyType: 'HASH',
       },
-      TableName: 'efcms-local-1',
-    })
-    .promise();
+      {
+        AttributeName: 'sk',
+        KeyType: 'RANGE',
+      },
+    ],
+    ProvisionedThroughput: {
+      ReadCapacityUnits: 1,
+      WriteCapacityUnits: 1,
+    },
+    StreamSpecification: {
+      StreamEnabled: true,
+      StreamViewType: 'NEW_AND_OLD_IMAGES',
+    },
+    TableName: 'efcms-local',
+  });
+  return await dynamo.createTable({
+    AttributeDefinitions: [
+      {
+        AttributeName: 'pk',
+        AttributeType: 'S',
+      },
+      {
+        AttributeName: 'sk',
+        AttributeType: 'S',
+      },
+      {
+        AttributeName: 'gsi1pk',
+        AttributeType: 'S',
+      },
+    ],
+    GlobalSecondaryIndexes: [
+      {
+        IndexName: 'gsi1',
+        KeySchema: [
+          {
+            AttributeName: 'gsi1pk',
+            KeyType: 'HASH',
+          },
+          {
+            AttributeName: 'pk',
+            KeyType: 'RANGE',
+          },
+        ],
+        Projection: {
+          ProjectionType: 'ALL',
+        },
+        ProvisionedThroughput: {
+          ReadCapacityUnits: 1,
+          WriteCapacityUnits: 1,
+        },
+      },
+    ],
+    KeySchema: [
+      {
+        AttributeName: 'pk',
+        KeyType: 'HASH',
+      },
+      {
+        AttributeName: 'sk',
+        KeyType: 'RANGE',
+      },
+    ],
+    ProvisionedThroughput: {
+      ReadCapacityUnits: 1,
+      WriteCapacityUnits: 1,
+    },
+    StreamSpecification: {
+      StreamEnabled: true,
+      StreamViewType: 'NEW_AND_OLD_IMAGES',
+    },
+    TableName: 'efcms-local-1',
+  });
 };
 
 (async () => {

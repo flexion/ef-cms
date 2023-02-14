@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+const { APIGateway } = require('@aws-sdk/client-api-gateway');
 
 const check = (value, message) => {
   if (!value) {
@@ -17,11 +17,11 @@ const REGIONS = ['us-east-1', 'us-west-1'];
 
 const run = async () => {
   for (const region of REGIONS) {
-    const apigateway = new AWS.APIGateway({
+    const apigateway = new APIGateway({
       region,
     });
 
-    const { items } = await apigateway.getRestApis({ limit: 500 }).promise();
+    const { items } = await apigateway.getRestApis({ limit: 500 });
 
     const apiGatewayRecord = items.find(
       record => record.name === `gateway_api_${ENV}_${DEPLOYING_COLOR}`,

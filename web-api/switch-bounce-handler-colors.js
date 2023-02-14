@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+const { SNS } = require('@aws-sdk/client-sns');
 
 const check = (value, message) => {
   if (!value) {
@@ -8,7 +8,7 @@ const check = (value, message) => {
 };
 
 const { AWS_ACCOUNT_ID, CURRENT_COLOR, DEPLOYING_COLOR, ENV } = process.env;
-const SNS = new AWS.SNS({ region: 'us-east-1' });
+const sns = new SNS({ region: 'us-east-1' });
 const TopicArn = `arn:aws:sns:us-east-1:${AWS_ACCOUNT_ID}:bounced_service_emails_${ENV}`;
 
 check(CURRENT_COLOR, 'You must have CURRENT_COLOR set in your environment');
@@ -27,9 +27,9 @@ check(AWS_ACCOUNT_ID, 'You must have AWS_ACCOUNT_ID set in your environment');
  */
 const getCurrentColorSubscription = async Token => {
   const CurrentLambda = `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${CURRENT_COLOR}`;
-  const { NextToken, Subscriptions } = await SNS.listSubscriptions({
+  const { NextToken, Subscriptions } = await sns.listSubscriptions({
     NextToken: Token,
-  }).promise();
+  });
 
   // Look for a subscription that match the current color and return it
   const foundSubscription = Subscriptions.find(
@@ -48,16 +48,16 @@ const getCurrentColorSubscription = async Token => {
 
 const run = async () => {
   // subscribe deploying lambda to topic
-  await SNS.subscribe({
+  await sns.subscribe({
     Endpoint: `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${DEPLOYING_COLOR}`,
     Protocol: 'lambda',
     TopicArn,
-  }).promise();
+  });
 
   // find current lambda subscription and unsubscribe from topic
   const SubscriptionArn = await getCurrentColorSubscription();
   if (SubscriptionArn) {
-    await SNS.unsubscribe({ SubscriptionArn }).promise();
+    await sns.unsubscribe({ SubscriptionArn });
   }
 };
 

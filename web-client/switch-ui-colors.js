@@ -1,4 +1,5 @@
-const AWS = require('aws-sdk');
+import { CloudFront } from '@aws-sdk/client-cloudfront';
+import { Route53 } from '@aws-sdk/client-route-53';
 
 const check = (value, message) => {
   if (!value) {
@@ -16,13 +17,11 @@ check(EFCMS_DOMAIN, 'You must have EFCMS_DOMAIN set in your environment');
 check(ZONE_NAME, 'You must have ZONE_NAME set in your environment');
 check(ENV, 'You must have ENV set in your environment');
 
-const cloudfront = new AWS.CloudFront({ maxRetries: 3 });
-const route53 = new AWS.Route53();
+const cloudfront = new CloudFront({ maxRetries: 3 });
+const route53 = new Route53();
 
 const run = async () => {
-  const { Items: distributions } = await cloudfront
-    .listDistributions({})
-    .promise();
+  const { Items: distributions } = await cloudfront.listDistributions({});
 
   const currentColorDistribution = distributions.find(distribution =>
     distribution.Aliases.Items.find(
@@ -36,17 +35,13 @@ const run = async () => {
     ),
   );
 
-  const currentColorConfig = await cloudfront
-    .getDistributionConfig({
-      Id: currentColorDistribution.Id,
-    })
-    .promise();
+  const currentColorConfig = await cloudfront.getDistributionConfig({
+    Id: currentColorDistribution.Id,
+  });
 
-  const deployingColorConfig = await cloudfront
-    .getDistributionConfig({
-      Id: deployingColorDistribution.Id,
-    })
-    .promise();
+  const deployingColorConfig = await cloudfront.getDistributionConfig({
+    Id: deployingColorDistribution.Id,
+  });
 
   currentColorConfig.DistributionConfig.Aliases.Items = [
     `app-${CURRENT_COLOR}.${EFCMS_DOMAIN}`,
@@ -59,62 +54,54 @@ const run = async () => {
     `app.${EFCMS_DOMAIN}`,
   ];
 
-  await cloudfront
-    .updateDistribution({
-      DistributionConfig: currentColorConfig.DistributionConfig,
-      Id: currentColorDistribution.Id,
-      IfMatch: currentColorConfig.ETag,
-    })
-    .promise();
+  await cloudfront.updateDistribution({
+    DistributionConfig: currentColorConfig.DistributionConfig,
+    Id: currentColorDistribution.Id,
+    IfMatch: currentColorConfig.ETag,
+  });
   try {
-    await cloudfront
-      .updateDistribution({
-        DistributionConfig: deployingColorConfig.DistributionConfig,
-        Id: deployingColorDistribution.Id,
-        IfMatch: deployingColorConfig.ETag,
-      })
-      .promise();
+    await cloudfront.updateDistribution({
+      DistributionConfig: deployingColorConfig.DistributionConfig,
+      Id: deployingColorDistribution.Id,
+      IfMatch: deployingColorConfig.ETag,
+    });
   } catch (e) {
     // Need to retry after one minute as throttling occurs after the previous update request.
     setTimeout(async () => {
-      await cloudfront
-        .updateDistribution({
-          DistributionConfig: deployingColorConfig.DistributionConfig,
-          Id: deployingColorDistribution.Id,
-          IfMatch: deployingColorConfig.ETag,
-        })
-        .promise();
+      await cloudfront.updateDistribution({
+        DistributionConfig: deployingColorConfig.DistributionConfig,
+        Id: deployingColorDistribution.Id,
+        IfMatch: deployingColorConfig.ETag,
+      });
     }, 60000);
   }
 
-  const zone = await route53
-    .listHostedZonesByName({ DNSName: `${ZONE_NAME}.` })
-    .promise();
+  const zone = await route53.listHostedZonesByName({
+    DNSName: `${ZONE_NAME}.`,
+  });
 
   const zoneId = zone.HostedZones[0].Id;
 
-  await route53
-    .changeResourceRecordSets({
-      ChangeBatch: {
-        Changes: [
-          {
-            Action: 'UPSERT',
-            ResourceRecordSet: {
-              AliasTarget: {
-                DNSName: deployingColorDistribution.DomainName,
-                EvaluateTargetHealth: false,
-                HostedZoneId: 'Z2FDTNDATAQYW2', // this magic number is the zone for all cloud front distributions on AWS
-              },
-              Name: `app.${EFCMS_DOMAIN}`,
-              Type: 'A',
+  await route53.changeResourceRecordSets({
+    ChangeBatch: {
+      Changes: [
+        {
+          Action: 'UPSERT',
+          ResourceRecordSet: {
+            AliasTarget: {
+              DNSName: deployingColorDistribution.DomainName,
+              EvaluateTargetHealth: false,
+              HostedZoneId: 'Z2FDTNDATAQYW2', // this magic number is the zone for all cloud front distributions on AWS
             },
+            Name: `app.${EFCMS_DOMAIN}`,
+            Type: 'A',
           },
-        ],
-        Comment: `The UI for app.${EFCMS_DOMAIN}`,
-      },
-      HostedZoneId: zoneId,
-    })
-    .promise();
+        },
+      ],
+      Comment: `The UI for app.${EFCMS_DOMAIN}`,
+    },
+    HostedZoneId: zoneId,
+  });
 };
 
 run();

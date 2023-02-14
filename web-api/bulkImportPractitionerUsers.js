@@ -1,6 +1,7 @@
-const AWS = require('aws-sdk');
 const axios = require('axios');
 const fs = require('fs');
+import { APIGateway } from '@aws-sdk/client-api-gateway';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 const { formatRecord } = require('./bulkImportPractitionerUsers.helpers');
 const { gatherRecords, getCsvOptions } = require('../shared/src/tools/helpers');
 const { getUserToken } = require('./storage/scripts/loadTest/loadTestHelpers');
@@ -45,15 +46,13 @@ const main = async () => {
     return;
   }
 
-  const cognito = new AWS.CognitoIdentityServiceProvider({
+  const cognito = new CognitoIdentityProvider({
     region: process.env.REGION,
   });
-  const apigateway = new AWS.APIGateway({
+  const apigateway = new APIGateway({
     region: process.env.REGION,
   });
-  const { items: apis } = await apigateway
-    .getRestApis({ limit: 200 })
-    .promise();
+  const { items: apis } = await apigateway.getRestApis({ limit: 200 });
 
   const services = apis
     .filter(api =>
