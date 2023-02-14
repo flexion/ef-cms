@@ -1,10 +1,11 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
+
 const {
   processItems,
 } = require('./migration-terraform/main/lambdas/migration-segments');
 
 (async () => {
-  const dynamo = new AWS.DynamoDB({
+  const dynamo = new DynamoDB({
     credentials: {
       accessKeyId: 'S3RVER',
       secretAccessKey: 'S3RVER',
@@ -13,7 +14,7 @@ const {
     region: 'us-east-1',
   });
 
-  const documentClient = new AWS.DynamoDB.DocumentClient({
+  const documentClient = new DynamoDB.DocumentClient({
     endpoint: 'http://localhost:8000',
     region: 'us-east-1',
     service: dynamo,

@@ -1,13 +1,10 @@
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { chunk } from 'lodash';
 import { exec } from 'child_process';
-import AWS from 'aws-sdk';
 import fs from 'fs';
 import path from 'path';
 
-AWS.config = new AWS.Config();
-AWS.config.region = 'us-east-1';
-
-const client = new AWS.DynamoDB.DocumentClient({
+const client = new DynamoDB.DocumentClient({
   credentials: {
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',

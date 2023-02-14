@@ -1,4 +1,5 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { SQS } from '@aws-sdk/client-sqs';
 const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
 const {
@@ -11,17 +12,17 @@ const { migrationsToRun } = require('./migrationsToRun');
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
 const applicationContext = createApplicationContext({});
-const dynamodb = new AWS.DynamoDB({
+const dynamodb = new DynamoDB({
   maxRetries: 10,
   region: 'us-east-1',
   retryDelayOptions: { base: 300 },
 });
-const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
+const dynamoDbDocumentClient = new DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
   service: dynamodb,
 });
-const sqs = new AWS.SQS({ region: 'us-east-1' });
+const sqs = new SQS({ region: 'us-east-1' });
 
 const scanTableSegment = async (segment, totalSegments, ranMigrations) => {
   let hasMoreResults = true;
@@ -121,7 +122,7 @@ exports.processItems = async ({ documentClient, items, ranMigrations }) => {
             .catch(retry);
         }).then(res => {
           if (res !== 'already-migrated') {
-            const marshalledItem = AWS.DynamoDB.Converter.marshall(item);
+            const marshalledItem = DynamoDB.Converter.marshall(item);
 
             let recordSize;
             try {
@@ -166,10 +167,8 @@ exports.handler = async event => {
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
   applicationContext.logger.info(`finishing ${segment} of ${totalSegments}`);
-  await sqs
-    .deleteMessage({
-      QueueUrl: process.env.SEGMENTS_QUEUE_URL,
-      ReceiptHandle: receiptHandle,
-    })
-    .promise();
+  await sqs.deleteMessage({
+    QueueUrl: process.env.SEGMENTS_QUEUE_URL,
+    ReceiptHandle: receiptHandle,
+  });
 };

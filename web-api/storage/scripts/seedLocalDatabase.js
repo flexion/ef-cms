@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 const seedEntries = require('../fixtures/seed');
 const {
   migrateItems: validationMigration,
@@ -7,12 +7,9 @@ const { chunk: splitIntoChunks } = require('lodash');
 const { createCase1 } = require('./cases/createCase1');
 const { createUsers } = require('./createUsers');
 
-AWS.config = new AWS.Config();
-AWS.config.region = 'us-east-1';
-
 Error.stackTraceLimit = Infinity;
 
-const client = new AWS.DynamoDB.DocumentClient({
+const client = new DynamoDB.DocumentClient({
   credentials: {
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',

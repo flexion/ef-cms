@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 const fs = require('fs');
 const path = require('path');
 
@@ -8,7 +8,7 @@ if (!ENV) {
   throw new Error('Please provide an environment.');
 }
 
-const docClient = new AWS.DynamoDB.DocumentClient({
+const docClient = new DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
 });

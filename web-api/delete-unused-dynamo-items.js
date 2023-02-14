@@ -3,7 +3,7 @@
  * which are no longer needed but are blocking our alpha -> beta migrations.
  */
 
-const AWS = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 const { chunk, isEmpty } = require('lodash');
 const args = process.argv.slice(2);
 const CHUNK_SIZE = 25;
@@ -17,7 +17,7 @@ if (args.length < 1) {
 
 const dynamoDbTableName = args[0];
 
-const documentClient = new AWS.DynamoDB.DocumentClient({
+const documentClient = new DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
 });

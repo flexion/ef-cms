@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 
 const tableName = process.argv[2] ?? 'efcms-local';
 
@@ -7,7 +7,7 @@ if (!tableName) {
   process.exit(1);
 }
 
-const documentClient = new AWS.DynamoDB.DocumentClient({
+const documentClient = new DynamoDB.DocumentClient({
   endpoint: 'http://localhost:8000',
   region: 'us-east-1',
 });

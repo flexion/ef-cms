@@ -1,14 +1,12 @@
-const AWS = require('aws-sdk');
-const { chunk } = require('lodash');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 
-AWS.config = new AWS.Config();
-AWS.config.region = 'us-east-1';
+const { chunk } = require('lodash');
 
 const {
   seedLocalDatabase,
 } = require('../../web-api/storage/scripts/seedLocalDatabase');
 
-const documentClient = new AWS.DynamoDB.DocumentClient({
+const documentClient = new DynamoDB.DocumentClient({
   credentials: {
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',
