@@ -1,16 +1,15 @@
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+
 const { migrateRecords: migrations } = require('./migration-segments');
 
-const dynamodb = new DynamoDB({
+const client = new DynamoDB({
+  endpoint: 'dynamodb.us-east-1.amazonaws.com',
   maxRetries: 10,
+  region: 'us-east-1',
   retryDelayOptions: { base: 300 },
 });
-
-const docClient = new DynamoDB.DocumentClient({
-  endpoint: 'dynamodb.us-east-1.amazonaws.com',
-  region: 'us-east-1',
-  service: dynamodb,
-});
+const docClient = DynamoDBDocumentClient.from(client);
 
 const processItems = async ({ documentClient, items, migrateRecords }) => {
   const promises = [];

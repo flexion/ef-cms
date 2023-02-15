@@ -1,9 +1,11 @@
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
-const docClient = new DynamoDB.DocumentClient({
+const client = new DynamoDB({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
 });
+const docClient = DynamoDBDocumentClient.from(client);
 
 const getWhiteListIps = async () => {
   const { Item: whiteListIps } = await docClient

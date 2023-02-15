@@ -1,4 +1,5 @@
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { SQS } from '@aws-sdk/client-sqs';
 const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
@@ -12,16 +13,14 @@ const { migrationsToRun } = require('./migrationsToRun');
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
 const applicationContext = createApplicationContext({});
-const dynamodb = new DynamoDB({
+
+const client = new DynamoDB({
+  endpoint: 'dynamodb.us-east-1.amazonaws.com',
   maxRetries: 10,
   region: 'us-east-1',
   retryDelayOptions: { base: 300 },
 });
-const dynamoDbDocumentClient = new DynamoDB.DocumentClient({
-  endpoint: 'dynamodb.us-east-1.amazonaws.com',
-  region: 'us-east-1',
-  service: dynamodb,
-});
+const dynamoDbDocumentClient = DynamoDBDocumentClient.from(client);
 const sqs = new SQS({ region: 'us-east-1' });
 
 const scanTableSegment = async (segment, totalSegments, ranMigrations) => {

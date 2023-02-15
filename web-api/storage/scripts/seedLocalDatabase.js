@@ -1,4 +1,6 @@
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+
 const seedEntries = require('../fixtures/seed');
 const {
   migrateItems: validationMigration,
@@ -9,7 +11,7 @@ const { createUsers } = require('./createUsers');
 
 Error.stackTraceLimit = Infinity;
 
-const client = new DynamoDB.DocumentClient({
+const dynamo = new DynamoDB({
   credentials: {
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',
@@ -17,6 +19,7 @@ const client = new DynamoDB.DocumentClient({
   endpoint: process.env.DYNAMODB_ENDPOINT ?? 'http://localhost:8000',
   region: 'us-east-1',
 });
+const client = DynamoDBDocumentClient.from(dynamo);
 
 const putEntries = async entries => {
   const chunks = splitIntoChunks(entries, 25);
