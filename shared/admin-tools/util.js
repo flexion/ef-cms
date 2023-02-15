@@ -1,5 +1,7 @@
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
+const {
+  CognitoIdentityProvider,
+} = require('@aws-sdk/client-cognito-identity-provider');
+const { DynamoDB } = require('@aws-sdk/client-dynamodb');
 
 const { ENV } = process.env;
 const UserPoolCache = {};

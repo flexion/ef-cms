@@ -1,4 +1,4 @@
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
+const { DynamoDB } = require('@aws-sdk/client-dynamodb');
 
 exports.formatWorkItemResult = ({ caseMap, hit, sourceUnmarshalled }) => {
   const casePk = hit['_id'].split('_')[0];

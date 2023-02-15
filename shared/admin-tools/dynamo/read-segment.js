@@ -1,5 +1,5 @@
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+const { DynamoDB } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
 
 const dynamodb = new DynamoDB({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',

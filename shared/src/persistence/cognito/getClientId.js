@@ -1,4 +1,6 @@
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+const {
+  CognitoIdentityProvider,
+} = require('@aws-sdk/client-cognito-identity-provider');
 
 exports.getClientId = async ({ userPoolId }) => {
   const cognitoIdentityProvider = new CognitoIdentityProvider({
