@@ -1,4 +1,5 @@
-const { CognitoIdentityServiceProvider, DynamoDB } = require('aws-sdk');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 
 const { ENV } = process.env;
 const UserPoolCache = {};
@@ -63,7 +64,7 @@ const checkEnvVar = (value, message) => {
 /**
  * Ascertain the Cognito User Pool based on the current environment
  *
- * @param {Object} cognitoInstance (optional) instance of the CognitoIdentityServiceProvider
+ * @param {Object} cognitoInstance (optional) instance of the CognitoIdentityProvider
  * @returns {String} The unique identifier of the Cognito User Pool
  */
 const getUserPoolId = async cognitoInstance => {
@@ -74,8 +75,7 @@ const getUserPoolId = async cognitoInstance => {
   }
 
   const cognito =
-    cognitoInstance ||
-    new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+    cognitoInstance || new CognitoIdentityProvider({ region: 'us-east-1' });
   const results = await cognito
     .listUserPools({
       MaxResults: 50,
@@ -96,7 +96,7 @@ const getUserPoolId = async cognitoInstance => {
  * @returns {String} The unique identifier of the Cognito Client ID
  */
 const getClientId = async userPoolId => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const results = await cognito
     .listUserPoolClients({
       MaxResults: 60,

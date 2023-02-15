@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { CognitoIdentityServiceProvider } = require('aws-sdk');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 const { EFCMS_DOMAIN, ENV, USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
 const {
   checkEnvVar,
@@ -11,7 +11,7 @@ const {
 let cachedAuthToken;
 
 const enableUser = async email => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
   await cognito
     .adminEnableUser({
@@ -22,7 +22,7 @@ const enableUser = async email => {
 };
 
 const disableUser = async email => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
   await cognito
     .adminDisableUser({
@@ -36,7 +36,7 @@ const disableUser = async email => {
  * This activates the admin user in Cognito so we can perform actions
  */
 const activateAdminAccount = async () => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
 
   try {
@@ -65,7 +65,7 @@ const activateAdminAccount = async () => {
  * This disables the admin in Cognito for security
  */
 const deactivateAdminAccount = async () => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
 
   await cognito
@@ -80,7 +80,7 @@ const deactivateAdminAccount = async () => {
  * This verifies that the USTC admin user is disabled in Cognito
  */
 const verifyAdminUserDisabled = async ({ attempt }) => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId(cognito);
 
   try {
@@ -145,7 +145,7 @@ const getAuthToken = async () => {
   );
   checkEnvVar(ENV, 'You must have ENV set in your local environment');
 
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
   const ClientId = await getClientId(UserPoolId);
 
@@ -183,7 +183,7 @@ const getAuthToken = async () => {
  * @param {String} providers.Username The username (email) of the Cognito user we are updating
  */
 const setPassword = async ({ Password, Permanent = false, Username }) => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
   await cognito
     .adminSetUserPassword({
@@ -241,7 +241,7 @@ const createDawsonUser = async ({
 
 const createAdminAccount = async () => {
   // does the user exist?
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
   try {
     let result = await cognito

@@ -12,7 +12,8 @@
  * $ npm run admin:become-user 432143213-4321-1234-4321-432143214321
  */
 const { checkEnvVar, getVersion } = require('../util');
-const { CognitoIdentityServiceProvider, DynamoDB } = require('aws-sdk');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 
 const { COGNITO_USER_EMAIL, COGNITO_USER_POOL, ENV } = process.env;
 
@@ -113,10 +114,10 @@ const lookupRoleForUser = async userId => {
 
     console.log(params);
 
-    const cognitoidentityserviceprovider = new CognitoIdentityServiceProvider({
+    const cognitoidentityprovider = new CognitoIdentityProvider({
       region: 'us-east-1',
     });
-    const result = await cognitoidentityserviceprovider
+    const result = await cognitoidentityprovider
       .adminUpdateUserAttributes(params)
       .promise();
     console.log(result);

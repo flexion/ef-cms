@@ -1,7 +1,7 @@
-const { CognitoIdentityServiceProvider } = require('aws-sdk');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
 exports.deleteCognitoPool = async ({ environment }) => {
-  const cognito = new CognitoIdentityServiceProvider({
+  const cognito = new CognitoIdentityProvider({
     region: environment.region,
   });
   const { UserPools } = await cognito

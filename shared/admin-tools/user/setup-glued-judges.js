@@ -10,11 +10,12 @@ const createApplicationContext = require('../../../web-api/src/applicationContex
 const {
   MAX_SEARCH_CLIENT_RESULTS,
 } = require('../../src/business/entities/EntityConstants');
-const { CognitoIdentityServiceProvider, DynamoDB } = require('aws-sdk');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 const { getUserPoolId, getVersion } = require('../util');
 const { search } = require('../../src/persistence/elasticsearch/searchClient');
 
-const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
 const dynamo = new DynamoDB({ region: process.env.REGION });
 
 /**

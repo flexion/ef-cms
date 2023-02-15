@@ -20,9 +20,9 @@ If everything is successful, you'll get back a ID Token which is the JWT you sho
 */
 
 const readline = require('readline');
-const { CognitoIdentityServiceProvider } = require('aws-sdk');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
-const cognito = new CognitoIdentityServiceProvider({
+const cognito = new CognitoIdentityProvider({
   region: 'us-east-1',
 });
 

@@ -5,7 +5,7 @@ const {
   deactivateAdminAccount,
 } = require('./admin');
 const { checkEnvVar, getUserPoolId } = require('../util');
-const { CognitoIdentityServiceProvider } = require('aws-sdk');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
 const { EFCMS_DOMAIN, ENV } = process.env;
 
@@ -127,7 +127,7 @@ const checkParams = params => {
  * @param {String} email The email we wish to send the welcome email
  */
 const sendWelcomeEmail = async email => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
   try {
     await cognito

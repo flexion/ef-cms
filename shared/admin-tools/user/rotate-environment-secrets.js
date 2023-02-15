@@ -1,10 +1,11 @@
 const { shuffle } = require('lodash');
 const { COGNITO_USER_POOL, ENV } = process.env;
 const { checkEnvVar } = require('../util');
-const { CognitoIdentityServiceProvider, SecretsManager } = require('aws-sdk');
+const { SecretsManager } = require('aws-sdk');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
 const secretsClient = new SecretsManager({ region: 'us-east-1' });
-const cognitoClient = new CognitoIdentityServiceProvider({
+const cognitoClient = new CognitoIdentityProvider({
   region: 'us-east-1',
 });
 
