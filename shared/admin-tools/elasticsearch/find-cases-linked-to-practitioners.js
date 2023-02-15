@@ -13,10 +13,11 @@ const version = process.argv[3] || 'alpha';
 const openSearchEndpoint = process.argv[4];
 const TABLE_NAME = `efcms-${environmentName}-${version}`;
 
-const documentClient = new DynamoDBDocumentClient({
+const client = new DynamoDB({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
 });
+const documentClient = DynamoDBDocumentClient.from(client);
 
 const esClient = new Client({
   ...AwsSigv4Signer({

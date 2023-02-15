@@ -2,16 +2,13 @@ import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
 const dynamodb = new DynamoDB({
+  endpoint: 'dynamodb.us-east-1.amazonaws.com',
   maxRetries: 10,
   region: 'us-east-1',
   retryDelayOptions: { base: 300 },
 });
 
-const dynamoDbDocumentClient = new DynamoDBDocumentClient({
-  endpoint: 'dynamodb.us-east-1.amazonaws.com',
-  region: 'us-east-1',
-  service: dynamodb,
-});
+const dynamoDbDocumentClient = DynamoDBDocumentClient.from(dynamodb);
 
 const [segmentArg, totalSegmentsArg] = process.argv.slice(2);
 
