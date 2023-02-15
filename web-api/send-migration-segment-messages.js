@@ -1,6 +1,6 @@
 const { chunk, shuffle } = require('lodash');
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
-import { SQS } from '@aws-sdk/client-sqs';
+const { DynamoDB } = require('@aws-sdk/client-dynamodb');
+const { SQS } = require('@aws-sdk/client-sqs');
 
 // We found that 200 seems to be a good number to choose.  Anything too high and migrations stop working well.
 const SEGMENT_SIZE = 200;

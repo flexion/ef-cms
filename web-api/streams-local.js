@@ -1,5 +1,5 @@
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
-import { DynamoDBStreams } from '@aws-sdk/client-dynamodb-streams';
+const { DynamoDB } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBStreams } = require('@aws-sdk/client-dynamodb-streams');
 
 const { Writable } = require('stream');
 

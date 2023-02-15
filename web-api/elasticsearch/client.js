@@ -1,4 +1,6 @@
-import { ElasticsearchService } from '@aws-sdk/client-elasticsearch-service';
+const {
+  ElasticsearchService,
+} = require('@aws-sdk/client-elasticsearch-service');
 
 const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 const { Client } = require('@opensearch-project/opensearch');

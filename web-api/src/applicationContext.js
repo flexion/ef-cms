@@ -13,12 +13,14 @@ const {
 const {
   ApiGatewayManagementApi,
 } = require('@aws-sdk/client-apigatewaymanagementapi');
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
-import { S3 } from '@aws-sdk/client-s3';
-import { SES } from '@aws-sdk/client-ses';
-import { SQS } from '@aws-sdk/client-sqs';
+const {
+  CognitoIdentityProvider,
+} = require('@aws-sdk/client-cognito-identity-provider');
 const { defaultProvider } = require('@aws-sdk/credential-provider-node');
+const { DynamoDB } = require('@aws-sdk/client-dynamodb');
+const { S3 } = require('@aws-sdk/client-s3');
+const { SES } = require('@aws-sdk/client-ses');
+const { SQS } = require('@aws-sdk/client-sqs');
 
 const {
   calculateDifferenceInDays,

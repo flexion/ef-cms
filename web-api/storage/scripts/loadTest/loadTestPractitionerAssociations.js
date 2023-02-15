@@ -1,5 +1,7 @@
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 const axios = require('axios');
+const {
+  CognitoIdentityProvider,
+} = require('@aws-sdk/client-cognito-identity-provider');
 const { getUserToken } = require('./loadTestHelpers');
 
 const cognito = new CognitoIdentityProvider({

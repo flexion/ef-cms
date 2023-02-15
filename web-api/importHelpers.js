@@ -1,8 +1,10 @@
-import { APIGateway } from '@aws-sdk/client-api-gateway';
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const localUsers = require('./storage/fixtures/seed/users.json');
+const {
+  CognitoIdentityProvider,
+} = require('@aws-sdk/client-cognito-identity-provider');
+const { APIGateway } = require('@aws-sdk/client-api-gateway');
 const { getUserToken } = require('./storage/scripts/loadTest/loadTestHelpers');
 
 const getToken = async () => {

@@ -1,7 +1,7 @@
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
 const {
   formatDocketEntryResult,
 } = require('./helpers/formatDocketEntryResult');
+const { DynamoDB } = require('@aws-sdk/client-dynamodb');
 const { formatMessageResult } = require('./helpers/formatMessageResult');
 const { formatWorkItemResult } = require('./helpers/formatWorkItemResult');
 const { get } = require('lodash');

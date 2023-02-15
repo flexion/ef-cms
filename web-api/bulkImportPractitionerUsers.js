@@ -1,7 +1,10 @@
 const axios = require('axios');
 const fs = require('fs');
-import { APIGateway } from '@aws-sdk/client-api-gateway';
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+const {
+  CognitoIdentityProvider,
+} = require('@aws-sdk/client-cognito-identity-provider');
+const { APIGateway } = require('@aws-sdk/client-api-gateway');
+
 const { formatRecord } = require('./bulkImportPractitionerUsers.helpers');
 const { gatherRecords, getCsvOptions } = require('../shared/src/tools/helpers');
 const { getUserToken } = require('./storage/scripts/loadTest/loadTestHelpers');

@@ -1,14 +1,14 @@
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { SQS } from '@aws-sdk/client-sqs';
 const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
 const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
+const { DynamoDB } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
 const { getRecordSize } = require('./utilities/getRecordSize');
 const { migrationsToRun } = require('./migrationsToRun');
+const { SQS } = require('@aws-sdk/client-sqs');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
 

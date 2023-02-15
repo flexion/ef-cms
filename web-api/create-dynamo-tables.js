@@ -1,4 +1,4 @@
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
+const { DynamoDB } = require('@aws-sdk/client-dynamodb');
 
 const dynamo = new DynamoDB({
   credentials: {

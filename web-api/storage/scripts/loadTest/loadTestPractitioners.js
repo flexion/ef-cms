@@ -1,7 +1,9 @@
-import { APIGateway } from '@aws-sdk/client-api-gateway';
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 const axios = require('axios');
 const createApplicationContext = require('../../../src/applicationContext');
+const {
+  CognitoIdentityProvider,
+} = require('@aws-sdk/client-cognito-identity-provider');
+const { APIGateway } = require('@aws-sdk/client-api-gateway');
 const { createCase, getUserToken } = require('./loadTestHelpers');
 
 Error.stackTraceLimit = Infinity;

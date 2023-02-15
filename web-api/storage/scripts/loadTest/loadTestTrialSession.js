@@ -6,8 +6,10 @@ const {
   createTrialSession,
   getUserToken,
 } = require('./loadTestHelpers');
-import { APIGateway } from '@aws-sdk/client-api-gateway';
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+const {
+  CognitoIdentityProvider,
+} = require('@aws-sdk/client-cognito-identity-provider');
+const { APIGateway } = require('@aws-sdk/client-api-gateway');
 
 Error.stackTraceLimit = Infinity;
 
