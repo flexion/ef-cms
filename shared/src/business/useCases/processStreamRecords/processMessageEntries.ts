@@ -1,5 +1,5 @@
+const { marshall } = require('@aws-sdk/util-dynamodb');
 import { compact } from 'lodash';
-import AWS from 'aws-sdk';
 
 export const processMessageEntries = async ({
   applicationContext,
@@ -38,8 +38,7 @@ export const processMessageEntries = async ({
         });
 
       if (!latestMessageData.isRepliedTo) {
-        const marshalledMessage =
-          AWS.DynamoDB.Converter.marshall(latestMessageData);
+        const marshalledMessage = marshall(latestMessageData);
 
         return {
           dynamodb: {
