@@ -1,4 +1,5 @@
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
 const dynamodb = new DynamoDB({
   maxRetries: 10,
@@ -6,7 +7,7 @@ const dynamodb = new DynamoDB({
   retryDelayOptions: { base: 300 },
 });
 
-const dynamoDbDocumentClient = new DynamoDB.DocumentClient({
+const dynamoDbDocumentClient = new DynamoDBDocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
   service: dynamodb,

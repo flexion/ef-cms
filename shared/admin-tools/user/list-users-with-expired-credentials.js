@@ -1,7 +1,11 @@
+const {
+  IAMClient,
+  ListAccessKeysCommand,
+  ListUsersCommand,
+} = require('@aws-sdk/client-iam');
 const { DateTime } = require('luxon');
-const { IAM } = require('aws-sdk');
 
-const iamClient = new IAM({ region: 'us-east-1' });
+const iamClient = new IAMClient({ region: 'us-east-1' });
 const startOfCurrentQuarter = DateTime.fromObject({
   quarter: DateTime.now().quarter,
   year: DateTime.now().year,
@@ -11,7 +15,8 @@ const startOfCurrentQuarter = DateTime.fromObject({
  * cycle through all of the users in the current AWS account and check the age of their credentials
  */
 const checkUsers = async () => {
-  const { Users } = await iamClient.listUsers({ MaxItems: 1000 }).promise();
+  const command = new ListUsersCommand({ MaxItems: 1000 });
+  const { Users } = await iamClient.send(command);
   await Promise.all(Users.map(checkCredentialsForUser));
   return 'done';
 };
@@ -23,9 +28,8 @@ const checkUsers = async () => {
  * @param {string} providers.UserName the unique identifier of the user to lookup
  */
 const checkCredentialsForUser = async ({ UserName }) => {
-  const { AccessKeyMetadata } = await iamClient
-    .listAccessKeys({ UserName })
-    .promise();
+  const command = new ListAccessKeysCommand({ UserName });
+  const { AccessKeyMetadata } = await iamClient.send(command);
 
   const hasExpired =
     AccessKeyMetadata.map(({ CreateDate }) =>

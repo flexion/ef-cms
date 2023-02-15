@@ -1,5 +1,4 @@
-const AWS = require('aws-sdk');
-const { DynamoDB } = AWS;
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 
 /**
  * getDynamoEndpoints

@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 const {
   formatDocketEntryResult,
 } = require('./helpers/formatDocketEntryResult');
@@ -13,9 +13,7 @@ const formatResults = body => {
 
   let caseMap = {};
   const results = get(body, 'hits.hits', []).map(hit => {
-    const sourceUnmarshalled = AWS.DynamoDB.Converter.unmarshall(
-      hit['_source'],
-    );
+    const sourceUnmarshalled = DynamoDB.Converter.unmarshall(hit['_source']);
     sourceUnmarshalled['_score'] = hit['_score'];
 
     const isDocketEntryResultWithParentCaseMapping =

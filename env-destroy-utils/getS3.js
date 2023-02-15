@@ -1,4 +1,4 @@
-const { S3 } = require('aws-sdk');
+import { S3 } from '@aws-sdk/client-s3';
 
 exports.getS3 = ({ environment }) => {
   const s3 = new S3({

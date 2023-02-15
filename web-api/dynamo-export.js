@@ -1,4 +1,5 @@
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
 const tableName = process.argv[2] ?? 'efcms-local';
 
@@ -7,10 +8,11 @@ if (!tableName) {
   process.exit(1);
 }
 
-const documentClient = new DynamoDB.DocumentClient({
+const client = new DynamoDB({
   endpoint: 'http://localhost:8000',
   region: 'us-east-1',
 });
+const documentClient = DynamoDBDocumentClient.from(client);
 
 documentClient
   .scan({

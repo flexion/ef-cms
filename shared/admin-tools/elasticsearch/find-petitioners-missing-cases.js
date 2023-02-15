@@ -2,6 +2,7 @@
 // node find-petitioners-missing-cases.js mig alpha https://search-efcms-search-mig-alpha-dwffrub5hv5f4w4vlxpt4v65ni.us-east-1.es.amazonaws.com
 
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 const { chunk } = require('lodash');
 const { Client } = require('@opensearch-project/opensearch');
@@ -14,10 +15,11 @@ const openSearchEndpoint = process.argv[4];
 
 const CHUNK_SIZE = 100;
 
-const documentClient = new DynamoDB.DocumentClient({
+const client = new DynamoDB({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
 });
+const documentClient = DynamoDBDocumentClient.from(client);
 
 const openSearchClient = new Client({
   ...AwsSigv4Signer({

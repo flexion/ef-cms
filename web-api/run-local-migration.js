@@ -1,4 +1,5 @@
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
 const {
   processItems,
@@ -14,11 +15,7 @@ const {
     region: 'us-east-1',
   });
 
-  const documentClient = new DynamoDB.DocumentClient({
-    endpoint: 'http://localhost:8000',
-    region: 'us-east-1',
-    service: dynamo,
-  });
+  const documentClient = DynamoDBDocumentClient.from(dynamo);
 
   await documentClient
     .scan({

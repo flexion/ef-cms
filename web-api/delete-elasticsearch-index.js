@@ -1,13 +1,10 @@
 (async () => {
-  const AWS = require('aws-sdk');
   const {
     elasticsearchIndexes,
   } = require('./elasticsearch/elasticsearch-indexes');
   const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
   const { Client } = require('@opensearch-project/opensearch');
-
-  AWS.config.region = 'us-east-1';
-  AWS.config.httpOptions.timeout = 300000;
+  const { defaultProvider } = require('@aws-sdk/credential-provider-node');
 
   const environment = {
     elasticsearchEndpoint: process.env.ELASTICSEARCH_ENDPOINT,
@@ -16,16 +13,14 @@
 
   const openSearchClient = new Client({
     ...AwsSigv4Signer({
-      getCredentials: () =>
-        new Promise((resolve, reject) => {
-          AWS.config.getCredentials((err, credentials) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(credentials);
-            }
-          });
-        }),
+      getCredentials: () => {
+        const credentialsProvider = defaultProvider({
+          httpOptions: {
+            timeout: 300000,
+          },
+        });
+        return credentialsProvider();
+      },
 
       region: 'us-east-1',
     }),

@@ -1,6 +1,6 @@
 const createApplicationContext = require('../../../web-api/src/applicationContext');
 const { Case } = require('../../src/business/entities/cases/Case');
-const { DynamoDB } = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 const { getClient } = require('../../../web-api/elasticsearch/client');
 
 const applicationContext = createApplicationContext({});

@@ -1,7 +1,7 @@
-const { CloudWatchLogs } = require('aws-sdk');
+import { CloudWatchLogsClient } from '@aws-sdk/client-cloudwatch-logs';
 
 exports.getCloudWatch = ({ environment }) => {
-  const cloudWatch = new CloudWatchLogs({
+  const cloudWatch = new CloudWatchLogsClient({
     apiVersion: 'latest',
     region: environment.region,
   });

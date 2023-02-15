@@ -1,4 +1,6 @@
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+
 const { chunk } = require('lodash');
 const args = process.argv.slice(2);
 
@@ -10,10 +12,11 @@ if (args.length < 1) {
 const tableName = args[0];
 const CHUNK_SIZE = 25;
 
-const documentClient = new DynamoDB.DocumentClient({
+const client = new DynamoDB({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
 });
+const documentClient = DynamoDBDocumentClient.from(client);
 
 (async function () {
   let hasMoreResults = true;

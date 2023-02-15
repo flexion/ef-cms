@@ -6,7 +6,7 @@ const {
   formatDateString,
   FORMATS,
 } = require('../../src/business/utilities/DateHandler');
-const { DynamoDB } = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 const { getVersion } = require('../util');
 
 const client = new DynamoDB({ region: 'us-east-1' });

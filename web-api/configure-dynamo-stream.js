@@ -1,4 +1,4 @@
-const { DynamoDB } = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 
 const tableName = process.argv[2];
 const enabled = process.argv[3] == 'true';

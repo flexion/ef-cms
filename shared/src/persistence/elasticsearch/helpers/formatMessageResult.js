@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 
 exports.formatMessageResult = ({ caseMap, hit, sourceUnmarshalled }) => {
   const casePk = hit['_id'].split('_')[0];
@@ -19,7 +19,7 @@ exports.formatMessageResult = ({ caseMap, hit, sourceUnmarshalled }) => {
   }
 
   if (foundCase) {
-    const foundCaseUnmarshalled = AWS.DynamoDB.Converter.unmarshall(foundCase);
+    const foundCaseUnmarshalled = DynamoDB.Converter.unmarshall(foundCase);
 
     return {
       ...foundCaseUnmarshalled,
