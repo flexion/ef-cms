@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-const AWS = require('aws-sdk');
+
 const axios = require('axios');
 const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
@@ -10,6 +10,16 @@ const util = require('util');
 const {
   addressLabelCoverSheet,
 } = require('../../shared/src/business/utilities/documentGenerators/addressLabelCoverSheet');
+const {
+  ApiGatewayManagementApi,
+} = require('@aws-sdk/client-apigatewaymanagementapi');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { S3 } from '@aws-sdk/client-s3';
+import { SES } from '@aws-sdk/client-ses';
+import { SQS } from '@aws-sdk/client-sqs';
+const { defaultProvider } = require('@aws-sdk/credential-provider-node');
+
 const {
   calculateDifferenceInDays,
   calculateISODate,
@@ -227,6 +237,7 @@ const {
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
 const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 const { Client } = require('@opensearch-project/opensearch');
+const { SNS } = require('@aws-sdk/client-sns');
 
 const {
   Case,
@@ -245,7 +256,6 @@ const { UserCase } = require('../../shared/src/business/entities/UserCase');
 const { v4: uuidv4 } = require('uuid');
 const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 
-const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
 
 const environment = {
@@ -438,7 +448,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
           }),
         };
       } else {
-        return new CognitoIdentityServiceProvider({
+        return new CognitoIdentityProvider({
           httpOptions: {
             connectTimeout: 3000,
             timeout: 5000,
@@ -608,7 +618,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       if (endpoint.includes('localhost')) {
         endpoint = 'http://localhost:3011';
       }
-      return new AWS.ApiGatewayManagementApi({
+      return new ApiGatewayManagementApi({
         endpoint,
         httpOptions: {
           timeout: 900000, // 15 minutes
@@ -632,7 +642,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
           }),
         };
       } else {
-        notificationServiceCache = new AWS.SNS({
+        notificationServiceCache = new SNS({
           httpOptions: {
             connectTimeout: 3000,
             timeout: 5000,
@@ -672,16 +682,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
         } else {
           searchClientCache = new Client({
             ...AwsSigv4Signer({
-              getCredentials: () =>
-                new Promise((resolve, reject) => {
-                  AWS.config.getCredentials((err, credentials) => {
-                    if (err) {
-                      reject(err);
-                    } else {
-                      resolve(credentials);
-                    }
-                  });
-                }),
+              getCredentials: () => {
+                const credentialsProvider = defaultProvider();
+                return credentialsProvider();
+              },
               region: 'us-east-1',
             }),
             node: `https://${environment.elasticsearchEndpoint}:443`,

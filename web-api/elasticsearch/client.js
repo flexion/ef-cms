@@ -1,19 +1,19 @@
-const AWS = require('aws-sdk');
+import { ElasticsearchService } from '@aws-sdk/client-elasticsearch-service';
+
 const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 const { Client } = require('@opensearch-project/opensearch');
+const { defaultProvider } = require('@aws-sdk/credential-provider-node');
 const { getVersion } = require('../../shared/admin-tools/util');
 
-const es = new AWS.ES({
+const es = new ElasticsearchService({
   region: 'us-east-1',
 });
 
 const getHost = async DomainName => {
   try {
-    const result = await es
-      .describeElasticsearchDomain({
-        DomainName,
-      })
-      .promise();
+    const result = await es.describeElasticsearchDomain({
+      DomainName,
+    });
     return result.DomainStatus.Endpoint;
   } catch (err) {
     console.error(`could not find resource for ${DomainName}`, err);
@@ -36,16 +36,10 @@ const getClient = async ({ environmentName, version }) => {
 
   return new Client({
     ...AwsSigv4Signer({
-      getCredentials: () =>
-        new Promise((resolve, reject) => {
-          AWS.config.getCredentials((err, credentials) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(credentials);
-            }
-          });
-        }),
+      getCredentials: () => {
+        const credentialsProvider = defaultProvider();
+        return credentialsProvider();
+      },
 
       region: 'us-east-1',
     }),

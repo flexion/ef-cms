@@ -1,18 +1,15 @@
 (async () => {
-  const AWS = require('aws-sdk');
-  const { elasticsearchIndexes } = require('./elasticsearch-indexes');
-  AWS.config.region = 'us-east-1';
   const mappings = require('./elasticsearch-mappings');
   const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
   const { Client } = require('@opensearch-project/opensearch');
+  const { defaultProvider } = require('@aws-sdk/credential-provider-node');
+  const { elasticsearchIndexes } = require('./elasticsearch-indexes');
   const { settings } = require('./elasticsearch-settings');
 
   const environment = {
     region: 'us-east-1',
     stage: process.env.ENV || 'local',
   };
-
-  AWS.config.httpOptions.timeout = 300000;
 
   const overriddenNumberOfReplicasIfNonProd =
     process.env.OVERRIDE_ES_NUMBER_OF_REPLICAS;
@@ -21,16 +18,14 @@
 
   const openSearchClient = new Client({
     ...AwsSigv4Signer({
-      getCredentials: () =>
-        new Promise((resolve, reject) => {
-          AWS.config.getCredentials((err, credentials) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(credentials);
-            }
-          });
-        }),
+      getCredentials: () => {
+        const credentialsProvider = defaultProvider({
+          httpOptions: {
+            timeout: 300000,
+          },
+        });
+        return credentialsProvider();
+      },
       region: environment.region,
     }),
     node:

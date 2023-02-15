@@ -1,9 +1,10 @@
 // how to run
 // node find-petitioners-missing-cases.js mig alpha https://search-efcms-search-mig-alpha-dwffrub5hv5f4w4vlxpt4v65ni.us-east-1.es.amazonaws.com
 
-const AWS = require('aws-sdk');
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 const { Client } = require('@opensearch-project/opensearch');
+const { defaultProvider } = require('@aws-sdk/credential-provider-node');
 const { get } = require('lodash');
 
 const environmentName = process.argv[2] || 'exp1';
@@ -11,23 +12,17 @@ const version = process.argv[3] || 'alpha';
 const openSearchEndpoint = process.argv[4];
 const TABLE_NAME = `efcms-${environmentName}-${version}`;
 
-const documentClient = new AWS.DynamoDB.DocumentClient({
+const documentClient = new DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
 });
 
 const esClient = new Client({
   ...AwsSigv4Signer({
-    getCredentials: () =>
-      new Promise((resolve, reject) => {
-        AWS.config.getCredentials((err, credentials) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(credentials);
-          }
-        });
-      }),
+    getCredentials: () => {
+      const credentialsProvider = defaultProvider();
+      return credentialsProvider();
+    },
 
     region: 'us-east-1',
   }),
@@ -56,7 +51,7 @@ const getOpenCases = async () => {
   const hits = get(results, 'hits.hits');
   const formatHit = hit => {
     return {
-      ...AWS.DynamoDB.Converter.unmarshall(hit['_source']),
+      ...DynamoDB.Converter.unmarshall(hit['_source']),
       score: hit['_score'],
     };
   };
