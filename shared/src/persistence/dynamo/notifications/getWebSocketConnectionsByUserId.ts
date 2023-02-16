@@ -21,8 +21,8 @@ export const getWebSocketConnectionsByUserId = ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `user|${userId}`,
-      ':prefix': 'connection',
+      ':pk': { S: `user|${userId}` },
+      ':prefix': { S: 'connection' },
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,

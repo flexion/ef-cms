@@ -16,7 +16,7 @@ export const updateWorkItemAssociatedJudge = ({
       '#associatedJudge': 'associatedJudge',
     },
     ExpressionAttributeValues: {
-      ':associatedJudge': associatedJudge,
+      ':associatedJudge': { S: associatedJudge },
     },
     Key: {
       pk: `case|${docketNumber}`,

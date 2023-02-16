@@ -16,8 +16,8 @@ describe('getWorkItemsByDocketNumber', () => {
 
     expect(queryMock.mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
-        ':pk': `case|${mockDocketNumber}`,
-        ':prefix': 'work-item',
+        ':pk': { S: `case|${mockDocketNumber}` },
+        ':prefix': { S: 'work-item' },
       },
       KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     });

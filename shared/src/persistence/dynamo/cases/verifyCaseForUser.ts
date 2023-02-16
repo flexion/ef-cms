@@ -15,8 +15,8 @@ export const verifyCaseForUser = async ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `user|${userId}`,
-      ':sk': `case|${docketNumber}`,
+      ':pk': { S: `user|${userId}` },
+      ':sk': { S: `case|${docketNumber}` },
     },
     KeyConditionExpression: '#pk = :pk AND #sk = :sk',
     applicationContext,

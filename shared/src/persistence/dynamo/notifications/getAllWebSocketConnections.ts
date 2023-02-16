@@ -17,7 +17,7 @@ export const getAllWebSocketConnections = ({
       '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': 'connection',
+      ':gsi1pk': { S: 'connection' },
     },
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',

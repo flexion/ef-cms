@@ -20,7 +20,7 @@ export const deleteByGsi = async ({
       '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': gsi,
+      ':gsi1pk': { S: gsi },
     },
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',

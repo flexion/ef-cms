@@ -28,7 +28,7 @@ export const markMessageThreadRepliedTo = async ({
           '#isRepliedTo': 'isRepliedTo',
         },
         ExpressionAttributeValues: {
-          ':isRepliedTo': true,
+          ':isRepliedTo': { BOOL: true },
         },
         Key: {
           pk: `case|${message.docketNumber}`,

@@ -24,8 +24,8 @@ export const verifyPendingCaseForUser = async ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `user|${userId}`,
-      ':sk': `pending-case|${docketNumber}`,
+      ':pk': { S: `user|${userId}` },
+      ':sk': { S: `pending-case|${docketNumber}` },
     },
     KeyConditionExpression: '#pk = :pk AND #sk = :sk',
     applicationContext,

@@ -27,8 +27,8 @@ export const getCasesAssociatedWithUser = ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `user|${userId}`,
-      ':prefix': 'case',
+      ':pk': { S: `user|${userId}` },
+      ':prefix': { S: 'case' },
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,

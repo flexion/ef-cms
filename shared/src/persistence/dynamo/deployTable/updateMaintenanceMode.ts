@@ -20,7 +20,7 @@ export const updateMaintenanceMode = ({
       '#current': 'current',
     },
     ExpressionAttributeValues: {
-      ':maintenanceMode': maintenanceMode,
+      ':maintenanceMode': { BOOL: maintenanceMode },
     },
     Key: {
       pk: 'maintenance-mode',

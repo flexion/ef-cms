@@ -26,8 +26,8 @@ export const createCaseTrialSortMappingRecords = async ({
       '#pk': 'pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `eligible-for-trial-case-catalog|${docketNumber}`,
-      ':pk': 'eligible-for-trial-case-catalog',
+      ':gsi1pk': { S: `eligible-for-trial-case-catalog|${docketNumber}` },
+      ':pk': { S: 'eligible-for-trial-case-catalog' },
     },
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk AND #pk = :pk',

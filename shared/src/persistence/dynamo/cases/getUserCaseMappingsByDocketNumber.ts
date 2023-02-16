@@ -12,7 +12,7 @@ export const getUserCaseMappingsByDocketNumber = ({
       '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `user-case|${docketNumber}`,
+      ':gsi1pk': { S: `user-case|${docketNumber}` },
     },
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',

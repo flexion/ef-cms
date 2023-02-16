@@ -1,5 +1,5 @@
 import { Case } from '../entities/cases/Case';
-import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { addCoverToPdf } from './addCoverToPdf';
 /**
  * addCoversheetInteractor

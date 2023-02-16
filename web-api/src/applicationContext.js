@@ -17,7 +17,6 @@ const {
   CognitoIdentityProvider,
 } = require('@aws-sdk/client-cognito-identity-provider');
 const { defaultProvider } = require('@aws-sdk/credential-provider-node');
-const { DynamoDB } = require('@aws-sdk/client-dynamodb');
 const { S3Client } = require('@aws-sdk/client-s3');
 
 const { SES } = require('@aws-sdk/client-ses');
@@ -83,6 +82,10 @@ const {
 const {
   documentUrlTranslator,
 } = require('../../shared/src/business/utilities/documentUrlTranslator');
+const {
+  DynamoDBDocument,
+  DynamoDBDocumentClient,
+} = require('@aws-sdk/lib-dynamodb');
 const {
   filterWorkItemsForUser,
 } = require('../../shared/src/business/utilities/filterWorkItemsForUser');
@@ -240,6 +243,7 @@ const {
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
 const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 const { Client } = require('@opensearch-project/opensearch');
+const { DynamoDB, DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { SNS } = require('@aws-sdk/client-sns');
 
 const {
@@ -284,45 +288,38 @@ const environment = {
 };
 
 const getDocumentClient = ({ useMasterRegion = false } = {}) => {
-  const type = useMasterRegion ? 'master' : 'region';
   const mainRegion = environment.region;
-  const fallbackRegion =
-    environment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
   const mainRegionEndpoint = environment.dynamoDbEndpoint.includes('local')
     ? environment.dynamoDbEndpoint.includes('localhost')
       ? 'http://localhost:8000'
       : environment.dynamoDbEndpoint
     : `dynamodb.${mainRegion}.amazonaws.com`;
-  const fallbackRegionEndpoint = environment.dynamoDbEndpoint.includes(
-    'localhost',
-  )
-    ? 'http://localhost:8000'
-    : `dynamodb.${fallbackRegion}.amazonaws.com`;
   const { masterDynamoDbEndpoint, masterRegion } = environment;
 
-  const config = {
-    fallbackRegion,
-    fallbackRegionEndpoint,
-    mainRegion,
-    mainRegionEndpoint,
-    masterDynamoDbEndpoint,
-    masterRegion,
-    useMasterRegion,
+  const translateConfig = {
+    marshallOptions: {
+      removeUndefinedValues: true,
+    },
+    unmarshallOptions: {
+      wrapNumbers: false,
+    },
   };
 
-  if (!dynamoClientCache[type]) {
-    dynamoClientCache[type] = {
-      batchGet: fallbackHandler({ key: 'batchGet', ...config }),
-      batchWrite: fallbackHandler({ key: 'batchWrite', ...config }),
-      delete: fallbackHandler({ key: 'delete', ...config }),
-      get: fallbackHandler({ key: 'get', ...config }),
-      put: fallbackHandler({ key: 'put', ...config }),
-      query: fallbackHandler({ key: 'query', ...config }),
-      scan: fallbackHandler({ key: 'scan', ...config }),
-      update: fallbackHandler({ key: 'update', ...config }),
-    };
-  }
-  return dynamoClientCache[type];
+  const mainRegionDBClient = new DynamoDBClient({
+    endpoint: useMasterRegion ? masterDynamoDbEndpoint : mainRegionEndpoint,
+    httpOptions: {
+      timeout: 5000,
+    },
+    maxRetries: 3,
+    region: useMasterRegion ? masterRegion : mainRegion,
+  });
+
+  const client = DynamoDBDocumentClient.from(
+    mainRegionDBClient,
+    translateConfig,
+  );
+
+  return client;
 };
 
 const getDynamoClient = ({ useMasterRegion = false } = {}) => {

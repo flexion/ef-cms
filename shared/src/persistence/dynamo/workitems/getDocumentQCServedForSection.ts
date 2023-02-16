@@ -15,8 +15,8 @@ export const getDocumentQCServedForSection = ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':afterDate': afterDate,
-      ':pk': `section-outbox|${section}`,
+      ':afterDate': { S: afterDate },
+      ':pk': { S: `section-outbox|${section}` },
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,

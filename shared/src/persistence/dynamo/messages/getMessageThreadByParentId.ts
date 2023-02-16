@@ -20,7 +20,7 @@ export const getMessageThreadByParentId = ({
       '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `message|${parentMessageId}`,
+      ':gsi1pk': { S: `message|${parentMessageId}` },
     },
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',

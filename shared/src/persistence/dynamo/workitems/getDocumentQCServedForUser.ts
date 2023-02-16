@@ -24,8 +24,8 @@ export const getDocumentQCServedForUser = ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':afterDate': afterDate,
-      ':pk': `user-outbox|${userId}`,
+      ':afterDate': { S: afterDate },
+      ':pk': { S: `user-outbox|${userId}` },
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,

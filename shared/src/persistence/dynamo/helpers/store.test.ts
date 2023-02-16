@@ -47,8 +47,8 @@ describe('setExpiresAt', () => {
         '#id': 'id',
       },
       ExpressionAttributeValues: {
-        ':id': 1,
-        ':value': '123',
+        ':id': { N: 1 },
+        ':value': { S: '123' },
       },
       Key: {
         pk: 'limiter',

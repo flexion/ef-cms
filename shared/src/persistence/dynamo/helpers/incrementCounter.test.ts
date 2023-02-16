@@ -17,7 +17,7 @@ describe('incrementCounter', () => {
     expect((updateConsistent as jest.Mock).mock.calls[0][0]).toMatchObject({
       ExpressionAttributeNames: { '#id': 'id' },
       ExpressionAttributeValues: {
-        ':value': 1,
+        ':value': { N: 1 },
       },
       Key: {
         pk: '3-2029',
@@ -39,7 +39,7 @@ describe('incrementCounter', () => {
     expect((updateConsistent as jest.Mock).mock.calls[0][0]).toMatchObject({
       ExpressionAttributeNames: { '#id': 'id' },
       ExpressionAttributeValues: {
-        ':value': 1,
+        ':value': { N: 1 },
       },
       Key: {
         pk: `4-${currentYear}`,

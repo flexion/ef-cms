@@ -29,7 +29,7 @@ describe('updateDocketEntryPendingServiceStatus', () => {
         '#isPendingService': 'isPendingService',
       },
       ExpressionAttributeValues: {
-        ':status': true,
+        ':status': { BOOL: true },
       },
       Key: { pk: 'case|123-20', sk: 'docket-entry|asdf' },
       UpdateExpression: 'SET #isPendingService = :status',

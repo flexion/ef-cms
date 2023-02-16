@@ -16,8 +16,8 @@ export const getEligibleCasesForTrialCity = async ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': 'eligible-for-trial-case-catalog',
-      ':prefix': prefix,
+      ':pk': { S: 'eligible-for-trial-case-catalog' },
+      ':prefix': { S: prefix },
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,

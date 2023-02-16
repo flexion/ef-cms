@@ -16,7 +16,7 @@ export const updateWorkItemTrialDate = ({
       '#trialDate': 'trialDate',
     },
     ExpressionAttributeValues: {
-      ':trialDate': trialDate,
+      ':trialDate': { S: trialDate },
     },
     Key: {
       pk: `case|${docketNumber}`,

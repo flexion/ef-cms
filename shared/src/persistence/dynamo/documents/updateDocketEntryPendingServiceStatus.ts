@@ -18,7 +18,7 @@ export const updateDocketEntryPendingServiceStatus = async ({
         '#isPendingService': 'isPendingService',
       },
       ExpressionAttributeValues: {
-        ':status': status,
+        ':status': { BOOL: status },
       },
       Key: {
         pk: `case|${docketNumber}`,

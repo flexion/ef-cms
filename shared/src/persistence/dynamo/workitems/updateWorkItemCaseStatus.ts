@@ -16,7 +16,7 @@ export const updateWorkItemCaseStatus = ({
       '#caseStatus': 'caseStatus',
     },
     ExpressionAttributeValues: {
-      ':caseStatus': caseStatus,
+      ':caseStatus': { S: caseStatus },
     },
     Key: {
       pk: `case|${docketNumber}`,

@@ -15,8 +15,8 @@ export const getRecordsViaMapping = async ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': pk,
-      ':prefix': prefix,
+      ':pk': { S: pk },
+      ':prefix': { S: prefix },
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,

@@ -1,4 +1,4 @@
-const { DynamoDB } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { DynamoDBDocument } = require('@aws-sdk/lib-dynamodb');
 
 /**
@@ -40,7 +40,7 @@ exports.getDynamoEndpoints = ({
 
   const translateConfig = { marshallOptions, unmarshallOptions };
 
-  const mainRegionDBClient = new DynamoDB({
+  const mainRegionDBClient = new DynamoDBClient({
     ...baseConfig,
     endpoint: useMasterRegion ? masterDynamoDbEndpoint : mainRegionEndpoint,
     region: useMasterRegion ? masterRegion : mainRegion,
@@ -50,7 +50,7 @@ exports.getDynamoEndpoints = ({
     translateConfig,
   );
 
-  const fallbackRegionDBClient = new DynamoDB({
+  const fallbackRegionDBClient = new DynamoDBClient({
     ...baseConfig,
     endpoint: useMasterRegion ? fallbackRegionEndpoint : masterDynamoDbEndpoint,
     region: useMasterRegion ? fallbackRegion : masterRegion,

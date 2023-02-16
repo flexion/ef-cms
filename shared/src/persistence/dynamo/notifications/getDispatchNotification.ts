@@ -25,9 +25,9 @@ export const getDispatchNotification = ({
       '#ttl': 'ttl',
     },
     ExpressionAttributeValues: {
-      ':currentEpoch': Date.now() / 1000, // time to live
-      ':pk': 'dispatch-notification',
-      ':sk': topic,
+      ':currentEpoch': { N: `${Date.now() / 1000}` },
+      ':pk': { S: 'dispatch-notification' },
+      ':sk': { S: topic },
     },
     FilterExpression: '#ttl >= :currentEpoch',
     KeyConditionExpression: '#pk = :pk AND #sk = :sk',

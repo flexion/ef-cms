@@ -32,8 +32,8 @@ export const getCaseMetadataWithCounsel = async ({
         '#sk': 'sk',
       },
       ExpressionAttributeValues: {
-        ':pk': `case|${docketNumber}`,
-        ':prefix': 'privatePractitioner',
+        ':pk': { S: `case|${docketNumber}` },
+        ':prefix': { S: 'privatePractitioner' },
       },
       KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
       applicationContext,
@@ -45,8 +45,8 @@ export const getCaseMetadataWithCounsel = async ({
         '#sk': 'sk',
       },
       ExpressionAttributeValues: {
-        ':pk': `case|${docketNumber}`,
-        ':prefix': 'irsPractitioner',
+        ':pk': { S: `case|${docketNumber}` },
+        ':prefix': { S: 'irsPractitioner' },
       },
       KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
       applicationContext,

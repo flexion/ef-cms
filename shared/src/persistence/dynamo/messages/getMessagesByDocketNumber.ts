@@ -21,8 +21,8 @@ export const getMessagesByDocketNumber = ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `case|${docketNumber}`,
-      ':prefix': 'message|',
+      ':pk': { S: `case|${docketNumber}` },
+      ':prefix': { S: 'message|' },
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,

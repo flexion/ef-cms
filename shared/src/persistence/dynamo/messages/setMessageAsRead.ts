@@ -14,7 +14,7 @@ export const setMessageAsRead = ({
       '#isRead': 'isRead',
     },
     ExpressionAttributeValues: {
-      ':isRead': true,
+      ':isRead': { BOOL: true },
     },
     Key: {
       pk: `case|${docketNumber}`,

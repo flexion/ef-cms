@@ -16,7 +16,7 @@ export const updateWorkItemDocketNumberSuffix = ({
       '#docketNumberSuffix': 'docketNumberSuffix',
     },
     ExpressionAttributeValues: {
-      ':docketNumberSuffix': docketNumberSuffix,
+      ':docketNumberSuffix': { S: docketNumberSuffix },
     },
     Key: {
       pk: `case|${docketNumber}`,

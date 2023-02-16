@@ -13,8 +13,8 @@ export const getWorkItemsByDocketNumber = ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `case|${docketNumber}`,
-      ':prefix': 'work-item',
+      ':pk': { S: `case|${docketNumber}` },
+      ':prefix': { S: 'work-item' },
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,

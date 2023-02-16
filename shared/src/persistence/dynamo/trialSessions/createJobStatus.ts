@@ -23,7 +23,7 @@ export const createJobStatus = ({
       '#unfinishedCases': 'unfinishedCases',
     },
     ExpressionAttributeValues: {
-      ':unfinishedCases': docketNumbers.length,
+      ':unfinishedCases': { N: docketNumbers.length },
     },
     Key: {
       pk: `set-notices-for-trial-session-job-${jobId}`,

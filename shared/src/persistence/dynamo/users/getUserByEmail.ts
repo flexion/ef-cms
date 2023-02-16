@@ -21,7 +21,7 @@ export const getUserByEmail = async ({
       '#pk': 'pk',
     },
     ExpressionAttributeValues: {
-      ':pk': `user-email|${formattedEmail}`,
+      ':pk': { S: `user-email|${formattedEmail}` },
     },
     KeyConditionExpression: '#pk = :pk',
     applicationContext,

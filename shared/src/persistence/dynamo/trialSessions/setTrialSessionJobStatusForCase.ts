@@ -26,7 +26,7 @@ export const setTrialSessionJobStatusForCase = ({
       '#docketNumber': docketNumber,
     },
     ExpressionAttributeValues: {
-      ':value': status,
+      ':value': { S: status },
     },
     Key: {
       pk: `set-notices-for-trial-session-job-${jobId}`,

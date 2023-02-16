@@ -11,7 +11,7 @@ export const getTrialSessions = ({
       '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': 'trial-session-catalog',
+      ':gsi1pk': { S: 'trial-session-catalog' },
     },
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',

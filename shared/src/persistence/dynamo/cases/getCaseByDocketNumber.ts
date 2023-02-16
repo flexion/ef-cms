@@ -22,11 +22,12 @@ export const getCaseByDocketNumber = async ({
       '#pk': 'pk',
     },
     ExpressionAttributeValues: {
-      ':pk': `case|${docketNumber}`,
+      ':pk': { S: `case|${docketNumber}` },
     },
     KeyConditionExpression: '#pk = :pk',
     applicationContext,
   });
+  console.log('success');
 
   return aggregateCaseItems(caseItems);
 };

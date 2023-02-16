@@ -27,8 +27,8 @@ export const setPriorityOnAllWorkItems = async ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `case|${docketNumber}`,
-      ':prefix': 'work-item',
+      ':pk': { S: `case|${docketNumber}` },
+      ':prefix': { S: 'work-item' },
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
@@ -41,7 +41,7 @@ export const setPriorityOnAllWorkItems = async ({
         '#gsi1pk': 'gsi1pk',
       },
       ExpressionAttributeValues: {
-        ':gsi1pk': mapping.sk,
+        ':gsi1pk': { S: mapping.sk },
       },
       IndexName: 'gsi1',
       KeyConditionExpression: '#gsi1pk = :gsi1pk',
@@ -56,8 +56,8 @@ export const setPriorityOnAllWorkItems = async ({
             '#trialDate': 'trialDate',
           },
           ExpressionAttributeValues: {
-            ':highPriority': highPriority,
-            ':trialDate': trialDate,
+            ':highPriority': { BOOL: highPriority },
+            ':trialDate': { S: trialDate },
           },
           Key: {
             pk: workItem.pk,

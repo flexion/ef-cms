@@ -20,7 +20,7 @@ export const deleteCaseTrialSortMappingRecords = async ({
       '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `eligible-for-trial-case-catalog|${docketNumber}`,
+      ':gsi1pk': { S: `eligible-for-trial-case-catalog|${docketNumber}` },
     },
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',

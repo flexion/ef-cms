@@ -15,8 +15,8 @@ export const getPractitionerDocuments = async ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `practitioner|${barNumber}`,
-      ':prefix': 'document',
+      ':pk': { S: `practitioner|${barNumber}` },
+      ':prefix': { S: 'document' },
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,

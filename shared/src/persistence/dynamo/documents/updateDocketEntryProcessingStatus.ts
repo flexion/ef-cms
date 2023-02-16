@@ -15,7 +15,7 @@ export const updateDocketEntryProcessingStatus = async ({
       '#processingStatus': 'processingStatus',
     },
     ExpressionAttributeValues: {
-      ':status': DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+      ':status': { S: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE },
     },
     Key: {
       pk: `case|${docketNumber}`,

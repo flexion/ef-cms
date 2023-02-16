@@ -23,7 +23,7 @@ export const setTrialSessionProcessingStatus = ({
       '#status': 'status',
     },
     ExpressionAttributeValues: {
-      ':value': trialSessionStatus,
+      ':value': { S: trialSessionStatus },
     },
     Key: {
       pk: `trial-session-processing-job-${trialSessionId}`,

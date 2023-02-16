@@ -16,7 +16,7 @@ export const updateWorkItemCaseTitle = ({
       '#caseTitle': 'caseTitle',
     },
     ExpressionAttributeValues: {
-      ':caseTitle': caseTitle,
+      ':caseTitle': { S: caseTitle },
     },
     Key: {
       pk: `case|${docketNumber}`,
