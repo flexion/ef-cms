@@ -9,6 +9,7 @@ const {
 const { asUserFromEmail } = require('../createUsers');
 
 module.exports.createCase1 = async () => {
+  console.log('createCase1');
   let caseDetail;
 
   const docketNumber = await asUserFromEmail(
@@ -17,6 +18,7 @@ module.exports.createCase1 = async () => {
       const petitionFile = getFakeFile();
       const petitionFileId = applicationContext.getUniqueId();
 
+      console.log('about to saveDocumentFromLambda 1');
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: petitionFile,
@@ -25,6 +27,8 @@ module.exports.createCase1 = async () => {
 
       const stinFile = getFakeFile();
       const stinFileId = applicationContext.getUniqueId();
+
+      console.log('about to saveDocumentFromLambda 222222');
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
@@ -59,6 +63,8 @@ module.exports.createCase1 = async () => {
           stinFileId,
         });
 
+      console.log('caseDetail', caseDetail);
+
       const addCoversheet = docketEntry => {
         return applicationContext
           .getUseCases()
@@ -75,6 +81,8 @@ module.exports.createCase1 = async () => {
           coversheets.push(addCoversheet(docketEntry));
         }
       }
+
+      console.log('coversheets!!!');
 
       await Promise.all(coversheets);
 

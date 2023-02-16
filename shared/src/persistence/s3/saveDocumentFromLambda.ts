@@ -1,3 +1,4 @@
+const { PutObjectCommand } = require('@aws-sdk/client-s3');
 export const saveDocumentFromLambda = async ({
   applicationContext,
   contentType: ContentType = 'application/pdf',
@@ -22,15 +23,13 @@ export const saveDocumentFromLambda = async ({
 
   for (let i = 0; i <= maxRetries; i++) {
     try {
-      response = await applicationContext
-        .getStorageClient()
-        .putObject({
-          Body: Buffer.from(body),
-          Bucket,
-          ContentType,
-          Key: key,
-        })
-        .promise();
+      const command = new PutObjectCommand({
+        Body: Buffer.from(body),
+        Bucket,
+        ContentType,
+        Key: key,
+      });
+      response = await applicationContext.getStorageClient().send(command);
       break;
     } catch (err) {
       if (i >= maxRetries) {

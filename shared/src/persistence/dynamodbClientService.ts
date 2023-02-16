@@ -325,20 +325,19 @@ export const queryFull = async ({
   while (hasMoreResults) {
     hasMoreResults = false;
 
-    const subsetResults = await applicationContext
-      .getDocumentClient()
-      .query({
-        ExclusiveStartKey: lastKey,
-        ExpressionAttributeNames,
-        ExpressionAttributeValues,
-        IndexName,
-        KeyConditionExpression,
-        TableName: getTableName({
-          applicationContext,
-        }),
-        ...params,
-      })
-      .promise();
+    const subsetResults = await applicationContext.getDocumentClient().query({
+      ExclusiveStartKey: lastKey,
+      ExpressionAttributeNames,
+      ExpressionAttributeValues,
+      IndexName,
+      KeyConditionExpression,
+      TableName: getTableName({
+        applicationContext,
+      }),
+      ...params,
+    });
+
+    console.log('---subsetResults', subsetResults);
 
     hasMoreResults = !!subsetResults.LastEvaluatedKey;
     lastKey = subsetResults.LastEvaluatedKey;

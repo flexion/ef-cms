@@ -1,5 +1,5 @@
 const { DynamoDB } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
+const { DynamoDBDocument } = require('@aws-sdk/lib-dynamodb');
 
 const seedEntries = require('../fixtures/seed');
 const {
@@ -19,7 +19,7 @@ const dynamo = new DynamoDB({
   endpoint: process.env.DYNAMODB_ENDPOINT ?? 'http://localhost:8000',
   region: 'us-east-1',
 });
-const client = DynamoDBDocumentClient.from(dynamo);
+const client = DynamoDBDocument.from(dynamo);
 
 const putEntries = async entries => {
   const chunks = splitIntoChunks(entries, 25);
@@ -31,17 +31,15 @@ const putEntries = async entries => {
       process.exit(1);
     }
 
-    await client
-      .batchWrite({
-        RequestItems: {
-          'efcms-local': chunk.map(item => ({
-            PutRequest: {
-              Item: item,
-            },
-          })),
-        },
-      })
-      .promise();
+    await client.batchWrite({
+      RequestItems: {
+        'efcms-local': chunk.map(item => ({
+          PutRequest: {
+            Item: item,
+          },
+        })),
+      },
+    });
   }
 };
 

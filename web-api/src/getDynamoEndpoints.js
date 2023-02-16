@@ -1,5 +1,5 @@
 const { DynamoDB } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
+const { DynamoDBDocument } = require('@aws-sdk/lib-dynamodb');
 
 /**
  * getDynamoEndpoints
@@ -30,19 +30,35 @@ exports.getDynamoEndpoints = ({
     maxRetries: 3,
   };
 
+  const marshallOptions = {
+    removeUndefinedValues: true,
+  };
+
+  const unmarshallOptions = {
+    wrapNumbers: false,
+  };
+
+  const translateConfig = { marshallOptions, unmarshallOptions };
+
   const mainRegionDBClient = new DynamoDB({
     ...baseConfig,
     endpoint: useMasterRegion ? masterDynamoDbEndpoint : mainRegionEndpoint,
     region: useMasterRegion ? masterRegion : mainRegion,
   });
-  const mainRegionDB = DynamoDBDocumentClient.from(mainRegionDBClient);
+  const mainRegionDB = DynamoDBDocument.from(
+    mainRegionDBClient,
+    translateConfig,
+  );
 
   const fallbackRegionDBClient = new DynamoDB({
     ...baseConfig,
     endpoint: useMasterRegion ? fallbackRegionEndpoint : masterDynamoDbEndpoint,
     region: useMasterRegion ? fallbackRegion : masterRegion,
   });
-  const fallbackRegionDB = DynamoDBDocumentClient.from(fallbackRegionDBClient);
+  const fallbackRegionDB = DynamoDBDocument.from(
+    fallbackRegionDBClient,
+    translateConfig,
+  );
 
   return { fallbackRegionDB, mainRegionDB };
 };

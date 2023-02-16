@@ -18,7 +18,8 @@ const {
 } = require('@aws-sdk/client-cognito-identity-provider');
 const { defaultProvider } = require('@aws-sdk/credential-provider-node');
 const { DynamoDB } = require('@aws-sdk/client-dynamodb');
-const { S3 } = require('@aws-sdk/client-s3');
+const { S3Client } = require('@aws-sdk/client-s3');
+
 const { SES } = require('@aws-sdk/client-ses');
 const { SQS } = require('@aws-sdk/client-sqs');
 
@@ -699,8 +700,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
     getStorageClient: () => {
       if (!s3Cache) {
-        s3Cache = new S3({
+        s3Cache = new S3Client({
           endpoint: environment.s3Endpoint,
+          endpointProvider: () => ({ url: '' }),
           httpOptions: {
             timeout: 300000,
           },
@@ -708,6 +710,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
           s3ForcePathStyle: true,
         });
       }
+      console.log('s3Cache', s3Cache);
       return s3Cache;
     },
     getTempDocumentsBucketName: () => {

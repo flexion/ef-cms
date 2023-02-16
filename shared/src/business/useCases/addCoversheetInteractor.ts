@@ -1,6 +1,6 @@
 import { Case } from '../entities/cases/Case';
+import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { addCoverToPdf } from './addCoverToPdf';
-
 /**
  * addCoversheetInteractor
  *
@@ -31,6 +31,8 @@ export const addCoversheetInteractor = async (
     useInitialData: boolean;
   },
 ) => {
+  console.log('###caseEntity', caseEntity);
+
   if (!caseEntity) {
     const caseRecord = await applicationContext
       .getPersistenceGateway()
@@ -39,18 +41,23 @@ export const addCoversheetInteractor = async (
         docketNumber,
       });
 
+    console.log('###caseRecord', caseRecord);
+
     caseEntity = new Case(caseRecord, { applicationContext });
+    console.log('###caseEntity after', caseEntity);
   }
+
+  console.log('doing thigns here');
 
   let pdfData;
   try {
-    const { Body } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: docketEntryId,
-      })
-      .promise();
+    const command = new GetObjectCommand({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: docketEntryId,
+    });
+    const { Body } = await applicationContext.getStorageClient().send(command);
+
+    console.log('Body ody ody', Body);
     pdfData = Body;
   } catch (err) {
     err.message = `${err.message} docket entry id is ${docketEntryId}`;

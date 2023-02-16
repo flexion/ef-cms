@@ -1,5 +1,6 @@
 const { marshall } = require('@aws-sdk/util-dynamodb');
 import { flattenDeep } from 'lodash';
+const { DynamoDB } = require('@aws-sdk/client-dynamodb');
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes all of the docket-entries associated with the case.
