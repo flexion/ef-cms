@@ -1,7 +1,7 @@
 name: Node.js CI - Client
 
 on:
-  pull_request:
+  # pull_request:
   push:
     branches:
       - dependency-updates

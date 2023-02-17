@@ -1,7 +1,7 @@
 name: Node.js CI - Api
 
 on:
-  pull_request:
+  # pull_request:
   push:
     branches:
       - dependency-updates

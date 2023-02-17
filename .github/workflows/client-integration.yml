@@ -1,7 +1,7 @@
 name: Client Integration
 
 on:
-  pull_request:
+  # pull_request:
   push:
     branches:
       - dependency-updates

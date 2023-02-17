@@ -1,7 +1,7 @@
 name: Node.js CI - shared
 
 on:
-  pull_request:
+  # pull_request:
   push:
     branches:
       - dependency-updates

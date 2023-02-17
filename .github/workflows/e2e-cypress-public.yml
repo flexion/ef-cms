@@ -1,7 +1,7 @@
 name: E2E Cypress Public
 
 on:
-  pull_request:
+  # pull_request:
   push:
     branches:
       - dependency-updates

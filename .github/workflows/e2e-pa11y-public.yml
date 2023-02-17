@@ -1,7 +1,7 @@
 name: E2E Pa11y Pubic
 
 on:
-  pull_request:
+  # pull_request:
   push:
     branches:
       - dependency-updates
