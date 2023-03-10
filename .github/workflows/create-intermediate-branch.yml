@@ -12,6 +12,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Set Git config
+        run: |
+          git config --local user.email "jabu@flexion.us"
+          git config --local user.name "Joshua Abu"
       - name: Create Intermediate branch
         run: |
           # Initialize variables
@@ -21,7 +25,7 @@ jobs:
 
           # Get Test branch
           git fetch --unshallow
-          git checkout experimental3
+          git checkout destination_branch
           git pull
 
           # Create a copy of the destination branch
