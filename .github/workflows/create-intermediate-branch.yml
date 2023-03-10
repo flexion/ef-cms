@@ -12,6 +12,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+
       - name: Set Git config
         run: |
           git config --local user.email "jabu@flexion.us"
@@ -37,11 +39,9 @@ jobs:
           # Push the new intermediate to remote
           git push -u origin "${intermediate_branch}"
       - name: Make PR of Intermediate branch to Test
-        uses: peter-evans/create-pull-request@v4
-        with:
-          commit-message: 'PR setup for intermediate branch of ${{ github.head_ref }} to experimental3'
-          title: '${{ github.head_ref }} intermediate to experimental3'
-          body: 'PR to experimental3.'
-          base: experimental3
-          labels: automated-pr
-          branch: 'origin/${{ github.head_ref }}-intermediate-to-experimental3'
+        run: |
+          destination_branch=test
+          pr_title="${feature_branch} intermediate to test"
+          pr_description="PR to test"
+
+          hub pull-request -b $destination_branch -m "$pr_title" -m "$pr_description"
