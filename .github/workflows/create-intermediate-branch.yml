@@ -20,6 +20,7 @@ jobs:
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
           # Get Test branch
+          git fetch --unshallow
           git checkout experimental3
           git pull
 
