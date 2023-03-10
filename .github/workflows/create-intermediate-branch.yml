@@ -12,11 +12,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - name: Set Git config
-        run: |
-          git config --local user.email "jabu@flexion.us"
-          git config --local user.name "Joshua Abu"
       - name: Create Intermediate branch
         run: |
           # Initialize variables
@@ -25,7 +20,6 @@ jobs:
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
           # Get Test branch
-          git fetch --unshallow
           git checkout experimental3
           git pull
 
@@ -45,4 +39,4 @@ jobs:
           body: 'PR to experimental3.'
           base: experimental3
           labels: automated-pr
-          branch: 'origin/${{ github.head_ref }}-intermediate-to-experimental3'
+          branch: '${{ github.head_ref }}-intermediate-to-experimental3'
