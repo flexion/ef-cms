@@ -1,0 +1,51 @@
+name: Create an intermediate branch to experimental3
+
+on:
+  pull_request:
+    branches: [experimental3]
+    type:
+      - opened
+
+jobs:
+  create-intermediate-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set Git config
+        run: |
+          git config --local user.email "jabu@flexion.us"
+          git config --local user.name "Joshua Abu"
+      - name: Create Intermediate branch
+        run: |
+          # Initialize variables
+          destination_branch=experimental3
+          feature_branch=${{ github.head_ref }}
+          intermediate_branch="${feature_branch}-intermediate-to-experimental3"
+
+          # Get the base branch
+          git fetch --unshallow
+          git checkout $destination_branch
+          git pull
+
+          # Create a copy of the destination branch
+          git checkout -b "${intermediate_branch}"
+
+          # Merge the feature branch into the intermediate branch
+          git merge "origin/${feature_branch}"
+
+          # Push the new intermediate to remote
+          git push -u origin "${intermediate_branch}"
+      - name: Install Hub
+        run: |
+          sudo apt-get update
+          sudo apt-get install hub
+      - name: Make PR of Intermediate branch to Test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          destination_branch=experimental3
+          pr_title="${feature_branch} intermediate to test"
+          pr_description="PR to test"
+
+          hub pull-request -b $destination_branch -m "$pr_title" -m "$pr_description"
