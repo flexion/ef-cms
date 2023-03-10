@@ -16,7 +16,7 @@ jobs:
         run: |
           # Initialize variables
           destination_branch=experimental3
-          feature_branch=github.head_ref
+          feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
           # Get Test branch
@@ -37,7 +37,7 @@ jobs:
         run: |
           # Initialize variables
           destination_branch=experimental3
-          feature_branch=github.head_ref
+          feature_branch=${{ github.head_ref }}
           pr_title="${feature_branch} intermediate to experimental3"
           pr_description="PR to experimental3."
 
