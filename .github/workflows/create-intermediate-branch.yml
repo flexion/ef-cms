@@ -45,4 +45,6 @@ jobs:
           body: 'PR to experimental3.'
           base: experimental3
           labels: automated-pr
-          branch: ${{ github.head_ref }}
+          branch: 'origin/${{ github.head_ref }}'
+        run: |
+          echo "${feature_branch}-intermediate-to-experimental3 has been completed"
