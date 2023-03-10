@@ -45,4 +45,4 @@ jobs:
           body: 'PR to experimental3.'
           base: experimental3
           labels: automated-pr
-          branch: '${{ github.head_ref }}-intermediate-to-experimental3'
+          branch: 'origin/${{ github.head_ref }}-intermediate-to-experimental3'
