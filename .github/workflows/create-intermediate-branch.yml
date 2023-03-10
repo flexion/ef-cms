@@ -28,7 +28,7 @@ jobs:
           git checkout $destination_branch
           git pull
 
-          # Create a copy of the destination branch
+          # Create a copy of the destination branchh
           git checkout -b "${intermediate_branch}"
 
           # Merge the feature branch into the intermediate branch
