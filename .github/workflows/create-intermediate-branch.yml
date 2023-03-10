@@ -23,13 +23,13 @@ jobs:
           feature_branch=${{ github.head_ref }}
           intermediate_branch="${feature_branch}-intermediate-to-experimental3"
 
-          # Get Test branch
+          # Get the base branch
           git fetch --unshallow
           git checkout experimental3
           git pull
 
           # Create a copy of the destination branch
-          git checkout -b "${intermediate_branch}" "${destination_branch}"
+          git checkout -b "${intermediate_branch}"
 
           # Merge the feature branch into the intermediate branch
           git merge "origin/${feature_branch}"
@@ -44,4 +44,4 @@ jobs:
           body: 'PR to experimental3.'
           base: experimental3
           labels: automated-pr
-          branch: '${{ github.head_ref }}-intermediate-to-experimental3'
+          branch: 'origin/${{ github.head_ref }}-intermediate-to-experimental3'
