@@ -26,7 +26,7 @@ jobs:
           # Get Test branch
           git fetch --unshallow
           git checkout experimental3
-          git pull upstream test
+          git pull
 
           # Create a copy of the destination branch
           git checkout -b "${intermediate_branch}" "${destination_branch}"
