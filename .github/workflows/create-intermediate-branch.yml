@@ -42,9 +42,9 @@ jobs:
           sudo apt-get install hub
       - name: Make PR of Intermediate branch to Test
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          destination_branch=test
+          destination_branch=experimental3
           pr_title="${feature_branch} intermediate to test"
           pr_description="PR to test"
 
