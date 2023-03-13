@@ -11,7 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
+      - name: print troubleshooting info
+        run: |
+          echo "event name:" ${{github.event_name}}
+          echo "event action:" ${{github.event.action}}
+          echo "actor:" ${{github.actor}}
+          echo "repository owner:" ${{github.repository_owner}}
       - name: Create Pull Request for Automerge
         id: cpr
         uses: peter-evans/create-pull-request@v4
@@ -34,7 +39,7 @@ jobs:
           labels: |
             report
             automated pr
-          reviewers: rosiehsmith
+          reviewers: ${{ github.actor }}
           team-reviewers: |
             owners
             maintainers
