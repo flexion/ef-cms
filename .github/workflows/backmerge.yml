@@ -1,7 +1,7 @@
 name: Auto-backmerge PRs to test
 on:
   pull_request:
-    branches: [staging]
+    branches: [staging-temp]
     types: [closed]
 
 jobs:
@@ -13,12 +13,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set Git config
         run: |
-          git config --local user.email "michael.marcotte@ustaxcourt.gov"
-          git config --local user.name "Mike Marcotte"
+          git config --local user.email "ahighsmith@flexion.us"
+          git config --local user.name "Rosie"
       - name: Merge staging back to test
         run: |
           git fetch --unshallow
-          git checkout test
+          git checkout test-temp
           git pull
-          git merge --no-ff staging -m "Auto-merge staging back to test [skip ci]"
+          git merge --no-ff staging-temp -m "Auto-merge staging back to test [skip ci]"
           git push
