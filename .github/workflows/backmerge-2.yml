@@ -16,7 +16,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.CREATE_AUTOMERGE_PR_TOKEN }}
           commit-message: Auto backmerge staging into test
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
