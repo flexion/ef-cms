@@ -15,17 +15,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Checkout staging-temp
+        with:
+          ref: test-temp
+      - name: Reset promotion branch
         run: |
-          git fetch --unshallow
-          git checkout staging-temp
+          git fetch origin staging-temp:staging-temp
+          git reset --hard staging-temp
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
-          base: test-temp
           delete-branch: true
           title: 'Auto backmerge staging into test PR'
+          branch: test-temp-promotion
           branch-suffix: timestamp
           body: |
             Auto backmerge staging into test
