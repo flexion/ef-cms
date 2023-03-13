@@ -11,6 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Check write access to repo
+        run: |
+          token_login=$(curl -H "Authorization: Bearer ${token}" https://api.github.com/user | jq -r '.login')
+          echo token login is ${token_login}
+          echo $(curl  -H "Authorization: Bearer ${token}" https://api.github.com/repos/${repo}/collaborators/${token_login}/permission) > result
+          cat result | jq  '.permission == "admin" // .permission == "write"' > /dev/null || ( echo "Token does not have write access to ${repo}" >> ${GITHUB_STEP_SUMMARY}; exit 1)
+          curl -sS -f -I -H "Authorization: Bearer ${token}" https://api.github.com | grep 'x-oauth-scopes:' | grep 'repo' > /dev/null && exit 0 || echo "Token does not have repo scope on ${repo}" >> ${GITHUB_STEP_SUMMARY}
+        env:
+          repo: ${{ github.repository }}
+          token: ${{ secrets.CREATE_AUTOMERGE_PR_TOKEN}}
       - name: print troubleshooting info
         run: |
           echo "event name:" ${{github.event_name}}
@@ -26,8 +36,8 @@ jobs:
           commit-message: Auto backmerge staging into test
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           signoff: false
-          branch: staging-temp
           base: test-temp
+          branch: staging-temp
           delete-branch: true
           title: 'Auto backmerge staging into test PR'
           body: |
