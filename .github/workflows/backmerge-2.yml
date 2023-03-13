@@ -22,6 +22,7 @@ jobs:
           git fetch origin staging-temp:staging-temp
           git reset --hard staging-temp
       - name: Create Pull Request
+        id: cpr
         uses: peter-evans/create-pull-request@v4
         with:
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
@@ -36,7 +37,7 @@ jobs:
 
             [1]: https://github.com/peter-evans/create-pull-request
           labels: |
-            'Don't Merge' 
+            Don't Merge
       - name: Auto approve
         if: steps.cpr.outputs.pull-request-operation == 'created'
         uses: juliangruber/approve-pull-request-action@v2
