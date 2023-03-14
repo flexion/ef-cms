@@ -1,7 +1,7 @@
 name: Auto-create PRs to test after staging update
 on:
   pull_request:
-    branches: [staging]
+    branches: [staging-temp]
     types: [closed]
 
 permissions:
@@ -16,11 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: test
+          ref: test-temp
       - name: Reset promotion branch
         run: |
-          git fetch origin staging:staging
-          git reset --hard staging
+          git fetch origin staging-temp:staging-temp
+          git reset --hard staging-temp
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v4
