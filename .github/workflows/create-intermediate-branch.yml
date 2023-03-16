@@ -2,7 +2,7 @@ name: Create an intermediate branch to experimental3
 
 on:
   pull_request:
-    branches: [experimental3]
+    branches: [experimental2]
     type:
       - opened
 
