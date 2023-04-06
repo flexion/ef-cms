@@ -24,7 +24,7 @@ echo "starting s3rver"
 rm -rf ./web-api/storage/s3/*
 npm run start:s3rver &
 S3RVER_PID=$!
-URL=http://localhost:9000/ ./wait-until.sh
+URL=http://localhost:4566/ ./wait-until.sh
 npm run seed:s3
 
 
@@ -55,6 +55,6 @@ if [ ! -e "$CI" ]; then
   pkill -P "${ESEARCH_PID}"
 fi
 
-pkill -P $S3RVER_PID
+pkill -P "${S3RVER_PID}"
 
 echo "API running..."
