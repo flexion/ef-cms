@@ -32,8 +32,8 @@ const config: Config = {
     presenter: { providers: { applicationContext: {} } },
   },
   testEnvironment: 'jsdom',
-  testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'],
-  testSequencer: `${__dirname}/../jestSequencer.js`,
+  // testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'],
+  // testSequencer: `${__dirname}/../jestSequencer.js`,
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': `${__dirname}/htmlLoader.js`, //this is to ignore imported html files
