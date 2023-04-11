@@ -1,12 +1,23 @@
 import type { Config } from 'jest';
 const testFilesEnv = process.env.TESTFILES;
-console.log('testFilesEnv first few', testFilesEnv?.slice(0, 5));
-const testFiles = testFilesEnv?.split(' ');
+const testFiles = testFilesEnv?.split(' ') || [];
+console.log('testFiles in config', testFiles);
 
 const config: Config = {
   clearMocks: true,
   collectCoverage: true,
-  collectCoverageFrom: testFiles,
+  collectCoverageFrom: [
+    ...testFiles,
+    '!integration-tests/**/*.js',
+    '!integration-tests-public/**/*.js',
+    '!src/applicationContext.ts',
+    '!src/applicationContextPublic.ts',
+    '!src/router.ts',
+    '!src/index.ts',
+    '!src/routerPublic.ts',
+    '!src/index-public.ts',
+    '!src/index-public.prod.ts',
+  ],
   coverageDirectory: './coverage-unit',
   coverageProvider: 'babel',
   coverageThreshold: {
