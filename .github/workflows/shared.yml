@@ -18,5 +18,10 @@ jobs:
           comment_on_pr: false
       - name: Install Node Dependencies
         run: npm ci
+      - name: Cache Jest cache
+        uses: actions/cache@v3
+        with:
+          path: /tmp/jest_rt
+          key: ${{ hashFiles('**/package-lock.json') }}
       - name: Shared
         run: npm run test:shared
