@@ -12,11 +12,11 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Document title journey', () => {
+  const cerebralTest = setupTest();
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  const cerebralTest = setupTest();
 
   const formattedWorkQueue = withAppContextDecorator(
     formattedWorkQueueComputed,
@@ -42,7 +42,7 @@ describe('Document title journey', () => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    const documentToSelect = {
+    const documentTypeToSelectToFile = {
       category: 'Miscellaneous',
       documentTitle: 'Exhibit(s)',
       documentType: 'Exhibit(s)',
@@ -50,12 +50,12 @@ describe('Document title journey', () => {
       scenario: 'Standard',
     };
 
-    for (const key of Object.keys(documentToSelect)) {
+    for (const [key, value] of Object.entries(documentTypeToSelectToFile)) {
       await cerebralTest.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
           key,
-          value: documentToSelect[key],
+          value,
         },
       );
     }
@@ -68,39 +68,32 @@ describe('Document title journey', () => {
 
     expect(cerebralTest.getState('form.documentType')).toEqual('Exhibit(s)');
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'hasSupportingDocuments',
-        value: false,
-      },
-    );
+    const { contactId: contactPrimaryId } =
+      contactPrimaryFromState(cerebralTest);
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'attachments',
-        value: false,
-      },
-    );
+    const documentToFileDetails = {
+      // certificateOfService: true,
+      // certificateOfServiceDay: '12',
+      // certificateOfServiceMonth: '12',
+      // certificateOfServiceYear: '2000',
+      // objections: OBJECTIONS_OPTIONS_MAP.NO,
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-    );
+      [`filersMap.${contactPrimaryId}`]: true,
+      attachments: false,
+      hasSupportingDocuments: false,
+      primaryDocumentFile: fakeFile,
+      primaryDocumentFileSize: 1,
+    };
 
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: `filersMap.${contactPrimary.contactId}`,
-        value: true,
-      },
-    );
+    for (const [key, value] of Object.entries(documentToFileDetails)) {
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value,
+        },
+      );
+    }
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
@@ -178,7 +171,7 @@ describe('Document title journey', () => {
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    const documentToSelect = {
+    const documentTypeToSelectToFile = {
       category: 'Miscellaneous',
       documentTitle: '[First, Second, etc.] Amendment to [anything]',
       documentType: 'Amendment [anything]',
@@ -187,15 +180,16 @@ describe('Document title journey', () => {
       ordinalValue: 'Other',
       otherIteration: '16',
       primaryDocumentFile: fakeFile,
+      primaryDocumentFileSize: 1,
       scenario: 'Nonstandard F',
     };
 
-    for (const key of Object.keys(documentToSelect)) {
+    for (const [key, value] of Object.entries(documentTypeToSelectToFile)) {
       await cerebralTest.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
           key,
-          value: documentToSelect[key],
+          value,
         },
       );
     }

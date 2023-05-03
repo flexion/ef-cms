@@ -30,6 +30,8 @@ describe('ExternalDocumentInformationFactory', () => {
         VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       );
       baseDoc.primaryDocumentFile = {};
+      baseDoc.primaryDocumentFileSize = 1;
+
       expect(errors().primaryDocumentFile).toEqual(undefined);
     });
 
@@ -44,6 +46,7 @@ describe('ExternalDocumentInformationFactory', () => {
     it('should set a default value for attachments when a value has not been provided', () => {
       baseDoc.certificateOfService = false;
       baseDoc.primaryDocumentFile = {};
+      baseDoc.primaryDocumentFileSize = 1;
       baseDoc.partyIrsPractitioner = true;
       baseDoc.hasSupportingDocuments = false;
       baseDoc.attachments = undefined;
@@ -195,7 +198,10 @@ describe('ExternalDocumentInformationFactory', () => {
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
           ).toEqual(VALIDATION_ERROR_MESSAGES.supportingDocumentFile);
+
           baseDoc.supportingDocuments[0].supportingDocumentFile = {};
+          baseDoc.supportingDocuments[0].supportingDocumentFileSize = 1;
+
           expect(errors().supportingDocuments).toEqual(undefined);
         });
       });
@@ -211,7 +217,10 @@ describe('ExternalDocumentInformationFactory', () => {
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
           ).toEqual(VALIDATION_ERROR_MESSAGES.supportingDocumentFile);
+
           baseDoc.supportingDocuments[0].supportingDocumentFile = {};
+          baseDoc.supportingDocuments[0].supportingDocumentFileSize = 1;
+
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
           ).toEqual(undefined);
@@ -301,6 +310,7 @@ describe('ExternalDocumentInformationFactory', () => {
             VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
           );
           baseDoc.secondaryDocumentFile = {};
+          baseDoc.secondaryDocumentFileSize = 1;
           expect(errors().secondaryDocumentFile).toEqual(undefined);
         });
 
@@ -370,8 +380,11 @@ describe('ExternalDocumentInformationFactory', () => {
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
               ).toEqual(VALIDATION_ERROR_MESSAGES.supportingDocumentFile);
+
               baseDoc.secondarySupportingDocuments[0].supportingDocumentFile =
                 {};
+              baseDoc.secondarySupportingDocuments[0].supportingDocumentFileSize = 1;
+
               expect(errors().secondarySupportingDocuments).toEqual(undefined);
             });
           });
@@ -391,8 +404,11 @@ describe('ExternalDocumentInformationFactory', () => {
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
               ).toEqual(VALIDATION_ERROR_MESSAGES.supportingDocumentFile);
+
               baseDoc.secondarySupportingDocuments[0].supportingDocumentFile =
                 {};
+              baseDoc.secondarySupportingDocuments[0].supportingDocumentFileSize = 1;
+
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
               ).toEqual(undefined);

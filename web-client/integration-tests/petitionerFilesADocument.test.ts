@@ -16,11 +16,13 @@ describe('petitioner files document', () => {
   loginAs(cerebralTest, 'petitioner@example.com');
   petitionerCancelsCreateCase(cerebralTest);
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest, {
+    const { docketNumber } = await uploadPetition(cerebralTest, {
       caseType: 'Whistleblower',
     });
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

@@ -9,17 +9,19 @@ describe("Docket Clerk Edits a Docket Entry's Nonstandard D Metadata", () => {
   const cerebralTest = setupTest();
 
   cerebralTest.draftOrders = [];
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest);
-    expect(caseDetail.docketNumber).toBeDefined();
+    const { docketEntries, docketNumber } = await uploadPetition(cerebralTest);
 
-    cerebralTest.docketNumber = caseDetail.docketNumber;
-    cerebralTest.previousDocumentId = caseDetail.docketEntries[0].docketEntryId;
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
+    cerebralTest.previousDocumentId = docketEntries[0].docketEntryId;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

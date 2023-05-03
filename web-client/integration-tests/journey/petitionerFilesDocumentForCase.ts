@@ -1,10 +1,8 @@
+import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
 export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
-  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
-
   return it('petitioner files document for case', async () => {
     await cerebralTest.runSequence('gotoFileDocumentSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -26,6 +24,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     );
 
     await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
+
     expect(cerebralTest.getState('validationErrors')).toEqual({
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
@@ -304,6 +303,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
+
     expect(cerebralTest.getState('validationErrors')).toEqual({
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
@@ -322,6 +322,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
         value: 'Supporting Document',
       },
     );
+
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
@@ -340,6 +341,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
         },
       },
     );
+
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
@@ -351,6 +353,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
+
     expect(cerebralTest.getState('validationErrors')).toEqual({
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
@@ -376,6 +379,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
+
     expect(cerebralTest.getState('validationErrors')).toEqual({
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
@@ -395,6 +399,15 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
         value: fakeFile,
       },
     );
+
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'primaryDocumentFileSize',
+        value: 1,
+      },
+    );
+
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
@@ -402,6 +415,15 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
         value: fakeFile,
       },
     );
+
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'secondaryDocumentFileSize',
+        value: 1,
+      },
+    );
+
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
@@ -411,8 +433,17 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     );
 
     await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'supportingDocuments.0.supportingDocumentFileSize',
+        value: 1,
+      },
+    );
+
+    await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
+
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     await cerebralTest.runSequence('addSupportingDocumentToFormSequence', {
@@ -422,6 +453,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
+
     expect(cerebralTest.getState('validationErrors')).toEqual({
       secondarySupportingDocuments: [
         {
@@ -438,6 +470,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
         value: 'Supporting Document',
       },
     );
+
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
@@ -445,6 +478,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
         value: 'Declaration in Support',
       },
     );
+
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
@@ -459,6 +493,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
         },
       },
     );
+
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
@@ -470,6 +505,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
+
     expect(cerebralTest.getState('validationErrors')).toEqual({
       secondarySupportingDocuments: [
         {

@@ -1,13 +1,11 @@
+import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 import { fileDocumentHelper } from '../../src/presenter/computeds/fileDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const petitionerFilesAmendedMotion = (cerebralTest, fakeFile) => {
-  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
-
   return it('petitioner files amended motion', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -17,63 +15,32 @@ export const petitionerFilesAmendedMotion = (cerebralTest, fakeFile) => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'category',
-        value: 'Miscellaneous',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'documentType',
-        value: 'Amended',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'documentTitle',
-        value: '[First, Second, etc.] Amended [Document Name]',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'eventCode',
-        value: 'AMAT',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'scenario',
-        value: 'Nonstandard F',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'ordinalValue',
-        value: '1',
-      },
-    );
-    const caseDetail = cerebralTest.getState('caseDetail');
-    const previousDocument = caseDetail.docketEntries.find(
+    const { docketEntries } = cerebralTest.getState('caseDetail');
+    const previousDocument = docketEntries.find(
       document =>
         document.documentTitle ===
         'Motion for Leave to File Out of Time Statement Anything',
     );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'previousDocument',
-        value: previousDocument.docketEntryId,
-      },
-    );
+
+    const documentTypeToSelectToFile = {
+      category: 'Miscellaneous',
+      documentTitle: '[First, Second, etc.] Amended [Document Name]',
+      documentType: 'Amended',
+      eventCode: 'AMAT',
+      ordinalValue: '1',
+      previousDocument: previousDocument.docketEntryId,
+      scenario: 'Nonstandard F',
+    };
+
+    for (const [key, value] of Object.entries(documentTypeToSelectToFile)) {
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value,
+        },
+      );
+    }
 
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
@@ -81,23 +48,24 @@ export const petitionerFilesAmendedMotion = (cerebralTest, fakeFile) => {
 
     expect(cerebralTest.getState('wizardStep')).toEqual('FileDocument');
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-    );
+    const { contactId: contactPrimaryId } =
+      contactPrimaryFromState(cerebralTest);
 
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    const documentToFileDetails = {
+      [`filersMap.${contactPrimaryId}`]: true,
+      primaryDocumentFile: fakeFile,
+      primaryDocumentFileSize: 1,
+    };
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: `filersMap.${contactPrimary.contactId}`,
-        value: true,
-      },
-    );
+    for (const [key, value] of Object.entries(documentToFileDetails)) {
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value,
+        },
+      );
+    }
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 

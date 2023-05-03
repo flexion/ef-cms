@@ -11,12 +11,12 @@ import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFil
 describe('Docket clerk consolidated case work item journey', () => {
   const cerebralTest = setupTest();
 
+  const leadCaseDocketNumber = '111-19';
+  const consolidatedCaseDocketNumber = '112-19';
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  const leadCaseDocketNumber = '111-19';
-  const consolidatedCaseDocketNumber = '112-19';
 
   // Document QC External filed document on Lead Case
 
