@@ -17,18 +17,20 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 describe('petitioner files document', () => {
   const cerebralTest = setupTest();
 
+  const trialLocation = `Jacksonville, Florida, ${Date.now()}`;
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
-  });
+    const { docketNumber } = await uploadPetition(cerebralTest);
 
-  const trialLocation = `Jacksonville, Florida, ${Date.now()}`;
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, { trialLocation });

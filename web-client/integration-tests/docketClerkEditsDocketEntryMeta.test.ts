@@ -51,7 +51,6 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   docketClerkQCsDocketEntry(cerebralTest);
   docketClerkChecksDocketEntryEditLink(cerebralTest, { value: true });
 
-  // edit docket entry meta for a minute entry
   docketClerkNavigatesToEditDocketEntryMetaMinuteEntry(cerebralTest);
   docketClerkEditsDocketEntryMetaMinuteEntry(cerebralTest);
   docketClerkVerifiesDocketEntryMetaUpdatesMinuteEntry(cerebralTest);

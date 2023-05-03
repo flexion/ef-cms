@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
 
 export const petitionerFilesApplicationToTakeDeposition = (
@@ -6,8 +6,6 @@ export const petitionerFilesApplicationToTakeDeposition = (
   fakeFile,
 ) => {
   return it('Petitioner files an application to take deposition', async () => {
-    const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
-
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
@@ -16,7 +14,7 @@ export const petitionerFilesApplicationToTakeDeposition = (
       docketNumber: cerebralTest.docketNumber,
     });
 
-    const documentToSelect = {
+    const documentTypeToSelectTofile = {
       category: 'Application',
       documentTitle: 'Application to Take Deposition of [Name]',
       documentType: 'Application to Take Deposition',
@@ -24,12 +22,12 @@ export const petitionerFilesApplicationToTakeDeposition = (
       scenario: 'Nonstandard B',
     };
 
-    for (const key of Object.keys(documentToSelect)) {
+    for (const [key, value] of Object.entries(documentTypeToSelectTofile)) {
       await cerebralTest.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
           key,
-          value: documentToSelect[key],
+          value,
         },
       );
     }
@@ -37,50 +35,30 @@ export const petitionerFilesApplicationToTakeDeposition = (
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('form.documentType')).toEqual(
-      documentToSelect.documentType,
+      documentTypeToSelectTofile.documentType,
     );
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-    );
+    const { contactId: contactPrimaryId } =
+      contactPrimaryFromState(cerebralTest);
 
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    const documentToFileDetails = {
+      certificateOfService: false,
+      hasSupportingDocuments: false,
+      [`filersMap.${contactPrimaryId}`]: true,
+      objections: OBJECTIONS_OPTIONS_MAP.NO,
+      primaryDocumentFile: fakeFile,
+      primaryDocumentFileSize: 1,
+    };
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: `filersMap.${contactPrimary.contactId}`,
-        value: true,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfService',
-        value: false,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'hasSupportingDocuments',
-        value: false,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'objections',
-        value: OBJECTIONS_OPTIONS_MAP.NO,
-      },
-    );
+    for (const [key, value] of Object.entries(documentToFileDetails)) {
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value,
+        },
+      );
+    }
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
