@@ -64,18 +64,18 @@ CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES =
 joiValidationDecorator(
   CaseExternalIncomplete,
   joi.object().keys({
-    businessType: CaseExternal.commonRequirements.businessType,
-    caseType: CaseExternal.commonRequirements.caseType,
-    countryType: CaseExternal.commonRequirements.countryType,
-    filingType: CaseExternal.commonRequirements.filingType,
-    hasIrsNotice: CaseExternal.commonRequirements.hasIrsNotice,
-    partyType: CaseExternal.commonRequirements.partyType,
+    businessType: CaseExternal.VALIDATION_RULES.businessType,
+    caseType: CaseExternal.VALIDATION_RULES.caseType,
+    countryType: CaseExternal.VALIDATION_RULES.countryType,
+    filingType: CaseExternal.VALIDATION_RULES.filingType,
+    hasIrsNotice: CaseExternal.VALIDATION_RULES.hasIrsNotice,
+    partyType: CaseExternal.VALIDATION_RULES.partyType,
     petitioners: joi
       .array()
       .description('List of Contact Entities for the case.')
       .optional(),
-    preferredTrialCity: CaseExternal.commonRequirements.preferredTrialCity,
-    procedureType: CaseExternal.commonRequirements.procedureType,
+    preferredTrialCity: CaseExternal.VALIDATION_RULES.preferredTrialCity,
+    procedureType: CaseExternal.VALIDATION_RULES.procedureType,
   }),
   CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES,
 );
