@@ -16,13 +16,14 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   const cerebralTest = setupTest();
 
+  let judgeDocketSectionQCInboxCountBefore;
+  let adcDocketSectionQCInboxCountBefore;
+
+  cerebralTest.createdCases = [];
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  cerebralTest.createdCases = [];
-  let judgeDocketSectionQCInboxCountBefore;
-  let adcDocketSectionQCInboxCountBefore;
 
   loginAs(cerebralTest, 'judgecohen@example.com');
   it("Get judge's document qc section inbox before", async () => {
@@ -39,11 +40,14 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   loginAs(cerebralTest, 'petitioner@example.com');
   for (let index = 0; index <= 2; index++) {
     it(`Create case ${index}`, async () => {
-      const caseDetail = await uploadPetition(cerebralTest);
-      expect(caseDetail.docketNumber).toBeDefined();
-      cerebralTest.createdCases.push(caseDetail.docketNumber);
-      cerebralTest.docketNumber = caseDetail.docketNumber;
+      const { docketNumber } = await uploadPetition(cerebralTest);
+
+      expect(docketNumber).toBeDefined();
+
+      cerebralTest.createdCases.push(docketNumber);
+      cerebralTest.docketNumber = docketNumber;
     });
+
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 

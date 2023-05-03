@@ -1,5 +1,5 @@
+import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
 export const respondentAddsMotionWithBrief = (
@@ -7,8 +7,6 @@ export const respondentAddsMotionWithBrief = (
   fakeFile,
   overrides,
 ) => {
-  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
-
   return it('Respondent adds Motion with supporting Brief', async () => {
     await cerebralTest.runSequence('gotoFileDocumentSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -30,11 +28,12 @@ export const respondentAddsMotionWithBrief = (
     );
 
     await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
+
     expect(cerebralTest.getState('validationErrors')).toEqual({
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
-    const documentToSelect = {
+    const documentTypeToSelectToFile = {
       category: 'Motion',
       documentTitle: 'Motion for Continuance',
       documentType: 'Motion for Continuance',
@@ -42,12 +41,12 @@ export const respondentAddsMotionWithBrief = (
       scenario: 'Standard',
     };
 
-    for (const key of Object.keys(documentToSelect)) {
+    for (const [key, value] of Object.entries(documentTypeToSelectToFile)) {
       await cerebralTest.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
           key,
-          value: documentToSelect[key],
+          value,
         },
       );
     }
@@ -61,81 +60,39 @@ export const respondentAddsMotionWithBrief = (
     expect(cerebralTest.getState('form.documentType')).toEqual(
       'Motion for Continuance',
     );
-
     expect(cerebralTest.getState('form.partyPrimary')).toBeUndefined();
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfService',
-        value: false,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'attachments',
-        value: false,
-      },
-    );
 
     await cerebralTest.runSequence('addSupportingDocumentToFormSequence', {
       type: 'primary',
     });
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'supportingDocuments.0.supportingDocument',
-        value: 'Brief in Support',
-      },
-    );
+    const { contactId: contactPrimaryId } =
+      contactPrimaryFromState(cerebralTest);
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'supportingDocuments.0.category',
-        value: 'Supporting Document',
+    const documentToFileDetails = {
+      [`filersMap.${contactPrimaryId}`]: true,
+      attachments: false,
+      certificateOfService: false,
+      primaryDocumentFile: fakeFile,
+      primaryDocumentFileSize: 1,
+      ['supportingDocuments.0.category']: 'Supporting Document',
+      ['supportingDocuments.0.documentType']: 'Brief in Support',
+      ['supportingDocuments.0.previousDocument']: {
+        documentTitle: cerebralTest.getState('form.documentTitle'),
+        documentType: cerebralTest.getState('form.documentType'),
       },
-    );
+      ['supportingDocuments.0.supportingDocument']: 'Brief in Support',
+    };
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'supportingDocuments.0.documentType',
-        value: 'Brief in Support',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'supportingDocuments.0.previousDocument',
-        value: {
-          documentTitle: cerebralTest.getState('form.documentTitle'),
-          documentType: cerebralTest.getState('form.documentType'),
+    for (const [key, value] of Object.entries(documentToFileDetails)) {
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value,
         },
-      },
-    );
-
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: `filersMap.${contactPrimary.contactId}`,
-        value: true,
-      },
-    );
+      );
+    }
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
@@ -150,21 +107,21 @@ export const respondentAddsMotionWithBrief = (
       ],
     });
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'objections',
-        value: OBJECTIONS_OPTIONS_MAP.YES,
-      },
-    );
+    const documentMissingRequiredFields = {
+      objections: OBJECTIONS_OPTIONS_MAP.YES,
+      ['supportingDocuments.0.supportingDocumentFile']: fakeFile,
+      ['supportingDocuments.0.supportingDocumentFileSize']: 1,
+    };
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'supportingDocuments.0.supportingDocumentFile',
-        value: fakeFile,
-      },
-    );
+    for (const [key, value] of Object.entries(documentMissingRequiredFields)) {
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value,
+        },
+      );
+    }
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 

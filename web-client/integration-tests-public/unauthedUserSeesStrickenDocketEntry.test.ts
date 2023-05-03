@@ -22,7 +22,7 @@ import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearch
 import { unauthedUserSearchesForStrickenOrder } from './journey/unauthedUserSearchesForStrickenOrder';
 import { unauthedUserSeesStrickenDocketEntry } from './journey/unauthedUserSeesStrickenDocketEntry';
 
-describe('unauthed user sees stricken docket entry', () => {
+describe('Unauthed user sees stricken docket entry', () => {
   const cerebralTest = setupTest();
   const testClient = setupTestClient();
 
@@ -34,10 +34,12 @@ describe('unauthed user sees stricken docket entry', () => {
   describe('Petitioner creates a case', () => {
     loginAs(testClient, 'petitioner@example.com');
     it('petitioner creates an electronic case', async () => {
-      const caseDetail = await uploadPetition(testClient);
-      expect(caseDetail.docketNumber).toBeDefined();
-      cerebralTest.docketNumber = caseDetail.docketNumber;
-      testClient.docketNumber = caseDetail.docketNumber;
+      const { docketNumber } = await uploadPetition(testClient);
+
+      expect(docketNumber).toBeDefined();
+
+      cerebralTest.docketNumber = docketNumber;
+      testClient.docketNumber = docketNumber;
     });
   });
 
