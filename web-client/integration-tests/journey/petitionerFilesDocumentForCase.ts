@@ -441,6 +441,14 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     );
 
     await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'supportingDocuments.0.supportingDocumentFileSize',
+        value: 1,
+      },
+    );
+
+    await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
 
@@ -523,6 +531,14 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       {
         key: 'secondarySupportingDocuments.0.supportingDocumentFile',
         value: fakeFile,
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'secondarySupportingDocuments.0.supportingDocumentFileSize',
+        value: 1,
       },
     );
 
