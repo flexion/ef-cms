@@ -8,7 +8,7 @@ const {
 } = require('../../../../shared/src/business/test/getFakeFile');
 const { asUserFromEmail } = require('../createUsers');
 
-module.exports.createCase1 = async () => {
+export const createCase1 = async () => {
   let caseDetail;
 
   const docketNumber = await asUserFromEmail(
@@ -53,8 +53,12 @@ module.exports.createCase1 = async () => {
             filingType: 'Myself',
             hasIrsNotice: false,
             partyType: PARTY_TYPES.petitioner,
+            petitionFile,
+            petitionFileSize: 1,
             preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'Regular',
+            stinFile,
+            stinFileSize: 1,
           },
           stinFileId,
         });
