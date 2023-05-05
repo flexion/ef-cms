@@ -1,6 +1,6 @@
 import {
   contactPrimaryFromState,
-  fakeFile1,
+  fakeEncryptedFile,
   loginAs,
   setupTest,
   uploadPetition,
@@ -45,7 +45,7 @@ describe('Petitioner files an encrypted document', () => {
       eventCode: 'A',
       hasSupportingDocuments: false,
       [`filersMap.${contactId}`]: true,
-      primaryDocumentFile: fakeFile1,
+      primaryDocumentFile: fakeEncryptedFile,
       primaryDocumentFileSize: 1,
       scenario: 'Standard',
     };

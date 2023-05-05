@@ -64,6 +64,7 @@ import jwt from 'jsonwebtoken';
 const pdfLib = require('pdf-lib');
 import {
   fakeData,
+  getFakeEncryptedFile,
   getFakeFile,
 } from '../../shared/src/business/test/getFakeFile';
 import { featureFlagHelper } from '../src/presenter/computeds/FeatureFlags/featureFlagHelper';
@@ -106,6 +107,10 @@ export const fakeFile = (() => {
 
 export const fakeFile1 = (() => {
   return getFakeFile(false, true);
+})();
+
+export const fakeEncryptedFile = (() => {
+  return getFakeEncryptedFile();
 })();
 
 let s3Cache;

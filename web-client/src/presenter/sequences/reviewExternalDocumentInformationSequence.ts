@@ -11,6 +11,7 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateExternalDocumentInformationAction } from '../actions/FileDocument/validateExternalDocumentInformationAction';
+import { validateFileAction } from '../actions/FileDocument/validateFileAction';
 
 export const reviewExternalDocumentInformationSequence = [
   clearAlertsAction,
@@ -18,8 +19,10 @@ export const reviewExternalDocumentInformationSequence = [
   computeCertificateOfServiceFormDateAction,
   setFilersFromFilersMapAction,
   validateExternalDocumentInformationAction,
+  validateFileAction,
   {
     error: [
+      startShowValidationAction,
       setAlertErrorAction,
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
