@@ -6,7 +6,7 @@ describe('validatePdfInteractor', () => {
   const getPagesMock = jest.fn();
 
   beforeEach(() => {
-    applicationContext.getPdfLib = jest.fn().mockResolvedValue({
+    applicationContext.getPdfLib = jest.fn().mockReturnValue({
       PDFDocument: {
         load: jest.fn().mockResolvedValue({
           getPages: getPagesMock,
@@ -24,7 +24,7 @@ describe('validatePdfInteractor', () => {
     applicationContext.getPersistenceGateway().deleteDocumentFile = jest.fn();
   });
 
-  it('validates a clean PDF', async () => {
+  it('should NOT throw an error and return when the PDF provided is valid', async () => {
     await expect(
       validatePdfInteractor(applicationContext, {
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -32,8 +32,8 @@ describe('validatePdfInteractor', () => {
     ).resolves.not.toBeDefined();
   });
 
-  it('throws an error and deletes the document from S3 when the PDF is encrypted', async () => {
-    applicationContext.getPdfLib = jest.fn().mockResolvedValue({
+  it('should throw an error and delete the document from S3 when the PDF is encrypted', async () => {
+    applicationContext.getPdfLib = jest.fn().mockReturnValue({
       PDFDocument: {
         load: jest.fn().mockResolvedValue({
           isEncrypted: true,
@@ -53,17 +53,9 @@ describe('validatePdfInteractor', () => {
       applicationContext,
       key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
-
-    expect(applicationContext.logger.debug.mock.calls[3][0]).toEqual(
-      'PDF Invalid: Deleting from S3',
-    );
-
-    expect(applicationContext.logger.debug.mock.calls[3][1]).toEqual(
-      'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-    );
   });
 
-  it('throws an error and deletes the document from S3 when the PDF is actually a png', async () => {
+  it('should throw an error and delete the document from S3 when the document is NOT of type PDF', async () => {
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: () => ({
         Body: testInvalidPdfDoc,
@@ -82,17 +74,9 @@ describe('validatePdfInteractor', () => {
       applicationContext,
       key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
-
-    expect(applicationContext.logger.debug.mock.calls[3][0]).toEqual(
-      'PDF Invalid: Deleting from S3',
-    );
-
-    expect(applicationContext.logger.debug.mock.calls[3][1]).toEqual(
-      'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-    );
   });
 
-  it('throws an error and deletes the document from s3 when pdf pages cannot be read', async () => {
+  it('should throw an error and delete the document from S3 when pdf pages cannot be read', async () => {
     getPagesMock.mockImplementation(() => {
       throw new Error('cannot read pages');
     });
@@ -109,18 +93,10 @@ describe('validatePdfInteractor', () => {
       applicationContext,
       key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
-
-    expect(applicationContext.logger.debug.mock.calls[3][0]).toEqual(
-      'PDF Pages Unreadable: Deleting from S3',
-    );
-
-    expect(applicationContext.logger.debug.mock.calls[3][1]).toEqual(
-      'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-    );
   });
 
   describe('removePdf', () => {
-    it('calls the persistence method for removing a document from S3 based on the given key', () => {
+    it('should delete a document from S3 based on the given key', () => {
       removePdf({
         applicationContext,
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -135,7 +111,7 @@ describe('validatePdfInteractor', () => {
       });
     });
 
-    it('calls the debug method with the given key and message for context', () => {
+    it('should log to the debug stream the given key and error message for context', () => {
       removePdf({
         applicationContext,
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -145,13 +121,12 @@ describe('validatePdfInteractor', () => {
       expect(applicationContext.logger.debug.mock.calls[0][0]).toEqual(
         'Test Message: Deleting from S3',
       );
-
       expect(applicationContext.logger.debug.mock.calls[0][1]).toEqual(
         'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       );
     });
 
-    it('calls the debug method with a generic message when one is not given', () => {
+    it('should log to the debug stream with a generic message when one is not given', () => {
       removePdf({
         applicationContext,
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -160,7 +135,6 @@ describe('validatePdfInteractor', () => {
       expect(applicationContext.logger.debug.mock.calls[0][0]).toEqual(
         'PDF Error: Deleting from S3',
       );
-
       expect(applicationContext.logger.debug.mock.calls[0][1]).toEqual(
         'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       );

@@ -636,7 +636,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockReturnValue(mockGetNotificationService),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
-    getPdfLib: jest.fn().mockResolvedValue(pdfLib),
+    getPdfLib: jest.fn().mockReturnValue(pdfLib),
     getPersistenceGateway: mockGetPersistenceGateway,
     getPublicSiteUrl,
     getPug: jest.fn().mockReturnValue(pug),
