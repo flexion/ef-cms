@@ -235,7 +235,7 @@ export const updateTrialSessionInteractor = async (
     const calendaredCases = currentTrialSession.caseOrder.filter(
       c => !c.removedFromTrial,
     );
-    const { PDFDocument } = await applicationContext.getPdfLib();
+    const { PDFDocument } = applicationContext.getPdfLib();
     const paperServicePdfsCombined = await PDFDocument.create();
 
     for (let calendaredCase of calendaredCases) {

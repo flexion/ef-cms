@@ -65,7 +65,7 @@ const completeDocketEntryQC = async (
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  const { PDFDocument } = await applicationContext.getPdfLib();
+  const { PDFDocument } = applicationContext.getPdfLib();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');

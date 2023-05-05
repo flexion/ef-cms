@@ -26,7 +26,7 @@ export const createStampedCoversheetPdf = async ({
     stampData,
   });
 
-  const { PDFDocument } = await applicationContext.getPdfLib();
+  const { PDFDocument } = applicationContext.getPdfLib();
 
   const coverPagePdf = await applicationContext
     .getDocumentGenerators()
