@@ -45,7 +45,7 @@ export const copyToNewPdf = async ({
   newPdfDoc,
   noticeDoc,
 }) => {
-  const { PDFDocument } = await applicationContext.getPdfLib();
+  const { PDFDocument } = applicationContext.getPdfLib();
 
   for (let addressPage of addressPages) {
     const addressPageDoc = await PDFDocument.load(addressPage);

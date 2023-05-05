@@ -24,7 +24,7 @@ export const removeCoversheet = async (
     throw err;
   }
 
-  const { PDFDocument } = await applicationContext.getPdfLib();
+  const { PDFDocument } = applicationContext.getPdfLib();
 
   const pdfDoc = await PDFDocument.load(pdfData);
 

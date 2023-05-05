@@ -65,7 +65,7 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
     const bytes =
       applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl.mock
         .calls[0][0].file;
-    const { PDFDocument } = await applicationContext.getPdfLib();
+    const { PDFDocument } = applicationContext.getPdfLib();
     const pdfDoc = await PDFDocument.load(bytes);
     expect(pdfDoc.getPageCount()).toBe(trialNoticePdfsKeys.length);
   });

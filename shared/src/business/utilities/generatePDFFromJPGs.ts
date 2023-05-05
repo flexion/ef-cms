@@ -8,7 +8,7 @@
  */
 
 export const generatePDFFromJPGs = async (applicationContext, { imgData }) => {
-  const { PDFDocument } = await applicationContext.getPdfLib();
+  const { PDFDocument } = applicationContext.getPdfLib();
 
   const pdfDoc = await PDFDocument.create();
   const addImageToPage = async img => {

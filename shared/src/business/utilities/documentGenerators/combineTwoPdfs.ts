@@ -3,7 +3,7 @@ export const combineTwoPdfs = async ({
   firstPdf,
   secondPdf,
 }) => {
-  const { PDFDocument } = await applicationContext.getPdfLib();
+  const { PDFDocument } = applicationContext.getPdfLib();
 
   const fullDocument = await PDFDocument.create();
   const firstPdfPages = await PDFDocument.load(firstPdf);
