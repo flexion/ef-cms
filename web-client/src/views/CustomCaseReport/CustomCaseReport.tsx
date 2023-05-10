@@ -10,7 +10,7 @@ import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { formatNumber } from '../../../../shared/src/business/utilities/formatNumber';
 import { sequences, state } from 'cerebral';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const CustomCaseReport = connect(
   {
@@ -20,6 +20,8 @@ export const CustomCaseReport = connect(
     customCaseInventoryReportHelper: state.customCaseInventoryReportHelper,
     getCustomCaseInventoryReportSequence:
       sequences.getCustomCaseInventoryReportSequence,
+    resetCustomCaseInventoryReportSequence:
+      sequences.resetCustomCaseInventoryReportSequence,
     setCustomCaseInventoryReportFiltersSequence:
       sequences.setCustomCaseInventoryReportFiltersSequence,
     totalCases: state.customCaseInventory.totalCases,
@@ -30,12 +32,19 @@ export const CustomCaseReport = connect(
     customCaseInventoryFilters,
     customCaseInventoryReportHelper,
     getCustomCaseInventoryReportSequence,
+    resetCustomCaseInventoryReportSequence,
     setCustomCaseInventoryReportFiltersSequence,
     totalCases,
     validationErrors,
   }) {
     const [hasRunCustomCaseReport, setHasRunCustomCaseReport] = useState(false);
     const [activePage, setActivePage] = useState(0);
+
+    useEffect(() => {
+      return () => {
+        resetCustomCaseInventoryReportSequence();
+      };
+    }, []);
 
     return (
       <>

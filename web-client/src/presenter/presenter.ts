@@ -303,6 +303,7 @@ import { removeSupportingDocumentSequence } from './sequences/removeSupportingDo
 import { replyToMessageSequence } from './sequences/replyToMessageSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
+import { resetCustomCaseInventoryReportSequence } from './sequences/resetCustomCaseInventoryReportSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
@@ -819,6 +820,7 @@ const sequences = {
   replyToMessageSequence,
   rescanBatchSequence,
   resetCaseMenuSequence,
+  resetCustomCaseInventoryReportSequence,
   resetHeaderAccordionsSequence,
   resetIdleTimerSequence,
   reviewExternalDocumentInformationSequence,
