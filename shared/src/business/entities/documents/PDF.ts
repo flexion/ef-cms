@@ -15,6 +15,7 @@ export class PDF extends JoiValidationEntity {
     this.size = rawProps.size;
 
     let files = new Blob([this.file], { type: 'application/pdf' });
+
     files.text().then(x => {
       console.log('isEncrypted', x.includes('Encrypt')); // true, if Encrypted
       console.log(
@@ -33,7 +34,7 @@ export class PDF extends JoiValidationEntity {
 
   static VALIDATION_RULES = {
     file: joi.object().required().description('The PDF file'),
-    isEncrypted: joi.boolean().valid(false),
+    isEncrypted: joi.boolean().invalid(true),
     size: JoiValidationConstants.MAX_FILE_SIZE_BYTES.required().description(
       'The size of the file in bytes.',
     ),
@@ -48,19 +49,6 @@ export class PDF extends JoiValidationEntity {
       'The file you uploaded is empty.',
     ],
   };
-
-  validate(options?: {
-    applicationContext: IApplicationContext;
-    logErrors: boolean;
-  }) {
-    super.validate(options);
-
-    // const reader = new FileReader();
-    // reader.readAsArrayBuffer(this.file);
-    console.log('****************************');
-
-    return this;
-  }
 
   getValidationRules() {
     return PDF.VALIDATION_RULES;
