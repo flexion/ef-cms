@@ -12,5 +12,7 @@ export const validateExternalDocumentInformationInteractor = ({
 }) => {
   const externalDocument = ExternalDocumentInformationFactory(documentMetadata);
 
+  externalDocument.validate();
+
   return externalDocument.getFormattedValidationErrors();
 };

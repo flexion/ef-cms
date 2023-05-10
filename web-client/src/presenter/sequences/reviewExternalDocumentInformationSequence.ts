@@ -18,8 +18,8 @@ export const reviewExternalDocumentInformationSequence = [
   startShowValidationAction,
   computeCertificateOfServiceFormDateAction,
   setFilersFromFilersMapAction,
-  // validateExternalDocumentInformationAction,
-  validateFileAction,
+  validateExternalDocumentInformationAction,
+  // validateFileAction,
   {
     error: [
       startShowValidationAction,
