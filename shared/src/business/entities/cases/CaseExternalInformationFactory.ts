@@ -10,7 +10,6 @@ import joi from 'joi';
  * CaseExternalInformationFactory Entity
  * Represents a Case that a Petitioner is attempting to add to the system via the File a Petition (now Create a Case) wizard.
  * Required fields are based on the user's current step in the wizard.
- *
  * @param {object} rawCase the raw case data
  * @constructor
  */
@@ -47,6 +46,7 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
     if (rawCase.stinFile) {
       this.stinFile = new PDF({
         file: rawCase.stinFile,
+        primaryDocumentText: rawProps.stinFileText,
         size: rawCase.stinFileSize,
       });
     }
@@ -54,6 +54,7 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
     if (rawCase.petitionFile) {
       this.petitionFile = new PDF({
         file: rawCase.petitionFile,
+        primaryDocumentText: rawProps.petitionFileText,
         size: rawCase.petitionFileSize,
       });
     }
@@ -61,6 +62,7 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
     if (rawCase.corporateDisclosureFile) {
       this.corporateDisclosureFile = new PDF({
         file: rawCase.corporateDisclosureFile,
+        primaryDocumentText: rawProps.corporateDisclosureFileText,
         size: rawCase.corporateDisclosureFileSize,
       });
     }

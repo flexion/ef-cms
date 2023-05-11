@@ -1,7 +1,6 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { MAX_FILE_SIZE_MB } from '../EntityConstants';
-import fs from 'fs';
 import joi from 'joi';
 
 export class PDF extends JoiValidationEntity {
@@ -14,27 +13,7 @@ export class PDF extends JoiValidationEntity {
 
     this.file = rawProps.file;
     this.size = rawProps.size;
-
-    // let files = new Blob([this.file], { type: 'application/pdf' });
-
-    // files.text().then(x => {
-    //   console.log('isEncrypted', x.includes('Encrypt')); // true, if Encrypted
-    //   console.log(
-    //     'isEncrypted',
-    //     x
-    //       .substring(x.lastIndexOf('<<'), x.lastIndexOf('>>'))
-    //       .includes('/Encrypt'),
-    //   );
-    //   console.log(this.file.name);
-
-    //   this.isEncrypted = x.includes('Encrypt');
-
-    //   console.log('&&&& MAKING A PDF', this.isEncrypted);
-    // });
-
-    let theFile = fs.readFileSync(this.file.name);
-    console.log('this file is: ', theFile);
-    console.log('this file is: ', theFile);
+    this.isEncrypted = rawProps.primaryDocumentText.includes('Encrypt');
   }
 
   static VALIDATION_RULES = {
@@ -46,6 +25,8 @@ export class PDF extends JoiValidationEntity {
   };
 
   static VALIDATION_ERROR_MESSAGES = {
+    isEncrypted:
+      'The file you are trying to upload may be encrypted or password protected. Remove the password or encryption and try again.',
     size: [
       {
         contains: 'must be less than or equal to',

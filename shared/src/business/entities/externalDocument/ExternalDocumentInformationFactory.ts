@@ -123,11 +123,11 @@ const VALIDATION_ERROR_MESSAGES = {
   ],
   supportingDocumentFreeText: 'Enter name',
   trialLocation: 'Select a preferred trial location.',
+  ...PDF.VALIDATION_ERROR_MESSAGES,
 };
 
 /**
  * External Document Information Factory entity
- *
  * @param {object} documentMetadata the document metadata
  * @constructor
  */
@@ -162,6 +162,7 @@ function ExternalDocumentInformationFactory(documentMetadata) {
     if (rawProps.primaryDocumentFile) {
       this.primaryDocumentFile = new PDF({
         file: rawProps.primaryDocumentFile,
+        primaryDocumentText: rawProps.primaryDocumentText,
         size: rawProps.primaryDocumentFileSize,
       });
     }

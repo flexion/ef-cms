@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * validates the document info form.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the validatePetition use case
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
@@ -17,7 +16,7 @@ export const validateExternalDocumentInformationAction = ({
 }) => {
   const documentMetadata = get(state.form);
 
-  const errors = applicationContext
+  let errors = applicationContext
     .getUseCases()
     .validateExternalDocumentInformationInteractor({
       documentMetadata,
@@ -26,6 +25,16 @@ export const validateExternalDocumentInformationAction = ({
   if (!errors) {
     return path.success();
   } else {
+    Object.keys(errors).forEach(errorKey => {
+      if (typeof errors[errorKey] === 'object') {
+        let errorArray = [];
+        Object.keys(errors[errorKey]).forEach(nestedErrorKey => {
+          errorArray.push(errors[errorKey][nestedErrorKey]);
+        });
+        errors[errorKey] = errorArray;
+      }
+    });
+
     const errorDisplayOrder = [
       'supportingDocument',
       'supportingDocumentFreeText',
