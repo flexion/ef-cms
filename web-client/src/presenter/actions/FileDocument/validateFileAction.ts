@@ -9,17 +9,14 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if validation was successful or error
  */
 export const validateFileAction = ({ applicationContext, get, path }) => {
-  const { primaryDocumentFile } = get(state.form);
-
-  console.log('*****', primaryDocumentFile);
+  const { primaryDocumentFile, primaryDocumentFileText } = get(state.form);
 
   const errors = applicationContext
     .getUseCases()
     .validateFileInteractor(applicationContext, {
       primaryDocumentFile,
+      primaryDocumentFileText,
     });
-
-  console.log('errors ', errors);
 
   if (errors) {
     return path.error({

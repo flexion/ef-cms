@@ -12,14 +12,13 @@ export const preprocessFileAction = async ({ get, store }) => {
   const { primaryDocumentFile } = get(state.form);
 
   let text;
+
   try {
     text = await new Blob([primaryDocumentFile], {
       type: 'application/pdf',
-    });
-    text = text.text();
+    }).text();
   } catch (e) {
     console.log(e);
   }
-
-  store.set(state.form.primaryDocumentFile?.text, text);
+  store.set(state.form.primaryDocumentFileText, text);
 };
