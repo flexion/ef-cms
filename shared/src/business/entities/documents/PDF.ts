@@ -12,8 +12,8 @@ export class PDF extends JoiValidationEntity {
     super('PDF');
 
     this.file = rawProps.file;
-    this.size = rawProps.size;
-    this.isEncrypted = rawProps.primaryDocumentText.includes('Encrypt');
+    this.size = rawProps.file.size;
+    this.isEncrypted = rawProps.file.text.includes('Encrypt');
   }
 
   static VALIDATION_RULES = {

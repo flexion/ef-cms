@@ -11,14 +11,15 @@ export const preprocessFileAction = async ({ get, store }) => {
   // TODO: refactor to process STIN, petition, corporateDisclosure for start case flow
   const { primaryDocumentFile } = get(state.form);
 
-  let file;
+  let text;
   try {
-    file = await new Blob([primaryDocumentFile], {
+    text = await new Blob([primaryDocumentFile], {
       type: 'application/pdf',
-    }).text();
+    });
+    text = text.text();
   } catch (e) {
     console.log(e);
   }
 
-  store.set(state.form.primaryDocumentText, file);
+  store.set(state.form.primaryDocumentFile?.text, text);
 };

@@ -162,15 +162,12 @@ function ExternalDocumentInformationFactory(documentMetadata) {
     if (rawProps.primaryDocumentFile) {
       this.primaryDocumentFile = new PDF({
         file: rawProps.primaryDocumentFile,
-        primaryDocumentText: rawProps.primaryDocumentText,
-        size: rawProps.primaryDocumentFileSize,
       });
     }
 
     if (rawProps.secondaryDocumentFile) {
       this.secondaryDocumentFile = new PDF({
         file: rawProps.secondaryDocumentFile,
-        size: rawProps.secondaryDocumentFileSize,
       });
     }
 
