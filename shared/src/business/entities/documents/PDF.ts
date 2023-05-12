@@ -8,17 +8,17 @@ export class PDF extends JoiValidationEntity {
   public size: number;
   public isEncrypted: boolean;
 
-  constructor({ document }) {
+  constructor(rawProps) {
     super('PDF');
 
-    this.file = document.file;
-    this.size = document.file.size;
-    this.isEncrypted = document.text.includes('Encrypt');
+    this.file = rawProps || {};
+    this.size = rawProps.size;
+    this.isEncrypted = rawProps.isEncrypted || false;
   }
 
   static VALIDATION_RULES = {
     file: joi.object().required().description('The PDF file'),
-    isEncrypted: joi.boolean().invalid(true),
+    isEncrypted: joi.boolean().invalid(true).required(),
     size: JoiValidationConstants.MAX_FILE_SIZE_BYTES.required().description(
       'The size of the file in bytes.',
     ),

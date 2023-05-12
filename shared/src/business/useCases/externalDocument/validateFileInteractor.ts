@@ -7,23 +7,31 @@ import { PDF } from '../../entities/documents/PDF';
  * @param {Array} providers.primaryDocumentFile the primary document file getting uploaded
  * @returns {void}
  */
-export const validateFileInteractor = (
+export const validateFileInteractor = async (
   applicationContext: any,
   {
-    primaryDocumentFile,
-  }: // primaryDocumentFileText,
-  {
-    applicationContext: any;
-    primaryDocumentFile: any;
-    // primaryDocumentFileText: string;
+    file,
+  }: {
+    file: any;
   },
 ) => {
-  console.log('***** ', primaryDocumentFile);
-  const aPdf = new PDF({
-    document: primaryDocumentFile,
-  });
+  const aPDF = new PDF(file);
 
-  console.log(aPdf.getFormattedValidationErrors(), ' ****');
+  try {
+    const aBlob = new Blob([file]);
 
-  return aPdf.getFormattedValidationErrors();
+    const arrayBuffer = await aBlob.arrayBuffer();
+
+    const { PDFDocument } = applicationContext.getPdfLib();
+
+    await PDFDocument.load(arrayBuffer);
+  } catch (e) {
+    if (
+      e.message.includes('Input document to `PDFDocument.load` is encrypted')
+    ) {
+      aPDF.isEncrypted = true;
+    }
+  }
+
+  return aPDF.getFormattedValidationErrors();
 };

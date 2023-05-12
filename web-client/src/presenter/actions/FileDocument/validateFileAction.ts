@@ -1,22 +1,23 @@
 import { state } from 'cerebral';
 
 /**
- * validates the file being uploaded
+ * Validates a file that was uploaded
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the validatePetition use case
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @param {object} providers.get the cerebral get function used for getting state.form
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validateFileAction = ({ applicationContext, get, path }) => {
-  const { primaryDocumentFile, primaryDocumentFileText } = get(state.form);
+export const validateFileAction = async ({ applicationContext, get, path }) => {
+  const { primaryDocumentFile } = get(state.form);
 
-  const errors = applicationContext
+  const errors = await applicationContext
     .getUseCases()
     .validateFileInteractor(applicationContext, {
-      primaryDocumentFile,
-      // primaryDocumentFileText,
+      file: primaryDocumentFile,
     });
+
+  console.log('errors are: ', errors);
 
   if (errors) {
     return path.error({
