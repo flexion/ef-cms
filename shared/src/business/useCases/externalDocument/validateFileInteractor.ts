@@ -11,17 +11,19 @@ export const validateFileInteractor = (
   applicationContext: any,
   {
     primaryDocumentFile,
-    primaryDocumentFileText,
-  }: {
+  }: // primaryDocumentFileText,
+  {
     applicationContext: any;
     primaryDocumentFile: any;
-    primaryDocumentFileText: string;
+    // primaryDocumentFileText: string;
   },
 ) => {
+  console.log('***** ', primaryDocumentFile);
   const aPdf = new PDF({
-    file: primaryDocumentFile,
-    text: primaryDocumentFileText,
+    document: primaryDocumentFile,
   });
+
+  console.log(aPdf.getFormattedValidationErrors(), ' ****');
 
   return aPdf.getFormattedValidationErrors();
 };

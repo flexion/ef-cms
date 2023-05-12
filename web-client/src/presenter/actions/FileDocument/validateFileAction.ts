@@ -15,7 +15,7 @@ export const validateFileAction = ({ applicationContext, get, path }) => {
     .getUseCases()
     .validateFileInteractor(applicationContext, {
       primaryDocumentFile,
-      primaryDocumentFileText,
+      // primaryDocumentFileText,
     });
 
   if (errors) {

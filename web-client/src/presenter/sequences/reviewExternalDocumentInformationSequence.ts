@@ -3,7 +3,6 @@ import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocume
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { generateTitleForSupportingDocumentsAction } from '../actions/FileDocument/generateTitleForSupportingDocumentsAction';
 import { navigateToReviewFileADocumentAction } from '../actions/FileDocument/navigateToReviewFileADocumentAction';
-import { preprocessFileAction } from '../actions/FileDocument/preprocessFileAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setSupportingDocumentScenarioAction } from '../actions/FileDocument/setSupportingDocumentScenarioAction';
@@ -18,7 +17,6 @@ export const reviewExternalDocumentInformationSequence = [
   startShowValidationAction,
   computeCertificateOfServiceFormDateAction,
   setFilersFromFilersMapAction,
-  preprocessFileAction,
   validateExternalDocumentInformationAction,
   {
     error: [

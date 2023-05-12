@@ -7,18 +7,19 @@ import { state } from 'cerebral';
  * @param {Function} providers.store the cerebral store used for setting state.form
  * @param {object} providers.get the cerebral get function used for getting state.form
  */
-export const preprocessFileAction = async ({ get, store }) => {
-  // TODO: refactor to process STIN, petition, corporateDisclosure for start case flow
-  const { primaryDocumentFile } = get(state.form);
-
-  let text;
-
+export const getPDFTextAction = async ({ get, store }) => {
   try {
-    text = await new Blob([primaryDocumentFile], {
+    const { primaryDocumentFile } = get(state.form);
+
+    const text = await new Blob([primaryDocumentFile], {
       type: 'application/pdf',
     }).text();
+
+    store.set(state.form.primaryDocumentFile, {
+      file: primaryDocumentFile,
+      text,
+    });
   } catch (e) {
     console.log(e);
   }
-  store.set(state.form.primaryDocumentFileText, text);
 };

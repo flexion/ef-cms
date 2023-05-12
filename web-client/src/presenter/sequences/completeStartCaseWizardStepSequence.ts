@@ -1,6 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { navigateToStartCaseWizardNextStepAction } from '../actions/StartCase/navigateToStartCaseWizardNextStepAction';
-import { preprocessFileAction } from '../actions/FileDocument/preprocessFileAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -9,7 +8,6 @@ import { validateStartCaseWizardAction } from '../actions/StartCase/validateStar
 
 export const completeStartCaseWizardStepSequence = [
   startShowValidationAction,
-  preprocessFileAction,
   validateStartCaseWizardAction,
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
