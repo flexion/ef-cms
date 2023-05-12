@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { instantiatePDFFromUploadAction } from '../actions/FileDocument/instantiatePDFFromUploadAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setFormValueAction } from '../actions/setFormValueAction';
+import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -14,7 +14,7 @@ export const validateFileInputSequence = [
   {
     error: [
       startShowValidationAction,
-      setAlertErrorAction,
+      setValidationAlertErrorsAction,
       setValidationErrorsAction,
     ],
     success: [stopShowValidationAction, clearAlertsAction],

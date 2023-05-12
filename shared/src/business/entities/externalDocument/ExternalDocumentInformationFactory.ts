@@ -210,7 +210,7 @@ function ExternalDocumentInformationFactory(documentMetadata) {
     lodged: joi.boolean().optional(),
     ordinalValue: JoiValidationConstants.STRING.optional(),
     previousDocument: joi.object().optional(),
-    primaryDocumentFile: joi.object(PDF.VALIDATION_RULES).required(),
+    primaryDocumentPDF: joi.object(PDF.VALIDATION_RULES).required(),
   };
 
   let schemaOptionalItems = {

@@ -22,6 +22,15 @@ export const validateExternalDocumentInformationAction = ({
       documentMetadata,
     });
 
+  Object.keys(errors).forEach(errorKey => {
+    if (typeof errors[errorKey] === 'object') {
+      let errorArray = [];
+      Object.keys(errors[errorKey]).forEach(nestedErrorKey => {
+        errorArray.push(errors[errorKey][nestedErrorKey]);
+      });
+      errors[errorKey] = errorArray;
+    }
+  });
   if (!errors) {
     return path.success();
   } else {
@@ -29,7 +38,7 @@ export const validateExternalDocumentInformationAction = ({
       'supportingDocument',
       'supportingDocumentFreeText',
       'supportingDocumentFile',
-      'primaryDocumentFile',
+      'primaryDocumentPDF',
       'certificateOfService',
       'certificateOfServiceDate',
       'attachments',

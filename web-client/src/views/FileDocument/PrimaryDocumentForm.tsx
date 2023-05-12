@@ -36,7 +36,7 @@ export const PrimaryDocumentForm = connect(
           />
         )}
         <div className="blue-container">
-          <FormGroup errorText={validationErrors.primaryDocumentFile}>
+          <FormGroup errorText={validationErrors.primaryDocumentPDF}>
             <label
               className={classNames(
                 'usa-label ustc-upload with-hint',
@@ -62,7 +62,6 @@ export const PrimaryDocumentForm = connect(
               validationSequence="validateExternalDocumentInformationSequence"
             />
           </FormGroup>
-
           <InclusionsForm
             bind="form"
             type="primaryDocument"
