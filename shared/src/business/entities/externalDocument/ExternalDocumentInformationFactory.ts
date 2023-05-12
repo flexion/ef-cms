@@ -160,15 +160,11 @@ function ExternalDocumentInformationFactory(documentMetadata) {
     this.supportingDocuments = rawProps.supportingDocuments;
 
     if (rawProps.primaryDocumentFile) {
-      this.primaryDocumentFile = new PDF({
-        document: rawProps.primaryDocumentFile,
-      });
+      this.primaryDocumentFile = new PDF(rawProps.primaryDocumentFile);
     }
 
     if (rawProps.secondaryDocumentFile) {
-      this.secondaryDocumentFile = new PDF({
-        document: rawProps.secondaryDocumentFile,
-      });
+      this.secondaryDocumentFile = new PDF(rawProps.secondaryDocumentFile);
     }
 
     if (this.secondaryDocument) {

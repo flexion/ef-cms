@@ -17,8 +17,6 @@ export const validateFileAction = async ({ applicationContext, get, path }) => {
       file: primaryDocumentFile,
     });
 
-  console.log('errors are: ', errors);
-
   if (errors) {
     return path.error({
       alertError: {
