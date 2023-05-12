@@ -14,7 +14,7 @@ export const validateFileAction = async ({ applicationContext, get, path }) => {
   const errors = await applicationContext
     .getUseCases()
     .validateFileInteractor(applicationContext, {
-      file: primaryDocumentPDF,
+      pdf: primaryDocumentPDF,
     });
 
   if (errors) {

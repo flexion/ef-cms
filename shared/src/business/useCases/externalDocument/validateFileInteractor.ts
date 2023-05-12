@@ -12,7 +12,7 @@ export const validateFileInteractor = (
   {
     pdf,
   }: {
-    file: PDF;
+    pdf: PDF;
   },
 ) => {
   return pdf.getFormattedValidationErrors();
