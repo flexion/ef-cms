@@ -128,6 +128,7 @@ import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
 import { createJudgeUserInteractor } from '../../shared/src/proxies/judges/createJudgeUserProxy';
 import { createMessageInteractor } from '../../shared/src/proxies/messages/createMessageProxy';
+import { createPDFFromUploadInteractor } from '../../shared/src/business/useCases/externalDocument/createPDFFromUploadInteractor';
 import { createPractitionerUserInteractor } from '../../shared/src/proxies/practitioners/createPractitionerUserProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { deleteAuthCookieInteractor } from '../../shared/src/proxies/auth/deleteAuthCookieProxy';
@@ -399,6 +400,7 @@ const allUseCases = {
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createJudgeUserInteractor,
   createMessageInteractor,
+  createPDFFromUploadInteractor,
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,

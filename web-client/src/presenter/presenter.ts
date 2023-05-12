@@ -341,6 +341,7 @@ import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence
 import { setIdleTimerRefSequence } from './sequences/setIdleTimerRefSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
+import { setPDFOnFormSequence } from './sequences/setPDFOnFormSequence';
 import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
 import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
 import { setPDFStampDataSequence } from './sequences/setPDFStampDataSequence';
@@ -856,6 +857,7 @@ const sequences = {
   setIdleTimerRefSequence,
   setIrsNoticeFalseSequence,
   setMessageDetailViewerDocumentToDisplaySequence,
+  setPDFOnFormSequence,
   setPDFPageForSigningSequence,
   setPDFSignatureDataSequence,
   setPDFStampDataSequence,

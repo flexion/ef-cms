@@ -28,7 +28,6 @@ import { createCaseFromPaperInteractor } from '../../shared/src/business/useCase
 import { createCaseInteractor } from '../../shared/src/business/useCases/createCaseInteractor';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor';
 import { createMessageInteractor } from '../../shared/src/business/useCases/messages/createMessageInteractor';
-import { createPDFFromUploadInteractor } from '../../shared/src/business/useCases/externalDocument/createPDFFromUploadInteractor';
 import { createPetitionerAccountInteractor } from '../../shared/src/business/useCases/users/createPetitionerAccountInteractor';
 import { createPractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerDocumentInteractor';
 import { createPractitionerUserInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor';
@@ -227,7 +226,6 @@ const useCases = {
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createMessageInteractor,
-  createPDFFromUploadInteractor,
   createPetitionerAccountInteractor,
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
