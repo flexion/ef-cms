@@ -46,7 +46,7 @@ describe('Petitioner files an encrypted document', () => {
       hasSupportingDocuments: false,
       [`filersMap.${contactId}`]: true,
       primaryDocumentFile: fakeEncryptedFile,
-      primaryDocumentFileSize: 1,
+      // primaryDocumentFileSize: 1,
       scenario: 'Standard',
     };
 

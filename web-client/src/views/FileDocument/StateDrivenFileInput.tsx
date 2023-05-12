@@ -61,6 +61,7 @@ export const StateDrivenFileInput = connect(
                     key: `${inputName}Size`,
                     value: clonedFile.size,
                   });
+                  setPDFOnFormSequence();
                   validateFileInputSequence();
                   return validationSequence();
                 })
