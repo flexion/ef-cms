@@ -3,6 +3,7 @@ import ImageBlobReduce from 'image-blob-reduce';
 const reduce = ImageBlobReduce({
   pica: ImageBlobReduce.pica({ features: ['js'] }),
 });
+import * as pdfLib from 'pdf-lib';
 import { BroadcastChannel } from 'broadcast-channel';
 import {
   Case,
@@ -675,7 +676,6 @@ const applicationContext = {
     return pdfjsLib;
   },
   getPdfLib: () => {
-    const pdfLib = import('pdf-lib');
     return pdfLib;
   },
   getPersistenceGateway: () => {
@@ -801,3 +801,5 @@ const applicationContext = {
 };
 
 export { applicationContext };
+
+export type ClientApplicationContext = typeof applicationContext;

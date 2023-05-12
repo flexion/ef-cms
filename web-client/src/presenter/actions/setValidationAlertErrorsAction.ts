@@ -9,7 +9,10 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting state.alertError
  * @returns {undefined} doesn't return anything
  */
-export const setValidationAlertErrorsAction = ({ props, store }) => {
+export const setValidationAlertErrorsAction = ({
+  props,
+  store,
+}: ActionProps) => {
   let errorKeys = Object.keys(props.errors);
   console.log('errorkeys', errorKeys);
 

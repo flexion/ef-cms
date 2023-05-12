@@ -39,7 +39,7 @@ export const validatePdfInteractor = async (
   applicationContext.logger.debug('pdfHeaderBytes', pdfHeaderBytes);
   applicationContext.logger.debug('pdfHeaderString', pdfHeaderString);
 
-  const { PDFDocument } = await applicationContext.getPdfLib();
+  const { PDFDocument } = applicationContext.getPdfLib();
 
   const pdfDoc = await PDFDocument.load(pdfData, { ignoreEncryption: true });
   const pdfIsEncrypted = pdfDoc.isEncrypted;

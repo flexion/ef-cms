@@ -23,7 +23,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { PDFDocument } = await applicationContext.getPdfLib();
+  const { PDFDocument } = applicationContext.getPdfLib();
   const paperServiceDocumentsPdf = await PDFDocument.create();
 
   for (let index = 0; index < trialNoticePdfsKeys.length; index++) {

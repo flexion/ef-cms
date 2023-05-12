@@ -22,7 +22,7 @@ export const loadPDFForSigningInteractor = async (
     removeCover: boolean;
   },
 ) => {
-  const { PDFDocument } = await applicationContext.getPdfLib();
+  const { PDFDocument } = applicationContext.getPdfLib();
 
   try {
     const pdfjsLib = await applicationContext.getPdfJs();

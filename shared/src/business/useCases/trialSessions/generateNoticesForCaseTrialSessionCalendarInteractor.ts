@@ -290,7 +290,7 @@ const setNoticeForCase = async ({
   caseEntity.updateDocketEntry(noticeOfTrialDocketEntry); // to generate an index
   caseEntity.updateDocketEntry(standingPretrialDocketEntry); // to generate an index
 
-  const { PDFDocument } = await applicationContext.getPdfLib();
+  const { PDFDocument } = applicationContext.getPdfLib();
   const newPdfDoc = await PDFDocument.create();
 
   await serveNoticesForCase({

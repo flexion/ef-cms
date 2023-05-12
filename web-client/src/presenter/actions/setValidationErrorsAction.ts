@@ -1,6 +1,5 @@
 import { state } from 'cerebral';
 
-export const setValidationErrorsAction = ({ props, store }) => {
-  console.log('props.errors', props.errors);
+export const setValidationErrorsAction = ({ props, store }: ActionProps) => {
   store.set(state.validationErrors, props.errors);
 };

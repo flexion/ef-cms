@@ -13,7 +13,7 @@ export const validateExternalDocumentInformationAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const documentMetadata = get(state.form);
 
   let errors = applicationContext
