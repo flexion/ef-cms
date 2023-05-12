@@ -19,7 +19,6 @@ export const instantiatePDFFromUploadAction = async ({
     .createPDFFromUploadInteractor(applicationContext, {
       file: primaryDocumentFile,
     });
-  console.log('7');
 
   return { key: 'primaryDocumentPDF', value: pdf };
 };

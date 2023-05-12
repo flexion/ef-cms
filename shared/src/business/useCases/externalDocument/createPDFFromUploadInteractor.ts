@@ -16,23 +16,16 @@ export const createPDFFromUploadInteractor = async (
   },
 ) => {
   const aPDF = new PDF(file);
-  console.log('1****');
-  try {
-    console.log('2****');
 
+  try {
     const aBlob = new Blob([file]);
-    console.log('3');
 
     const arrayBuffer = await aBlob.arrayBuffer();
-    console.log('4');
 
     const { PDFDocument } = applicationContext.getPdfLib();
-    console.log('5');
 
     await PDFDocument.load(arrayBuffer);
   } catch (e) {
-    console.log('6', e);
-
     if (
       e.message.includes('Input document to `PDFDocument.load` is encrypted')
     ) {

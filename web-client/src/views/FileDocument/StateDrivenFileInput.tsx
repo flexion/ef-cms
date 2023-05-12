@@ -14,7 +14,6 @@ export const StateDrivenFileInput = connect(
     fileInputName: props.name,
     form: state.form,
     id: props.id,
-    setPDFOnFormSequence: sequences.setPDFOnFormSequence,
     updateFormValueSequence: sequences[props.updateFormValueSequence],
     validateFileInputSequence: sequences.validateFileInputSequence,
     validationSequence: sequences[props.validationSequence],
@@ -27,9 +26,8 @@ export const StateDrivenFileInput = connect(
     fileInputName,
     form,
     id,
-    setPDFOnFormSequence,
     updateFormValueSequence,
-    // validateFileInputSequence,
+    validateFileInputSequence,
     validationSequence,
   }) {
     let inputRef;
@@ -63,8 +61,7 @@ export const StateDrivenFileInput = connect(
                     key: `${inputName}Size`,
                     value: clonedFile.size,
                   });
-                  setPDFOnFormSequence();
-                  // validateFileInputSequence();
+                  validateFileInputSequence();
                   return validationSequence();
                 })
                 .catch(() => {

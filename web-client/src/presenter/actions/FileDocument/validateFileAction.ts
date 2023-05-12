@@ -11,11 +11,9 @@ import { state } from 'cerebral';
 export const validateFileAction = async ({ applicationContext, get, path }) => {
   const { primaryDocumentPDF } = get(state.form);
 
-  const errors = await applicationContext
-    .getUseCases()
-    .validateFileInteractor(applicationContext, {
-      pdf: primaryDocumentPDF,
-    });
+  const errors = await applicationContext.getUseCases().validateFileInteractor({
+    pdf: primaryDocumentPDF,
+  });
 
   if (errors) {
     return path.error({
