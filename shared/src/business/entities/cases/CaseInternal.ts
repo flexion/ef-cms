@@ -63,38 +63,27 @@ export class CaseInternal extends JoiValidationEntity {
     super('CaseInternal');
 
     if (rawCase.applicationForWaiverOfFilingFeeFile) {
-      this.applicationForWaiverOfFilingFeeFile = new PDF({
-        file: rawCase.applicationForWaiverOfFilingFeeFile,
-        size: rawCase.applicationForWaiverOfFilingFeeFileSize,
-      });
+      this.applicationForWaiverOfFilingFeeFile = new PDF(
+        rawCase.applicationForWaiverOfFilingFeeFile,
+      );
     }
 
     if (rawCase.corporateDisclosureFile) {
-      this.corporateDisclosureFile = new PDF({
-        file: rawCase.corporateDisclosureFile,
-        size: rawCase.corporateDisclosureFileSize,
-      });
+      this.corporateDisclosureFile = new PDF(rawCase.corporateDisclosureFile);
     }
 
     if (rawCase.petitionFile) {
-      this.petitionFile = new PDF({
-        file: rawCase.petitionFile,
-        size: rawCase.petitionFileSize,
-      });
+      this.petitionFile = new PDF(rawCase.petitionFile);
     }
 
     if (rawCase.requestForPlaceOfTrialFile) {
-      this.requestForPlaceOfTrialFile = new PDF({
-        file: rawCase.requestForPlaceOfTrialFile,
-        size: rawCase.requestForPlaceOfTrialFileSize,
-      });
+      this.requestForPlaceOfTrialFile = new PDF(
+        rawCase.requestForPlaceOfTrialFile,
+      );
     }
 
     if (rawCase.stinFile) {
-      this.stinFile = new PDF({
-        file: rawCase.stinFile,
-        size: rawCase.stinFileSize,
-      });
+      this.stinFile = new PDF(rawCase.stinFile);
     }
 
     this.caseCaption = rawCase.caseCaption;

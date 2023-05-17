@@ -10,7 +10,6 @@ const { makeRequiredHelper } = require('./externalDocumentHelpers');
 
 /**
  * Supporting Document Information Factory entity
- *
  * @param {object} documentMetadata the document metadata
  * @param {object} VALIDATION_ERROR_MESSAGES the error to message map constant
  * @constructor
@@ -32,10 +31,7 @@ function SupportingDocumentInformationFactory(
     this.supportingDocumentFreeText = rawProps.supportingDocumentFreeText;
 
     if (rawProps.supportingDocumentFile) {
-      this.supportingDocumentFile = new PDF({
-        file: rawProps.supportingDocumentFile,
-        size: rawProps.supportingDocumentFileSize,
-      });
+      this.supportingDocumentFile = new PDF(rawProps.supportingDocumentFile);
     }
   };
 

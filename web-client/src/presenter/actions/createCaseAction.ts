@@ -30,9 +30,9 @@ export const createCaseAction = async ({
 
   const progressFunctions = setupPercentDone(
     {
-      corporate: corporateDisclosureFile,
-      petition: petitionFile,
-      stin: stinFile,
+      corporate: corporateDisclosureFile?.file,
+      petition: petitionFile.file,
+      stin: stinFile.file,
     },
     store,
   );
@@ -42,12 +42,12 @@ export const createCaseAction = async ({
     filePetitionResult = await applicationContext
       .getUseCases()
       .filePetitionInteractor(applicationContext, {
-        corporateDisclosureFile,
+        corporateDisclosureFile: corporateDisclosureFile?.file,
         corporateDisclosureUploadProgress: progressFunctions.corporate,
-        petitionFile,
+        petitionFile: petitionFile.file,
         petitionMetadata: form,
         petitionUploadProgress: progressFunctions.petition,
-        stinFile,
+        stinFile: stinFile.file,
         stinUploadProgress: progressFunctions.stin,
       });
   } catch (err) {

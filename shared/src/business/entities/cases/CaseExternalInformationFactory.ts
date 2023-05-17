@@ -44,27 +44,15 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
     this.wizardStep = rawCase.wizardStep;
 
     if (rawCase.stinFile) {
-      this.stinFile = new PDF({
-        file: rawCase.stinFile,
-        primaryDocumentText: rawProps.stinFileText,
-        size: rawCase.stinFileSize,
-      });
+      this.stinFile = new PDF(rawCase.stinFile);
     }
 
     if (rawCase.petitionFile) {
-      this.petitionFile = new PDF({
-        file: rawCase.petitionFile,
-        primaryDocumentText: rawProps.petitionFileText,
-        size: rawCase.petitionFileSize,
-      });
+      this.petitionFile = new PDF(rawCase.petitionFile);
     }
 
     if (rawCase.corporateDisclosureFile) {
-      this.corporateDisclosureFile = new PDF({
-        file: rawCase.corporateDisclosureFile,
-        primaryDocumentText: rawProps.corporateDisclosureFileText,
-        size: rawCase.corporateDisclosureFileSize,
-      });
+      this.corporateDisclosureFile = new PDF(rawCase.corporateDisclosureFile);
     }
 
     if (+this.wizardStep >= 3) {

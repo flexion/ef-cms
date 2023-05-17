@@ -45,8 +45,6 @@ describe('Petitioner files an encrypted document', () => {
       eventCode: 'A',
       hasSupportingDocuments: false,
       [`filersMap.${contactId}`]: true,
-      primaryDocumentFile: fakeEncryptedFile,
-      // primaryDocumentFileSize: 1,
       scenario: 'Standard',
     };
 
@@ -60,16 +58,14 @@ describe('Petitioner files an encrypted document', () => {
       );
     }
 
-    await cerebralTest.runSequence('validateFileInputSequence');
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeEncryptedFile,
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+    });
+
     expect(cerebralTest.getState('validationErrors')).toEqual({
       primaryDocumentPDF:
         'The file you are trying to upload may be encrypted or password protected. Remove the password or encryption and try again.',
-    });
-    expect(cerebralTest.getState('alertError')).toEqual({
-      messages: [
-        'The file you are trying to upload may be encrypted or password protected. Remove the password or encryption and try again.',
-      ],
-      title: 'Please correct the following errors on the page:',
     });
 
     // written under the assumption that hitting the submit button will be allowed w/ validation errors present

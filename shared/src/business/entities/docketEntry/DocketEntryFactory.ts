@@ -88,17 +88,11 @@ function DocketEntryFactory(rawProps) {
     this.trialLocation = rawPropsParam.trialLocation;
 
     if (rawPropsParam.primaryDocumentFile) {
-      this.primaryDocumentFile = new PDF({
-        file: rawPropsParam.primaryDocumentFile,
-        size: rawPropsParam.primaryDocumentFileSize,
-      });
+      this.primaryDocumentFile = new PDF(rawPropsParam.primaryDocumentFile);
     }
 
     if (rawPropsParam.secondaryDocumentFile) {
-      this.secondaryDocumentFile = new PDF({
-        file: rawPropsParam.secondaryDocumentFile,
-        size: rawPropsParam.secondaryDocumentFileSize,
-      });
+      this.secondaryDocumentFile = new PDF(rawPropsParam.secondaryDocumentFile);
     }
 
     if (rawPropsParam.secondaryDocument) {

@@ -46,24 +46,15 @@ export class CaseExternal extends JoiValidationEntity {
     this.procedureType = rawCase.procedureType;
 
     if (rawCase.stinFile) {
-      this.stinFile = new PDF({
-        file: rawCase.stinFile,
-        size: rawCase.stinFileSize,
-      });
+      this.stinFile = new PDF(rawCase.stinFile);
     }
 
     if (rawCase.petitionFile) {
-      this.petitionFile = new PDF({
-        file: rawCase.petitionFile,
-        size: rawCase.petitionFileSize,
-      });
+      this.petitionFile = new PDF(rawCase.petitionFile);
     }
 
     if (rawCase.corporateDisclosureFile) {
-      this.corporateDisclosureFile = new PDF({
-        file: rawCase.corporateDisclosureFile,
-        size: rawCase.corporateDisclosureFileSize,
-      });
+      this.corporateDisclosureFile = new PDF(rawCase.corporateDisclosureFile);
     }
 
     const contacts = ContactFactory.createContacts({
