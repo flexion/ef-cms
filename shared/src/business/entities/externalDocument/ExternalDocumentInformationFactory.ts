@@ -158,7 +158,10 @@ function ExternalDocumentInformationFactory(documentMetadata) {
     this.secondarySupportingDocuments = rawProps.secondarySupportingDocuments;
     this.selectedCases = rawProps.selectedCases;
     this.supportingDocuments = rawProps.supportingDocuments;
-    this.primaryDocumentPDF = rawProps.primaryDocumentPDF;
+
+    if (rawProps.primaryDocumentFile) {
+      this.primaryDocumentFile = new PDF(rawProps.primaryDocumentFile);
+    }
 
     if (rawProps.secondaryDocumentFile) {
       this.secondaryDocumentFile = new PDF(rawProps.secondaryDocumentFile);
@@ -210,7 +213,7 @@ function ExternalDocumentInformationFactory(documentMetadata) {
     lodged: joi.boolean().optional(),
     ordinalValue: JoiValidationConstants.STRING.optional(),
     previousDocument: joi.object().optional(),
-    primaryDocumentPDF: joi.object(PDF.VALIDATION_RULES).required(),
+    primaryDocumentFile: joi.object(PDF.VALIDATION_RULES).required(),
   };
 
   let schemaOptionalItems = {

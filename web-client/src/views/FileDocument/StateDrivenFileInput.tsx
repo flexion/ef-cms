@@ -61,7 +61,10 @@ export const StateDrivenFileInput = connect(
                     key: `${inputName}Size`,
                     value: clonedFile.size,
                   });
-                  validateFileInputSequence();
+                  validateFileInputSequence({
+                    file: clonedFile,
+                    theNameOfTheFileOnTheEntity: inputName,
+                  });
                   return validationSequence();
                 })
                 .catch(() => {

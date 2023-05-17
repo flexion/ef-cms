@@ -52,25 +52,27 @@ export const uploadExternalDocumentsAction = async ({
   };
 
   const documentFiles = {
-    primary: form.primaryDocumentFile,
+    primary: form.primaryDocumentFile.file,
   };
 
   if (form.secondaryDocumentFile) {
-    documentFiles.secondary = form.secondaryDocumentFile;
+    documentFiles.secondary = form.secondaryDocumentFile.file;
     documentMetadata.secondaryDocument.isFileAttached = true;
   }
 
   if (form.hasSupportingDocuments) {
     form.supportingDocuments.forEach((item, idx) => {
-      documentFiles[`primarySupporting${idx}`] = item.supportingDocumentFile;
-      item.isFileAttached = !!item.supportingDocumentFile;
+      documentFiles[`primarySupporting${idx}`] =
+        item.supportingDocumentFile.file;
+      item.isFileAttached = !!item.supportingDocumentFile.file;
     });
   }
 
   if (form.hasSecondarySupportingDocuments) {
     form.secondarySupportingDocuments.forEach((item, idx) => {
-      documentFiles[`secondarySupporting${idx}`] = item.supportingDocumentFile;
-      item.isFileAttached = !!item.supportingDocumentFile;
+      documentFiles[`secondarySupporting${idx}`] =
+        item.supportingDocumentFile.file;
+      item.isFileAttached = !!item.supportingDocumentFile.file;
     });
   }
 
