@@ -1,5 +1,4 @@
 import { PDF } from '../../../../../shared/src/business/entities/documents/PDF';
-import { state } from 'cerebral';
 
 /**
  * TODO
