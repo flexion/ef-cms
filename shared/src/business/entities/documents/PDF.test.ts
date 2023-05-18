@@ -8,7 +8,7 @@ describe('PDF entity', () => {
 
       const validationErrors = pdfEntity.getFormattedValidationErrors();
 
-      expect(Object.keys(validationErrors)).toEqual(['size']);
+      expect(Object.keys(validationErrors!)).toEqual(['size']);
     });
 
     it('should be invalid when the size of the file is larger than allowed by DAWSON', () => {
@@ -16,7 +16,15 @@ describe('PDF entity', () => {
 
       const validationErrors = pdfEntity.getFormattedValidationErrors();
 
-      expect(Object.keys(validationErrors)).toEqual(['size']);
+      expect(Object.keys(validationErrors!)).toEqual(['size']);
+    });
+
+    it('should be invalid when the PDF is encrypted', () => {
+      const pdfEntity = new PDF({ isEncrypted: true, size: 1 });
+
+      const validationErrors = pdfEntity.getFormattedValidationErrors();
+
+      expect(Object.keys(validationErrors!)).toEqual(['isEncrypted']);
     });
   });
 });

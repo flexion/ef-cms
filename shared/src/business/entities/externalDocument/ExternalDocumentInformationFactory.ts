@@ -9,7 +9,6 @@ const {
   ALL_EVENT_CODES,
   AMENDMENT_EVENT_CODES,
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
-  MAX_FILE_SIZE_MB,
 } = require('../EntityConstants');
 const {
   joiValidationDecorator,
@@ -88,22 +87,18 @@ const VALIDATION_ERROR_MESSAGES = {
   ],
   partyIrsPractitioner: 'Select a filing party',
   previousDocument: 'Select a document',
-  primaryDocumentFile: 'Upload a document',
-  primaryDocumentFileSize: [
+  primaryDocumentFile: [
     {
-      contains: 'must be less than or equal to',
-      message: `Your Primary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      contains: 'is required',
+      message: 'Upload a document',
     },
-    'Your Primary Document file size is empty.',
   ],
   secondaryDocument: 'Select a document',
-  secondaryDocumentFile: 'Upload a document',
-  secondaryDocumentFileSize: [
+  secondaryDocumentFile: [
     {
-      contains: 'must be less than or equal to',
-      message: `Your Secondary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      contains: 'is required',
+      message: 'Upload a document',
     },
-    'Your Secondary Document file size is empty.',
   ],
   serviceDate: [
     {
@@ -113,17 +108,14 @@ const VALIDATION_ERROR_MESSAGES = {
     'Provide a service date',
   ],
   supportingDocument: 'Select a document type',
-  supportingDocumentFile: 'Upload a document',
-  supportingDocumentFileSize: [
+  supportingDocumentFile: [
     {
-      contains: 'must be less than or equal to',
-      message: `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      contains: 'is required',
+      message: 'Upload a document',
     },
-    'Your Supporting Document file size is empty.',
   ],
   supportingDocumentFreeText: 'Enter name',
   trialLocation: 'Select a preferred trial location.',
-  ...PDF.VALIDATION_ERROR_MESSAGES,
 };
 
 /**
@@ -213,7 +205,7 @@ function ExternalDocumentInformationFactory(documentMetadata) {
     lodged: joi.boolean().optional(),
     ordinalValue: JoiValidationConstants.STRING.optional(),
     previousDocument: joi.object().optional(),
-    primaryDocumentFile: joi.object(PDF.VALIDATION_RULES).required(),
+    primaryDocumentFile: joi.object().keys(PDF.VALIDATION_RULES).required(),
   };
 
   let schemaOptionalItems = {
@@ -225,13 +217,17 @@ function ExternalDocumentInformationFactory(documentMetadata) {
     hasSecondarySupportingDocuments: joi.boolean(),
     objections: JoiValidationConstants.STRING,
     partyIrsPractitioner: joi.boolean(),
-    secondaryDocumentFile: joi.object(PDF.VALIDATION_RULES),
+    secondaryDocumentFile: joi.object().keys(PDF.VALIDATION_RULES),
     secondarySupportingDocuments: joi.array().optional(),
     selectedCases: joi.array().items(JoiValidationConstants.STRING).optional(),
     supportingDocuments: joi.array().optional(),
   };
 
-  const addProperty = (itemName, itemSchema, itemErrorMessage) => {
+  const addProperty = (
+    itemName: string,
+    itemSchema,
+    itemErrorMessage?: string,
+  ) => {
     addPropertyHelper({
       VALIDATION_ERROR_MESSAGES,
       itemErrorMessage,
