@@ -36,8 +36,7 @@ describe('validate petition from paper', () => {
         mailingDate: 'testing',
         orderDesignatingPlaceOfTrial: true,
         partyType: PARTY_TYPES.petitioner,
-        petitionFile: {},
-        petitionFileSize: 100,
+        petitionFile: { size: 100 },
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         petitioners: [
           {

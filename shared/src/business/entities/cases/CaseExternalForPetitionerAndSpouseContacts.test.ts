@@ -1,12 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  CASE_TYPES_MAP,
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-} = require('../EntityConstants');
-const { CaseExternal } = require('./CaseExternal');
+import { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES } from '../EntityConstants';
+import { CaseExternal } from './CaseExternal';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternal', () => {
   describe('for Petitioner And Spouse Contacts', () => {
@@ -18,13 +12,11 @@ describe('CaseExternal', () => {
           hasIrsNotice: true,
           irsNoticeDate: '2009-10-13',
           partyType: PARTY_TYPES.petitionerSpouse,
-          petitionFile: {},
-          petitionFileSize: 1,
+          petitionFile: { size: 1 },
           preferredTrialCity: 'Memphis, Tennessee',
           procedureType: 'Small',
           signature: true,
-          stinFile: {},
-          stinFileSize: 1,
+          stinFile: { size: 1 },
         },
         { applicationContext },
       );
@@ -60,13 +52,11 @@ describe('CaseExternal', () => {
           hasIrsNotice: true,
           irsNoticeDate: '2009-10-13',
           partyType: PARTY_TYPES.petitionerSpouse,
-          petitionFile: {},
-          petitionFileSize: 1,
+          petitionFile: { size: 1 },
           preferredTrialCity: 'Memphis, Tennessee',
           procedureType: 'Small',
           signature: true,
-          stinFile: {},
-          stinFileSize: 1,
+          stinFile: { size: 1 },
         },
         { applicationContext },
       );

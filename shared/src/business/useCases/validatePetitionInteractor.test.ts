@@ -24,10 +24,8 @@ describe('validatePetitionInteractor', () => {
       petition: {
         caseType: 'defined',
         hasIrsNotice: true,
-        petitionFile: new File([], 'test.png'),
-        petitionFileSize: 1,
-        stinFile: new File([], 'test.png'),
-        stinFileSize: 1,
+        petitionFile: new File(['abc'], 'test.png'),
+        stinFile: new File(['abc'], 'test.png'),
       },
     });
     expect(Object.keys(errors)).toEqual([
@@ -56,12 +54,10 @@ describe('validatePetitionInteractor', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.petitioner,
-        petitionFile: new File([], 'test.png'),
-        petitionFileSize: 1,
+        petitionFile: new File(['abc'], 'test.png'),
         preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Regular',
-        stinFile: new File([], 'testStinFile.pdf'),
-        stinFileSize: 1,
+        stinFile: new File(['abc'], 'testStinFile.pdf'),
       },
     });
     expect(errors).toEqual(null);

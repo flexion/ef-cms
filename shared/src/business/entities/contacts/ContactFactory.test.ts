@@ -19,13 +19,11 @@ describe('ContactFactory', () => {
     irsNoticeDate: '2009-10-13T08:06:07.539Z',
     mailingDate: 'testing',
     partyType: PARTY_TYPES.petitioner,
-    petitionFile: {},
-    petitionFileSize: 1,
+    petitionFile: { size: 1 },
     preferredTrialCity: 'Memphis, Tennessee',
     procedureType: 'Small',
     signature: true,
-    stinFile: {},
-    stinFileSize: 1,
+    stinFile: { size: 1 },
   };
 
   const baseContact = {

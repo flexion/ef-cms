@@ -44,8 +44,7 @@ describe('CaseInternal', () => {
           caseType: CASE_TYPES_MAP.other,
           mailingDate: 'test',
           partyType: PARTY_TYPES.petitioner,
-          petitionFile: { anObject: true },
-          petitionFileSize: 1,
+          petitionFile: { size: 1 },
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           petitioners: [
             {
@@ -64,8 +63,7 @@ describe('CaseInternal', () => {
           preferredTrialCity: 'Boise, Idaho',
           procedureType: 'Small',
           receivedAt: applicationContext.getUtilities().createISODateString(),
-          requestForPlaceOfTrialFile: { anObject: true },
-          requestForPlaceOfTrialFileSize: 1,
+          requestForPlaceOfTrialFile: { size: 1 },
           statistics: [
             {
               irsDeficiencyAmount: 1,
@@ -99,8 +97,7 @@ describe('CaseInternal', () => {
           caseType: CASE_TYPES_MAP.other,
           mailingDate: 'test',
           partyType: PARTY_TYPES.petitioner,
-          petitionFile: { anObject: true },
-          petitionFileSize: 1,
+          petitionFile: { size: 1 },
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           petitioners: [
             {
@@ -119,8 +116,7 @@ describe('CaseInternal', () => {
           preferredTrialCity: 'Boise, Idaho',
           procedureType: 'Small',
           receivedAt: applicationContext.getUtilities().createISODateString(),
-          requestForPlaceOfTrialFile: { anObject: true },
-          requestForPlaceOfTrialFileSize: 1,
+          requestForPlaceOfTrialFile: { size: 1 },
           statistics: [
             {
               irsDeficiencyAmount: 1,
@@ -143,13 +139,11 @@ describe('CaseInternal', () => {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
-          corporateDisclosureFile: { anObject: true },
-          corporateDisclosureFileSize: 1,
+          corporateDisclosureFile: { size: 1 },
           mailingDate: 'test',
           orderDesignatingPlaceOfTrial: true,
           partyType: PARTY_TYPES.corporation,
-          petitionFile: { anObject: true },
-          petitionFileSize: 1,
+          petitionFile: { size: 1 },
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           petitioners: [
             {
@@ -186,8 +180,7 @@ describe('CaseInternal', () => {
           orderDesignatingPlaceOfTrial: true,
           orderForCds: true,
           partyType: PARTY_TYPES.corporation,
-          petitionFile: { anObject: true },
-          petitionFileSize: 1,
+          petitionFile: { size: 1 },
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           petitioners: [
             {
@@ -229,7 +222,6 @@ describe('CaseInternal', () => {
       const caseInternal: CaseInternal = new CaseInternal(
         {
           petitionFile: new File([], 'test.pdf'),
-          petitionFileSize: undefined,
         },
         { applicationContext },
       );
@@ -289,7 +281,7 @@ describe('CaseInternal', () => {
       const caseInternal = new CaseInternal(
         {
           applicationForWaiverOfFilingFeeFile: new File([], 'test.pdf'),
-          applicationForWaiverOfFilingFeeFileSize: undefined,
+          applicationForWaiverOfFilingFeeFileSie: undefined,
         },
         { applicationContext },
       );
@@ -304,7 +296,6 @@ describe('CaseInternal', () => {
       const caseInternal = new CaseInternal(
         {
           stinFile: new File([], 'test.pdf'),
-          stinFileSize: undefined,
         },
         { applicationContext },
       );
@@ -318,7 +309,6 @@ describe('CaseInternal', () => {
       const caseInternal = new CaseInternal(
         {
           corporateDisclosureFile: new File([], 'test.pdf'),
-          corporateDisclosureFileSize: undefined,
         },
         { applicationContext },
       );
@@ -333,7 +323,6 @@ describe('CaseInternal', () => {
       const caseInternal = new CaseInternal(
         {
           requestForPlaceOfTrialFile: new File([], 'test.pdf'),
-          requestForPlaceOfTrialFileSize: undefined,
         },
         { applicationContext },
       );
@@ -380,12 +369,10 @@ describe('CaseInternal', () => {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
-          corporateDisclosureFile: { anObject: true },
-          corporateDisclosureFileSize: 1,
+          corporateDisclosureFile: { size: 1 },
           mailingDate: 'test',
           partyType: PARTY_TYPES.corporation,
-          petitionFile: { anObject: true },
-          petitionFileSize: 1,
+          petitionFile: { size: 1 },
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           petitioners: [
             {
@@ -404,8 +391,7 @@ describe('CaseInternal', () => {
           ],
           procedureType: 'Small',
           receivedAt: applicationContext.getUtilities().createISODateString(),
-          stinFile: { anObject: true },
-          stinFileSize: 1,
+          stinFile: { size: 1 },
         },
         { applicationContext },
       );
@@ -423,13 +409,11 @@ describe('CaseInternal', () => {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
-          corporateDisclosureFile: { anObject: true },
-          corporateDisclosureFileSize: 1,
+          corporateDisclosureFile: { size: 1 },
           mailingDate: 'test',
           orderDesignatingPlaceOfTrial: false,
           partyType: PARTY_TYPES.corporation,
-          petitionFile: { anObject: true },
-          petitionFileSize: 1,
+          petitionFile: { size: 1 },
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           petitioners: [
             {
@@ -448,8 +432,7 @@ describe('CaseInternal', () => {
           ],
           procedureType: 'Small',
           receivedAt: applicationContext.getUtilities().createISODateString(),
-          stinFile: { anObject: true },
-          stinFileSize: 1,
+          stinFile: { size: 1 },
         },
         { applicationContext },
       );
@@ -477,8 +460,7 @@ describe('CaseInternal', () => {
         caseType: CASE_TYPES_MAP.other,
         mailingDate: 'test',
         partyType: PARTY_TYPES.petitioner,
-        petitionFile: { anObject: true },
-        petitionFileSize: 1,
+        petitionFile: { size: 1 },
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         petitioners: [
           {
@@ -497,8 +479,7 @@ describe('CaseInternal', () => {
         preferredTrialCity: 'Boise, Idaho',
         procedureType: 'Small',
         receivedAt: applicationContext.getUtilities().createISODateString(),
-        requestForPlaceOfTrialFile: { anObject: true },
-        requestForPlaceOfTrialFileSize: 1,
+        requestForPlaceOfTrialFile: { size: 1 },
         statistics: [
           {
             irsDeficiencyAmount: 1,

@@ -48,8 +48,7 @@ describe('CaseExternalInformationFactory', () => {
     it('should be valid when wizardStep and all step 1 requirements are present', () => {
       const caseExternal = new CaseExternalInformationFactory(
         {
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: 1,
+          stinFile: new File(['abc'], 'test.pdf'),
           wizardStep: '1',
         },
         {
@@ -82,8 +81,7 @@ describe('CaseExternalInformationFactory', () => {
     it('should require hasIrsNotice and petitionFile', () => {
       const caseExternal = new CaseExternalInformationFactory(
         {
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: 1,
+          stinFile: new File(['abc'], 'test.pdf'),
           wizardStep: '2',
         },
         {
@@ -101,10 +99,8 @@ describe('CaseExternalInformationFactory', () => {
       const caseExternal = new CaseExternalInformationFactory(
         {
           hasIrsNotice: true,
-          petitionFile: new File([], 'test.pdf'),
-          petitionFileSize: 1,
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: 1,
+          petitionFile: new File(['abc'], 'test.pdf'),
+          stinFile: new File(['abc'], 'test.pdf'),
           wizardStep: '2',
         },
         {
@@ -122,10 +118,8 @@ describe('CaseExternalInformationFactory', () => {
         {
           caseType: CASE_TYPES_MAP.deficiency,
           hasIrsNotice: true,
-          petitionFile: new File([], 'test.pdf'),
-          petitionFileSize: 1,
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: 1,
+          petitionFile: new File(['abc'], 'test.pdf'),
+          stinFile: new File(['abc'], 'test.pdf'),
           wizardStep: '2',
         },
         {
@@ -142,15 +136,13 @@ describe('CaseExternalInformationFactory', () => {
           caseType: CASE_TYPES_MAP.deficiency,
           hasIrsNotice: true,
           partyType: PARTY_TYPES.petitioner,
-          petitionFile: new File([], 'test.pdf'),
-          petitionFileSize: 1,
+          petitionFile: new File(['abc'], 'test.pdf'),
           petitioners: [
             {
               name: 'Something',
             },
           ],
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: 1,
+          stinFile: new File(['abc'], 'test.pdf'),
           wizardStep: '2',
         },
         {
@@ -184,10 +176,8 @@ describe('CaseExternalInformationFactory', () => {
       caseExternal = new CaseExternalInformationFactory(
         {
           hasIrsNotice: true,
-          petitionFile: new File([], 'test.pdf'),
-          petitionFileSize: 1,
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: 1,
+          petitionFile: new File(['abc'], 'test.pdf'),
+          stinFile: new File(['abc'], 'test.pdf'),
           wizardStep: '3',
         },
         {
@@ -207,10 +197,8 @@ describe('CaseExternalInformationFactory', () => {
         {
           caseType: CASE_TYPES_MAP.deficiency,
           hasIrsNotice: true,
-          petitionFile: new File([], 'test.pdf'),
-          petitionFileSize: 1,
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: 1,
+          petitionFile: new File(['abc'], 'test.pdf'),
+          stinFile: new File(['abc'], 'test.pdf'),
           wizardStep: '3',
         },
         {
@@ -231,10 +219,8 @@ describe('CaseExternalInformationFactory', () => {
           filingType: 'A business',
           hasIrsNotice: true,
           partyType: PARTY_TYPES.corporation,
-          petitionFile: new File([], 'test.pdf'),
-          petitionFileSize: 1,
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: 1,
+          petitionFile: new File(['abc'], 'test.pdf'),
+          stinFile: new File(['abc'], 'test.pdf'),
           wizardStep: '3',
         },
         {
@@ -254,10 +240,8 @@ describe('CaseExternalInformationFactory', () => {
           filingType: 'something else',
           hasIrsNotice: true,
           partyType: PARTY_TYPES.corporation,
-          petitionFile: new File([], 'test.pdf'),
-          petitionFileSize: 1,
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: 1,
+          petitionFile: new File(['abc'], 'test.pdf'),
+          stinFile: new File(['abc'], 'test.pdf'),
           wizardStep: '3',
         },
         {
@@ -277,10 +261,8 @@ describe('CaseExternalInformationFactory', () => {
           filingType: 'Myself',
           hasIrsNotice: true,
           partyType: PARTY_TYPES.petitioner,
-          petitionFile: new File([], 'test.pdf'),
-          petitionFileSize: 1,
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: 1,
+          petitionFile: new File(['abc'], 'test.pdf'),
+          stinFile: new File(['abc'], 'test.pdf'),
           wizardStep: '3',
         },
         {
@@ -311,10 +293,8 @@ describe('CaseExternalInformationFactory', () => {
           filingType: 'Myself',
           hasIrsNotice: true,
           partyType: PARTY_TYPES.petitionerSpouse,
-          petitionFile: new File([], 'test.pdf'),
-          petitionFileSize: 1,
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: 1,
+          petitionFile: new File(['abc'], 'test.pdf'),
+          stinFile: new File(['abc'], 'test.pdf'),
           wizardStep: '3',
         },
         {
@@ -354,10 +334,8 @@ describe('CaseExternalInformationFactory', () => {
           filingType: 'Myself',
           hasIrsNotice: true,
           partyType: PARTY_TYPES.petitionerSpouse,
-          petitionFile: new File([], 'test.pdf'),
-          petitionFileSize: 1,
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: 1,
+          petitionFile: new File(['abc'], 'test.pdf'),
+          stinFile: new File(['abc'], 'test.pdf'),
           wizardStep: '4',
         },
         {
@@ -410,8 +388,7 @@ describe('CaseExternalInformationFactory', () => {
           filingType: 'Myself',
           hasIrsNotice: true,
           partyType: PARTY_TYPES.petitionerSpouse,
-          petitionFile: new File([], 'test.pdf'),
-          petitionFileSize: 1,
+          petitionFile: new File(['abc'], 'test.pdf'),
           petitioners: [
             {
               address1: '123 Main St',
@@ -426,8 +403,7 @@ describe('CaseExternalInformationFactory', () => {
           ],
           preferredTrialCity: 'Boise, Idaho',
           procedureType: 'Regular',
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: 1,
+          stinFile: new File(['abc'], 'test.pdf'),
           wizardStep: '4',
         },
         {

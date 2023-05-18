@@ -1,11 +1,9 @@
-const {
+import { CaseAssociationRequestFactory } from './CaseAssociationRequestFactory';
+import { OBJECTIONS_OPTIONS_MAP } from '../entities/EntityConstants';
+import {
   calculateISODate,
   createISODateString,
-} = require('../utilities/DateHandler');
-const {
-  CaseAssociationRequestFactory,
-} = require('./CaseAssociationRequestFactory');
-const { OBJECTIONS_OPTIONS_MAP } = require('../entities/EntityConstants');
+} from '../utilities/DateHandler';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 
@@ -25,9 +23,11 @@ describe('CaseAssociationRequestFactory', () => {
 
     it('should require a file', () => {
       expect(errors().primaryDocumentFile).toEqual(
-        VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFile[0].message,
       );
-      rawEntity.primaryDocumentFile = {};
+
+      rawEntity.primaryDocumentFile = { size: 1 };
+
       expect(errors().primaryDocumentFile).toEqual(undefined);
     });
 
@@ -35,7 +35,9 @@ describe('CaseAssociationRequestFactory', () => {
       expect(errors().certificateOfService).toEqual(
         VALIDATION_ERROR_MESSAGES.certificateOfService,
       );
+
       rawEntity.certificateOfService = false;
+
       expect(errors().certificateOfService).toEqual(undefined);
     });
 
@@ -43,7 +45,9 @@ describe('CaseAssociationRequestFactory', () => {
       expect(errors().documentType).toEqual(
         VALIDATION_ERROR_MESSAGES.documentType[1],
       );
+
       rawEntity.documentType = 'Entry of Appearance';
+
       expect(errors().documentType).toEqual(undefined);
     });
 
@@ -51,20 +55,26 @@ describe('CaseAssociationRequestFactory', () => {
       expect(errors().documentTitleTemplate).toEqual(
         VALIDATION_ERROR_MESSAGES.documentTitleTemplate,
       );
+
       rawEntity.documentTitleTemplate =
         'Entry of Appearance for [Petitioner Names]';
+
       expect(errors().documentTitleTemplate).toEqual(undefined);
     });
 
     it('should require event code', () => {
       expect(errors().eventCode).toEqual(VALIDATION_ERROR_MESSAGES.eventCode);
+
       rawEntity.eventCode = 'P';
+
       expect(errors().eventCode).toEqual(undefined);
     });
 
     it('should require scenario title', () => {
       expect(errors().scenario).toEqual(VALIDATION_ERROR_MESSAGES.scenario);
+
       rawEntity.scenario = 'Standard';
+
       expect(errors().scenario).toEqual(undefined);
     });
 
@@ -77,7 +87,9 @@ describe('CaseAssociationRequestFactory', () => {
         expect(errors().certificateOfServiceDate).toEqual(
           VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
         );
+
         rawEntity.certificateOfServiceDate = createISODateString();
+
         expect(errors().certificateOfServiceDate).toEqual(undefined);
       });
 
@@ -87,6 +99,7 @@ describe('CaseAssociationRequestFactory', () => {
           howMuch: 1,
           units: 'days',
         });
+
         expect(errors().certificateOfServiceDate).toEqual(
           VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
         );
@@ -104,7 +117,9 @@ describe('CaseAssociationRequestFactory', () => {
         expect(errors().objections).toEqual(
           VALIDATION_ERROR_MESSAGES.objections,
         );
+
         rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
+
         expect(errors().objections).toEqual(undefined);
       });
     });
@@ -121,7 +136,9 @@ describe('CaseAssociationRequestFactory', () => {
         expect(errors().attachments).toEqual(
           VALIDATION_ERROR_MESSAGES.attachments,
         );
+
         rawEntity.attachments = false;
+
         expect(errors().attachments).toEqual(undefined);
       });
 
@@ -129,7 +146,9 @@ describe('CaseAssociationRequestFactory', () => {
         expect(errors().objections).toEqual(
           VALIDATION_ERROR_MESSAGES.objections,
         );
+
         rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
+
         expect(errors().objections).toEqual(undefined);
       });
 
@@ -137,7 +156,9 @@ describe('CaseAssociationRequestFactory', () => {
         expect(errors().hasSupportingDocuments).toEqual(
           VALIDATION_ERROR_MESSAGES.hasSupportingDocuments,
         );
+
         rawEntity.hasSupportingDocuments = false;
+
         expect(errors().hasSupportingDocuments).toEqual(undefined);
       });
 
@@ -160,11 +181,14 @@ describe('CaseAssociationRequestFactory', () => {
         it('should require certificate of service date to be entered if certificateOfService is true', () => {
           rawEntity.supportingDocuments[0].certificateOfService = true;
           rawEntity.supportingDocuments[0].supportingDocument = 'brief';
+
           expect(
             errors().supportingDocuments[0].certificateOfServiceDate,
           ).toEqual(VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1]);
+
           rawEntity.supportingDocuments[0].certificateOfServiceDate =
             createISODateString();
+
           expect(errors().supportingDocuments).toEqual(undefined);
         });
       });
@@ -172,7 +196,9 @@ describe('CaseAssociationRequestFactory', () => {
 
     it('should require one filer to be selected', () => {
       expect(errors().filers).toEqual(VALIDATION_ERROR_MESSAGES.filers);
+
       rawEntity.filers = ['c41fdac6-cc16-4ca6-97fc-980ebb618dd5'];
+
       expect(errors().filers).toEqual(undefined);
     });
 
@@ -195,6 +221,7 @@ describe('CaseAssociationRequestFactory', () => {
           documentType: 'Substitution of Counsel',
           filers: [mockPrimaryId],
         });
+
         expect(caseAssoc.getDocumentTitle(petitioners)).toEqual(
           'Substitution of Counsel for Petr. Test Petitioner',
         );
@@ -207,6 +234,7 @@ describe('CaseAssociationRequestFactory', () => {
           documentType: 'Substitution of Counsel',
           filers: [mockSecondaryId],
         });
+
         expect(caseAssoc.getDocumentTitle(petitioners)).toEqual(
           'Substitution of Counsel for Petr. Another Petitioner',
         );
@@ -219,6 +247,7 @@ describe('CaseAssociationRequestFactory', () => {
           documentType: 'Substitution of Counsel',
           filers: [mockPrimaryId, mockSecondaryId],
         });
+
         expect(caseAssoc.getDocumentTitle(petitioners)).toEqual(
           'Substitution of Counsel for Petrs. Test Petitioner & Another Petitioner',
         );
@@ -231,6 +260,7 @@ describe('CaseAssociationRequestFactory', () => {
           documentType: 'Motion to Substitute Parties and Change Caption',
           filers: [mockPrimaryId, mockSecondaryId],
         });
+
         expect(caseAssoc.getDocumentTitle(petitioners)).toEqual(
           'Motion to Substitute Parties and Change Caption',
         );
@@ -243,6 +273,7 @@ describe('CaseAssociationRequestFactory', () => {
           documentType: 'Substitution of Counsel',
           partyIrsPractitioner: true,
         });
+
         expect(caseAssoc.getDocumentTitle(petitioners)).toEqual(
           'Substitution of Counsel for Respondent',
         );

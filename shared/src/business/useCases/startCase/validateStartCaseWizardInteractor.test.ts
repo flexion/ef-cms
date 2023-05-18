@@ -35,10 +35,8 @@ describe('validateStartCaseWizardInteractor', () => {
           state: 'CA',
         },
         hasIrsNotice: true,
-        petitionFile: new File([], 'test.pdf'),
-        petitionFileSize: 1,
-        stinFile: new File([], 'test.pdf'),
-        stinFileSize: 1,
+        petitionFile: new File(['abc'], 'test.pdf'),
+        stinFile: new File(['abc'], 'test.pdf'),
         wizardStep: '4',
       },
     });

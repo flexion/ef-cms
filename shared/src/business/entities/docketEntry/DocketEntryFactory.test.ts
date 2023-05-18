@@ -31,8 +31,7 @@ describe('DocketEntryFactory', () => {
   });
 
   it('should require a file', () => {
-    rawEntity.primaryDocumentFile = {};
-    rawEntity.primaryDocumentFileSize = 1;
+    rawEntity.primaryDocumentFile = { size: 1 };
 
     expect(
       DocketEntryFactory(rawEntity).getFormattedValidationErrors()
@@ -41,8 +40,7 @@ describe('DocketEntryFactory', () => {
   });
 
   it('should return an error when an empty document is attached', () => {
-    rawEntity.primaryDocumentFile = {};
-    rawEntity.primaryDocumentFileSize = 0;
+    rawEntity.primaryDocumentFile = { size: 0 };
 
     expect(
       DocketEntryFactory(rawEntity).getFormattedValidationErrors()

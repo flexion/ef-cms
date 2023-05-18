@@ -11,7 +11,7 @@ describe('SupportingDocumentInformationFactory', () => {
       const documentInstance = SupportingDocumentInformationFactory({
         certificateOfService: false,
         supportingDocument: 'Brief in Support',
-        supportingDocumentFile: {},
+        supportingDocumentFile: { size: 1 },
       });
       expect(documentInstance.attachments).toBe(false);
     });
@@ -35,8 +35,7 @@ describe('SupportingDocumentInformationFactory', () => {
           attachments: true,
           certificateOfService: false,
           supportingDocument: 'Affidavit in Support',
-          supportingDocumentFile: {},
-          supportingDocumentFileSize: 1,
+          supportingDocumentFile: { size: 1 },
         },
         VALIDATION_ERROR_MESSAGES,
       );
@@ -52,8 +51,7 @@ describe('SupportingDocumentInformationFactory', () => {
           attachments: true,
           certificateOfService: false,
           supportingDocument: 'Brief in Support',
-          supportingDocumentFile: {},
-          supportingDocumentFileSize: 1,
+          supportingDocumentFile: { size: 1 },
         },
         VALIDATION_ERROR_MESSAGES,
       );
@@ -67,8 +65,7 @@ describe('SupportingDocumentInformationFactory', () => {
             attachments: true,
             certificateOfService: true,
             supportingDocument: 'Brief in Support',
-            supportingDocumentFile: {},
-            supportingDocumentFileSize: 1,
+            supportingDocumentFile: { size: 1 },
           },
           VALIDATION_ERROR_MESSAGES,
         );

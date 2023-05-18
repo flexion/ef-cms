@@ -29,8 +29,7 @@ describe('validateDocketEntryInteractor', () => {
         lodged: false,
         ordinalValue: 'Other',
         otherIteration: '16',
-        primaryDocumentFile: {},
-        primaryDocumentFileSize: 1,
+        primaryDocumentFile: { size: 1 },
         scenario: 'Nonstandard G',
       },
     });

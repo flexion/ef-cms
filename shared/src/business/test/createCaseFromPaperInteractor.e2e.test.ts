@@ -50,8 +50,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           caseCaption: 'Bob Jones2, Petitioner',
           createdAt: RECEIVED_DATE,
           mailingDate: 'testing',
-          petitionFile: { name: 'something' },
-          petitionFileSize: 1,
+          petitionFile: { size: 1 },
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           petitioners: [
             {
@@ -67,12 +66,10 @@ describe('createCaseFromPaperInteractor integration test', () => {
           ],
           receivedAt: RECEIVED_DATE,
           requestForPlaceOfTrialFile: new File(
-            [],
+            ['abc'],
             'requestForPlaceOfTrialFile.pdf',
           ),
-          requestForPlaceOfTrialFileSize: 1,
-          stinFile: { name: 'something else' },
-          stinFileSize: 1,
+          stinFile: { size: 1 },
         },
         stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
       },

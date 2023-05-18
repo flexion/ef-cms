@@ -88,8 +88,7 @@ describe('createCaseFromPaperInteractor', () => {
           irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
-          petitionFile: new File([], 'petitionFile.pdf'),
-          petitionFileSize: 1,
+          petitionFile: new File(['abc'], 'petitionFile.pdf'),
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           petitioners: [
             {
@@ -110,12 +109,10 @@ describe('createCaseFromPaperInteractor', () => {
           procedureType: 'Small',
           receivedAt: applicationContext.getUtilities().createISODateString(),
           requestForPlaceOfTrialFile: new File(
-            [],
+            ['abc'],
             'requestForPlaceOfTrialFile.pdf',
           ),
-          requestForPlaceOfTrialFileSize: 1,
-          stinFile: new File([], 'stinFile.pdf'),
-          stinFileSize: 1,
+          stinFile: new File(['abc'], 'stinFile.pdf'),
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       } as any,
@@ -149,8 +146,7 @@ describe('createCaseFromPaperInteractor', () => {
           irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
-          petitionFile: new File([], 'petitionFile.pdf'),
-          petitionFileSize: 1,
+          petitionFile: new File(['abc'], 'petitionFile.pdf'),
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           petitioners: [
             {
@@ -171,12 +167,10 @@ describe('createCaseFromPaperInteractor', () => {
           procedureType: 'Small',
           receivedAt: applicationContext.getUtilities().createISODateString(),
           requestForPlaceOfTrialFile: new File(
-            [],
+            ['abc'],
             'requestForPlaceOfTrialFile.pdf',
           ),
-          requestForPlaceOfTrialFileSize: 1,
-          stinFile: new File([], 'stinFile.pdf'),
-          stinFileSize: 1,
+          stinFile: new File(['abc'], 'stinFile.pdf'),
         },
       } as any,
     );
@@ -206,8 +200,7 @@ describe('createCaseFromPaperInteractor', () => {
           irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
-          petitionFile: new File([], 'petitionFile.pdf'),
-          petitionFileSize: 1,
+          petitionFile: new File(['abc'], 'petitionFile.pdf'),
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           petitioners: [
             {
@@ -228,12 +221,10 @@ describe('createCaseFromPaperInteractor', () => {
           procedureType: 'Small',
           receivedAt: applicationContext.getUtilities().createISODateString(),
           requestForPlaceOfTrialFile: new File(
-            [],
+            ['abc'],
             'requestForPlaceOfTrialFile.pdf',
           ),
-          requestForPlaceOfTrialFileSize: 1,
-          stinFile: new File([], 'stinFile.pdf'),
-          stinFileSize: 1,
+          stinFile: new File(['abc'], 'stinFile.pdf'),
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
@@ -262,8 +253,7 @@ describe('createCaseFromPaperInteractor', () => {
           irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
-          petitionFile: new File([], 'petitionFile.pdf'),
-          petitionFileSize: 1,
+          petitionFile: new File(['abc'], 'petitionFile.pdf'),
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           petitioners: [
             {
@@ -284,12 +274,10 @@ describe('createCaseFromPaperInteractor', () => {
           procedureType: 'Small',
           receivedAt: applicationContext.getUtilities().createISODateString(),
           requestForPlaceOfTrialFile: new File(
-            [],
+            ['abc'],
             'requestForPlaceOfTrialFile.pdf',
           ),
-          requestForPlaceOfTrialFileSize: 1,
-          stinFile: new File([], 'stinFile.pdf'),
-          stinFileSize: 1,
+          stinFile: new File(['abc'], 'stinFile.pdf'),
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
@@ -329,8 +317,7 @@ describe('createCaseFromPaperInteractor', () => {
           irsNoticeDate: date,
           mailingDate: 'test',
           partyType: PARTY_TYPES.petitionerSpouse,
-          petitionFile: new File([], 'petitionFile.pdf'),
-          petitionFileSize: 1,
+          petitionFile: new File(['abc'], 'petitionFile.pdf'),
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           petitioners: [
             {
@@ -351,12 +338,10 @@ describe('createCaseFromPaperInteractor', () => {
           procedureType: 'Small',
           receivedAt: applicationContext.getUtilities().createISODateString(),
           requestForPlaceOfTrialFile: new File(
-            [],
+            ['abc'],
             'requestForPlaceOfTrialFile.pdf',
           ),
-          requestForPlaceOfTrialFileSize: 1,
-          stinFile: new File([], 'stinFile.pdf'),
-          stinFileSize: 1,
+          stinFile: new File(['abc'], 'stinFile.pdf'),
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
@@ -382,8 +367,7 @@ describe('createCaseFromPaperInteractor', () => {
           irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
-          petitionFile: new File([], 'petitionFile.pdf'),
-          petitionFileSize: 1,
+          petitionFile: new File(['abc'], 'petitionFile.pdf'),
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           petitioners: [
             {
@@ -404,12 +388,10 @@ describe('createCaseFromPaperInteractor', () => {
           procedureType: 'Small',
           receivedAt: applicationContext.getUtilities().createISODateString(),
           requestForPlaceOfTrialFile: new File(
-            [],
+            ['abc'],
             'requestForPlaceOfTrialFile.pdf',
           ),
-          requestForPlaceOfTrialFileSize: 1,
-          stinFile: new File([], 'stinFile.pdf'),
-          stinFileSize: 1,
+          stinFile: new File(['abc'], 'stinFile.pdf'),
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       } as any,

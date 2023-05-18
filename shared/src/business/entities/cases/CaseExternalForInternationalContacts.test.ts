@@ -23,8 +23,7 @@ describe('CaseExternal', () => {
           hasIrsNotice: true,
           irsNoticeDate: '2009-10-13',
           partyType: PARTY_TYPES.petitioner,
-          petitionFile: {},
-          petitionFileSize: 1,
+          petitionFile: { size: 1 },
           petitioners: [
             {
               address1: '876 12th Ave',
@@ -41,8 +40,7 @@ describe('CaseExternal', () => {
           preferredTrialCity: 'Memphis, Tennessee',
           procedureType: 'Small',
           signature: true,
-          stinFile: {},
-          stinFileSize: 1,
+          stinFile: { size: 1 },
         },
         { applicationContext },
       );
@@ -59,8 +57,7 @@ describe('CaseExternal', () => {
           hasIrsNotice: true,
           irsNoticeDate: '2009-10-13',
           partyType: PARTY_TYPES.petitioner,
-          petitionFile: {},
-          petitionFileSize: 1,
+          petitionFile: { size: 1 },
           petitioners: [
             {
               address1: '876 12th Ave',
@@ -78,8 +75,7 @@ describe('CaseExternal', () => {
           preferredTrialCity: 'Memphis, Tennessee',
           procedureType: 'Small',
           signature: true,
-          stinFile: {},
-          stinFileSize: 1,
+          stinFile: { size: 1 },
         },
         { applicationContext },
       );

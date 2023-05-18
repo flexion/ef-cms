@@ -11,7 +11,8 @@ describe('validateExternalDocumentInformationInteractor', () => {
       certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
       filers: VALIDATION_ERROR_MESSAGES.filers,
       hasSupportingDocuments: VALIDATION_ERROR_MESSAGES.hasSupportingDocuments,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      primaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFile[0].message,
     });
   });
 
@@ -22,8 +23,7 @@ describe('validateExternalDocumentInformationInteractor', () => {
         certificateOfService: false,
         filers: ['759c5880-0c81-4a50-a38b-662da37e2954'],
         hasSupportingDocuments: false,
-        primaryDocumentFile: { file: 'yes!' },
-        primaryDocumentFileSize: 1,
+        primaryDocumentFile: { size: 1 },
       },
     });
 

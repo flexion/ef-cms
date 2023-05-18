@@ -26,7 +26,7 @@ describe('uploadExternalDocumentsAction', () => {
   });
 
   it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor for the added document', async () => {
-    const mockPrimaryDocumentFile = { data: 'something' };
+    const mockPrimaryDocumentFile = { file: {}, size: 1 };
     applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor.mockReturnValue({
@@ -58,7 +58,7 @@ describe('uploadExternalDocumentsAction', () => {
       applicationContext.getUseCases().uploadExternalDocumentsInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      documentFiles: { primary: mockPrimaryDocumentFile },
+      documentFiles: { primary: {} },
       documentMetadata: {
         attachments: true,
         docketNumber: MOCK_CASE.docketNumber,
@@ -91,25 +91,25 @@ describe('uploadExternalDocumentsAction', () => {
           attachments: true,
           hasSecondarySupportingDocuments: true,
           hasSupportingDocuments: true,
-          primaryDocumentFile: { data: 'something' },
+          primaryDocumentFile: { file: {}, size: 1 },
           secondaryDocument: {},
-          secondaryDocumentFile: { data: 'something2' },
+          secondaryDocumentFile: { file: {}, size: 1 },
           secondarySupportingDocuments: [
             {
-              supportingDocumentFile: { data: 'something5' },
+              supportingDocumentFile: { file: {}, size: 1 },
             },
             {
-              supportingDocumentFile: { data: 'something6' },
+              supportingDocumentFile: { file: {}, size: 1 },
             },
           ],
           supportingDocuments: [
             {
-              supportingDocumentFile: { data: 'something3' },
+              supportingDocumentFile: { file: {}, size: 1 },
               supportingDocumentFreeText: 'abc',
             },
             {
               attachments: true,
-              supportingDocumentFile: { data: 'something4' },
+              supportingDocumentFile: { file: {}, size: 1 },
             },
           ],
         },
@@ -125,12 +125,12 @@ describe('uploadExternalDocumentsAction', () => {
         .calls[0][1],
     ).toMatchObject({
       documentFiles: {
-        primary: { data: 'something' },
-        primarySupporting0: { data: 'something3' },
-        primarySupporting1: { data: 'something4' },
-        secondary: { data: 'something2' },
-        secondarySupporting0: { data: 'something5' },
-        secondarySupporting1: { data: 'something6' },
+        primary: {},
+        primarySupporting0: {},
+        primarySupporting1: {},
+        secondary: {},
+        secondarySupporting0: {},
+        secondarySupporting1: {},
       },
       documentMetadata: {
         attachments: true,
