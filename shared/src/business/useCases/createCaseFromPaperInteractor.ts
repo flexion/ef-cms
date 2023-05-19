@@ -1,5 +1,4 @@
 import { Case } from '../entities/cases/Case';
-import { CaseInternal } from '../entities/cases/CaseInternal';
 import { DocketEntry } from '../entities/DocketEntry';
 import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
 import {
@@ -94,17 +93,6 @@ export const createCaseFromPaperInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const petitionEntity = new CaseInternal(
-    {
-      ...petitionMetadata,
-      applicationForWaiverOfFilingFeeFileId,
-      corporateDisclosureFileId,
-      petitionFileId,
-      stinFileId,
-    },
-    { applicationContext },
-  ).validate();
-
   const docketNumber =
     await applicationContext.docketNumberGenerator.createDocketNumber({
       applicationContext,
@@ -114,7 +102,7 @@ export const createCaseFromPaperInteractor = async (
   const caseToAdd = new Case(
     {
       docketNumber,
-      ...petitionEntity.toRawObject(),
+      ...petitionMetadata,
       isPaper: true,
       status: petitionMetadata.status || null,
       userId: user.userId,
@@ -124,8 +112,6 @@ export const createCaseFromPaperInteractor = async (
       isNewCase: true,
     },
   );
-
-  caseToAdd.caseCaption = petitionEntity.caseCaption;
 
   const filers = [caseToAdd.getContactPrimary().contactId];
 
@@ -148,7 +134,7 @@ export const createCaseFromPaperInteractor = async (
       isFileAttached: true,
       isOnDocketRecord: true,
       isPaper: true,
-      mailingDate: petitionEntity.mailingDate,
+      mailingDate: caseToAdd.mailingDate,
       receivedAt: caseToAdd.receivedAt,
       userId: user.userId,
     },
@@ -179,7 +165,7 @@ export const createCaseFromPaperInteractor = async (
         filingDate: caseToAdd.receivedAt,
         isFileAttached: true,
         isPaper: true,
-        mailingDate: petitionEntity.mailingDate,
+        mailingDate: caseToAdd.mailingDate,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
       },
@@ -209,7 +195,7 @@ export const createCaseFromPaperInteractor = async (
         filingDate: caseToAdd.receivedAt,
         isFileAttached: true,
         isPaper: true,
-        mailingDate: petitionEntity.mailingDate,
+        mailingDate: caseToAdd.mailingDate,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
       },
@@ -232,7 +218,7 @@ export const createCaseFromPaperInteractor = async (
         index: 0,
         isFileAttached: true,
         isPaper: true,
-        mailingDate: petitionEntity.mailingDate,
+        mailingDate: caseToAdd.mailingDate,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
       },
@@ -254,7 +240,7 @@ export const createCaseFromPaperInteractor = async (
         filingDate: caseToAdd.receivedAt,
         isFileAttached: true,
         isPaper: true,
-        mailingDate: petitionEntity.mailingDate,
+        mailingDate: caseToAdd.mailingDate,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
       },

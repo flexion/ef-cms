@@ -62,6 +62,7 @@ import jwt from 'jsonwebtoken';
 const pdfLib = require('pdf-lib');
 import {
   fakeData,
+  getFakeBlob,
   getFakeEncryptedFile,
   getFakeFile,
 } from '../../shared/src/business/test/getFakeFile';
@@ -626,8 +627,6 @@ export const uploadExternalDecisionDocument = async cerebralTest => {
     eventCode: 'ACED',
     filers: [contactPrimary.contactId],
     hasSupportingDocuments: false,
-    primaryDocumentFile: fakeFile,
-    primaryDocumentFileSize: 115022,
     scenario: 'Standard',
     searchError: false,
     supportingDocument: null,
@@ -635,6 +634,12 @@ export const uploadExternalDecisionDocument = async cerebralTest => {
     supportingDocumentFreeText: null,
     supportingDocumentMetadata: null,
   });
+
+  await cerebralTest.runSequence('validateFileInputSequence', {
+    file: getFakeBlob(),
+    theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+  });
+
   await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
 
@@ -652,8 +657,6 @@ export const uploadExternalRatificationDocument = async cerebralTest => {
     filers: [contactPrimary.contactId],
     freeText: 'do the test',
     hasSupportingDocuments: false,
-    primaryDocumentFile: fakeFile,
-    primaryDocumentFileSize: 115022,
     scenario: 'Nonstandard B',
     searchError: false,
     supportingDocument: null,
@@ -661,6 +664,12 @@ export const uploadExternalRatificationDocument = async cerebralTest => {
     supportingDocumentFreeText: null,
     supportingDocumentMetadata: null,
   });
+
+  await cerebralTest.runSequence('validateFileInputSequence', {
+    file: getFakeBlob(),
+    theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+  });
+
   await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
 

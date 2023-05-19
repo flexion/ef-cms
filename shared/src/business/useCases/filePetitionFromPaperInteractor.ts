@@ -43,7 +43,7 @@ export const filePetitionFromPaperInteractor = async (
     applicationForWaiverOfFilingFeeUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: applicationForWaiverOfFilingFeeFile,
+        document: applicationForWaiverOfFilingFeeFile.file,
         onUploadProgress: applicationForWaiverOfFilingFeeUploadProgress,
       });
   }
@@ -51,7 +51,7 @@ export const filePetitionFromPaperInteractor = async (
   const petitionFileUpload = applicationContext
     .getUseCases()
     .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-      document: petitionFile,
+      document: petitionFile.file,
       onUploadProgress: petitionUploadProgress,
     });
 
@@ -60,7 +60,7 @@ export const filePetitionFromPaperInteractor = async (
     corporateDisclosureFileUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: corporateDisclosureFile,
+        document: corporateDisclosureFile.file,
         onUploadProgress: corporateDisclosureUploadProgress,
       });
   }
@@ -70,7 +70,7 @@ export const filePetitionFromPaperInteractor = async (
     stinFileUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: stinFile,
+        document: stinFile.file,
         onUploadProgress: stinUploadProgress,
       });
   }
@@ -80,7 +80,7 @@ export const filePetitionFromPaperInteractor = async (
     requestForPlaceOfTrialFileUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: requestForPlaceOfTrialFile,
+        document: requestForPlaceOfTrialFile.file,
         onUploadProgress: requestForPlaceOfTrialUploadProgress,
       });
   }

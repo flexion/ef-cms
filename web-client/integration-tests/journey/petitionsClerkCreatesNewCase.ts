@@ -5,7 +5,7 @@ import {
   PAYMENT_STATUS,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
-import { fakeFile } from '../helpers';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
 export const petitionsClerkCreatesNewCase = (
   cerebralTest,
@@ -78,44 +78,24 @@ export const petitionsClerkCreatesNewCase = (
       cerebralTest.getState('validationErrors.requestForPlaceOfTrialFile'),
     ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile);
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'petitionFile',
-      value: fakeFile,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'petitionFile',
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'petitionFileSize',
-      value: 1,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'stinFile',
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'stinFile',
-      value: fakeFile,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'corporateDisclosureFile',
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'stinFileSize',
-      value: 1,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'corporateDisclosureFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'corporateDisclosureFileSize',
-      value: 1,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'requestForPlaceOfTrialFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'requestForPlaceOfTrialFileSize',
-      value: 1,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'requestForPlaceOfTrialFile',
     });
 
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
@@ -124,14 +104,9 @@ export const petitionsClerkCreatesNewCase = (
       cerebralTest.getState('validationErrors.requestForPlaceOfTrialFile'),
     ).toBeUndefined();
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'applicationForWaiverOfFilingFeeFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'applicationForWaiverOfFilingFeeFileSize',
-      value: 1,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'applicationForWaiverOfFilingFeeFile',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
