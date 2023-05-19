@@ -1,8 +1,11 @@
-import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-
-const { COUNTRY_TYPES, DEFAULT_PROCEDURE_TYPE, PARTY_TYPES, PAYMENT_STATUS } =
-  applicationContext.getConstants();
+import {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  DEFAULT_PROCEDURE_TYPE,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+} from '../../../shared/src/business/entities/EntityConstants';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
 export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
@@ -36,46 +39,6 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     {
       key: 'mailingDate',
       value: 'Some Day',
-    },
-    {
-      key: 'petitionFile',
-      value: fakeFile,
-    },
-    {
-      key: 'petitionFileSize',
-      value: 1,
-    },
-    {
-      key: 'cdsFile',
-      value: fakeFile,
-    },
-    {
-      key: 'cdsFileSize',
-      value: 1,
-    },
-    {
-      key: 'corporateDisclosureFile',
-      value: fakeFile,
-    },
-    {
-      key: 'corporateDisclosureFileSize',
-      value: 1,
-    },
-    {
-      key: 'requestForPlaceOfTrialFile',
-      value: fakeFile,
-    },
-    {
-      key: 'requestForPlaceOfTrialFileSize',
-      value: 1,
-    },
-    {
-      key: 'applicationForWaiverOfFilingFeeFile',
-      value: fakeFile,
-    },
-    {
-      key: 'applicationForWaiverOfFilingFeeFileSize',
-      value: 1,
     },
     {
       key: 'preferredTrialCity',
@@ -192,6 +155,23 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
         await cerebralTest.runSequence('updateFormValueSequence', item);
       }
     }
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'petitionFile',
+    });
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'corporateDisclosureFile',
+    });
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'requestForPlaceOfTrialFile',
+    });
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'applicationForWaiverOfFilingFeeFile',
+    });
 
     await cerebralTest.runSequence(
       'updateFormValueAndSecondaryContactInfoSequence',

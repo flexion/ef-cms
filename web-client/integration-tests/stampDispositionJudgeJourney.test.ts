@@ -69,10 +69,12 @@ describe('Stamp disposition judge journey test', () => {
       key: 'dateReceivedMonth',
       value: 1,
     });
+
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: 1,
     });
+
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: 2018,

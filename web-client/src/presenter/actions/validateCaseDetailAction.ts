@@ -29,13 +29,11 @@ export const validateCaseDetailAction = ({
       document => document.documentType === type,
     );
   };
-
   const initialDocumentFormFiles = {};
   Object.keys(INITIAL_DOCUMENT_TYPES_MAP).forEach(key => {
     const foundDocument = findDocumentByType(INITIAL_DOCUMENT_TYPES_MAP[key]);
     if (foundDocument) {
-      initialDocumentFormFiles[key] = {};
-      initialDocumentFormFiles[`${key}Size`] = 1;
+      initialDocumentFormFiles[key] = { size: 1 };
     }
   });
 
