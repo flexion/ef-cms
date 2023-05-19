@@ -1,6 +1,5 @@
 /**
  * uploadPdfFromClient
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.file the file to upload

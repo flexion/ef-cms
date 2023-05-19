@@ -56,9 +56,7 @@ import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCa
 import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
-
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
-import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 const pdfLib = require('pdf-lib');
@@ -806,11 +804,9 @@ export const loginAs = (cerebralTest, user) =>
 
 export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
   let cerebralTest;
-  global.FormData = FormDataHelper;
-  global.File = () => {
-    return fakeFile;
-  };
+
   global.WebSocket = require('websocket').w3cwebsocket;
+
   const dom = new JSDOM(
     `<!DOCTYPE html>
 <body>

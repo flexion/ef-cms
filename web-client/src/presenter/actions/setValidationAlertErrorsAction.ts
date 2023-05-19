@@ -14,7 +14,6 @@ export const setValidationAlertErrorsAction = ({
   store,
 }: ActionProps) => {
   let errorKeys = Object.keys(props.errors);
-  console.log('errorkeys', errorKeys);
 
   const getErrorKeys = keys => {
     const filteredErrorKeys = [];

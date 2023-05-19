@@ -3,11 +3,11 @@ import type { Config } from 'jest';
 const config: Config = {
   clearMocks: true,
   collectCoverage: false,
-  globals: {
-    File() {},
-    FileReader: () => {},
-    atob: x => x,
-  },
+  // globals: {
+  //   File() {},
+  //   FileReader: () => {},
+  //   atob: x => x,
+  // },
   maxWorkers: 1, // because running integration tests are heavy and can interfere with one another, we are locking this to 1 worker
   testEnvironment: 'node',
   // testMatch: [
