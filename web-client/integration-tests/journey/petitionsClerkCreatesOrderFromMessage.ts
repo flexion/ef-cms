@@ -25,11 +25,6 @@ export const petitionsClerkCreatesOrderFromMessage = cerebralTest => {
 
     await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
-    // await cerebralTest.runSequence('updateFormValueSequence', {
-    //   key: 'richText',
-    //   value: '<p>This is a test order.</p>',
-    // });
-
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'documentContents',
       value: 'This is a test order.',

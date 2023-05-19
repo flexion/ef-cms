@@ -27,7 +27,15 @@ export const petitionsClerkEditsDraftOrder = (
 
     expect(cerebralTest.getState('form.richText')).toEqual(currentRichText);
 
-    cerebralTest.setState('form.richText', setRichText);
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'richText',
+      value: setRichText,
+    });
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'documentContents',
+      value: setRichText,
+    });
+
     await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
     await cerebralTest.runSequence('gotoEditOrderSequence', {

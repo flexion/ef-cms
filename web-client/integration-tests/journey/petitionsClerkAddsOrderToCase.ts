@@ -34,6 +34,11 @@ export const petitionsClerkAddsOrderToCase = cerebralTest => {
       value: '<p>This is a test order.</p>',
     });
 
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'documentContents',
+      value: 'This is a test order.',
+    });
+
     await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});

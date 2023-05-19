@@ -42,6 +42,11 @@ export const docketClerkEditsOrderFromMessage = cerebralTest => {
       value: '<p>This is an updated order.</p>',
     });
 
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'documentContents',
+      value: 'This is an updated order.',
+    });
+
     await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
     expect(cerebralTest.getState('currentPage')).toEqual('SignOrder');
