@@ -77,7 +77,7 @@ export const practitionerFilesDocumentForStipulatedDecision = cerebralTest => {
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);

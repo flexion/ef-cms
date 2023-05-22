@@ -146,7 +146,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
@@ -350,7 +350,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {

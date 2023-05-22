@@ -93,22 +93,22 @@ export const petitionsClerkCreatesNewCase = (
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'petitionFile',
+      locationOnForm: 'petitionFile',
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'stinFile',
+      locationOnForm: 'stinFile',
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'corporateDisclosureFile',
+      locationOnForm: 'corporateDisclosureFile',
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'requestForPlaceOfTrialFile',
+      locationOnForm: 'requestForPlaceOfTrialFile',
     });
 
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
@@ -119,7 +119,7 @@ export const petitionsClerkCreatesNewCase = (
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'applicationForWaiverOfFilingFeeFile',
+      locationOnForm: 'applicationForWaiverOfFilingFeeFile',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {

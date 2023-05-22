@@ -156,12 +156,12 @@ describe('E-Consent journey', () => {
 
       await cerebralTest.runSequence('validateFileInputSequence', {
         file: fakeBlob1,
-        theNameOfTheFileOnTheEntity: 'petitionFile',
+        locationOnForm: 'petitionFile',
       });
 
       await cerebralTest.runSequence('validateFileInputSequence', {
         file: fakeBlob1,
-        theNameOfTheFileOnTheEntity: 'requestForPlaceOfTrialFile',
+        locationOnForm: 'requestForPlaceOfTrialFile',
       });
 
       await cerebralTest.runSequence('saveSavedCaseForLaterSequence');

@@ -4,7 +4,7 @@ export const docketClerkAddsDocketEntryFile = cerebralTest => {
   return it('Adds a file to the current docket record form', async () => {
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
   });
 };

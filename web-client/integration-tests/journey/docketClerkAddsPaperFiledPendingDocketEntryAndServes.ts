@@ -59,7 +59,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     const { contactId } = contactPrimaryFromState(cerebralTest);

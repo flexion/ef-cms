@@ -24,7 +24,7 @@ export const respondentUploadsProposedStipulatedDecision = cerebralTest => {
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('submitExternalDocumentSequence');

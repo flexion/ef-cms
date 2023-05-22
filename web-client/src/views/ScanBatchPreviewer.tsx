@@ -405,7 +405,7 @@ export const ScanBatchPreviewer = connect(
                   setDocumentForUploadSequence({
                     documentUploadMode: 'preview',
                     file,
-                    theNameOfTheFileOnTheEntity: documentType,
+                    locationOnForm: documentType,
                   });
                   if (validateSequence) {
                     validateSequence();

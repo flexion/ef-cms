@@ -97,7 +97,7 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('uploadCourtIssuedDocumentSequence');

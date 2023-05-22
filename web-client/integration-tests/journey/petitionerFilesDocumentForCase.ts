@@ -395,18 +395,17 @@ export const petitionerFilesDocumentForCase = cerebralTest => {
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'secondaryDocumentFile',
+      locationOnForm: 'secondaryDocumentFile',
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity:
-        'supportingDocuments.0.supportingDocumentFile',
+      locationOnForm: 'supportingDocuments.0.supportingDocumentFile',
     });
 
     await cerebralTest.runSequence(
@@ -489,8 +488,7 @@ export const petitionerFilesDocumentForCase = cerebralTest => {
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity:
-        'secondarySupportingDocuments.0.supportingDocumentFile',
+      locationOnForm: 'secondarySupportingDocuments.0.supportingDocumentFile',
     });
 
     await cerebralTest.runSequence(

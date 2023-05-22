@@ -63,7 +63,7 @@ export const StateDrivenFileInput = connect(
                   });
                   validateFileInputSequence({
                     file: clonedFile,
-                    theNameOfTheFileOnTheEntity: inputName,
+                    locationOnForm: inputName,
                   });
                   return validationSequence();
                 })

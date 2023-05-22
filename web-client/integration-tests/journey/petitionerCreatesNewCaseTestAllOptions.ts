@@ -18,12 +18,12 @@ export const petitionerCreatesNewCaseTestAllOptions = (
   return it('petitioner creates a new case, testing all form options', async () => {
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'petitionFile',
+      locationOnForm: 'petitionFile',
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'stinFile',
+      locationOnForm: 'stinFile',
     });
 
     let result = runCompute(startCaseHelper, {
@@ -244,7 +244,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'corporateDisclosureFile',
+      locationOnForm: 'corporateDisclosureFile',
     });
 
     await cerebralTest.runSequence('submitFilePetitionSequence');

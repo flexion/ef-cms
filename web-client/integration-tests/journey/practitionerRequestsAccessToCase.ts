@@ -83,7 +83,7 @@ export const practitionerRequestsAccessToCase = cerebralTest => {
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');

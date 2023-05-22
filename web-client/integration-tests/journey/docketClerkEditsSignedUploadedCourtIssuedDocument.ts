@@ -21,7 +21,7 @@ export const docketClerkEditsSignedUploadedCourtIssuedDocument =
 
       await cerebralTest.runSequence('validateFileInputSequence', {
         file: fakeBlob1,
-        theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+        locationOnForm: 'primaryDocumentFile',
       });
 
       await cerebralTest.runSequence('editUploadCourtIssuedDocumentSequence', {

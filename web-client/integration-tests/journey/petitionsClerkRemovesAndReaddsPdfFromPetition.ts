@@ -40,7 +40,7 @@ export const petitionsClerkRemovesAndReaddsPdfFromPetition = cerebralTest => {
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentUploadMode: 'preview',
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'applicationForWaiverOfFilingFeeFile',
+      locationOnForm: 'applicationForWaiverOfFilingFeeFile',
     });
 
     expect(

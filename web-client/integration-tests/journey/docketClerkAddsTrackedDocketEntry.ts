@@ -44,7 +44,7 @@ export const docketClerkAddsTrackedDocketEntry = (
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);

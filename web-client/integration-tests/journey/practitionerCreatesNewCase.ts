@@ -18,12 +18,12 @@ export const practitionerCreatesNewCase = (
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'petitionFile',
+      locationOnForm: 'petitionFile',
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'stinFile',
+      locationOnForm: 'stinFile',
     });
 
     let result = runCompute(startCaseHelper, {

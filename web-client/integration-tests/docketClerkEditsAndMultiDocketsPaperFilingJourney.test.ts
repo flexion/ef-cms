@@ -40,7 +40,7 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
       await cerebralTest.runSequence('setDocumentForUploadSequence', {
         documentUploadMode: 'preview',
         file: fakeBlob1,
-        theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+        locationOnForm: 'primaryDocumentFile',
       });
 
       const formValues = {

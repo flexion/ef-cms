@@ -7,7 +7,7 @@ export const instantiatePDFFromUploadAction = async ({
   applicationContext,
   props,
 }) => {
-  const { file, theNameOfTheFileOnTheEntity } = props;
+  const { file, locationOnForm } = props;
 
   const pdf: PDF = await applicationContext
     .getUseCases()
@@ -15,5 +15,5 @@ export const instantiatePDFFromUploadAction = async ({
       file,
     });
 
-  return { key: theNameOfTheFileOnTheEntity, value: pdf };
+  return { key: locationOnForm, value: pdf };
 };

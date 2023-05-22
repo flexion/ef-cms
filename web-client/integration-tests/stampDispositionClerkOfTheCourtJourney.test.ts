@@ -54,7 +54,7 @@ describe('Stamp disposition clerk of the court journey test', () => {
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentUploadMode: 'preview',
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     expect(Object.keys(cerebralTest.getState('validationErrors'))).toEqual(

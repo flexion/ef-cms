@@ -50,12 +50,12 @@ describe('Petitions clerk creates Estate case with long additionalName', () => {
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'petitionFile',
+      locationOnForm: 'petitionFile',
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'requestForPlaceOfTrialFile',
+      locationOnForm: 'requestForPlaceOfTrialFile',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {

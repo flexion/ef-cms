@@ -27,7 +27,7 @@ export const docketClerkAddsDocketEntryForMotion = cerebralTest => {
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentUploadMode: 'preview',
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('submitPaperFilingSequence');

@@ -64,7 +64,7 @@ export const practitionerRequestsPendingAccessToCase = cerebralTest => {
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     const contactSecondary = contactSecondaryFromState(cerebralTest);

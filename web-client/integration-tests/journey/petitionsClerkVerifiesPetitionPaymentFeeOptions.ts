@@ -100,7 +100,7 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = cerebralTest => {
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'applicationForWaiverOfFilingFeeFile',
+      locationOnForm: 'applicationForWaiverOfFilingFeeFile',
     });
 
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');

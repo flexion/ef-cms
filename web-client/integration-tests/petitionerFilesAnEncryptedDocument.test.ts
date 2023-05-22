@@ -60,7 +60,7 @@ describe('Petitioner files an encrypted document', () => {
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeEncryptedFile,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({

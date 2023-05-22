@@ -50,7 +50,7 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     expect(cerebralTest.getState('form.documentType')).toEqual(

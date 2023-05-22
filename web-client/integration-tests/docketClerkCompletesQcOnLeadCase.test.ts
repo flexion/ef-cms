@@ -46,7 +46,7 @@ describe('Docket clerk multi-dockets court issued document journey', () => {
 
       await cerebralTest.runSequence('validateFileInputSequence', {
         file: fakeBlob1,
-        theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+        locationOnForm: 'primaryDocumentFile',
       });
 
       await cerebralTest.runSequence(

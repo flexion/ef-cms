@@ -31,7 +31,7 @@ export const userEditsCorrespondence = (cerebralTest, user) =>
 
     await cerebralTest.runSequence('validateFileInputSequence', {
       file: fakeBlob2,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('editCorrespondenceDocumentSequence');

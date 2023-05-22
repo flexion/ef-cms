@@ -57,7 +57,7 @@ export const petitionsClerkVerifiesOrderForCdsCheckbox = cerebralTest => {
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentUploadMode: 'preview',
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'corporateDisclosureFile',
+      locationOnForm: 'corporateDisclosureFile',
     });
 
     expect(cerebralTest.getState('form.orderForCds')).toBeFalsy();
@@ -92,7 +92,7 @@ export const petitionsClerkVerifiesOrderForCdsCheckbox = cerebralTest => {
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentUploadMode: 'preview',
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'petitionFile',
+      locationOnForm: 'petitionFile',
     });
 
     expect(cerebralTest.getState('form.orderForCds')).toBeFalsy();

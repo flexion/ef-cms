@@ -22,7 +22,7 @@ export const petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving =
       await cerebralTest.runSequence('setDocumentForUploadSequence', {
         documentUploadMode: 'preview',
         file: fakeBlob1,
-        theNameOfTheFileOnTheEntity: documentToRemoveAndReAdd,
+        locationOnForm: documentToRemoveAndReAdd,
       });
 
       expect(

@@ -72,7 +72,7 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox =
       await cerebralTest.runSequence('setDocumentForUploadSequence', {
         documentUploadMode: 'preview',
         file: fakeBlob1,
-        theNameOfTheFileOnTheEntity: 'requestForPlaceOfTrialFile',
+        locationOnForm: 'requestForPlaceOfTrialFile',
       });
 
       expect(
@@ -111,7 +111,7 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox =
       await cerebralTest.runSequence('setDocumentForUploadSequence', {
         documentUploadMode: 'preview',
         file: fakeBlob1,
-        theNameOfTheFileOnTheEntity: 'petitionFile',
+        locationOnForm: 'petitionFile',
       });
 
       expect(

@@ -62,7 +62,7 @@ describe('Invoke checkForReadyForTrialCasesLambda via http request', () => {
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentUploadMode: 'preview',
       file: fakeBlob1,
-      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+      locationOnForm: 'primaryDocumentFile',
     });
 
     const { contactId } = contactPrimaryFromState(cerebralTest);
