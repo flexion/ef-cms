@@ -14,6 +14,9 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     formOrdersAndNotices = {},
     paymentStatus = PAYMENT_STATUS.WAIVED,
     procedureType = 'Small',
+    receivedAtDay = '01',
+    receivedAtMonth = '01',
+    receivedAtYear = '2001',
     trialLocation = 'Birmingham, Alabama',
   } = {},
   formOverrides = [],
@@ -26,15 +29,15 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   let formValues = [
     {
       key: 'receivedAtMonth',
-      value: '01',
+      value: receivedAtMonth,
     },
     {
       key: 'receivedAtDay',
-      value: '01',
+      value: receivedAtDay,
     },
     {
       key: 'receivedAtYear',
-      value: '2001',
+      value: receivedAtYear,
     },
     {
       key: 'mailingDate',
