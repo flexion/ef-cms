@@ -2,8 +2,8 @@ import {
   AMICUS_BRIEF_EVENT_CODE,
   PARTIES_CODES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
 import {
-  fakeFile,
   loginAs,
   setupTest,
   uploadPetition,
@@ -49,9 +49,9 @@ describe('Amicus Brief Journey', () => {
     });
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
-      documentType: 'primaryDocumentFile',
       documentUploadMode: 'preview',
-      file: fakeFile,
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('submitPaperFilingSequence', {

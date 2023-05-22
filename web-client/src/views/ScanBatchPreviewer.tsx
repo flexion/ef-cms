@@ -403,9 +403,9 @@ export const ScanBatchPreviewer = connect(
                 limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                   const file = e.target.files[0];
                   setDocumentForUploadSequence({
-                    documentType,
                     documentUploadMode: 'preview',
                     file,
+                    theNameOfTheFileOnTheEntity: documentType,
                   });
                   if (validateSequence) {
                     validateSequence();

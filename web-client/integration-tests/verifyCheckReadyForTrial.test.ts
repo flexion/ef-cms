@@ -1,12 +1,12 @@
 import {
   contactPrimaryFromState,
-  fakeFile,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
   waitForCondition,
 } from './helpers';
+import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import axios from 'axios';
 
@@ -60,9 +60,9 @@ describe('Invoke checkForReadyForTrialCasesLambda via http request', () => {
     }
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
-      documentType: 'primaryDocumentFile',
       documentUploadMode: 'preview',
-      file: fakeFile,
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     const { contactId } = contactPrimaryFromState(cerebralTest);

@@ -5,13 +5,13 @@ import {
 import { confirmInitiateServiceModalHelper } from '../src/presenter/computeds/confirmInitiateServiceModalHelper';
 import {
   contactPrimaryFromState,
-  fakeFile,
   findWorkItemByDocketNumber,
   setupTest,
   waitForCondition,
 } from './helpers';
 import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
 import { docketClerkEditsServiceIndicatorForPetitioner } from './journey/docketClerkEditsServiceIndicatorForPetitioner';
+import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -38,9 +38,9 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
       });
 
       await cerebralTest.runSequence('setDocumentForUploadSequence', {
-        documentType: 'primaryDocumentFile',
         documentUploadMode: 'preview',
-        file: fakeFile,
+        file: getFakeBlob(),
+        theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
       });
 
       const formValues = {

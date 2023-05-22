@@ -1,24 +1,21 @@
-import { getFormValueDocumentAction } from '../actions/getFormValueDocumentAction';
-import { getFormValueDocumentSizeAction } from '../actions/getFormValueDocumentSizeAction';
+import { instantiatePDFFromUploadAction } from '../actions/FileDocument/instantiatePDFFromUploadAction';
 import { selectDocumentForPreviewSequence } from './selectDocumentForPreviewSequence';
 import { setDocumentUploadModeSequence } from './setDocumentUploadModeSequence';
+import { setFormValueAction } from '../actions/setFormValueAction';
 import { setIsScanningFalseAction } from '../actions/setIsScanningFalseAction';
-import { updateFormValueSequence } from './updateFormValueSequence';
 import { updateOrderForCdsAction } from '../actions/StartCaseInternal/updateOrderForCdsAction';
 import { updateOrderForDesignatingPlaceOfTrialAction } from '../actions/updateOrderForDesignatingPlaceOfTrialAction';
-import { validateFileSizeAction } from '../actions/validateFileSizeAction';
+import { validateFileAction } from '../actions/FileDocument/validateFileAction';
 
 export const setDocumentForUploadSequence = [
-  validateFileSizeAction,
+  instantiatePDFFromUploadAction,
+  setFormValueAction,
+  validateFileAction,
   {
-    invalid: [setIsScanningFalseAction],
-    valid: [
-      getFormValueDocumentAction,
-      updateFormValueSequence,
+    error: [setIsScanningFalseAction],
+    success: [
       updateOrderForDesignatingPlaceOfTrialAction,
       updateOrderForCdsAction,
-      getFormValueDocumentSizeAction,
-      updateFormValueSequence,
       selectDocumentForPreviewSequence,
       setDocumentUploadModeSequence,
     ],

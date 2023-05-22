@@ -17,10 +17,6 @@ import { petitionsClerkVerifiesPetitionPaymentFeeOptions } from './journey/petit
 describe('Petitions clerk case journey', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(40000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
@@ -35,12 +31,9 @@ describe('Petitions clerk case journey', () => {
     receivedAtFormatted: '01/01/01',
     shouldShowIrsNoticeDate: false,
   });
-  petitionsClerkVerifiesOrderForCdsCheckbox(cerebralTest, fakeFile);
-  petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(
-    cerebralTest,
-    fakeFile,
-  );
-  petitionsClerkVerifiesPetitionPaymentFeeOptions(cerebralTest, fakeFile);
+  petitionsClerkVerifiesOrderForCdsCheckbox(cerebralTest);
+  petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(cerebralTest);
+  petitionsClerkVerifiesPetitionPaymentFeeOptions(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case #1', async () => {

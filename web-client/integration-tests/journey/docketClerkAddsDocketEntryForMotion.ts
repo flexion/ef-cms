@@ -1,4 +1,4 @@
-import { fakeFile } from '../../integration-tests-public/helpers';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 import { waitForLoadingComponentToHide } from '../helpers';
 
 export const docketClerkAddsDocketEntryForMotion = cerebralTest => {
@@ -25,9 +25,9 @@ export const docketClerkAddsDocketEntryForMotion = cerebralTest => {
     }
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
-      documentType: 'primaryDocumentFile',
       documentUploadMode: 'preview',
-      file: fakeFile,
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('submitPaperFilingSequence');

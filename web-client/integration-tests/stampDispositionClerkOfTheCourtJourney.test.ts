@@ -1,12 +1,12 @@
 import { MOTION_DISPOSITIONS } from '../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
-  fakeFile,
   loginAs,
   setupTest,
   uploadPetition,
   waitForCondition,
 } from './helpers';
+import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
 import { userSendsMessage } from './journey/userSendsMessage';
 
 describe('Stamp disposition clerk of the court journey test', () => {
@@ -52,9 +52,9 @@ describe('Stamp disposition clerk of the court journey test', () => {
     );
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
-      documentType: 'primaryDocumentFile',
       documentUploadMode: 'preview',
-      file: fakeFile,
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     expect(Object.keys(cerebralTest.getState('validationErrors'))).toEqual(
@@ -65,10 +65,12 @@ describe('Stamp disposition clerk of the court journey test', () => {
       key: 'dateReceivedMonth',
       value: 1,
     });
+
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: 1,
     });
+
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: 2018,
@@ -95,7 +97,6 @@ describe('Stamp disposition clerk of the court journey test', () => {
     });
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);
-
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {

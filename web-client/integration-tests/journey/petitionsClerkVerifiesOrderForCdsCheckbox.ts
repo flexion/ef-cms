@@ -1,10 +1,8 @@
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
-export const petitionsClerkVerifiesOrderForCdsCheckbox = (
-  cerebralTest,
-  fakeFile,
-) => {
+export const petitionsClerkVerifiesOrderForCdsCheckbox = cerebralTest => {
   return it('Petitions clerk verifies that the Order for CDS checkbox is correctly checked and unchecked', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
@@ -57,9 +55,9 @@ export const petitionsClerkVerifiesOrderForCdsCheckbox = (
     });
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
-      documentType: 'corporateDisclosureFile',
       documentUploadMode: 'preview',
-      file: fakeFile,
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'corporateDisclosureFile',
     });
 
     expect(cerebralTest.getState('form.orderForCds')).toBeFalsy();
@@ -92,9 +90,9 @@ export const petitionsClerkVerifiesOrderForCdsCheckbox = (
     });
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
-      documentType: 'petitionFile',
       documentUploadMode: 'preview',
-      file: fakeFile,
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'petitionFile',
     });
 
     expect(cerebralTest.getState('form.orderForCds')).toBeFalsy();

@@ -11,10 +11,6 @@ import { petitionsClerkViewsSectionInProgress } from './journey/petitionsClerkVi
 describe('Petitions Clerk QCs Paper Filed Petition', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(40000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
@@ -32,14 +28,11 @@ describe('Petitions Clerk QCs Paper Filed Petition', () => {
   petitionsClerkReviewsPetitionAndSavesForLater(cerebralTest);
   petitionsClerkViewsSectionInProgress(cerebralTest);
   petitionsClerkEditsSavedPetition(cerebralTest);
-  petitionsClerkRemovesAndReaddsPetitionFile(cerebralTest, fakeFile);
+  petitionsClerkRemovesAndReaddsPetitionFile(cerebralTest);
   petitionsClerkEditsSavedPetition(cerebralTest);
-  petitionsClerkRemovesAndReaddsPdfFromPetition(cerebralTest, fakeFile);
+  petitionsClerkRemovesAndReaddsPdfFromPetition(cerebralTest);
   petitionsClerkEditsSavedPetition(cerebralTest);
-  petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving(
-    cerebralTest,
-    fakeFile,
-  );
+  petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving(cerebralTest);
 
   it('should be able to serve the case', async () => {
     expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');

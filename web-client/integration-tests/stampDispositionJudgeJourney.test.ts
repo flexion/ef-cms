@@ -2,12 +2,12 @@ import { MOTION_DISPOSITIONS } from '../../shared/src/business/entities/EntityCo
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   contactPrimaryFromState,
-  fakeFile,
   loginAs,
   setupTest,
   uploadPetition,
   waitForCondition,
 } from './helpers';
+import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
 import { userSendsMessage } from './journey/userSendsMessage';
 
 describe('Stamp disposition judge journey test', () => {
@@ -56,9 +56,9 @@ describe('Stamp disposition judge journey test', () => {
     );
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
-      documentType: 'primaryDocumentFile',
       documentUploadMode: 'preview',
-      file: fakeFile,
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     expect(Object.keys(cerebralTest.getState('validationErrors'))).toEqual(

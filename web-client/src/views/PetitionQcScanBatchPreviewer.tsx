@@ -419,9 +419,9 @@ export const PetitionQcScanBatchPreviewer = connect(
                 e.preventDefault();
                 const file = e.target.files[0];
                 setDocumentForUploadSequence({
-                  documentType,
                   documentUploadMode: 'preview',
                   file,
+                  theNameOfTheFileOnTheEntity: documentType,
                 });
               }}
             />

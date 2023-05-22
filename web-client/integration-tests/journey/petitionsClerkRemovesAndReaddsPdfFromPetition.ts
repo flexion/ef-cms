@@ -1,9 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
-export const petitionsClerkRemovesAndReaddsPdfFromPetition = (
-  cerebralTest,
-  fakeFile,
-) => {
+export const petitionsClerkRemovesAndReaddsPdfFromPetition = cerebralTest => {
   const documentToRemoveAndReAdd = 'applicationForWaiverOfFilingFeeFile';
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
 
@@ -40,9 +38,9 @@ export const petitionsClerkRemovesAndReaddsPdfFromPetition = (
     );
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
-      documentType: 'applicationForWaiverOfFilingFeeFile',
       documentUploadMode: 'preview',
-      file: fakeFile,
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'applicationForWaiverOfFilingFeeFile',
     });
 
     expect(

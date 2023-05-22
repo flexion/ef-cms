@@ -1,6 +1,5 @@
 import {
   contactPrimaryFromState,
-  fakeFile,
   loginAs,
   setupTest,
   uploadPetition,
@@ -9,6 +8,7 @@ import {
 } from './helpers';
 import { docketClerkAddsMiscellaneousPaperFiling } from './journey/docketClerkAddsMiscellaneousPaperFiling';
 import { docketClerkServesPaperFilingFromDocumentQC } from './journey/docketClerkServesPaperFilingFromDocumentQC';
+import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 describe('Docket Clerk edits a paper filing journey', () => {
@@ -50,9 +50,9 @@ describe('Docket Clerk edits a paper filing journey', () => {
     );
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
-      documentType: 'primaryDocumentFile',
       documentUploadMode: 'preview',
-      file: fakeFile,
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     expect(Object.keys(cerebralTest.getState('validationErrors'))).toEqual(
@@ -164,9 +164,9 @@ describe('Docket Clerk edits a paper filing journey', () => {
     ]);
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
-      documentType: 'primaryDocumentFile',
       documentUploadMode: 'preview',
-      file: fakeFile,
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     expect(cerebralTest.getState('currentPage')).toEqual('PaperFiling');
