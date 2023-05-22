@@ -2,7 +2,7 @@ import { createConsolidatedGroup } from './journey/consolidation/createConsolida
 import { docketClerkAddsDocketEntryForHearingExhibitsFromDraftOnLeadCase } from './journey/docketClerkAddsDocketEntryForHearingExhibitsFromDraftOnLeadCase';
 import { docketClerkAddsDocketEntryForTrialExhibit } from './journey/docketClerkAddsDocketEntryForTrialExhibit';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { loginAs, setupTest } from './helpers';
 
 describe('Case Consolidation Coversheets Journey', () => {
   const cerebralTest = setupTest();
@@ -50,7 +50,7 @@ describe('Case Consolidation Coversheets Journey', () => {
     });
 
     loginAs(cerebralTest, 'docketclerk@example.com');
-    docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
+    docketClerkUploadsACourtIssuedDocument(cerebralTest);
     docketClerkAddsDocketEntryForHearingExhibitsFromDraftOnLeadCase(
       cerebralTest,
       {
@@ -90,7 +90,7 @@ describe('Case Consolidation Coversheets Journey', () => {
       cerebralTest.draftOrders = [];
     });
 
-    docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
+    docketClerkUploadsACourtIssuedDocument(cerebralTest);
     docketClerkAddsDocketEntryForTrialExhibit(cerebralTest, {
       draftOrderIndex: 0,
     });

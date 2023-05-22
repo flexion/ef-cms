@@ -242,7 +242,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
+  docketClerkUploadsACourtIssuedDocument(cerebralTest);
   it('verifies the docket record after filing an unservable document type', async () => {
     const uploadedDocument = cerebralTest.draftOrders[0];
 

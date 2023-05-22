@@ -1,11 +1,9 @@
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkUploadsACourtIssuedDocument = (
-  cerebralTest,
-  fakeFile,
-) => {
+export const docketClerkUploadsACourtIssuedDocument = cerebralTest => {
   return it('Docket Clerk uploads a court issued document', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -25,10 +23,11 @@ export const docketClerkUploadsACourtIssuedDocument = (
       value: 'Some order content',
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
+
     await cerebralTest.runSequence('validateUploadCourtIssuedDocumentSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});

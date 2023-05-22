@@ -1,4 +1,4 @@
-import { fakeFile } from '../helpers';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
 export const userAddsCorrespondence = (
   cerebralTest,
@@ -11,9 +11,9 @@ export const userAddsCorrespondence = (
       value: correspondenceTitle,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('uploadCorrespondenceDocumentSequence', {

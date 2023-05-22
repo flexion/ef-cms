@@ -33,7 +33,7 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
+  docketClerkUploadsACourtIssuedDocument(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(cerebralTest, 4);
@@ -52,7 +52,7 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   petitionerViewsCaseDetail(cerebralTest, { documentCount: 3 });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
+  docketClerkUploadsACourtIssuedDocument(cerebralTest);
   docketClerkViewsDraftOrder(cerebralTest);
   docketClerkAddsDocketEntryForNoticeFromDraft(cerebralTest, 2);
 

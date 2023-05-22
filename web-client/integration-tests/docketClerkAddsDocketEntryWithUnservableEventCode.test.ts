@@ -4,7 +4,6 @@ import { caseDetailHeaderHelper } from '../src/presenter/computeds/caseDetailHea
 import { caseDetailSubnavHelper } from '../src/presenter/computeds/caseDetailSubnavHelper';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import {
-  fakeFile,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
@@ -32,7 +31,7 @@ describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
+  docketClerkUploadsACourtIssuedDocument(cerebralTest);
 
   it('adds a docket entry with an unservable event code', async () => {
     const getHelper = () => {

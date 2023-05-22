@@ -1,4 +1,4 @@
-import { fakeFile } from '../helpers';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
 export const respondentUploadsProposedStipulatedDecision = cerebralTest => {
   return it('respondent uploads a proposed stipulated decision', async () => {
@@ -17,12 +17,16 @@ export const respondentUploadsProposedStipulatedDecision = cerebralTest => {
       hasSecondarySupportingDocuments: false,
       hasSupportingDocuments: false,
       partyIrsPractitioner: true,
-      primaryDocumentFile: fakeFile,
-      primaryDocumentFileSize: 115022,
       privatePractitioners: [],
       scenario: 'Standard',
       searchError: false,
     });
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+    });
+
     await cerebralTest.runSequence('submitExternalDocumentSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});

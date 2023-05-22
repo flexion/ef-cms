@@ -58,7 +58,7 @@ describe('Docket clerk consolidated case work item journey', () => {
     queue: 'section',
   });
 
-  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
+  docketClerkUploadsACourtIssuedDocument(cerebralTest);
 
   docketClerkAddsAnUnservableDocument(cerebralTest);
 

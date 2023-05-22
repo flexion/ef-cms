@@ -1,4 +1,4 @@
-import { fakeFile1 } from '../helpers';
+import { fakeBlob2 } from '../../../shared/src/business/test/getFakeFile';
 import axios from 'axios';
 
 export const userEditsCorrespondence = (cerebralTest, user) =>
@@ -29,9 +29,9 @@ export const userEditsCorrespondence = (cerebralTest, user) =>
       cerebralTest.getState('currentViewMetadata.documentUploadMode'),
     ).toBe('scan');
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile1,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob2,
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('editCorrespondenceDocumentSequence');

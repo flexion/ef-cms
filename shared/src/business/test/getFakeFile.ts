@@ -30,6 +30,8 @@ export const getFakeBlob = () => {
   return new Blob([getFakeFile()]);
 };
 
+export const fakeBlob2 = new Blob([getFakeFile(false, true)]);
+
 export const getFakeEncryptedFile = () => {
   return new Uint8Array(fs.readFileSync(`${testAssetsPath}encrypted.pdf`));
 };

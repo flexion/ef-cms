@@ -24,9 +24,9 @@ describe('a user signs and serves a stipulated decision', () => {
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+    const { docketNumber } = await uploadPetition(cerebralTest);
+    expect(docketNumber).toBeDefined();
+    cerebralTest.docketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

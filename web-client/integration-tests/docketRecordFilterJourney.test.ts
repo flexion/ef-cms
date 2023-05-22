@@ -6,7 +6,6 @@ import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import {
-  fakeFile,
   getFormattedDocketEntriesForTest,
   loginAs,
   setupTest,
@@ -27,7 +26,7 @@ describe('Docket Record Filter Journey', () => {
   petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
+  docketClerkUploadsACourtIssuedDocument(cerebralTest);
   docketClerkAddsDocketEntryForTrialExhibit(cerebralTest, {
     draftOrderIndex: 0,
   });

@@ -17,7 +17,7 @@ export const uploadOrderFileAction = async ({
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
       .uploadOrderDocumentInteractor(applicationContext, {
-        documentFile: primaryDocumentFile,
+        documentFile: primaryDocumentFile.file,
       });
 
     return path.success({
