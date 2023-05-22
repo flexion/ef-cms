@@ -49,7 +49,7 @@ export const saveCaseDetailInternalEditAction = async ({
         await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: caseToUpdate[fileKey],
+            document: caseToUpdate[fileKey].file,
             key: oldPetitionDocument.docketEntryId,
             onUploadProgress: progressFunctions[fileKey],
           });
@@ -57,7 +57,7 @@ export const saveCaseDetailInternalEditAction = async ({
         const newDocketEntryId = await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: caseToUpdate[fileKey],
+            document: caseToUpdate[fileKey].file,
             onUploadProgress: progressFunctions[fileKey],
           });
 
