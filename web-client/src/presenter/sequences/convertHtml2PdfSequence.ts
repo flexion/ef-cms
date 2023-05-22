@@ -12,6 +12,7 @@ import { showProgressSequenceDecorator } from '../utilities/showProgressSequence
 export const convertHtml2PdfSequence = showProgressSequenceDecorator([
   createOrderAction,
   clearPdfPreviewUrlAction,
+  // todo: remove?
   getCaseAction,
   setCaseAction,
   getPdfUrlAction,

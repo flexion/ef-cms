@@ -15,14 +15,9 @@ import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritiz
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
-  beforeAll(() => {
-    jest.setTimeout(40000);
-  });
-
+  const cerebralTest = setupTest();
+  cerebralTest.draftOrders = [];
   afterAll(() => {
     cerebralTest.closeSocket();
   });
@@ -59,7 +54,7 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   petitionsClerkPrioritizesCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkViewsDraftOrder(cerebralTest, 0);
+  docketClerkViewsDraftOrder(cerebralTest);
   docketClerkGetsDocketEntryByEventCode(cerebralTest, 'O');
   docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
