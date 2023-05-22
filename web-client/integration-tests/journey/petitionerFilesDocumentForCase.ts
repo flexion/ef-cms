@@ -198,8 +198,10 @@ export const petitionerFilesDocumentForCase = cerebralTest => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       objections: VALIDATION_ERROR_MESSAGES.objections,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
+      primaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFile[0].message,
+      secondaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.secondaryDocumentFile[0].message,
     });
 
     await cerebralTest.runSequence(
@@ -221,8 +223,10 @@ export const petitionerFilesDocumentForCase = cerebralTest => {
       certificateOfServiceDate:
         VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
       objections: VALIDATION_ERROR_MESSAGES.objections,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
+      primaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFile[0].message,
+      secondaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.secondaryDocumentFile[0].message,
       supportingDocuments: [
         {
           index: 0,
@@ -245,8 +249,10 @@ export const petitionerFilesDocumentForCase = cerebralTest => {
     expect(cerebralTest.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
         VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
+      primaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFile[0].message,
+      secondaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.secondaryDocumentFile[0].message,
       supportingDocuments: [
         {
           index: 0,
@@ -283,8 +289,10 @@ export const petitionerFilesDocumentForCase = cerebralTest => {
     expect(cerebralTest.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
         VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
+      primaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFile[0].message,
+      secondaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.secondaryDocumentFile[0].message,
       supportingDocuments: [
         {
           index: 0,
@@ -306,8 +314,10 @@ export const petitionerFilesDocumentForCase = cerebralTest => {
     );
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
+      primaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFile[0].message,
+      secondaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.secondaryDocumentFile[0].message,
       supportingDocuments: [
         {
           index: 0,
@@ -356,13 +366,15 @@ export const petitionerFilesDocumentForCase = cerebralTest => {
     );
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
+      primaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFile[0].message,
+      secondaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.secondaryDocumentFile[0].message,
       supportingDocuments: [
         {
           index: 0,
           supportingDocumentFile:
-            VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
+            VALIDATION_ERROR_MESSAGES.supportingDocumentFile[0].message,
           supportingDocumentFreeText:
             VALIDATION_ERROR_MESSAGES.supportingDocumentFreeText,
         },
@@ -382,13 +394,15 @@ export const petitionerFilesDocumentForCase = cerebralTest => {
     );
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
+      primaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFile[0].message,
+      secondaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.secondaryDocumentFile[0].message,
       supportingDocuments: [
         {
           index: 0,
           supportingDocumentFile:
-            VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
+            VALIDATION_ERROR_MESSAGES.supportingDocumentFile[0].message,
         },
       ],
     });
@@ -479,7 +493,7 @@ export const petitionerFilesDocumentForCase = cerebralTest => {
         {
           index: 0,
           supportingDocumentFile:
-            VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
+            VALIDATION_ERROR_MESSAGES.supportingDocumentFile[0].message,
           supportingDocumentFreeText:
             VALIDATION_ERROR_MESSAGES.supportingDocumentFreeText,
         },

@@ -10,10 +10,10 @@ export const validateFileAction = async ({
   props,
 }) => {
   const { locationOnForm } = props;
-  const form = get(state.form);
+  const pdf = get(state.form[locationOnForm]);
 
   const errors = await applicationContext.getUseCases().validateFileInteractor({
-    pdf: form[locationOnForm],
+    pdf,
   });
 
   if (errors) {

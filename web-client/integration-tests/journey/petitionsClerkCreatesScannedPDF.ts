@@ -9,13 +9,10 @@ export const petitionsClerkCreatesScannedPDF = cerebralTest => {
     setBatchPages({ cerebralTest });
 
     await cerebralTest.runSequence('generatePdfFromScanSessionSequence', {
-      documentType: selectedDocumentType,
       documentUploadMode: 'preview',
+      locationOnForm: selectedDocumentType,
     });
 
-    expect(
-      cerebralTest.getState(`form.${selectedDocumentType}Size`),
-    ).toBeGreaterThan(0);
     expect(cerebralTest.getState(`form.${selectedDocumentType}`)).toBeDefined();
   });
 };

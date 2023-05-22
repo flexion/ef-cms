@@ -147,8 +147,8 @@ export const ScanBatchPreviewer = connect(
             onClick={e => {
               e.preventDefault();
               generatePdfFromScanSessionSequence({
-                documentType,
                 documentUploadMode: 'preview',
+                locationOnForm: documentType,
               });
             }}
           >

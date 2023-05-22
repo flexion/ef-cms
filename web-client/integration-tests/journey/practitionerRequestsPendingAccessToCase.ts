@@ -19,7 +19,8 @@ export const practitionerRequestsPendingAccessToCase = cerebralTest => {
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
       filers: VALIDATION_ERROR_MESSAGES.filers,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      primaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFile[0].message,
       scenario: VALIDATION_ERROR_MESSAGES.scenario,
     });
 
@@ -44,7 +45,8 @@ export const practitionerRequestsPendingAccessToCase = cerebralTest => {
     expect(cerebralTest.getState('validationErrors')).toEqual({
       filers: VALIDATION_ERROR_MESSAGES.filers,
       objections: VALIDATION_ERROR_MESSAGES.objections,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      primaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFile[0].message,
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {

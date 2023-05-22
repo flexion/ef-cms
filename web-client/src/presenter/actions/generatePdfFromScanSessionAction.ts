@@ -29,7 +29,7 @@ export const generatePdfFromScanSessionAction = async ({
     .getUseCases()
     .generatePDFFromJPGDataInteractor(applicationContext, { imgData });
 
-  const file = new File([pdfBlob], 'myfile.pdf', {
+  const file = new Blob([pdfBlob], {
     type: 'application/pdf',
   });
 

@@ -31,8 +31,8 @@ export const createPDFFromScannedBatches = cerebralTest => {
     setBatchPages({ cerebralTest });
 
     await cerebralTest.runSequence('generatePdfFromScanSessionSequence', {
-      documentType: selectedDocumentType,
       documentUploadMode: 'preview',
+      locationOnForm: selectedDocumentType,
     });
 
     expect(
