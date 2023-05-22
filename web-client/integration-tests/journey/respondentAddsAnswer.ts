@@ -1,6 +1,6 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { contactPrimaryFromState } from '../helpers';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const respondentAddsAnswer = (cerebralTest, overrides) => {
   return it('Respondent adds an answer', async () => {
@@ -57,7 +57,7 @@ export const respondentAddsAnswer = (cerebralTest, overrides) => {
     expect(cerebralTest.getState('form.partyPrimary')).toBeUndefined();
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

@@ -1,5 +1,5 @@
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const docketClerkFilesRQTBeforePetitionIsServed = cerebralTest => {
   return it('docket clerk files an initial filing type document AFTER a paper petition is added but not served', async () => {
@@ -25,7 +25,7 @@ export const docketClerkFilesRQTBeforePetitionIsServed = cerebralTest => {
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

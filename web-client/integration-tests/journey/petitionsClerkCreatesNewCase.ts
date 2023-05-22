@@ -5,7 +5,7 @@ import {
   PAYMENT_STATUS,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const petitionsClerkCreatesNewCase = (
   cerebralTest,
@@ -92,22 +92,22 @@ export const petitionsClerkCreatesNewCase = (
     ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile);
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'petitionFile',
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'stinFile',
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'corporateDisclosureFile',
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'requestForPlaceOfTrialFile',
     });
 
@@ -118,7 +118,7 @@ export const petitionsClerkCreatesNewCase = (
     ).toBeUndefined();
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'applicationForWaiverOfFilingFeeFile',
     });
 

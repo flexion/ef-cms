@@ -1,5 +1,5 @@
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox =
   cerebralTest => {
@@ -71,7 +71,7 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox =
 
       await cerebralTest.runSequence('setDocumentForUploadSequence', {
         documentUploadMode: 'preview',
-        file: getFakeBlob(),
+        file: fakeBlob1,
         theNameOfTheFileOnTheEntity: 'requestForPlaceOfTrialFile',
       });
 
@@ -110,7 +110,7 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox =
 
       await cerebralTest.runSequence('setDocumentForUploadSequence', {
         documentUploadMode: 'preview',
-        file: getFakeBlob(),
+        file: fakeBlob1,
         theNameOfTheFileOnTheEntity: 'petitionFile',
       });
 

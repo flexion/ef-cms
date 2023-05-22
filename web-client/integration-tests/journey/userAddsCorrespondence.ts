@@ -1,4 +1,4 @@
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const userAddsCorrespondence = (
   cerebralTest,
@@ -12,7 +12,7 @@ export const userAddsCorrespondence = (
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

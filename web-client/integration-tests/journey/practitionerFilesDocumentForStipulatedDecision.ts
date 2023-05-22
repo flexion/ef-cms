@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const practitionerFilesDocumentForStipulatedDecision = cerebralTest => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
@@ -76,7 +76,7 @@ export const practitionerFilesDocumentForStipulatedDecision = cerebralTest => {
     );
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

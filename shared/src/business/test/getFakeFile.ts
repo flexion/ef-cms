@@ -26,9 +26,7 @@ export const getFakeFile = (returnArray = false, useFakeData1 = false) => {
   return fakeFile;
 };
 
-export const getFakeBlob = () => {
-  return new Blob([getFakeFile()]);
-};
+export const fakeBlob1 = new Blob([getFakeFile()]);
 
 export const fakeBlob2 = new Blob([getFakeFile(false, true)]);
 

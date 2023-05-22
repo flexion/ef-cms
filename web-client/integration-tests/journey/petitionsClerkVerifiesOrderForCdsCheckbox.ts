@@ -1,6 +1,6 @@
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const petitionsClerkVerifiesOrderForCdsCheckbox = cerebralTest => {
   return it('Petitions clerk verifies that the Order for CDS checkbox is correctly checked and unchecked', async () => {
@@ -56,7 +56,7 @@ export const petitionsClerkVerifiesOrderForCdsCheckbox = cerebralTest => {
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentUploadMode: 'preview',
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'corporateDisclosureFile',
     });
 
@@ -91,7 +91,7 @@ export const petitionsClerkVerifiesOrderForCdsCheckbox = cerebralTest => {
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentUploadMode: 'preview',
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'petitionFile',
     });
 

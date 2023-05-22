@@ -1,7 +1,7 @@
 import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactSecondaryFromState } from '../helpers';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const practitionerRequestsPendingAccessToCase = cerebralTest => {
   const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
@@ -63,7 +63,7 @@ export const practitionerRequestsPendingAccessToCase = cerebralTest => {
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

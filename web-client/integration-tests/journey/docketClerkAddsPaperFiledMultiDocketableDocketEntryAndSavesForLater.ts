@@ -1,5 +1,5 @@
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater =
   (cerebralTest, eventCode) => {
@@ -39,7 +39,7 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater
       }
 
       await cerebralTest.runSequence('validateFileInputSequence', {
-        file: getFakeBlob(),
+        file: fakeBlob1,
         theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
       });
 

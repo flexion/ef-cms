@@ -7,6 +7,7 @@ import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesC
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
+import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
 import {
   fakeFile,
   loginAs,
@@ -16,7 +17,6 @@ import {
   waitForLoadingComponentToHide,
 } from './helpers';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
-import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -96,7 +96,7 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

@@ -8,7 +8,7 @@ import {
 } from './helpers';
 import { docketClerkAddsMiscellaneousPaperFiling } from './journey/docketClerkAddsMiscellaneousPaperFiling';
 import { docketClerkServesPaperFilingFromDocumentQC } from './journey/docketClerkServesPaperFilingFromDocumentQC';
-import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 describe('Docket Clerk edits a paper filing journey', () => {
@@ -51,7 +51,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentUploadMode: 'preview',
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
@@ -165,7 +165,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentUploadMode: 'preview',
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

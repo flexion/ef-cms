@@ -13,7 +13,7 @@ import {
 } from './helpers';
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
-import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
 import { irsPractitionerViewsPetitionerInfoForUnassociatedCase } from './journey/irsPractitionerViewsPetitionerInfoForUnassociatedCase';
 import { petitionerSearchesForCase } from './journey/petitionerSearchesForCase';
 import { petitionerSearchesForNonexistentCase } from './journey/petitionerSearchesForNonexistentCase';
@@ -148,7 +148,7 @@ describe('Practitioner requests access to case', () => {
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

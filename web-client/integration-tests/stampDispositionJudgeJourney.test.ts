@@ -7,7 +7,7 @@ import {
   uploadPetition,
   waitForCondition,
 } from './helpers';
-import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
 import { userSendsMessage } from './journey/userSendsMessage';
 
 describe('Stamp disposition judge journey test', () => {
@@ -57,7 +57,7 @@ describe('Stamp disposition judge journey test', () => {
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentUploadMode: 'preview',
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

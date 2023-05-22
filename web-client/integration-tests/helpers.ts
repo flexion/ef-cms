@@ -61,8 +61,8 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 const pdfLib = require('pdf-lib');
 import {
+  fakeBlob1,
   fakeData,
-  getFakeBlob,
   getFakeEncryptedFile,
   getFakeFile,
 } from '../../shared/src/business/test/getFakeFile';
@@ -636,7 +636,7 @@ export const uploadExternalDecisionDocument = async cerebralTest => {
   });
 
   await cerebralTest.runSequence('validateFileInputSequence', {
-    file: getFakeBlob(),
+    file: fakeBlob1,
     theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
   });
 
@@ -666,7 +666,7 @@ export const uploadExternalRatificationDocument = async cerebralTest => {
   });
 
   await cerebralTest.runSequence('validateFileInputSequence', {
-    file: getFakeBlob(),
+    file: fakeBlob1,
     theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
   });
 

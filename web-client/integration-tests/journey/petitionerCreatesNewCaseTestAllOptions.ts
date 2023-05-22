@@ -1,6 +1,6 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 import { runCompute } from 'cerebral/test';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -17,12 +17,12 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 ) => {
   return it('petitioner creates a new case, testing all form options', async () => {
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'petitionFile',
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'stinFile',
     });
 
@@ -243,7 +243,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     );
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'corporateDisclosureFile',
     });
 

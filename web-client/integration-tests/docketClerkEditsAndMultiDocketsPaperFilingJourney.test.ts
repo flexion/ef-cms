@@ -11,7 +11,7 @@ import {
 } from './helpers';
 import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
 import { docketClerkEditsServiceIndicatorForPetitioner } from './journey/docketClerkEditsServiceIndicatorForPetitioner';
-import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -39,7 +39,7 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
 
       await cerebralTest.runSequence('setDocumentForUploadSequence', {
         documentUploadMode: 'preview',
-        file: getFakeBlob(),
+        file: fakeBlob1,
         theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
       });
 

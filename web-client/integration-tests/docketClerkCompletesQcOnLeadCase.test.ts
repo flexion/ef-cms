@@ -1,6 +1,6 @@
 import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
+import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
-import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
 import {
   getFormattedDocumentQCSectionInProgress,
   refreshElasticsearchIndex,
@@ -45,7 +45,7 @@ describe('Docket clerk multi-dockets court issued document journey', () => {
       });
 
       await cerebralTest.runSequence('validateFileInputSequence', {
-        file: getFakeBlob(),
+        file: fakeBlob1,
         theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
       });
 

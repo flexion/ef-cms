@@ -1,5 +1,5 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const respondentAddsStipulatedDecision = (cerebralTest, overrides) => {
   return it('Respondent adds stipulated decision', async () => {
@@ -56,7 +56,7 @@ export const respondentAddsStipulatedDecision = (cerebralTest, overrides) => {
     );
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

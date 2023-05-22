@@ -1,4 +1,4 @@
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving =
   cerebralTest => {
@@ -21,7 +21,7 @@ export const petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving =
 
       await cerebralTest.runSequence('setDocumentForUploadSequence', {
         documentUploadMode: 'preview',
-        file: getFakeBlob(),
+        file: fakeBlob1,
         theNameOfTheFileOnTheEntity: documentToRemoveAndReAdd,
       });
 

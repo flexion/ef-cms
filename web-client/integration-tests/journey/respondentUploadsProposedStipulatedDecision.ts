@@ -1,4 +1,4 @@
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const respondentUploadsProposedStipulatedDecision = cerebralTest => {
   return it('respondent uploads a proposed stipulated decision', async () => {
@@ -23,7 +23,7 @@ export const respondentUploadsProposedStipulatedDecision = cerebralTest => {
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

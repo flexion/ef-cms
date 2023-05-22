@@ -5,7 +5,7 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../../shared/src/business/entities/EntityConstants';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
@@ -160,19 +160,19 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     }
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'petitionFile',
     });
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'corporateDisclosureFile',
     });
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'requestForPlaceOfTrialFile',
     });
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'applicationForWaiverOfFilingFeeFile',
     });
 

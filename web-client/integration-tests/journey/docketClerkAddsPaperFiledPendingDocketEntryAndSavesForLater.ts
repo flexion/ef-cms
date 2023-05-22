@@ -4,7 +4,7 @@ import {
   getFormattedDocketEntriesForTest,
   waitForCondition,
 } from '../helpers';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
   cerebralTest,
@@ -55,7 +55,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
     }
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

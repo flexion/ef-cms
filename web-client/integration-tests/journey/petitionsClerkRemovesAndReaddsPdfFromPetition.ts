@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const petitionsClerkRemovesAndReaddsPdfFromPetition = cerebralTest => {
   const documentToRemoveAndReAdd = 'applicationForWaiverOfFilingFeeFile';
@@ -39,7 +39,7 @@ export const petitionsClerkRemovesAndReaddsPdfFromPetition = cerebralTest => {
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentUploadMode: 'preview',
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'applicationForWaiverOfFilingFeeFile',
     });
 

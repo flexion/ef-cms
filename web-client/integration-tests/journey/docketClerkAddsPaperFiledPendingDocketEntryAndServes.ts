@@ -3,7 +3,7 @@ import {
   OBJECTIONS_OPTIONS_MAP,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
   cerebralTest,
@@ -58,7 +58,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
     }
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

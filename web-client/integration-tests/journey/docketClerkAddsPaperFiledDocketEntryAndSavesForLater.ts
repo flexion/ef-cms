@@ -1,7 +1,7 @@
 import { DOCUMENT_RELATIONSHIPS } from '../../../shared/src/business/entities/EntityConstants';
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
   cerebralTest,
@@ -49,7 +49,7 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
@@ -17,12 +17,12 @@ export const practitionerCreatesNewCase = (
   return it('Practitioner creates a new case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'petitionFile',
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'stinFile',
     });
 

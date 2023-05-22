@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -49,7 +49,7 @@ export const petitionsClerkRemovesAndReaddsPetitionFile = cerebralTest => {
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentUploadMode: 'preview',
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'petitionFile',
     });
 

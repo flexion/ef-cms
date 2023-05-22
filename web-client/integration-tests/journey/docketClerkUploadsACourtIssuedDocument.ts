@@ -1,5 +1,5 @@
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -24,7 +24,7 @@ export const docketClerkUploadsACourtIssuedDocument = cerebralTest => {
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

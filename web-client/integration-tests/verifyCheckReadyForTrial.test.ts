@@ -6,7 +6,7 @@ import {
   uploadPetition,
   waitForCondition,
 } from './helpers';
-import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import axios from 'axios';
 
@@ -61,7 +61,7 @@ describe('Invoke checkForReadyForTrialCasesLambda via http request', () => {
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentUploadMode: 'preview',
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

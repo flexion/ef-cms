@@ -1,6 +1,6 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const docketClerkAddsTrackedDocketEntry = (
   cerebralTest,
@@ -43,7 +43,7 @@ export const docketClerkAddsTrackedDocketEntry = (
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 

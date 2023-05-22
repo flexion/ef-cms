@@ -1,4 +1,4 @@
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 import { waitForExpectedItem } from '../helpers';
 
 export const docketClerkEditsSignedUploadedCourtIssuedDocument =
@@ -20,7 +20,7 @@ export const docketClerkEditsSignedUploadedCourtIssuedDocument =
       await cerebralTest.runSequence('clearExistingDocumentSequence');
 
       await cerebralTest.runSequence('validateFileInputSequence', {
-        file: getFakeBlob(),
+        file: fakeBlob1,
         theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
       });
 

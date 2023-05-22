@@ -11,7 +11,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
 import { internalPetitionPartiesHelper as internalPetitionPartiesHelperComputed } from '../src/presenter/computeds/internalPetitionPartiesHelper';
 import { partiesInformationHelper as partiesInformationHelperComputed } from '../src/presenter/computeds/partiesInformationHelper';
 import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../src/presenter/computeds/reviewSavedPetitionHelper';
@@ -155,12 +155,12 @@ describe('E-Consent journey', () => {
       });
 
       await cerebralTest.runSequence('validateFileInputSequence', {
-        file: getFakeBlob(),
+        file: fakeBlob1,
         theNameOfTheFileOnTheEntity: 'petitionFile',
       });
 
       await cerebralTest.runSequence('validateFileInputSequence', {
-        file: getFakeBlob(),
+        file: fakeBlob1,
         theNameOfTheFileOnTheEntity: 'requestForPlaceOfTrialFile',
       });
 

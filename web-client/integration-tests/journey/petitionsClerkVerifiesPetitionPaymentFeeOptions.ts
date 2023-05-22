@@ -1,7 +1,7 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
-import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const petitionsClerkVerifiesPetitionPaymentFeeOptions = cerebralTest => {
   return it('Petitions clerk verifies petition payment fee options and required fields', async () => {
@@ -99,7 +99,7 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = cerebralTest => {
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'applicationForWaiverOfFilingFeeFile',
     });
 

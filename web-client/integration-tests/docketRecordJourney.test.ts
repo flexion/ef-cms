@@ -23,7 +23,7 @@ import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
+import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
 import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
@@ -145,7 +145,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
@@ -349,7 +349,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
-      file: getFakeBlob(),
+      file: fakeBlob1,
       theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
