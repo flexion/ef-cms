@@ -4,7 +4,6 @@ import { setFormValueAction } from '../actions/setFormValueAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateFileAction } from '../actions/FileDocument/validateFileAction';
 
 export const validateFileInputSequence = [
@@ -17,6 +16,6 @@ export const validateFileInputSequence = [
       setValidationAlertErrorsAction,
       setValidationErrorsAction,
     ],
-    success: [stopShowValidationAction, clearAlertsAction],
+    success: [clearAlertsAction],
   },
 ];

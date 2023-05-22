@@ -4,7 +4,7 @@ import {
 } from '../../shared/src/business/entities/EntityConstants';
 import { admissionsClerkAddsPractitionerEmail } from './journey/admissionsClerkAddsPractitionerEmail';
 import { admissionsClerkMigratesPractitionerWithoutEmail } from './journey/admissionsClerkMigratesPractitionerWithoutEmail';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { partiesInformationHelper as partiesInformationHelperComputed } from '../src/presenter/computeds/partiesInformationHelper';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
@@ -21,7 +21,7 @@ describe('private practitioner views pending email journey', () => {
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest, {
+    const { docketNumber } = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -33,8 +33,10 @@ describe('private practitioner views pending email journey', () => {
       },
       partyType: PARTY_TYPES.petitionerSpouse,
     });
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -69,7 +71,7 @@ describe('private practitioner views pending email journey', () => {
   });
 
   loginAs(cerebralTest, 'privatepractitioner@example.com');
-  practitionerRequestsAccessToCase(cerebralTest, fakeFile);
+  practitionerRequestsAccessToCase(cerebralTest);
 
   it('unassociated private practitioner views pending email for counsel on case', () => {
     const partiesInformationHelper = withAppContextDecorator(

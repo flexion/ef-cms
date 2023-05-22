@@ -13,7 +13,6 @@ import { docketClerkViewsAssignedWorkItemEditLink } from './journey/docketClerkV
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { docketClerkViewsQCInProgress } from './journey/docketClerkViewsQCInProgress';
 import { docketClerkViewsQCOutbox } from './journey/docketClerkViewsQCOutbox';
-import { fakeFile } from '../integration-tests-public/helpers';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
@@ -99,7 +98,7 @@ describe('Docket Clerk Document QC Journey', () => {
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'privatepractitioner@example.com');
-  practitionerRequestsAccessToCase(cerebralTest, fakeFile);
+  practitionerRequestsAccessToCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkAssignWorkItemToSelf(cerebralTest);

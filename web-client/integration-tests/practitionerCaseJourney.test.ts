@@ -94,7 +94,7 @@ describe('Practitioner requests access to case', () => {
   practitionerViewsDashboardBeforeAddingCase(cerebralTest);
   practitionerSearchesForCase(cerebralTest);
   practitionerViewsCaseDetail(cerebralTest, false);
-  practitionerRequestsAccessToCase(cerebralTest, fakeFile);
+  practitionerRequestsAccessToCase(cerebralTest);
   practitionerViewsDashboard(cerebralTest);
   practitionerViewsCaseDetailOfOwnedCase(cerebralTest);
   practitionerFilesDocumentForOwnedCase(cerebralTest, fakeFile);
