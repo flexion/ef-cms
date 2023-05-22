@@ -1,10 +1,7 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
-export const respondentAddsStipulatedDecision = (
-  cerebralTest,
-  fakeFile,
-  overrides,
-) => {
+export const respondentAddsStipulatedDecision = (cerebralTest, overrides) => {
   return it('Respondent adds stipulated decision', async () => {
     await cerebralTest.runSequence('gotoFileDocumentSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -58,13 +55,10 @@ export const respondentAddsStipulatedDecision = (
       'Proposed Stipulated Decision',
     );
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-    );
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+    });
 
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',

@@ -16,6 +16,7 @@ import {
   waitForLoadingComponentToHide,
 } from './helpers';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
+import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -94,9 +95,9 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
       value: miscellaneousForm.documentTitle,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('uploadCourtIssuedDocumentSequence');

@@ -1,4 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
@@ -9,31 +10,20 @@ const { CASE_TYPES_MAP, COUNTRY_TYPES } = applicationContext.getConstants();
 
 export const practitionerCreatesNewCase = (
   cerebralTest,
-  fakeFile,
   trialLocation = 'Seattle, Washington',
   procedureType = 'Small',
   isLeadCase = false,
 ) => {
   return it('Practitioner creates a new case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
-      key: 'petitionFile',
-      value: fakeFile,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'petitionFile',
     });
 
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
-      key: 'petitionFileSize',
-      value: 1,
-    });
-
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
-      key: 'stinFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
-      key: 'stinFileSize',
-      value: 1,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'stinFile',
     });
 
     let result = runCompute(startCaseHelper, {

@@ -1,8 +1,9 @@
 import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { contactPrimaryFromState } from '../helpers';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
-export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
+export const petitionerFilesDocumentForCase = cerebralTest => {
   return it('petitioner files document for case', async () => {
     await cerebralTest.runSequence('gotoFileDocumentSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -392,61 +393,21 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       ],
     });
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-    );
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+    });
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'primaryDocumentFileSize',
-        value: 1,
-      },
-    );
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'secondaryDocumentFile',
+    });
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'secondaryDocumentFile',
-        value: fakeFile,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'secondaryDocumentFileSize',
-        value: 1,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'supportingDocuments.0.supportingDocumentFile',
-        value: fakeFile,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'supportingDocuments.0.supportingDocumentFileSize',
-        value: 1,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'supportingDocuments.0.supportingDocumentFileSize',
-        value: 1,
-      },
-    );
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity:
+        'supportingDocuments.0.supportingDocumentFile',
+    });
 
     await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
@@ -526,21 +487,11 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       ],
     });
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'secondarySupportingDocuments.0.supportingDocumentFile',
-        value: fakeFile,
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'secondarySupportingDocuments.0.supportingDocumentFileSize',
-        value: 1,
-      },
-    );
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity:
+        'secondarySupportingDocuments.0.supportingDocumentFile',
+    });
 
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',

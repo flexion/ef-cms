@@ -1,15 +1,16 @@
 import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const caseDetailHeaderHelper = withAppContextDecorator(
-  caseDetailHeaderHelperComputed,
-);
-
 const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 
-export const respondentRequestsAccessToCase = (cerebralTest, fakeFile) => {
+export const respondentRequestsAccessToCase = cerebralTest => {
+  const caseDetailHeaderHelper = withAppContextDecorator(
+    caseDetailHeaderHelperComputed,
+  );
+
   return it('Respondent requests access to case', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -57,9 +58,9 @@ export const respondentRequestsAccessToCase = (cerebralTest, fakeFile) => {
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
     });
 
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {

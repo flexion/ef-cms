@@ -55,7 +55,7 @@ describe('Respondent requests access to a case', () => {
   loginAs(cerebralTest, 'irspractitioner1@example.com');
   respondentSearchesForCase(cerebralTest);
   respondentViewsCaseDetailOfUnassociatedCase(cerebralTest);
-  respondentRequestsAccessToCase(cerebralTest, fakeFile);
+  respondentRequestsAccessToCase(cerebralTest);
   respondent1ViewsCaseDetailOfAssociatedCase(cerebralTest);
   respondentFilesDocumentForAssociatedCase(cerebralTest, fakeFile);
 

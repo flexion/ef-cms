@@ -13,6 +13,7 @@ import {
 } from './helpers';
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
+import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
 import { irsPractitionerViewsPetitionerInfoForUnassociatedCase } from './journey/irsPractitionerViewsPetitionerInfoForUnassociatedCase';
 import { petitionerSearchesForCase } from './journey/petitionerSearchesForCase';
 import { petitionerSearchesForNonexistentCase } from './journey/petitionerSearchesForNonexistentCase';
@@ -146,9 +147,9 @@ describe('Practitioner requests access to case', () => {
       value: 'No',
     });
 
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
@@ -215,7 +216,7 @@ describe('Practitioner requests access to case', () => {
   loginAs(cerebralTest, 'privatepractitioner@example.com');
   practitionerSearchesForCase(cerebralTest);
   practitionerViewsCaseDetailWithPublicOrder(cerebralTest);
-  practitionerRequestsPendingAccessToCase(cerebralTest, fakeFile);
+  practitionerRequestsPendingAccessToCase(cerebralTest);
   practitionerViewsCaseDetailOfPendingCase(cerebralTest);
 
   loginAs(cerebralTest, 'irspractitioner@example.com');

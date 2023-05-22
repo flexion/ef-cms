@@ -1,11 +1,9 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
-export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
-  cerebralTest,
-  fakeFile,
-) => {
+export const petitionsClerkVerifiesPetitionPaymentFeeOptions = cerebralTest => {
   return it('Petitions clerk verifies petition payment fee options and required fields', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
@@ -99,13 +97,10 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
       key: 'paymentDateWaivedYear',
       value: '2002',
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'applicationForWaiverOfFilingFeeFile',
-      value: fakeFile,
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'applicationForWaiverOfFilingFeeFileSize',
-      value: 1,
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'applicationForWaiverOfFilingFeeFile',
     });
 
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');

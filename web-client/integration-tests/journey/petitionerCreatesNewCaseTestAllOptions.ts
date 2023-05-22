@@ -1,5 +1,6 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 import { runCompute } from 'cerebral/test';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -12,28 +13,17 @@ const { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES } =
 
 export const petitionerCreatesNewCaseTestAllOptions = (
   cerebralTest,
-  fakeFile,
   overrides = {},
 ) => {
   return it('petitioner creates a new case, testing all form options', async () => {
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
-      key: 'petitionFile',
-      value: fakeFile,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'petitionFile',
     });
 
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
-      key: 'petitionFileSize',
-      value: 1,
-    });
-
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
-      key: 'stinFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
-      key: 'stinFileSize',
-      value: 1,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'stinFile',
     });
 
     let result = runCompute(startCaseHelper, {
@@ -252,9 +242,9 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
     );
 
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
-      key: 'corporateDisclosureFile',
-      value: fakeFile,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'corporateDisclosureFile',
     });
 
     await cerebralTest.runSequence('submitFilePetitionSequence');

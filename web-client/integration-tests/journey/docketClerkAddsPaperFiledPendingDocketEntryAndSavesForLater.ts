@@ -1,10 +1,10 @@
 import { DOCUMENT_RELATIONSHIPS } from '../../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
-  fakeFile,
   getFormattedDocketEntriesForTest,
   waitForCondition,
 } from '../helpers';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
 export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
   cerebralTest,
@@ -38,14 +38,6 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
         value: 2018,
       },
       {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-      {
-        key: 'primaryDocumentFileSize',
-        value: 100,
-      },
-      {
         key: 'eventCode',
         value: 'A',
       },
@@ -61,6 +53,11 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
         item,
       );
     }
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+    });
 
     const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(

@@ -11,6 +11,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
+import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
 import { internalPetitionPartiesHelper as internalPetitionPartiesHelperComputed } from '../src/presenter/computeds/internalPetitionPartiesHelper';
 import { partiesInformationHelper as partiesInformationHelperComputed } from '../src/presenter/computeds/partiesInformationHelper';
 import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../src/presenter/computeds/reviewSavedPetitionHelper';
@@ -153,24 +154,14 @@ describe('E-Consent journey', () => {
         value: true,
       });
 
-      await cerebralTest.runSequence('updateFormValueSequence', {
-        key: 'petitionFile',
-        value: fakeFile,
+      await cerebralTest.runSequence('validateFileInputSequence', {
+        file: getFakeBlob(),
+        theNameOfTheFileOnTheEntity: 'petitionFile',
       });
 
-      await cerebralTest.runSequence('updateFormValueSequence', {
-        key: 'petitionFileSize',
-        value: 2,
-      });
-
-      await cerebralTest.runSequence('updateFormValueSequence', {
-        key: 'requestForPlaceOfTrialFile',
-        value: fakeFile,
-      });
-
-      await cerebralTest.runSequence('updateFormValueSequence', {
-        key: 'requestForPlaceOfTrialFileSize',
-        value: 5,
+      await cerebralTest.runSequence('validateFileInputSequence', {
+        file: getFakeBlob(),
+        theNameOfTheFileOnTheEntity: 'requestForPlaceOfTrialFile',
       });
 
       await cerebralTest.runSequence('saveSavedCaseForLaterSequence');

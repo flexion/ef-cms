@@ -6,7 +6,7 @@ import { docketClerkRemovesSignatureFromUploadedCourtIssuedDocument } from './jo
 import { docketClerkSignsUploadedCourtIssuedDocument } from './journey/docketClerkSignsUploadedCourtIssuedDocument';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
@@ -41,9 +41,9 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkViewsDraftOrder(cerebralTest);
-  docketClerkEditsAnUploadedCourtIssuedDocument(cerebralTest, fakeFile, 0);
+  docketClerkEditsAnUploadedCourtIssuedDocument(cerebralTest, 0);
   docketClerkSignsUploadedCourtIssuedDocument(cerebralTest);
-  docketClerkEditsSignedUploadedCourtIssuedDocument(cerebralTest, fakeFile);
+  docketClerkEditsSignedUploadedCourtIssuedDocument(cerebralTest);
   docketClerkSignsUploadedCourtIssuedDocument(cerebralTest);
   docketClerkRemovesSignatureFromUploadedCourtIssuedDocument(cerebralTest);
   docketClerkAddsDocketEntryFromDraft(cerebralTest, 0);

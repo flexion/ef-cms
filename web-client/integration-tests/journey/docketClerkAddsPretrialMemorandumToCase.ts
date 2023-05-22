@@ -1,9 +1,6 @@
 import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
-import {
-  contactPrimaryFromState,
-  fakeFile,
-  waitForCondition,
-} from '../helpers';
+import { contactPrimaryFromState, waitForCondition } from '../helpers';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
 export const docketClerkAddsPretrialMemorandumToCase = (
   cerebralTest,
@@ -32,14 +29,6 @@ export const docketClerkAddsPretrialMemorandumToCase = (
         value: 2001,
       },
       {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-      {
-        key: 'primaryDocumentFileSize',
-        value: 100,
-      },
-      {
         key: 'partyIrsPractitioner',
         value: filedByPractitioner,
       },
@@ -59,6 +48,11 @@ export const docketClerkAddsPretrialMemorandumToCase = (
         item,
       );
     }
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+    });
 
     const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(

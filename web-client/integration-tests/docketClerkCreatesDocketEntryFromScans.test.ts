@@ -10,7 +10,7 @@ import { docketClerkSavesAndServesDocketEntry } from './journey/docketClerkSaves
 import { docketClerkViewsEditDocketRecord } from './journey/docketClerkViewsEditDocketRecord';
 import { docketClerkViewsQCInProgress } from './journey/docketClerkViewsQCInProgress';
 import { docketClerkViewsSectionQCInProgress } from './journey/docketClerkViewsSectionQCInProgress';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 
 describe('Create Docket Entry From Scans', () => {
   const cerebralTest = setupTest();
@@ -63,7 +63,7 @@ describe('Create Docket Entry From Scans', () => {
   });
   createPDFFromScannedBatches(cerebralTest);
 
-  docketClerkAddsDocketEntryFile(cerebralTest, fakeFile);
+  docketClerkAddsDocketEntryFile(cerebralTest);
   docketClerkSavesAndServesDocketEntry(cerebralTest);
 
   docketClerkViewsQCInProgress(cerebralTest, false);

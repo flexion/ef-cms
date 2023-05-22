@@ -1,11 +1,9 @@
 import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactSecondaryFromState } from '../helpers';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
-export const practitionerRequestsPendingAccessToCase = (
-  cerebralTest,
-  fakeFile,
-) => {
+export const practitionerRequestsPendingAccessToCase = cerebralTest => {
   const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
@@ -64,9 +62,9 @@ export const practitionerRequestsPendingAccessToCase = (
       value: false,
     });
 
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     const contactSecondary = contactSecondaryFromState(cerebralTest);

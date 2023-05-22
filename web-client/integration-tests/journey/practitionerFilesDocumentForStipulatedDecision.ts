@@ -1,10 +1,8 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
-export const practitionerFilesDocumentForStipulatedDecision = (
-  cerebralTest,
-  fakeFile,
-) => {
+export const practitionerFilesDocumentForStipulatedDecision = cerebralTest => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('Practitioner files document for stipulated decision', async () => {
@@ -77,13 +75,10 @@ export const practitionerFilesDocumentForStipulatedDecision = (
       },
     );
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-    );
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+    });
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);
 

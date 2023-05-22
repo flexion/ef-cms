@@ -23,6 +23,7 @@ import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
+import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
 import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
@@ -103,7 +104,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   petitionsClerkCreatesNewCase(cerebralTest, { shouldServe: false });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkFilesRQTBeforePetitionIsServed(cerebralTest, fakeFile);
+  docketClerkFilesRQTBeforePetitionIsServed(cerebralTest);
   it('verifies docket record after filing initial filing document', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
@@ -143,14 +144,9 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       value: 2018,
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFileSize',
-      value: 100,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
@@ -352,14 +348,9 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       value: 2018,
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFileSize',
-      value: 100,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
@@ -518,7 +509,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkAddsTrackedDocketEntry(cerebralTest, fakeFile);
+  docketClerkAddsTrackedDocketEntry(cerebralTest);
   it('verifies the docket record after filing a tracked, paper-filed docket entry (APPL)', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
@@ -539,7 +530,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
   );
 
-  docketClerkAddsTrackedDocketEntry(cerebralTest, fakeFile, true);
+  docketClerkAddsTrackedDocketEntry(cerebralTest, true);
   it('verifies the docket record after filing a tracked, paper-filed docket entry (APPL) on a case with paper service parties', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);

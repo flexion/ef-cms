@@ -7,7 +7,7 @@ import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkUnsealsCase } from './journey/docketClerkUnsealsCase';
 import { docketClerkVerifiesConsolidatedCases } from './journey/docketClerkVerifiesConsolidatedCases';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { loginAs, setupTest } from './helpers';
 import { manuallyAddCaseToTrial } from './utils/manuallyAddCaseToTrial';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
@@ -91,7 +91,7 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
     });
     docketClerkVerifiesConsolidatedCases(cerebralTest);
 
-    docketClerkAddsTrackedDocketEntry(cerebralTest, fakeFile, false);
+    docketClerkAddsTrackedDocketEntry(cerebralTest, false);
     removePendingItemFromCase(cerebralTest, 'Docket Clerk');
     docketClerkVerifiesConsolidatedCases(cerebralTest);
   });

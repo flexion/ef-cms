@@ -1,7 +1,8 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { contactPrimaryFromState } from '../helpers';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
-export const respondentAddsAnswer = (cerebralTest, fakeFile, overrides) => {
+export const respondentAddsAnswer = (cerebralTest, overrides) => {
   return it('Respondent adds an answer', async () => {
     await cerebralTest.runSequence('gotoFileDocumentSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -55,13 +56,10 @@ export const respondentAddsAnswer = (cerebralTest, fakeFile, overrides) => {
 
     expect(cerebralTest.getState('form.partyPrimary')).toBeUndefined();
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
-      },
-    );
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+    });
 
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',

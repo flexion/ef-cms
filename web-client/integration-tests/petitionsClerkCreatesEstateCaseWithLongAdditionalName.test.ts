@@ -5,7 +5,8 @@ import {
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
+import { loginAs, setupTest } from './helpers';
 
 describe('Petitions clerk creates Estate case with long additionalName', () => {
   const cerebralTest = setupTest();
@@ -47,24 +48,14 @@ describe('Petitions clerk creates Estate case with long additionalName', () => {
       value: 'Boise, Idaho',
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'petitionFile',
-      value: fakeFile,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'petitionFile',
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'petitionFileSize',
-      value: 1,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'requestForPlaceOfTrialFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'requestForPlaceOfTrialFileSize',
-      value: 1,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'requestForPlaceOfTrialFile',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {

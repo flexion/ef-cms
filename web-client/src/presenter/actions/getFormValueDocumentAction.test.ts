@@ -1,12 +1,11 @@
 import { getFormValueDocumentAction } from './getFormValueDocumentAction';
 import { runAction } from 'cerebral/test';
 
-const fakeFile = {
-  name: 'petition',
-  size: 100,
-};
-
 describe('getFormValueDocumentAction', () => {
+  const fakeFile = {
+    name: 'petition',
+    size: 100,
+  };
   it('should return the document type and file as a key/value pair', async () => {
     const result = await runAction(getFormValueDocumentAction, {
       props: {

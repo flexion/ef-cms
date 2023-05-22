@@ -1,8 +1,9 @@
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkCreatesAnOpinion = (cerebralTest, fakeFile) => {
+export const docketClerkCreatesAnOpinion = cerebralTest => {
   return it('Docket Clerk creates an opinion', async () => {
     cerebralTest.draftOrders = [];
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -18,10 +19,11 @@ export const docketClerkCreatesAnOpinion = (cerebralTest, fakeFile) => {
       value: 'My Awesome Opinion',
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
+
     await cerebralTest.runSequence('validateUploadCourtIssuedDocumentSequence');
 
     await cerebralTest.runSequence('uploadCourtIssuedDocumentSequence');

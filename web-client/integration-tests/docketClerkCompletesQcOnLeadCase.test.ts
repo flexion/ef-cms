@@ -1,11 +1,11 @@
 import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
+import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
+import { getFakeBlob } from '../../shared/src/business/test/getFakeFile';
 import {
-  fakeFile,
   getFormattedDocumentQCSectionInProgress,
   refreshElasticsearchIndex,
   setupTest,
 } from './helpers';
-import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -44,10 +44,11 @@ describe('Docket clerk multi-dockets court issued document journey', () => {
         value: 'Some order content',
       });
 
-      await cerebralTest.runSequence('updateFormValueSequence', {
-        key: 'primaryDocumentFile',
-        value: fakeFile,
+      await cerebralTest.runSequence('validateFileInputSequence', {
+        file: getFakeBlob(),
+        theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
       });
+
       await cerebralTest.runSequence(
         'validateUploadCourtIssuedDocumentSequence',
       );

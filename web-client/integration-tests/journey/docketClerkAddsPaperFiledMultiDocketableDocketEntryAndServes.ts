@@ -1,8 +1,5 @@
-import {
-  contactPrimaryFromState,
-  fakeFile,
-  waitForCondition,
-} from '../helpers';
+import { contactPrimaryFromState, waitForCondition } from '../helpers';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
 export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
   cerebralTest,
@@ -20,14 +17,6 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
     {
       key: 'dateReceivedYear',
       value: 2001,
-    },
-    {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    },
-    {
-      key: 'primaryDocumentFileSize',
-      value: 100,
     },
     {
       key: 'eventCode',
@@ -50,6 +39,11 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
         option,
       );
     }
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
+    });
 
     const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(

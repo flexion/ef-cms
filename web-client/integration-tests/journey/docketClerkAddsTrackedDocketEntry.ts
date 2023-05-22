@@ -1,9 +1,9 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
 export const docketClerkAddsTrackedDocketEntry = (
   cerebralTest,
-  fakeFile,
   paperServiceRequested = false,
 ) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
@@ -42,14 +42,9 @@ export const docketClerkAddsTrackedDocketEntry = (
       value: 2018,
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFileSize',
-      value: 100,
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);
