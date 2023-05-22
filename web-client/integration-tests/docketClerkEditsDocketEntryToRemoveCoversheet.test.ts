@@ -36,17 +36,15 @@ describe('docket clerk updates docket entries', () => {
 
     await cerebralTest.runSequence('gotoUploadCourtIssuedDocumentSequence');
 
-    const pdfUploadFormValues = {
-      freeText: pdfUploadDescription,
-      primaryDocumentFile: fakeBlob1,
-    };
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'freeText',
+      value: pdfUploadDescription,
+    });
 
-    for (let [key, value] of Object.entries(pdfUploadFormValues)) {
-      await cerebralTest.runSequence('updateFormValueSequence', {
-        key,
-        value,
-      });
-    }
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'primaryDocumentFile',
+    });
 
     await cerebralTest.runSequence('uploadCourtIssuedDocumentSequence');
 
@@ -113,7 +111,7 @@ describe('docket clerk updates docket entries', () => {
     cerebralTest.index = trialExhibitsDocketEntry.index;
 
     const { PDFDocument } = await cerebralTest.applicationContext.getPdfLib();
-    const pdfDoc = await PDFDocument.load(fakeBlob1);
+    const pdfDoc = await PDFDocument.load(await fakeBlob1.arrayBuffer());
 
     expect(trialExhibitsDocketEntry.numberOfPages).toEqual(
       pdfDoc.getPageCount() + 1,
@@ -170,7 +168,7 @@ describe('docket clerk updates docket entries', () => {
     cerebralTest.index = trialExhibitsDocketEntry.index;
 
     const { PDFDocument } = await cerebralTest.applicationContext.getPdfLib();
-    const pdfDoc = await PDFDocument.load(fakeBlob1);
+    const pdfDoc = await PDFDocument.load(await fakeBlob1.arrayBuffer());
 
     expect(trialExhibitsDocketEntry.numberOfPages).toEqual(
       pdfDoc.getPageCount(),
