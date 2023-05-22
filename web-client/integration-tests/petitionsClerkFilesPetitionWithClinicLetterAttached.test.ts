@@ -2,7 +2,7 @@ import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATr
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkVerifiesPetitionReceiptLength } from './journey/docketClerkVerifiesPetitionReceiptLength';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { loginAs, setupTest } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
@@ -29,7 +29,7 @@ describe('Petitions Clerk creates a paper case which should have a clinic letter
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
 
-  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {
+  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, {
     trialLocation: 'Los Angeles, California',
   });
   petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
@@ -43,7 +43,7 @@ describe('Petitions Clerk creates a paper case which should have a clinic letter
   docketClerkVerifiesPetitionReceiptLength(cerebralTest, 1);
 
   // creating pro se petition with preferredTrialCity and procedureType that DOES have a corresponding clinic letter
-  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {
+  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, {
     procedureType: 'Regular',
     trialLocation: 'Los Angeles, California',
   });
@@ -79,7 +79,6 @@ describe('Petitions Clerk creates a paper case which should have a clinic letter
   // creating petition with prefferredTrialCity and procedureType that DOES have a corresponding clinic letter
   practitionerCreatesNewCase(
     cerebralTest,
-    fakeFile,
     'Los Angeles, California',
     'Regular',
   );

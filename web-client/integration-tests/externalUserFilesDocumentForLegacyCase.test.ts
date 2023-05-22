@@ -1,7 +1,7 @@
 import { associatedExternalUserViewsCaseDetailForOwnedCase } from './journey/associatedExternalUserViewsCaseDetailForOwnedCase';
 import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFilesDocumentForOwnedCase';
-import { fakeFile, loginAs, setupTest } from './helpers';
 import { getOtherFilers } from '../../shared/src/business/entities/cases/Case';
+import { loginAs, setupTest } from './helpers';
 import { userTriesToFileAnUnavailableDocumentType } from './journey/userTriesToFileAnUnavailableDocumentType';
 
 describe('an external user files a document for their legacy case', () => {
@@ -19,17 +19,17 @@ describe('an external user files a document for their legacy case', () => {
 
   loginAs(cerebralTest, 'petitioner@example.com');
   associatedExternalUserViewsCaseDetailForOwnedCase(cerebralTest);
-  externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
+  externalUserFilesDocumentForOwnedCase(cerebralTest);
   userTriesToFileAnUnavailableDocumentType(cerebralTest);
 
   loginAs(cerebralTest, 'privatepractitioner@example.com');
   associatedExternalUserViewsCaseDetailForOwnedCase(cerebralTest);
-  externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
+  externalUserFilesDocumentForOwnedCase(cerebralTest);
   userTriesToFileAnUnavailableDocumentType(cerebralTest);
 
   loginAs(cerebralTest, 'irspractitioner@example.com');
   associatedExternalUserViewsCaseDetailForOwnedCase(cerebralTest);
-  externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
+  externalUserFilesDocumentForOwnedCase(cerebralTest);
   userTriesToFileAnUnavailableDocumentType(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');

@@ -6,7 +6,6 @@ import { applicationContextForClient as applicationContext } from '../../shared/
 import {
   contactPrimaryFromState,
   createCourtIssuedDocketEntry,
-  fakeFile,
   getFormattedDocketEntriesForTest,
   loginAs,
   setupTest,
@@ -491,7 +490,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerFilesADocumentForCase(cerebralTest, fakeFile);
+  petitionerFilesADocumentForCase(cerebralTest);
   it('verifies the docket record after filing a document electronically after serving the petition', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);

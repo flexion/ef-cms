@@ -1,10 +1,8 @@
 import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
-export const petitionerFilesApplicationToTakeDeposition = (
-  cerebralTest,
-  fakeFile,
-) => {
+export const petitionerFilesApplicationToTakeDeposition = cerebralTest => {
   return it('Petitioner files an application to take deposition', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -46,8 +44,6 @@ export const petitionerFilesApplicationToTakeDeposition = (
       hasSupportingDocuments: false,
       [`filersMap.${contactPrimaryId}`]: true,
       objections: OBJECTIONS_OPTIONS_MAP.NO,
-      primaryDocumentFile: fakeFile,
-      primaryDocumentFileSize: 1,
     };
 
     for (const [key, value] of Object.entries(documentToFileDetails)) {
@@ -59,6 +55,11 @@ export const petitionerFilesApplicationToTakeDeposition = (
         },
       );
     }
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'primaryDocumentFile',
+    });
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 

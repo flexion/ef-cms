@@ -2,7 +2,7 @@ import { OBJECTIONS_OPTIONS_MAP } from '../../shared/src/business/entities/Entit
 import { docketClerkAddsPaperFiledDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledDocketEntryAndSavesForLater';
 import { docketClerkServesDocumentFromCaseDetailDocumentView } from './journey/docketClerkServesDocumentFromCaseDetailDocumentView';
 import { docketClerkViewsCaseDetailDocumentView } from './journey/docketClerkViewsCaseDetailDocumentView';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 
 describe('Docket Clerk Serves Paper Filed Document From Case Detail Documents View', () => {
   const cerebralTest = setupTest();
@@ -31,13 +31,9 @@ describe('Docket Clerk Serves Paper Filed Document From Case Detail Documents Vi
     dateReceivedYear: 2018,
     eventCode: 'M115',
     objections: OBJECTIONS_OPTIONS_MAP.NO,
-    primaryDocumentFile: fakeFile,
-    primaryDocumentFileSize: 100,
     'secondaryDocument.addToCoversheet': true,
     'secondaryDocument.additionalInfo': 'Test Secondary Additional Info',
     'secondaryDocument.eventCode': 'APPW',
-    secondaryDocumentFile: fakeFile,
-    secondaryDocumentFileSize: 100,
   };
 
   docketClerkAddsPaperFiledDocketEntryAndSavesForLater({

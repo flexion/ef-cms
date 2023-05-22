@@ -62,6 +62,11 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
         key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
         value: true,
       });
+
+      await cerebralTest.runSequence('validateFileInputSequence', {
+        file: fakeBlob1,
+        locationOnForm: 'secondaryDocumentFile',
+      });
     }
 
     await cerebralTest.runSequence('submitPaperFilingSequence', {

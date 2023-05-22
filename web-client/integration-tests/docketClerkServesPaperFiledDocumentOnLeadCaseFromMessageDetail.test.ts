@@ -6,7 +6,6 @@ import {
 import { confirmInitiateServiceModalHelper } from '../src/presenter/computeds/confirmInitiateServiceModalHelper';
 import {
   contactPrimaryFromState,
-  fakeFile,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
@@ -18,6 +17,7 @@ import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesC
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
+import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -31,13 +31,9 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
     dateReceivedYear: 2018,
     eventCode: 'M115',
     objections: OBJECTIONS_OPTIONS_MAP.NO,
-    primaryDocumentFile: fakeFile,
-    primaryDocumentFileSize: 100,
     'secondaryDocument.addToCoversheet': true,
     'secondaryDocument.additionalInfo': 'Test Secondary Additional Info',
     'secondaryDocument.eventCode': 'APPW',
-    secondaryDocumentFile: fakeFile,
-    secondaryDocumentFileSize: 100,
   };
 
   const motionForLeaveToFileCaseMessageForm = {
@@ -106,6 +102,11 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
         value,
       });
     }
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'primaryDocumentFile',
+    });
 
     const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {

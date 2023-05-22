@@ -7,7 +7,7 @@ import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkStrikesDocketEntry } from './journey/docketClerkStrikesDocketEntry';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { practitionerViewsCaseDetail } from './journey/practitionerViewsCaseDetail';
@@ -35,7 +35,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerFilesADocumentForCase(cerebralTest, fakeFile);
+  petitionerFilesADocumentForCase(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);

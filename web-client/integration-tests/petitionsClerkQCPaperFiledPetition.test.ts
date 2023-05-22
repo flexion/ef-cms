@@ -1,4 +1,4 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkEditsSavedPetition } from './journey/petitionsClerkEditsSavedPetition';
 import { petitionsClerkRemovesAndReaddsPdfFromPetition } from './journey/petitionsClerkRemovesAndReaddsPdfFromPetition';
@@ -16,7 +16,7 @@ describe('Petitions Clerk QCs Paper Filed Petition', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  petitionsClerkCreatesNewCaseFromPaper(cerebralTest);
   petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
     hasIrsNoticeFormatted: 'No',
     ordersAndNoticesInDraft: ['Order Designating Place of Trial'],

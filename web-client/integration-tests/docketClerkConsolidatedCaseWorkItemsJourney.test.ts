@@ -5,7 +5,7 @@ import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import { docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection } from './journey/docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection';
 import { docketClerkVerifiesConsolidatedGroupInformationForDocumentQC } from './journey/docketClerkVerifiesConsolidatedGroupInformationForDocumentQC';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { loginAs, setupTest } from './helpers';
 import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
 
 describe('Docket clerk consolidated case work item journey', () => {
@@ -26,11 +26,7 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   loginAs(cerebralTest, 'privatepractitioner@example.com');
 
-  practitionerFilesDocumentForOwnedCase(
-    cerebralTest,
-    fakeFile,
-    leadCaseDocketNumber,
-  );
+  practitionerFilesDocumentForOwnedCase(cerebralTest, leadCaseDocketNumber);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 
@@ -75,7 +71,6 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   practitionerFilesDocumentForOwnedCase(
     cerebralTest,
-    fakeFile,
     consolidatedCaseDocketNumber,
   );
 

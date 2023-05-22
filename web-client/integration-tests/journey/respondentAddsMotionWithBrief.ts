@@ -1,12 +1,9 @@
 import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { contactPrimaryFromState } from '../helpers';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
-export const respondentAddsMotionWithBrief = (
-  cerebralTest,
-  fakeFile,
-  overrides,
-) => {
+export const respondentAddsMotionWithBrief = (cerebralTest, overrides) => {
   return it('Respondent adds Motion with supporting Brief', async () => {
     await cerebralTest.runSequence('gotoFileDocumentSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -73,8 +70,6 @@ export const respondentAddsMotionWithBrief = (
       [`filersMap.${contactPrimaryId}`]: true,
       attachments: false,
       certificateOfService: false,
-      primaryDocumentFile: fakeFile,
-      primaryDocumentFileSize: 1,
       ['supportingDocuments.0.category']: 'Supporting Document',
       ['supportingDocuments.0.documentType']: 'Brief in Support',
       ['supportingDocuments.0.previousDocument']: {
@@ -94,6 +89,11 @@ export const respondentAddsMotionWithBrief = (
       );
     }
 
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'primaryDocumentFile',
+    });
+
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
@@ -109,8 +109,6 @@ export const respondentAddsMotionWithBrief = (
 
     const documentMissingRequiredFields = {
       objections: OBJECTIONS_OPTIONS_MAP.YES,
-      ['supportingDocuments.0.supportingDocumentFile']: fakeFile,
-      ['supportingDocuments.0.supportingDocumentFileSize']: 1,
     };
 
     for (const [key, value] of Object.entries(documentMissingRequiredFields)) {
@@ -122,6 +120,11 @@ export const respondentAddsMotionWithBrief = (
         },
       );
     }
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'supportingDocuments.0.supportingDocumentFile',
+    });
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 

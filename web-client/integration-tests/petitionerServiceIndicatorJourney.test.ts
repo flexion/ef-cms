@@ -1,10 +1,5 @@
 import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
-import {
-  contactPrimaryFromState,
-  fakeFile,
-  loginAs,
-  setupTest,
-} from './helpers';
+import { contactPrimaryFromState, loginAs, setupTest } from './helpers';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
@@ -23,7 +18,7 @@ describe('Petitioner Service Indicator Journey', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  petitionsClerkCreatesNewCaseFromPaper(cerebralTest);
   petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
     hasIrsNoticeFormatted: 'No',
     ordersAndNoticesInDraft: ['Order Designating Place of Trial'],

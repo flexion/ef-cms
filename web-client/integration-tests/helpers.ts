@@ -100,14 +100,6 @@ Object.assign(applicationContext, {
   getScanner: getScannerMockInterface,
 });
 
-export const fakeFile = (() => {
-  return getFakeFile();
-})();
-
-export const fakeFile1 = (() => {
-  return getFakeFile(false, true);
-})();
-
 export const fakeEncryptedFile = (() => {
   return getFakeEncryptedFile();
 })();
@@ -688,8 +680,6 @@ export const uploadProposedStipulatedDecision = async (
     hasSecondarySupportingDocuments: false,
     hasSupportingDocuments: false,
     partyIrsPractitioner: true,
-    primaryDocumentFile: fakeFile,
-    primaryDocumentFileSize: 115022,
     privatePractitioners: [],
     scenario: 'Standard',
     searchError: false,
@@ -699,6 +689,12 @@ export const uploadProposedStipulatedDecision = async (
     ...defaultForm,
     ...configObject,
   });
+
+  await cerebralTest.runSequence('validateFileInputSequence', {
+    file: fakeBlob1,
+    locationOnForm: 'primaryDocumentFile',
+  });
+
   await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
 
@@ -716,8 +712,6 @@ export const uploadExternalAdministrativeRecord = async cerebralTest => {
     filers: [contactPrimary.contactId],
     freeText: '',
     hasSupportingDocuments: false,
-    primaryDocumentFile: fakeFile,
-    primaryDocumentFileSize: 115022,
     scenario: 'Standard',
     searchError: false,
     supportingDocument: null,
@@ -725,6 +719,12 @@ export const uploadExternalAdministrativeRecord = async cerebralTest => {
     supportingDocumentFreeText: null,
     supportingDocumentMetadata: null,
   });
+
+  await cerebralTest.runSequence('validateFileInputSequence', {
+    file: fakeBlob1,
+    locationOnForm: 'primaryDocumentFile',
+  });
+
   await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
 

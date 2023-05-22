@@ -8,7 +8,6 @@ import { docketClerkServesDocument } from '../integration-tests/journey/docketCl
 import { docketClerkSignsOrder } from '../integration-tests/journey/docketClerkSignsOrder';
 import { docketClerkStrikesDocketEntry } from '../integration-tests/journey/docketClerkStrikesDocketEntry';
 import {
-  fakeFile,
   loginAs,
   setupTest as setupTestClient,
   uploadPetition,
@@ -50,7 +49,7 @@ describe('Unauthed user sees stricken docket entry', () => {
 
   describe('Petitioner files a document for the case', () => {
     loginAs(testClient, 'petitioner@example.com');
-    petitionerFilesADocumentForCase(testClient, fakeFile);
+    petitionerFilesADocumentForCase(testClient);
   });
 
   describe('Docketclerk QCs and Strikes a docket entry', () => {

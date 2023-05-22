@@ -5,7 +5,6 @@ import {
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
 import {
   contactPrimaryFromState,
-  fakeFile,
   getFormattedDocumentQCSectionInbox,
   loginAs,
   setupTest,
@@ -47,7 +46,7 @@ describe('Practitioner requests access to case', () => {
 
   //tests for practitioner starting a new case
   loginAs(cerebralTest, 'privatepractitioner@example.com');
-  practitionerCreatesNewCase(cerebralTest, fakeFile);
+  practitionerCreatesNewCase(cerebralTest);
   practitionerViewsCaseDetailOfOwnedCase(cerebralTest);
 
   // verify petition filed by private practitioner can be found in petitions Section Document QC
@@ -98,7 +97,7 @@ describe('Practitioner requests access to case', () => {
   practitionerRequestsAccessToCase(cerebralTest);
   practitionerViewsDashboard(cerebralTest);
   practitionerViewsCaseDetailOfOwnedCase(cerebralTest);
-  practitionerFilesDocumentForOwnedCase(cerebralTest, fakeFile);
+  practitionerFilesDocumentForOwnedCase(cerebralTest);
 
   loginAs(cerebralTest, 'privatepractitioner4@example.com');
   it('Practitioner requests access to case using "Notice of Election to Intervene" document type', async () => {

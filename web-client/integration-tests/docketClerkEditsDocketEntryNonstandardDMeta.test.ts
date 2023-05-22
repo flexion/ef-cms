@@ -1,7 +1,7 @@
 import { docketClerkChecksDocketEntryEditLink } from './journey/docketClerkChecksDocketEntryEditLink';
 import { docketClerkNavigatesToEditDocketEntryCertificateOfService } from './journey/docketClerkNavigatesToEditDocketEntryCertificateOfService';
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerFilesANonstardardDDocumentForCase } from './journey/petitionerFilesANonstardardDDocumentForCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
@@ -28,7 +28,7 @@ describe("Docket Clerk Edits a Docket Entry's Nonstandard D Metadata", () => {
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerFilesANonstardardDDocumentForCase(cerebralTest, fakeFile);
+  petitionerFilesANonstardardDDocumentForCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkChecksDocketEntryEditLink(cerebralTest);

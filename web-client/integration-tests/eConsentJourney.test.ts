@@ -6,7 +6,6 @@ import {
 } from '../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
-  fakeFile,
   loginAs,
   setupTest,
   uploadPetition,
@@ -54,12 +53,6 @@ describe('E-Consent journey', () => {
         paymentDateDay: '01',
         paymentDateMonth: '01',
         paymentDateYear: '2001',
-        petitionFile: fakeFile,
-        petitionFileSize: 5,
-        stinFile: fakeFile,
-        stinFileSize: 2,
-        requestForPlaceOfTrialFile: fakeFile,
-        requestForPlaceOfTrialFileSize: 3,
       };
 
       for (const [key, value] of Object.entries(paperPetitionFields)) {
@@ -68,6 +61,21 @@ describe('E-Consent journey', () => {
           value,
         });
       }
+
+      await cerebralTest.runSequence('validateFileInputSequence', {
+        file: fakeBlob1,
+        locationOnForm: 'petitionFile',
+      });
+
+      await cerebralTest.runSequence('validateFileInputSequence', {
+        file: fakeBlob1,
+        locationOnForm: 'stinFile',
+      });
+
+      await cerebralTest.runSequence('validateFileInputSequence', {
+        file: fakeBlob1,
+        locationOnForm: 'requestForPlaceOfTrialFile',
+      });
 
       await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
         key: 'petitionPaymentStatus',

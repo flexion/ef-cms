@@ -18,8 +18,8 @@ import { docketClerkVerifiesDocketEntryMetaUpdatesInEditForm } from './journey/d
 import { docketClerkVerifiesDocketEntryMetaUpdatesMinuteEntry } from './journey/docketClerkVerifiesDocketEntryMetaUpdatesMinuteEntry';
 import { docketClerkVerifiesEditCourtIssuedNonstandardFields } from './journey/docketClerkVerifiesEditCourtIssuedNonstandardFields';
 import { docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge } from './journey/docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { irsSuperuserGetsReconciliationReport } from './journey/irsSuperuserGetsReconciliationReport';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
 import { petitionerFilesApplicationToTakeDeposition } from './journey/petitionerFilesApplicationToTakeDeposition';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
@@ -44,7 +44,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerFilesADocumentForCase(cerebralTest, fakeFile);
+  petitionerFilesADocumentForCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkChecksDocketEntryEditLink(cerebralTest);
@@ -90,7 +90,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerFilesApplicationToTakeDeposition(cerebralTest, fakeFile);
+  petitionerFilesApplicationToTakeDeposition(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 7);

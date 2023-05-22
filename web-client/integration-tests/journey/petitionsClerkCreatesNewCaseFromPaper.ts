@@ -9,7 +9,6 @@ import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
 export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
-  fakeFile,
   {
     formOrdersAndNotices = {},
     paymentStatus = PAYMENT_STATUS.WAIVED,

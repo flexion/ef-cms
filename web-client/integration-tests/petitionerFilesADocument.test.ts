@@ -1,4 +1,4 @@
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerCancelsCreateCase } from './journey/petitionerCancelsCreateCase';
 import { petitionerFilesAmendedMotion } from './journey/petitionerFilesAmendedMotion';
 import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
@@ -32,9 +32,9 @@ describe('petitioner files document', () => {
   petitionerViewsCaseDetail(cerebralTest, {
     documentCount: 4,
   });
-  petitionerFilesDocumentForCase(cerebralTest, fakeFile);
+  petitionerFilesDocumentForCase(cerebralTest);
   petitionerViewsCaseDetailAfterFilingDocument(cerebralTest, {
     documentCount: 8,
   });
-  petitionerFilesAmendedMotion(cerebralTest, fakeFile);
+  petitionerFilesAmendedMotion(cerebralTest);
 });

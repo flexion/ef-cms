@@ -1,5 +1,5 @@
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerk1ServesPetitionFromMessageDetail } from './journey/petitionsClerk1ServesPetitionFromMessageDetail';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
@@ -24,7 +24,7 @@ describe('Petitions Clerk Serves Paper Petition From Message Detail & Document V
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  petitionsClerkCreatesNewCaseFromPaper(cerebralTest);
   petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
     hasIrsNoticeFormatted: 'No',
     ordersAndNoticesInDraft: ['Order Designating Place of Trial'],

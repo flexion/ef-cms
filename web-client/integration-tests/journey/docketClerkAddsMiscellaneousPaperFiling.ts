@@ -1,9 +1,9 @@
 import {
   contactPrimaryFromState,
-  fakeFile,
   refreshElasticsearchIndex,
   waitForCondition,
 } from '../helpers';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -28,8 +28,6 @@ export const docketClerkAddsMiscellaneousPaperFiling = cerebralTest => {
       dateReceivedYear: 2001,
       eventCode: 'MISC',
       freeText: 'A title',
-      primaryDocumentFile: fakeFile,
-      primaryDocumentFileSize: 100,
     };
 
     for (const [key, value] of Object.entries(docketEntryFormValues)) {
@@ -38,6 +36,11 @@ export const docketClerkAddsMiscellaneousPaperFiling = cerebralTest => {
         value,
       });
     }
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'primaryDocumentFile',
+    });
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(

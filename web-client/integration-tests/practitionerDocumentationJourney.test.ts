@@ -2,7 +2,8 @@ import {
   PRACTITIONER_DOCUMENT_TYPES_MAP,
   US_STATES,
 } from '../../shared/src/business/entities/EntityConstants';
-import { fakeFile, loginAs, setupTest, waitForExpectedItem } from './helpers';
+import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
+import { loginAs, setupTest, waitForExpectedItem } from './helpers';
 
 describe('Practitioner documentation journey', () => {
   const cerebralTest = setupTest();
@@ -28,7 +29,10 @@ describe('Practitioner documentation journey', () => {
     });
 
     it('upload practitioner document but submit before completing form', async () => {
-      cerebralTest.setState('form.practitionerDocumentFile', fakeFile);
+      await cerebralTest.runSequence('validateFileInputSequence', {
+        file: fakeBlob1,
+        locationOnForm: 'practitionerDocumentFile',
+      });
 
       await cerebralTest.runSequence('submitAddPractitionerDocumentSequence');
 

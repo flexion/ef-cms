@@ -1,10 +1,5 @@
 import { COUNTRY_TYPES } from '../../shared/src/business/entities/EntityConstants';
-import {
-  contactPrimaryFromState,
-  fakeFile,
-  loginAs,
-  setupTest,
-} from './helpers';
+import { contactPrimaryFromState, loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
@@ -17,7 +12,7 @@ describe('Admissions Clerk modified petitioner address and email', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  petitionsClerkCreatesNewCaseFromPaper(cerebralTest);
   petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
     hasIrsNoticeFormatted: 'No',
     ordersAndNoticesInDraft: ['Order Designating Place of Trial'],

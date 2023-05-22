@@ -1,7 +1,6 @@
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {
-  fakeFile,
   getFormattedDocumentQCSectionInbox,
   getSectionInboxCount,
   loginAs,
@@ -49,10 +48,10 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
     });
 
     loginAs(cerebralTest, 'petitionsclerk@example.com');
-    petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+    petitionsClerkServesPetitionFromDocumentView;
 
     loginAs(cerebralTest, 'petitioner@example.com');
-    petitionerFilesADocumentForCase(cerebralTest, fakeFile);
+    petitionerFilesADocumentForCase(cerebralTest);
   }
 
   loginAs(cerebralTest, 'docketclerk@example.com');

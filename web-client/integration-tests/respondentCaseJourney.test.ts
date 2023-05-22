@@ -2,7 +2,7 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { practitionerSearchesForUnassociatedSealedCase } from './journey/practitionerSearchesForUnassociatedSealedCase';
 import { respondent1ViewsCaseDetailOfAssociatedCase } from './journey/respondent1ViewsCaseDetailOfAssociatedCase';
 import { respondentFilesDocumentForAssociatedCase } from './journey/respondentFilesDocumentForAssociatedCase';
@@ -47,17 +47,17 @@ describe('Respondent requests access to a case', () => {
   respondentViewsDashboard(cerebralTest);
   respondentSearchesForCase(cerebralTest);
   respondentViewsCaseDetail(cerebralTest, false);
-  respondentFilesFirstIRSDocumentOnCase(cerebralTest, fakeFile);
+  respondentFilesFirstIRSDocumentOnCase(cerebralTest);
   respondentViewsDashboard(cerebralTest);
   respondentViewsCaseDetailOfAssociatedCase(cerebralTest);
-  respondentFilesDocumentForAssociatedCase(cerebralTest, fakeFile);
+  respondentFilesDocumentForAssociatedCase(cerebralTest);
 
   loginAs(cerebralTest, 'irspractitioner1@example.com');
   respondentSearchesForCase(cerebralTest);
   respondentViewsCaseDetailOfUnassociatedCase(cerebralTest);
   respondentRequestsAccessToCase(cerebralTest);
   respondent1ViewsCaseDetailOfAssociatedCase(cerebralTest);
-  respondentFilesDocumentForAssociatedCase(cerebralTest, fakeFile);
+  respondentFilesDocumentForAssociatedCase(cerebralTest);
 
   loginAs(cerebralTest, 'irspractitioner3@example.com');
   practitionerSearchesForUnassociatedSealedCase(cerebralTest);

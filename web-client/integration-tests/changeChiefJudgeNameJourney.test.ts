@@ -1,6 +1,5 @@
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import {
-  fakeFile,
   loginAs,
   setChiefJudgeNameFlagValue,
   setJudgeTitle,
@@ -30,7 +29,7 @@ describe('Chief Judge feature flag configuration', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  petitionsClerkCreatesNewCaseFromPaper(cerebralTest);
   petitionsClerkReviewsPaperCaseBeforeServing(cerebralTest, {
     hasIrsNoticeFormatted: 'No',
     ordersAndNoticesInDraft: ['Order Designating Place of Trial'],

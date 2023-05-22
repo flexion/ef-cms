@@ -1,14 +1,12 @@
 import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
 import { contactSecondaryFromState } from '../helpers';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 import { fileDocumentHelper as fileDocumentHelperComputed } from '../../src/presenter/computeds/fileDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const respondentFilesFirstIRSDocumentOnCase = (
-  cerebralTest,
-  fakeFile,
-) => {
+export const respondentFilesFirstIRSDocumentOnCase = cerebralTest => {
   const caseDetailHeaderHelper = withAppContextDecorator(
     caseDetailHeaderHelperComputed,
   );
@@ -76,8 +74,6 @@ export const respondentFilesFirstIRSDocumentOnCase = (
       hasSupportingDocuments: false,
       objections: OBJECTIONS_OPTIONS_MAP.NO,
       partyIrsPractitioner: true,
-      primaryDocumentFile: fakeFile,
-      primaryDocumentFileSize: 1,
     };
 
     for (const [key, value] of Object.entries(documentToFileDetails)) {
@@ -89,6 +85,11 @@ export const respondentFilesFirstIRSDocumentOnCase = (
         },
       );
     }
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'primaryDocumentFile',
+    });
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 

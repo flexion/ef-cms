@@ -1,10 +1,6 @@
 import { completeDocumentTypeSectionHelper as completeDocumentTypeSectionHelperComputed } from '../src/presenter/computeds/completeDocumentTypeSectionHelper';
-import {
-  contactPrimaryFromState,
-  fakeFile,
-  loginAs,
-  setupTest,
-} from './helpers';
+import { contactPrimaryFromState, loginAs, setupTest } from './helpers';
+import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
@@ -27,7 +23,7 @@ describe('Document title journey', () => {
   );
 
   loginAs(cerebralTest, 'privatepractitioner2@example.com');
-  practitionerCreatesNewCase(cerebralTest, fakeFile);
+  practitionerCreatesNewCase(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
@@ -72,17 +68,9 @@ describe('Document title journey', () => {
       contactPrimaryFromState(cerebralTest);
 
     const documentToFileDetails = {
-      // certificateOfService: true,
-      // certificateOfServiceDay: '12',
-      // certificateOfServiceMonth: '12',
-      // certificateOfServiceYear: '2000',
-      // objections: OBJECTIONS_OPTIONS_MAP.NO,
-
       [`filersMap.${contactPrimaryId}`]: true,
       attachments: false,
       hasSupportingDocuments: false,
-      primaryDocumentFile: fakeFile,
-      primaryDocumentFileSize: 1,
     };
 
     for (const [key, value] of Object.entries(documentToFileDetails)) {
@@ -94,6 +82,11 @@ describe('Document title journey', () => {
         },
       );
     }
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'primaryDocumentFile',
+    });
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
@@ -179,8 +172,6 @@ describe('Document title journey', () => {
       filers: [contactPrimary.contactId],
       ordinalValue: 'Other',
       otherIteration: '16',
-      primaryDocumentFile: fakeFile,
-      primaryDocumentFileSize: 1,
       scenario: 'Nonstandard F',
     };
 
@@ -193,6 +184,11 @@ describe('Document title journey', () => {
         },
       );
     }
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'primaryDocumentFile',
+    });
 
     await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
 

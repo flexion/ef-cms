@@ -8,15 +8,14 @@ import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpens
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
+import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
 import {
-  fakeFile,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
   waitForLoadingComponentToHide,
 } from './helpers';
-import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -28,8 +27,6 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
     documentTitle: 'Court issued document filed on lead case',
     documentType: 'Miscellaneous',
     eventCode: 'MISC',
-    primaryDocumentFile: fakeFile,
-    primaryDocumentFileSize: 100,
   };
 
   const miscellaneousCaseMessageForm = {

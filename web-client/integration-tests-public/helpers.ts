@@ -1,11 +1,8 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextPublic as applicationContext } from '../src/applicationContextPublic';
-import { getFakeFile } from '../../shared/src/business/test/getFakeFile';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter-public';
 import { withAppContextDecorator } from '../src/withAppContext';
-
-export const fakeFile = getFakeFile();
 
 export const setupTest = ({ useCases = {} } = {}) => {
   let cerebralTest;

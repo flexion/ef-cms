@@ -1,9 +1,7 @@
 import { contactPrimaryFromState } from '../helpers';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
-export const petitionerFilesANonstardardDDocumentForCase = (
-  cerebralTest,
-  fakeFile,
-) => {
+export const petitionerFilesANonstardardDDocumentForCase = cerebralTest => {
   return it('Petitioner files a nonstandard d document for case', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -24,8 +22,6 @@ export const petitionerFilesANonstardardDDocumentForCase = (
       eventCode: 'CS',
       hasSupportingDocuments: false,
       previousDocument: cerebralTest.previousDocumentId,
-      primaryDocumentFile: fakeFile,
-      primaryDocumentFileSize: 1,
       scenario: 'Nonstandard D',
       serviceDateDay: '03',
       serviceDateMonth: '03',
@@ -42,6 +38,11 @@ export const petitionerFilesANonstardardDDocumentForCase = (
         },
       );
     }
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'primaryDocumentFile',
+    });
 
     await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
 

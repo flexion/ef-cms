@@ -4,7 +4,6 @@ import { docketClerkViewsSectionInboxHighPriority } from './journey/docketClerkV
 import { docketClerkViewsSectionInboxNotHighPriority } from './journey/docketClerkViewsSectionInboxNotHighPriority';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {
-  fakeFile,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
@@ -53,7 +52,7 @@ describe('petitioner files document', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerFilesDocumentForCase(cerebralTest, fakeFile);
+  petitionerFilesDocumentForCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkViewsSectionInboxHighPriority(cerebralTest);

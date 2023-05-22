@@ -1,6 +1,6 @@
 import { docketClerkUpdatesCaseCaption } from './journey/docketClerkUpdatesCaseCaption';
 import { docketClerkViewsCaseDetail } from './journey/docketClerkViewsCaseDetail';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { loginAs, setupTest } from './helpers';
 import { petitionerCancelsCreateCase } from './journey/petitionerCancelsCreateCase';
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
@@ -41,7 +41,7 @@ describe('Case journey', () => {
   petitionerCancelsCreateCase(cerebralTest);
   petitionerChoosesProcedureType(cerebralTest);
   petitionerChoosesCaseType(cerebralTest);
-  petitionerCreatesNewCaseTestAllOptions(cerebralTest, fakeFile);
+  petitionerCreatesNewCaseTestAllOptions(cerebralTest);
   petitionerViewsDashboard(cerebralTest);
   petitionerViewsCaseDetail(cerebralTest);
 
@@ -65,7 +65,7 @@ describe('Case journey', () => {
   respondentAddsStipulatedDecision(cerebralTest, {
     documentCount: documentCountPreStipDecision + 1,
   });
-  respondentAddsMotionWithBrief(cerebralTest, fakeFile, {
+  respondentAddsMotionWithBrief(cerebralTest, {
     documentCount: documentCountPreStipDecision + 3,
   });
 

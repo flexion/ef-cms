@@ -5,10 +5,10 @@ import {
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
 import { caseDetailSubnavHelper as caseDetailSubnavHelperComputed } from '../src/presenter/computeds/caseDetailSubnavHelper';
-import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../src/presenter/computeds/reviewSavedPetitionHelper';
-
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
+import { loginAs, setupTest } from './helpers';
 import { petitionsClerkServesPaperCaseToIRS } from './petitionsClerkServesPaperCaseToIRS';
+import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../src/presenter/computeds/reviewSavedPetitionHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 const { faker } = require('@faker-js/faker');
@@ -76,46 +76,6 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       {
         key: 'mailingDate',
         value: faker.date.recent().toDateString(),
-      },
-      {
-        key: 'petitionFile',
-        value: fakeFile,
-      },
-      {
-        key: 'petitionFileSize',
-        value: 1,
-      },
-      {
-        key: 'cdsFile',
-        value: fakeFile,
-      },
-      {
-        key: 'cdsFileSize',
-        value: 1,
-      },
-      {
-        key: 'corporateDisclosureFile',
-        value: fakeFile,
-      },
-      {
-        key: 'corporateDisclosureFileSize',
-        value: 1,
-      },
-      {
-        key: 'requestForPlaceOfTrialFile',
-        value: fakeFile,
-      },
-      {
-        key: 'requestForPlaceOfTrialFileSize',
-        value: 1,
-      },
-      {
-        key: 'applicationForWaiverOfFilingFeeFile',
-        value: fakeFile,
-      },
-      {
-        key: 'applicationForWaiverOfFilingFeeFileSize',
-        value: 1,
       },
       {
         key: 'preferredTrialCity',
@@ -186,6 +146,23 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
         value: true,
       });
     }
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'petitionFile',
+    });
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'corporateDisclosureFile',
+    });
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'requestForPlaceOfTrialFile',
+    });
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'applicationForWaiverOfFilingFeeFile',
+    });
 
     await cerebralTest.runSequence(
       'updateFormValueAndCaseCaptionSequence',

@@ -1,7 +1,8 @@
 import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 
-export const petitionerFilesADocumentForCase = (cerebralTest, fakeFile) => {
+export const petitionerFilesADocumentForCase = cerebralTest => {
   return it('Petitioner files a document for case', async () => {
     await cerebralTest.runSequence('gotoFileDocumentSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -46,8 +47,6 @@ export const petitionerFilesADocumentForCase = (cerebralTest, fakeFile) => {
       certificateOfServiceYear: '2000',
       hasSupportingDocuments: false,
       objections: OBJECTIONS_OPTIONS_MAP.NO,
-      primaryDocumentFile: fakeFile,
-      primaryDocumentFileSize: 1,
       [`filersMap.${contactPrimaryId}`]: true,
     };
 
@@ -60,6 +59,11 @@ export const petitionerFilesADocumentForCase = (cerebralTest, fakeFile) => {
         },
       );
     }
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'primaryDocumentFile',
+    });
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 

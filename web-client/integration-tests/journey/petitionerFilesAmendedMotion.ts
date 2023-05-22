@@ -1,11 +1,12 @@
 import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { contactPrimaryFromState } from '../helpers';
+import { fakeBlob1 } from '../../../shared/src/business/test/getFakeFile';
 import { fileDocumentHelper } from '../../src/presenter/computeds/fileDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const petitionerFilesAmendedMotion = (cerebralTest, fakeFile) => {
+export const petitionerFilesAmendedMotion = cerebralTest => {
   return it('petitioner files amended motion', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -51,21 +52,18 @@ export const petitionerFilesAmendedMotion = (cerebralTest, fakeFile) => {
     const { contactId: contactPrimaryId } =
       contactPrimaryFromState(cerebralTest);
 
-    const documentToFileDetails = {
-      [`filersMap.${contactPrimaryId}`]: true,
-      primaryDocumentFile: fakeFile,
-      primaryDocumentFileSize: 1,
-    };
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactPrimaryId}`,
+        value: true,
+      },
+    );
 
-    for (const [key, value] of Object.entries(documentToFileDetails)) {
-      await cerebralTest.runSequence(
-        'updateFileDocumentWizardFormValueSequence',
-        {
-          key,
-          value,
-        },
-      );
-    }
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: fakeBlob1,
+      locationOnForm: 'primaryDocumentFile',
+    });
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 

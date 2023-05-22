@@ -1,5 +1,6 @@
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { fakeBlob1 } from '../../shared/src/business/test/getFakeFile';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -37,7 +38,7 @@ describe('docket clerk updates docket entries', () => {
 
     const pdfUploadFormValues = {
       freeText: pdfUploadDescription,
-      primaryDocumentFile: fakeFile,
+      primaryDocumentFile: fakeBlob1,
     };
 
     for (let [key, value] of Object.entries(pdfUploadFormValues)) {
@@ -112,7 +113,7 @@ describe('docket clerk updates docket entries', () => {
     cerebralTest.index = trialExhibitsDocketEntry.index;
 
     const { PDFDocument } = await cerebralTest.applicationContext.getPdfLib();
-    const pdfDoc = await PDFDocument.load(fakeFile);
+    const pdfDoc = await PDFDocument.load(fakeBlob1);
 
     expect(trialExhibitsDocketEntry.numberOfPages).toEqual(
       pdfDoc.getPageCount() + 1,
@@ -169,7 +170,7 @@ describe('docket clerk updates docket entries', () => {
     cerebralTest.index = trialExhibitsDocketEntry.index;
 
     const { PDFDocument } = await cerebralTest.applicationContext.getPdfLib();
-    const pdfDoc = await PDFDocument.load(fakeFile);
+    const pdfDoc = await PDFDocument.load(fakeBlob1);
 
     expect(trialExhibitsDocketEntry.numberOfPages).toEqual(
       pdfDoc.getPageCount(),
