@@ -1,6 +1,7 @@
 import { DOCUMENT_RELATIONSHIPS } from '../../../shared/src/business/entities/EntityConstants';
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
+import { getFakeBlob } from '../../../shared/src/business/test/getFakeFile';
 
 export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
   cerebralTest,
@@ -34,8 +35,6 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
       filers: VALIDATION_ERROR_MESSAGES.filers,
     });
 
-    const { contactId } = contactPrimaryFromState(cerebralTest);
-
     for (const [key, value] of Object.entries(documentFormValues)) {
       await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
         key,
@@ -43,9 +42,15 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
       });
     }
 
+    const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: `filersMap.${contactId}`,
       value: true,
+    });
+
+    await cerebralTest.runSequence('validateFileInputSequence', {
+      file: getFakeBlob(),
+      theNameOfTheFileOnTheEntity: 'primaryDocumentFile',
     });
 
     expect(cerebralTest.getState('form.documentType')).toEqual(
@@ -70,7 +75,7 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
         cerebralTest.getState('currentPage') === 'CaseDetailInternal',
     });
 
-    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
+    const { docketEntries } = cerebralTest.getState('caseDetail');
 
     cerebralTest.docketEntryId = docketEntries.find(
       doc => doc.eventCode === documentFormValues.eventCode,

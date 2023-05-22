@@ -30,7 +30,7 @@ export const uploadDocketEntryFileAction = async ({
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
       .uploadDocumentInteractor(applicationContext, {
-        documentFile: primaryDocumentFile,
+        documentFile: primaryDocumentFile.file,
         key: docketEntryId,
         onUploadProgress: progressFunctions.primary,
       });

@@ -5,7 +5,6 @@ import {
 import { confirmInitiateServiceModalHelper } from '../src/presenter/computeds/confirmInitiateServiceModalHelper';
 import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
 import { docketClerkAddsPaperFiledDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledDocketEntryAndSavesForLater';
-import { fakeFile } from '../integration-tests-public/helpers';
 import { runCompute } from 'cerebral/test';
 import { setupTest } from './helpers';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -28,8 +27,6 @@ describe('Docket Clerk serves non multi-docketable entry on consolidated case', 
       dateReceivedYear: 2018,
       eventCode: SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES[0],
       objections: OBJECTIONS_OPTIONS_MAP.NO,
-      primaryDocumentFile: fakeFile,
-      primaryDocumentFileSize: 100,
     };
 
     it('setup docket number', () => {
