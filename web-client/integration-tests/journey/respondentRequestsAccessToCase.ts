@@ -32,7 +32,8 @@ export const respondentRequestsAccessToCase = cerebralTest => {
       documentTitleTemplate: VALIDATION_ERROR_MESSAGES.documentTitleTemplate,
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      primaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFile[0].message,
       scenario: VALIDATION_ERROR_MESSAGES.scenario,
     });
 
@@ -55,7 +56,8 @@ export const respondentRequestsAccessToCase = cerebralTest => {
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      primaryDocumentFile:
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFile[0].message,
     });
 
     await cerebralTest.runSequence('validateFileInputSequence', {
