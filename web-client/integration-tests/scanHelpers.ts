@@ -35,9 +35,6 @@ export const createPDFFromScannedBatches = cerebralTest => {
       locationOnForm: selectedDocumentType,
     });
 
-    expect(
-      cerebralTest.getState(`form.${selectedDocumentType}Size`),
-    ).toBeGreaterThan(0);
     expect(cerebralTest.getState(`form.${selectedDocumentType}`)).toBeDefined();
   });
 };

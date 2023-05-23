@@ -17,7 +17,7 @@ export const createPractitionerDocumentAction = async ({
   const practitionerDocumentFileId = await applicationContext
     .getUseCases()
     .uploadOrderDocumentInteractor(applicationContext, {
-      documentFile: practitionerDocumentFile,
+      documentFile: practitionerDocumentFile.file,
     });
 
   await applicationContext

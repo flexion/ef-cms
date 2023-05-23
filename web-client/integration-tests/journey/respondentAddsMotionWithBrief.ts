@@ -102,7 +102,7 @@ export const respondentAddsMotionWithBrief = (cerebralTest, overrides) => {
         {
           index: 0,
           supportingDocumentFile:
-            VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
+            VALIDATION_ERROR_MESSAGES.supportingDocumentFile[0].message,
         },
       ],
     });
