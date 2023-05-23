@@ -3,7 +3,7 @@
 # This script waits for a specified service to come online
 
 # Usage
-#   URL=http://localhost:4000/api/swagger wait-until.sh
+#   URL=http://localhost:9000/ wait-until.sh
 
 ( ! command -v curl > /dev/null ) && echo "Curl was not found on your path. Please install curl." && exit 1
 max_tries=100

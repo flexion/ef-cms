@@ -9,5 +9,5 @@
 
 
 ./wait-for-dynamo.sh
-URL=http://localhost:4000/api/swagger ./wait-until.sh
+# URL=http://localhost:4000/api/swagger ./wait-until.sh
 URL=http://localhost:9200/ ./wait-until.sh

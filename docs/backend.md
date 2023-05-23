@@ -91,7 +91,6 @@ Before diving into the technical aspects of the backend, it might be useful just
 │   │   │   └──  main
 │   │   │       ├── lambdas // the lambda containing the node logic
 │   │   │       ├── main.tf // the main terraform entrypoint
-├── swagger.json // the swagger .json we update when api endpoints are changed or added
 ├── switch-cognito-triggers-color.js // used to switch the color of the cognito triggers
 ├── track-successful-migrations.js // tracks which migration scripts have run after doing a migration
 ├── verify-ses-email.sh // used to verify SES 
