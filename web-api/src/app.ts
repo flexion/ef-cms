@@ -145,8 +145,6 @@ import { setNoticesForCalendaredTrialSessionLambda } from './trialSessions/setNo
 import { setTrialSessionCalendarLambda } from './trialSessions/setTrialSessionCalendarLambda';
 import { setWorkItemAsReadLambda } from './workitems/setWorkItemAsReadLambda';
 import { strikeDocketEntryLambda } from './documents/strikeDocketEntryLambda';
-import { swaggerJsonLambda } from './swagger/swaggerJsonLambda';
-import { swaggerLambda } from './swagger/swaggerLambda';
 import { unblockCaseFromTrialLambda } from './cases/unblockCaseFromTrialLambda';
 import { unprioritizeCaseLambda } from './cases/unprioritizeCaseLambda';
 import { unsealCaseLambda } from './cases/unsealCaseLambda';
@@ -259,8 +257,6 @@ app.use(logger());
  * api
  */
 {
-  app.get('/api/swagger', lambdaWrapper(swaggerLambda));
-  app.get('/api/swagger.json', lambdaWrapper(swaggerJsonLambda));
   app.get('/api/notifications', lambdaWrapper(getNotificationsLambda));
   app.post(
     '/api/court-issued-order',

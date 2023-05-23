@@ -11,7 +11,7 @@
 
 ENV=$1
 
-response=$(curl -I "https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/api/swagger" | head -n 1 | cut -d$' ' -f2)
+response=$(curl -I "https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/" | head -n 1 | cut -d$' ' -f2)
 
 if [[ "$response" != "401" ]]; then
   echo "expected endpoint to throw Unauthorized error with invalid token"
