@@ -1,9 +1,11 @@
 import { state } from 'cerebral';
 
 /**
- * upload document to s3.
+ * Upload document to s3
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.path the next object in the path
  * @returns {object} the next path based on if validation was successful or error
  */
 export const uploadOrderFileAction = async ({

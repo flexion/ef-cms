@@ -17,7 +17,7 @@ export const uploadOrderDocumentInteractor = async (
   {
     documentFile,
     fileIdToOverwrite,
-  }: { fileIdToOverwrite: string; documentFile: any },
+  }: { fileIdToOverwrite?: string; documentFile: any },
 ) => {
   const user = applicationContext.getCurrentUser();
 

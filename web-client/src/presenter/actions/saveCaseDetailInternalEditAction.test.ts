@@ -1,13 +1,16 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  INITIAL_DOCUMENT_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { PDF } from '../../../../shared/src/business/entities/documents/PDF';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { saveCaseDetailInternalEditAction } from './saveCaseDetailInternalEditAction';
 
 describe('saveCaseDetailInternalEditAction', () => {
-  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
-  const mockUploadedKey = applicationContext.getUniqueId();
+  const mockUploadedKey: string = '5dc203b8-9ba1-4a9a-95a3-46a8d5ed0ed8';
 
   beforeAll(() => {
     applicationContext
@@ -26,6 +29,7 @@ describe('saveCaseDetailInternalEditAction', () => {
   });
 
   it('should replace a petition document file', async () => {
+    const mockDocketEntryId: string = 'd033ea1e-c333-483b-8a7a-2e204996033f';
     const caseDetail = {
       ...MOCK_CASE,
       createdAt: '2019-03-01T21:40:46.415Z',
@@ -33,7 +37,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     };
     applicationContext
       .getUseCases()
-      .saveCaseDetailInternalEditInteractor.mockReturnValue(caseDetail);
+      .saveCaseDetailInternalEditInteractor.mockResolvedValue(caseDetail);
 
     await runAction(saveCaseDetailInternalEditAction, {
       modules: {
@@ -50,7 +54,7 @@ describe('saveCaseDetailInternalEditAction', () => {
           ...caseDetail,
           docketEntries: [
             {
-              docketEntryId: '123',
+              docketEntryId: mockDocketEntryId,
               eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
             },
           ],
@@ -61,7 +65,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[0][1].key,
-    ).toEqual('123');
+    ).toEqual(mockDocketEntryId);
   });
 
   it('should not replace an initial filing document if it is not a petition document file', async () => {
@@ -156,18 +160,12 @@ describe('saveCaseDetailInternalEditAction', () => {
   });
 
   it('should upload initial filing documents if they exist on the case', async () => {
-    const mockRqtFile = {
-      docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
-      documentType: 'Request for Place of Trial',
-      eventCode: 'RQT',
-      filedBy: 'Test Petitioner',
-      userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
-    };
+    const file: Blob = new Blob(['abc']);
+    const pdf: PDF = new PDF(file);
     const caseDetail = {
       ...MOCK_CASE,
       docketEntries: [],
-      requestForPlaceOfTrialFile: mockRqtFile,
-      requestForPlaceOfTrialFileSize: 2,
+      requestForPlaceOfTrialFile: pdf,
     };
 
     await runAction(saveCaseDetailInternalEditAction, {
@@ -183,7 +181,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[0][1].document,
-    ).toEqual(mockRqtFile);
+    ).toEqual(pdf.file);
     expect(
       applicationContext.getUseCases().saveCaseDetailInternalEditInteractor.mock
         .calls[0][1].caseToUpdate.docketEntries,

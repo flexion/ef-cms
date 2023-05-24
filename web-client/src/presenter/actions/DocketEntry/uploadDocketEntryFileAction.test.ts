@@ -1,29 +1,24 @@
+import { PDF } from '../../../../../shared/src/business/entities/documents/PDF';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { uploadDocketEntryFileAction } from './uploadDocketEntryFileAction';
 
 describe('uploadDocketEntryFileAction', () => {
-  const mockDocketEntryId = '7dc7c871-6fc4-4274-85ed-63b0c14465bd';
-  const mockFile = {
-    name: 'petition',
-    size: 100,
+  const mockDocketEntryId: string = '7dc7c871-6fc4-4274-85ed-63b0c14465bd';
+
+  const file: Blob = new Blob(['abc']);
+  const pdf: PDF = new PDF(file);
+
+  const successStub: jest.Mock = jest.fn();
+  const errorStub: jest.Mock = jest.fn();
+
+  presenter.providers.applicationContext = applicationContext;
+
+  presenter.providers.path = {
+    error: errorStub,
+    success: successStub,
   };
-
-  let successStub;
-  let errorStub;
-
-  beforeAll(() => {
-    successStub = jest.fn();
-    errorStub = jest.fn();
-
-    presenter.providers.applicationContext = applicationContext;
-
-    presenter.providers.path = {
-      error: errorStub,
-      success: successStub,
-    };
-  });
 
   it('should make a call to upload the selected document with docketEntryId from state', async () => {
     await runAction(uploadDocketEntryFileAction, {
@@ -31,21 +26,22 @@ describe('uploadDocketEntryFileAction', () => {
       state: {
         docketEntryId: mockDocketEntryId,
         form: {
-          primaryDocumentFile: mockFile,
+          primaryDocumentFile: pdf,
         },
       },
     });
 
     expect(
-      applicationContext.getUseCases().uploadDocumentInteractor.mock
-        .calls[0][1],
-    ).toMatchObject({
-      documentFile: mockFile,
-      key: mockDocketEntryId,
-    });
+      applicationContext.getUseCases().uploadDocumentInteractor.mock.calls[0][1]
+        .key,
+    ).toBe(mockDocketEntryId);
+    expect(
+      applicationContext.getUseCases().uploadDocumentInteractor.mock.calls[0][1]
+        .documentFile,
+    ).toBe(pdf.file);
   });
 
-  it('should return the error path when an error is thrown when attempting to upload the document file', async () => {
+  it('should return the error path when an error is thrown while attempting to upload the document file', async () => {
     applicationContext
       .getUseCases()
       .uploadDocumentInteractor.mockRejectedValueOnce(new Error('whoopsie!'));
@@ -54,7 +50,7 @@ describe('uploadDocketEntryFileAction', () => {
       modules: { presenter },
       state: {
         form: {
-          primaryDocumentFile: {},
+          primaryDocumentFile: pdf,
         },
       },
     });
@@ -72,7 +68,7 @@ describe('uploadDocketEntryFileAction', () => {
       state: {
         docketEntryId: mockDocketEntryId,
         form: {
-          primaryDocumentFile: mockFile,
+          primaryDocumentFile: pdf,
         },
       },
     });

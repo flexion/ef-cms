@@ -4,27 +4,23 @@ import { runAction } from 'cerebral/test';
 import { validateCaseDetailAction } from './validateCaseDetailAction';
 
 describe('validateCaseDetail', () => {
-  let successStub;
-  let errorStub;
+  let successStub: jest.Mock = jest.fn();
+  let errorStub: jest.Mock = jest.fn();
 
-  beforeAll(() => {
-    successStub = jest.fn();
-    errorStub = jest.fn();
+  presenter.providers.applicationContext = applicationContext;
 
-    presenter.providers.applicationContext = applicationContext;
-    presenter.providers.path = {
-      error: errorStub,
-      success: successStub,
-    };
+  presenter.providers.path = {
+    error: errorStub,
+    success: successStub,
+  };
 
-    applicationContext
-      .getUseCases()
-      .validateCaseDetailInteractor.mockReturnValue(null);
+  applicationContext
+    .getUseCases()
+    .validateCaseDetailInteractor.mockReturnValue(null);
 
-    applicationContext
-      .getUseCases()
-      .validatePetitionFromPaperInteractor.mockReturnValue(null);
-  });
+  applicationContext
+    .getUseCases()
+    .validatePetitionFromPaperInteractor.mockReturnValue(null);
 
   it('should call the success path when no errors are found', async () => {
     await runAction(validateCaseDetailAction, {
@@ -40,6 +36,7 @@ describe('validateCaseDetail', () => {
       },
       state: {},
     });
+
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
         .calls[0][1].caseDetail,
@@ -75,6 +72,7 @@ describe('validateCaseDetail', () => {
         },
       },
     });
+
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 
@@ -136,6 +134,7 @@ describe('validateCaseDetail', () => {
       },
       state: {},
     });
+
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor,
     ).not.toHaveBeenCalled();
@@ -144,7 +143,7 @@ describe('validateCaseDetail', () => {
     ).toHaveBeenCalled();
   });
 
-  it('sets file and file size properties for initially filed documents from the documents array for paper filings', async () => {
+  it('sets file properties for initially filed documents from the documents array for paper filings', async () => {
     await runAction(validateCaseDetailAction, {
       modules: {
         presenter,
@@ -163,6 +162,7 @@ describe('validateCaseDetail', () => {
       },
       state: {},
     });
+
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor,
     ).not.toHaveBeenCalled();
@@ -171,11 +171,8 @@ describe('validateCaseDetail', () => {
         .calls[0][1].petition,
     ).toMatchObject({
       applicationForWaiverOfFilingFeeFile: {},
-      applicationForWaiverOfFilingFeeFileSize: 1,
       petitionFile: {},
-      petitionFileSize: 1,
       stinFile: {},
-      stinFileSize: 1,
     });
   });
 

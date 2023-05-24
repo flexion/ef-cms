@@ -1,13 +1,17 @@
+import { PDF } from '../../../../../shared/src/business/entities/documents/PDF';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { uploadOrderFileAction } from './uploadOrderFileAction';
 
 describe('uploadOrderFileAction', () => {
-  const errorStub = jest.fn();
-  const successStub = jest.fn();
-  const fakeFile = { data: 'something' };
-  const mockPrimaryDocumentFileId = '2729c8a9-45a5-47ff-9210-01bf0fc3a133';
+  const errorStub: jest.Mock = jest.fn();
+  const successStub: jest.Mock = jest.fn();
+
+  const file: Blob = new Blob(['abc']);
+  const pdf: PDF = new PDF(file);
+  const mockPrimaryDocumentFileId: string =
+    '2729c8a9-45a5-47ff-9210-01bf0fc3a133';
 
   presenter.providers.applicationContext = applicationContext;
 
@@ -27,7 +31,7 @@ describe('uploadOrderFileAction', () => {
       },
       state: {
         form: {
-          primaryDocumentFile: fakeFile,
+          primaryDocumentFile: pdf,
         },
       },
     });
@@ -42,7 +46,7 @@ describe('uploadOrderFileAction', () => {
       },
       state: {
         form: {
-          primaryDocumentFile: fakeFile,
+          primaryDocumentFile: pdf,
         },
       },
     });
@@ -52,8 +56,8 @@ describe('uploadOrderFileAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().uploadOrderDocumentInteractor.mock
-        .calls[0][1],
-    ).toMatchObject({ documentFile: fakeFile });
+        .calls[0][1].documentFile,
+    ).toBe(pdf.file);
   });
 
   it('should call path.success with the returned primaryDocumentFileId after successfully uploading the order document', async () => {
@@ -67,7 +71,7 @@ describe('uploadOrderFileAction', () => {
       },
       state: {
         form: {
-          primaryDocumentFile: fakeFile,
+          primaryDocumentFile: pdf,
         },
       },
     });

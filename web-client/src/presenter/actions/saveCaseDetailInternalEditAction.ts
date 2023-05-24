@@ -2,7 +2,7 @@ import { setupPercentDone } from './createCaseFromPaperAction';
 import { state } from 'cerebral';
 
 /**
- * takes the state.caseDetail and updates it via the updateCase use case.
+ * Takes the state.caseDetail and updates it via the updateCase use case.
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the updateCase use case
  * @param {object} providers.get the cerebral store used for getting state.caseDetail

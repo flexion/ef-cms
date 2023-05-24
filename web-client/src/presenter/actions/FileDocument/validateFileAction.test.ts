@@ -1,29 +1,28 @@
+import { PDF } from '../../../../../shared/src/business/entities/documents/PDF';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateFileAction } from './validateFileAction';
 
 describe('validateFileAction', () => {
-  let pathSuccessStub;
-  let pathErrorStub;
+  const pathSuccessStub: jest.Mock = jest.fn();
+  const pathErrorStub: jest.Mock = jest.fn();
 
-  beforeAll(() => {
-    pathSuccessStub = jest.fn();
-    pathErrorStub = jest.fn();
+  const file: Blob = new Blob(['abc']);
+  const pdf: PDF = new PDF(file);
 
-    presenter.providers.path = {
-      error: pathErrorStub,
-      success: pathSuccessStub,
-    };
+  presenter.providers.path = {
+    error: pathErrorStub,
+    success: pathSuccessStub,
+  };
 
-    presenter.providers.applicationContext = applicationContext;
-  });
+  presenter.providers.applicationContext = applicationContext;
 
   it('should call the error path when an error occurs when validating the file', async () => {
     applicationContext
       .getUseCases()
       .validateFileInteractor.mockImplementation(() => {
-        throw new Error('This file looks super bad. I hate it.');
+        throw new Error('The file is not valid.');
       });
 
     await runAction(validateFileAction, {
@@ -51,7 +50,7 @@ describe('validateFileAction', () => {
       },
       state: {
         form: {
-          primaryDocumentFile: '',
+          primaryDocumentFile: pdf,
         },
       },
     });
