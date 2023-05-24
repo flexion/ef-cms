@@ -55,16 +55,19 @@ export const StateDrivenFileInput = connect(
               const uploadedFile = e.target.files[0];
               cloneFile(uploadedFile)
                 .then(clonedFile => {
-                  updateFormValueSequence({
-                    key: inputName,
-                    value: clonedFile,
-                  });
                   if (!skipPdfValidate) {
-                    validateFileInputSequence({
+                    return validateFileInputSequence({
                       file: clonedFile,
                       locationOnForm: inputName,
                     });
+                  } else {
+                    return updateFormValueSequence({
+                      key: inputName,
+                      value: clonedFile,
+                    });
                   }
+                })
+                .then(() => {
                   return validationSequence();
                 })
                 .catch(() => {
@@ -79,7 +82,10 @@ export const StateDrivenFileInput = connect(
 
         {fileOnForm && (
           <div>
-            <span className="success-message icon-upload margin-right-1">
+            <span
+              className="success-message icon-upload margin-right-1"
+              data-cy="file-upload-success"
+            >
               <FontAwesomeIcon icon="check-circle" size="1x" />
             </span>
             <span className="mr-1">

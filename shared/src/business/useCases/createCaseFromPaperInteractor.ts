@@ -101,8 +101,8 @@ export const createCaseFromPaperInteractor = async (
 
   const caseToAdd = new Case(
     {
-      docketNumber,
       ...petitionMetadata,
+      docketNumber,
       isPaper: true,
       status: petitionMetadata.status || null,
       userId: user.userId,

@@ -5,6 +5,7 @@ import joi from 'joi';
 
 export class PDF extends JoiValidationEntity {
   public file: File;
+  public name: string;
   public size: number;
   public isEncrypted: boolean;
 
@@ -12,6 +13,7 @@ export class PDF extends JoiValidationEntity {
     super('PDF');
 
     this.file = rawProps;
+    this.name = rawProps.name;
     this.size = rawProps.size;
     this.isEncrypted = rawProps.isEncrypted || false;
   }
