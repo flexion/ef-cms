@@ -62,7 +62,6 @@ describe('Practitioner documentation', { scrollBehavior: 'center' }, () => {
     const updatedDescription: string = `Edited by cypress ${Math.random()}`;
 
     it('navigates to edit a document', () => {
-      ///practitioner-detail/${barNumber}/edit-document/${document.practitionerDocumentFileId}
       cy.get('[data-cy="edit-practitioner-document"]').first().click();
     });
 
@@ -98,6 +97,9 @@ describe('Practitioner documentation', { scrollBehavior: 'center' }, () => {
     it('should delete the practitioner document', () => {
       cy.get('[data-cy="delete-practitioner-document"]').first().click();
       cy.get('button#confirm').click();
+      cy.get('[data-cy="success-notification"]').contains(
+        'The document has been deleted.',
+      );
       cy.get('[data-cy="practitioner-document-count"]')
         .invoke('text')
         .then(documentCountAfterDelete => {

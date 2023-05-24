@@ -48,6 +48,7 @@ export const uploadCourtIssuedDocumentAndEditViaDocumentQC = attempt => {
   const freeText = `court document ${attempt}`;
   cy.get('#upload-description').clear().type(freeText);
   cy.get('input#primary-document-file').attachFile('../fixtures/w3-dummy.pdf');
+  cy.get('[data-cy="file-upload-success"]');
   cy.get('#save-uploaded-pdf-button').click();
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.get('#document-type .select-react-element__input-container input')
