@@ -32,6 +32,7 @@ export const PractitionerDocumentation = connect(
           <Button
             link
             className="push-right margin-bottom-1"
+            data-cy="add-practitioner-document"
             href={`/practitioner-detail/${barNumber}/add-document`}
             icon="plus-circle"
             overrideMargin={true}
@@ -41,7 +42,7 @@ export const PractitionerDocumentation = connect(
         </div>
         <div className="float-right text-semibold margin-bottom-2">
           Count:{' '}
-          <span className="text-normal">
+          <span className="text-normal" data-cy="practitioner-document-count">
             {practitionerDocumentationHelper.practitionerDocumentsCount}
           </span>
         </div>
@@ -135,6 +136,7 @@ export const PractitionerDocumentation = connect(
                   <td className="text-align-left edit-delete-buttons">
                     <Button
                       link
+                      data-cy="edit-practitioner-document"
                       href={`/practitioner-detail/${barNumber}/edit-document/${document.practitionerDocumentFileId}`}
                       icon="edit"
                     >
@@ -143,6 +145,7 @@ export const PractitionerDocumentation = connect(
                     <Button
                       link
                       className="red-warning margin-right-0"
+                      data-cy="delete-practitioner-document"
                       icon="trash"
                       onClick={() => {
                         openDeletePractitionerDocumentConfirmModalSequence({

@@ -193,6 +193,7 @@ export const PractitionerAddEditDocument = connect(
                 <div className="grid-col-12">
                   {form.isEditingDocument ? (
                     <Button
+                      data-cy="update-practitioner-document"
                       onClick={() => {
                         submitEditPractitionerDocumentSequence();
                       }}
@@ -201,6 +202,7 @@ export const PractitionerAddEditDocument = connect(
                     </Button>
                   ) : (
                     <Button
+                      data-cy="submit-add-practitioner-document"
                       onClick={() => {
                         submitAddPractitionerDocumentSequence();
                       }}

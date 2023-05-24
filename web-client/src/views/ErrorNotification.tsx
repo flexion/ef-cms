@@ -24,6 +24,7 @@ export const ErrorNotification = connect(
           <div
             aria-live="polite"
             className="usa-alert usa-alert--error"
+            data-cy="error-notification"
             ref={notificationRef}
             role="alert"
           >
