@@ -14,6 +14,7 @@ export const StateDrivenFileInput = connect(
     fileInputName: props.name,
     form: state.form,
     id: props.id,
+    skipPdfValidate: props.skipPdfValidate,
     updateFormValueSequence: sequences[props.updateFormValueSequence],
     validateFileInputSequence: sequences.validateFileInputSequence,
     validationSequence: sequences[props.validationSequence],
@@ -26,6 +27,7 @@ export const StateDrivenFileInput = connect(
     fileInputName,
     form,
     id,
+    skipPdfValidate,
     updateFormValueSequence,
     validateFileInputSequence,
     validationSequence,
@@ -57,14 +59,12 @@ export const StateDrivenFileInput = connect(
                     key: inputName,
                     value: clonedFile,
                   });
-                  updateFormValueSequence({
-                    key: `${inputName}Size`,
-                    value: clonedFile.size,
-                  });
-                  validateFileInputSequence({
-                    file: clonedFile,
-                    locationOnForm: inputName,
-                  });
+                  if (!skipPdfValidate) {
+                    validateFileInputSequence({
+                      file: clonedFile,
+                      locationOnForm: inputName,
+                    });
+                  }
                   return validationSequence();
                 })
                 .catch(() => {

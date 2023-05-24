@@ -64,14 +64,14 @@ describe('Petitioner files an encrypted document', () => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      primaryDocumentPDF:
+      primaryDocumentFile:
         'The file you are trying to upload may be encrypted or password protected. Remove the password or encryption and try again.',
     });
 
     // await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
     // expect(cerebralTest.getState('validationErrors')).toEqual({
-    //   primaryDocumentPDF:
+    //   primaryDocumentFile:
     //     'The file you are trying to upload may be encrypted or password protected. Remove the password or encryption and try again.',
     // });
   });

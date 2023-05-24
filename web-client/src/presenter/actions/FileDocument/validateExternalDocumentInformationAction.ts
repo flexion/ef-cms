@@ -29,7 +29,7 @@ export const validateExternalDocumentInformationAction = ({
       'supportingDocument',
       'supportingDocumentFreeText',
       'supportingDocumentFile',
-      'primaryDocumentPDF',
+      'primaryDocumentFile',
       'certificateOfService',
       'certificateOfServiceDate',
       'attachments',

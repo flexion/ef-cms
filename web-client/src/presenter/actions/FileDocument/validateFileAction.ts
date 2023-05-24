@@ -19,7 +19,7 @@ export const validateFileAction = async ({
   if (errors) {
     return path.error({
       errors: {
-        primaryDocumentPDF:
+        primaryDocumentFile:
           'The file you are trying to upload may be encrypted or password protected. Remove the password or encryption and try again.',
       },
     });

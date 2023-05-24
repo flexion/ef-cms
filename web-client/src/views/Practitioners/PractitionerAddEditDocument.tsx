@@ -86,6 +86,7 @@ export const PractitionerAddEditDocument = connect(
                         aria-describedby="practitioner-document-file-label"
                         id="practitioner-document-file"
                         name="practitionerDocumentFile"
+                        skipPdfValidate={true}
                         updateFormValueSequence="updateFormValueSequence"
                         validationSequence="validateAddPractitionerDocumentSequence"
                       />
