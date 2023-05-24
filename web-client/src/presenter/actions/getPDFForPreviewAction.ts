@@ -17,7 +17,7 @@ export const getPDFForPreviewAction = async ({
 }: ActionProps) => {
   store.set(state.modal.pdfPreviewModal, {});
   if (props.file.name) {
-    return props;
+    return props.file;
   }
   const { docketEntryId } = props.file;
   const docketNumber = get(state.caseDetail.docketNumber);
