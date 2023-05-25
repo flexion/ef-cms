@@ -21,7 +21,7 @@ module.exports = {
     'plugin:security/recommended',
     'prettier',
     'plugin:import/typescript',
-    // 'plugin:jsx-a11y/recommended', // todo
+    'plugin:storybook/recommended',
   ],
   ignorePatterns: '**/*_.js',
   overrides: [
@@ -60,7 +60,11 @@ module.exports = {
       rules: {
         'max-lines': [
           'error',
-          { max: 500, skipBlankLines: true, skipComments: true },
+          {
+            max: 500,
+            skipBlankLines: true,
+            skipComments: true,
+          },
         ],
       },
     },
@@ -95,7 +99,13 @@ module.exports = {
     '@miovision/disallow-date/no-static-date': 0,
     '@miovision/disallow-date/no-to-date': 0,
     'arrow-parens': ['error', 'as-needed'],
-    complexity: ['warn', { max: 20 }], // todo: plugin default is 20; set to 'error'
+    complexity: [
+      'warn',
+      {
+        max: 20,
+      },
+    ],
+    // todo: plugin default is 20; set to 'error'
     'eol-last': ['error', 'always'],
     'id-denylist': ['error', /* 'error', 'err', 'cb', 'callback',*/ 'test'],
     'import/named': 'warn',
@@ -104,14 +114,20 @@ module.exports = {
     'jest/expect-expect': 'off',
     'jest/no-conditional-expect': 'off',
     'jest/no-export': 'off',
-    'jest/no-identical-title': 'off', // todo: warn
+    'jest/no-identical-title': 'off',
+    // todo: warn
     'jsdoc/check-alignment': 'error',
-    'jsdoc/check-param-names': 'off', // todo: warn
-    'jsdoc/check-tag-names': 'off', // todo: warn
-    'jsdoc/check-types': 'off', // todo: warn
-    'jsdoc/no-undefined-types': 'off', // todo: warn
+    'jsdoc/check-param-names': 'off',
+    // todo: warn
+    'jsdoc/check-tag-names': 'off',
+    // todo: warn
+    'jsdoc/check-types': 'off',
+    // todo: warn
+    'jsdoc/no-undefined-types': 'off',
+    // todo: warn
     'jsdoc/require-jsdoc': 'warn',
-    'jsdoc/require-param': 'off', // todo: warn
+    'jsdoc/require-param': 'off',
+    // todo: warn
     'jsdoc/require-param-description': 'warn',
     'jsdoc/require-param-name': 'warn',
     'jsdoc/require-param-type': 'warn',
@@ -139,26 +155,63 @@ module.exports = {
     ],
     'max-lines': [
       'error',
-      { max: 700, skipBlankLines: true, skipComments: true },
+      {
+        max: 700,
+        skipBlankLines: true,
+        skipComments: true,
+      },
     ],
-    'no-irregular-whitespace': ['error', { skipStrings: false }],
+    'no-irregular-whitespace': [
+      'error',
+      {
+        skipStrings: false,
+      },
+    ],
     'no-prototype-builtins': 'off',
     'no-restricted-globals': [
       'error',
-      { name: 'error' },
-      { name: 'event' },
-      { name: 'status' },
-      { name: 'name' },
-      { name: 'document' },
+      {
+        name: 'error',
+      },
+      {
+        name: 'event',
+      },
+      {
+        name: 'status',
+      },
+      {
+        name: 'name',
+      },
+      {
+        name: 'document',
+      },
     ],
-    'no-shadow': ['error', { builtinGlobals: false }],
+    'no-shadow': [
+      'error',
+      {
+        builtinGlobals: false,
+      },
+    ],
     'no-trailing-spaces': 'error',
-    'no-underscore-dangle': ['error', { allowAfterThis: true }],
-    'no-unneeded-ternary': ['error', { defaultAssignment: false }],
+    'no-underscore-dangle': [
+      'error',
+      {
+        allowAfterThis: true,
+      },
+    ],
+    'no-unneeded-ternary': [
+      'error',
+      {
+        defaultAssignment: false,
+      },
+    ],
     'no-var': 'error',
     'no-warning-comments': [
       'error',
-      { location: 'anywhere', terms: ['fixme', 'xxx'] },
+      {
+        location: 'anywhere',
+        terms: ['fixme', 'xxx'],
+      },
     ],
     'object-shorthand': 'warn',
     'prefer-destructuring': [
@@ -178,9 +231,12 @@ module.exports = {
       },
     ],
     'prettier/prettier': 'error',
-    'promise/always-return': 'off', // todo: warn
-    'promise/avoid-new': 'off', // todo: warn
-    'promise/catch-or-return': 'off', // todo: warn
+    'promise/always-return': 'off',
+    // todo: warn
+    'promise/avoid-new': 'off',
+    // todo: warn
+    'promise/catch-or-return': 'off',
+    // todo: warn
     'promise/no-callback-in-promise': 'warn',
     'promise/no-native': 'off',
     'promise/no-nesting': 'warn',
@@ -190,7 +246,13 @@ module.exports = {
     'promise/no-return-wrap': 'error',
     'promise/param-names': 'error',
     'promise/valid-params': 'warn',
-    quotes: ['error', 'single', { avoidEscape: true }],
+    quotes: [
+      'error',
+      'single',
+      {
+        avoidEscape: true,
+      },
+    ],
     'react/jsx-sort-props': [
       'error',
       {
@@ -211,7 +273,9 @@ module.exports = {
     'security/detect-object-injection': 'off',
     'sort-destructure-keys/sort-destructure-keys': [
       'error',
-      { caseSensitive: false },
+      {
+        caseSensitive: false,
+      },
     ],
     'sort-imports-es6-autofix/sort-imports-es6': [
       'error',
@@ -224,7 +288,10 @@ module.exports = {
     'sort-keys-fix/sort-keys-fix': [
       'error',
       'asc',
-      { caseSensitive: true, natural: true },
+      {
+        caseSensitive: true,
+        natural: true,
+      },
     ],
     'sort-requires-fix/sort-requires-fix': 'error',
     'spellcheck/spell-checker': [
