@@ -22,6 +22,7 @@ module.exports = {
     'prettier',
     'plugin:import/typescript',
     'plugin:storybook/recommended',
+    'react-app',
   ],
   ignorePatterns: '**/*_.js',
   overrides: [
@@ -66,6 +67,14 @@ module.exports = {
             skipComments: true,
           },
         ],
+      },
+    },
+    {
+      files: ['**/*.stories.ts', '**/*.stories.tsx'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': 'off',
+        'import/no-default-export': 'off',
+        'unused-imports/no-unused-imports': 'off',
       },
     },
   ],

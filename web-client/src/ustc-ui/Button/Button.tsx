@@ -2,7 +2,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import classNames from 'classnames';
 
-export const Button = props => {
+export const Button = (props: {
+  href?: string;
+  children?: any;
+  className?: any;
+  icon?: any;
+  iconColor?: string;
+  iconRight?: boolean;
+  iconSize?: string;
+  isActive?: boolean;
+  link?: any;
+  marginDirection?: string;
+  overrideMargin?: boolean;
+  secondary?: any;
+  shouldWrapText?: boolean;
+  tooltip?: string;
+  remainingProps?: any;
+}) => {
   const { href } = props;
   const {
     children,
@@ -55,5 +71,3 @@ export const Button = props => {
     </Element>
   );
 };
-
-Button.displayName = 'Button';
