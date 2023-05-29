@@ -29,8 +29,13 @@ const config: Config = {
       statements: 98.25,
     },
   },
+  globals: {
+    Blob,
+    TextEncoder,
+  },
   maxWorkers: '50%',
-  testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.js`,
+  // testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.js`,
+  testEnvironment: 'jsdom',
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],

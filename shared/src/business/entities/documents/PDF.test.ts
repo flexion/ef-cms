@@ -1,5 +1,6 @@
 import { MAX_FILE_SIZE_BYTES } from '../EntityConstants';
 import { PDF } from './PDF';
+import { encryptedPdfBase64 } from '../../test/encryptedPdf';
 
 describe('PDF entity', () => {
   describe('validation', () => {
@@ -19,13 +20,17 @@ describe('PDF entity', () => {
       expect(Object.keys(validationErrors!)).toEqual(['size']);
     });
 
-    it.only('should be invalid when the PDF is encrypted', async () => {
-      const pdfEntity = new PDF({ size: 1 });
+    it('should be invalid when the PDF is encrypted', async () => {
+      const mockEncryptedPdf = new Blob([encryptedPdfBase64]);
+
+      const pdfEntity = new PDF(mockEncryptedPdf);
 
       const validationErrors =
         await pdfEntity.getFormattedValidationErrorsAsync();
 
-      expect(Object.keys(validationErrors!)).toEqual(['isEncrypted']);
+      expect(validationErrors).toEqual({
+        file: 'The file you are trying to upload may be encrypted or password protected. Remove the password or encryption and try again.',
+      });
     });
   });
 });
