@@ -8,7 +8,7 @@ jobs:
     name: Deploy Storybook
     environment:
       name: github-pages
-      url: ${{ github.workspace }}/storybook
+      url: ${{ steps.build-publish.outputs.page_url }}/storybook
 
     steps:
       - name: Checkout staging
