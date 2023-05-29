@@ -23,7 +23,7 @@ export const PrimaryDocumentForm = connect(
     validationErrors,
   }) {
     const flattenErrorObject = errorObj => {
-      return Object.values(errorObj);
+      return Object.values(errorObj || {});
     };
 
     return (
@@ -41,9 +41,7 @@ export const PrimaryDocumentForm = connect(
         )}
         <div className="blue-container">
           <FormGroup
-            errorText={flattenErrorObject(
-              validationErrors.primaryDocumentFile || {},
-            )}
+            errorText={flattenErrorObject(validationErrors.primaryDocumentFile)}
           >
             <label
               className={classNames(

@@ -149,6 +149,7 @@ export interface IValidationEntity<T> {
   getFormattedValidationErrorsNoHoist(): any;
   getValidationErrors(): any;
   toRawObject(): any;
+  validateAsync(): T;
   toRawObjectFromJoi(): any;
 }
 
@@ -245,6 +246,10 @@ export function joiValidationDecorator(
     }
     setIsValidated(this);
     return this;
+  };
+
+  entityConstructor.prototype.validateAsync = async function validateAsync() {
+    return await schema.validateAsync(this);
   };
 
   entityConstructor.prototype.validateWithLogging =

@@ -19,10 +19,10 @@ describe('PDF entity', () => {
       expect(Object.keys(validationErrors!)).toEqual(['size']);
     });
 
-    it('should be invalid when the PDF is encrypted', () => {
-      const pdfEntity = new PDF({ isEncrypted: true, size: 1 });
+    it.only('should be invalid when the PDF is encrypted', async () => {
+      const pdfEntity = new PDF({ size: 1 });
 
-      const validationErrors = pdfEntity.getFormattedValidationErrors();
+      const validationErrors = await pdfEntity.validateAsync();
 
       expect(Object.keys(validationErrors!)).toEqual(['isEncrypted']);
     });

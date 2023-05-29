@@ -13,7 +13,6 @@ const setIsValidated = obj => {
 
 /**
  * converts an entity to the raw json object form needed for persistence.
- *
  * @returns {object} the raw object
  */
 function toRawObject(entity) {
@@ -43,7 +42,6 @@ function toRawObject(entity) {
 
 /**
  * returns all of the validation errors after being converted to their formatted output
- *
  * @returns {object} the formatted errors
  */
 function getFormattedValidationErrorsHelper(entity) {
@@ -73,7 +71,6 @@ function getFormattedValidationErrorsHelper(entity) {
 
 /**
  * returns all of the validation errors after being converted to their formatted output
- *
  * @returns {object} the formatted errors
  */
 function getFormattedValidationErrors(entity): Record<string, any> | null {
@@ -193,6 +190,13 @@ export abstract class JoiValidationEntity {
     }
     setIsValidated(this);
     return this;
+  }
+
+  async validateAsync() {
+    return await this.schema.validateAsync(this, {
+      abortEarly: false,
+      allowUnknown: true,
+    });
   }
 
   getFormattedValidationErrors() {
