@@ -3,9 +3,20 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import { MAX_FILE_SIZE_MB } from '../EntityConstants';
 import joi from 'joi';
 
-const isPDFEncrypted = async () => {
+const isPDFEncrypted = async value => {
   await new Promise(resolve => setTimeout(resolve, 300));
-  throw new joi.ValidationError('Validation failed', [], {});
+  throw new joi.ValidationError(
+    'isEncrypted',
+    [
+      {
+        message:
+          'The file you are trying to upload may be encrypted or password protected. Remove the password or encryption and try again.',
+        path: ['isEncrypted'],
+        type: 'any.invalid',
+      },
+    ],
+    value,
+  );
 };
 
 export class PDF extends JoiValidationEntity {
@@ -14,7 +25,7 @@ export class PDF extends JoiValidationEntity {
   public size: number;
   public isEncrypted: boolean;
 
-  constructor(rawProps, private applicationContext) {
+  constructor(rawProps) {
     super('PDF');
 
     this.file = rawProps;
@@ -24,15 +35,12 @@ export class PDF extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
-    file: joi
-      .object()
+    file: joi.object().required().description('The PDF file'),
+    isEncrypted: joi
+      .boolean()
+      .invalid(true)
       .required()
-      .external(isPDFEncrypted)
-      .description('The PDF file'),
-    isEncrypted: joi.boolean().invalid(true).required().messages({
-      'any.invalid':
-        'The file you are trying to upload may be encrypted or password protected. Remove the password or encryption and try again.',
-    }),
+      .external(isPDFEncrypted),
     size: JoiValidationConstants.MAX_FILE_SIZE_BYTES.required().description(
       'The size of the file in bytes.',
     ),

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { InvalidEntityError } from '../../errors/errors';
-import { isEmpty } from 'lodash';
+import { isEmpty, set } from 'lodash';
 import joi from 'joi';
 
 const setIsValidated = obj => {
@@ -201,6 +201,24 @@ export abstract class JoiValidationEntity {
 
   getFormattedValidationErrors() {
     return getFormattedValidationErrors(this);
+  }
+
+  async getFormattedValidationErrorsAsync() {
+    try {
+      await this.schema.validateAsync(this, {
+        abortEarly: false,
+        allowUnknown: true,
+      });
+      return null;
+    } catch (error) {
+      const errors = {};
+
+      error?.details?.forEach(item => {
+        set(errors, item.path, item.message);
+      });
+
+      return errors;
+    }
   }
 
   toRawObject() {
