@@ -16,7 +16,7 @@ export const validateExternalDocumentInformationAction = ({
 }: ActionProps) => {
   const documentMetadata = get(state.form);
 
-  let errors = applicationContext
+  const errors = applicationContext
     .getUseCases()
     .validateExternalDocumentInformationInteractor({
       documentMetadata,

@@ -22,6 +22,10 @@ export const PrimaryDocumentForm = connect(
     form,
     validationErrors,
   }) {
+    const flattenErrorObject = errorObj => {
+      return Object.values(errorObj);
+    };
+
     return (
       <React.Fragment>
         <h2 className="margin-top-4">{form.documentTitle}</h2>
@@ -36,7 +40,11 @@ export const PrimaryDocumentForm = connect(
           />
         )}
         <div className="blue-container">
-          <FormGroup errorText={validationErrors.primaryDocumentFile}>
+          <FormGroup
+            errorText={flattenErrorObject(
+              validationErrors.primaryDocumentFile || {},
+            )}
+          >
             <label
               className={classNames(
                 'usa-label ustc-upload with-hint',
