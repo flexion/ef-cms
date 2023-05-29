@@ -3,13 +3,8 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof Button> = {
-  argTypes: {
-    children: { control: 'label' },
-    tooltip: { control: 'tool tip' },
-  },
   component: Button,
   tags: ['autodocs'],
-  title: 'Button',
 } satisfies Meta<typeof Button>;
 
 export default meta;

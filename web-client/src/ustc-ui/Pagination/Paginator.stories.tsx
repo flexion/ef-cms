@@ -4,6 +4,13 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof Paginator> = {
   component: Paginator,
+  parameters: {
+    docs: {
+      description: {
+        component: "hi mom, I'm on tv!",
+      },
+    },
+  },
   tags: ['autodocs'],
 } satisfies Meta<typeof Paginator>;
 
@@ -25,6 +32,22 @@ export const SinglePage: Story = {
       description: {
         story:
           'Pagination control should not appear when there is one or fewer pages of results.',
+      },
+    },
+  },
+};
+
+export const DataSetsWithMoreThan20000Results: Story = {
+  args: {
+    marginPagesDisplayed: 0,
+    pageCount: 950,
+    pageRangeDisplayed: 0,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Pagination should limit control only to previous and next pages, and handle pagination on the back end.',
       },
     },
   },
