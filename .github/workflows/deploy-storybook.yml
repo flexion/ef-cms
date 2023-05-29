@@ -1,0 +1,29 @@
+name: Deploy Storybook
+
+on: push
+
+jobs:
+  deploy-storybook:
+    runs-on: ubuntu-latest
+    name: Deploy Storybook
+    environment:
+      name: github-pages
+      url: ${{ github.workspace }}/storybook
+
+    steps:
+      - name: Checkout staging
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.15.0'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build Storybook
+        run: npm run build-storybook
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          clean: true
+          clean-exclude: |
+            CNAME
+          folder: storybook-static # The folder the action should deploy.
