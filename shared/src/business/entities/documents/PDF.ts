@@ -20,7 +20,10 @@ export class PDF extends JoiValidationEntity {
 
   static VALIDATION_RULES = {
     file: joi.object().required().description('The PDF file'),
-    isEncrypted: joi.boolean().invalid(true).required(),
+    isEncrypted: joi.boolean().invalid(true).required().messages({
+      'any.invalid':
+        'The file you are trying to upload may be encrypted or password protected. Remove the password or encryption and try again.',
+    }),
     size: JoiValidationConstants.MAX_FILE_SIZE_BYTES.required().description(
       'The size of the file in bytes.',
     ),

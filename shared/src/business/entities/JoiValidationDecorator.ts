@@ -1,5 +1,5 @@
 import { InvalidEntityError } from '../../errors/errors';
-import { isEmpty } from 'lodash';
+import { isEmpty, set } from 'lodash';
 import joi from 'joi';
 
 const setIsValidated = obj => {
@@ -120,6 +120,24 @@ function getFormattedValidationErrors(entity) {
   return Object.keys(obj).length === 0 ? null : obj;
 }
 
+/**
+ *
+ */
+function getFormattedValidationErrorsNoHoist(schema, entity) {
+  const errors = {};
+
+  const { error } = schema.validate(entity, {
+    abortEarly: false,
+    allowUnknown: true,
+  });
+
+  error?.details?.forEach(item => {
+    set(errors, item.path, item.message);
+  });
+
+  return isEmpty(errors) ? null : errors;
+}
+
 export interface IValidationEntity<T> {
   getErrorToMessageMap(): any;
   getSchema(): any;
@@ -128,6 +146,7 @@ export interface IValidationEntity<T> {
   validate(): T;
   validateWithLogging(): void;
   getFormattedValidationErrors(): any;
+  getFormattedValidationErrorsNoHoist(): any;
   getValidationErrors(): any;
   toRawObject(): any;
   toRawObjectFromJoi(): any;
@@ -237,6 +256,11 @@ export function joiValidationDecorator(
     return getFormattedValidationErrors(this);
   };
 
+  entityConstructor.prototype.getFormattedValidationErrorsNoHoist =
+    function () {
+      return getFormattedValidationErrorsNoHoist(schema, this);
+    };
+
   entityConstructor.prototype.getValidationErrors =
     function getValidationErrors() {
       const { error } = schema.validate(this, {
@@ -278,7 +302,6 @@ export function joiValidationDecorator(
  * Creates a new Proxy object from the provided entity constructor.
  * When the returned function is invoked with the 'new' keyword, a proxy
  * instance of the original entity is returned which trims incoming string values.
- *
  * @param {Function} entityConstructor the entity constructor
  * @returns {Function} a factory function with proxy trap for 'construct' and
  *   proxy trap for 'set' on the returned instances

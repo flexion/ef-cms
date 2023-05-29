@@ -52,6 +52,21 @@ describe('ExternalDocumentInformationFactory', () => {
     ).toEqual(VALIDATION_ERROR_MESSAGES.certificateOfService);
   });
 
+  it('should require one of [filers, partyIrsPractitioner] to be selected', () => {
+    baseDoc.filers = [];
+    expect(errors().filers).toEqual(VALIDATION_ERROR_MESSAGES.filers);
+    baseDoc.partyIrsPractitioner = true;
+    expect(errors().filers).toEqual(undefined);
+  });
+
+  it('should require has supporting documents radio be selected', () => {
+    expect(errors().hasSupportingDocuments).toEqual(
+      VALIDATION_ERROR_MESSAGES.hasSupportingDocuments,
+    );
+    baseDoc.hasSupportingDocuments = false;
+    expect(errors().hasSupportingDocuments).toEqual(undefined);
+  });
+
   describe('attachments', () => {
     it('should set a default value for attachments when a value has not been provided', () => {
       const externalDocument = ExternalDocumentInformationFactory({
@@ -162,14 +177,6 @@ describe('ExternalDocumentInformationFactory', () => {
 
       expect(errors().objections).toBeUndefined();
     });
-  });
-
-  it('should require has supporting documents radio be selected', () => {
-    expect(errors().hasSupportingDocuments).toEqual(
-      VALIDATION_ERROR_MESSAGES.hasSupportingDocuments,
-    );
-    baseDoc.hasSupportingDocuments = false;
-    expect(errors().hasSupportingDocuments).toEqual(undefined);
   });
 
   describe('Has Supporting Documents', () => {
@@ -462,13 +469,6 @@ describe('ExternalDocumentInformationFactory', () => {
     });
   });
 
-  it('should require one of [filers, partyIrsPractitioner] to be selected', () => {
-    baseDoc.filers = [];
-    expect(errors().filers).toEqual(VALIDATION_ERROR_MESSAGES.filers);
-    baseDoc.partyIrsPractitioner = true;
-    expect(errors().filers).toEqual(undefined);
-  });
-
   describe('Consolidated Case filing to multiple cases', () => {
     beforeEach(() => {
       baseDoc.casesParties = {};
@@ -514,6 +514,26 @@ describe('ExternalDocumentInformationFactory', () => {
 
       it('should not allow having a insufficient account of parties to all cases', () => {
         expect(errors().filers).toEqual(VALIDATION_ERROR_MESSAGES.filers);
+      });
+    });
+  });
+
+  describe('primaryDocumentFile', () => {
+    it('should NOT hoist nested PDF validation errors', () => {
+      baseDoc.primaryDocumentFile = { isEncrypted: true, size: 10 };
+      baseDoc.certificateOfService = false;
+      baseDoc.hasSupportingDocuments = false;
+
+      const formattedErrors =
+        ExternalDocumentInformationFactory(
+          baseDoc,
+        ).getFormattedValidationErrorsNoHoist();
+
+      console.log('I am formatted Errors', formattedErrors);
+      expect(formattedErrors).toEqual({
+        primaryDocumentFile: {
+          isEncrypted: expect.anything(),
+        },
       });
     });
   });
