@@ -15,7 +15,7 @@ const isPDFEncrypted = async (value: Blob) => {
       e.message.includes('Input document to `PDFDocument.load` is encrypted')
     ) {
       throw new joi.ValidationError(
-        'file',
+        'The pdf is encrypted',
         [
           {
             message:

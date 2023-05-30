@@ -34,7 +34,6 @@ const config: Config = {
     TextEncoder,
   },
   maxWorkers: '50%',
-  // testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.js`,
   testEnvironment: 'jsdom',
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {

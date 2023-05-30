@@ -1,8 +1,10 @@
+import type { Config } from 'jest';
+
 // a global config if running tests singly on CLI
 // this file also contains a set of configuration defaults which can
 // be imported / overridden as a base configuration elsewhere.
 
-module.exports = {
+const config: Config = {
   clearMocks: true,
   collectCoverage: false,
   coverageDirectory: './coverage',
@@ -17,3 +19,6 @@ module.exports = {
   transformIgnorePatterns: ['/node_modules/(?!uuid)'],
   verbose: false,
 };
+
+// eslint-disable-next-line import/no-default-export
+export default config;
