@@ -9,7 +9,10 @@ const config: Config = {
   collectCoverage: false,
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
-  preset: 'ts-jest',
+  globals: {
+    Blob,
+    TextEncoder,
+  },
   testEnvironment: 'jsdom',
   testSequencer: `${__dirname}/jestSequencer.js`,
   transform: {
