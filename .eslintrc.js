@@ -20,6 +20,8 @@ module.exports = {
     'plugin:security/recommended',
     'prettier',
     'plugin:import/typescript',
+    'plugin:storybook/recommended',
+    'react-app',
     // 'plugin:jsx-a11y/recommended', // todo
   ],
   ignorePatterns: '**/*_.js',
@@ -61,6 +63,14 @@ module.exports = {
           'error',
           { max: 500, skipBlankLines: true, skipComments: true },
         ],
+      },
+    },
+    {
+      files: ['**/*.stories.ts', '**/*.stories.tsx'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': 'off',
+        'import/no-default-export': 'off',
+        'unused-imports/no-unused-imports': 'off',
       },
     },
   ],
