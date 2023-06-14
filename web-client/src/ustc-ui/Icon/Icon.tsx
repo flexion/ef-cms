@@ -3,7 +3,6 @@ import { cloneDeep } from 'lodash';
 import React from 'react';
 
 /**
- * Icon component
  * Useful for copying an aria-label on an icon to a tool-tip 'title' attribute,
  * particularly when an icon is used without any accompanying on-screen text
  * explanation
