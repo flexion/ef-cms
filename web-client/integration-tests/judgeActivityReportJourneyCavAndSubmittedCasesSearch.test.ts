@@ -18,7 +18,7 @@ const judgeActivityReportHelper = withAppContextDecorator(
 
 let progressDescriptionTableTotalBefore = 0;
 
-describe('Judge activity report journey', () => {
+describe('Judge activity report journey - CAV and Submitted Cases Search', () => {
   const cerebralTest = setupTest();
 
   afterAll(() => {
