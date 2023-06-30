@@ -36,19 +36,25 @@ export const viewJudgeActivityReportResults = (
       judgeName: overrides.judgeName || 'Colvin',
     });
 
-    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
-    await cerebralTest.runSequence('getCavAndSubmittedCasesForJudgesSequence', {
+    await cerebralTest.runSequence('submitJudgeActivityReportSequence', {
       selectedPage: 0,
     });
 
-    const { progressDescriptionTableTotal } = runCompute(
-      judgeActivityReportHelper,
-      {
-        state: cerebralTest.getState(),
-      },
-    );
+    const {
+      closedCasesTotal,
+      opinionsFiledTotal,
+      ordersFiledTotal,
+      progressDescriptionTableTotal,
+      trialSessionsHeldTotal,
+    } = runCompute(judgeActivityReportHelper, {
+      state: cerebralTest.getState(),
+    });
 
     cerebralTest.progressDescriptionTableTotal = progressDescriptionTableTotal;
+    cerebralTest.ordersFiledTotal = ordersFiledTotal;
+    cerebralTest.closedCasesTotal = closedCasesTotal;
+    cerebralTest.opinionsFiledTotal = opinionsFiledTotal;
+    cerebralTest.trialSessionsHeldTotal = trialSessionsHeldTotal;
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
     expect(
