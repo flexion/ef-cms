@@ -50,7 +50,8 @@ describe('Judge activity report journey', () => {
   };
 
   const cerebralTest = setupTest();
-
+  cerebralTest.createdTrialSessions = [];
+  cerebralTest.createdCases = [];
   afterAll(() => {
     cerebralTest.closeSocket();
   });
@@ -152,13 +153,10 @@ describe('Judge activity report journey', () => {
   // loginAs(cerebralTest, 'judgecolvin@example.com');
   // viewJudgeActivityReportResults(cerebralTest, { judgeName: 'All Judges' });
 
-  cerebralTest.createdTrialSessions = [];
-  cerebralTest.createdCases = [];
-
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, overrides1);
   docketClerkViewsTrialSessionList(cerebralTest);
-  docketClerkViewsNewTrialSession(cerebralTest);
+  docketClerkViewsNewTrialSession(cerebralTest, false);
   docketClerkCreatesATrialSession(cerebralTest, overrides2);
   docketClerkViewsTrialSessionList(cerebralTest);
   docketClerkViewsNewTrialSession(cerebralTest);
@@ -176,8 +174,10 @@ describe('Judge activity report journey', () => {
   docketClerkAddsCaseToHearing(cerebralTest, 'Test hearing note one.');
   docketClerkViewsNewTrialSession(cerebralTest, true, 'Test hearing note one.');
 
-  // it('should increase the trial session count for all judges', () => {
-  //   const trialSessionsHeldAfter = cerebralTest.trialSessionsHeldTotal;
-  //   expect(trialSessionsHeldAfter).toEqual(trialSessionsHeldBefore + 2);
-  // });
+  it('should increase the trial session count for all judges', () => {
+    console.log('trialsessions number', cerebralTest.trialSessionsHeldTotal);
+
+    // const trialSessionsHeldAfter = cerebralTest.trialSessionsHeldTotal;
+    // expect(trialSessionsHeldAfter).toEqual(trialSessionsHeldBefore + 2);
+  });
 });
