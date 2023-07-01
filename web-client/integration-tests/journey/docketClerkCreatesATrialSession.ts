@@ -188,6 +188,14 @@ export const docketClerkCreatesATrialSession = (
     );
     expect(lastCreatedTrialSessionId).toBeDefined();
 
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.lastCreatedTrialSessionId,
+    });
+    console.log(
+      'trialSession!! JUST AFTER CREATING TRIAL SESSION',
+      cerebralTest.getState('trialSession'),
+    );
+
     cerebralTest.lastCreatedTrialSessionId = lastCreatedTrialSessionId;
     cerebralTest.trialSessionId = cerebralTest.lastCreatedTrialSessionId;
   });

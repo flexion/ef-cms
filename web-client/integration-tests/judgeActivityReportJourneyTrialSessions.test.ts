@@ -159,7 +159,7 @@ describe('Judge activity report journey', () => {
   docketClerkViewsNewTrialSession(cerebralTest, false);
   docketClerkCreatesATrialSession(cerebralTest, overrides2);
   docketClerkViewsTrialSessionList(cerebralTest);
-  docketClerkViewsNewTrialSession(cerebralTest);
+  docketClerkViewsNewTrialSession(cerebralTest, false);
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('create case 1', async () => {
@@ -173,6 +173,17 @@ describe('Judge activity report journey', () => {
   docketClerkManuallyAddsCaseToTrialSessionWithNote(cerebralTest);
   docketClerkAddsCaseToHearing(cerebralTest, 'Test hearing note one.');
   docketClerkViewsNewTrialSession(cerebralTest, true, 'Test hearing note one.');
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsNewTrialSession(cerebralTest);
+  markAllCasesAsQCed(cerebralTest, () => [cerebralTest.docketNumber]);
+
+  console.log(
+    'HERE TO SEE IF DOCKET CLERK is opened',
+    cerebralTest.lastCreatedTrialSessionId,
+  );
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkViewsTrialSessionList(cerebralTest);
 
   it('should increase the trial session count for all judges', () => {
     console.log('trialsessions number', cerebralTest.trialSessionsHeldTotal);

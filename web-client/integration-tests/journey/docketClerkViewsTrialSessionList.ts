@@ -18,11 +18,18 @@ export const docketClerkViewsTrialSessionList = (
     const formatted = runCompute(formattedTrialSessions, {
       state: cerebralTest.getState(),
     });
+
+    console.log('formatted SESSIONS', formatted.formattedSessions);
     expect(formatted.formattedSessions.length).toBeGreaterThan(0);
+    console.log(
+      'lastCreatedTrialSessionId',
+      cerebralTest.lastCreatedTrialSessionId,
+    );
 
     const trialSession = find(formatted.sessionsByTerm, {
       trialSessionId: cerebralTest.lastCreatedTrialSessionId,
     });
+    console.log('trialSession', trialSession);
 
     expect(trialSession).toBeDefined();
 

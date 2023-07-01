@@ -124,6 +124,8 @@ export const judgeActivityReportHelper = (
       CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
   );
 
+  console.log('TRIAL SESSIONS IN HELPER', trialSessionsHeldTotal);
+
   return {
     closedCasesTotal,
     filteredSubmittedAndCavCasesByJudge,
