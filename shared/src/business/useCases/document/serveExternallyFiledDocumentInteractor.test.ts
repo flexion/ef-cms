@@ -1,15 +1,16 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
-jest.mock('../addCoverToPdf');
 import { MOCK_CASE } from '../../../test/mockCase';
 import { addCoverToPdf } from '../addCoverToPdf';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';
+import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
 import { testPdfDoc } from '../../test/getFakeFile';
+jest.mock('../addCoverToPdf');
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let mockCase;
@@ -47,7 +48,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(true);
+      .getAllFeatureFlagsInteractor.mockReturnValue({
+        [ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key]: true,
+      });
 
     applicationContext
       .getUseCaseHelpers()
@@ -347,7 +350,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     const mockMemberCaseDocketNumber = '999-15';
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(false);
+      .getAllFeatureFlagsInteractor.mockReturnValue({
+        [ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key]: false,
+      });
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',

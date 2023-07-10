@@ -3,6 +3,9 @@ import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 import { supportingDocumentFreeTextTypes } from './fileDocumentHelper';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 const getInternalDocumentTypes = typeMap => {
   let filteredTypeList = [];
   Object.keys(typeMap).forEach(category => {
@@ -24,9 +27,6 @@ export const getSupportingDocumentTypeList = categoryMap => {
     return entryCopy;
   });
 };
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const addDocketEntryHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

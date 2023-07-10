@@ -33,7 +33,7 @@ describe('TrialSession entity', () => {
 
     tests.forEach(({ daysFromToday, expectedOutput }) => {
       it(`should set isStartDateWithinNOTTReminderRange to ${expectedOutput} when the trial session is calendared and the start date is ${daysFromToday} days from today`, () => {
-        const thirtyDaysFromToday = today.plus({ ['days']: daysFromToday });
+        const thirtyDaysFromToday = today.plus({ days: daysFromToday });
 
         const trialSession = new TrialSession(
           {

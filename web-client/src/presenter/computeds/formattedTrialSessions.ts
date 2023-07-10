@@ -3,6 +3,9 @@ import { filter, find, identity, omit, orderBy, pickBy } from 'lodash';
 import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 export const formatSession = (session, applicationContext) => {
   const { DATE_FORMATS } = applicationContext.getConstants();
 
@@ -118,9 +121,6 @@ export const filterFormattedSessionsByStatus = trialTerms => {
 
   return filteredbyStatusType;
 };
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const formattedTrialSessions = (
   get: Get,
   applicationContext: ClientApplicationContext,

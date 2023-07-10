@@ -3,6 +3,9 @@
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
   {
@@ -107,9 +110,6 @@ export const formatDocketEntryOnDocketRecord = (
     signatory: record.signatory,
   };
 };
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const publicCaseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

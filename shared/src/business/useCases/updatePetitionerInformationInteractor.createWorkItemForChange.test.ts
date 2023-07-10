@@ -8,10 +8,10 @@ import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_PRACTITIONER, docketClerkUser } from '../../test/mockUsers';
 import { User } from '../entities/User';
 import { UserCase } from '../entities/UserCase';
+import { addCoverToPdf } from './addCoverToPdf';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
 jest.mock('./addCoverToPdf');
-import { addCoverToPdf } from './addCoverToPdf';
 
 describe('updatePetitionerInformationInteractor createWorkItemForChange', () => {
   let mockUser;

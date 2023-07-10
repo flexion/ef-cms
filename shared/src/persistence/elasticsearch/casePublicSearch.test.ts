@@ -1,7 +1,7 @@
 import { applicationContext } from '../../business/test/createTestApplicationContext';
 import { casePublicSearch } from './casePublicSearch';
-jest.mock('./searchClient');
 import { search } from './searchClient';
+jest.mock('./searchClient');
 
 describe('casePublicSearch', () => {
   it('returns results from an exact-matches query', async () => {

@@ -1,7 +1,7 @@
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { getUserInboxMessages } from './getUserInboxMessages';
-jest.mock('../searchClient');
 import { search } from '../searchClient';
+jest.mock('../searchClient');
 
 describe('getUserInboxMessages', () => {
   it('should return results from the search client', async () => {

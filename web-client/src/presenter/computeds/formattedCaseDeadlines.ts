@@ -1,6 +1,9 @@
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 const formatCaseDeadline = (applicationContext, caseDeadline) => {
   const result = cloneDeep(caseDeadline);
   result.deadlineDateFormatted = applicationContext
@@ -20,9 +23,6 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
 
   return result;
 };
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const formattedCaseDeadlines = (
   get: Get,
   applicationContext: ClientApplicationContext,

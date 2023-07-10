@@ -1,11 +1,3 @@
-jest.mock('./processStreamRecords/processStreamUtilities');
-jest.mock('./processStreamRecords/processDocketEntries');
-jest.mock('./processStreamRecords/processMessageEntries');
-jest.mock('./processStreamRecords/processPractitionerMappingEntries');
-jest.mock('./processStreamRecords/processRemoveEntries');
-jest.mock('./processStreamRecords/processWorkItemEntries');
-jest.mock('./processStreamRecords/processCaseEntries');
-jest.mock('./processStreamRecords/processOtherEntries');
 import { applicationContext } from '../test/createTestApplicationContext';
 import { partitionRecords } from './processStreamRecords/processStreamUtilities';
 import { processCaseEntries } from './processStreamRecords/processCaseEntries';
@@ -16,6 +8,14 @@ import { processPractitionerMappingEntries } from './processStreamRecords/proces
 import { processRemoveEntries } from './processStreamRecords/processRemoveEntries';
 import { processStreamRecordsInteractor } from './processStreamRecordsInteractor';
 import { processWorkItemEntries } from './processStreamRecords/processWorkItemEntries';
+jest.mock('./processStreamRecords/processStreamUtilities');
+jest.mock('./processStreamRecords/processDocketEntries');
+jest.mock('./processStreamRecords/processMessageEntries');
+jest.mock('./processStreamRecords/processPractitionerMappingEntries');
+jest.mock('./processStreamRecords/processRemoveEntries');
+jest.mock('./processStreamRecords/processWorkItemEntries');
+jest.mock('./processStreamRecords/processCaseEntries');
+jest.mock('./processStreamRecords/processOtherEntries');
 
 describe('processStreamRecordsInteractor', () => {
   beforeAll(() => {

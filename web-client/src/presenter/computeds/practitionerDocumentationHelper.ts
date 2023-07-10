@@ -1,10 +1,10 @@
 import { getConstants } from '../../getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-const { DESCENDING } = getConstants();
-
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+
+const { DESCENDING } = getConstants();
 export const practitionerDocumentationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

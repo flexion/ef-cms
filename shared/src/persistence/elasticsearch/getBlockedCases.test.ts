@@ -1,7 +1,7 @@
 import { applicationContext } from '../../business/test/createTestApplicationContext';
 import { getBlockedCases } from './getBlockedCases';
-jest.mock('./searchClient');
 import { search } from './searchClient';
+jest.mock('./searchClient');
 
 describe('getBlockedCases', () => {
   it('returns results when searching with a trialLocation', async () => {

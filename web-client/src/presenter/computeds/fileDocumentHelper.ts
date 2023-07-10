@@ -2,6 +2,9 @@ import { getFilerParties } from './getFilerParties';
 import { getSupportingDocumentTypeList } from './addDocketEntryHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 export const supportingDocumentFreeTextTypes = [
   'Affidavit in Support',
   'Declaration in Support',
@@ -9,9 +12,6 @@ export const supportingDocumentFreeTextTypes = [
 ];
 
 export const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const fileDocumentHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

@@ -1,8 +1,8 @@
 import { PARTIES_CODES } from '../../business/entities/EntityConstants';
 import { applicationContext } from '../../business/test/createTestApplicationContext';
 import { getReconciliationReport } from './getReconciliationReport';
-jest.mock('./searchClient');
 import { search } from './searchClient';
+jest.mock('./searchClient');
 
 describe('getReconciliationReport', () => {
   it('should search for docket entries that were served between the provided date range and were served to either the respondent or both parties', async () => {

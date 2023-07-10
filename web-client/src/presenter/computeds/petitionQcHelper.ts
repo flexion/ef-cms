@@ -1,5 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 export const initialFilingDocumentTabs = [
   {
     documentType: 'petitionFile',
@@ -22,9 +25,6 @@ export const initialFilingDocumentTabs = [
     title: 'APW',
   },
 ];
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const petitionQcHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

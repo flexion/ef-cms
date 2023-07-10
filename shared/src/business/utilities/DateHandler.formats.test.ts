@@ -1,7 +1,7 @@
 import * as DateHandler from './DateHandler';
+import { JoiValidationConstants } from '../entities/JoiValidationConstants';
 const { createISODateString, formatDateString, FORMATS, prepareDateFromEST } =
   DateHandler;
-import { JoiValidationConstants } from '../entities/JoiValidationConstants';
 
 describe('DateHandler', () => {
   describe('Date Formats', () => {

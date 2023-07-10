@@ -1,8 +1,8 @@
+import { GET_PARENT_CASE } from '../helpers/searchClauses';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { getDocumentQCInboxForSection } from './getDocumentQCInboxForSection';
-jest.mock('../searchClient');
-import { GET_PARENT_CASE } from '../helpers/searchClauses';
 import { search } from '../searchClient';
+jest.mock('../searchClient');
 
 describe('getDocumentQCInboxForSection', () => {
   beforeAll(() => {

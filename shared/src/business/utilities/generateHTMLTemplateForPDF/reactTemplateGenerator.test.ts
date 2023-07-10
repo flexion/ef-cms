@@ -1,8 +1,8 @@
-jest.mock('react');
-jest.mock('react-dom/server');
 import { reactTemplateGenerator } from './reactTemplateGenerator';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
+jest.mock('react');
+jest.mock('react-dom/server');
 
 describe('reactTemplateGenerator', () => {
   beforeEach(() => {

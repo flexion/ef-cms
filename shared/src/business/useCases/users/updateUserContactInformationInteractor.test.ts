@@ -8,13 +8,13 @@ import {
 import { MOCK_USERS } from '../../../test/mockUsers';
 import { UnauthorizedError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
 import { entityName as practitionerEntityName } from '../../entities/Practitioner';
 import { entityName as privatePractitionerEntityName } from '../../entities/PrivatePractitioner';
 import { updateUserContactInformationInteractor } from './updateUserContactInformationInteractor';
 
 jest.mock('./generateChangeOfAddress');
-import { generateChangeOfAddress } from './generateChangeOfAddress';
 
 describe('updateUserContactInformationInteractor', () => {
   let mockUser;

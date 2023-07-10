@@ -5,7 +5,7 @@ import {
 } from '../entities/EntityConstants';
 
 const mockDynamoUsers = {
-  ['user|1805d1ab-18d0-43ec-bafb-654e83405416 user|1805d1ab-18d0-43ec-bafb-654e83405416']:
+  'user|1805d1ab-18d0-43ec-bafb-654e83405416 user|1805d1ab-18d0-43ec-bafb-654e83405416':
     {
       email: 'docketclerk@example.com',
       name: 'Test Docketclerk',
@@ -15,7 +15,7 @@ const mockDynamoUsers = {
       sk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     },
-  ['user|3805d1ab-18d0-43ec-bafb-654e83405416 user|3805d1ab-18d0-43ec-bafb-654e83405416']:
+  'user|3805d1ab-18d0-43ec-bafb-654e83405416 user|3805d1ab-18d0-43ec-bafb-654e83405416':
     {
       email: 'petitionsclerk@example.com',
       name: 'Test Petitionsclerk',
@@ -25,7 +25,7 @@ const mockDynamoUsers = {
       sk: 'user|3805d1ab-18d0-43ec-bafb-654e83405416',
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     },
-  ['user|7805d1ab-18d0-43ec-bafb-654e83405416 user|7805d1ab-18d0-43ec-bafb-654e83405416']:
+  'user|7805d1ab-18d0-43ec-bafb-654e83405416 user|7805d1ab-18d0-43ec-bafb-654e83405416':
     {
       email: 'petitioner@example.com',
       name: 'Test Petitioner',
@@ -34,7 +34,7 @@ const mockDynamoUsers = {
       sk: 'user|7805d1ab-18d0-43ec-bafb-654e83405416',
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     },
-  ['user|a805d1ab-18d0-43ec-bafb-654e83405416 user|a805d1ab-18d0-43ec-bafb-654e83405416']:
+  'user|a805d1ab-18d0-43ec-bafb-654e83405416 user|a805d1ab-18d0-43ec-bafb-654e83405416':
     {
       email: 'pettitionsclerk@example.com',
       name: 'Alex Petitionsclerk',
@@ -58,7 +58,7 @@ export const createMockDocumentClient = () => {
         promise: () =>
           Promise.resolve({
             Responses: {
-              ['efcms-local']: arr,
+              'efcms-local': arr,
             },
           }),
       };

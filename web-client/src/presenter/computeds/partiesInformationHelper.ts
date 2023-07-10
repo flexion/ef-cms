@@ -1,6 +1,9 @@
 import { capitalize } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 export const formatCounsel = ({ counsel, screenMetadata }) => {
   const counselPendingEmail = screenMetadata.pendingEmails
     ? screenMetadata.pendingEmails[counsel.userId]
@@ -47,9 +50,6 @@ export const getCanEditPetitioner = ({
 
   return false;
 };
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const partiesInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

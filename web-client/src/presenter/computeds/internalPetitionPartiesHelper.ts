@@ -1,5 +1,17 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
+/**
+ * gets the contact view options based on form.partyType
+ *
+ * @param {Function} get the cerebral get function used
+ * for getting state.caseDetail.partyType and state.constants
+ * @param {object} applicationContext the application context
+ * @returns {object} the contactPrimary and/or contactSecondary
+ * view options
+ */
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
   let contacts;
   switch (partyType) {
@@ -193,18 +205,6 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
 
   return contacts;
 };
-
-/**
- * gets the contact view options based on form.partyType
- *
- * @param {Function} get the cerebral get function used
- * for getting state.caseDetail.partyType and state.constants
- * @param {object} applicationContext the application context
- * @returns {object} the contactPrimary and/or contactSecondary
- * view options
- */
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const internalPetitionPartiesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

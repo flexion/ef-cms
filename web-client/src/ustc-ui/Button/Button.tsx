@@ -30,6 +30,7 @@ export const Button = (props: {
     isActive = false,
     link,
     marginDirection = 'right',
+    noMargin = false,
     overrideMargin = false,
     secondary,
     shouldWrapText = false,
@@ -55,7 +56,7 @@ export const Button = (props: {
   );
 
   const iconClasses = classNames(
-    iconRight ? 'margin-left-05' : 'margin-right-05',
+    iconRight ? 'margin-left-05' : noMargin ? 'margin-0' : 'margin-right-05',
     iconColor && `fa-icon-${iconColor}`,
   );
 

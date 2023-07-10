@@ -56,7 +56,7 @@ export const clearDatabase = async () => {
           await client
             .batchWrite({
               RequestItems: {
-                ['efcms-local']: c.map(item => ({
+                'efcms-local': c.map(item => ({
                   DeleteRequest: {
                     Key: {
                       pk: item.pk,

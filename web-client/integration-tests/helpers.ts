@@ -59,22 +59,21 @@ import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
-import FormDataHelper from 'form-data';
-import axios from 'axios';
-import jwt from 'jsonwebtoken';
-const pdfLib = require('pdf-lib');
-import { ALLOWLIST_FEATURE_FLAGS } from '../../shared/src/business/entities/EntityConstants';
 import {
   fakeData,
   getFakeFile,
 } from '../../shared/src/business/test/getFakeFile';
 import { featureFlagHelper } from '../src/presenter/computeds/FeatureFlags/featureFlagHelper';
 import { sendEmailEventToQueue } from '../../shared/src/persistence/messages/sendEmailEventToQueue';
+import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
+import FormDataHelper from 'form-data';
+import axios from 'axios';
+import jwt from 'jsonwebtoken';
 import pug from 'pug';
 import qs from 'qs';
 import riotRoute from 'riot-route';
 import sass from 'sass';
+const pdfLib = require('pdf-lib');
 
 const { CASE_TYPES_MAP, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
   applicationContext.getConstants();
@@ -250,16 +249,21 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     }),
     getUseCases: () => ({
       generatePdfFromHtmlInteractor,
-      getFeatureFlagValueInteractor: (appContext, { featureFlag }) => {
-        if (
-          featureFlag ===
-          ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key
-        ) {
-          return false;
-        } else {
-          return true;
-        }
-      },
+      getAllFeatureFlagsInteractor: () => ({
+        'chief-judge-name': 'Maurice B. Foley',
+        'consolidated-cases-add-docket-numbers': true,
+        'consolidated-cases-group-access-petitioner': true,
+        'document-visibility-policy-change-date': '2023-05-01',
+        'e-consent-fields-enabled-feature-flag': true,
+        'external-opinion-search-enabled': true,
+        'external-order-search-enabled': true,
+        'internal-opinion-search-enabled': true,
+        'internal-order-search-enabled': true,
+        'multi-docketable-paper-filings': true,
+        'redaction-acknowledgement-enabled': true,
+        'updated-trial-status-types': true,
+        'use-external-pdf-generation': false,
+      }),
     }),
     getUtilities: () => ({
       calculateDifferenceInDays,

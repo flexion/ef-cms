@@ -1,8 +1,8 @@
+import { DEADLINE_REPORT_PAGE_SIZE } from '../../../business/entities/EntityConstants';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { getCaseDeadlinesByDateRange } from './getCaseDeadlinesByDateRange';
-jest.mock('../searchClient');
-import { DEADLINE_REPORT_PAGE_SIZE } from '../../../business/entities/EntityConstants';
 import { search } from '../searchClient';
+jest.mock('../searchClient');
 
 describe('getCaseDeadlinesByDateRange', () => {
   const START_DATE = '2019-08-25T05:00:00.000Z';

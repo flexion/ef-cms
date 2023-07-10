@@ -2,6 +2,9 @@ import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntr
 import { capitalize, cloneDeep, map, memoize, orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 const isDateToday = (date, applicationContext) => {
   const now = applicationContext.getUtilities().formatNow('MMDDYY');
   const then = applicationContext
@@ -319,9 +322,6 @@ const memoizedFormatItemWithLink = memoize(
   ({ isSelected, workItem, workQueueToDisplay }) =>
     JSON.stringify({ ...workItem, isSelected, workQueueToDisplay }),
 );
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const formattedWorkQueue = (
   get: Get,
   applicationContext: ClientApplicationContext,

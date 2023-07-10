@@ -1,6 +1,9 @@
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 export const formatTrialSessionDisplayOptions = (
   trialSessions,
   applicationContext,
@@ -127,9 +130,6 @@ export const trialSessionsModalHelper = ({
     trialSessionsFormattedByState,
   };
 };
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const addToTrialSessionModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

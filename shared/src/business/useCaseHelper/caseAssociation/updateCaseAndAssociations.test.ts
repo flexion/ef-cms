@@ -1,7 +1,4 @@
 /* eslint-disable max-lines */
-jest.mock('../../entities/Message');
-jest.mock('../../entities/CaseDeadline');
-
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -18,6 +15,9 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { faker } from '@faker-js/faker';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
+
+jest.mock('../../entities/Message');
+jest.mock('../../entities/CaseDeadline');
 
 describe('updateCaseAndAssociations', () => {
   const MOCK_TRIAL_SESSION = {

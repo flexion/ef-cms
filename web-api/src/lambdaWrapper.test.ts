@@ -1,6 +1,6 @@
+import { getCurrentInvoke } from '@vendia/serverless-express';
 import { lambdaWrapper } from './lambdaWrapper';
 jest.mock('@vendia/serverless-express');
-import { getCurrentInvoke } from '@vendia/serverless-express';
 
 describe('lambdaWrapper', () => {
   let req, res;

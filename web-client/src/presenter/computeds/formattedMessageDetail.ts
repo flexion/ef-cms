@@ -3,6 +3,9 @@ import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 const formatMessage = ({ applicationContext, caseDetail, message }) => {
   const formattedAttachments = applicationContext
     .getUtilities()
@@ -24,9 +27,6 @@ const formatMessage = ({ applicationContext, caseDetail, message }) => {
     ),
   };
 };
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const formattedMessageDetail = (
   get: Get,
   applicationContext: ClientApplicationContext,

@@ -25,7 +25,7 @@ describe('getFilerParties', () => {
         ],
       },
       filersMap: {
-        ['c51150193c634a07bdbd2388fbf06aef']: false,
+        c51150193c634a07bdbd2388fbf06aef: false,
         [mockContactId]: true,
       },
     });

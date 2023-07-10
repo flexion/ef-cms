@@ -748,11 +748,11 @@ describe('DateHandler', () => {
 
     it('should return true when the current date falls within the specified date time range', () => {
       const mockPastStartDate = prepareDateFromString().minus({
-        ['days']: 2,
+        days: 2,
       });
 
       const mockPastEndDate = prepareDateFromString().plus({
-        ['days']: 2,
+        days: 2,
       });
 
       const result = isTodayWithinGivenInterval({

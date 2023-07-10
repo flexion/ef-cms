@@ -1,8 +1,8 @@
+import { PETITIONS_SECTION } from '../../../business/entities/EntityConstants';
 import { applicationContext } from '../../../business/test/createTestApplicationContext';
 import { getCompletedSectionInboxMessages } from './getCompletedSectionInboxMessages';
-jest.mock('../searchClient');
-import { PETITIONS_SECTION } from '../../../business/entities/EntityConstants';
 import { search } from '../searchClient';
+jest.mock('../searchClient');
 
 describe('getCompletedSectionInboxMessages', () => {
   it('should return results from the search client', async () => {

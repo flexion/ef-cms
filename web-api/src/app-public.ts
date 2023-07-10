@@ -8,6 +8,23 @@ import { set } from 'lodash';
 import cors from 'cors';
 import express from 'express';
 
+import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
+import { casePublicSearchLambda } from './public-api/casePublicSearchLambda';
+import { generatePublicDocketRecordPdfLambda } from './public-api/generatePublicDocketRecordPdfLambda';
+import { getAllFeatureFlagsLambda } from './featureFlag/getAllFeatureFlagsLambda';
+import { getCaseForPublicDocketSearchLambda } from './public-api/getCaseForPublicDocketSearchLambda';
+import { getHealthCheckLambda } from './health/getHealthCheckLambda';
+import { getMaintenanceModeLambda } from './maintenance/getMaintenanceModeLambda';
+import { getPublicCaseExistsLambda } from './public-api/getPublicCaseExistsLambda';
+import { getPublicCaseLambda } from './public-api/getPublicCaseLambda';
+import { getPublicDocumentDownloadUrlLambda } from './public-api/getPublicDocumentDownloadUrlLambda';
+import { getPublicJudgesLambda } from './public-api/getPublicJudgesLambda';
+import { ipLimiter } from './middleware/ipLimiter';
+import { opinionPublicSearchLambda } from './public-api/opinionPublicSearchLambda';
+import { orderPublicSearchLambda } from './public-api/orderPublicSearchLambda';
+import { todaysOpinionsLambda } from './public-api/todaysOpinionsLambda';
+import { todaysOrdersLambda } from './public-api/todaysOrdersLambda';
+
 export const app = express();
 
 const applicationContext = createApplicationContext({});
@@ -51,23 +68,6 @@ app.use(async (req, res, next) => {
   return next();
 });
 app.use(logger());
-
-import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
-import { casePublicSearchLambda } from './public-api/casePublicSearchLambda';
-import { generatePublicDocketRecordPdfLambda } from './public-api/generatePublicDocketRecordPdfLambda';
-import { getCaseForPublicDocketSearchLambda } from './public-api/getCaseForPublicDocketSearchLambda';
-import { getFeatureFlagValueLambda } from './featureFlag/getFeatureFlagValueLambda';
-import { getHealthCheckLambda } from './health/getHealthCheckLambda';
-import { getMaintenanceModeLambda } from './maintenance/getMaintenanceModeLambda';
-import { getPublicCaseExistsLambda } from './public-api/getPublicCaseExistsLambda';
-import { getPublicCaseLambda } from './public-api/getPublicCaseLambda';
-import { getPublicDocumentDownloadUrlLambda } from './public-api/getPublicDocumentDownloadUrlLambda';
-import { getPublicJudgesLambda } from './public-api/getPublicJudgesLambda';
-import { ipLimiter } from './middleware/ipLimiter';
-import { opinionPublicSearchLambda } from './public-api/opinionPublicSearchLambda';
-import { orderPublicSearchLambda } from './public-api/orderPublicSearchLambda';
-import { todaysOpinionsLambda } from './public-api/todaysOpinionsLambda';
-import { todaysOrdersLambda } from './public-api/todaysOrdersLambda';
 
 /**
  * public-api
@@ -133,4 +133,4 @@ app.get(
   lambdaWrapper(getMaintenanceModeLambda),
 );
 
-app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
+app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));

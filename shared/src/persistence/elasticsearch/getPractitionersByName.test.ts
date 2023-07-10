@@ -1,7 +1,7 @@
 import { applicationContext } from '../../business/test/createTestApplicationContext';
 import { getPractitionersByName } from './getPractitionersByName';
-jest.mock('./searchClient');
 import { search } from './searchClient';
+jest.mock('./searchClient');
 
 describe('getPractitionersByName', () => {
   it('returns results from a single persistence query', async () => {

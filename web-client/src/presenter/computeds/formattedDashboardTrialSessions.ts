@@ -1,15 +1,15 @@
 import { map, orderBy, partition } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 export const formatSession = (session, applicationContext) => {
   session.formattedStartDate = applicationContext
     .getUtilities()
     .formatDateString(session.startDate, 'MMDDYY');
   return session;
 };
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const formattedDashboardTrialSessions = (
   get: Get,
   applicationContext: ClientApplicationContext,

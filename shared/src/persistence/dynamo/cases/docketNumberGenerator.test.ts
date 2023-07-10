@@ -1,4 +1,3 @@
-jest.mock('../../dynamodbClientService');
 import { get } from '../../dynamodbClientService';
 
 import * as DateHandler from '../../../business/utilities/DateHandler';
@@ -8,6 +7,7 @@ import {
   createDocketNumber,
   getNextDocketNumber,
 } from './docketNumberGenerator';
+jest.mock('../../dynamodbClientService');
 
 let applicationContext;
 const startingCounter = 123;

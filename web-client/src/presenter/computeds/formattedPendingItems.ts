@@ -3,6 +3,9 @@ import { formatSearchResultRecord } from './AdvancedSearch/advancedSearchHelper'
 import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 export const formatPendingItem = (item, { applicationContext }) => {
   let result = formatSearchResultRecord(item, { applicationContext });
 
@@ -27,9 +30,6 @@ export const formatPendingItem = (item, { applicationContext }) => {
 
   return result;
 };
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const formattedPendingItems = (
   get: Get,
   applicationContext: ClientApplicationContext,

@@ -2,6 +2,9 @@ import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntr
 import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
   let iconsToDisplay: any[] = [];
 
@@ -264,9 +267,6 @@ export const getFormattedDocketEntry = ({
 
   return formattedResult;
 };
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const formattedDocketEntries = (
   get: Get,
   applicationContext: ClientApplicationContext,

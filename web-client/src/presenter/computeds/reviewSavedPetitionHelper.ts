@@ -1,6 +1,9 @@
 import { formatStatistic } from './statisticsHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 export const ordersAndNoticesNeededCodes = {
   orderForCds: 'Order for Corporate Disclosure Statement',
   orderForRatification: 'Order for Ratification of Petition',
@@ -28,9 +31,6 @@ const getEConsentAttributesForContact = (
 
   return { eServiceConsentText, shouldDisplayEConsentText };
 };
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const reviewSavedPetitionHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

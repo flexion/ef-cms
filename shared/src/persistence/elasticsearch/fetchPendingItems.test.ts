@@ -1,7 +1,7 @@
 import { applicationContext } from '../../business/test/createTestApplicationContext';
 import { fetchPendingItems } from './fetchPendingItems';
-jest.mock('./searchClient');
 import { search } from './searchClient';
+jest.mock('./searchClient');
 
 describe('fetchPendingItems', () => {
   it('returns results from a query without judge', async () => {

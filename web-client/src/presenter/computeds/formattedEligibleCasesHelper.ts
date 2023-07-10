@@ -1,5 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 const groupKeySymbol = Symbol('group');
 
 const addGroupSymbol = (object, value) => {
@@ -77,9 +80,6 @@ const compareTrialSessionEligibleCases = eligibleCases => {
     return aSortString.localeCompare(bSortString);
   };
 };
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const formattedEligibleCasesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

@@ -1,5 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+
 export const formatSearchResultRecord = (result, { applicationContext }) => {
   const { US_STATES } = applicationContext.getConstants();
 
@@ -20,9 +23,6 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
 
   return result;
 };
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const advancedSearchHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

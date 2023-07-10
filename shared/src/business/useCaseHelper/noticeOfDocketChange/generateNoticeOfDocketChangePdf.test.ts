@@ -1,7 +1,7 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateNoticeOfDocketChangePdf } from './generateNoticeOfDocketChangePdf';
-jest.mock('../../../authorization/authorizationClientService');
 import { isAuthorized } from '../../../authorization/authorizationClientService';
+jest.mock('../../../authorization/authorizationClientService');
 
 const docketChangeInfo = {
   caseCaptionWithPostfix:

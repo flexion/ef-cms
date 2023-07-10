@@ -1,4 +1,3 @@
-const joi = require('joi').extend(require('@hapi/joi-date'));
 import {
   FORMATS,
   calculateISODate,
@@ -8,6 +7,9 @@ import {
 } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import joiDate from '@joi/date';
+import joiImported, { Root } from 'joi';
+const joi: Root = joiImported.extend(joiDate);
 
 export class JudgeActivityReportSearch extends JoiValidationEntity {
   private VALID_DATE_FORMAT: string = FORMATS.MMDDYYYY;
