@@ -247,7 +247,7 @@
     "terser": "^5.14.2",
     "jsonwebtoken": "^9.0.1",
     "underscore": "^1.13.1",
-    "stylelint": "^15.8.0"
+    "stylelint": "^15.10.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.22.9",
@@ -350,10 +350,10 @@
     "shuffle-seed": "^1.1.6",
     "stream-browserify": "^3.0.0",
     "style-loader": "^3.3.3",
-    "stylelint": "^15.8.0",
+    "stylelint": "^15.10.1",
     "stylelint-config-idiomatic-order": "^9.0.0",
-    "stylelint-config-standard": "^33.0.0",
-    "stylelint-config-standard-scss": "^9.0.0",
+    "stylelint-config-standard": "^34.0.0",
+    "stylelint-config-standard-scss": "^10.0.0",
     "swagger-cli": "^4.0.4",
     "tiff2pdf": "^1.0.2",
     "ts-jest": "^29.1.1",
