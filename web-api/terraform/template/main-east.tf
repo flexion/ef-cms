@@ -593,6 +593,20 @@ module "api-east-waf" {
   source = "./waf/"
 }
 
+resource "aws_ssm_param" "blue_east_health_check_id" {
+  count = var.enable_health_checks
+  name  = "${var.environment}-blue-east-health-check-id"
+  type  = "String"
+  value = module.api-east-blue.health_check_id
+}
+
+resource "aws_ssm_param" "green_east_health_check_id" {
+  count = var.enable_health_checks
+  name  = "${var.environment}-green-east-health-check-id"
+  type  = "String"
+  value = module.api-east-green.health_check_id
+}
+
 module "api-east-green" {
   api_object                = null_resource.api_east_object
   api_public_object         = null_resource.api_public_east_object

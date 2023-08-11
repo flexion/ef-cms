@@ -14,11 +14,3 @@ resource "aws_route53_health_check" "failover_health_check" {
   search_string      = "true"                                  # Search for a JSON property returning "true"; fail check if not present
   regions            = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
 }
-
-resource "aws_ssm_param" "health_check_id" {
-  count    = var.enable_health_checks
-  name     = "${var.environment}-${var.current_color}-${var.region}-health-check-id"
-  type     = "String"
-  value    = aws_route53_health_check.failover_health_check[0].id
-  provider = aws.us-east-1
-}

@@ -357,6 +357,19 @@ module "api-west-waf" {
   source = "./waf/"
 }
 
+resource "aws_ssm_param" "green_west_health_check_id" {
+  count = var.enable_health_checks
+  name  = "${var.environment}-green-west-health-check-id"
+  type  = "String"
+  value = module.api-west-green.health_check_id
+}
+
+resource "aws_ssm_param" "blue_west_health_check_id" {
+  count = var.enable_health_checks
+  name  = "${var.environment}-blue-west-health-check-id"
+  type  = "String"
+  value = module.api-west-blue.health_check_id
+}
 module "api-west-green" {
   api_object                = null_resource.api_west_object
   api_public_object         = null_resource.api_public_west_object
