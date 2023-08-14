@@ -595,14 +595,14 @@ module "api-east-waf" {
 
 resource "aws_ssm_parameter" "blue_east_health_check_id" {
   count = var.enable_health_checks
-  name  = "${var.environment}-blue-east-health-check-id"
+  name  = "${var.environment}-blue-us-east-1-health-check-id"
   type  = "String"
   value = module.api-east-blue.health_check_id
 }
 
 resource "aws_ssm_parameter" "green_east_health_check_id" {
   count = var.enable_health_checks
-  name  = "${var.environment}-green-east-health-check-id"
+  name  = "${var.environment}-green-us-west-1-health-check-id"
   type  = "String"
   value = module.api-east-green.health_check_id
 }
