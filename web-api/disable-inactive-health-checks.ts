@@ -27,7 +27,7 @@ async function main() {
     ],
   });
   const ssmResponse = await ssmClient.send(ssmCommand);
-  console.log('ssmResponse', ssmResponse);
+  console.log('ssmResponse:', ssmResponse);
 
   const healthCheckIds: string[] = ssmResponse.Parameters!.map(param => {
     return param.Value!;
@@ -35,12 +35,12 @@ async function main() {
 
   const client = new Route53Client({});
 
-  for (let id in healthCheckIds) {
+  for (const id of healthCheckIds) {
     const input: UpdateHealthCheckRequest = {
       Disabled: true,
       HealthCheckId: id,
     };
-
+    console.log('route53 input:', input);
     const command = new UpdateHealthCheckCommand(input);
     const response = await client.send(command);
     console.log('Response: ', response);
