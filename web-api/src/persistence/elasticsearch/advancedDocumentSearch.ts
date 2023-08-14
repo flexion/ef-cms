@@ -1,4 +1,4 @@
-import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
+import { MAX_SEARCH_CLIENT_RESULTS } from '@shared/business/entities/EntityConstants';
 import { getJudgeFilterForOpinionSearch } from './advancedDocumentSearchHelpers/getJudgeFilterForOpinionSearch';
 import { getJudgeFilterForOrderSearch } from './advancedDocumentSearchHelpers/getJudgeFilterForOrderSearch';
 import { getSealedQuery } from './advancedDocumentSearchHelpers/getSealedQuery';
