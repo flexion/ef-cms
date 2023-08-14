@@ -2,8 +2,8 @@ import { GetParametersCommand, SSMClient } from '@aws-sdk/client-ssm';
 import {
   Route53Client,
   UpdateHealthCheckCommand,
+  UpdateHealthCheckRequest,
 } from '@aws-sdk/client-route-53';
-import { UpdateHealthCheckRequest } from 'aws-sdk/clients/route53';
 
 const check = (value: string | undefined, message: string) => {
   if (!value) {
