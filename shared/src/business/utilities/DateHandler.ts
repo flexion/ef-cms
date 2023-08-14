@@ -8,6 +8,8 @@ export const FORMATS = {
   FILENAME_DATE: 'MMMM_d_yyyy',
   ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
   LOG_TIMESTAMP: "yyyy/MM/dd HH:mm:ss.SSS 'ET'",
+  MDYY: 'M/d/yy',
+  MDYYYY: 'M/d/yyyy',
   MMDDYY: 'MM/dd/yy',
   MMDDYYYY: 'MM/dd/yyyy',
   MMDDYYYY_DASHED: 'MM-dd-yyyy',
@@ -138,7 +140,7 @@ export const calculateISODate = ({
  * @param {string?} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {string} a formatted ISO date string
  */
-export const createISODateString = (dateString?, inputFormat?) => {
+export const createISODateString = (dateString?, inputFormat?: TimeFormats) => {
   let result;
 
   if (!dateString) {

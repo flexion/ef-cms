@@ -1,6 +1,13 @@
 /* eslint-disable complexity */
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { Get } from 'cerebral';
 import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
-import { state } from 'cerebral';
+import {
+  fetchRootDocument,
+  getMeetsPolicyChangeRequirements,
+} from './Public/publicCaseDetailHelper';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
   let iconsToDisplay: any[] = [];
@@ -105,7 +112,7 @@ export const getShowEditDocketRecordEntry = ({
     entry && systemGeneratedEventCodes.includes(entry.eventCode);
   const hasCourtIssuedDocument = entry && entry.isCourtIssuedDocument;
   const hasServedCourtIssuedDocument =
-    hasCourtIssuedDocument && applicationContext.getUtilities().isServed(entry);
+    hasCourtIssuedDocument && DocketEntry.isServed(entry);
   const hasUnservableCourtIssuedDocument =
     entry && UNSERVABLE_EVENT_CODES.includes(entry.eventCode);
 
@@ -133,14 +140,12 @@ export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
   entry,
-  filedAfterPolicyChange,
-  formattedCase,
   isExternalUser,
   permissions,
   userAssociatedWithCase,
+  visibilityPolicyDateFormatted,
 }) => {
   const {
-    BRIEF_EVENTCODES,
     DOCKET_ENTRY_SEALED_TO_TYPES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
@@ -192,19 +197,10 @@ export const getFormattedDocketEntry = ({
     .map(k => INITIAL_DOCUMENT_TYPES[k].documentType)
     .includes(entry.documentType);
 
-  let filedByPractitioner: boolean = false;
-  let requiresPractitionerCheck: boolean = false;
-  if (BRIEF_EVENTCODES.includes(entry.eventCode)) {
-    requiresPractitionerCheck = true;
-    filedByPractitioner =
-      formattedCase.docketEntriesEFiledByPractitioner.includes(
-        entry.docketEntryId,
-      );
-  }
-
-  const meetsPolicyChangeRequirements =
-    filedAfterPolicyChange &&
-    (requiresPractitionerCheck ? filedByPractitioner : true);
+  const meetsPolicyChangeRequirements = getMeetsPolicyChangeRequirements(
+    entry,
+    visibilityPolicyDateFormatted,
+  );
 
   showDocumentLinks = getShowDocumentViewerLink({
     hasDocument: entry.isFileAttached,
@@ -217,7 +213,7 @@ export const getFormattedDocketEntry = ({
     isSealed: entry.isSealed,
     isSealedToExternal:
       entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
-    isServed: applicationContext.getUtilities().isServed(entry),
+    isServed: DocketEntry.isServed(entry),
     isStipDecision: entry.isStipDecision,
     isStricken: entry.isStricken,
     isUnservable: formattedResult.isUnservable,
@@ -265,7 +261,10 @@ export const getFormattedDocketEntry = ({
   return formattedResult;
 };
 
-export const formattedDocketEntries = (get, applicationContext) => {
+export const formattedDocketEntries = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const user = applicationContext.getCurrentUser();
   const isExternalUser = applicationContext
     .getUtilities()
@@ -330,21 +329,21 @@ export const formattedDocketEntries = (get, applicationContext) => {
     .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
     .toISO();
 
-  docketEntriesFormatted = docketEntriesFormatted.map(entry => {
-    const filedAfterPolicyChange =
-      entry.filingDate >= visibilityPolicyDateFormatted;
-
-    return getFormattedDocketEntry({
-      applicationContext,
-      docketNumber,
-      entry,
-      filedAfterPolicyChange,
-      formattedCase: result,
-      isExternalUser,
-      permissions,
-      userAssociatedWithCase,
+  docketEntriesFormatted = docketEntriesFormatted
+    .map((entry: any, _, array) => {
+      return { ...entry, rootDocument: fetchRootDocument(entry, array) };
+    })
+    .map(entry => {
+      return getFormattedDocketEntry({
+        applicationContext,
+        docketNumber,
+        entry,
+        isExternalUser,
+        permissions,
+        userAssociatedWithCase,
+        visibilityPolicyDateFormatted,
+      });
     });
-  });
 
   result.formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
     d => d.isOnDocketRecord,
