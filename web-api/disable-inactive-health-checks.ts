@@ -18,7 +18,7 @@ check(DEPLOYING_COLOR, 'You must have DEPLOYING_COLOR set in your environment');
 check(ENV, 'You must have ENV set in your environment');
 
 async function main() {
-  const ssmClient = new SSMClient({});
+  const ssmClient = new SSMClient({ region: 'us-east-1' });
 
   const ssmCommand = new GetParametersCommand({
     Names: [
