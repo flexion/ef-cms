@@ -4,7 +4,7 @@ import { CharactersRemainingHint } from '../../ustc-ui/CharactersRemainingHint/C
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
