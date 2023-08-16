@@ -1,10 +1,22 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+
+const props = cerebralProps as unknown as {
+  entry: {
+    showLinkToDocument: true;
+    descriptionDisplay: string;
+    isStricken: boolean;
+    docketEntryId: string;
+    openInSameTab: boolean;
+    showDocumentDescriptionWithoutLink: boolean;
+    signatory: string;
+  };
+};
 
 export const PublicFilingsAndProceedings = connect(
   {

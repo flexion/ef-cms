@@ -9,20 +9,19 @@ import { sequences } from '@web-client/presenter/app-public.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
-const props = {
-  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS:
-    state.constants.PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
-  docketNumber: state.caseDetail.docketNumber,
-  gotoPublicPrintableDocketRecordSequence:
-    sequences.gotoPublicPrintableDocketRecordSequence,
-  sessionMetadata: state.sessionMetadata,
-  showModal: state.modal.showModal,
-  toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
-  updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
-};
-
 export const PublicDocketRecordHeader = connect(
-  props,
+  {
+    PUBLIC_DOCKET_RECORD_FILTER_OPTIONS:
+      state.constants.PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+    docketNumber: state.caseDetail.docketNumber,
+    gotoPublicPrintableDocketRecordSequence:
+      sequences.gotoPublicPrintableDocketRecordSequence,
+    publicCaseDetailHelper: state.publicCaseDetailHelper,
+    sessionMetadata: state.sessionMetadata,
+    showModal: state.modal.showModal,
+    toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
+    updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
+  },
   function ({
     docketNumber,
     gotoPublicPrintableDocketRecordSequence,
@@ -32,8 +31,6 @@ export const PublicDocketRecordHeader = connect(
     showModal,
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
-  }: typeof props & {
-    publicCaseDetailHelper: ReturnType<typeof state.publicCaseDetailHelper>;
   }) {
     return (
       <React.Fragment>

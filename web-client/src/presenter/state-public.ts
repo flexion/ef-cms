@@ -36,6 +36,7 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  constants: {} as Record<string, string>,
   currentPage: 'Interstitial',
   header: {
     searchTerm: '',
@@ -45,6 +46,9 @@ export const baseState = {
   },
   isPublic: true,
   isTerminalUser: false,
+  modal: {
+    showModal: '',
+  },
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,

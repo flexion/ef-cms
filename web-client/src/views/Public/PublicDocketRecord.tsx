@@ -8,7 +8,6 @@ import classNames from 'classnames';
 
 export const PublicDocketRecord = connect(
   {
-    docketNumber: state.caseDetail.docketNumber,
     publicCaseDetailHelper: state.publicCaseDetailHelper,
   },
   function ({ publicCaseDetailHelper }) {
