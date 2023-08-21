@@ -3,7 +3,7 @@ name: Team Experiment Template
 about: 'Experiment for team improvement. '
 title: 'Experiment: '
 labels: Experiment
-assignees: ''
+assignees: ccolluro
 
 ---
 

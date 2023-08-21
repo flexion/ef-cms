@@ -2,7 +2,7 @@
 name: Logging Improvement
 about: 'Template for improving what DAWSON logs and '
 title: ''
-labels: ''
+labels: 'log-improvement'
 assignees: ''
 
 ---
@@ -16,3 +16,4 @@ Should we include it in our Kibana index?
 What's the information you think we are missing or would rather not be including?
 
 **Provide any examples**
+
