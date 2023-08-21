@@ -6,6 +6,7 @@ import { clearModalStateAction } from '../../actions/clearModalStateAction';
 import { getCaseAction } from '../../actions/getCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { getPendingEmailsOnCaseAction } from '../../actions/getPendingEmailsOnCaseAction';
+import { sequence } from 'cerebral';
 import { setAlertSuccessAction } from '../../actions/setAlertSuccessAction';
 import { setCaseAction } from '../../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../../actions/setCasePropFromStateAction';
@@ -18,7 +19,7 @@ import { startShowValidationAction } from '../../actions/startShowValidationActi
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 import { validateAddPrivatePractitionerAction } from '../../actions/CaseAssociation/validateAddPrivatePractitionerAction';
 
-export const associatePrivatePractitionerWithCaseSequence =
+export const associatePrivatePractitionerWithCaseSequence = sequence(
   showProgressSequenceDecorator([
     startShowValidationAction,
     setRepresentingFromRepresentingMapActionFactory('modal'),
@@ -46,4 +47,5 @@ export const associatePrivatePractitionerWithCaseSequence =
         },
       ],
     },
-  ]);
+  ]),
+);

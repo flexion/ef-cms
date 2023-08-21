@@ -342,7 +342,10 @@ export const baseState = {
   modal: {
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
-  },
+  } as {
+    pdfPreviewModal?: string;
+    showModal?: string;
+  } & Record<string, any>,
   navigation: {},
   noticeStatusState: {
     casesProcessed: 0,
@@ -407,7 +410,7 @@ export const baseState = {
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
   users: [],
-  validationErrors: {},
+  validationErrors: {} as Record<string, string>,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
