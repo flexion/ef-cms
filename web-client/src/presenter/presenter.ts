@@ -77,6 +77,7 @@ import { completeDocumentSelectSequence } from './sequences/completeDocumentSele
 import { completeMessageSequence } from './sequences/completeMessageSequence';
 import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
+import { conditionallySetFileOnFormSequence } from './sequences/conditionallySetFileOnFormSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { confirmWorkItemAlreadyCompleteSequence } from './sequences/confirmWorkItemAlreadyCompleteSequence';
 import { consolidatedCaseCheckboxAllChangeSequence } from './sequences/consolidatedCaseCheckboxAllChangeSequence';
@@ -609,6 +610,7 @@ export const presenterSequences = {
   completeMessageSequence,
   completePrintPaperPetitionReceiptSequence,
   completeStartCaseWizardStepSequence,
+  conditionallySetFileOnFormSequence,
   confirmStayLoggedInSequence,
   confirmWorkItemAlreadyCompleteSequence,
   consolidatedCaseCheckboxAllChangeSequence,

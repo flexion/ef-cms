@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { cloneFile } from '../cloneFile';
+import { cloneFile } from '@web-client/views/cloneFile';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from '../limitFileSize';
 import { props } from 'cerebral';
@@ -11,6 +11,8 @@ import React from 'react';
 export const StateDrivenFileInput = connect(
   {
     ariaDescribedBy: props.ariaDescribedBy,
+    conditionallySetFileOnFormSequence:
+      sequences.conditionallySetFileOnFormSequence,
     constants: state.constants,
     file: props.file,
     fileInputName: props.name,
@@ -22,6 +24,7 @@ export const StateDrivenFileInput = connect(
   function StateDrivenFileInput({
     accept = '.pdf',
     ariaDescribedBy,
+    conditionallySetFileOnFormSequence,
     constants,
     file,
     fileInputName,
@@ -49,17 +52,15 @@ export const StateDrivenFileInput = connect(
           type="file"
           onChange={e => {
             const { name: inputName } = e.target;
+            console.log('inputName', inputName);
             limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
               const uploadedFile = e.target.files[0];
               cloneFile(uploadedFile)
                 .then(clonedFile => {
-                  updateFormValueSequence({
-                    key: inputName,
-                    value: clonedFile,
-                  });
-                  updateFormValueSequence({
-                    key: `${inputName}Size`,
-                    value: clonedFile.size,
+                  conditionallySetFileOnFormSequence({
+                    file: clonedFile,
+                    fileName: inputName,
+                    inputId: id,
                   });
                   return validationSequence();
                 })
