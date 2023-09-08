@@ -9,6 +9,7 @@
 .terraform.lock.hcl
 .terraform/
 .vscode/*
+async-processes/.sst
 !.vscode/launch.json
 **/*_.js
 *.iml
