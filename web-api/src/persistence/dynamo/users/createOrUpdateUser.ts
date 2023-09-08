@@ -117,6 +117,7 @@ export const isUserAlreadyCreated = async ({
   userPoolId: string;
 }) => {
   try {
+    console.log('-----adminGetUser');
     await applicationContext
       .getCognito()
       .adminGetUser({
@@ -124,8 +125,11 @@ export const isUserAlreadyCreated = async ({
         Username: email,
       })
       .promise();
+    console.log('-----adminGetUser success');
     return true;
   } catch (e) {
+    console.log('----e.code', e.code);
+    console.log(e);
     if (e.code === 'UserNotFoundException') {
       return false;
     } else {
