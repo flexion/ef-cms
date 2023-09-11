@@ -1,26 +1,34 @@
-import { Queue } from 'sst/constructs';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { Function } from 'sst/constructs';
 import { StackContext } from 'sst/constructs';
 
 export function AsyncStack({ stack }: StackContext) {
-  // const queue = new Queue(stack, 'ChangeOfAddressQueue');
+  // const pdfDeadLetterQueue = new Queue(stack, 'PDFDeadLetters');
 
-  // new Function(stack, 'ChangeOfAddress', {
-  //   handler: 'src/change-of-address.handler',
-  //   runtime: 'nodejs18.x',
+  // new Queue(stack, 'Queue', {
+  //   cdk: {
+  //     queue: {
+  //       deadLetterQueue: {
+  //         maxReceiveCount: 1,
+  //         queue: pdfDeadLetterQueue.cdk.queue,
+  //       },
+  //     },
+  //   },
+  //   consumer: {
+  //     function: 'src/pdf-generation.handler',
+  //   },
   // });
-  new Queue(stack, 'Queue', {
-    consumer: {
-      cdk: {
-        eventSource: {
-          maxConcurrency: 5,
-        },
+
+  new Function(stack, 'PDFGeneration', {
+    copyFiles: [
+      {
+        from: 'node_modules/@sparticuz/chromium/bin',
+        to: 'bin',
       },
-      function: 'src/change-of-address.handler',
-    },
+    ],
+    handler: 'src/pdf-generation.handler',
+    memorySize: 3000,
+    runtime: 'nodejs18.x',
+    timeout: 30,
   });
-
-  // Show the endpoint in the output
-  // stack.addOutputs({
-  //   ApiEndpoint: api.url,
-  // });
 }
