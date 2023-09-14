@@ -1,4 +1,3 @@
-import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Function } from 'sst/constructs';
 import { StackContext } from 'sst/constructs';
 
@@ -22,12 +21,19 @@ export function AsyncStack({ stack }: StackContext) {
   new Function(stack, 'PDFGeneration', {
     copyFiles: [
       {
-        from: 'node_modules/@sparticuz/chromium/bin',
+        from: '../node_modules/@sparticuz/chromium/bin',
         to: 'bin',
       },
     ],
     handler: 'src/pdf-generation.handler',
     memorySize: 3000,
+    nodejs: {
+      esbuild: {
+        loader: {
+          '.node': 'file',
+        },
+      },
+    },
     runtime: 'nodejs18.x',
     timeout: 30,
   });

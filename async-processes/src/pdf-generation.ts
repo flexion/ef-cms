@@ -1,6 +1,7 @@
 import { createApplicationContext } from '../../web-api/src/applicationContext';
 
 export async function handler(event: any) {
+  console.log('event', event);
   const applicationContext = createApplicationContext(undefined);
 
   const results = await applicationContext
