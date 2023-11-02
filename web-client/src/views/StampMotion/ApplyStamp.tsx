@@ -444,7 +444,7 @@ export const ApplyStamp = connect(
                         </span>
                         {(form.strickenFromTrialSession ||
                           form.jurisdictionalOption ||
-                          (form.dueDateMessage && form.day) ||
+                          (form.dueDateMessage && form.date) ||
                           form.customText) && <hr className="narrow-hr" />}
                         {form.strickenFromTrialSession && (
                           <>
@@ -458,10 +458,10 @@ export const ApplyStamp = connect(
                           </>
                         )}
                         <span>
-                          {form.day && (
+                          {form.date && (
                             <>
-                              - {form.dueDateMessage} {form.month}/{form.day}/
-                              {form.year} -
+                              - {form.dueDateMessage}{' '}
+                              {applyStampFormHelper.formattedDueDate} -
                               <br />
                             </>
                           )}

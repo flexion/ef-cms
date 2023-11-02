@@ -8,6 +8,10 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @returns {object} apply stamp form helper fields
  */
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import {
+  FORMATS,
+  formatDateString,
+} from '../../../../shared/src/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 export const applyStampFormHelper = (
   get: Get,
@@ -34,6 +38,11 @@ export const applyStampFormHelper = (
     .getUtilities()
     .formatNow(DATE_FORMATS.YYYYMMDD);
 
+  const formattedDueDate = formatDateString(
+    get(state.form.date),
+    FORMATS.MMDDYYYY,
+  );
+
   const validationErrors = get(state.validationErrors);
   const dateErrorClass = !validationErrors.date
     ? 'stamp-form-group'
@@ -48,6 +57,7 @@ export const applyStampFormHelper = (
     customOrderTextCharacterCount,
     dateErrorClass,
     dispositionErrorClass,
+    formattedDueDate,
     hideClass,
     minDate,
   };

@@ -188,4 +188,19 @@ describe('applyStampFormHelper', () => {
       expect(dispositionErrorClass).toEqual('stamp-form-group-error');
     });
   });
+
+  describe('formattedDueDate', () => {
+    it('should be set to the form date formatted as "MM/DD/YYYY"', () => {
+      const { formattedDueDate } = runCompute(applyStampFormHelper, {
+        state: {
+          ...baseState,
+          form: {
+            date: '2023-11-02T00:43:18Z',
+          },
+        },
+      });
+
+      expect(formattedDueDate).toEqual('11/01/2023');
+    });
+  });
 });

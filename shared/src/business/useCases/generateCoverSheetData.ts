@@ -56,7 +56,7 @@ export const generateCoverSheetData = async ({
   applicationContext: IApplicationContext;
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
-  filingDateUpdated: boolean;
+  filingDateUpdated?: boolean;
   stampData?: any;
   useInitialData?: boolean;
 }) => {
