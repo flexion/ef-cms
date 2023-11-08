@@ -29,6 +29,17 @@ export class PublicContact extends JoiValidationEntity {
   getValidationRules() {
     return PublicContact.VALIDATION_RULES;
   }
+<<<<<<< HEAD
+=======
+
+  getValidationRules_NEW() {
+    return PublicContact.VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return PublicContact.VALIDATION_ERROR_MESSAGES;
+  }
+>>>>>>> d4451d8c8e3590b293b1a4e8ae197a694f937a05
 }
 
 export type RawPublicContact = ExcludeMethods<PublicContact>;

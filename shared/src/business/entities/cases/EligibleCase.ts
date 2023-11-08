@@ -88,6 +88,17 @@ export class EligibleCase extends JoiValidationEntity {
   getValidationRules() {
     return EligibleCase.VALIDATION_RULES;
   }
+<<<<<<< HEAD
+=======
+
+  getValidationRules_NEW() {
+    return EligibleCase.VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return EligibleCase.VALIDATION_ERROR_MESSAGES;
+  }
+>>>>>>> d4451d8c8e3590b293b1a4e8ae197a694f937a05
 }
 
 export type RawEligibleCase = ExcludeMethods<EligibleCase>;

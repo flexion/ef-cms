@@ -11,6 +11,7 @@ import {
 } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class JudgeActivityReportSearch extends JoiValidationEntity {
   private VALID_DATE_FORMAT: string = FORMATS.MMDDYYYY;
@@ -120,6 +121,74 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   getValidationRules() {
     return JudgeActivityReportSearch.VALIDATION_RULES;
   }
+<<<<<<< HEAD
+=======
+
+  static VALIDATION_RULES_NEW = {
+    endDate: JoiValidationConstants.ISO_DATE.less(joi.ref('tomorrow'))
+      .min(joi.ref('startDate'))
+      .description(
+        'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
+      )
+      .messages({
+        ...setDefaultErrorMessage('Enter a valid end date.'),
+        'any.required': 'Enter an end date',
+        'date.less': 'End date cannot be in the future. Enter a valid date.',
+        'date.min':
+          'End date cannot be prior to start date. Enter a valid date.',
+      }),
+    judgeId: joi
+      .optional()
+      .description('The userId of the judge to generate the report for'),
+    judgeName: joi
+      .optional()
+      .description('The last name of the judge to generate the report for'),
+    judges: joi
+      .array()
+      .items(joi.string())
+      .description('The last names of judges to generate report for'),
+    pageNumber: joi
+      .number()
+      .optional()
+      .description(
+        'The page of the selected subset of CAV and Submitted cases for display',
+      ),
+    pageSize: joi
+      .number()
+      .optional()
+      .description(
+        'The page size for calculating the number of CAV and Submitted cases to display.',
+      ),
+    searchAfter: joi
+      .number()
+      .description(
+        'The last docket number to be used to make the next set of calls per page number',
+      ),
+    startDate: JoiValidationConstants.ISO_DATE.max('now')
+      .description(
+        'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+      )
+      .messages({
+        ...setDefaultErrorMessage('Enter a valid start date.'),
+        'any.required': 'Enter a start date.',
+        'date.max': 'Start date cannot be in the future. Enter a valid date.',
+      }),
+    statuses: JoiValidationConstants.JUDGES_STATUSES.optional().description(
+      'The CAV and Submitted case statuses associated with judges',
+    ),
+    tomorrow: JoiValidationConstants.STRING.optional().description(
+      'The computed value to validate the endDate against, in order to verify that the endDate is less than or equal to the current date',
+    ),
+  };
+
+  getValidationRules_NEW() {
+    return JudgeActivityReportSearch.VALIDATION_RULES_NEW;
+  }
+
+  getErrorToMessageMap() {
+    return JudgeActivityReportSearch.VALIDATION_ERROR_MESSAGES;
+  }
+>>>>>>> d4451d8c8e3590b293b1a4e8ae197a694f937a05
 }
 
 export type RawJudgeActivityReportSearch =

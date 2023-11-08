@@ -13,4 +13,15 @@ export class PetitionerSpouseContact extends Contact {
   getValidationRules() {
     return super.getValidationRules();
   }
+<<<<<<< HEAD
+=======
+
+  getValidationRules_NEW() {
+    return super.getValidationRules_NEW();
+  }
+
+  getErrorToMessageMap() {
+    return super.getErrorToMessageMap();
+  }
+>>>>>>> d4451d8c8e3590b293b1a4e8ae197a694f937a05
 }

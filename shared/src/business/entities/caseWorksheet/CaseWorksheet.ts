@@ -1,6 +1,7 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { STATUS_OF_MATTER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class CaseWorksheet extends JoiValidationEntity {
   public docketNumber: string;
@@ -32,9 +33,42 @@ export class CaseWorksheet extends JoiValidationEntity {
       .optional(),
   };
 
+<<<<<<< HEAD
   getValidationRules() {
     return CaseWorksheet.VALIDATION_RULES;
   }
+=======
+  static VALIDATION_RULES_NEW = {
+    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
+    finalBriefDueDate: JoiValidationConstants.DATE.allow('')
+      .optional()
+      .messages({
+        ...setDefaultErrorMessage('Enter a valid due date'),
+      }),
+    primaryIssue: JoiValidationConstants.STRING.allow('').optional(),
+    statusOfMatter: JoiValidationConstants.STRING.valid(
+      ...STATUS_OF_MATTER_OPTIONS,
+    )
+      .allow(null)
+      .optional(),
+  };
+
+  static VALIDATION_ERROR_MESSAGES = {
+    finalBriefDueDate: 'Enter a valid due date',
+  };
+
+  getValidationRules() {
+    return CaseWorksheet.VALIDATION_RULES;
+  }
+
+  getValidationRules_NEW() {
+    return CaseWorksheet.VALIDATION_RULES_NEW;
+  }
+
+  getErrorToMessageMap() {
+    return CaseWorksheet.VALIDATION_ERROR_MESSAGES;
+  }
+>>>>>>> d4451d8c8e3590b293b1a4e8ae197a694f937a05
 }
 
 export type RawCaseWorksheet = ExcludeMethods<CaseWorksheet>;
