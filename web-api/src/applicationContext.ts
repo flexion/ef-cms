@@ -200,6 +200,10 @@ export const createApplicationContext = (
     return user;
   };
 
+  const setCurrentUser = someThing => {
+    user = new User(someThing);
+  };
+
   if (process.env.NODE_ENV === 'production') {
     const authenticated = user && Object.keys(user).length;
     logger.defaultMeta = logger.defaultMeta || {};
@@ -551,6 +555,7 @@ export const createApplicationContext = (
     runVirusScan: async ({ filePath }) => {
       return await execPromise(`clamdscan ${filePath}`);
     },
+    setCurrentUser,
   };
 };
 
