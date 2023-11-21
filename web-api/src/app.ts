@@ -1072,16 +1072,7 @@ export const publicProcedure = tRpc.procedure;
 export const appRouter = tRpcRouter({
   customCaseReport: publicProcedure.query(opts => {
     console.log('trpc custom case request', opts);
-    return getCustomCaseReportInteractor(applicationContext, {
-      caseStatuses: [],
-      caseTypes: [],
-      filingMethod: 'all',
-      judges: [],
-      pageSize: 100,
-      preferredTrialCities: [],
-      procedureType: 'All',
-      searchAfter: { pk: '', receivedAt: 0 },
-    });
+    return getCustomCaseReportInteractor(applicationContext, opts.rawInput);
   }),
   userCreate: publicProcedure.mutation(async opts => {
     return {
