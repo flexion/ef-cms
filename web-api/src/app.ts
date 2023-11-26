@@ -1,4 +1,8 @@
 /* eslint-disable max-lines */
+import {
+  GetCustomCaseReportRequest,
+  getCustomCaseReportInteractor,
+} from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { addCaseToTrialSessionLambda } from './lambdas/trialSessions/addCaseToTrialSessionLambda';
 import { addConsolidatedCaseLambda } from './lambdas/cases/addConsolidatedCaseLambda';
 import { addCoversheetLambda } from './lambdas/documents/addCoversheetLambda';
@@ -79,7 +83,6 @@ import { getCompletedMessagesForSectionLambda } from './lambdas/messages/getComp
 import { getCompletedMessagesForUserLambda } from './lambdas/messages/getCompletedMessagesForUserLambda';
 import { getCountOfCaseDocumentsFiledByJudgesLambda } from '@web-api/lambdas/reports/getCountOfCaseDocumentsFiledByJudgesLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
-import { getCustomCaseReportInteractor } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { getCustomCaseReportLambda } from './lambdas/reports/getCustomCaseReportLambda';
 import { getDocumentContentsForDocketEntryLambda } from './lambdas/documents/getDocumentContentsForDocketEntryLambda';
 import { getDocumentDownloadUrlLambda } from './lambdas/documents/getDocumentDownloadUrlLambda';
@@ -1038,7 +1041,7 @@ if (process.env.IS_LOCAL) {
   app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));
 }
 
-export async function createContext({ req, res }) {
+export async function createContext({ req }) {
   // Create your context based on the request object
   // Will be available as `ctx` in all your resolvers
   // This is just an example of something you might want to do in your ctx fn
@@ -1070,11 +1073,15 @@ export const tRpcRouter = tRpc.router;
 export const publicProcedure = tRpc.procedure;
 
 export const appRouter = tRpcRouter({
-  customCaseReport: publicProcedure.query(opts => {
-    console.log('trpc custom case request', opts);
-    return getCustomCaseReportInteractor(applicationContext, opts.rawInput);
-  }),
-  userCreate: publicProcedure.mutation(async opts => {
+  customCaseReport: publicProcedure
+    .input(something => {
+      return something as GetCustomCaseReportRequest;
+    })
+    .query(opts => {
+      console.log('trpc custom case request', opts);
+      return getCustomCaseReportInteractor(applicationContext, opts.input);
+    }),
+  userCreate: publicProcedure.mutation(() => {
     return {
       hello: 'GoodBye',
     };
