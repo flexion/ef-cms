@@ -68,7 +68,7 @@ describe('getCustomCaseReportAction', () => {
 
     expect(
       applicationContext.getUseCases().getCustomCaseReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), expectedRequest);
+    ).toHaveBeenCalledWith(expectedRequest);
     expect(result.state.customCaseReport.cases).toEqual(
       mockCustomCaseReportResponse.foundCases,
     );
@@ -116,7 +116,7 @@ describe('getCustomCaseReportAction', () => {
 
     expect(
       applicationContext.getUseCases().getCustomCaseReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), expectedRequestWithSearchAfter);
+    ).toHaveBeenCalledWith(expectedRequestWithSearchAfter);
     expect(result.state.customCaseReport.cases).toEqual(
       mockCustomCaseReportResponse.foundCases,
     );
@@ -148,7 +148,7 @@ describe('getCustomCaseReportAction', () => {
 
     expect(
       applicationContext.getUseCases().getCustomCaseReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), {
+    ).toHaveBeenCalledWith({
       ...expectedRequest,
       highPriority: undefined,
     });
@@ -177,6 +177,6 @@ describe('getCustomCaseReportAction', () => {
 
     expect(
       applicationContext.getUseCases().getCustomCaseReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), expectedRequest);
+    ).toHaveBeenCalledWith(expectedRequest);
   });
 });
