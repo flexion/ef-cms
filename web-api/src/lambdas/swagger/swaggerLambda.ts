@@ -1,5 +1,3 @@
-import { headerOverride } from '../../lambdaWrapper';
-
 export const swaggerBody = `<html>
 <body>
   <head>
@@ -16,20 +14,3 @@ export const swaggerBody = `<html>
   </script>
 </body>
 </html>`;
-/**
- * render the swagger html page
- *
- * @returns {object} the api gateway response object containing the statusCode, body, and headers
- */
-export const swaggerLambda = () => {
-  return {
-    body: swaggerBody,
-    headers: {
-      ...headerOverride,
-      'Content-Type': 'text/html',
-      'X-Frame-Options': 'DENY',
-      'X-XSS-Protection': '1; mode=block',
-    },
-    statusCode: '200',
-  };
-};

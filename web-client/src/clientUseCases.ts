@@ -27,7 +27,6 @@ import { confirmSignUpLocalInteractor } from '../../shared/src/proxies/auth/conf
 import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
-import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
 import { createJudgeUserInteractor } from '../../shared/src/proxies/judges/createJudgeUserProxy';
 import { createMessageInteractor } from '../../shared/src/proxies/messages/createMessageProxy';
 import { createPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/createPractitionerDocumentProxy';
@@ -259,7 +258,8 @@ export const allUseCases = {
   createCaseDeadlineInteractor,
   createCaseFromPaperInteractor,
   createCaseInteractor,
-  createCourtIssuedOrderPdfFromHtmlInteractor,
+  createCourtIssuedOrderPdfFromHtmlInteractor:
+    trpcClient.createCourtIssuedOrderPdfFromHtmlInteractor.mutate,
   createJudgeUserInteractor,
   createMessageInteractor,
   createPractitionerDocumentInteractor,

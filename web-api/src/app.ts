@@ -33,7 +33,7 @@ import { createApplicationContext } from './applicationContext';
 import { createCaseDeadlineLambda } from './lambdas/caseDeadline/createCaseDeadlineLambda';
 import { createCaseFromPaperLambda } from './lambdas/cases/createCaseFromPaperLambda';
 import { createCaseLambda } from './lambdas/cases/createCaseLambda';
-import { createCourtIssuedOrderPdfFromHtmlLambda } from './lambdas/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda';
+import { createCourtIssuedOrderPdfFromHtmlInteractor } from '@shared/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor';
 import { createMessageLambda } from './lambdas/messages/createMessageLambda';
 import { createPractitionerDocumentLambda } from './lambdas/practitioners/createPractitionerDocumentLambda';
 import { createPractitionerUserLambda } from './lambdas/practitioners/createPractitionerUserLambda';
@@ -99,7 +99,6 @@ import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceMo
 import { getMessageThreadLambda } from './lambdas/messages/getMessageThreadLambda';
 import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseLambda';
 import { getNotificationsInteractor } from '@shared/business/useCases/getNotificationsInteractor';
-import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
 import { getPaperServicePdfUrlLambda } from '@web-api/lambdas/trialSessions/getPaperServicePdfUrlLambda';
@@ -274,11 +273,11 @@ app.use(logger());
 {
   // app.get('/api/swagger', lambdaWrapper(swaggerLambda));
   // app.get('/api/swagger.json', lambdaWrapper(swaggerJsonLambda));
-  app.get('/api/notifications', lambdaWrapper(getNotificationsLambda));
-  app.post(
-    '/api/court-issued-order',
-    lambdaWrapper(createCourtIssuedOrderPdfFromHtmlLambda),
-  );
+  // app.get('/api/notifications', lambdaWrapper(getNotificationsLambda));
+  // app.post(
+  //   '/api/court-issued-order',
+  //   lambdaWrapper(createCourtIssuedOrderPdfFromHtmlLambda),
+  // );
   app.post(
     '/api/docket-record-pdf',
     lambdaWrapper(generateDocketRecordPdfLambda),
@@ -1060,6 +1059,22 @@ export const tRpcRouter = tRpc.router;
 export const publicProcedure = tRpc.procedure;
 
 export const appRouter = tRpcRouter({
+  createCourtIssuedOrderPdfFromHtmlInteractor: publicProcedure
+    .input(request => {
+      return request as {
+        contentHtml: string;
+        addedDocketNumbers: string[];
+        docketNumber: string;
+        documentTitle: string;
+        signatureText: string;
+      };
+    })
+    .mutation(opts =>
+      createCourtIssuedOrderPdfFromHtmlInteractor(
+        applicationContext,
+        opts.input,
+      ),
+    ),
   getCustomCaseReportInteractor: publicProcedure
     .input(request => {
       return request as GetCustomCaseReportRequest;
