@@ -36,7 +36,7 @@ export const getCustomCaseReportAction = async ({
 
   const reportData = await applicationContext
     .getUseCases()
-    .getCustomCaseReportInteractor(applicationContext, {
+    .getCustomCaseReportInteractor({
       ...filterValues,
       endDate: formattedEndDate,
       pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,

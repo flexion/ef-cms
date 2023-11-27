@@ -93,6 +93,10 @@ import {
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
 import { getConstants } from './getConstants';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
+import {
+  getCurrentUserToken,
+  setCurrentUserToken,
+} from '@web-client/userToken';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import {
   getDocQcSectionForUser,
@@ -141,20 +145,12 @@ const setCurrentUser = (
   user = newUser;
 };
 
-let token;
-const getCurrentUserToken = () => {
-  return token;
-};
-const setCurrentUserToken = newToken => {
-  token = newToken;
-};
-
 const appConstants = deepFreeze({
   ...getConstants(),
   ERROR_MAP_429,
 }) as ReturnType<typeof getConstants>;
 
-const applicationContext = {
+export const applicationContext = {
   convertBlobToUInt8Array: async blob => {
     return new Uint8Array(await new Response(blob).arrayBuffer());
   },
@@ -347,7 +343,5 @@ const applicationContext = {
   setCurrentUser,
   setCurrentUserToken,
 };
-
-export { applicationContext };
 
 export type ClientApplicationContext = typeof applicationContext;

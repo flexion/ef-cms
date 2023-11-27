@@ -1073,7 +1073,7 @@ export const tRpcRouter = tRpc.router;
 export const publicProcedure = tRpc.procedure;
 
 export const appRouter = tRpcRouter({
-  customCaseReport: publicProcedure
+  getCustomCaseReportInteractor: publicProcedure
     .input(something => {
       return something as GetCustomCaseReportRequest;
     })
