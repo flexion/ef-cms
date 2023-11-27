@@ -82,7 +82,6 @@ import { getCompletedMessagesForSectionLambda } from './lambdas/messages/getComp
 import { getCompletedMessagesForUserLambda } from './lambdas/messages/getCompletedMessagesForUserLambda';
 import { getCountOfCaseDocumentsFiledByJudgesLambda } from '@web-api/lambdas/reports/getCountOfCaseDocumentsFiledByJudgesLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
-import { getCustomCaseReportLambda } from './lambdas/reports/getCustomCaseReportLambda';
 import { getDocumentContentsForDocketEntryLambda } from './lambdas/documents/getDocumentContentsForDocketEntryLambda';
 import { getDocumentDownloadUrlLambda } from './lambdas/documents/getDocumentDownloadUrlLambda';
 import { getDocumentQCInboxForSectionLambda } from './lambdas/workitems/getDocumentQCInboxForSectionLambda';
@@ -99,6 +98,7 @@ import { getJudgeInSectionLambda } from './lambdas/users/getJudgeInSectionLambda
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
 import { getMessageThreadLambda } from './lambdas/messages/getMessageThreadLambda';
 import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseLambda';
+import { getNotificationsInteractor } from '@shared/business/useCases/getNotificationsInteractor';
 import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
@@ -161,8 +161,7 @@ import { setNoticesForCalendaredTrialSessionLambda } from './lambdas/trialSessio
 import { setTrialSessionCalendarLambda } from './lambdas/trialSessions/setTrialSessionCalendarLambda';
 import { setWorkItemAsReadLambda } from './lambdas/workitems/setWorkItemAsReadLambda';
 import { strikeDocketEntryLambda } from './lambdas/documents/strikeDocketEntryLambda';
-import { swaggerJsonLambda } from './lambdas/swagger/swaggerJsonLambda';
-import { swaggerLambda } from './lambdas/swagger/swaggerLambda';
+import { swaggerBody } from './lambdas/swagger/swaggerLambda';
 import { unblockCaseFromTrialLambda } from './lambdas/cases/unblockCaseFromTrialLambda';
 import { unprioritizeCaseLambda } from './lambdas/cases/unprioritizeCaseLambda';
 import { unsealCaseLambda } from './lambdas/cases/unsealCaseLambda';
@@ -200,6 +199,7 @@ import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingE
 import cors from 'cors';
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import swagger from '../swagger.json';
 
 const applicationContext = createApplicationContext({});
 
@@ -272,8 +272,8 @@ app.use(logger());
  * api
  */
 {
-  app.get('/api/swagger', lambdaWrapper(swaggerLambda));
-  app.get('/api/swagger.json', lambdaWrapper(swaggerJsonLambda));
+  // app.get('/api/swagger', lambdaWrapper(swaggerLambda));
+  // app.get('/api/swagger.json', lambdaWrapper(swaggerJsonLambda));
   app.get('/api/notifications', lambdaWrapper(getNotificationsLambda));
   app.post(
     '/api/court-issued-order',
@@ -756,10 +756,10 @@ app.get(
     '/reports/case-inventory-report',
     lambdaWrapper(getCaseInventoryReportLambda),
   );
-  app.get(
-    '/reports/custom-case-report',
-    lambdaWrapper(getCustomCaseReportLambda),
-  );
+  // app.get(
+  //   '/reports/custom-case-report',
+  //   lambdaWrapper(getCustomCaseReportLambda),
+  // );
   app.get(
     '/reports/printable-case-inventory-report',
     lambdaWrapper(generatePrintableCaseInventoryReportLambda),
@@ -1041,31 +1041,46 @@ if (process.env.IS_LOCAL) {
 }
 
 export async function createContext({ req }) {
-  const token = req.headers.authorization.split(' ')[1];
-  const decoded = jwt.decode(token);
-  const tempUser = {
-    role: decoded['custom:role'],
-    token,
-    userId: decoded['custom:userId'],
-  };
-  applicationContext.setCurrentUser(tempUser);
+  const token = req?.headers?.authorization?.split(' ')?.[1];
+  if (token) {
+    const decoded = jwt.decode(token);
+    const tempUser = {
+      role: decoded['custom:role'],
+      token,
+      userId: decoded['custom:userId'] || decoded.sub,
+    };
+    console.log({ decoded });
+    applicationContext.setCurrentUser(tempUser);
+  }
 }
-// type Context = Awaited<ReturnType<typeof createContext>>;
 
 const tRpc = initTRPC.context().create();
 
-// eslint-disable-next-line prefer-destructuring
 export const tRpcRouter = tRpc.router;
 export const publicProcedure = tRpc.procedure;
 
 export const appRouter = tRpcRouter({
   getCustomCaseReportInteractor: publicProcedure
-    .input(something => {
-      return something as GetCustomCaseReportRequest;
+    .input(request => {
+      return request as GetCustomCaseReportRequest;
     })
-    .query(opts => {
-      return getCustomCaseReportInteractor(applicationContext, opts.input);
-    }),
+    .query(opts =>
+      getCustomCaseReportInteractor(applicationContext, opts.input),
+    ),
+  getNotificationsInteractor: publicProcedure
+    .input(request => {
+      return request as {
+        judgeUserId: string;
+        caseServicesSupervisorData: any;
+      };
+    })
+    .query(opts => getNotificationsInteractor(applicationContext, opts.input)),
+  swagger: publicProcedure.query(() => swaggerBody),
+  swaggerJson: publicProcedure
+    .input(request => {
+      return request;
+    })
+    .query(() => swagger),
 });
 
 // Export type router type signature,

@@ -27,7 +27,7 @@ export const getNotificationsAction = async ({
 
   const notifications = await applicationContext
     .getUseCases()
-    .getNotificationsInteractor(applicationContext, {
+    .getNotificationsInteractor({
       caseServicesSupervisorData,
       judgeUserId,
     });
