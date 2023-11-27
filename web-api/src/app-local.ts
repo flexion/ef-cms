@@ -1,15 +1,30 @@
 import { server as WebSocketServer } from 'websocket';
 import { Writable } from 'stream';
+import {
+  appRouter,
+  createContext,
+  defaultCorsOptions,
+  app as localApiApp,
+} from './app';
 import { connectLambda } from './lambdas/notifications/connectLambda';
+import { createHTTPServer } from '@trpc/server/adapters/standalone';
 import { disconnectLambda } from './lambdas/notifications/disconnectLambda';
-import { app as localApiApp } from './app';
 import { app as localPublicApiApp } from './app-public';
 import { processStreamRecordsLambda } from './lambdas/streams/processStreamRecordsLambda';
 import { v4 as uuid } from 'uuid';
 import AWS from 'aws-sdk';
 import DynamoDBReadable from 'dynamodb-streams-readable';
+import cors from 'cors';
 import express from 'express';
 import http from 'http';
+
+// ************************ app-trpc-local *********************************
+const trpcServer = createHTTPServer({
+  createContext,
+  middleware: cors({ ...defaultCorsOptions, credentials: true }),
+  router: appRouter,
+});
+trpcServer.listen(3040);
 
 // ************************ app-local *********************************
 const localApiPort = 4000;

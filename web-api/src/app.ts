@@ -34,7 +34,6 @@ import { createCaseDeadlineLambda } from './lambdas/caseDeadline/createCaseDeadl
 import { createCaseFromPaperLambda } from './lambdas/cases/createCaseFromPaperLambda';
 import { createCaseLambda } from './lambdas/cases/createCaseLambda';
 import { createCourtIssuedOrderPdfFromHtmlLambda } from './lambdas/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda';
-import { createHTTPServer } from '@trpc/server/adapters/standalone';
 import { createMessageLambda } from './lambdas/messages/createMessageLambda';
 import { createPractitionerDocumentLambda } from './lambdas/practitioners/createPractitionerDocumentLambda';
 import { createPractitionerUserLambda } from './lambdas/practitioners/createPractitionerUserLambda';
@@ -224,7 +223,7 @@ const allowAccessOriginFunction = (origin, callback) => {
   callback(null, '*');
 };
 
-const defaultCorsOptions = {
+export const defaultCorsOptions = {
   origin: allowAccessOriginFunction,
 };
 
@@ -1042,19 +1041,6 @@ if (process.env.IS_LOCAL) {
 }
 
 export async function createContext({ req }) {
-  // Create your context based on the request object
-  // Will be available as `ctx` in all your resolvers
-  // This is just an example of something you might want to do in your ctx fn
-  // async function getUserFromHeader() {
-  //   if (req.headers.authorization) {
-  //     const user = await decodeAndVerifyJwtToken(
-  //       req.headers.authorization.split(' ')[1],
-  //     );
-  //     return user;
-  //   }
-  //   return null;
-  // }
-  // const user = await getUserFromHeader();
   const token = req.headers.authorization.split(' ')[1];
   const decoded = jwt.decode(token);
   const tempUser = {
@@ -1064,7 +1050,7 @@ export async function createContext({ req }) {
   };
   applicationContext.setCurrentUser(tempUser);
 }
-export type Context = Awaited<ReturnType<typeof createContext>>;
+// type Context = Awaited<ReturnType<typeof createContext>>;
 
 const tRpc = initTRPC.context().create();
 
@@ -1078,28 +1064,10 @@ export const appRouter = tRpcRouter({
       return something as GetCustomCaseReportRequest;
     })
     .query(opts => {
-      console.log('trpc custom case request', opts);
       return getCustomCaseReportInteractor(applicationContext, opts.input);
     }),
-  userCreate: publicProcedure.mutation(() => {
-    return {
-      hello: 'GoodBye',
-    };
-  }),
-  userList: publicProcedure.query(async () => {
-    await new Promise(resolve => setTimeout(resolve, 5000));
-    return 'Yo it is me';
-  }),
 });
 
 // Export type router type signature,
 // NOT the router itself.
 export type AppRouter = typeof appRouter;
-
-const server = createHTTPServer({
-  createContext,
-  middleware: cors(authCorsOptions),
-  router: appRouter,
-});
-
-server.listen(3040);
