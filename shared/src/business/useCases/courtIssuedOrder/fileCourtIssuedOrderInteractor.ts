@@ -1,6 +1,7 @@
 import { Case } from '../../entities/cases/Case';
 import { DOCUMENT_RELATIONSHIPS } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
+import { IApplicationContext } from 'types/IApplicationContext';
 import { Message } from '../../entities/Message';
 import {
   ROLE_PERMISSIONS,
@@ -10,21 +11,16 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { orderBy } from 'lodash';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.documentMetadata the document metadata
- * @param {string} providers.primaryDocumentFileId the id of the primary document
- * @returns {Promise<*>} the updated case entity after the document is added
- */
 export const fileCourtIssuedOrder = async (
   applicationContext: IApplicationContext,
   {
     documentMetadata,
     primaryDocumentFileId,
-  }: { documentMetadata: any; primaryDocumentFileId: string },
-) => {
+  }: {
+    documentMetadata: any;
+    primaryDocumentFileId: string;
+  },
+): Promise<RawCase> => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 
@@ -60,8 +56,7 @@ export const fileCourtIssuedOrder = async (
       .getObject({
         Bucket: applicationContext.environment.documentsBucketName,
         Key: primaryDocumentFileId,
-      })
-      .promise();
+      });
 
     const contents = await applicationContext
       .getUseCaseHelpers()

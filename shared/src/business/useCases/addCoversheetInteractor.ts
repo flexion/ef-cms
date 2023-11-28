@@ -1,4 +1,5 @@
 import { Case } from '../entities/cases/Case';
+import { IApplicationContext } from 'types/IApplicationContext';
 import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../entities/EntityConstants';
 import { addCoverToPdf } from './addCoverToPdf';
 
@@ -44,19 +45,18 @@ export const addCoversheetInteractor = async (
 
   let pdfData;
   try {
-    const { Body } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: docketEntryId,
-      })
-      .promise();
+    const { Body } = await applicationContext.getStorageClient().getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: docketEntryId,
+    });
+
     pdfData = Body;
   } catch (err) {
     applicationContext.logger.error(
       `Failed to get document for docket entry id ${docketEntryId} `,
       err,
     );
+
     throw err;
   }
 

@@ -1,3 +1,5 @@
+import { IApplicationContext } from 'types/IApplicationContext';
+
 const regionEast = 'us-east-1';
 const regionWest = 'us-west-1';
 
@@ -121,13 +123,10 @@ const checkS3BucketsStatus = async ({
   bucketName: string;
 }): Promise<boolean> => {
   try {
-    await applicationContext
-      .getStorageClient()
-      .listObjectsV2({
-        Bucket: bucketName,
-        MaxKeys: 1,
-      })
-      .promise();
+    await applicationContext.getStorageClient().listObjectsV2({
+      Bucket: bucketName,
+      MaxKeys: 1,
+    });
 
     return true;
   } catch (e) {

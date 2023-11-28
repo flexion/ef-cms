@@ -88,11 +88,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
 
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
-    });
+    applicationContext
+      .getStorageClient()
+      .getObject.mockResolvedValue({ Body: testPdfDoc });
 
     applicationContext
       .getPersistenceGateway()

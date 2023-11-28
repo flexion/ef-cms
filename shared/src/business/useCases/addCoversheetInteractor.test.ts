@@ -77,19 +77,16 @@ describe('addCoversheetInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(testingCaseData);
-
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
-    });
+    applicationContext
+      .getStorageClient()
+      .getObject.mockResolvedValue({ Body: testPdfDoc });
   });
 
   it('adds a cover page to a pdf document', async () => {
     await addCoversheetInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    });
 
     expect(
       applicationContext.getDocumentGenerators().coverSheet,
@@ -104,7 +101,7 @@ describe('addCoversheetInteractor', () => {
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
       replaceCoversheet: true,
-    } as any);
+    });
 
     expect(
       applicationContext.getDocumentGenerators().coverSheet,
@@ -118,7 +115,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    });
 
     expect(
       applicationContext.getPersistenceGateway().updateDocketEntry,
@@ -133,7 +130,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(applicationContext, {
       docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
       docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    });
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -146,7 +143,7 @@ describe('addCoversheetInteractor', () => {
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
     );
 
     expect(updatedDocketEntryEntity).toMatchObject({
@@ -155,17 +152,17 @@ describe('addCoversheetInteractor', () => {
     });
   });
 
-  it('throws an error when unable to get the pdfData from s3', async () => {
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => Promise.reject(new Error('error')),
-    });
+  it('should throw an error when unable to download the PDF from s3', async () => {
+    applicationContext
+      .getStorageClient()
+      .getObject.mockRejectedValue(new Error('error'));
 
     await expect(
       addCoversheetInteractor(applicationContext, {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
         replaceCoversheet: true,
-      } as any),
+      }),
     ).rejects.toThrow('error');
   });
 
@@ -173,7 +170,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    });
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
@@ -186,7 +183,7 @@ describe('addCoversheetInteractor', () => {
       caseEntity: new Case(testingCaseData, { applicationContext }),
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    });
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -227,7 +224,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    });
 
     expect(
       applicationContext.getPersistenceGateway().updateDocketEntry,
@@ -264,7 +261,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    });
 
     expect(
       applicationContext.getPersistenceGateway().updateDocketEntry,
@@ -325,7 +322,7 @@ describe('addCoversheetInteractor', () => {
       ),
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    });
 
     const calls = applicationContext
       .getPersistenceGateway()
@@ -382,7 +379,7 @@ describe('addCoversheetInteractor', () => {
       ),
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    });
 
     const calls = applicationContext
       .getPersistenceGateway()

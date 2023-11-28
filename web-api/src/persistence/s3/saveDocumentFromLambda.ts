@@ -1,3 +1,5 @@
+import { IApplicationContext } from 'types/IApplicationContext';
+
 export const saveDocumentFromLambda = async ({
   applicationContext,
   contentType: ContentType = 'application/pdf',
@@ -22,15 +24,12 @@ export const saveDocumentFromLambda = async ({
 
   for (let i = 0; i <= maxRetries; i++) {
     try {
-      response = await applicationContext
-        .getStorageClient()
-        .putObject({
-          Body: Buffer.from(body),
-          Bucket,
-          ContentType,
-          Key: key,
-        })
-        .promise();
+      response = await applicationContext.getStorageClient().putObject({
+        Body: Buffer.from(body),
+        Bucket,
+        ContentType,
+        Key: key,
+      });
       break;
     } catch (err) {
       if (i >= maxRetries) {

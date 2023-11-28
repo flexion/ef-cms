@@ -1,12 +1,9 @@
 // usage: npx ts-node --transpile-only shared/admin-tools/download-all-case-documents.js "453-17"
 
-const fs = require('fs');
-const {
-  createApplicationContext,
-} = require('../../web-api/src/applicationContext');
-const {
-  getCaseByDocketNumber,
-} = require('../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber');
+import { IServerApplicationContext } from '@web-api/applicationContext';
+import { createApplicationContext } from '../../web-api/src/applicationContext';
+import { getCaseByDocketNumber } from '../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
+import fs from 'fs';
 
 const DOCKET_NUMBER = process.argv[2];
 const OUTPUT_DIR = `${process.env.HOME}/Downloads/${DOCKET_NUMBER}`;
@@ -16,19 +13,22 @@ const downloadPdf = async ({
   docketEntryId,
   filename,
   path,
+}: {
+  applicationContext: IServerApplicationContext;
+  docketEntryId: string;
+  filename: string;
+  path: string;
 }) => {
   console.log(`BEGIN --- ${filename}`);
 
-  // download pdf from S3
-  const data = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: docketEntryId,
-    })
-    .promise();
+  const { Body } = await applicationContext.getStorageClient().getObject({
+    Bucket: applicationContext.environment.documentsBucketName,
+    Key: docketEntryId,
+  });
 
-  await fs.promises.writeFile(`${path}/${filename}`, data.Body);
+  const data = (await Body?.transformToString()) || '';
+
+  await fs.promises.writeFile(`${path}/${filename}`, data);
 
   console.log(`COMPLETE --- ${filename}`);
 };

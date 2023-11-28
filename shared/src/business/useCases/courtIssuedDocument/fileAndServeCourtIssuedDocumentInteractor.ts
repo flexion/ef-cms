@@ -4,6 +4,7 @@ import {
   DOCUMENT_SERVED_MESSAGES,
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
+import { IApplicationContext } from 'types/IApplicationContext';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -13,17 +14,6 @@ import { createISODateString } from '../../utilities/DateHandler';
 import { omit } from 'lodash';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
-/**
- * fileAndServeCourtIssuedDocumentInteractor
- * @param {Object} applicationContext the application context
- * @param {Object} providers the providers object
- * @param {string} providers.clientConnectionId the UUID of the websocket connection for the current tab
- * @param {String} providers.docketEntryId the ID of the docket entry being filed and served
- * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
- * @param {Object} providers.form the form from the front end that has last minute modifications to the docket entry
- * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
- * @returns {Object} the URL of the document that was served
- */
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: IApplicationContext,
   {
@@ -39,7 +29,7 @@ export const fileAndServeCourtIssuedDocument = async (
     form: any;
     subjectCaseDocketNumber: string;
   },
-) => {
+): Promise<void> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission =
@@ -98,8 +88,7 @@ export const fileAndServeCourtIssuedDocument = async (
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
       Key: docketEntryToServe.docketEntryId,
-    })
-    .promise();
+    });
 
   const stampedPdf = await applicationContext
     .getUseCaseHelpers()

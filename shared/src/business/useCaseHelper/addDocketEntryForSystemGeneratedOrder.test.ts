@@ -30,16 +30,13 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     expect(caseEntity.docketEntries.length).toEqual(
       newDocketEntriesFromNewCaseCount,
     );
-
     const naneDocketEntry = caseEntity.docketEntries.find(
       entry => entry.eventCode === 'NOT',
     );
     expect(naneDocketEntry.isDraft).toEqual(true);
-
     const passedInNoticeTitle =
       applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
         .orderTitle;
-
     expect(passedInNoticeTitle).toEqual(passedInNoticeTitle.toUpperCase());
   });
 
@@ -52,7 +49,6 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
 
     const mostRecentDocketEntry =
       caseEntity.docketEntries[caseEntity.docketEntries.length - 1];
-
     expect('freeText' in mostRecentDocketEntry).toEqual(true);
     expect('freeText' in mostRecentDocketEntry.draftOrderState).toEqual(true);
   });
@@ -71,7 +67,6 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     const mockSignatureText =
       applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
         .signatureText;
-
     expect(mockSignatureText.length).toBeGreaterThan(0);
   });
 
@@ -85,7 +80,6 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     const mockSignatureText =
       applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
         .signatureText;
-
     expect(mockSignatureText.length).toEqual(0);
   });
 
@@ -104,7 +98,6 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
       content: 'Something else',
       documentTitle: 'The Trials and Tribulations of Rufio the Jester',
     };
-
     const contentToStore = {
       documentContents: 'Something else',
       richText: 'Something else',
@@ -119,7 +112,6 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0].document,
@@ -128,13 +120,9 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
 
   it('should append additional pdf form data when the document is an orderForAmendedPetition', async () => {
     const mockAmendedPetitionFormData = 'Elmo the Third';
-
-    applicationContext.getStorageClient.mockReturnValue({
-      getObject: jest.fn().mockReturnValue({
-        promise: () => ({ Body: mockAmendedPetitionFormData }),
-      }),
+    applicationContext.getStorageClient().getObject.mockResolvedValue({
+      Body: mockAmendedPetitionFormData,
     });
-
     const mockCombinedPdfsReturnVal = 'Antonia Lafaso';
     applicationContext
       .getUtilities()
@@ -149,7 +137,6 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     expect(
       applicationContext.getStorageClient().getObject.mock.calls[0][0].Key,
     ).toEqual(AMENDED_PETITION_FORM_NAME);
-
     expect(
       applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0]
         .secondPdf,
@@ -158,13 +145,9 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
 
   it('should append additional pdf form data when the document is an orderForAmendedPetitionAndFilingFee', async () => {
     const mockAmendedPetitionFormData = 'Elmo the Third';
-
-    applicationContext.getStorageClient.mockReturnValue({
-      getObject: jest.fn().mockReturnValue({
-        promise: () => ({ Body: mockAmendedPetitionFormData }),
-      }),
+    applicationContext.getStorageClient().getObject.mockResolvedValue({
+      Body: mockAmendedPetitionFormData,
     });
-
     const mockCombinedPdfsReturnVal = 'Antonia Lafaso';
     applicationContext
       .getUtilities()
@@ -179,7 +162,6 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     expect(
       applicationContext.getStorageClient().getObject.mock.calls[0][0].Key,
     ).toEqual(AMENDED_PETITION_FORM_NAME);
-
     expect(
       applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0]
         .secondPdf,

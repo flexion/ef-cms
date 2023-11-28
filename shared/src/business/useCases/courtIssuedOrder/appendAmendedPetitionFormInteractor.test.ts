@@ -4,6 +4,7 @@ import {
 } from '../../entities/EntityConstants';
 import { appendAmendedPetitionFormInteractor } from './appendAmendedPetitionFormInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { petitionsClerkUser } from '@shared/test/mockUsers';
 
 const mockDocketEntryId = 'd594360c-0514-4acd-a2ac-24a402060756';
 
@@ -13,10 +14,7 @@ describe('appendAmendedPetitionFormInteractor', () => {
   const returnedCombinedPdf = 'ever';
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: '432',
-    });
+    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -26,11 +24,9 @@ describe('appendAmendedPetitionFormInteractor', () => {
       .getUtilities()
       .combineTwoPdfs.mockReturnValue(returnedCombinedPdf);
 
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: fakeFile2,
-      }),
-    });
+    applicationContext
+      .getStorageClient()
+      .getObject.mockResolvedValue({ Body: fakeFile2 });
   });
 
   it('should throw an error when the user is not authorized to modify docket entries', async () => {

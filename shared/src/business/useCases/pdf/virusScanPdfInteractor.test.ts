@@ -4,7 +4,6 @@ import fs from 'fs';
 import path from 'path';
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
-
 const testAsset = filename => {
   return fs.readFileSync(testAssetsPath + filename);
 };
@@ -21,11 +20,8 @@ describe('virusScanPdfInteractor', () => {
       quarantineBucketName: mockQuarantineBucketName,
     };
 
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Body: testAsset('sample.pdf'),
-        }),
+    applicationContext.getStorageClient().getObject.mockResolvedValue({
+      Body: testAsset('sample.pdf'),
     });
   });
 

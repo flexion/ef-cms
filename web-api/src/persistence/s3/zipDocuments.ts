@@ -1,3 +1,4 @@
+import { IApplicationContext } from 'types/IApplicationContext';
 import { zipS3Files } from './zipS3Files';
 import archiver from 'archiver';
 import s3FilesLib from 's3-files';

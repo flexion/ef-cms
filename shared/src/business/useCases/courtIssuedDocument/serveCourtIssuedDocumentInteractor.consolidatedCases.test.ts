@@ -66,11 +66,9 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(1);
 
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
-    });
+    applicationContext
+      .getStorageClient()
+      .getObject.mockResolvedValue({ Body: testPdfDoc });
 
     leadCaseDocketEntries = [
       mockDocketEntryWithWorkItem,

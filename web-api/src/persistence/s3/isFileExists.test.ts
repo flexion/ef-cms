@@ -4,15 +4,9 @@ import { isFileExists } from './isFileExists';
 describe('isFileExists', () => {
   applicationContext
     .getStorageClient()
-    .headObject.mockImplementationOnce(() => {
-      return { promise: () => Promise.resolve('I found it!') };
-    })
-    .mockImplementationOnce(() => {
-      return { promise: () => Promise.resolve('I found it!') };
-    })
-    .mockImplementation(() => {
-      throw new Error('head request failed');
-    });
+    .headObject.mockResolvedValueOnce('I found it!')
+    .mockResolvedValueOnce('I found it!')
+    .mockRejectedValue('head request failed');
 
   it('makes a head request to storage client to determine existence of a file', async () => {
     const result = await isFileExists({

@@ -1,15 +1,8 @@
-/* eslint-disable max-lines */
-import AWS from 'aws-sdk';
-
 import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
-import axios from 'axios';
-import pug from 'pug';
-import sass from 'sass';
-import util from 'util';
-
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import {
   CASE_STATUS_TYPES,
   CLOSED_CASE_STATUSES,
@@ -20,9 +13,6 @@ import {
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
-
-// eslint-disable-next-line import/no-unresolved
-import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { Client } from '@opensearch-project/opensearch';
@@ -32,6 +22,7 @@ import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitio
 import { Message } from '../../shared/src/business/entities/Message';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
+import { S3 } from '@aws-sdk/client-s3';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
@@ -71,8 +62,15 @@ import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification
 import { sendUpdatePetitionerCasesMessage } from './persistence/messages/sendUpdatePetitionerCasesMessage';
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { v4 as uuidv4 } from 'uuid';
+import AWS from 'aws-sdk';
+import axios from 'axios';
+import pug from 'pug';
+import sass from 'sass';
+import util from 'util';
 import type { ClientApplicationContext } from '../../web-client/src/applicationContext';
-const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
+
+const { CognitoIdentityServiceProvider, DynamoDB, SES, SQS } = AWS;
+
 const execPromise = util.promisify(exec);
 
 const environment = {
@@ -418,7 +416,6 @@ export const createApplicationContext = (
         }
       },
     }),
-
     getMessagingClient: () => {
       if (!sqsCache) {
         sqsCache = new SQS({
@@ -521,17 +518,17 @@ export const createApplicationContext = (
       return searchClientCache;
     },
     getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
-    getStorageClient: () => {
+    getStorageClient: (): S3 => {
       if (!s3Cache) {
         s3Cache = new S3({
           endpoint: environment.s3Endpoint,
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
-          maxRetries: 3,
+          forcePathStyle: true,
+          // httpOptions: {
+          //   connectTimeout: 3000,
+          //   timeout: 5000,
+          // },
+          maxAttempts: 3,
           region: 'us-east-1',
-          s3ForcePathStyle: true,
         });
       }
       return s3Cache;

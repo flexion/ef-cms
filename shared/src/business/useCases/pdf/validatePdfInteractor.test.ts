@@ -15,10 +15,8 @@ describe('validatePdfInteractor', () => {
       },
     });
 
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
+    applicationContext.getStorageClient().getObject.mockResolvedValue({
+      Body: testPdfDoc,
     });
 
     applicationContext.getPersistenceGateway().deleteDocumentFile = jest.fn();
@@ -64,10 +62,8 @@ describe('validatePdfInteractor', () => {
   });
 
   it('throws an error and deletes the document from S3 when the PDF is actually a png', async () => {
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testInvalidPdfDoc,
-      }),
+    applicationContext.getStorageClient().getObject.mockResolvedValue({
+      Body: testInvalidPdfDoc,
     });
 
     await expect(

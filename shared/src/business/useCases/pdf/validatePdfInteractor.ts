@@ -1,3 +1,4 @@
+import { IApplicationContext } from 'types/IApplicationContext';
 import { StringDecoder } from 'string_decoder';
 
 export const removePdf = async ({
@@ -23,14 +24,13 @@ export const removePdf = async ({
 export const validatePdfInteractor = async (
   applicationContext: IApplicationContext,
   { key }: { key: string },
-) => {
+): Promise<void> => {
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
       Key: key,
-    })
-    .promise();
+    });
 
   const stringDecoder = new StringDecoder('utf8');
   const pdfHeaderBytes = pdfData.slice(0, 5);

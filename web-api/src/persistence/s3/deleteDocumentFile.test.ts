@@ -2,14 +2,9 @@ import { applicationContext } from '../../../../shared/src/business/test/createT
 import { deleteDocumentFile } from './deleteDocumentFile';
 
 describe('deleteDocumentFile', () => {
-  beforeAll(() => {
-    applicationContext.environment.documentsBucketName = 'aBucket';
-    applicationContext.getStorageClient().deleteObject.mockReturnValue({
-      promise: () => {
-        return Promise.resolve();
-      },
-    });
-  });
+  applicationContext.environment.documentsBucketName = 'aBucket';
+
+  applicationContext.getStorageClient().deleteObject.mockResolvedValue({});
 
   it('deletes the document', async () => {
     await deleteDocumentFile({

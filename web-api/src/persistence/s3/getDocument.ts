@@ -1,3 +1,5 @@
+import { IApplicationContext } from 'types/IApplicationContext';
+
 export const getDocument = async ({
   applicationContext,
   key,
@@ -8,12 +10,13 @@ export const getDocument = async ({
   useTempBucket?: boolean;
 }) => {
   const S3 = applicationContext.getStorageClient();
+
   return (
     await S3.getObject({
       Bucket: useTempBucket
         ? applicationContext.getTempDocumentsBucketName()
         : applicationContext.getDocumentsBucketName(),
       Key: key,
-    }).promise()
+    })
   ).Body;
 };

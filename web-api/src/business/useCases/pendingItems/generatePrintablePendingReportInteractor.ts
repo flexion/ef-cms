@@ -1,8 +1,10 @@
+import { IApplicationContext } from 'types/IApplicationContext';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { Upload } from '@aws-sdk/lib-storage';
 
 export const generatePrintablePendingReportInteractor = async (
   applicationContext: IApplicationContext,
@@ -52,26 +54,17 @@ export const generatePrintablePendingReportInteractor = async (
 
   const key = `pending-report-${applicationContext.getUniqueId()}.pdf`;
 
-  await new Promise((resolve, reject) => {
-    const documentsBucket =
-      applicationContext.environment.tempDocumentsBucketName;
-    const s3Client = applicationContext.getStorageClient();
-
-    const params = {
+  const upload = new Upload({
+    client: applicationContext.getStorageClient(),
+    params: {
       Body: pdf,
-      Bucket: documentsBucket,
+      Bucket: applicationContext.environment.tempDocumentsBucketName,
       ContentType: 'application/pdf',
       Key: key,
-    };
-
-    s3Client.upload(params, function (err) {
-      if (err) {
-        applicationContext.logger.error('error uploading to s3', err);
-        reject(err);
-      }
-      resolve(undefined);
-    });
+    },
   });
+
+  await upload.done();
 
   const { url } = await applicationContext
     .getPersistenceGateway()

@@ -75,8 +75,7 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
       .getObject({
         Bucket: applicationContext.environment.documentsBucketName,
         Key: AMENDED_PETITION_FORM_NAME,
-      })
-      .promise();
+      });
 
     const returnVal = await applicationContext.getUtilities().combineTwoPdfs({
       applicationContext,

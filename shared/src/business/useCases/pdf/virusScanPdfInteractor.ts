@@ -1,29 +1,20 @@
+import { IApplicationContext } from 'types/IApplicationContext';
 import fs from 'fs';
 import tmp from 'tmp';
 
-/**
- * virusScanPdfInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.key the S3 document ID
- * @param {object} providers.scanCompleteCallback to execute after scanning completes
- * @returns {Promise} resolves when complete
- */
 export const virusScanPdfInteractor = async (
   applicationContext: IApplicationContext,
   {
     key,
     scanCompleteCallback,
   }: { key: string; scanCompleteCallback: () => void },
-) => {
+): Promise<void> => {
   let { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.quarantineBucketName,
       Key: key,
-    })
-    .promise();
+    });
 
   const inputPdf = tmp.fileSync({
     mode: 0o644,
@@ -35,23 +26,17 @@ export const virusScanPdfInteractor = async (
   try {
     await applicationContext.runVirusScan({ filePath: inputPdf.name });
 
-    await applicationContext
-      .getStorageClient()
-      .putObject({
-        Body: pdfData,
-        Bucket: applicationContext.environment.documentsBucketName,
-        ContentType: 'application/pdf',
-        Key: key,
-      })
-      .promise();
+    await applicationContext.getStorageClient().putObject({
+      Body: pdfData,
+      Bucket: applicationContext.environment.documentsBucketName,
+      ContentType: 'application/pdf',
+      Key: key,
+    });
 
-    await applicationContext
-      .getStorageClient()
-      .deleteObject({
-        Bucket: applicationContext.environment.quarantineBucketName,
-        Key: key,
-      })
-      .promise();
+    await applicationContext.getStorageClient().deleteObject({
+      Bucket: applicationContext.environment.quarantineBucketName,
+      Key: key,
+    });
 
     await scanCompleteCallback();
   } catch (e) {

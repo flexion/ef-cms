@@ -5,6 +5,7 @@ import {
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
+import { IApplicationContext } from 'types/IApplicationContext';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -12,15 +13,6 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
-/**
- * serveExternallyFiledDocumentInteractor
- * @param {Object} applicationContext the application context
- * @param {Object} providers the providers object
- * @param {object} providers.clientConnectionId the client connection Id
- * @param {String} providers.docketEntryId the ID of the docket entry being filed and served
- * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
- * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
- */
 export const serveExternallyFiledDocument = async (
   applicationContext: IApplicationContext,
   {
@@ -34,7 +26,7 @@ export const serveExternallyFiledDocument = async (
     docketNumbers: string[];
     subjectCaseDocketNumber: string;
   },
-) => {
+): Promise<void> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission =
@@ -77,8 +69,7 @@ export const serveExternallyFiledDocument = async (
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
       Key: docketEntryId,
-    })
-    .promise();
+    });
 
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()

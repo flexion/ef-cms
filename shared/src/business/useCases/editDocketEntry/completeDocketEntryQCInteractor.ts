@@ -11,6 +11,7 @@ import {
   dateStringsCompared,
   formatDateString,
 } from '../../utilities/DateHandler';
+import { IApplicationContext } from 'types/IApplicationContext';
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -244,8 +245,7 @@ const completeDocketEntryQC = async (
         .getObject({
           Bucket: applicationContext.environment.documentsBucketName,
           Key: updatedDocketEntry.docketEntryId,
-        })
-        .promise();
+        });
 
       const noticeDoc = await PDFDocument.load(pdfData);
 
@@ -322,8 +322,7 @@ const completeDocketEntryQC = async (
       .getObject({
         Bucket: applicationContext.environment.documentsBucketName,
         Key: noticeUpdatedDocketEntry.docketEntryId,
-      })
-      .promise();
+      });
 
     const serviceStampDate = formatDateString(
       noticeUpdatedDocketEntry.servedAt!,

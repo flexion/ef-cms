@@ -1,3 +1,4 @@
+import { IApplicationContext } from 'types/IApplicationContext';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,

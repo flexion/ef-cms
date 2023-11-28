@@ -22,11 +22,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
-    });
+    applicationContext
+      .getStorageClient()
+      .getObject.mockResolvedValue({ Body: testPdfDoc });
 
     applicationContext
       .getUseCaseHelpers()
