@@ -42,7 +42,7 @@ import { createTrialSessionLambda } from './lambdas/trialSessions/createTrialSes
 import { createUserLambda } from './lambdas/users/createUserLambda';
 import { createUserLocalLambda } from './users/createUserLocalLambda';
 import { deleteAuthCookieLambda } from './lambdas/auth/deleteAuthCookieLambda';
-import { deleteCaseDeadlineLambda } from './lambdas/caseDeadline/deleteCaseDeadlineLambda';
+import { deleteCaseDeadlineInteractor } from '@shared/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
 import { deleteCaseNoteLambda } from './lambdas/caseNote/deleteCaseNoteLambda';
 import { deleteCounselFromCaseLambda } from './lambdas/cases/deleteCounselFromCaseLambda';
 import { deleteDeficiencyStatisticLambda } from './lambdas/cases/deleteDeficiencyStatisticLambda';
@@ -293,10 +293,10 @@ app.use(logger());
   //   '/case-deadlines/:docketNumber/:caseDeadlineId',
   //   lambdaWrapper(updateCaseDeadlineLambda),
   // );
-  app.delete(
-    '/case-deadlines/:docketNumber/:caseDeadlineId',
-    lambdaWrapper(deleteCaseDeadlineLambda),
-  );
+  // app.delete(
+  //   '/case-deadlines/:docketNumber/:caseDeadlineId',
+  //   lambdaWrapper(deleteCaseDeadlineLambda),
+  // );
   app.post(
     '/case-deadlines/:docketNumber',
     lambdaWrapper(createCaseDeadlineLambda),
@@ -1075,6 +1075,13 @@ export const appRouter = tRpcRouter({
         applicationContext,
         opts.input,
       ),
+    ),
+  deleteCaseDeadlineInteractor: publicProcedure
+    .input(request => {
+      return request as { caseDeadlineId: string; docketNumber: string };
+    })
+    .mutation(opts =>
+      deleteCaseDeadlineInteractor(applicationContext, opts.input),
     ),
   generateDocketRecordPdfInteractor: publicProcedure
     .input(request => {

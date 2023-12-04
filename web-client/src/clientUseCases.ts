@@ -34,7 +34,6 @@ import { createPractitionerUserInteractor } from '../../shared/src/proxies/pract
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { createUserInteractorLocal } from '../../shared/src/proxies/createUserInteractorLocalProxy';
 import { deleteAuthCookieInteractor } from '../../shared/src/proxies/auth/deleteAuthCookieProxy';
-import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteCaseNoteProxy';
 import { deleteCounselFromCaseInteractor } from '../../shared/src/proxies/caseAssociation/deleteCounselFromCaseProxy';
 import { deleteDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/deleteDeficiencyStatisticProxy';
@@ -265,7 +264,7 @@ export const allUseCases = {
   createTrialSessionInteractor,
   createUserInteractorLocal,
   deleteAuthCookieInteractor,
-  deleteCaseDeadlineInteractor,
+  deleteCaseDeadlineInteractor: trpcClient.deleteCaseDeadlineInteractor.mutate,
   deleteCaseNoteInteractor,
   deleteCounselFromCaseInteractor,
   deleteDeficiencyStatisticInteractor,

@@ -20,7 +20,7 @@ export const deleteCaseDeadlineAction = async ({
 
   const updatedCase = await applicationContext
     .getUseCases()
-    .deleteCaseDeadlineInteractor(applicationContext, {
+    .deleteCaseDeadlineInteractor({
       caseDeadlineId,
       docketNumber,
     });
