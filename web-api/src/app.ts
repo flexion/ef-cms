@@ -84,7 +84,6 @@ import { getCompletedMessagesForUserLambda } from './lambdas/messages/getComplet
 import { getCountOfCaseDocumentsFiledByJudgesLambda } from '@web-api/lambdas/reports/getCountOfCaseDocumentsFiledByJudgesLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { getDocumentContentsForDocketEntryInteractor } from '@shared/business/useCases/document/getDocumentContentsForDocketEntryInteractor';
-import { getDocumentDownloadUrlLambda } from './lambdas/documents/getDocumentDownloadUrlLambda';
 import { getDocumentQCInboxForSectionLambda } from './lambdas/workitems/getDocumentQCInboxForSectionLambda';
 import { getDocumentQCInboxForUserLambda } from './lambdas/workitems/getDocumentQCInboxForUserLambda';
 import { getDocumentQCServedForSectionLambda } from './lambdas/workitems/getDocumentQCServedForSectionLambda';
@@ -317,10 +316,10 @@ app.use(logger());
   //   '/case-documents/:documentContentsId/document-contents',
   //   lambdaWrapper(getDocumentContentsForDocketEntryLambda),
   // );
-  app.get(
-    '/case-documents/:docketNumber/:key/document-download-url',
-    lambdaWrapper(getDocumentDownloadUrlLambda),
-  );
+  // app.get(
+  //   '/case-documents/:docketNumber/:key/document-download-url',
+  //   lambdaWrapper(getDocumentDownloadUrlLambda),
+  // );
   app.get(
     '/case-documents/:docketNumber/:key/download-policy-url',
     lambdaWrapper(downloadPolicyUrlLambda),
