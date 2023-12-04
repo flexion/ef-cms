@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import {
   GetCustomCaseReportRequest,
   getCustomCaseReportInteractor,
@@ -166,7 +167,7 @@ import { unprioritizeCaseLambda } from './lambdas/cases/unprioritizeCaseLambda';
 import { unsealCaseLambda } from './lambdas/cases/unsealCaseLambda';
 import { unsealDocketEntryLambda } from './lambdas/documents/unsealDocketEntryLambda';
 import { updateCaseContextLambda } from './lambdas/cases/updateCaseContextLambda';
-import { updateCaseDeadlineLambda } from './lambdas/caseDeadline/updateCaseDeadlineLambda';
+import { updateCaseDeadlineInteractor } from '@shared/business/useCases/caseDeadline/updateCaseDeadlineInteractor';
 import { updateCaseDetailsLambda } from './lambdas/cases/updateCaseDetailsLambda';
 import { updateCaseTrialSortTagsLambda } from './lambdas/cases/updateCaseTrialSortTagsLambda';
 import { updateCaseWorksheetLambda } from '@web-api/lambdas/caseWorksheet/updateCaseWorksheetLambda';
@@ -288,10 +289,10 @@ app.use(logger());
  * case-deadlines
  */
 {
-  app.put(
-    '/case-deadlines/:docketNumber/:caseDeadlineId',
-    lambdaWrapper(updateCaseDeadlineLambda),
-  );
+  // app.put(
+  //   '/case-deadlines/:docketNumber/:caseDeadlineId',
+  //   lambdaWrapper(updateCaseDeadlineLambda),
+  // );
   app.delete(
     '/case-deadlines/:docketNumber/:caseDeadlineId',
     lambdaWrapper(deleteCaseDeadlineLambda),
@@ -1108,6 +1109,13 @@ export const appRouter = tRpcRouter({
       return request;
     })
     .query(() => swagger),
+  updateCaseDeadlineInteractor: publicProcedure
+    .input(request => {
+      return request as { caseDeadline: CaseDeadline };
+    })
+    .mutation(opts =>
+      updateCaseDeadlineInteractor(applicationContext, opts.input),
+    ),
 });
 
 // Export type router type signature,

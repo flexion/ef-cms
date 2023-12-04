@@ -163,7 +163,6 @@ import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritiz
 import { unsealCaseInteractor } from '../../shared/src/proxies/unsealCaseProxy';
 import { unsealDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/unsealDocketEntryProxy';
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
-import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseDetailsInteractor } from '../../shared/src/proxies/updateCaseDetailsProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { updateCaseWorksheetInteractor } from '@shared/proxies/caseWorksheet/updateCaseWorksheetProxy';
@@ -400,7 +399,7 @@ export const allUseCases = {
   unsealCaseInteractor,
   unsealDocketEntryInteractor,
   updateCaseContextInteractor,
-  updateCaseDeadlineInteractor,
+  updateCaseDeadlineInteractor: trpcClient.updateCaseDeadlineInteractor.mutate,
   updateCaseDetailsInteractor,
   updateCaseTrialSortTagsInteractor,
   updateCaseWorksheetInteractor,

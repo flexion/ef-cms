@@ -28,7 +28,7 @@ export const updateCaseDeadlineAction = async ({
 
   let updateCaseDeadlineResult = await applicationContext
     .getUseCases()
-    .updateCaseDeadlineInteractor(applicationContext, {
+    .updateCaseDeadlineInteractor({
       caseDeadline,
     });
 
