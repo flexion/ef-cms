@@ -24,7 +24,6 @@ import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDo
 import { completeMessageInteractor } from '../../shared/src/proxies/messages/completeMessageProxy';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { confirmSignUpLocalInteractor } from '../../shared/src/proxies/auth/confirmSignUpLocalProxy';
-import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createJudgeUserInteractor } from '../../shared/src/proxies/judges/createJudgeUserProxy';
@@ -252,7 +251,7 @@ export const allUseCases = {
   completeMessageInteractor,
   completeWorkItemInteractor,
   confirmSignUpLocalInteractor,
-  createCaseDeadlineInteractor,
+  createCaseDeadlineInteractor: trpcClient.createCaseDeadlineInteractor.mutate,
   createCaseFromPaperInteractor,
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor:

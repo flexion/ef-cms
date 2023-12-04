@@ -31,7 +31,7 @@ import { completeMessageLambda } from './lambdas/messages/completeMessageLambda'
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
 import { confirmSignUpLocalLambda } from './auth/confirmSignUpLocalLambda';
 import { createApplicationContext } from './applicationContext';
-import { createCaseDeadlineLambda } from './lambdas/caseDeadline/createCaseDeadlineLambda';
+import { createCaseDeadlineInteractor } from '@shared/business/useCases/caseDeadline/createCaseDeadlineInteractor';
 import { createCaseFromPaperLambda } from './lambdas/cases/createCaseFromPaperLambda';
 import { createCaseLambda } from './lambdas/cases/createCaseLambda';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '@shared/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor';
@@ -297,10 +297,10 @@ app.use(logger());
   //   '/case-deadlines/:docketNumber/:caseDeadlineId',
   //   lambdaWrapper(deleteCaseDeadlineLambda),
   // );
-  app.post(
-    '/case-deadlines/:docketNumber',
-    lambdaWrapper(createCaseDeadlineLambda),
-  );
+  // app.post(
+  //   '/case-deadlines/:docketNumber',
+  //   lambdaWrapper(createCaseDeadlineLambda),
+  // );
   app.get(
     '/case-deadlines/:docketNumber',
     lambdaWrapper(getCaseDeadlinesForCaseLambda),
@@ -1060,6 +1060,13 @@ export const tRpcRouter = tRpc.router;
 export const publicProcedure = tRpc.procedure;
 
 export const appRouter = tRpcRouter({
+  createCaseDeadlineInteractor: publicProcedure
+    .input(request => {
+      return request as { caseDeadline: CaseDeadline };
+    })
+    .mutation(opts =>
+      createCaseDeadlineInteractor(applicationContext, opts.input),
+    ),
   createCourtIssuedOrderPdfFromHtmlInteractor: publicProcedure
     .input(request => {
       return request as {
