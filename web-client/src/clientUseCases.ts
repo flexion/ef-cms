@@ -65,7 +65,6 @@ import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/tri
 import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
 import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getBlockedCasesProxy';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
-import { getCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesProxy';
 import { getCaseExistsInteractor } from '../../shared/src/proxies/getCaseExistsProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
@@ -299,7 +298,7 @@ export const allUseCases = {
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor:
     trpcClient.getCaseDeadlinesForCaseInteractor.query,
-  getCaseDeadlinesInteractor,
+  getCaseDeadlinesInteractor: trpcClient.getCaseDeadlinesInteractor.query,
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,

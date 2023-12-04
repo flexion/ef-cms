@@ -72,7 +72,7 @@ import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFla
 import { getBlockedCasesLambda } from './lambdas/reports/getBlockedCasesLambda';
 import { getCalendaredCasesForTrialSessionLambda } from './lambdas/trialSessions/getCalendaredCasesForTrialSessionLambda';
 import { getCaseDeadlinesForCaseInteractor } from '@shared/business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor';
-import { getCaseDeadlinesLambda } from './lambdas/caseDeadline/getCaseDeadlinesLambda';
+import { getCaseDeadlinesInteractor } from '@shared/business/useCases/getCaseDeadlinesInteractor';
 import { getCaseExistsLambda } from './lambdas/cases/getCaseExistsLambda';
 import { getCaseInventoryReportLambda } from './lambdas/reports/getCaseInventoryReportLambda';
 import { getCaseLambda } from './lambdas/cases/getCaseLambda';
@@ -305,7 +305,7 @@ app.use(logger());
   //   '/case-deadlines/:docketNumber',
   //   lambdaWrapper(getCaseDeadlinesForCaseLambda),
   // );
-  app.get('/case-deadlines', lambdaWrapper(getCaseDeadlinesLambda));
+  // app.get('/case-deadlines', lambdaWrapper(getCaseDeadlinesLambda));
 }
 
 /**
@@ -1109,6 +1109,17 @@ export const appRouter = tRpcRouter({
     .query(opts =>
       getCaseDeadlinesForCaseInteractor(applicationContext, opts.input),
     ),
+  getCaseDeadlinesInteractor: publicProcedure
+    .input(request => {
+      return request as {
+        endDate: string;
+        from: number;
+        judge: string;
+        pageSize: number;
+        startDate;
+      };
+    })
+    .query(opts => getCaseDeadlinesInteractor(applicationContext, opts.input)),
   getCustomCaseReportInteractor: publicProcedure
     .input(request => {
       return request as GetCustomCaseReportRequest;

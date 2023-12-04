@@ -18,7 +18,7 @@ export const getCaseDeadlinesAction = async ({
 
   const { deadlines, totalCount } = await applicationContext
     .getUseCases()
-    .getCaseDeadlinesInteractor(applicationContext, {
+    .getCaseDeadlinesInteractor({
       endDate,
       judge: judgeFilter,
       page,
