@@ -83,7 +83,7 @@ import { getCompletedMessagesForSectionLambda } from './lambdas/messages/getComp
 import { getCompletedMessagesForUserLambda } from './lambdas/messages/getCompletedMessagesForUserLambda';
 import { getCountOfCaseDocumentsFiledByJudgesLambda } from '@web-api/lambdas/reports/getCountOfCaseDocumentsFiledByJudgesLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
-import { getDocumentContentsForDocketEntryLambda } from './lambdas/documents/getDocumentContentsForDocketEntryLambda';
+import { getDocumentContentsForDocketEntryInteractor } from '@shared/business/useCases/document/getDocumentContentsForDocketEntryInteractor';
 import { getDocumentDownloadUrlLambda } from './lambdas/documents/getDocumentDownloadUrlLambda';
 import { getDocumentQCInboxForSectionLambda } from './lambdas/workitems/getDocumentQCInboxForSectionLambda';
 import { getDocumentQCInboxForUserLambda } from './lambdas/workitems/getDocumentQCInboxForUserLambda';
@@ -313,10 +313,10 @@ app.use(logger());
  */
 {
   //GET
-  app.get(
-    '/case-documents/:documentContentsId/document-contents',
-    lambdaWrapper(getDocumentContentsForDocketEntryLambda),
-  );
+  // app.get(
+  //   '/case-documents/:documentContentsId/document-contents',
+  //   lambdaWrapper(getDocumentContentsForDocketEntryLambda),
+  // );
   app.get(
     '/case-documents/:docketNumber/:key/document-download-url',
     lambdaWrapper(getDocumentDownloadUrlLambda),
@@ -1126,6 +1126,16 @@ export const appRouter = tRpcRouter({
     })
     .query(opts =>
       getCustomCaseReportInteractor(applicationContext, opts.input),
+    ),
+  getDocumentContentsForDocketEntryInteractor: publicProcedure
+    .input(request => {
+      return request as { documentContentsId: string };
+    })
+    .query(opts =>
+      getDocumentContentsForDocketEntryInteractor(
+        applicationContext,
+        opts.input,
+      ),
     ),
   getNotificationsInteractor: publicProcedure
     .input(request => {

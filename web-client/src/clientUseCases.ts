@@ -74,7 +74,6 @@ import { getCasesForUserInteractor } from '../../shared/src/proxies/getCasesForU
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/proxies/reports/getCountOfCaseDocumentsFiledByJudgesProxy';
-import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/proxies/documents/getDocumentContentsForDocketEntryProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
 import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
 import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForUserProxy';
@@ -309,7 +308,8 @@ export const allUseCases = {
   getCompletedMessagesForUserInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
   getCustomCaseReportInteractor: trpcClient.getCustomCaseReportInteractor.query,
-  getDocumentContentsForDocketEntryInteractor,
+  getDocumentContentsForDocketEntryInteractor:
+    trpcClient.getDocumentContentsForDocketEntryInteractor.query,
   getDocumentDownloadUrlInteractor,
   getDocumentQCInboxForSectionInteractor,
   getDocumentQCInboxForUserInteractor,
