@@ -50,7 +50,6 @@ import { deletePractitionerDocumentLambda } from './lambdas/practitioners/delete
 import { deleteTrialSessionLambda } from './lambdas/trialSessions/deleteTrialSessionLambda';
 import { deleteUserCaseNoteLambda } from './lambdas/caseNote/deleteUserCaseNoteLambda';
 import { dismissNOTTReminderForTrialLambda } from './lambdas/trialSessions/dismissNOTTReminderForTrialLambda';
-import { downloadPolicyUrlLambda } from './lambdas/documents/downloadPolicyUrlLambda';
 import { editPaperFilingLambda } from './lambdas/documents/editPaperFilingLambda';
 import { editPractitionerDocumentLambda } from './lambdas/practitioners/editPractitionerDocumentLambda';
 import { fetchPendingItemsLambda } from './lambdas/pendingItems/fetchPendingItemsLambda';
@@ -88,6 +87,7 @@ import { getDocumentQCInboxForSectionLambda } from './lambdas/workitems/getDocum
 import { getDocumentQCInboxForUserLambda } from './lambdas/workitems/getDocumentQCInboxForUserLambda';
 import { getDocumentQCServedForSectionLambda } from './lambdas/workitems/getDocumentQCServedForSectionLambda';
 import { getDocumentQCServedForUserLambda } from './lambdas/workitems/getDocumentQCServedForUserLambda';
+import { getDownloadPolicyUrlInteractor } from '@shared/business/useCases/getDownloadPolicyUrlInteractor';
 import { getEligibleCasesForTrialSessionLambda } from './lambdas/trialSessions/getEligibleCasesForTrialSessionLambda';
 import { getGeneratePrintableTrialSessionCopyReportLambda } from './lambdas/trialSessions/getGeneratePrintableTrialSessionCopyReportLambda';
 import { getInboxMessagesForSectionLambda } from './lambdas/messages/getInboxMessagesForSectionLambda';
@@ -320,10 +320,10 @@ app.use(logger());
   //   '/case-documents/:docketNumber/:key/document-download-url',
   //   lambdaWrapper(getDocumentDownloadUrlLambda),
   // );
-  app.get(
-    '/case-documents/:docketNumber/:key/download-policy-url',
-    lambdaWrapper(downloadPolicyUrlLambda),
-  );
+  // app.get(
+  //   '/case-documents/:docketNumber/:key/download-policy-url',
+  //   lambdaWrapper(downloadPolicyUrlLambda),
+  // );
   app.get(
     '/case-documents/opinion-search',
     ipLimiter({
@@ -1135,6 +1135,13 @@ export const appRouter = tRpcRouter({
         applicationContext,
         opts.input,
       ),
+    ),
+  getDownloadPolicyUrlInteractor: publicProcedure
+    .input(request => {
+      return request as { docketNumber: string; key: string };
+    })
+    .query(opts =>
+      getDownloadPolicyUrlInteractor(applicationContext, opts.input),
     ),
   getNotificationsInteractor: publicProcedure
     .input(request => {
