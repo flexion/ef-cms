@@ -16,7 +16,7 @@ export const getCaseDeadlinesForCaseAction = async ({
 
   const caseDeadlines = await applicationContext
     .getUseCases()
-    .getCaseDeadlinesForCaseInteractor(applicationContext, {
+    .getCaseDeadlinesForCaseInteractor({
       docketNumber,
     });
 
