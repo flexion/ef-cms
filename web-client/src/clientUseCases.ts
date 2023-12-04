@@ -54,7 +54,6 @@ import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCa
 import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { forwardMessageInteractor } from '../../shared/src/proxies/messages/forwardMessageProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
-import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/generateDocketRecordPdfProxy';
 import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/documents/generateDraftStampOrderProxy';
 import { generateEntryOfAppearancePdfInteractor } from '../../shared/src/proxies/caseAssociation/generateEntryOfAppearancePdfProxy';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
@@ -287,7 +286,8 @@ export const allUseCases = {
   filePetitionInteractor,
   forwardMessageInteractor,
   generateCaseAssociationDocumentTitleInteractor,
-  generateDocketRecordPdfInteractor,
+  generateDocketRecordPdfInteractor:
+    trpcClient.generateDocketRecordPdfInteractor.query,
   generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
   generatePDFFromJPGDataInteractor,

@@ -14,7 +14,7 @@ import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
  * @returns {Uint8Array} docket record pdf
  */
 export const generateDocketRecordPdfInteractor = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   {
     docketNumber,
     docketRecordSort,

@@ -59,7 +59,7 @@ import { fileCourtIssuedDocketEntryLambda } from './lambdas/documents/fileCourtI
 import { fileCourtIssuedOrderToCaseLambda } from './lambdas/documents/fileCourtIssuedOrderToCaseLambda';
 import { fileExternalDocumentToCaseLambda } from './lambdas/documents/fileExternalDocumentToCaseLambda';
 import { forwardMessageLambda } from './lambdas/messages/forwardMessageLambda';
-import { generateDocketRecordPdfLambda } from './lambdas/cases/generateDocketRecordPdfLambda';
+import { generateDocketRecordPdfInteractor } from '@shared/business/useCases/generateDocketRecordPdfInteractor';
 import { generateDraftStampOrderLambda } from './lambdas/documents/generateDraftStampOrderLambda';
 import { generateEntryOfAppearancePdfLambda } from '@web-api/lambdas/caseAssociations/generateEntryOfAppearancePdfLambda';
 import { generatePractitionerCaseListPdfLambda } from './lambdas/cases/generatePractitionerCaseListPdfLambda';
@@ -278,10 +278,10 @@ app.use(logger());
   //   '/api/court-issued-order',
   //   lambdaWrapper(createCourtIssuedOrderPdfFromHtmlLambda),
   // );
-  app.post(
-    '/api/docket-record-pdf',
-    lambdaWrapper(generateDocketRecordPdfLambda),
-  );
+  // app.post(
+  //   '/api/docket-record-pdf',
+  //   lambdaWrapper(generateDocketRecordPdfLambda),
+  // );
 }
 
 /**
@@ -1074,6 +1074,18 @@ export const appRouter = tRpcRouter({
         applicationContext,
         opts.input,
       ),
+    ),
+  generateDocketRecordPdfInteractor: publicProcedure
+    .input(request => {
+      return request as {
+        docketNumber: string;
+        docketRecordSort?: string;
+        includePartyDetail: boolean;
+        isIndirectlyAssociated?: boolean;
+      };
+    })
+    .query(opts =>
+      generateDocketRecordPdfInteractor(applicationContext, opts.input),
     ),
   getCustomCaseReportInteractor: publicProcedure
     .input(request => {
