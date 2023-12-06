@@ -21,6 +21,7 @@ export const prioritizeCase = async (
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PRIORITIZE_CASE)) {
+    console.log('');
     throw new UnauthorizedError('Unauthorized');
   }
 
