@@ -1,7 +1,7 @@
 name: Node.js CI - Shared
 
 on:
-  pull_request:
+  pull_request: 
 
 jobs:
   Shared:
