@@ -2191,7 +2191,6 @@ export const userIsDirectlyAssociated = function ({ aCase, userId }) {
  */
 export const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
   const contactPrimary = getContactPrimary(rawCase);
-  const contactSecondary = getContactSecondary(rawCase);
 
   if (contactPrimary && !contactPrimary.additionalName) {
     const contactPrimaryRef = obj.petitioners.find(
@@ -2226,18 +2225,6 @@ export const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
       }
       default:
         break;
-    }
-  }
-
-  if (contactSecondary && !contactSecondary.additionalName) {
-    const contactSecondaryRef = obj.petitioners.find(
-      p => p.contactId === contactSecondary.contactId,
-    );
-
-    switch (rawCase.partyType) {
-      case PARTY_TYPES.petitionerDeceasedSpouse:
-        contactSecondaryRef.additionalName = `c/o ${contactSecondaryRef.inCareOf}`;
-        delete contactSecondaryRef.inCareOf;
     }
   }
 };
