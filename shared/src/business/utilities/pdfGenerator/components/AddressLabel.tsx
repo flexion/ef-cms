@@ -1,7 +1,6 @@
 import React from 'react';
 
 export const AddressLabel = ({
-  additionalName,
   address1,
   address2,
   address3,
@@ -11,7 +10,6 @@ export const AddressLabel = ({
   inCareOf,
   name,
   postalCode,
-  secondaryName,
   state,
   title,
 }) => {
@@ -21,14 +19,7 @@ export const AddressLabel = ({
         {'@media print{@page {margin-bottom: 2cm}}'}
       </style>
       <div>{name}</div>
-      {additionalName && <div>c/o {additionalName}</div>}
-      {!additionalName && secondaryName && (
-        <div>
-          c/o {secondaryName}
-          {title && <span>, {title}</span>}
-        </div>
-      )}
-      {!additionalName && inCareOf && (
+      {inCareOf && (
         <div>
           c/o {inCareOf}
           {title && <span>, {title}</span>}

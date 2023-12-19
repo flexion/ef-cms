@@ -2198,15 +2198,21 @@ export const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
     );
 
     switch (rawCase.partyType) {
-      case PARTY_TYPES.conservator:
+      case PARTY_TYPES.conservator: // assuming these are all c/o relationships
       case PARTY_TYPES.custodian:
       case PARTY_TYPES.guardian:
       case PARTY_TYPES.nextFriendForIncompetentPerson:
       case PARTY_TYPES.nextFriendForMinor:
       case PARTY_TYPES.partnershipOtherThanTaxMatters:
-      case PARTY_TYPES.partnershipBBA:
       case PARTY_TYPES.survivingSpouse:
+      case PARTY_TYPES.estateWithoutExecutor:
+      case PARTY_TYPES.corporation:
+      case PARTY_TYPES.petitionerDeceasedSpouse:
       case PARTY_TYPES.trust:
+        contactPrimaryRef.inCareOf =
+          contactPrimaryRef.inCareOf ?? contactPrimaryRef.secondaryName;
+        break;
+      case PARTY_TYPES.partnershipBBA: // assuming this is a non-c/o relationship
         contactPrimaryRef.additionalName = contactPrimaryRef.secondaryName;
         break;
       case PARTY_TYPES.estate: {
@@ -2217,11 +2223,6 @@ export const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
         contactPrimaryRef.additionalName = additionalNameFields.join(', ');
         break;
       }
-      case PARTY_TYPES.estateWithoutExecutor:
-      case PARTY_TYPES.corporation:
-      case PARTY_TYPES.petitionerDeceasedSpouse: // is this correct or a bug fix/hack?
-        contactPrimaryRef.additionalName = `c/o ${contactPrimaryRef.inCareOf}`;
-        break;
       default:
         break;
     }

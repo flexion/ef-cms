@@ -120,17 +120,13 @@ export const AddressDisplay = connect(
               <br />
             </>
           )}
-          {contact.additionalName}
-          {!contact.additionalName &&
-            [contact.secondaryName, contact.inCareOf].map(
-              contactName =>
-                contactName && (
-                  <span key={contactName}>
-                    c/o {contactName}
-                    {contact.title && <span>, {contact.title}</span>}
-                  </span>
-                ),
-            )}
+          {contact.additionalName && contact.additionalName}
+          {contact.inCareOf && (
+            <span key={contact.inCareOf}>
+              c/o {contact.inCareOf}
+              {contact.title && <span>, {contact.title}</span>}
+            </span>
+          )}
         </p>
         {!contact.sealedAndUnavailable && contactDetails()}
         {contact.sealedAndUnavailable && (
