@@ -22,13 +22,13 @@ export const AddressLabel = ({
       </style>
       <div>{name}</div>
       {additionalName && <div>c/o {additionalName}</div>}
-      {secondaryName && (
+      {!additionalName && secondaryName && (
         <div>
           c/o {secondaryName}
           {title && <span>, {title}</span>}
         </div>
       )}
-      {inCareOf && (
+      {!additionalName && inCareOf && (
         <div>
           c/o {inCareOf}
           {title && <span>, {title}</span>}

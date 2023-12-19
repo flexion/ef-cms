@@ -2205,29 +2205,22 @@ export const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
       case PARTY_TYPES.nextFriendForMinor:
       case PARTY_TYPES.partnershipOtherThanTaxMatters:
       case PARTY_TYPES.partnershipBBA:
+      case PARTY_TYPES.survivingSpouse:
       case PARTY_TYPES.trust:
         contactPrimaryRef.additionalName = contactPrimaryRef.secondaryName;
-        delete contactPrimaryRef.secondaryName;
         break;
-      case PARTY_TYPES.survivingSpouse:
-        contactPrimaryRef.additionalName = `c/o ${contactPrimaryRef.secondaryName}`;
-        delete contactPrimaryRef.secondaryName;
-        break;
-
       case PARTY_TYPES.estate: {
         const additionalNameFields = compact([
           contactPrimaryRef.secondaryName,
           contactPrimaryRef.title,
         ]);
         contactPrimaryRef.additionalName = additionalNameFields.join(', ');
-        delete contactPrimaryRef.secondaryName;
-        delete contactPrimaryRef.title;
         break;
       }
       case PARTY_TYPES.estateWithoutExecutor:
       case PARTY_TYPES.corporation:
+      case PARTY_TYPES.petitionerDeceasedSpouse: // is this correct or a bug fix/hack?
         contactPrimaryRef.additionalName = `c/o ${contactPrimaryRef.inCareOf}`;
-        delete contactPrimaryRef.inCareOf;
         break;
       default:
         break;
