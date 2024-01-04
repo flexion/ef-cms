@@ -40,6 +40,9 @@ export const getCasesForUserInteractor = async (
     })
   ).map(c => c.docketNumber);
 
+  // 500ms
+  applicationContext.logger.info('done getting cases for user');
+
   const allUserCases: TAssociatedCase[] = Case.validateRawCollection(
     await applicationContext.getPersistenceGateway().getCasesByDocketNumbers({
       applicationContext,
@@ -50,11 +53,15 @@ export const getCasesForUserInteractor = async (
     return { ...convertCaseToUserCaseDTO(c), isRequestingUserAssociated: true };
   });
 
+  applicationContext.logger.info('done getting allUserCases'); // getting low on runway
+
   const nestedCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
     cases: allUserCases,
     userId,
   });
+
+  applicationContext.logger.info('done getting nestedCases');
 
   const openCases = nestedCases.filter(nestedCase => {
     return [nestedCase, ...(nestedCase.consolidatedCases || [])].some(
@@ -70,6 +77,8 @@ export const getCasesForUserInteractor = async (
 
   const sortedOpenCases = sortCases(openCases, 'open');
   const sortedClosedCases = sortCases(closedCases, 'closed');
+
+  applicationContext.logger.info('done processing');
 
   return { closedCaseList: sortedClosedCases, openCaseList: sortedOpenCases };
 };
