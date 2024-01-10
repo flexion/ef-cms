@@ -161,7 +161,31 @@ export const searchAll = async ({
     const hits = get(chunk, 'body.hits.hits', []);
 
     if (hits.length > 0) {
-      results = results.concat(hits);
+      // results = results.concat(hits.map(h => h.petitioners));
+      const formattedResults = formatResults({
+        hits: {
+          hits,
+        },
+      });
+      // console.log(formattedResults);
+      const arr: {}[] = [];
+      for (const hit of formattedResults.results) {
+        if (hit.petitioners) {
+          for (const p of hit.petitioners) {
+            if (
+              'additionalName' in p &&
+              p.additionalName &&
+              p.additionalName.length >= 100
+            ) {
+              // const key = hit.docketNumber;
+              arr.push(`${hit.docketNumber}:${p.additionalName}`);
+            }
+          }
+        }
+      }
+      if (arr.length) {
+        console.log(arr);
+      }
       search_after = hits[hits.length - 1].sort;
     }
     i += size; // this avoids an endless loop if expected is somehow greater than the sum of all hits
