@@ -1,0 +1,15 @@
+{
+  "exclude": ["packages"],
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "module": "node16",
+    "target": "ES2022",
+    "jsx": "react",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "outDir": "dist",
+    "strictNullChecks": true,
+    "esModuleInterop": true
+  },
+  "include": ["./src/**/*.ts"]
+}

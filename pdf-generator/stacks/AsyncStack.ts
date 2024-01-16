@@ -19,12 +19,6 @@ export function AsyncStack({ stack }: StackContext) {
   // });
 
   new Function(stack, 'PDFGeneration', {
-    copyFiles: [
-      {
-        from: '../node_modules/@sparticuz/chromium/bin',
-        to: 'bin',
-      },
-    ],
     handler: 'src/pdf-generation.handler',
     memorySize: 3000,
     nodejs: {

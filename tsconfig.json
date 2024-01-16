@@ -28,6 +28,7 @@
     "./web-api/src/**/*",
     "./shared/src/**/*",
     "./web-client/src/**/*",
+    "./pdf-generation/src/**/*",
     "./web-client/integration-tests/**/*",
     "./web-client/integration-tests-public/**/*",
     "./shared/admin-tools/dynamodb/import-case-status-changes-from-csv.ts",
