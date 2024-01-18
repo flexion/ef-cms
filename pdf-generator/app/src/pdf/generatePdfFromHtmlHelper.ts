@@ -1,20 +1,9 @@
 import { combineTwoPdfs } from './combineTwoPdfs';
 import { generatePageMetaHeaderDocket } from './generatePageMetaHeaderDocket';
 import { headerFontFace } from './headerFontFace';
-// import puppeteerCore from 'puppeteer-core';
-// import { getEnv } from '../config/getEnv';
 import puppeteer from 'puppeteer-core';
 const chromium = require('@sparticuz/chromium');
 
-/**
- * generatePdfFromHtmlHelper
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.contentHtml the html content for the pdf
- * @param {boolean} providers.displayHeaderFooter boolean to determine if the header and footer should be displayed
- * @returns {Buffer} the pdf as a binary buffer
- */
 export const generatePdfFromHtmlHelper = async ({
   contentHtml,
   displayHeaderFooter = true,
@@ -25,10 +14,10 @@ export const generatePdfFromHtmlHelper = async ({
 }: {
   contentHtml: string;
   displayHeaderFooter: boolean;
-  docketNumber: string;
-  footerHtml: string;
-  headerHtml: string;
-  overwriteFooter: boolean;
+  docketNumber?: string;
+  footerHtml?: string;
+  headerHtml?: string;
+  overwriteFooter?: boolean;
 }) => {
   let browser: any | undefined;
   let result: any = null;

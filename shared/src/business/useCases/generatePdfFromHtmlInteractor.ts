@@ -26,6 +26,8 @@ export const generatePdfFromHtmlInteractor = async (
   const sendGenerateEvent =
     featureFlags[ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key];
 
+  let key;
+
   if (sendGenerateEvent) {
     const { currentColor, region, stage } = applicationContext.environment;
     const client = new LambdaClient({
@@ -48,23 +50,34 @@ export const generatePdfFromHtmlInteractor = async (
     const response = await client.send(command);
     const textDecoder = new TextDecoder('utf-8');
     const responseStr = textDecoder.decode(response.Payload);
-    const key = JSON.parse(responseStr);
-    return await applicationContext.getPersistenceGateway().getDocument({
-      applicationContext,
-      key,
-      useTempBucket: true,
-    });
+    key = JSON.parse(responseStr);
   } else {
-    const ret = await applicationContext
-      .getUseCaseHelpers()
-      .generatePdfFromHtmlHelper(applicationContext, {
-        contentHtml,
-        displayHeaderFooter,
-        docketNumber,
-        footerHtml,
-        headerHtml,
-        overwriteFooter,
-      });
-    return ret;
+    key = await fetch(
+      'http://localhost:8333/2015-03-31/functions/function/invocations',
+      {
+        body: JSON.stringify({
+          body: JSON.stringify({
+            contentHtml,
+            displayHeaderFooter,
+            docketNumber,
+            footerHtml,
+            headerHtml,
+            overwriteFooter,
+          }),
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      },
+    ).then(r => {
+      return r.json();
+    });
   }
+
+  return await applicationContext.getPersistenceGateway().getDocument({
+    applicationContext,
+    key,
+    useTempBucket: true,
+  });
 };

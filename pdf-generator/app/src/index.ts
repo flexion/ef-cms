@@ -5,15 +5,14 @@ import { z } from 'zod';
 
 export async function handler(event: any) {
   const body = JSON.parse(event.body ?? '{}') as any;
-  console.log(body);
 
   const bodySchema = z.object({
     contentHtml: z.string(),
     displayHeaderFooter: z.boolean(),
-    docketNumber: z.string(),
-    footerHtml: z.string(),
-    headerHtml: z.string(),
-    overwriteFooter: z.boolean(),
+    docketNumber: z.string().optional(),
+    footerHtml: z.string().optional(),
+    headerHtml: z.string().optional(),
+    overwriteFooter: z.boolean().optional(),
   });
 
   const parsedBody = bodySchema.parse(body);
@@ -21,7 +20,6 @@ export async function handler(event: any) {
   const results = await generatePdfFromHtmlHelper(parsedBody);
 
   const tempId = uuidv4();
-  console.log('saving document');
 
   await saveTemporaryDocument({
     document: results,

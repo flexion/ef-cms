@@ -12,6 +12,5 @@ export function getS3Client() {
       secretAccessKey: getEnv().AWS_SECRET_ACCESS_KEY,
     };
   }
-  console.log('config', config);
   return new S3Client(config);
 }
