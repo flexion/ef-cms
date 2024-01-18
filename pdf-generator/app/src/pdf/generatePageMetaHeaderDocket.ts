@@ -1,6 +1,6 @@
 import babelRegister from '@babel/register';
 
-import { PageMetaHeaderDocket } from './PageMetaHeaderDocket.tsx';
+import { PageMetaHeaderDocket } from './PageMetaHeaderDocket';
 
 import React from 'react';
 import ReactDOM from 'react-dom/server';

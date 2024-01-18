@@ -1,15 +1,14 @@
 {
-  "exclude": ["packages"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
     "lib": ["ES2022"],
     "module": "node16",
     "target": "ES2022",
     "jsx": "react",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "outDir": "dist",
+    "baseUrl": "./",
+    "outDir": "./app/dist",
     "strictNullChecks": true,
     "esModuleInterop": true
   },
-  "include": ["./src/**/*.ts"]
+  "include": ["./app/src/**/*.ts"]
 }

@@ -1,6 +1,12 @@
 import * as pdfLib from 'pdf-lib';
 
-export const combineTwoPdfs = async ({ firstPdf, secondPdf }) => {
+export const combineTwoPdfs = async ({
+  firstPdf,
+  secondPdf,
+}: {
+  firstPdf: Uint8Array;
+  secondPdf: Uint8Array;
+}) => {
   const { PDFDocument } = pdfLib;
 
   const fullDocument = await PDFDocument.create();

@@ -6,24 +6,22 @@
   "scripts": {
     "test:integration": "vitest test/integration.test.ts",
     "build": "./build.sh",
-    "local": "docker run --platform linux/amd64 -p 8333:8080 docker-image:pdf-generator",
-    "invoke": "curl -XPOST \"http://localhost:8333/2015-03-31/functions/function/invocations\" -d '{\"payload\":\"hello world!\"}'"
+    "deploy": "sst deploy --stage prod",
+    "local": "docker run --env AWS_ACCESS_KEY_ID=S3RVER --env AWS_SECRET_ACCESS_KEY=S3RVER --env \"S3_ENDPOINT=http://10.0.0.96:9000\" --platform linux/amd64 -p 8333:8080 docker-image:pdf-generator",
+    "compile": "tsc",
+    "invoke": "tsx invoke.ts"
   },
   "keywords": [],
   "author": "",
   "license": "CC0-1.0",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.490.0",
-    "@babel/register": "^7.23.7",
-    "pdf-lib": "^1.17.1",
-    "puppeteer": "^21.7.0",
-    "puppeteer-core": "^21.7.0",
-    "sass": "^1.69.7",
-    "uuid": "^9.0.1",
-    "zod": "^3.22.4"
+    "@aws-sdk/client-s3": "^3.490.0"
   },
   "devDependencies": {
-    "dotenv": "^16.3.1",
+    "aws-cdk-lib": "2.110.1",
+    "constructs": "10.3.0",
+    "sst": "2.39.6",
+    "tsx": "^4.7.0",
     "vitest": "^1.2.0"
   }
 }

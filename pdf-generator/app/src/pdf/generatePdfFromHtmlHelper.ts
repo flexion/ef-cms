@@ -1,9 +1,11 @@
-import { Browser } from 'puppeteer';
 import { combineTwoPdfs } from './combineTwoPdfs';
 import { generatePageMetaHeaderDocket } from './generatePageMetaHeaderDocket';
 import { headerFontFace } from './headerFontFace';
 // import puppeteerCore from 'puppeteer-core';
-import puppeteer from 'puppeteer';
+// import { getEnv } from '../config/getEnv';
+import puppeteer from 'puppeteer-core';
+const chromium = require('@sparticuz/chromium');
+
 /**
  * generatePdfFromHtmlHelper
  * @param {object} applicationContext the application context
@@ -28,12 +30,15 @@ export const generatePdfFromHtmlHelper = async ({
   headerHtml: string;
   overwriteFooter: boolean;
 }) => {
-  let browser: Browser | undefined;
+  let browser: any | undefined;
   let result: any = null;
 
   try {
     browser = await puppeteer.launch({
-      headless: 'new',
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
     });
 
     let page = await browser?.newPage()!;

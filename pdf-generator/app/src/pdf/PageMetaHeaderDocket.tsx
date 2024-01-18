@@ -4,6 +4,9 @@ export const PageMetaHeaderDocket = ({
   docketNumber,
   // do not set this to true unless the content of the PDF also is rendering the century schoolbook font; there is a puppeteer documented here https://github.com/puppeteer/puppeteer/issues/422#issuecomment-759424240
   useCenturySchoolbookFont = false,
+}: {
+  docketNumber: string;
+  useCenturySchoolbookFont?: boolean;
 }) => {
   return (
     <div style={{ position: 'relative', top: '-20px' }}>

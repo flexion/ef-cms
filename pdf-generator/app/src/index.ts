@@ -1,13 +1,11 @@
-import { APIGatewayProxyEvent } from 'aws-lambda';
 import { generatePdfFromHtmlHelper } from './pdf/generatePdfFromHtmlHelper';
 import { saveTemporaryDocument } from './s3/saveTemporaryDocument';
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 
-export async function handler(event: APIGatewayProxyEvent) {
-  console.log('event', event);
-
+export async function handler(event: any) {
   const body = JSON.parse(event.body ?? '{}') as any;
+  console.log(body);
 
   const bodySchema = z.object({
     contentHtml: z.string(),
@@ -23,6 +21,7 @@ export async function handler(event: APIGatewayProxyEvent) {
   const results = await generatePdfFromHtmlHelper(parsedBody);
 
   const tempId = uuidv4();
+  console.log('saving document');
 
   await saveTemporaryDocument({
     document: results,
