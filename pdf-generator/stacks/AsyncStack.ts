@@ -24,7 +24,7 @@ export function AsyncStack({ stack }: StackContext) {
   const bucket = new Bucket(stack, 'ATempBucket');
 
   const lambdaFunction = new lambda.DockerImageFunction(stack, 'PDFGenerator', {
-    code: lambda.DockerImageCode.fromImageAsset('./app'),
+    code: lambda.DockerImageCode.fromImageAsset('.'),
     memorySize: 2048,
     timeout: Duration.seconds(30),
   });

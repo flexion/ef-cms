@@ -1,14 +1,18 @@
 {
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "lib": ["ES2022"],
+    "lib": ["es2023"],
     "module": "node16",
-    "target": "ES2022",
+    "target": "es2022",
     "jsx": "react",
     "baseUrl": "./",
-    "outDir": "./app/dist",
+    "outDir": "./dist",
     "strictNullChecks": true,
-    "esModuleInterop": true
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node16",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
-  "include": ["./app/src/**/*.ts"]
+  "include": ["./src/**/*.ts"]
 }

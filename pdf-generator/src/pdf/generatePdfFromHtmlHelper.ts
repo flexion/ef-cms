@@ -1,8 +1,10 @@
 import { combineTwoPdfs } from './combineTwoPdfs';
 import { generatePageMetaHeaderDocket } from './generatePageMetaHeaderDocket';
 import { headerFontFace } from './headerFontFace';
+import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core';
-const chromium = require('@sparticuz/chromium');
+
+chromium.setGraphicsMode = false;
 
 export const generatePdfFromHtmlHelper = async ({
   contentHtml,
