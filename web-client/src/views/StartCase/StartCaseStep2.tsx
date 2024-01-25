@@ -176,9 +176,9 @@ export const StartCaseStep2 = connect(
                     customClassName="usa-file-input"
                     id="atp-files-upload"
                     multiple={'multiple'}
-                    name="atpFiles"
+                    name="attachmentToPetitionFiles"
                     updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
-                    validationSequence="validateExternalDocumentInformationSequence"
+                    validationSequence="validateStartCaseWizardSequence"
                   />
                 </FormGroup>
               </>

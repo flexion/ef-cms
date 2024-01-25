@@ -80,19 +80,22 @@ export const StartCaseStep5 = connect(
                             </div>
                           </div>
                         </div>
-                        {!!form.atpFiles?.length && (
+                        {!!form.attachmentToPetitionFiles?.length && (
                           <div className="grid-row margin-top-3">
                             <div className="grid-col">
                               <span className="usa-label usa-label-display">
                                 IRS notice(s)
                               </span>
-                              {form.atpFiles.map(atpFile => {
+                              {form.attachmentToPetitionFiles.map(atpFile => {
                                 return (
-                                  <div className="grid-row" key={atpFile.name}>
+                                  <div
+                                    className="grid-row"
+                                    key={atpFile.file.name}
+                                  >
                                     <div className="grid-col flex-auto">
                                       <PDFPreviewButton
                                         data-testid="petition-preview-button"
-                                        file={atpFile}
+                                        file={atpFile.file}
                                         id="petition-preview-button"
                                         shouldAbbreviateTitle={false}
                                         shouldWrapText={true}

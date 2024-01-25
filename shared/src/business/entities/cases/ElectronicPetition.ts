@@ -16,6 +16,8 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import { getContactPrimary, getContactSecondary } from './Case';
 import joi from 'joi';
 
+export type AttachmentToPetitionFileType = { file: File; fileSize: number }[];
+
 /**
  * Represents a Case with required documents that a Petitioner is attempting to
  * add to the system.
@@ -36,12 +38,12 @@ export class ElectronicPetition extends JoiValidationEntity {
   public procedureType: string;
   public stinFile?: object;
   public stinFileSize?: number;
-  public atpFiles: File[];
+  public attachmentToPetitionFiles: AttachmentToPetitionFileType;
 
   constructor(rawCase, { applicationContext }) {
     super('ElectronicPetition');
 
-    this.atpFiles = rawCase.atpFiles;
+    this.attachmentToPetitionFiles = rawCase.attachmentToPetitionFiles;
     this.businessType = rawCase.businessType;
     this.caseType = rawCase.caseType;
     this.countryType = rawCase.countryType;
@@ -77,9 +79,31 @@ export class ElectronicPetition extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
-    atpFiles: joi
+    attachmentToPetitionFiles: joi
       .array()
-      .items(joi.object().optional().messages({ '*': 'Upload your notices' })), // todo: confirm validation message
+      .items(
+        joi
+          .object()
+          .keys({
+            file: joi.object().required(),
+            fileSize: joi
+              .number()
+              .integer()
+              .min(1)
+              .max(MAX_FILE_SIZE_BYTES)
+              .required(),
+          })
+          .required()
+          .messages({ '*': 'Please upload some attachments' }), // todo: confirm validation message
+      )
+      .when('hasIrsNotice', {
+        is: true,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      })
+      .messages({
+        'any.required': 'Upload supporting documents for notices', // ui question: is this the correct message?
+      }),
     businessType: JoiValidationConstants.STRING.valid(
       ...Object.values(BUSINESS_TYPES),
     )

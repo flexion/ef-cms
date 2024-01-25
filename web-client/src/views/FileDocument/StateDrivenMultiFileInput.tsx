@@ -1,8 +1,8 @@
+import { AttachmentToPetitionFileType } from '@shared/business/entities/cases/ElectronicPetition';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cloneFile } from '../cloneFile';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { limitFileSize } from '../limitFileSize';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -54,29 +54,24 @@ export const StateDrivenMultiFileInput = connect(
           }}
           type="file"
           onChange={e => {
-            const { name: inputName } = e.target;
-            let validatedFiles = [];
-            Array.from(e.target.files!).forEach(capturedFile => {
+            const { files, name: inputName } = e.target;
+            const validatedFiles: any = [];
+            Array.from(files!).forEach(capturedFile => {
               // validate size;
-              // add to array;
-
               if (
                 capturedFile.size >=
                 constants.MAX_FILE_SIZE_MB * 1024 * 1024
               ) {
-                alert('file n is too big'); // change message
+                alert('file n is too big'); // todo: what's the message
                 return false;
               }
 
-              // atpFiles: [File1, File2]
-              // atpFiles: [{file1: {file, fileSize}}, File2]
-              // atpFiles: [{file, fileSize}, {file, fileSize}]
-              // atpFiles: [[file, fileSize], []]
-              // atpFiles: [[{file: file}, {size: size}], ]
-
               cloneFile(capturedFile)
                 .then(clonedFile => {
-                  validatedFiles.push(clonedFile);
+                  validatedFiles.push({
+                    file: clonedFile,
+                    fileSize: capturedFile.size,
+                  });
                 })
                 .catch(() => {
                   /* no-op */
@@ -87,6 +82,8 @@ export const StateDrivenMultiFileInput = connect(
               key: inputName,
               value: validatedFiles,
             });
+
+            validationSequence();
           }}
           onClick={e => {
             if (fileOnForm) e.preventDefault();
