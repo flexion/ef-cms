@@ -16,8 +16,6 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import { getContactPrimary, getContactSecondary } from './Case';
 import joi from 'joi';
 
-export type AttachmentToPetitionFileType = { file: File; fileSize: number }[];
-
 /**
  * Represents a Case with required documents that a Petitioner is attempting to
  * add to the system.
@@ -38,12 +36,10 @@ export class ElectronicPetition extends JoiValidationEntity {
   public procedureType: string;
   public stinFile?: object;
   public stinFileSize?: number;
-  public attachmentToPetitionFiles: AttachmentToPetitionFileType;
 
   constructor(rawCase, { applicationContext }) {
     super('ElectronicPetition');
 
-    this.attachmentToPetitionFiles = rawCase.attachmentToPetitionFiles;
     this.businessType = rawCase.businessType;
     this.caseType = rawCase.caseType;
     this.countryType = rawCase.countryType;
@@ -81,6 +77,11 @@ export class ElectronicPetition extends JoiValidationEntity {
   static VALIDATION_RULES = {
     attachmentToPetitionFiles: joi
       .array()
+      .when('hasIrsNotice', {
+        is: true,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      })
       .items(
         joi
           .object()
@@ -96,11 +97,6 @@ export class ElectronicPetition extends JoiValidationEntity {
           .required()
           .messages({ '*': 'Please upload some attachments' }), // todo: confirm validation message
       )
-      .when('hasIrsNotice', {
-        is: true,
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      })
       .messages({
         'any.required': 'Upload supporting documents for notices', // ui question: is this the correct message?
       }),

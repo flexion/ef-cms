@@ -1,4 +1,3 @@
-import { AttachmentToPetitionFileType } from '@shared/business/entities/cases/ElectronicPetition';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cloneFile } from '../cloneFile';

@@ -5,6 +5,8 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import { getContactPrimary, getContactSecondary } from './Case';
 import joi from 'joi';
 
+export type AttachmentToPetitionFileType = { file: File; fileSize: number }[];
+
 /**
  * ElectronicPetitionInformationFactory Entity
  * Represents a Case that a Petitioner is attempting to add to the system via the File a Petition (now Create a Case) wizard.
@@ -29,10 +31,12 @@ export class ElectronicPetitionInformationFactory extends JoiValidationEntity {
   public stinFile?: object;
   public stinFileSize?: number;
   public wizardStep: number;
+  public attachmentToPetitionFiles: AttachmentToPetitionFileType;
 
   constructor(rawCase, { applicationContext }) {
     super('ElectronicPetitionInformationFactory');
 
+    this.attachmentToPetitionFiles = rawCase.attachmentToPetitionFiles;
     this.businessType = rawCase.businessType;
     this.caseType = rawCase.caseType;
     this.corporateDisclosureFile = rawCase.corporateDisclosureFile;
@@ -112,7 +116,8 @@ export class ElectronicPetitionInformationFactory extends JoiValidationEntity {
 
   static wizardStep2() {
     return ElectronicPetitionInformationFactory.atWizardStep(2, {
-      atpFiles: ElectronicPetition.VALIDATION_RULES.attachmentToPetitionFiles,
+      attachmentToPetitionFiles:
+        ElectronicPetition.VALIDATION_RULES.attachmentToPetitionFiles,
       caseType: ElectronicPetition.VALIDATION_RULES.caseType,
       hasIrsNotice: ElectronicPetition.VALIDATION_RULES.hasIrsNotice,
       petitionFile: ElectronicPetition.VALIDATION_RULES.petitionFile,
