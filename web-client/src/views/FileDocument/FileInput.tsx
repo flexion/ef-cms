@@ -25,14 +25,14 @@ const updateFormValues = ({
   });
 
   Promise.all(clonedFilePromises)
-    .then(async clonedFiles => {
+    .then(clonedFiles => {
       const validatedFiles = clonedFiles.filter(file => file !== null);
       updateFormValueSequence({
         key: inputName,
         value: validatedFiles,
       });
-      console.log('validatedFiles', validatedFiles);
 
+      // todo: move to entityvalidation constants
       const schema = joi
         .array()
         .max(5)
@@ -40,10 +40,14 @@ const updateFormValues = ({
           joi.object().keys({
             size: joi.number().min(1).max(MAX_FILE_SIZE_BYTES),
           }),
+          // .messages({
+          //   '*': 'Attachment to Petition file is empty',
+          //   'number.max': `Your Attachment to Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+          // }),
         )
         .optional();
 
-      const results = await schema.validateAsync(validatedFiles);
+      const results = schema.validate(validatedFiles);
       console.log('results', results);
 
       // return validationSequence();
@@ -164,8 +168,8 @@ function DragDropInput({
 }
 
 // 1. Create intermediate validation entity (extracted rules)
-// 2. Use ElectronicPetition directly
-// 3. Use the rule directly
+// 2. Use ElectronicPetition directly (check if other fields need to be set for this to work)
+// 3. Use joi rule directly (current experimentation)
 
 function handleFileSelectionAndValidation(
   e,
