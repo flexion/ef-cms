@@ -77,7 +77,21 @@ export class ElectronicPetition extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
-    attachmentToPetitionFiles: joi.array().items(joi.object().optional()),
+    attachmentToPetitionFiles: joi
+      .array()
+      .max(5)
+      .items(
+        joi
+          .object()
+          .keys({
+            size: joi.number().min(1).max(MAX_FILE_SIZE_BYTES).required(),
+          })
+          .messages({
+            '*': 'Attachment to Petition file is empty',
+            'number.max': `Your Attachment to Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+          }),
+      )
+      .optional(),
     businessType: JoiValidationConstants.STRING.valid(
       ...Object.values(BUSINESS_TYPES),
     )

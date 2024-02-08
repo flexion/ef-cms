@@ -1,3 +1,4 @@
+import { MAX_FILE_SIZE_BYTES } from '@shared/business/entities/EntityConstants';
 import { cloneFile } from '../cloneFile';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
@@ -5,6 +6,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import fileInput from '../../../../node_modules/@uswds/uswds/packages/usa-file-input/src';
+import joi from 'joi';
 
 const removeNode = node => {
   if (node && node.parentNode) {
@@ -12,20 +14,42 @@ const removeNode = node => {
   }
 };
 
-const updateFormValues = (files, updateFormValueSequence, inputName) => {
+const updateFormValues = ({
+  files,
+  inputName,
+  updateFormValueSequence,
+  validationSequence,
+}) => {
   const clonedFilePromises = Array.from(files).map(capturedFile => {
     return cloneFile(capturedFile).catch(() => null);
   });
 
   Promise.all(clonedFilePromises)
-    .then(clonedFiles => {
+    .then(async clonedFiles => {
       const validatedFiles = clonedFiles.filter(file => file !== null);
       updateFormValueSequence({
         key: inputName,
         value: validatedFiles,
       });
+      console.log('validatedFiles', validatedFiles);
+
+      const schema = joi
+        .array()
+        .max(5)
+        .items(
+          joi.object().keys({
+            size: joi.number().min(1).max(MAX_FILE_SIZE_BYTES),
+          }),
+        )
+        .optional();
+
+      const results = await schema.validateAsync(validatedFiles);
+      console.log('results', results);
+
+      // return validationSequence();
     })
-    .catch(() => {
+    .catch(e => {
+      console.log('ERROR AFTER UPLOAD AND VALIDATION', e);
       /* no-op */
     });
 };
@@ -139,47 +163,56 @@ function DragDropInput({
   );
 }
 
+// 1. Create intermediate validation entity (extracted rules)
+// 2. Use ElectronicPetition directly
+// 3. Use the rule directly
+
 function handleFileSelectionAndValidation(
   e,
   maxFileSize,
   updateFormValueSequence,
+  validationSequence,
 ) {
   const { name: inputName } = e.target;
   const { files } = e.target;
 
-  if (Array.from(files).length > 5) {
-    setTimeout(() => {
-      removeFiles(inputName, updateFormValueSequence);
-      alert('Maximum file limit is 5.');
-    }, 10);
-    return false;
-  }
+  // if (Array.from(files).length > 5) {
+  //   setTimeout(() => {
+  //     removeFiles(inputName, updateFormValueSequence);
+  //     alert('Maximum file limit is 5.');
+  //   }, 10);
+  //   return false;
+  // }
 
-  const filesExceedingSizeLimit = Array.from(files)
-    .map(capturedFile => {
-      // if (capturedFile.size >= maxFileSize * 1024 * 1024) {
-      if (capturedFile.size >= 40 * 1024 * 1024) {
-        return capturedFile.name;
-      }
-    })
-    .filter(file => !!file);
+  // const filesExceedingSizeLimit = Array.from(files)
+  //   .map(capturedFile => {
+  //     // if (capturedFile.size >= maxFileSize * 1024 * 1024) {
+  //     if (capturedFile.size >= 40 * 1024 * 1024) {
+  //       return capturedFile.name;
+  //     }
+  //   })
+  //   .filter(file => !!file);
 
-  if (filesExceedingSizeLimit.length) {
-    setTimeout(() => {
-      removeFiles(inputName, updateFormValueSequence);
-      alert(
-        `The maximum file size is ${maxFileSize}MB. The following file(s) exceed the limit:
-          ${filesExceedingSizeLimit.join(', \n')}
-          `,
-      );
-    }, 10);
-    return false;
-  }
+  // if (filesExceedingSizeLimit.length) {
+  //   setTimeout(() => {
+  //     removeFiles(inputName, updateFormValueSequence);
+  //     alert(
+  //       `The maximum file size is ${maxFileSize}MB. The following file(s) exceed the limit:
+  //         ${filesExceedingSizeLimit.join(', \n')}
+  //         `,
+  //     );
+  //   }, 10);
+  //   return false;
+  // }
 
   if (!files.length) return false;
 
-  updateFormValues(files, updateFormValueSequence, inputName);
-  // run validationSequence
+  updateFormValues({
+    files,
+    inputName,
+    updateFormValueSequence,
+    validationSequence,
+  });
 }
 
 export const FileInput = connect(
@@ -188,7 +221,7 @@ export const FileInput = connect(
     form: state.form,
     name: props.name,
     updateFormValueSequence: sequences[props.updateFormValueSequence],
-    // validationSequence: sequences[props.validationSequence],
+    validationSequence: sequences[props.validationSequence],
   },
   function FileInput({
     constants,
@@ -196,8 +229,8 @@ export const FileInput = connect(
     multiple,
     name,
     updateFormValueSequence,
+    validationSequence,
     ...remainingProps
-    // validationSequence,
   }) {
     return (
       <React.Fragment>
@@ -210,6 +243,7 @@ export const FileInput = connect(
               e,
               constants.MAX_FILE_SIZE_MB,
               updateFormValueSequence,
+              validationSequence,
             )
           }
           handleRemove={() => {
