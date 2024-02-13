@@ -3,8 +3,8 @@ resource "aws_cloudwatch_log_group" "elasticsearch_kibana_logs" {
 }
 
 resource "aws_opensearch_domain" "efcms-logs" {
-  domain_name           = "info"
-  engine_version        = "OpenSearch_2.11"
+  domain_name    = "info"
+  engine_version = "OpenSearch_2.11"
 
   cluster_config {
     instance_type  = var.es_logs_instance_type
@@ -143,15 +143,15 @@ resource "aws_cognito_identity_pool_roles_attachment" "log_viewers" {
   }
 }
 
-resource "opensearch_snapshot_repository" "archived-logs" {
-  name = "archived-logs"
-  type = "s3"
-  settings = {
-    bucket   = "${var.log_snapshot_bucket_name}"
-    region   = "us-east-1"
-    role_arn = aws_iam_role.es_s3_snapshot_access_role.arn
-  }
-}
+# resource "opensearch_snapshot_repository" "archived-logs" {
+#   name = "archived-logs"
+#   type = "s3"
+#   settings = {
+#     bucket   = "${var.log_snapshot_bucket_name}"
+#     region   = "us-east-1"
+#     role_arn = aws_iam_role.es_s3_snapshot_access_role.arn
+#   }
+# }
 
 locals {
   instance_size_in_mb = aws_opensearch_domain.efcms-logs.ebs_options[0].volume_size * 1000
