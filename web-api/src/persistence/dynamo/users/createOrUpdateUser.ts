@@ -9,6 +9,7 @@ import {
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const createUserRecords = async ({
   applicationContext,
@@ -128,6 +129,7 @@ export const isUserAlreadyCreated = async ({
       UserPoolId: userPoolId,
       Username: email,
     });
+
     return true;
   } catch (e) {
     if (e instanceof UserNotFoundException) {
@@ -144,7 +146,7 @@ export const createOrUpdateUser = async ({
   password,
   user,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   disableCognitoUser: boolean;
   password: string;
   user: RawUser;
@@ -164,52 +166,18 @@ export const createOrUpdateUser = async ({
   const cognito: CognitoIdentityProvider = applicationContext.getCognito();
 
   if (!userExists) {
-    const response = await cognito.adminCreateUser({
-      //TODO: make 1000000% sure this works fine on deployed env
-      DesiredDeliveryMediums: ['EMAIL'],
-      MessageAction: 'SUPPRESS',
-      TemporaryPassword: password,
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-        {
-          Name: 'email',
-          Value: user.email,
-        },
-        {
-          Name: 'custom:role',
-          Value: user.role,
-        },
-        {
-          Name: 'name',
-          Value: user.name,
-        },
-      ],
-      UserPoolId: userPoolId,
-      Username: user.email,
-    });
-    // replace sub here
-    userId = response.User!.Username;
+    userId = await applicationContext
+      .getUserGateway()
+      .createUser(applicationContext, {
+        email: user.email,
+        name: user.name,
+        password,
+        role: user.role,
+      });
   } else {
-    const response = await cognito.adminGetUser({
-      UserPoolId: userPoolId,
-      Username: user.email,
-    });
-    await cognito.adminUpdateUserAttributes({
-      UserAttributes: [
-        {
-          Name: 'custom:role',
-          Value: user.role,
-        },
-      ],
-      UserPoolId: userPoolId,
-      // and here
-      Username: response.Username,
-    });
-    //and here
-    userId = response.Username;
+    userId = await applicationContext
+      .getUserGateway()
+      .updateUser(applicationContext, { email: user.email, role: user.role });
   }
 
   if (disableCognitoUser) {

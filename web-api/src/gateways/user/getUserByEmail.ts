@@ -29,10 +29,10 @@ export const getUserByEmail = async (
     }
   | undefined
 > => {
-  const cognito = applicationContext.getCognito();
   let foundUser: AdminGetUserCommandOutput;
+
   try {
-    foundUser = await cognito.adminGetUser({
+    foundUser = await applicationContext.getCognito().adminGetUser({
       UserPoolId: process.env.USER_POOL_ID,
       Username: email,
     });
@@ -50,7 +50,6 @@ export const getUserByEmail = async (
   const role = foundUser.UserAttributes?.find(
     element => element.Name === 'custom:role',
   )?.Value! as Role;
-
   const name = foundUser.UserAttributes?.find(
     element => element.Name === 'name',
   )?.Value!;
