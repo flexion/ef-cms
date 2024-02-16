@@ -137,7 +137,6 @@ import { getWorkItemById } from './persistence/dynamo/workitems/getWorkItemById'
 import { getWorkItemsByDocketNumber } from './persistence/dynamo/workitems/getWorkItemsByDocketNumber';
 import { getWorkItemsByWorkItemId } from './persistence/dynamo/workitems/getWorkItemsByWorkItemId';
 import { incrementCounter } from './persistence/dynamo/helpers/incrementCounter';
-import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
 import { markMessageThreadRepliedTo } from './persistence/dynamo/messages/markMessageThreadRepliedTo';
 import { persistUser } from './persistence/dynamo/users/persistUser';
@@ -180,7 +179,6 @@ import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTri
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
 import { updateUser } from './persistence/dynamo/users/updateUser';
 import { updateUserCaseNote } from './persistence/dynamo/userCaseNotes/updateUserCaseNote';
-import { updateUserEmail } from './persistence/dynamo/users/updateUserEmail';
 import { updateUserRecords } from './persistence/dynamo/users/updateUserRecords';
 import { verifyCaseForUser } from './persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from './persistence/dynamo/cases/verifyPendingCaseForUser';
@@ -277,7 +275,6 @@ const gatewayMethods = {
     updateTrialSessionWorkingCopy,
     updateUser,
     updateUserCaseNote,
-    updateUserEmail,
     updateUserRecords,
   }),
   // methods below are not known to create or update "entity" records
@@ -388,7 +385,6 @@ const gatewayMethods = {
   getWorkItemById,
   getWorkItemsByDocketNumber,
   getWorkItemsByWorkItemId,
-  isEmailAvailable,
   isFileExists,
   refreshConfirmationCodeExpiration,
   removeIrsPractitionerOnCase,

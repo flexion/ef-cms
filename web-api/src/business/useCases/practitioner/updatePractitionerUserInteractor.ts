@@ -146,9 +146,8 @@ export const updatePractitionerUser = async (
 
 const updateUserPendingEmail = async ({ applicationContext, user }) => {
   const isEmailAvailable = await applicationContext
-    .getPersistenceGateway()
-    .isEmailAvailable({
-      applicationContext,
+    .getUserGateway()
+    .isEmailAvailable(applicationContext, {
       email: user.updatedEmail,
     });
 

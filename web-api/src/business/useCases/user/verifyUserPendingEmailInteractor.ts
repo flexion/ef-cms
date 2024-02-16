@@ -30,9 +30,8 @@ export const verifyUserPendingEmailInteractor = async (
   }
 
   const isEmailAvailable = await applicationContext
-    .getPersistenceGateway()
-    .isEmailAvailable({
-      applicationContext,
+    .getUserGateway()
+    .isEmailAvailable(applicationContext, {
       email: user.pendingEmail,
     });
 

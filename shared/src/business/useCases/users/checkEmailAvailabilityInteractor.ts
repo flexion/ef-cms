@@ -3,18 +3,11 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-/**
- * checkEmailAvailabilityInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.email the email to check
- * @returns {boolean} true if the email is available; false otherwise
- */
+
 export const checkEmailAvailabilityInteractor = async (
   applicationContext: IApplicationContext,
   { email }: { email: string },
-) => {
+): Promise<boolean> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
@@ -22,9 +15,8 @@ export const checkEmailAvailabilityInteractor = async (
   }
 
   const isEmailAvailable = await applicationContext
-    .getPersistenceGateway()
-    .isEmailAvailable({
-      applicationContext,
+    .getUserGateway()
+    .isEmailAvailable(applicationContext, {
       email,
     });
 

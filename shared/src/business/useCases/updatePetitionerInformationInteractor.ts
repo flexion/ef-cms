@@ -242,9 +242,8 @@ export const updatePetitionerInformation = async (
 
   if (shouldUpdateEmailAddress) {
     const isEmailAvailable = await applicationContext
-      .getPersistenceGateway()
-      .isEmailAvailable({
-        applicationContext,
+      .getUserGateway()
+      .isEmailAvailable(applicationContext, {
         email: updatedPetitionerData.updatedEmail,
       });
     if (isEmailAvailable) {

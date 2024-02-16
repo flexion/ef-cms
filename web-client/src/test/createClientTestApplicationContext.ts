@@ -504,7 +504,6 @@ const createTestApplicationContext = () => {
     getWorkItemsByDocketNumber: jest.fn().mockReturnValue([]),
     incrementCounter,
     incrementKeyCount: jest.fn(),
-    isEmailAvailable: jest.fn(),
     isFileExists: jest.fn(),
     persistUser: jest.fn(),
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),

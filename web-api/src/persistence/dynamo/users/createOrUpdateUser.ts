@@ -1,15 +1,61 @@
 import * as client from '../../dynamodbClientService';
 import {
-  CognitoIdentityProvider,
-  UserNotFoundException,
-} from '@aws-sdk/client-cognito-identity-provider';
-import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+
+export const createOrUpdateUser = async ({
+  applicationContext,
+  disableCognitoUser = false,
+  password,
+  user,
+}: {
+  applicationContext: ServerApplicationContext;
+  disableCognitoUser: boolean;
+  password: string;
+  user: RawUser;
+}) => {
+  let userId;
+  let userPoolId =
+    user.role === ROLES.irsSuperuser
+      ? process.env.USER_POOL_IRS_ID
+      : process.env.USER_POOL_ID;
+
+  const emailIsAvailable = await applicationContext
+    .getUserGateway()
+    .isEmailAvailable(applicationContext, { email: user.email, userPoolId });
+
+  if (emailIsAvailable) {
+    userId = await applicationContext
+      .getUserGateway()
+      .createUser(applicationContext, {
+        email: user.email,
+        name: user.name,
+        password,
+        role: user.role,
+      });
+  } else {
+    userId = await applicationContext
+      .getUserGateway()
+      .updateUser(applicationContext, { email: user.email, role: user.role });
+  }
+
+  if (disableCognitoUser) {
+    await applicationContext.getUserGateway().disableUser(applicationContext, {
+      role: user.role,
+      userId,
+    });
+  }
+
+  return await createUserRecords({
+    applicationContext,
+    user,
+    userId,
+  });
+};
 
 export const createUserRecords = async ({
   applicationContext,
@@ -111,83 +157,4 @@ export const createUserRecords = async ({
     ...user,
     userId,
   };
-};
-
-export const isUserAlreadyCreated = async ({
-  applicationContext,
-  email,
-  userPoolId,
-}: {
-  applicationContext: IApplicationContext;
-  email: string;
-  userPoolId: string;
-}) => {
-  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
-
-  try {
-    await cognito.adminGetUser({
-      UserPoolId: userPoolId,
-      Username: email,
-    });
-
-    return true;
-  } catch (e) {
-    if (e instanceof UserNotFoundException) {
-      return false;
-    } else {
-      throw e;
-    }
-  }
-};
-
-export const createOrUpdateUser = async ({
-  applicationContext,
-  disableCognitoUser = false,
-  password,
-  user,
-}: {
-  applicationContext: ServerApplicationContext;
-  disableCognitoUser: boolean;
-  password: string;
-  user: RawUser;
-}) => {
-  let userId;
-  let userPoolId =
-    user.role === ROLES.irsSuperuser
-      ? process.env.USER_POOL_IRS_ID
-      : process.env.USER_POOL_ID;
-
-  const userExists = await isUserAlreadyCreated({
-    applicationContext,
-    email: user.email,
-    userPoolId: userPoolId as string,
-  });
-
-  if (!userExists) {
-    userId = await applicationContext
-      .getUserGateway()
-      .createUser(applicationContext, {
-        email: user.email,
-        name: user.name,
-        password,
-        role: user.role,
-      });
-  } else {
-    userId = await applicationContext
-      .getUserGateway()
-      .updateUser(applicationContext, { email: user.email, role: user.role });
-  }
-
-  if (disableCognitoUser) {
-    await applicationContext.getUserGateway().disableUser(applicationContext, {
-      role: user.role,
-      userId,
-    });
-  }
-
-  return await createUserRecords({
-    applicationContext,
-    user,
-    userId,
-  });
 };

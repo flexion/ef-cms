@@ -1,25 +1,16 @@
-import { Practitioner } from '../../entities/Practitioner';
+import { Practitioner, RawPractitioner } from '../../entities/Practitioner';
 import { ROLES } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { RawUser, User } from '../../entities/User';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { User } from '../../entities/User';
 
-/**
- * updateUserPendingEmailInteractor
- * Allows a user to request an update their own email address if they have permission.
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.pendingEmail the pending email
- * @returns {Promise} the updated user object
- */
 export const updateUserPendingEmailInteractor = async (
   applicationContext: IApplicationContext,
   { pendingEmail }: { pendingEmail: string },
-) => {
+): Promise<RawUser | RawPractitioner> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
@@ -27,9 +18,8 @@ export const updateUserPendingEmailInteractor = async (
   }
 
   const isEmailAvailable = await applicationContext
-    .getPersistenceGateway()
-    .isEmailAvailable({
-      applicationContext,
+    .getUserGateway()
+    .isEmailAvailable(applicationContext, {
       email: pendingEmail,
     });
 
