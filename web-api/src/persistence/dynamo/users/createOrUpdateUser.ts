@@ -163,8 +163,6 @@ export const createOrUpdateUser = async ({
     userPoolId: userPoolId as string,
   });
 
-  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
-
   if (!userExists) {
     userId = await applicationContext
       .getUserGateway()
@@ -181,9 +179,9 @@ export const createOrUpdateUser = async ({
   }
 
   if (disableCognitoUser) {
-    await cognito.adminDisableUser({
-      UserPoolId: userPoolId,
-      Username: userId,
+    await applicationContext.getUserGateway().disableUser(applicationContext, {
+      role: user.role,
+      userId,
     });
   }
 
