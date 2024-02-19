@@ -17,33 +17,18 @@ export const confirmSignUpInteractor = async (
     applicationContext.logger.info(
       'action: user_did_not_confirm_account_within_24hr',
     );
+
     throw new InvalidRequest('Confirmation code expired');
   }
 
-  await applicationContext.getCognito().adminConfirmSignUp({
-    UserPoolId: process.env.USER_POOL_ID,
-    Username: email,
-  });
-
-  const updatePetitionerAttributes = applicationContext
-    .getCognito()
-    .adminUpdateUserAttributes({
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'true',
-        },
-        {
-          Name: 'email',
-          Value: email,
-        },
-      ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: email,
+  const confirmSignUp = applicationContext
+    .getUserGateway()
+    .confirmSignUp(applicationContext, {
+      email,
     });
 
   await Promise.all([
-    updatePetitionerAttributes,
+    confirmSignUp,
     createPetitionerUser(applicationContext, { email, userId }),
   ]);
 };
