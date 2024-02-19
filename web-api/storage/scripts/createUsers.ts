@@ -1,4 +1,7 @@
-import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  ROLES,
+  Role,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { createApplicationContext } from '../../src/applicationContext';
 import { createPetitionerUserRecords } from '../../../web-api/src/persistence/dynamo/users/createPetitionerUserRecords';
 import { createUserRecords as createPractitionerUserRecords } from '../../../web-api/src/persistence/dynamo/users/createOrUpdatePractitionerUser';
@@ -13,71 +16,63 @@ const EXCLUDE_PROPS = ['pk', 'sk', 'userId'];
 export const createUsers = async () => {
   usersByEmail = {};
 
-  const user = {
+  const applicationContext = createApplicationContext({
     role: ROLES.admin,
-  };
-
-  const applicationContext = createApplicationContext(user);
+  });
 
   await Promise.all(
-    users.map(userRecord => {
+    users.map(async userRecord => {
       if (!userRecord.userId) {
         throw new Error('User has no uuid');
       }
 
-      const { userId } = userRecord;
-
-      if (
-        [
-          ROLES.irsPractitioner,
-          ROLES.privatePractitioner,
-          ROLES.inactivePractitioner,
-        ].includes(userRecord.role)
-      ) {
-        return createPractitionerUserRecords({
+      const practitionerRoles: Role[] = [
+        ROLES.irsPractitioner,
+        ROLES.privatePractitioner,
+        ROLES.inactivePractitioner,
+      ];
+      if (practitionerRoles.includes(userRecord.role as Role)) {
+        const userCreated = await createPractitionerUserRecords({
           applicationContext,
           user: omit(userRecord, EXCLUDE_PROPS),
-          userId,
-        }).then(userCreated => {
-          if (usersByEmail[userCreated.email]) {
-            throw new Error('User already exists');
-          }
-          usersByEmail[userCreated.email] = userCreated;
+          userId: userRecord.userId,
         });
+
+        if (usersByEmail[userCreated.email]) {
+          throw new Error(`User ${JSON.stringify(userRecord)} already exists`);
+        }
+
+        usersByEmail[userCreated.email] = userCreated;
+        return;
       }
 
       if (userRecord.role === ROLES.petitioner) {
-        return createPetitionerUserRecords({
+        const userCreated = await createPetitionerUserRecords({
           applicationContext,
           user: omit(userRecord, EXCLUDE_PROPS),
-          userId,
-        }).then(userCreated => {
-          if (usersByEmail[userCreated.email]) {
-            throw new Error('User already exists');
-          }
-          usersByEmail[userCreated.email] = userCreated;
+          userId: userRecord.userId,
         });
+
+        if (usersByEmail[userCreated.email]) {
+          throw new Error(`User ${JSON.stringify(userRecord)} already exists`);
+        }
+
+        usersByEmail[userCreated.email] = userCreated;
+        return;
       }
 
-      return createUserRecords({
+      const userCreated = await createUserRecords({
         applicationContext,
         user: omit(userRecord, EXCLUDE_PROPS),
-        userId,
-      }).then(userCreated => {
-        if (usersByEmail[userCreated.email]) {
-          throw new Error('User already exists');
-        }
-        usersByEmail[userCreated.email] = userCreated;
+        userId: userRecord.userId,
       });
+
+      if (usersByEmail[userCreated.email]) {
+        throw new Error(`User ${JSON.stringify(userRecord)} already exists`);
+      }
+
+      usersByEmail[userCreated.email] = userCreated;
+      return;
     }),
   );
-};
-
-export const asUserFromEmail = async (email, callback) => {
-  const asUser = usersByEmail[email];
-  if (!asUser) {
-    throw new Error('User not found');
-  }
-  const applicationContext = createApplicationContext(asUser);
-  return await callback(applicationContext);
 };

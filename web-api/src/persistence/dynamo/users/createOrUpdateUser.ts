@@ -65,7 +65,7 @@ export const createUserRecords = async ({
   applicationContext: ServerApplicationContext;
   user: any;
   userId: string;
-}): Promise<{ userId: string }> => {
+}) => {
   delete user.password;
 
   if (user.barNumber === '') {
@@ -154,6 +154,7 @@ export const createUserRecords = async ({
   }
 
   return {
+    ...user,
     userId,
   };
 };

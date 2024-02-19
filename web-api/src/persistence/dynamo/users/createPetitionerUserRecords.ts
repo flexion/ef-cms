@@ -1,11 +1,12 @@
 import * as client from '../../dynamodbClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const createPetitionerUserRecords = async ({
   applicationContext,
   user,
   userId,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   user: any;
   userId: string;
 }) => {
