@@ -18,11 +18,10 @@ export const createOrUpdateUser = async (
     user: RawUser;
   },
 ): Promise<{ userId: string }> => {
-  // TODO:
-  // let userPoolId =
-  //   user.role === ROLES.irsSuperuser
-  //   ? process.env.USER_POOL_IRS_ID
-  //   : process.env.USER_POOL_ID;
+  let userPoolId =
+    user.role === ROLES.irsSuperuser
+      ? process.env.USER_POOL_IRS_ID
+      : process.env.USER_POOL_ID;
 
   if (!user.email) {
     throw new InvalidRequest(
@@ -32,7 +31,10 @@ export const createOrUpdateUser = async (
 
   const emailIsAvailable = await applicationContext
     .getUserGateway()
-    .isEmailAvailable(applicationContext, { email: user.email });
+    .getUserByEmail(applicationContext, {
+      email: user.email,
+      userPoolId,
+    });
 
   let userId: string;
   if (emailIsAvailable) {
@@ -43,11 +45,16 @@ export const createOrUpdateUser = async (
         name: user.name,
         password,
         role: user.role,
+        userPoolId,
       });
   } else {
     userId = await applicationContext
       .getUserGateway()
-      .updateUser(applicationContext, { email: user.email, role: user.role });
+      .updateUser(applicationContext, {
+        email: user.email,
+        role: user.role,
+        userPoolId,
+      });
   }
 
   return await createUserRecords({

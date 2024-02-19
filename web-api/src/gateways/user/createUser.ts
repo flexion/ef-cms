@@ -1,4 +1,4 @@
-import { ROLES, Role } from '@shared/business/entities/EntityConstants';
+import { Role } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export async function createUser(
@@ -8,13 +8,15 @@ export async function createUser(
     name,
     password,
     role,
-  }: { email: string; name: string; role: Role; password: string },
+    userPoolId,
+  }: {
+    email: string;
+    userPoolId?: string;
+    name: string;
+    role: Role;
+    password: string;
+  },
 ): Promise<string> {
-  const userPoolId =
-    role === ROLES.irsSuperuser
-      ? process.env.USER_POOL_IRS_ID
-      : process.env.USER_POOL_ID;
-
   const response = await applicationContext.getCognito().adminCreateUser({
     DesiredDeliveryMediums: ['EMAIL'],
     MessageAction: 'SUPPRESS',
@@ -37,7 +39,7 @@ export async function createUser(
         Value: name,
       },
     ],
-    UserPoolId: userPoolId,
+    UserPoolId: userPoolId || process.env.USER_POOL_ID,
     Username: email,
   });
 

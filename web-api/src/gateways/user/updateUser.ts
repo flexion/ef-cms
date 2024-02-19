@@ -1,17 +1,16 @@
-import { ROLES, Role } from '@shared/business/entities/EntityConstants';
+import { Role } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export async function updateUser(
   applicationContext: ServerApplicationContext,
-  { email, role }: { email: string; role: Role },
+  {
+    email,
+    role,
+    userPoolId,
+  }: { email: string; role: Role; userPoolId?: string },
 ): Promise<string> {
-  let userPoolId =
-    role === ROLES.irsSuperuser
-      ? process.env.USER_POOL_IRS_ID
-      : process.env.USER_POOL_ID;
-
   const response = await applicationContext.getCognito().adminGetUser({
-    UserPoolId: userPoolId,
+    UserPoolId: userPoolId || process.env.USER_POOL_ID,
     Username: email,
   });
 
@@ -22,7 +21,7 @@ export async function updateUser(
         Value: role,
       },
     ],
-    UserPoolId: userPoolId,
+    UserPoolId: userPoolId || process.env.USER_POOL_ID,
     Username: response.Username,
   });
 

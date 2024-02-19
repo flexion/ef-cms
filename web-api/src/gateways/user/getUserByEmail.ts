@@ -18,7 +18,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const getUserByEmail = async (
   applicationContext: ServerApplicationContext,
-  { email }: { email: string },
+  { email, userPoolId }: { userPoolId?: string; email: string },
 ): Promise<
   | {
       userId: string;
@@ -33,7 +33,7 @@ export const getUserByEmail = async (
 
   try {
     foundUser = await applicationContext.getCognito().adminGetUser({
-      UserPoolId: process.env.USER_POOL_ID,
+      UserPoolId: userPoolId || process.env.USER_POOL_ID,
       Username: email,
     });
   } catch (err: any) {
