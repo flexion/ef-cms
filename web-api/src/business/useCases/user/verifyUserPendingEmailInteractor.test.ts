@@ -57,21 +57,16 @@ describe('verifyUserPendingEmailInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(mockPractitioner);
-
-    applicationContext
-      .getPersistenceGateway()
-      .isEmailAvailable.mockReturnValue(true);
-
+    applicationContext.getUserGateway().isEmailAvailable.mockReturnValue(true);
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
-
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersByUser.mockReturnValue([mockCase.docketNumber]);
   });
 
-  it('should throw unauthorized error when user does not have permission to verify emails', async () => {
+  it('should throw an error when user does not have permission to verify emails', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -84,7 +79,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     ).rejects.toThrow('Unauthorized to manage emails');
   });
 
-  it('should throw an unauthorized error when the token passed as an argument does not match stored token on user', async () => {
+  it('should throw an error when the token passed as an argument does not match stored token on user', async () => {
     await expect(
       verifyUserPendingEmailInteractor(applicationContext, {
         token: 'abc',
@@ -92,7 +87,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     ).rejects.toThrow('Tokens do not match');
   });
 
-  it('should throw an unauthorized error when the token passed as an argument and the token store on the user are both undefined', async () => {
+  it('should throw an error when the token passed as an argument and the token store on the user are both undefined', async () => {
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       ...mockPractitioner,
       pendingEmailVerificationToken: undefined,
@@ -105,10 +100,10 @@ describe('verifyUserPendingEmailInteractor', () => {
     ).rejects.toThrow('Tokens do not match');
   });
 
-  it('should throw an error when the pendingEmail address is not available in cognito', async () => {
+  it('should throw an error when the pendingEmail address is already associated with an account', async () => {
     applicationContext
-      .getPersistenceGateway()
-      .isEmailAvailable.mockReturnValue(false);
+      .getUserGateway()
+      .isEmailAvailable.mockResolvedValue(false);
 
     await expect(
       verifyUserPendingEmailInteractor(applicationContext, {
@@ -117,7 +112,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     ).rejects.toThrow('Email is not available');
   });
 
-  it('should update the cognito email when tokens match', async () => {
+  it('should update the user`s email when tokens match', async () => {
     await expect(
       verifyUserPendingEmailInteractor(applicationContext, {
         token: TOKEN,

@@ -1,5 +1,8 @@
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { UserNotFoundException } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  UserNotFoundException,
+  UserStatusType,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   createOrUpdatePractitionerUser,
@@ -87,7 +90,7 @@ describe('createOrUpdatePractitionerUser', () => {
     applicationContext.getDocumentClient().put.mockResolvedValue(null);
   });
 
-  it('persists a private practitioner user with name and barNumber mapping records but does not call cognito adminCreateUser if there is no email address', async () => {
+  it('should create a private practitioner user with name and barNumber mapping records but does NOT call user gateway when they do not have an email address', async () => {
     await createUserRecords({
       applicationContext,
       user: privatePractitionerUser,
@@ -121,7 +124,7 @@ describe('createOrUpdatePractitionerUser', () => {
     });
   });
 
-  it('does not persist mapping records for practitioner without barNumber', async () => {
+  it('should NOT persist mapping records for practitioner without barNumber', async () => {
     await createUserRecords({
       applicationContext,
       user: privatePractitionerUserWithoutBarNumber,
@@ -152,7 +155,7 @@ describe('createOrUpdatePractitionerUser', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should call cognito adminCreateUser for a private practitioner user with email address', async () => {
+  it('should call user gateway to create an account for a private practitioner user with email address', async () => {
     setupNonExistingUserMock();
 
     await createOrUpdatePractitionerUser({
@@ -168,7 +171,7 @@ describe('createOrUpdatePractitionerUser', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should call cognito adminCreateUser for a private practitioner user with pendingEmail when it is defined', async () => {
+  it('should call user gateway to create an account for a private practitioner user with pendingEmail when it is defined', async () => {
     const mockPendingEmail = 'noone@example.com';
     setupNonExistingUserMock();
 
@@ -186,7 +189,7 @@ describe('createOrUpdatePractitionerUser', () => {
     ).toBe(mockPendingEmail);
   });
 
-  it('should call cognito adminCreateUser for an IRS practitioner user with email address', async () => {
+  it('should call user gateway to create an account for an IRS practitioner user with email address', async () => {
     setupNonExistingUserMock();
 
     await createOrUpdatePractitionerUser({
@@ -200,7 +203,7 @@ describe('createOrUpdatePractitionerUser', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should call cognito adminCreateUser for an inactive practitioner user with email address', async () => {
+  it('should call user gateway to create an account for an inactive practitioner user with email address', async () => {
     setupNonExistingUserMock();
 
     await createOrUpdatePractitionerUser({
@@ -214,7 +217,7 @@ describe('createOrUpdatePractitionerUser', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should call cognito adminCreateUser for a private practitioner user with email address and use a random uniqueId if the response does not contain a username (for local testing)', async () => {
+  it('should call user gateway to create an account for a private practitioner user with email address and use a random uniqueId if the response does not contain a username (for local testing)', async () => {
     applicationContext.getCognito().adminCreateUser.mockResolvedValue({});
     applicationContext
       .getCognito()
@@ -233,16 +236,13 @@ describe('createOrUpdatePractitionerUser', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should call cognito adminGetUser and adminUpdateUserAttributes if adminCreateUser throws an error', async () => {
-    applicationContext.getCognito().adminCreateUser.mockReturnValue({
-      promise: () => Promise.reject(new Error('bad!')),
-    });
-
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Username: '562d6260-aa9b-4010-af99-536d3872c752',
-        }),
+  it('should update the practitioner when they already have an account in the system', async () => {
+    applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
+      accountStatus: UserStatusType.CONFIRMED,
+      email: privatePractitionerUserWithSection.email,
+      name: privatePractitionerUserWithSection.name,
+      role: privatePractitionerUserWithSection.role,
+      userId: '562d6260-aa9b-4010-af99-536d3872c752',
     });
 
     await createOrUpdatePractitionerUser({
@@ -253,10 +253,7 @@ describe('createOrUpdatePractitionerUser', () => {
     expect(
       applicationContext.getCognito().adminCreateUser,
     ).not.toHaveBeenCalled();
-    expect(applicationContext.getCognito().adminGetUser).toHaveBeenCalled();
-    expect(
-      applicationContext.getCognito().adminUpdateUserAttributes,
-    ).toHaveBeenCalled();
+    expect(applicationContext.getUserGateway().updateUser).toHaveBeenCalled();
   });
 
   it('should throw an error when attempting to create a user that is not role private, IRS practitioner or inactive practitioner', async () => {
@@ -271,14 +268,9 @@ describe('createOrUpdatePractitionerUser', () => {
   });
 
   it('should call adminCreateUser with the correct UserAttributes', async () => {
-    applicationContext.getCognito().adminCreateUser.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          User: { Username: '123' },
-        }),
-    });
-
-    setupNonExistingUserMock();
+    applicationContext
+      .getUserGateway()
+      .getUserByEmail.mockResolvedValue(undefined);
 
     await createOrUpdatePractitionerUser({
       applicationContext,
@@ -313,7 +305,7 @@ describe('createOrUpdatePractitionerUser', () => {
   });
 
   describe('createUserRecords', () => {
-    it('attempts to persist a private practitioner user with name and barNumber mapping records', async () => {
+    it('should persist a private practitioner user with name and barNumber mapping records', async () => {
       await createUserRecords({
         applicationContext,
         user: privatePractitionerUser,
@@ -350,7 +342,7 @@ describe('createOrUpdatePractitionerUser', () => {
       });
     });
 
-    it('does not persist mapping records for private practitioner without barNumber', async () => {
+    it('should NOT persist mapping records for a private practitioner without a bar number', async () => {
       await createUserRecords({
         applicationContext,
         user: privatePractitionerUserWithoutBarNumber,

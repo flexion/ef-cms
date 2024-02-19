@@ -1,4 +1,3 @@
-import { UserNotFoundException } from '@aws-sdk/client-cognito-identity-provider';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   caseServicesSupervisorUser,
@@ -12,15 +11,10 @@ import { createOrUpdateUser, createUserRecords } from './createOrUpdateUser';
 describe('createOrUpdateUser', () => {
   const mockTemporaryPassword = 'tempPass';
 
-  it('should ONLY create a user when they do not already exist', async () => {
+  it('should ONLY create a user when they do not already exist in the system', async () => {
     applicationContext
-      .getCognito()
-      .adminGetUser.mockRejectedValue(
-        new UserNotFoundException({ $metadata: {}, message: '' }),
-      );
-    applicationContext.getCognito().adminCreateUser.mockResolvedValue({
-      User: { Username: petitionsClerkUser.userId },
-    });
+      .getUserGateway()
+      .isEmailAvailable.mockResolvedValue(true);
 
     await createOrUpdateUser({
       applicationContext,
@@ -29,34 +23,15 @@ describe('createOrUpdateUser', () => {
       user: petitionsClerkUser,
     });
 
-    expect(
-      applicationContext.getCognito().adminCreateUser,
-    ).toHaveBeenCalledWith({
-      DesiredDeliveryMediums: ['EMAIL'],
-      MessageAction: 'SUPPRESS',
-      TemporaryPassword: mockTemporaryPassword,
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-
-        {
-          Name: 'email',
-          Value: petitionsClerkUser.email,
-        },
-        {
-          Name: 'custom:role',
-          Value: petitionsClerkUser.role,
-        },
-        {
-          Name: 'name',
-          Value: petitionsClerkUser.name,
-        },
-      ],
-      UserPoolId: undefined,
-      Username: petitionsClerkUser.email,
-    });
+    expect(applicationContext.getUserGateway().createUser).toHaveBeenCalledWith(
+      expect.anything(),
+      {
+        email: petitionsClerkUser.email,
+        name: petitionsClerkUser.name,
+        password: mockTemporaryPassword,
+        role: petitionsClerkUser.role,
+      },
+    );
     expect(
       applicationContext.getCognito().adminDisableUser,
     ).not.toHaveBeenCalled();
@@ -65,15 +40,13 @@ describe('createOrUpdateUser', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should create a user and cognito record, but disable the cognito user', async () => {
+  it('should create and disable the user when the email is available and the disable flag is true', async () => {
     applicationContext
-      .getCognito()
-      .adminGetUser.mockRejectedValue(
-        new UserNotFoundException({ $metadata: {}, message: '' }),
-      );
-    applicationContext.getCognito().adminCreateUser.mockResolvedValue({
-      User: { Username: petitionsClerkUser.userId },
-    });
+      .getUserGateway()
+      .isEmailAvailable.mockResolvedValue(true);
+    applicationContext
+      .getUserGateway()
+      .createUser.mockResolvedValue(petitionsClerkUser.userId);
 
     await createOrUpdateUser({
       applicationContext,
@@ -82,18 +55,14 @@ describe('createOrUpdateUser', () => {
       user: petitionsClerkUser,
     });
 
-    expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
-    expect(applicationContext.getCognito().adminDisableUser).toHaveBeenCalled();
-    expect(applicationContext.getCognito().adminGetUser).toHaveBeenCalled();
-    expect(
-      applicationContext.getCognito().adminUpdateUserAttributes,
-    ).not.toHaveBeenCalled();
+    expect(applicationContext.getUserGateway().createUser).toHaveBeenCalled();
+    expect(applicationContext.getUserGateway().disableUser).toHaveBeenCalled();
   });
 
-  it('should attempt to update the user when the user already exists', async () => {
-    applicationContext.getCognito().adminGetUser.mockResolvedValue({
-      Username: petitionsClerkUser.userId,
-    });
+  it('should update the user when the user already exists in the system', async () => {
+    applicationContext
+      .getUserGateway()
+      .isEmailAvailable.mockResolvedValue(false);
 
     await createOrUpdateUser({
       applicationContext,
@@ -102,13 +71,16 @@ describe('createOrUpdateUser', () => {
       user: petitionsClerkUser,
     });
 
-    expect(applicationContext.getCognito().adminGetUser).toHaveBeenCalled();
     expect(
       applicationContext.getCognito().adminCreateUser,
     ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getCognito().adminUpdateUserAttributes,
-    ).toHaveBeenCalled();
+    expect(applicationContext.getUserGateway().updateUser).toHaveBeenCalledWith(
+      expect.anything(),
+      {
+        email: petitionsClerkUser.email,
+        role: petitionsClerkUser.role,
+      },
+    );
   });
 
   describe('createUserRecords', () => {

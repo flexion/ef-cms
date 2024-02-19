@@ -1,36 +1,37 @@
-import { UserNotFoundException } from '@aws-sdk/client-cognito-identity-provider';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { isEmailAvailable } from './isEmailAvailable';
 
 describe('isEmailAvailable', () => {
-  const mockEmail = 'hello@example.com';
-  const mockFoundUser = { email: mockEmail };
+  it('should return false when there is a corresponding user with the provided email found in the databse', async () => {
+    const mockEmail = 'test@example.com';
 
-  it('returns false when there is a corresponding user with the provided email found in cognito', async () => {
-    applicationContext
-      .getCognito()
-      .adminGetUser.mockReturnValue({ mockFoundUser });
+    applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
+      accountStatus: UserStatusType.CONFIRMED,
+      email: mockEmail,
+      name: 'Test Petitioner',
+      role: ROLES.petitioner,
+      userId: 'c17328d3-0f1c-462a-9974-cf95935407f6',
+    });
 
     await expect(
-      isEmailAvailable({
-        applicationContext,
+      isEmailAvailable(applicationContext, {
         email: mockEmail,
       }),
-    ).resolves.toBeFalsy();
+    ).resolves.toEqual(false);
   });
 
-  it('returns true when there is no corresponding user with the provided email found in cognito', async () => {
+  it('should return true when there is no corresponding user with the provided email found in the database', async () => {
+    const mockEmail = 'test@example.com';
     applicationContext
-      .getCognito()
-      .adminGetUser.mockRejectedValue(
-        new UserNotFoundException({ $metadata: {}, message: '' }),
-      );
+      .getUserGateway()
+      .getUserByEmail.mockResolvedValue(undefined);
 
     await expect(
-      isEmailAvailable({
-        applicationContext,
+      isEmailAvailable(applicationContext, {
         email: mockEmail,
       }),
-    ).resolves.toBeTruthy();
+    ).resolves.toEqual(true);
   });
 });
