@@ -41,7 +41,7 @@ describe('confirmSignUpInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getAccountConfirmationCode.mockResolvedValue(mockConfirmationCode);
-    applicationContext.getCognito().adminConfirmSignUp.mockResolvedValue({});
+    applicationContext.getUserGateway().confirmSignUp.mockResolvedValue({});
     applicationContext
       .getUserGateway()
       .getUserByEmail.mockResolvedValue({ email: mockEmail });
@@ -53,13 +53,10 @@ describe('confirmSignUpInteractor', () => {
     });
 
     expect(
-      applicationContext.getCognito().adminConfirmSignUp,
+      applicationContext.getUserGateway().confirmSignUp,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getCognito().adminUpdateUserAttributes,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().createPetitionerAccountInteractor,
+      applicationContext.getPersistenceGateway().persistUser,
     ).toHaveBeenCalled();
   });
 });

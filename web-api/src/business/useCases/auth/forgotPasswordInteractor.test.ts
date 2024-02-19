@@ -62,7 +62,6 @@ describe('forgotPasswordInteractor', () => {
     expect(
       applicationContext.getUserGateway().getUserByEmail.mock.calls[0][1],
     ).toEqual({ email });
-
     expect(result).toEqual({
       email,
     });
@@ -83,7 +82,6 @@ describe('forgotPasswordInteractor', () => {
     expect(
       applicationContext.getUserGateway().getUserByEmail.mock.calls[0][1],
     ).toEqual({ email });
-
     expect(
       applicationContext.getUseCaseHelpers().createUserConfirmation.mock
         .calls[0][1],
@@ -92,7 +90,6 @@ describe('forgotPasswordInteractor', () => {
 
   it('should throw an UnauthorizedError and call adminCreateUser (without TemporaryPassword on prod) when user account is in FORCE_CHANGE_PASSWORD status', async () => {
     process.env.STAGE = 'prod';
-
     applicationContext.getUserGateway().getUserByEmail.mockResolvedValueOnce({
       ...mockUser,
       accountStatus: UserStatusType.FORCE_CHANGE_PASSWORD,
@@ -128,7 +125,6 @@ describe('forgotPasswordInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().createUserConfirmation,
     ).not.toHaveBeenCalled();
-
     expect(
       applicationContext.getCognito().adminCreateUser.mock.calls[0][0],
     ).toEqual({
@@ -196,7 +192,6 @@ describe('forgotPasswordInteractor', () => {
       <span>This is an automated email. We are unable to respond to any messages to this email address.</span>
     </div>
   </div>`);
-
     expect(result).toEqual({
       code: expectedForgotPasswordCode,
       email,

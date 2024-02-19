@@ -1,5 +1,7 @@
 import { InvalidRequest, NotFoundError } from '@web-api/errors/errors';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { User } from '@shared/business/entities/User';
 
 export const confirmSignUpInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -36,7 +38,7 @@ export const confirmSignUpInteractor = async (
 const createPetitionerUser = async (
   applicationContext: ServerApplicationContext,
   { email, userId }: { email: string; userId: string },
-) => {
+): Promise<void> => {
   const user = await applicationContext
     .getUserGateway()
     .getUserByEmail(applicationContext, { email });
@@ -45,11 +47,15 @@ const createPetitionerUser = async (
     throw new NotFoundError(`User not found with email: ${email}`);
   }
 
-  await applicationContext
-    .getUseCases()
-    .createPetitionerAccountInteractor(applicationContext, {
-      email,
-      name: user.name,
-      userId,
-    });
+  const userEntity = new User({
+    email,
+    name: user.name,
+    role: ROLES.petitioner,
+    userId,
+  });
+
+  return applicationContext.getPersistenceGateway().persistUser({
+    applicationContext,
+    user: userEntity.validate().toRawObject(),
+  });
 };
