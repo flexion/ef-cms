@@ -48,15 +48,12 @@ describe('updatePetitionerInformationInteractor', () => {
 
   beforeAll(() => {
     (addCoverToPdf as jest.Mock).mockResolvedValue({});
-
     applicationContext.getCurrentUser.mockImplementation(
       () => new User(mockUser),
     );
-
     applicationContext
       .getUseCaseHelpers()
       .addExistingUserToCase.mockReturnValue(PRIMARY_CONTACT_ID);
-
     applicationContext
       .getUseCaseHelpers()
       .createUserForContact.mockImplementation(() => new UserCase(mockCase));
@@ -700,10 +697,10 @@ describe('updatePetitionerInformationInteractor', () => {
       ).toHaveBeenCalled();
     });
 
-    it('should call createUserForContact when the new email address is available', async () => {
+    it('should call createUserForContact when the provided email address is NOT associated with an account in the system already', async () => {
       applicationContext
-        .getPersistenceGateway()
-        .isEmailAvailable.mockImplementation(() => true);
+        .getUserGateway()
+        .isEmailAvailable.mockResolvedValue(true);
 
       await updatePetitionerInformationInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,

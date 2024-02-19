@@ -32,12 +32,10 @@ describe('updateUserPendingEmailInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .updateUser.mockImplementation(() => mockUser);
-    applicationContext
-      .getPersistenceGateway()
-      .isEmailAvailable.mockReturnValue(true);
+    applicationContext.getUserGateway().isEmailAvailable.mockReturnValue(true);
   });
 
-  it('should throw unauthorized error when user does not have permission to manage emails', async () => {
+  it('should throw an error when user does not have permission to manage emails', async () => {
     mockUser = {
       role: ROLES.petitionsClerk,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -50,10 +48,10 @@ describe('updateUserPendingEmailInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('should throw an error when the pendingEmail address is not available in cognito', async () => {
+  it('should throw an error when the provided email address is already associated with an account in the system', async () => {
     applicationContext
-      .getPersistenceGateway()
-      .isEmailAvailable.mockReturnValue(false);
+      .getUserGateway()
+      .isEmailAvailable.mockResolvedValue(false);
 
     await expect(
       updateUserPendingEmailInteractor(applicationContext, {

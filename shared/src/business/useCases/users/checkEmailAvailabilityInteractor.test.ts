@@ -1,20 +1,19 @@
-import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { checkEmailAvailabilityInteractor } from './checkEmailAvailabilityInteractor';
+import {
+  petitionsClerkUser,
+  privatePractitionerUser,
+} from '@shared/test/mockUsers';
 
 describe('checkEmailAvailabilityInteractor', () => {
   const mockEmail = 'test@example.com';
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.privatePractitioner,
-    });
+    applicationContext.getCurrentUser.mockReturnValue(privatePractitionerUser);
   });
 
   it('should throw an error when the logged in user is unauthorized to check email availability', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-    });
+    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
     await expect(
       checkEmailAvailabilityInteractor(applicationContext, {
@@ -23,40 +22,27 @@ describe('checkEmailAvailabilityInteractor', () => {
     ).rejects.toThrow('Unauthorized to manage emails.');
   });
 
-  it('should attempt to retrieve the user by email', async () => {
-    await checkEmailAvailabilityInteractor(applicationContext, {
-      email: mockEmail,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().isEmailAvailable.mock
-        .calls[0][0],
-    ).toMatchObject({
-      email: mockEmail,
-    });
-  });
-
-  it('should return true when the specified email is not already in use', async () => {
+  it('should return true when the provided email is not already in use', async () => {
     applicationContext
-      .getPersistenceGateway()
-      .isEmailAvailable.mockReturnValue(true);
+      .getUserGateway()
+      .isEmailAvailable.mockResolvedValue(true);
 
     const result = await checkEmailAvailabilityInteractor(applicationContext, {
       email: mockEmail,
     });
 
-    expect(result).toBeTruthy();
+    expect(result).toEqual(true);
   });
 
-  it('should return false when the specified email is already in use', async () => {
+  it('should return false when the provided email is already in use', async () => {
     applicationContext
-      .getPersistenceGateway()
-      .isEmailAvailable.mockReturnValue(false);
+      .getUserGateway()
+      .isEmailAvailable.mockResolvedValue(false);
 
     const result = await checkEmailAvailabilityInteractor(applicationContext, {
       email: mockEmail,
     });
 
-    expect(result).toBeFalsy();
+    expect(result).toEqual(false);
   });
 });
