@@ -23,7 +23,7 @@ export async function updateUser(
       },
     ],
     UserPoolId: userPoolId,
-    Username: response.Username, // and here
+    Username: response.Username,
   });
 
   const userId = response.Username;
@@ -32,6 +32,5 @@ export async function updateUser(
     throw new Error(`Unable to update user for email ${email}`);
   }
 
-  //and here
   return userId;
 }

@@ -1,6 +1,8 @@
-import {} from './createOrUpdateUser';
 import * as client from '../../dynamodbClientService';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  ROLES,
+  Role,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 
 export const createOrUpdatePractitionerUser = async ({
@@ -11,7 +13,7 @@ export const createOrUpdatePractitionerUser = async ({
   user: RawUser;
 }) => {
   let userId = applicationContext.getUniqueId();
-  const practitionerRoleTypes = [
+  const practitionerRoleTypes: Role[] = [
     ROLES.privatePractitioner,
     ROLES.irsPractitioner,
     ROLES.inactivePractitioner,

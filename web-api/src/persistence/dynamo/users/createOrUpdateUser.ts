@@ -4,30 +4,37 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
+import { InvalidRequest } from '@web-api/errors/errors';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
-export const createOrUpdateUser = async ({
-  applicationContext,
-  disableCognitoUser = false,
-  password,
-  user,
-}: {
-  applicationContext: ServerApplicationContext;
-  disableCognitoUser: boolean;
-  password: string;
-  user: RawUser;
-}) => {
-  let userId;
-  let userPoolId =
-    user.role === ROLES.irsSuperuser
-      ? process.env.USER_POOL_IRS_ID
-      : process.env.USER_POOL_ID;
+export const createOrUpdateUser = async (
+  applicationContext: ServerApplicationContext,
+  {
+    password,
+    user,
+  }: {
+    password: string;
+    user: RawUser;
+  },
+): Promise<{ userId: string }> => {
+  // TODO:
+  // let userPoolId =
+  //   user.role === ROLES.irsSuperuser
+  //   ? process.env.USER_POOL_IRS_ID
+  //   : process.env.USER_POOL_ID;
+
+  if (!user.email) {
+    throw new InvalidRequest(
+      'Unable to create an account, email was not provided.',
+    );
+  }
 
   const emailIsAvailable = await applicationContext
     .getUserGateway()
-    .isEmailAvailable(applicationContext, { email: user.email, userPoolId });
+    .isEmailAvailable(applicationContext, { email: user.email });
 
+  let userId: string;
   if (emailIsAvailable) {
     userId = await applicationContext
       .getUserGateway()
@@ -43,13 +50,6 @@ export const createOrUpdateUser = async ({
       .updateUser(applicationContext, { email: user.email, role: user.role });
   }
 
-  if (disableCognitoUser) {
-    await applicationContext.getUserGateway().disableUser(applicationContext, {
-      role: user.role,
-      userId,
-    });
-  }
-
   return await createUserRecords({
     applicationContext,
     user,
@@ -62,10 +62,10 @@ export const createUserRecords = async ({
   user,
   userId,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   user: any;
   userId: string;
-}) => {
+}): Promise<{ userId: string }> => {
   delete user.password;
 
   if (user.barNumber === '') {
@@ -154,7 +154,6 @@ export const createUserRecords = async ({
   }
 
   return {
-    ...user,
     userId,
   };
 };

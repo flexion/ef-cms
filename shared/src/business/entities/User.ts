@@ -3,6 +3,7 @@ import {
   COUNTRY_TYPES,
   JudgeTitle,
   ROLES,
+  Role,
   STATE_NOT_AVAILABLE,
   US_STATES,
   US_STATES_OTHER,
@@ -17,7 +18,7 @@ export class User extends JoiValidationEntity {
   public email?: string;
   public name: string;
   public pendingEmail?: string;
-  public role: string;
+  public role: Role;
   public token?: string;
   public userId: string;
   public isUpdatingInformation?: boolean;
