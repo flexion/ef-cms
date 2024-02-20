@@ -36,10 +36,6 @@ export const createUserInteractor = async (
       await createPractitionerUser({ applicationContext, user }),
     );
   } else {
-    if (user.barNumber === '') {
-      delete user.barNumber;
-    }
-
     userEntity = new User({
       ...user,
       userId: applicationContext.getUniqueId(),

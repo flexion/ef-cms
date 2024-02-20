@@ -1,3 +1,4 @@
+import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   caseServicesSupervisorUser,
@@ -14,11 +15,9 @@ describe('createOrUpdateUser', () => {
   it('should ONLY create a user when they do not already exist in the system', async () => {
     applicationContext
       .getUserGateway()
-      .isEmailAvailable.mockResolvedValue(true);
+      .getUserByEmail.mockResolvedValue(undefined);
 
-    await createOrUpdateUser({
-      applicationContext,
-      disableCognitoUser: false,
+    await createOrUpdateUser(applicationContext, {
       password: mockTemporaryPassword,
       user: petitionsClerkUser,
     });
@@ -33,46 +32,26 @@ describe('createOrUpdateUser', () => {
       },
     );
     expect(
-      applicationContext.getCognito().adminDisableUser,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getCognito().adminUpdateUserAttributes,
+      applicationContext.getUserGateway().updateUser,
     ).not.toHaveBeenCalled();
   });
 
-  it('should create and disable the user when the email is available and the disable flag is true', async () => {
-    applicationContext
-      .getUserGateway()
-      .isEmailAvailable.mockResolvedValue(true);
-    applicationContext
-      .getUserGateway()
-      .createUser.mockResolvedValue(petitionsClerkUser.userId);
-
-    await createOrUpdateUser({
-      applicationContext,
-      disableCognitoUser: true,
-      password: mockTemporaryPassword,
-      user: petitionsClerkUser,
+  it('should update the user when they already exist in the system', async () => {
+    applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
+      accountStatus: UserStatusType.CONFIRMED,
+      email: petitionsClerkUser.email,
+      name: petitionsClerkUser.name,
+      role: petitionsClerkUser.role,
+      userId: petitionsClerkUser.userId,
     });
 
-    expect(applicationContext.getUserGateway().createUser).toHaveBeenCalled();
-    expect(applicationContext.getUserGateway().disableUser).toHaveBeenCalled();
-  });
-
-  it('should update the user when the user already exists in the system', async () => {
-    applicationContext
-      .getUserGateway()
-      .isEmailAvailable.mockResolvedValue(false);
-
-    await createOrUpdateUser({
-      applicationContext,
-      disableCognitoUser: false,
+    await createOrUpdateUser(applicationContext, {
       password: mockTemporaryPassword,
       user: petitionsClerkUser,
     });
 
     expect(
-      applicationContext.getCognito().adminCreateUser,
+      applicationContext.getUserGateway().createUser,
     ).not.toHaveBeenCalled();
     expect(applicationContext.getUserGateway().updateUser).toHaveBeenCalledWith(
       expect.anything(),

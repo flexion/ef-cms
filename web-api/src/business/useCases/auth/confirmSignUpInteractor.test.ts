@@ -42,9 +42,10 @@ describe('confirmSignUpInteractor', () => {
       .getPersistenceGateway()
       .getAccountConfirmationCode.mockResolvedValue(mockConfirmationCode);
     applicationContext.getUserGateway().confirmSignUp.mockResolvedValue({});
-    applicationContext
-      .getUserGateway()
-      .getUserByEmail.mockResolvedValue({ email: mockEmail });
+    applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
+      email: mockEmail,
+      name: 'Test Petitioner',
+    });
 
     await confirmSignUpInteractor(applicationContext, {
       confirmationCode: mockConfirmationCode,

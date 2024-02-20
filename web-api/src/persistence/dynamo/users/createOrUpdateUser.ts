@@ -29,7 +29,7 @@ export const createOrUpdateUser = async (
     );
   }
 
-  const emailIsAvailable = await applicationContext
+  const emailHasAccount = await applicationContext
     .getUserGateway()
     .getUserByEmail(applicationContext, {
       email: user.email,
@@ -37,7 +37,7 @@ export const createOrUpdateUser = async (
     });
 
   let userId: string;
-  if (emailIsAvailable) {
+  if (!emailHasAccount) {
     userId = await applicationContext
       .getUserGateway()
       .createUser(applicationContext, {
