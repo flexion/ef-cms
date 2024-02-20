@@ -1,5 +1,9 @@
 ::: STUFF TO DO :::
 - TODOs
+- Increase SES email quote in the us-west-1 region as we are now sending emails from there.
+- Cypress smoketests will fail on test right now because of passwords.
+- Investigate rate limiting authentication end points
+- Talk about forgotPassword security. Potentially refactor to use a tempPass instead?
 
 
 ::: QUESTIONS :::
@@ -36,7 +40,7 @@
 
 ::: Post Deployment Things to Know :::
 - Create Petitioner Account verification email link sent before 10007 deploy will no longer work
-    - Remedation steps: Ask the user to attempt to login to DAWSON. They will be sent a new verification email with a new link they can use to verify their account. 
+    - Remediation steps: Ask the user to attempt to login to DAWSON. They will be sent a new verification email with a new link they can use to verify their account. 
 - Verify pending email
     - Old email will work successfully without the user needing to do anything. User still needs to be logged in when they click on the verify link.
 - Forgot password

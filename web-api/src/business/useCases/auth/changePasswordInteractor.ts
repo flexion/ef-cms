@@ -100,7 +100,7 @@ export const changePasswordInteractor = async (
         userFromPersistence.pendingEmail &&
         userFromPersistence.pendingEmail === email
       ) {
-        const { updatedUser } = await updateUserEmailAddress(
+        const { updatedUser } = await updateUserPendingEmailRecord(
           applicationContext,
           {
             user: userFromPersistence,
@@ -109,7 +109,7 @@ export const changePasswordInteractor = async (
 
         await applicationContext
           .getWorkerGateway()
-          .initialize(applicationContext, {
+          .queueWork(applicationContext, {
             message: {
               payload: { user: updatedUser },
               type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
@@ -156,10 +156,18 @@ export const changePasswordInteractor = async (
         ClientId: applicationContext.environment.cognitoClientId,
       });
 
+      if (
+        !result.AuthenticationResult?.AccessToken ||
+        !result.AuthenticationResult?.IdToken ||
+        !result.AuthenticationResult?.RefreshToken
+      ) {
+        throw new Error('Unsuccessful password change');
+      }
+
       return {
-        accessToken: result.AuthenticationResult!.AccessToken!,
-        idToken: result.AuthenticationResult!.IdToken!,
-        refreshToken: result.AuthenticationResult!.RefreshToken!,
+        accessToken: result.AuthenticationResult.AccessToken,
+        idToken: result.AuthenticationResult.IdToken,
+        refreshToken: result.AuthenticationResult.RefreshToken,
       };
     }
   } catch (err: any) {
@@ -172,7 +180,7 @@ export const changePasswordInteractor = async (
   }
 };
 
-export const updateUserEmailAddress = async (
+export const updateUserPendingEmailRecord = async (
   applicationContext: ServerApplicationContext,
   { user }: { user: RawUser },
 ): Promise<{ updatedUser: RawPractitioner | RawUser }> => {

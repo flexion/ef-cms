@@ -1,8 +1,11 @@
+import {
+  batchWrite,
+  getDocumentClient,
+} from '../helpers/dynamo/getDynamoCypress';
 import { cypressEnv } from '../helpers/env/cypressEnvironment';
 import { getCognito } from '../helpers/cognito/getCognitoCypress';
-import { getDocumentClient } from '../helpers/dynamo/getDynamoCypress';
 import promiseRetry from 'promise-retry';
-import type { DeleteRequest } from '@web-api/src/persistence/dynamo/dynamoTypes.ts';
+import type { DeleteRequest } from '../../web-api/src/persistence/dynamo/dynamoTypes';
 
 export const confirmUser = async ({ email }: { email: string }) => {
   const userPoolId = await getUserPoolId();
@@ -169,40 +172,44 @@ const deleteAccount = async (
   const deleteRequests: DeleteRequest[] = [];
   if (userRecord) {
     deleteRequests.push({
-      Key: {
-        pk: `privatePractitioner|${userRecord.barNumber}`,
-        sk: `user|${user.userId}`,
+      DeleteRequest: {
+        Key: {
+          pk: `user-email|${userRecord.email}`,
+          sk: `user|${user.userId}`,
+        },
       },
     });
-    deleteRequests.push({
-      Key: {
-        pk: `privatePractitioner|${userRecord.name}`,
-        sk: `user|${user.userId}`,
-      },
-    });
-    deleteRequests.push({
-      Key: {
-        pk: `user-email|${userRecord.email}`,
-        sk: `user|${user.userId}`,
-      },
-    });
-  }
 
-  userRecords.Items?.map(record =>
     deleteRequests.push({
-      Key: {
-        pk: record.pk,
-        sk: record.sk,
+      DeleteRequest: {
+        Key: {
+          pk: `privatePractitioner|${userRecord.barNumber}`,
+          sk: `user|${user.userId}`,
+        },
       },
-    }),
-  );
-  await getDocumentClient().batchWrite({
-    RequestItems: {
-      [cypressEnv.dynamoDbTableName]: deleteRequests.map(request => ({
-        DeleteRequest: request,
-      })),
-    },
-  });
+    });
+    deleteRequests.push({
+      DeleteRequest: {
+        Key: {
+          pk: `privatePractitioner|${userRecord.name}`,
+          sk: `user|${user.userId}`,
+        },
+      },
+    });
+
+    userRecords.Items?.map(record =>
+      deleteRequests.push({
+        DeleteRequest: {
+          Key: {
+            pk: record.pk,
+            sk: record.sk,
+          },
+        },
+      }),
+    );
+
+    await batchWrite(deleteRequests);
+  }
 };
 
 const getAllCypressTestAccounts = async (

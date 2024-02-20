@@ -6,7 +6,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../../errors/errors';
-import { updateUserEmailAddress } from '@web-api/business/useCases/auth/changePasswordInteractor';
+import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/changePasswordInteractor';
 
 export const verifyUserPendingEmailInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -39,10 +39,12 @@ export const verifyUserPendingEmailInteractor = async (
     throw new Error('Email is not available');
   }
 
-  // Todo 10007 Look for other places we are doing this. Can this be consolidated?
-  const { updatedUser } = await updateUserEmailAddress(applicationContext, {
-    user,
-  });
+  const { updatedUser } = await updateUserPendingEmailRecord(
+    applicationContext,
+    {
+      user,
+    },
+  );
 
   const cognito: CognitoIdentityProvider = applicationContext.getCognito();
 
@@ -61,7 +63,7 @@ export const verifyUserPendingEmailInteractor = async (
     Username: user.email,
   });
 
-  await applicationContext.getWorkerGateway().initialize(applicationContext, {
+  await applicationContext.getWorkerGateway().queueWork(applicationContext, {
     message: {
       payload: { user: updatedUser },
       type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
