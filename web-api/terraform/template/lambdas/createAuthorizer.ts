@@ -1,13 +1,19 @@
+console.log('_1');
+
 import { createLogger } from '../../../src/createLogger';
 import { transports } from 'winston';
 import axios from 'axios';
 import jwk from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
 
+console.log('A');
+
 const transport = new transports.Console({
   handleExceptions: true,
   handleRejections: true,
 });
+
+console.log('B');
 
 const issMain = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_MAIN}`;
 const issIrs = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_IRS}`;
@@ -63,6 +69,8 @@ const throw401GatewayError = () => {
 
 export const createAuthorizer = getToken => async (event, context) => {
   const logger = getLogger(context);
+
+  logger.info('CREATING AUTHORIZER');
 
   let token;
   try {

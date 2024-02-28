@@ -1,15 +1,13 @@
-data "archive_file" "websocket_authorizer" {
-  type        = "zip"
-  output_path = "${path.module}/lambdas/websocket-authorizer.js.zip"
-  source_file = "${path.module}/lambdas/dist/websocket-authorizer.js"
-}
+
 
 resource "aws_lambda_function" "websocket_authorizer_lambda" {
-  filename         = data.archive_file.websocket_authorizer.output_path
+  filename         = data.archive_file.zip_lambdas.output_path
   function_name    = "websocket_authorizer_lambda_${var.environment}"
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_${var.environment}"
-  handler          = "websocket-authorizer.handler"
-  source_code_hash = data.archive_file.websocket_authorizer.output_base64sha256
+  handler          = "handlers.websocketAuthorizerHandler"
+  source_code_hash = data.archive_file.zip_lambdas.output_base64sha256
+  timeout          = "10"
+  memory_size      = "1024"
 
   runtime = "nodejs18.x"
 
@@ -25,12 +23,14 @@ resource "aws_lambda_function" "websocket_authorizer_lambda" {
 }
 
 resource "aws_lambda_function" "websocket_authorizer_lambda_west" {
-  filename         = data.archive_file.websocket_authorizer.output_path
+  filename         = data.archive_file.zip_lambdas.output_path
   function_name    = "websocket_authorizer_lambda_${var.environment}"
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_${var.environment}"
-  handler          = "websocket-authorizer.handler"
-  source_code_hash = data.archive_file.websocket_authorizer.output_base64sha256
-
+  handler          = "handlers.websocketAuthorizerHandler"
+  source_code_hash = data.archive_file.zip_lambdas.output_base64sha256
+  timeout          = "10"
+  memory_size      = "1024"
+  
   runtime = "nodejs18.x"
 
   environment {

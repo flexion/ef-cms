@@ -23,16 +23,16 @@ resource "aws_lambda_permission" "allow_trigger" {
 resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
   function_name    = "cognito_post_confirmation_lambda_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_cognito_post_confirmation_lambda_role_${var.environment}"
-  handler          = "cognito-triggers.handler"
+  handler          = "handlers.cognitoTriggersHandler"
   timeout          = "29"
   memory_size      = "3008"
   runtime          = var.node_version
   count            = var.create_triggers
 
-  depends_on       = [var.triggers_object]
+  depends_on       = [var.lambdas_object]
   s3_bucket        = var.lambda_bucket_id
-  s3_key           = "triggers_${var.current_color}.js.zip"
-  source_code_hash = var.triggers_object_hash
+  s3_key           = "lambdas_${var.current_color}.js.zip"
+  source_code_hash = var.lambdas_object_hash
 
   layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
@@ -44,14 +44,14 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
 resource "aws_lambda_function" "cognito_post_authentication_lambda" {
   function_name    = "cognito_post_authentication_lambda_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_cognito_post_authentication_lambda_role_${var.environment}"
-  handler          = "cognito-triggers.handler"
+  handler          = "handlers.postAuthenticationHandler"
   timeout          = "29"
   memory_size      = "3008"
   runtime          = var.node_version
-  depends_on       = [var.triggers_object]
+  depends_on       = [var.lambdas_object]
   s3_bucket        = var.lambda_bucket_id
-  s3_key           = "triggers_${var.current_color}.js.zip"
-  source_code_hash = var.triggers_object_hash
+  s3_key           = "lambdas_${var.current_color}.js.zip"
+  source_code_hash = var.lambdas_object_hash
   count            = var.create_triggers
 
   layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
@@ -65,15 +65,15 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
 resource "aws_lambda_function" "update_petitioner_cases_lambda" {
   function_name    = "update_petitioner_cases_lambda_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_update_petitioner_cases_lambda_role_${var.environment}"
-  handler          = "cognito-triggers.updatePetitionerCasesLambda"
+  handler          = "handlers.updatePetitionerCasesHandler"
   timeout          = "29"
   count            = var.create_triggers
   memory_size      = "3008"
   runtime          = var.node_version
-  depends_on       = [var.triggers_object]
+  depends_on       = [var.lambdas_object]
   s3_bucket        = var.lambda_bucket_id
-  s3_key           = "triggers_${var.current_color}.js.zip"
-  source_code_hash = var.triggers_object_hash
+  s3_key           = "lambdas_${var.current_color}.js.zip"
+  source_code_hash = var.lambdas_object_hash
 
   layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 

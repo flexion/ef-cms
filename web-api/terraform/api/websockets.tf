@@ -26,13 +26,13 @@ resource "aws_apigatewayv2_route" "default" {
 
 
 resource "aws_lambda_function" "websockets_connect_lambda" {
-  depends_on       = [var.websockets_object]
+  depends_on       = [var.lambdas_object]
   function_name    = "websockets_connect_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "websockets.connectHandler"
+  handler          = "handlers.websocketConnectHandler"
   s3_bucket        = var.lambda_bucket_id
-  s3_key           = "websockets_${var.current_color}.js.zip"
-  source_code_hash = var.websockets_object_hash
+  s3_key           = "lambdas_${var.current_color}.js.zip"
+  source_code_hash = var.lambdas_object_hash
   timeout          = "29"
   memory_size      = "3008"
 
@@ -46,13 +46,13 @@ resource "aws_lambda_function" "websockets_connect_lambda" {
 }
 
 resource "aws_lambda_function" "websockets_default_lambda" {
-  depends_on       = [var.websockets_object]
+  depends_on       = [var.lambdas_object]
   function_name    = "websockets_default_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "websockets.defaultHandler"
+  handler          = "handlers.websocketDefaultHandler"
   s3_bucket        = var.lambda_bucket_id
-  s3_key           = "websockets_${var.current_color}.js.zip"
-  source_code_hash = var.websockets_object_hash
+  s3_key           = "lambdas_${var.current_color}.js.zip"
+  source_code_hash = var.lambdas_object_hash
   timeout          = "29"
   memory_size      = "3008"
 
@@ -67,13 +67,13 @@ resource "aws_lambda_function" "websockets_default_lambda" {
 
 
 resource "aws_lambda_function" "websockets_disconnect_lambda" {
-  depends_on       = [var.websockets_object]
+  depends_on       = [var.lambdas_object]
   function_name    = "websockets_disconnect_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "websockets.disconnectHandler"
+  handler          = "handlers.websocketDisconnectHandler"
   s3_bucket        = var.lambda_bucket_id
-  s3_key           = "websockets_${var.current_color}.js.zip"
-  source_code_hash = var.websockets_object_hash
+  s3_key           = "lambdas_${var.current_color}.js.zip"
+  source_code_hash = var.lambdas_object_hash
   timeout          = "29"
   memory_size      = "3008"
 

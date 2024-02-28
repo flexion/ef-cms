@@ -1,3 +1,5 @@
+console.log('X');
+
 import { createAuthorizer } from './createAuthorizer';
 
 const getToken = event => {

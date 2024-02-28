@@ -1,14 +1,14 @@
 resource "aws_lambda_function" "zip_seal" {
   count            = var.create_seal_in_lower
-  depends_on       = [var.seal_in_lower_object]
+  depends_on       = [var.lambdas_object]
   s3_bucket        = var.lambda_bucket_id
-  s3_key           = "seal_in_lower_${var.current_color}.js.zip"
-  source_code_hash = var.seal_in_lower_object_hash
+  s3_key           = "lambdas_${var.current_color}.js.zip"
+  source_code_hash = var.lambdas_object_hash
   function_name    = "seal_in_lower_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "seal-in-lower-environment.handler"
+  handler          = "handlers.sealInLowerEnvironmentHandler"
   timeout          = "60"
-  memory_size      = "768"
+  memory_size      = "1024"
 
   runtime = var.node_version
 

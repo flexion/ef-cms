@@ -1,11 +1,11 @@
 resource "aws_lambda_function" "api_public_lambda" {
-  depends_on       = [var.api_public_object]
+  depends_on       = [var.lambdas_object]
   function_name    = "api_public_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "api-public.handler"
+  handler          = "handlers.publicApiHandler"
   s3_bucket        = var.lambda_bucket_id
-  s3_key           = "api_public_${var.current_color}.js.zip"
-  source_code_hash = var.public_object_hash
+  s3_key           = "lambdas_${var.current_color}.js.zip"
+  source_code_hash = var.lambdas_object_hash
   timeout          = "29"
   memory_size      = "3008"
 

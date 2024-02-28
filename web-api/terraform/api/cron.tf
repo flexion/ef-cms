@@ -1,12 +1,12 @@
 resource "aws_lambda_function" "check_case_cron_lambda" {
+  depends_on       = [var.lambdas_object]
   count            = var.create_check_case_cron
-  depends_on       = [var.cron_object]
   s3_bucket        = var.lambda_bucket_id
-  s3_key           = "cron_${var.current_color}.js.zip"
-  source_code_hash = var.cron_object_hash
+  s3_key           = "lambdas_${var.current_color}.js.zip"
+  source_code_hash = var.lambdas_object_hash
   function_name    = "check_case_cron_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "cron.checkForReadyForTrialCasesHandler"
+  handler          = "handlers.checkForReadyForTrialCasesHandler"
   timeout          = "900"
   memory_size      = "3008"
 
@@ -22,13 +22,13 @@ resource "aws_lambda_function" "check_case_cron_lambda" {
 
 resource "aws_lambda_function" "health_check_cron_lambda" {
   count            = var.create_health_check_cron
-  depends_on       = [var.cron_object]
+  depends_on       = [var.lambdas_object]
   s3_bucket        = var.lambda_bucket_id
-  s3_key           = "cron_${var.current_color}.js.zip"
-  source_code_hash = var.cron_object_hash
+  s3_key           = "lambdas_${var.current_color}.js.zip"
+  source_code_hash = var.lambdas_object_hash
   function_name    = "health_check_cron_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "cron.setHealthCheckCacheHandler"
+  handler          = "handlers.setHealthCheckCacheHandler"
   timeout          = "900"
   memory_size      = "3008"
 

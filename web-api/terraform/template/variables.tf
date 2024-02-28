@@ -50,6 +50,7 @@ variable "green_table_name" {
   type = string
 }
 
+
 variable "blue_elasticsearch_domain" {
   type = string
 }

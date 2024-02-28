@@ -1,3 +1,5 @@
+console.log('API');
+
 import { app } from '../../../src/app';
 import awsServerlessExpress from '@vendia/serverless-express';
 

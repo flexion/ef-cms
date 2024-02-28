@@ -1,14 +1,14 @@
 resource "aws_lambda_function" "zip_streams" {
   count            = var.create_streams
-  depends_on       = [var.streams_object]
+  depends_on       = [var.lambdas_object]
   s3_bucket        = var.lambda_bucket_id
-  s3_key           = "streams_${var.current_color}.js.zip"
-  source_code_hash = var.streams_object_hash
+  s3_key           = "lambdas_${var.current_color}.js.zip"
+  source_code_hash = var.lambdas_object_hash
   function_name    = "streams_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "streams.handler"
+  handler          = "handlers.streamsHandler"
   timeout          = "60"
-  memory_size      = "768"
+  memory_size      = "1024"
 
   runtime = var.node_version
 

@@ -3,13 +3,13 @@ locals {
 }
 
 resource "aws_lambda_function" "change_of_address_lambda" {
-  depends_on       = [var.pdf_generation_object]
+  depends_on       = [var.lambdas_object]
   function_name    = "change_of_address_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "pdf-generation.changeOfAddressHandler"
+  handler          = "handlers.changeOfAddressHandler"
   s3_bucket        = var.lambda_bucket_id
-  s3_key           = "pdf_generation_${var.current_color}.js.zip"
-  source_code_hash = var.pdf_generation_object_hash
+  s3_key           = "lambdas_${var.current_color}.js.zip"
+  source_code_hash = var.lambdas_object_hash
   timeout          = local.timeout_time
   memory_size      = "3008"
 

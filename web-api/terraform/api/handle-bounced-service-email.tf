@@ -1,14 +1,14 @@
 resource "aws_lambda_function" "zip_handle_bounce" {
   count            = var.create_bounce_handler
-  depends_on       = [var.bounce_handler_object]
+  depends_on       = [var.lambdas_object]
   s3_bucket        = var.lambda_bucket_id
-  s3_key           = "bounce_handler_${var.current_color}.js.zip"
-  source_code_hash = var.bounce_handler_object_hash
+  s3_key           = "lambdas_${var.current_color}.js.zip"
+  source_code_hash = var.lambdas_object_hash
   function_name    = "bounce_handler_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "handle-bounced-service-email.handler"
+  handler          = "handlers.handleBounceNotificationsHandler"
   timeout          = "60"
-  memory_size      = "768"
+  memory_size      = "1024"
 
   runtime = var.node_version
 
