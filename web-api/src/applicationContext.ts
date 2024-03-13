@@ -73,6 +73,74 @@ import util from 'util';
 
 const execPromise = util.promisify(exec);
 
+function getFileSize(s3Client, params): Promise<number> {
+  return new Promise((resolve, reject) => {
+    s3Client.headObject(params, function (err, data) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data.ContentLength);
+      }
+    });
+  });
+}
+
+// Function to download a part of the file
+function downloadPart(s3Client, params, partNumber, rangeStart, rangeEnd) {
+  const getObjectParams = {
+    ...params,
+    Range: `bytes=${rangeStart}-${rangeEnd}`,
+  };
+
+  return new Promise((resolve, reject) => {
+    s3Client.getObject(getObjectParams, function (err, data) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve({ data: data.Body, partNumber });
+      }
+    });
+  });
+}
+
+// Function to download file parts in parallel
+function downloadFile(s3Client, params, fileSize, numParts) {
+  const partSize = 8 * 1024 * 1024; // 8MB
+  const rangeStarts = Array.from({ length: numParts }, (_, i) => i * partSize);
+  const rangeEnds = rangeStarts.map(start =>
+    Math.min(start + partSize - 1, fileSize - 1),
+  );
+
+  const promises = rangeStarts.map((start, index) => {
+    return downloadPart(s3Client, params, index + 1, start, rangeEnds[index]);
+  });
+
+  return Promise.all(promises).then(results => {
+    const fileBuffer = Buffer.concat(
+      results
+        .sort((a: any, b: any) => a.partNumber - b.partNumber)
+        .map((part: any) => part.data),
+    );
+    return fileBuffer;
+  });
+}
+
+const getObjectUsingMultiParts = async (
+  s3Client,
+  params: {
+    Bucket: string;
+    Key: string;
+  },
+) => {
+  try {
+    const fileSize = await getFileSize(s3Client, params);
+    const numParts = Math.ceil(fileSize / (8 * 1024 * 1024));
+    return downloadFile(s3Client, params, fileSize, numParts);
+  } catch (error) {
+    console.error('Error downloading file:', error);
+  }
+};
+
 const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
     ? `app.${process.env.EFCMS_DOMAIN}`
@@ -401,6 +469,9 @@ export const createApplicationContext = (
           region: 'us-east-1',
           s3ForcePathStyle: true,
         });
+
+        s3Cache.getObjectUsingMultiParts = params =>
+          getObjectUsingMultiParts(s3Cache, params);
       }
       return s3Cache;
     },
