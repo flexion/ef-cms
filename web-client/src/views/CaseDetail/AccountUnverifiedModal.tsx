@@ -6,7 +6,10 @@ import React from 'react';
 export const AccountUnverifiedModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
+    confirmSequence:
+      sequences.submitUpdatePetitionerInformationFromModalSequence,
   },
+  // TODO: Workshop message with UXs
   function AccountUnverifiedModal({ cancelSequence }) {
     return (
       <ModalDialog
@@ -17,8 +20,8 @@ export const AccountUnverifiedModal = connect(
       >
         <div>
           <p>
-            This account is unverified. Please contact the user and ask them to
-            verify their email address.
+            This account is unverified. The account will be updated to pending
+            status.
           </p>
         </div>
       </ModalDialog>

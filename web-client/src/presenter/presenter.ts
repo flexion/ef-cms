@@ -438,6 +438,7 @@ import { submitStampMotionSequence } from './sequences/submitStampMotionSequence
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
 import { submitUpdateAddDocketNumbersToOrderSequence } from './sequences/submitUpdateAddDocketNumbersToOrderSequence';
 import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
+import { submitUpdatePetitionerAccountVerificationStatusSequence } from '@web-client/presenter/sequences/submitUpdatePetitionerAccountVerificationStatusSequence';
 import { submitUpdatePetitionerInformationFromModalSequence } from './sequences/submitUpdatePetitionerInformationFromModalSequence';
 import { submitUpdatePractitionerUserSequence } from './sequences/submitUpdatePractitionerUserSequence';
 import { submitUpdateUserContactInformationSequence } from './sequences/submitUpdateUserContactInformationSequence';
@@ -1300,6 +1301,8 @@ export const presenterSequences = {
     submitUpdateAddDocketNumbersToOrderSequence as unknown as Function,
   submitUpdateCaseModalSequence:
     submitUpdateCaseModalSequence as unknown as Function,
+  submitUpdatePetitionerAccountVerificationStatusSequence:
+    submitUpdatePetitionerAccountVerificationStatusSequence as unknown as Function,
   submitUpdatePetitionerInformationFromModalSequence:
     submitUpdatePetitionerInformationFromModalSequence as unknown as Function,
   submitUpdatePractitionerUserSequence:
