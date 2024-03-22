@@ -37,10 +37,11 @@ const verifyDownloadedFiles = ({
 }: {
   downloadPath: string;
   zipName: string;
-}) =>
-  cy
-    .listDownloadedFiles(downloadPath)
-    .then((files: string[]) => files.includes(zipName));
+}) => {
+  return cy.listDownloadedFiles(downloadPath).then((files: string[]) => {
+    return files.includes(zipName);
+  });
+};
 
 const checkFileCounts = ({
   expectedFileCount,
@@ -68,7 +69,7 @@ const checkFileCounts = ({
 };
 
 describe('Batch Download Documents', () => {
-  afterEach(() => {
+  beforeEach(() => {
     const downloadPath = Cypress.config('downloadsFolder');
     cy.task('deleteAllFilesInFolder', downloadPath);
   });

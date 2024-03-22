@@ -15,7 +15,6 @@ import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-pract
 export default defineConfig({
   chromeWebSecurity: false,
   defaultCommandTimeout: 60000,
-  downloadsFolder: 'cypress/downloads',
   e2e: {
     baseUrl: 'http://localhost:1234',
     experimentalStudio: true,
