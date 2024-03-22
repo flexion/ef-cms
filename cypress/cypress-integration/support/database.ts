@@ -41,5 +41,9 @@ export const deleteAllFilesInFolder = (directoryPath: string) => {
       fs.unlinkSync(filePath);
     }
   });
+
+  cy.exec(`ls ${directoryPath}`)
+    .its('stdout')
+    .then(stdout => console.log('files in directory:', stdout));
   return null;
 };
