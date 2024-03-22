@@ -75,10 +75,10 @@ describe('Batch Download Documents', () => {
   });
 
   it('should download all eligible documents that are not stricken with the printable docket record, with all files in a flat directory', () => {
-    const downloadPath = Cypress.config('downloadsFolder');
-
     createAndServePaperPetition().then(
       ({ docketNumber, documentsCreated, name }) => {
+        const downloadPath = Cypress.config('downloadsFolder');
+
         const zipName = `${docketNumber}, ${name}.zip`;
         let expectedFileCount = documentsCreated.length;
         const expectedSealedCount = 0;
@@ -107,10 +107,10 @@ describe('Batch Download Documents', () => {
   });
 
   it('should download all eligible documents with some stricken and some sealed, labeling files and adding sealed docs to sealed directory', () => {
-    const downloadPath = Cypress.config('downloadsFolder');
-
     createAndServePaperPetition().then(
       ({ docketNumber, documentsCreated, name }) => {
+        const downloadPath = Cypress.config('downloadsFolder');
+
         const zipName = `${docketNumber}, ${name}.zip`;
         const expectedFileCount = documentsCreated.length;
         let expectedSealedCount = 0;
@@ -161,10 +161,10 @@ describe('Batch Download Documents', () => {
   });
 
   it('should download selected documents, labeling stricken documents and putting everything except the printable docket record into the sealed directory when then the case is sealed', () => {
-    const downloadPath = Cypress.config('downloadsFolder');
-
     createAndServePaperPetition().then(
       ({ docketNumber, documentsCreated, name }) => {
+        const downloadPath = Cypress.config('downloadsFolder');
+
         const zipName = `${docketNumber}, ${name}.zip`;
         let expectedFileCount = documentsCreated.length;
         let expectedSealedCount = 0;
@@ -215,9 +215,9 @@ describe('Batch Download Documents', () => {
   });
 
   it('should download selected documents filtered by document type', () => {
-    const downloadPath = Cypress.config('downloadsFolder');
-
     createAndServePaperPetition().then(({ docketNumber, name }) => {
+      const downloadPath = Cypress.config('downloadsFolder');
+
       const zipName = `${docketNumber}, ${name}.zip`;
       const documentsFilteredByDocumentType = [{ eventCode: 'O' }];
       let expectedFileCount = 1;
