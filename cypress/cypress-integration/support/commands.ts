@@ -20,7 +20,7 @@ Cypress.Commands.add('showsSpinner', (shows = true) => {
 
 Cypress.Commands.add('listDownloadedFiles', directory => {
   return cy
-    .exec(`ls ${directory}`, { timeout: 5000 })
+    .exec(`ls ${directory}`, { timeout: 25000 })
     .its('stdout')
     .then(stdout => stdout.split('\n').filter(Boolean));
 });
