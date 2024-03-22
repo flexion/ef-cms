@@ -37,11 +37,10 @@ const verifyDownloadedFiles = ({
 }: {
   downloadPath: string;
   zipName: string;
-}) => {
-  return cy.listDownloadedFiles(downloadPath).then((files: string[]) => {
-    return files.includes(zipName);
-  });
-};
+}) =>
+  cy
+    .listDownloadedFiles(downloadPath)
+    .then((files: string[]) => files.includes(zipName));
 
 const checkFileCounts = ({
   expectedFileCount,
