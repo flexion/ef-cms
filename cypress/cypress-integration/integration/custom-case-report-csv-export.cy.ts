@@ -45,6 +45,10 @@ describe('Custom Case Report CSV export', () => {
 });
 
 const waitUntilTheCsvFileIsInTheDownloadFolder = (downloadPath: string) => {
+  console.log('downloadPath', downloadPath);
+  ///Users/joshuaabu/Documents/FLEXION/DAWSON/cypress/downloads
+  // Users / joshuaabu / Documents / FLEXION / DAWSON / cypress / downloads;
+
   return cy.listDownloadedFiles(downloadPath).then((files: string[]) => {
     const latestFile = files
       .sort()
