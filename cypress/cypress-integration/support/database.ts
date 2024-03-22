@@ -42,8 +42,11 @@ export const deleteAllFilesInFolder = (directoryPath: string) => {
     }
   });
 
-  cy.exec(`ls ${directoryPath}`)
+  const truePath = directoryPath.split('/');
+  truePath.pop();
+
+  cy.exec(`ls ${truePath}`)
     .its('stdout')
-    .then(stdout => console.log('files in directory:', stdout));
+    .then(stdout => console.log('files in folder', stdout));
   return null;
 };
