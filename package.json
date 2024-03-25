@@ -52,7 +52,7 @@
     "deep-freeze": "^0.0.1",
     "diff-arrays-of-objects": "^1.1.9",
     "english-ordinals": "^3.3.0",
-    "express": "^4.18.3",
+    "express": "4.19.2",
     "form-data": "^4.0.0",
     "image-blob-reduce": "^4.1.0",
     "joi": "^17.12.2",
@@ -88,7 +88,7 @@
     "uuid": "^9.0.1",
     "websocket": "^1.0.34",
     "wicg-inert": "^3.1.2",
-    "winston": "^3.12.0"
+    "winston": "3.13.0"
   },
   "scripts": {
     "admin:become-user": "npx ts-node --transpile-only scripts/user/become-user.ts",
@@ -370,9 +370,9 @@
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
     "tsconfig-paths-webpack-plugin": "4.1.0",
-    "typescript": "5.3.3",
+    "typescript": "5.4.3",
     "utf8": "3.0.0",
-    "webpack": "5.90.3",
+    "webpack": "5.91.0",
     "webpack-cli": "5.1.4"
   }
 }
