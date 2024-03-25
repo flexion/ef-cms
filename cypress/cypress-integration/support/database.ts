@@ -50,3 +50,8 @@ export const deleteAllFilesInFolder = (directoryPath: string) => {
     .then(stdout => console.log('files in folder', stdout));
   return null;
 };
+
+export const verifyExistenceOfFolder = (directoryPath: string) => {
+  if (fs.existsSync(directoryPath)) return null;
+  fs.mkdirSync(directoryPath);
+};

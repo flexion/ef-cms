@@ -41,6 +41,9 @@ export default defineConfig({
         unzipFile({ destinationPath, filePath }) {
           return unzipFile({ destinationPath, filePath });
         },
+        verifyExistenceOfFolder(dir) {
+          return verifyExistenceOfFolder(dir);
+        },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
         },
