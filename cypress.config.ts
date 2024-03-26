@@ -8,7 +8,7 @@ import {
 import { defineConfig } from 'cypress';
 import {
   deleteAllFilesInFolder,
-  verifyExistenceOfFolder,
+  ensureFolderExists,
 } from './cypress/cypress-integration/support/database';
 import { unzipFile } from './cypress/helpers/unzip-file';
 import { waitForNoce } from './cypress/helpers/wait-for-noce';
@@ -32,6 +32,9 @@ export default defineConfig({
         deleteAllFilesInFolder(dir) {
           return deleteAllFilesInFolder(dir);
         },
+        ensureFolderExists(directory) {
+          return ensureFolderExists(directory);
+        },
         expireUserConfirmationCode(email: string) {
           return expireUserConfirmationCode(email);
         },
@@ -43,9 +46,6 @@ export default defineConfig({
         },
         unzipFile({ destinationPath, filePath }) {
           return unzipFile({ destinationPath, filePath });
-        },
-        verifyExistenceOfFolder(dir) {
-          return verifyExistenceOfFolder(dir);
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });

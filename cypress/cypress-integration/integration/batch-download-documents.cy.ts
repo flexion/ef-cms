@@ -69,15 +69,15 @@ const checkFileCounts = ({
 };
 
 describe('Batch Download Documents', () => {
-  // beforeEach(() => {
-  //   const downloadPath = Cypress.config('downloadsFolder');
-  //   cy.task('verifyExistenceOfFolder', downloadPath);
-  // });
+  beforeEach(() => {
+    const downloadPath = Cypress.config('downloadsFolder');
+    cy.task('ensureFolderExists', downloadPath);
+  });
 
-  // afterEach(() => {
-  //   const downloadPath = Cypress.config('downloadsFolder');
-  //   cy.task('deleteAllFilesInFolder', downloadPath);
-  // });
+  afterEach(() => {
+    const downloadPath = Cypress.config('downloadsFolder');
+    cy.task('deleteAllFilesInFolder', downloadPath);
+  });
 
   it('should download all eligible documents that are not stricken with the printable docket record, with all files in a flat directory', () => {
     createAndServePaperPetition().then(

@@ -31,8 +31,8 @@ export const deleteAllFilesInFolder = (directoryPath: string) => {
   return null;
 };
 
-export const verifyExistenceOfFolder = (directoryPath: string) => {
-  if (fs.existsSync(directoryPath)) return null;
-  fs.mkdirSync(directoryPath);
+export const ensureFolderExists = (directory: string) => {
+  if (fs.existsSync(directory)) return null;
+  fs.mkdirSync(directory);
   return null;
 };
