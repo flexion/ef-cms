@@ -47,6 +47,7 @@ import { getDocumentClient } from '@web-api/persistence/dynamo/getDocumentClient
 import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
+import { getHttpAgent } from '@web-client/providers/httpAgent';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
@@ -259,7 +260,8 @@ export const createApplicationContext = (
       return entitiesByName[name];
     },
     getEnvironment,
-    getHttpClient: () => axios,
+    getHttpClient: getHttpAgent,
+    // getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMessageGateway: () => ({
       sendEmailEventToQueue: async ({ applicationContext, emailParams }) => {
