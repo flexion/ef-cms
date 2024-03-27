@@ -21,6 +21,7 @@ import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/p
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
+import { getHttpAgent } from '@web-client/providers/httpAgent';
 import { getScannerMockInterface } from '../src/persistence/dynamsoft/getScannerMockInterface';
 import {
   image1,
@@ -631,7 +632,11 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
     },
   );
 
-  presenter.providers.applicationContext = applicationContext;
+  // presenter.providers.applicationContext = applicationContext;
+  presenter.providers.applicationContext = {
+    ...applicationContext,
+    getHttpClient: getHttpAgent,
+  };
 
   const {
     initialize: initializeSocketProvider,
