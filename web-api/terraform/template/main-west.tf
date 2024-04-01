@@ -432,6 +432,10 @@ module "api-west-green" {
   cron_object_hash               = data.aws_s3_bucket_object.cron_green_west_object.etag
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_green_west_object.etag
   streams_object_hash            = ""
+  pool_arn                       = aws_cognito_user_pool.pool.arn
+  triggers_object                = ""
+  triggers_object_hash           = ""
+  create_triggers                = 0
   create_check_case_cron         = 0
   create_health_check_cron       = 1
   create_streams                 = 0
@@ -507,6 +511,10 @@ module "api-west-blue" {
   cron_object_hash               = data.aws_s3_bucket_object.cron_blue_west_object.etag
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_blue_west_object.etag
   streams_object_hash            = ""
+  pool_arn                       = aws_cognito_user_pool.pool.arn
+  triggers_object                = ""
+  triggers_object_hash           = ""
+  create_triggers                = 0
   create_check_case_cron         = 0
   create_health_check_cron       = 1
   create_streams                 = 0

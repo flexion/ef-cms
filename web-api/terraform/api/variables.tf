@@ -1,3 +1,20 @@
+variable "pool_arn" {
+  type = string
+}
+
+variable "create_triggers" {
+  type    = number
+  default = 1
+}
+
+variable "triggers_object" {
+  type = any
+}
+
+variable "triggers_object_hash" {
+  type = string
+}
+
 variable "environment" {
   type = string
 }
