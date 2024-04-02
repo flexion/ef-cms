@@ -4,12 +4,16 @@ import {
   createApplicationContext,
 } from '@web-api/applicationContext';
 
+// TODO Handle Post Migration, Set Flag? Or Delete User?
 export const handler = async (event, context) => {
+  console.log('UserMigration_Authentication, Handler');
   const applicationContext: ServerApplicationContext = createApplicationContext(
     {},
   );
 
   if (event.triggerSource == 'UserMigration_Authentication') {
+    console.log('Login - UserMigration_Authentication', event);
+
     // authenticate the user with old user pool
     const result = await applicationContext.getCognito().adminInitiateAuth({
       AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
@@ -21,6 +25,8 @@ export const handler = async (event, context) => {
       UserPoolId: 'us-east-1_jDerGoxYK', // OLD user pool
     });
 
+    console.log('adminInitiateAuth', result);
+
     let user;
     if (result.hasOwnProperty('AuthenticationResult')) {
       user = await applicationContext.getCognito().adminGetUser({
@@ -29,9 +35,10 @@ export const handler = async (event, context) => {
       });
     }
 
+    console.log('user', user);
+
     let userAttributes: AttributeType[] = [];
-    let sub,
-      customUserId = '';
+    let sub, customUserId;
 
     if (user.Username) {
       user.UserAttributes.forEach(attribute => {
@@ -48,7 +55,6 @@ export const handler = async (event, context) => {
 
       // Create user in new user pool
       await applicationContext.getCognito().adminCreateUser({
-        DesiredDeliveryMediums: ['EMAIL'],
         TemporaryPassword: event.request.password,
         UserAttributes: [
           ...userAttributes,
@@ -62,16 +68,15 @@ export const handler = async (event, context) => {
           // },
         ],
         UserPoolId: 'us-east-1_cH7eMtBTZ', // NEW user pool id
-        Username: user.pendingEmail!,
+        Username: event.userName,
       });
 
       // Allow user to login
-      //   event.response.userAttributes = userAttributes;
-      //   event.response.finalUserStatus = 'CONFIRMED';
-      //   event.response.messageAction = 'SUPPRESS';
+      event.response.userAttributes = userAttributes;
+      event.response.finalUserStatus = 'CONFIRMED';
+      event.response.messageAction = 'SUPPRESS';
       context.succeed(event);
     }
-    console.log('Login - UserMigration_Authentication', event);
   } else if (event.triggerSource == 'UserMigration_ForgotPassword') {
     console.log('Forgot Password - UserMigration_ForgotPassword', event);
   } else {
