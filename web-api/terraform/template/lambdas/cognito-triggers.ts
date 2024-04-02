@@ -1,14 +1,10 @@
-import {
-  AdminCreateUserCommandInput,
-  AttributeType,
-  AuthFlowType,
-} from '@aws-sdk/client-cognito-identity-provider';
+import { AttributeType } from '@aws-sdk/client-cognito-identity-provider';
 import {
   ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
 
-export const handler = async event => {
+export const handler = async (event, context) => {
   const applicationContext: ServerApplicationContext = createApplicationContext(
     {},
   );
@@ -50,10 +46,6 @@ export const handler = async event => {
         userAttributes[attribute.Name] = attribute.Value;
       });
 
-      if (customUserId === '') {
-        customUserId = sub;
-      }
-
       // Create user in new user pool
       await applicationContext.getCognito().adminCreateUser({
         DesiredDeliveryMediums: ['EMAIL'],
@@ -62,14 +54,14 @@ export const handler = async event => {
           ...userAttributes,
           {
             Name: 'custom:userId',
-            Value: customUserId,
+            Value: customUserId || sub,
           },
           // {
           //   Name: 'email_verified',
           //   Value: 'True',
           // },
         ],
-        UserPoolId: process.env.USER_POOL_ID!,
+        UserPoolId: 'us-east-1_cH7eMtBTZ', // NEW user pool id
         Username: user.pendingEmail!,
       });
 
@@ -77,7 +69,7 @@ export const handler = async event => {
       //   event.response.userAttributes = userAttributes;
       //   event.response.finalUserStatus = 'CONFIRMED';
       //   event.response.messageAction = 'SUPPRESS';
-      //   context.succeed(event);
+      context.succeed(event);
     }
     console.log('Login - UserMigration_Authentication', event);
   } else if (event.triggerSource == 'UserMigration_ForgotPassword') {
