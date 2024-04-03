@@ -1,4 +1,8 @@
-import { AttributeType } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  AdminGetUserCommandOutput,
+  AdminInitiateAuthCommandOutput,
+  AttributeType,
+} from '@aws-sdk/client-cognito-identity-provider';
 import {
   ServerApplicationContext,
   createApplicationContext,
@@ -15,33 +19,35 @@ export const handler = async (event, context) => {
     console.log('Login - UserMigration_Authentication', event);
 
     // authenticate the user with old user pool
-    const result = await applicationContext.getCognito().adminInitiateAuth({
-      AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
-      AuthParameters: {
-        PASSWORD: event.request.password,
-        USERNAME: event.userName,
-      },
-      ClientId: '2em8dvalgn7eednvasqa6reok3', // OLD user pool
-      UserPoolId: 'us-east-1_jDerGoxYK', // OLD user pool
-    });
+    const result: AdminInitiateAuthCommandOutput = await applicationContext
+      .getCognito()
+      .adminInitiateAuth({
+        AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
+        AuthParameters: {
+          PASSWORD: event.request.password,
+          USERNAME: event.userName,
+        },
+        ClientId: '2em8dvalgn7eednvasqa6reok3', // OLD user pool
+        UserPoolId: 'us-east-1_jDerGoxYK', // OLD user pool
+      });
 
     console.log('adminInitiateAuth', result);
 
-    let user;
+    let user: AdminGetUserCommandOutput;
     if (result.hasOwnProperty('AuthenticationResult')) {
       user = await applicationContext.getCognito().adminGetUser({
         UserPoolId: 'us-east-1_jDerGoxYK', // OLD user pool
         Username: event.userName,
       });
+    } else {
+      return;
     }
-
-    console.log('user', user);
 
     let userAttributes: AttributeType[] = [];
     let sub, customUserId;
 
     if (user.Username) {
-      user.UserAttributes.forEach(attribute => {
+      user.UserAttributes?.forEach(attribute => {
         if (attribute.Name == 'sub') {
           sub = attribute.Value;
           return;
@@ -50,26 +56,37 @@ export const handler = async (event, context) => {
           customUserId = attribute.Value;
           return;
         }
-        userAttributes[attribute.Name] = attribute.Value;
+        userAttributes.push(attribute);
       });
 
       // Create user in new user pool
-      await applicationContext.getCognito().adminCreateUser({
-        TemporaryPassword: event.request.password,
-        UserAttributes: [
-          ...userAttributes,
-          {
-            Name: 'custom:userId',
-            Value: customUserId || sub,
-          },
-          // {
-          //   Name: 'email_verified',
-          //   Value: 'True',
-          // },
-        ],
-        UserPoolId: 'us-east-1_cH7eMtBTZ', // NEW user pool id
-        Username: event.userName,
-      });
+      const createUserResult = await applicationContext
+        .getCognito()
+        .adminCreateUser({
+          TemporaryPassword: event.request.password,
+          UserAttributes: [
+            ...userAttributes,
+            {
+              Name: 'custom:userId',
+              Value: customUserId || sub,
+            },
+            {
+              Name: 'email_verified',
+              Value: 'True',
+            },
+          ],
+          UserPoolId: 'us-east-1_cH7eMtBTZ', // NEW user pool id
+          Username: event.userName,
+        });
+
+      if (createUserResult?.User?.UserStatus == 'FORCE_CHANGE_PASSWORD') {
+        await applicationContext.getCognito().adminSetUserPassword({
+          Password: event.request.password,
+          Permanent: true,
+          UserPoolId: 'us-east-1_cH7eMtBTZ', // NEW user pool id
+          Username: createUserResult.User.Username,
+        });
+      }
 
       // Allow user to login
       event.response.userAttributes = userAttributes;
