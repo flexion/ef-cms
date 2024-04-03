@@ -10,6 +10,7 @@ import {
 
 // TODO Handle Post Migration, Set Flag? Or Delete User?
 export const handler = async (event, context) => {
+  console.log('triggerSource', event.triggerSource);
   const applicationContext: ServerApplicationContext = createApplicationContext(
     {},
   );
@@ -93,13 +94,13 @@ export const handler = async (event, context) => {
     console.log('Forgot Password - UserMigration_ForgotPassword', event);
 
     // Get user from old user pool
-    const { Users: existingAccounts } = await cognito.listUsers({
-      Filter: `email = "${user.email}"`,
+    const { Users: users } = await applicationContext.getCognito().listUsers({
+      Filter: `email = "${event.userName}"`,
       UserPoolId: 'us-east-1_jDerGoxYK',
     });
-    console.log('user', user);
+    console.log('users', users);
 
-    if (user.Username) {
+    if (users) {
       // user found
       // create user in new user pool in "force password change"
       // send password change email
@@ -107,7 +108,7 @@ export const handler = async (event, context) => {
 
       let userAttributes = {};
 
-      user.UserAttributes?.forEach(attribute => {
+      users[0].Attributes?.forEach(attribute => {
         if (attribute.Name == 'sub') {
           return;
         }
@@ -122,7 +123,6 @@ export const handler = async (event, context) => {
       //userAttributes['email_verified'] = "true";
 
       event.response.userAttributes = userAttributes;
-
       event.response.messageAction = 'SUPPRESS';
       context.succeed(event);
     }
