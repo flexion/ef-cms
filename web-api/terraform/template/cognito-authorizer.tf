@@ -16,7 +16,7 @@ resource "aws_lambda_function" "cognito_authorizer_lambda" {
 
   environment {
     variables = {
-      USER_POOL_ID_MAIN = aws_cognito_user_pool.pool.id
+      USER_POOL_ID_MAIN = aws_cognito_user_pool.pool_case_insensitive.id
       USER_POOL_ID_IRS  = aws_cognito_user_pool.irs_pool.id
       NODE_ENV          = "production"
       LOG_LEVEL         = "info"
@@ -36,7 +36,7 @@ resource "aws_lambda_function" "cognito_authorizer_lambda_west" {
 
   environment {
     variables = {
-      USER_POOL_ID_MAIN = aws_cognito_user_pool.pool.id
+      USER_POOL_ID_MAIN = aws_cognito_user_pool.pool_case_insensitive.id
       USER_POOL_ID_IRS  = aws_cognito_user_pool.irs_pool.id
     }
   }
