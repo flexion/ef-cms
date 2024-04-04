@@ -11,12 +11,12 @@ import {
 // TODO Handle Post Migration, Set Flag? Or Delete User?
 export const handler = async (event, context) => {
   console.log('triggerSource', event.triggerSource);
+
   const applicationContext: ServerApplicationContext = createApplicationContext(
     {},
   );
 
-  if (event.triggerSource == 'UserMigration_Authentication') {
-    // authenticate the user with old user pool
+  if (event.triggerSource === 'UserMigration_Authentication') {
     const result: AdminInitiateAuthCommandOutput = await applicationContext
       .getCognito()
       .adminInitiateAuth({
@@ -55,7 +55,6 @@ export const handler = async (event, context) => {
         userAttributes.push(attribute);
       });
 
-      // Create user in new user pool
       const createUserResult = await applicationContext
         .getCognito()
         .adminCreateUser({
@@ -84,47 +83,62 @@ export const handler = async (event, context) => {
         });
       }
 
-      // Allow user to login
       event.response.userAttributes = userAttributes;
       event.response.finalUserStatus = 'CONFIRMED';
       event.response.messageAction = 'SUPPRESS';
-      context.succeed(event);
-    }
-  } else if (event.triggerSource == 'UserMigration_ForgotPassword') {
-    console.log('Forgot Password - UserMigration_ForgotPassword', event);
 
-    // Get user from old user pool
+      // context.succeed(event);
+      return event;
+    }
+  } else if (event.triggerSource === 'UserMigration_ForgotPassword') {
     const { Users: users } = await applicationContext.getCognito().listUsers({
       Filter: `email = "${event.userName}"`,
-      UserPoolId: 'us-east-1_jDerGoxYK',
+      UserPoolId: 'us-east-1_jDerGoxYK', // OLD user pool id
     });
-    console.log('users', users);
 
     if (users) {
-      // user found
-      // create user in new user pool in "force password change"
-      // send password change email
-      // return message that code has been sent
+      let userAttributes: AttributeType[] = [];
+      let sub, customUserId;
 
-      let userAttributes = {};
+      if (users[0].Username) {
+        users[0].Attributes?.forEach(attribute => {
+          if (attribute.Name == 'sub') {
+            sub = attribute.Value;
+            return;
+          }
+          if (attribute.Name === 'custom:userId') {
+            customUserId = attribute.Value;
+            return;
+          }
+          userAttributes.push(attribute);
+        });
+      }
 
-      users[0].Attributes?.forEach(attribute => {
-        if (attribute.Name == 'sub') {
-          return;
-        }
-        userAttributes[attribute.Name!] = attribute.Value;
-      });
+      const createUserResult = await applicationContext
+        .getCognito()
+        .adminCreateUser({
+          TemporaryPassword: event.request.password,
+          UserAttributes: [
+            ...userAttributes,
+            {
+              Name: 'custom:userId',
+              Value: customUserId || sub,
+            },
+            {
+              Name: 'email_verified',
+              Value: 'True',
+            },
+          ],
+          UserPoolId: 'us-east-1_cH7eMtBTZ', // NEW user pool id
+          Username: event.userName,
+        });
 
-      //***Note:*** email_verified or phone_number_verified must be set to true
-      //to enable password-reset code to be sent to user
-      //If the attribute is not already set in the source user pool,
-      //uncomment the following line as an example to set email as verified
+      // event.response.userAttributes = userAttributes;
+      // event.response.messageAction = 'SUPPRESS';
 
-      //userAttributes['email_verified'] = "true";
+      console.log('createUserResult: ', createUserResult);
 
-      event.response.userAttributes = userAttributes;
-      event.response.messageAction = 'SUPPRESS';
-      context.succeed(event);
+      return createUserResult.User!;
     }
   } else {
     // return message that code has been sent even if user not found
