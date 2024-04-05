@@ -15,11 +15,18 @@ export const forgotPasswordInteractor = async (
     .getUserByEmail(applicationContext, { email });
 
   if (!user) {
-    // try cognito trigger to migrate user?
-    await cognito.forgotPassword({
-      ClientId: applicationContext.environment.cognitoClientId,
-      Username: email,
-    });
+    // try cognito trigger to migrate user
+    try {
+      await applicationContext
+        .getUserGateway()
+        .forgotPassword(applicationContext, {
+          email,
+        });
+    } catch (e) {
+      console.log('**** ERROR', e);
+    }
+
+    console.log('****** GOT HERE');
     return;
   }
 
