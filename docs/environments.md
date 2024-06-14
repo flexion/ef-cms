@@ -219,7 +219,7 @@ Sometimes you'll find the need to remove an environment to start from a fresh st
 ```bash
 npm run destroy:env <ENV>
 npm run destroy:client <ENV>
-npm run destroy:api <ENV>
+npm run destroy:allColors <ENV>
 npm run destroy:migration <ENV>
 npm run destroy:migration-cron <ENV>
 ```

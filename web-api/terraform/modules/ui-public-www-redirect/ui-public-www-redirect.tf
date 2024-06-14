@@ -24,9 +24,20 @@ resource "aws_s3_bucket_website_configuration" "public_redirect_s3_website" {
   }
 }
 
+resource "aws_s3_bucket_public_access_block" "public_redirect_access_block" {
+  bucket = aws_s3_bucket.public_redirect.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
 resource "aws_s3_bucket_policy" "redirect_policy" {
   bucket = aws_s3_bucket.public_redirect.id
   policy = data.aws_iam_policy_document.www_redirect_policy_bucket.json
+
+  depends_on = [ aws_s3_bucket_public_access_block.public_redirect_access_block ]
 }
 
 data "aws_iam_policy_document" "www_redirect_policy_bucket" {
