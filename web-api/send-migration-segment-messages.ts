@@ -1,4 +1,8 @@
-import { DescribeTableCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import {
+  DynamoDBClient,
+  ScanCommand,
+  ScanCommandOutput,
+} from '@aws-sdk/client-dynamodb';
 import { addToQueue } from '../shared/admin-tools/aws/sqsHelper';
 import { shuffle } from 'lodash';
 
@@ -27,24 +31,27 @@ const dynamodb = new DynamoDBClient({
 });
 
 const getItemCount = async (): Promise<number> => {
-  let count = 0;
-  const describeTableCommand = new DescribeTableCommand({
-    TableName: process.env.SOURCE_TABLE,
-  });
+  let totalCount = 0;
+  let lastEvaluatedKey: Record<string, any> | undefined = undefined;
+
   try {
-    const { Table } = await dynamodb.send(describeTableCommand);
-    if (
-      Table &&
-      'ItemCount' in Table &&
-      Table.ItemCount &&
-      Table.ItemCount > 0
-    ) {
-      count = Table.ItemCount;
-    }
+    do {
+      const command = new ScanCommand({
+        ExclusiveStartKey: lastEvaluatedKey,
+        Select: 'COUNT',
+        TableName: process.env.SOURCE_TABLE,
+      });
+
+      const response: ScanCommandOutput = await dynamodb.send(command);
+
+      totalCount += response.Count ?? 0;
+
+      lastEvaluatedKey = response.LastEvaluatedKey;
+    } while (lastEvaluatedKey);
   } catch (e) {
     console.error('Error retrieving dynamo item count.', e);
   }
-  return count;
+  return totalCount;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
