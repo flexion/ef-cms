@@ -1,4 +1,4 @@
-import './index.scss';
+// import './index.scss';
 
 import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 
@@ -45,104 +45,96 @@ import { presenter } from './presenter/presenter-public';
 import App from 'cerebral';
 import React from 'react';
 
-/**
- * Instantiates the Cerebral app with React
- */
-const appPublic = {
-  initialize: (applicationContext, debugTools) => {
-    const withAppContextDecorator = (f, context) => {
-      return get => f(get, context || applicationContext);
-    };
+export function setupCerebral(applicationContext) {
+  const withAppContextDecorator = (f, context) => {
+    return get => f(get, context || applicationContext);
+  };
 
-    // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
-    presenter.state = mapValues(presenter.state, value => {
-      if (isFunction(value)) {
-        return withAppContextDecorator(value, applicationContext);
-      }
-      return value;
-    });
-
-    library.add(
-      faFileAltSolid,
-      faLock,
-      faLongArrowAltUp,
-      faPrint,
-      faFilePdf,
-      faSearch,
-      faSync,
-      faSort,
-      faTimesCircle,
-      faInfoCircle,
-      faCheckCircle,
-      faExclamation,
-      faExclamationCircle,
-      faExclamationTriangle,
-      faChevronUp,
-      faEnvelopeSolid,
-      faPhone,
-      faTimesCircleRegular,
-      faArrowAltCircleLeftSolid,
-      faArrowAltCircleLeftRegular,
-      faUser,
-    );
-
-    presenter.providers.applicationContext = applicationContext;
-
-    presenter.state.constants = applicationContext.getConstants();
-
-    const advancedSearchTab = applicationContext
-      .getUseCases()
-      .getItemInteractor(applicationContext, { key: 'advancedSearchTab' });
-
-    if (advancedSearchTab) {
-      presenter.state.advancedSearchTab = advancedSearchTab;
-      applicationContext
-        .getUseCases()
-        .removeItemInteractor(applicationContext, {
-          key: 'advancedSearchTab',
-        });
+  // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
+  presenter.state = mapValues(presenter.state, value => {
+    if (isFunction(value)) {
+      return withAppContextDecorator(value, applicationContext);
     }
+    return value;
+  });
 
-    const advancedSearchForm = applicationContext
-      .getUseCases()
-      .getItemInteractor(applicationContext, { key: 'advancedSearchForm' });
+  library.add(
+    faFileAltSolid,
+    faLock,
+    faLongArrowAltUp,
+    faPrint,
+    faFilePdf,
+    faSearch,
+    faSync,
+    faSort,
+    faTimesCircle,
+    faInfoCircle,
+    faCheckCircle,
+    faExclamation,
+    faExclamationCircle,
+    faExclamationTriangle,
+    faChevronUp,
+    faEnvelopeSolid,
+    faPhone,
+    faTimesCircleRegular,
+    faArrowAltCircleLeftSolid,
+    faArrowAltCircleLeftRegular,
+    faUser,
+  );
 
-    if (advancedSearchForm) {
-      presenter.state.advancedSearchForm = advancedSearchForm;
-      applicationContext
-        .getUseCases()
-        .removeItemInteractor(applicationContext, {
-          key: 'advancedSearchForm',
-        });
-    }
+  presenter.providers.applicationContext = applicationContext;
 
-    presenter.providers.router = {
-      back,
-      createObjectURL,
-      externalRoute,
-      revokeObjectURL,
-      route,
-    };
+  presenter.state.constants = applicationContext.getConstants();
 
-    const cerebralApp = App(presenter, debugTools);
+  const advancedSearchTab = applicationContext
+    .getUseCases()
+    .getItemInteractor(applicationContext, { key: 'advancedSearchTab' });
 
-    applicationContext.setForceRefreshCallback(async () => {
-      await cerebralApp.getSequence('openAppUpdatedModalSequence')();
+  if (advancedSearchTab) {
+    presenter.state.advancedSearchTab = advancedSearchTab;
+    applicationContext.getUseCases().removeItemInteractor(applicationContext, {
+      key: 'advancedSearchTab',
     });
+  }
 
-    router.initialize(cerebralApp);
+  const advancedSearchForm = applicationContext
+    .getUseCases()
+    .getItemInteractor(applicationContext, { key: 'advancedSearchForm' });
 
-    const container = window.document.querySelector('#app-public');
-    const root = createRoot(container);
+  if (advancedSearchForm) {
+    presenter.state.advancedSearchForm = advancedSearchForm;
+    applicationContext.getUseCases().removeItemInteractor(applicationContext, {
+      key: 'advancedSearchForm',
+    });
+  }
 
-    root.render(
+  presenter.providers.router = {
+    back,
+    createObjectURL,
+    externalRoute,
+    revokeObjectURL,
+    route,
+  };
+
+  const cerebralApp = App(presenter, debugTools);
+
+  applicationContext.setForceRefreshCallback(async () => {
+    await cerebralApp.getSequence('openAppUpdatedModalSequence')();
+  });
+
+  router.initialize(cerebralApp);
+
+  return cerebralApp;
+}
+
+export function PublicApp({ cerebralApp }) {
+  return (
+    cerebralApp && (
       <Container app={cerebralApp}>
         <AppComponentPublic />
         <GlobalModalWrapper />
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
-      </Container>,
-    );
-  },
-};
-
-export { appPublic };
+      </Container>
+    )
+  );
+}

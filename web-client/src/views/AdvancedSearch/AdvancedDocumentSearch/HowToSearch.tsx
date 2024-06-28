@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
-import howToUseSearch from '../../../pdfs/how-to-use-search.pdf';
+// import howToUseSearch from '../../../pdfs/how-to-use-search.pdf';
 
 export const HowToSearch = connect({}, function HowToSearch() {
   return (
@@ -43,7 +43,7 @@ export const HowToSearch = connect({}, function HowToSearch() {
             />
             <a
               className="usa-link--external"
-              href={howToUseSearch}
+              href=""
               rel="noopener noreferrer"
               target="_blank"
             >
