@@ -3,6 +3,25 @@ import { PassThrough, Writable } from 'stream';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { Upload } from '@aws-sdk/lib-storage';
 
+/**
+ *
+Timings: (also see screenshots on Rachel's desktop)
+No parallelization:
+102411.38ms
+1243 MB
+
+Parallelized:
+181871ms
+2474 MB
+
+76769 ms
+2173 MB
+*/
+
+/**
+ * WE LEFT OFF: Brice asked the question: "Do we know we have seperate connections for upload/download?". We should explore if using multiple S3 clients for reading documents or at least upload zip/download documents improves things.
+ */
+
 export type ProgressData = {
   totalFiles: number;
   filesCompleted: number;
@@ -82,6 +101,7 @@ export async function zipDocuments(
     zip.add(compressedPdfStream);
 
     let continueReading = true;
+    const start = Date.now();
     while (continueReading) {
       const unzippedChunk = await reader.read();
       const nextChunk = unzippedChunk.value || new Uint8Array();
@@ -92,6 +112,11 @@ export async function zipDocuments(
         await new Promise(resolve => setTimeout(resolve, 10));
       }
     }
+    const end = Date.now();
+    console.log(
+      `Done reading document ${document.key}, time elapsed: `,
+      start - end,
+    );
     reader.releaseLock();
 
     if (onProgress) {
