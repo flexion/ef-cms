@@ -32,13 +32,3 @@ The onboarding checklist and quick reference guide will be handy as you navigate
 
 1. [Onboarding Checklist](https://docs.google.com/document/d/12twlx5nLG6B4R6ds96wh_gZ6wR5Y_PGjsmSeP98V6o0): Make a copy as this will be your personal checklist of important tasks as you onboard.
 2. [Onboarding Quick Reference Guide](https://docs.google.com/document/d/1ObraR8X5YUzR1GIwsm903EhS7-AQbpy90--5aAWysKU): A hodge-podge of helpful links, information, who's who, and what's what.
-
-## Looking for Old Docs?
-
-Most of the older documentation was moved directly into this `docsify` directory.  The goal is to incorporate them into the top level sections of this documentation, or move them to a common sub directory if they don't fit well into the incremental introduction approach the documentation follows. They can be found in one of the following links:
-
-- [Additional Resources](/additional-resources/README)
-- [Operations](/operations/README)
-- [Environments](/environments/README)
-- [Flow](/flows/README)
-- [Architecture](/architecture/README)

@@ -1,1 +1,0 @@
-This part of the documentation is to explain the purpose of the petitioner role and the various business use cases for the petitioner.
