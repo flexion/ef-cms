@@ -1448,7 +1448,7 @@ export const presenterSequences = {
     updateFormValueAndSecondaryContactInfoSequence as unknown as Function,
   updateFormValueCountryTypeSequence:
     updateFormValueCountryTypeSequence as unknown as Function,
-  updateFormValueSequence: updateFormValueSequence as unknown as Function,
+  updateFormValueSequence: updateFormValueSequence,
   updateFormValueUpdatedSequence:
     updateFormValueUpdatedSequence as unknown as Function,
   updateGenerateNoticesProgressSequence:

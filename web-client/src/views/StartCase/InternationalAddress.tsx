@@ -1,36 +1,38 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
-  bind: string;
-  onBlur: string;
+type InternationalAddressProps = {
+  onBlur: (props: { validationKey: string[] }) => void;
+  registerRef?: (param: string) => void;
   type: string;
-  onChange: string;
-  registerRef: (param: string) => void;
+  onChange: (props: { key: string; value: any }) => void;
+  addressInfo: {
+    address1?: string;
+    address2?: string;
+    address3?: string;
+    state?: string;
+    city?: string;
+    postalCode?: string;
+  };
 };
 
-export const InternationalAddress = connect(
-  {
-    data: state[props.bind],
-    onBlur: props.onBlur,
-    onBlurSequence: sequences[props.onBlur],
-    registerRef: props.registerRef,
-    type: props.type,
-    updateFormValueSequence: sequences[props.onChange],
-    usStates: state.constants.US_STATES,
-    usStatesOther: state.constants.US_STATES_OTHER,
-    validationErrors: state.validationErrors,
-  },
+const internationalAddressDeps = {
+  validationErrors: state.validationErrors,
+};
+
+export const InternationalAddress = connect<
+  InternationalAddressProps,
+  typeof internationalAddressDeps
+>(
+  internationalAddressDeps,
   function InternationalAddress({
-    data,
-    onBlurSequence,
+    addressInfo,
+    onBlur,
+    onChange,
     registerRef,
     type,
-    updateFormValueSequence,
     validationErrors,
   }) {
     return (
@@ -50,14 +52,14 @@ export const InternationalAddress = connect(
             name={`${type}.address1`}
             ref={registerRef && registerRef(`${type}.address1`)}
             type="text"
-            value={data[type].address1 || ''}
+            value={addressInfo.address1 || ''}
             onBlur={() => {
-              onBlurSequence({
+              onBlur({
                 validationKey: [type, 'address1'],
               });
             }}
             onChange={e => {
-              updateFormValueSequence({
+              onChange({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -75,14 +77,14 @@ export const InternationalAddress = connect(
             id={`${type}.address2`}
             name={`${type}.address2`}
             type="text"
-            value={data[type].address2 || ''}
+            value={addressInfo.address2 || ''}
             onBlur={() => {
-              onBlurSequence({
+              onBlur({
                 validationKey: [type, 'address2'],
               });
             }}
             onChange={e => {
-              updateFormValueSequence({
+              onChange({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -100,14 +102,14 @@ export const InternationalAddress = connect(
             id={`${type}.address3`}
             name={`${type}.address3`}
             type="text"
-            value={data[type].address3 || ''}
+            value={addressInfo.address3 || ''}
             onBlur={() => {
-              onBlurSequence({
+              onBlur({
                 validationKey: [type, 'address3'],
               });
             }}
             onChange={e => {
-              updateFormValueSequence({
+              onChange({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -129,14 +131,14 @@ export const InternationalAddress = connect(
             name={`${type}.state`}
             ref={registerRef && registerRef(`${type}.state`)}
             type="text"
-            value={data[type].state || ''}
+            value={addressInfo.state || ''}
             onBlur={() => {
-              onBlurSequence({
+              onBlur({
                 validationKey: [type, 'state'],
               });
             }}
             onChange={e => {
-              updateFormValueSequence({
+              onChange({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -158,14 +160,14 @@ export const InternationalAddress = connect(
             name={`${type}.city`}
             ref={registerRef && registerRef(`${type}.city`)}
             type="text"
-            value={data[type].city || ''}
+            value={addressInfo.city || ''}
             onBlur={() => {
-              onBlurSequence({
+              onBlur({
                 validationKey: [type, 'city'],
               });
             }}
             onChange={e => {
-              updateFormValueSequence({
+              onChange({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -187,14 +189,14 @@ export const InternationalAddress = connect(
             name={`${type}.postalCode`}
             ref={registerRef && registerRef(`${type}.postalCode`)}
             type="text"
-            value={data[type].postalCode || ''}
+            value={addressInfo.postalCode || ''}
             onBlur={() => {
-              onBlurSequence({
+              onBlur({
                 validationKey: [type, 'postalCode'],
               });
             }}
             onChange={e => {
-              updateFormValueSequence({
+              onChange({
                 key: e.target.name,
                 value: e.target.value,
               });

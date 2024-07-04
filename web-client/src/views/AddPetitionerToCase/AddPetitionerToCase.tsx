@@ -205,10 +205,10 @@ export const AddPetitionerToCase = connect(
               />
             ) : (
               <InternationalAddress
-                bind={bind}
+                addressInfo={form.contact}
                 type={type}
                 onBlur={onBlur}
-                onChange="updateFormValueSequence"
+                onChange={updateFormValueSequence}
               />
             )}
             <FormGroup errorText={validationErrors?.phone}>
