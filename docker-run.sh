@@ -1,4 +1,4 @@
-#!/bin/bash -e
+nn#!/bin/bash -e
 
 # This script will only work when ran on linux due to the volume mount.
 # If you're macOS, you'll need to add npm i to the start the -c and run `npm run clean` before starting 
