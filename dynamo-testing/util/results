@@ -1,0 +1,13 @@
+from laptop
+50_000 items, 500 write concurrency, keep alive - starts to lock up
+50_000 items, 250 write concurrency, keep alive - 1:13.65
+50_000 items, 150 write concurrency, keep alive - 1:02.77 <-- best so far
+50_000 items, 50 write concurrency, keep alive - 1:14.76
+
+50_000 items, 150 write concurrency, keep alive oFF - 1:12.10s
+50_000 items, 50 write concurrency, keep alive oFF - 55.132s
+
+
+
+
+
