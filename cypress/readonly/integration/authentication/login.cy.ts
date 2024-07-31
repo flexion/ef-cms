@@ -2,7 +2,7 @@ import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 
 describe('Given a user with a DAWSON account', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   describe('When they login in with the correct email and password', () => {
@@ -50,7 +50,7 @@ describe('Given a user with a DAWSON account', () => {
 
 describe('Given a user without a DAWSON account', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   describe('When they login', () => {

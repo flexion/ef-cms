@@ -3,7 +3,7 @@ import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login
 
 describe('Practitioner Details - Admissions Clerk Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   describe('Practitioner documentation tab', () => {

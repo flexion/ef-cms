@@ -3,7 +3,7 @@ import { loginAsAdc } from '../../../../helpers/authentication/login-as-helpers'
 
 describe('Messages - ADC Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   describe('My messages tab', () => {

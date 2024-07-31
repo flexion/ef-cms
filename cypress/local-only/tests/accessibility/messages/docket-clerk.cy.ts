@@ -3,7 +3,7 @@ import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-
 
 describe('Messages', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   describe('My', () => {

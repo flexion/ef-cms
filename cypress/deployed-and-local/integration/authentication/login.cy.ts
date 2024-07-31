@@ -7,7 +7,7 @@ import { v4 } from 'uuid';
 
 describe('login', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   after(() => {

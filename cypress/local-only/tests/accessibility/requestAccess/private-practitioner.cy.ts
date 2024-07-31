@@ -5,7 +5,7 @@ import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/l
 
 describe('Request Case Access Page - Private Practitioner Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   it('should be free of a11y issues', () => {

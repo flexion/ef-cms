@@ -3,7 +3,7 @@ import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-
 
 describe('Edit Petitioner Information - Docket Clerk Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   describe('when party is a petitioner', () => {

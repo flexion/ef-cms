@@ -6,7 +6,7 @@ import {
 
 describe('Confirm Initiate Service Modal - Docket Clerk Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   it('should be free of a11y issues', () => {

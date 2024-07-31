@@ -10,7 +10,7 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
     const userName = 'cypress_test_account_irs_super_user@example.com';
 
     beforeEach(() => {
-      Cypress.session.clearCurrentSessionData();
+      cy.clearAllCookies();
       cy.task('deleteAllIrsCypressTestAccounts');
     });
 

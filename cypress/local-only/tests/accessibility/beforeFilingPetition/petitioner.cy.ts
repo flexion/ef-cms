@@ -3,7 +3,7 @@ import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-h
 
 describe('Before Starting Case - Petitioner Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   it('should be free of a11y issues', () => {

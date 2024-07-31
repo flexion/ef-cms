@@ -2,7 +2,7 @@ import { loginAsDocketClerk1 } from '../../../helpers/authentication/login-as-he
 
 describe('logout', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   /*

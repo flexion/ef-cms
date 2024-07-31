@@ -21,7 +21,7 @@ describe('Petitioner Updates e-mail', () => {
   });
 
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   /*

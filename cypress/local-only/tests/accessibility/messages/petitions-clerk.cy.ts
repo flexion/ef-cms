@@ -3,7 +3,7 @@ import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-
 
 describe('Messages - Petitions Clerk Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   describe('My', () => {

@@ -17,7 +17,7 @@ describe('Admissions Clerk Grants E-Access', () => {
   });
 
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   /*

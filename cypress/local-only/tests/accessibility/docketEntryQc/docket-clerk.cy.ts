@@ -3,7 +3,7 @@ import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-
 
 describe('Docket Entry QC - Docket Clerk Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   it('should be free of a11y issues', () => {

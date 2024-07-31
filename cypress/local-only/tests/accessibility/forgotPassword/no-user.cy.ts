@@ -7,7 +7,7 @@ import { createAPetitioner } from '../../../../helpers/accountCreation/create-a-
 
 describe('Forgot Password - Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   it('should be free of a11y issues', () => {

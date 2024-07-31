@@ -3,7 +3,7 @@ import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-
 
 describe('Advanced Search - Docket Clerk Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   describe('Order search tab', () => {

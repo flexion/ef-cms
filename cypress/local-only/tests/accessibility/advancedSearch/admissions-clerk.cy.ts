@@ -3,7 +3,7 @@ import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login
 
 describe('Advanced Search', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   it('Case - should be free of a11y issues', () => {

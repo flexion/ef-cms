@@ -3,7 +3,7 @@ import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-h
 
 describe('File a Petition Page - Petitioner Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   describe('Step 1', () => {

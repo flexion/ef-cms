@@ -2,7 +2,7 @@ import { checkA11y } from '../../../../support/generalCommands/checkA11y';
 
 describe('Advanced Search - Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   describe('Case tab', () => {

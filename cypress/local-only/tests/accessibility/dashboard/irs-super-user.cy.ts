@@ -3,7 +3,7 @@ import { loginAsIrsSuperUser } from '../../../../helpers/authentication/login-as
 
 describe('Dashboard Page - IRS Super User Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   it('should be free of a11y issues', () => {

@@ -3,7 +3,7 @@ import { loginAsIrsSuperUser } from '../../../../helpers/authentication/login-as
 
 describe('Advanced Search - IRS Super User Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   it('should be free of a11y issues while performing search by petitioner name and viewing results', () => {

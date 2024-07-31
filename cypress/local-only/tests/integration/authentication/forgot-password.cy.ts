@@ -15,7 +15,7 @@ describe('Forgot Password', () => {
   });
 
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
   const password = getCypressEnv().defaultAccountPass;
 

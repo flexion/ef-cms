@@ -3,7 +3,7 @@ import { loginAsColvin } from '../../../../helpers/authentication/login-as-helpe
 
 describe('Trial Sessions Page - Judge Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   it('should be free of a11y issues', () => {

@@ -3,7 +3,7 @@ import { loginAsGeneral } from '../../../../helpers/authentication/login-as-help
 
 describe('Dashboard - General Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   it('should be free of a11y issues', () => {

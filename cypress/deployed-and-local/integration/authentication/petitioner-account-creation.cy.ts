@@ -12,7 +12,7 @@ describe('Petitioner Account Creation', () => {
   const GUID = Date.now();
 
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   after(() => {
@@ -150,7 +150,7 @@ describe('Petitioner Account Creation', () => {
     const TEST_PASSWORD = generatePassword(VALID_PASSWORD_CONFIG);
 
     before(() => {
-      Cypress.session.clearCurrentSessionData();
+      cy.clearAllCookies();
     });
 
     it('should display the error message when user tries to confirm account with wrong confirmation code', () => {
@@ -196,7 +196,7 @@ describe('Petitioner Account Creation', () => {
     const TEST_PASSWORD = generatePassword(VALID_PASSWORD_CONFIG);
 
     before(() => {
-      Cypress.session.clearCurrentSessionData();
+      cy.clearAllCookies();
     });
 
     it('should display error message when a user tries to confirm account with an expired confirmation code', () => {

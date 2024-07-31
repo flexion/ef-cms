@@ -3,7 +3,7 @@ import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/l
 
 describe('File a Petition Page - Private Practitioner Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   it('should be free of a11y issues for step 1', () => {

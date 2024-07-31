@@ -6,7 +6,7 @@ import {
 
 describe('Case Detail Internal - Judge Accessibility', () => {
   beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
+    cy.clearAllCookies();
   });
 
   describe('Notes tab', () => {
