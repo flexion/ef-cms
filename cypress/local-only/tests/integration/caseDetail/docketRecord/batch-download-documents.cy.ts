@@ -1,11 +1,12 @@
 import { createAndServePaperPetition } from '../../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { createISODateString } from '../../../../../../shared/src/business/utilities/DateHandler';
-import { externalUserSearchesDocketNumber } from '../../../../../helpers/advancedSearch/external-user-searches-docket-number';
-import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
 import {
+  cyLogin,
   loginAsDocketClerk,
   loginAsPetitioner,
 } from '../../../../../helpers/authentication/login-as-helpers';
+import { externalUserSearchesDocketNumber } from '../../../../../helpers/advancedSearch/external-user-searches-docket-number';
+import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
 import { petitionerCreatesElectronicCase } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 
@@ -82,7 +83,7 @@ describe('Batch Download Documents', () => {
         'reportersoffice',
         'trialclerk',
       ].forEach(account => {
-        cy.login(account);
+        cyLogin({ email: `${account}@example.com` });
         goToCase(docketNumber);
         confirmCountOfDocumentsToDownload(documentsCreated.length);
         includePrintableDocketRecord();
@@ -92,7 +93,7 @@ describe('Batch Download Documents', () => {
       // check for external roles
       ['privatePractitioner', 'petitioner', 'irspractitioner'].forEach(
         account => {
-          cy.login(account);
+          cyLogin({ email: `${account}@example.com` });
           cy.get('[data-testid="download-docket-records-button"]').should(
             'not.exist',
           );

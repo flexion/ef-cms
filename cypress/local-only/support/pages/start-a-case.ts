@@ -1,7 +1,3 @@
-export const navigateTo = (username: string) => {
-  cy.login(username, '/file-a-petition/step-1');
-};
-
 export const fillInAndSubmitForm = () => {
   const w3Dummy = '../../helpers/file/sample.pdf'; // this comes from the fixtures folder
 

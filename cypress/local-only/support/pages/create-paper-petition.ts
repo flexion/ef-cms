@@ -1,11 +1,10 @@
 import { faker } from '@faker-js/faker';
-import {
-  getCreateACaseButton,
-  navigateTo as navigateToDocumentQC,
-} from './document-qc';
+import { getCreateACaseButton } from './document-qc';
+import { loginAsPetitionsClerk } from '../../../helpers/authentication/login-as-helpers';
 
 export const createPaperPetition = () => {
-  navigateToDocumentQC('petitionsclerk');
+  loginAsPetitionsClerk();
+  cy.visit('/document-qc');
 
   getCreateACaseButton().click();
   cy.get('#tab-parties').parent().should('have.attr', 'aria-selected');

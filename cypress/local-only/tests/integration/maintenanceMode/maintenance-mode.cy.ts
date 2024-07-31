@@ -3,8 +3,8 @@ import {
   engageMaintenance,
   getMaintenanceModal,
   getMaintenancePageContent,
-  navigateTo as loginAs,
 } from '../../../support/pages/maintenance';
+import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Maintenance mode', () => {
   after(() => {
@@ -12,7 +12,7 @@ describe('Maintenance mode', () => {
   });
 
   it('should display a maintenance modal when the user is logged in and maintenance mode is engaged', () => {
-    loginAs('petitionsclerk');
+    loginAsPetitionsClerk();
     engageMaintenance();
     getMaintenanceModal().should('exist');
 

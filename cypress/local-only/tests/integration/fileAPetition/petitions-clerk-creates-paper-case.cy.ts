@@ -1,26 +1,22 @@
 import {
+  createAndServePaperPetition,
+  createAndServePaperPetitionMyselfAndSpouse,
+} from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import {
   createPaperPetition,
   fillInCreateCaseFromPaperForm,
   postPaperPetition,
 } from '../../../support/pages/create-paper-petition';
-
-import {
-  getCreateACaseButton,
-  navigateTo as navigateToDocumentQC,
-} from '../../../support/pages/document-qc';
-
+import { getCreateACaseButton } from '../../../support/pages/document-qc';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
-
-import {
-  createAndServePaperPetition,
-  createAndServePaperPetitionMyselfAndSpouse,
-} from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 import { unchecksOrdersAndNoticesBoxesInCase } from '../../../support/pages/unchecks-orders-and-notices-boxes-in-case';
 
 describe('Petition clerk creates a paper filing', function () {
   describe('Create and submit a paper petition', () => {
     it('should create a paper petition', () => {
-      navigateToDocumentQC('petitionsclerk');
+      loginAsPetitionsClerk();
+      cy.visit('/document-qc');
 
       getCreateACaseButton().click();
       cy.get('#tab-parties').parent().should('have.attr', 'aria-selected');

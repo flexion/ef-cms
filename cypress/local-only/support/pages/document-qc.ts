@@ -1,7 +1,3 @@
-export const navigateTo = username => {
-  cy.login(username, '/document-qc');
-};
-
 export const getCreateACaseButton = () => {
   return cy.get('a#file-a-petition');
 };

@@ -31,6 +31,7 @@ export function loginAsDojPractitioner(
 
 export function loginAsPrivatePractitioner(
   practitionerUser:
+    | 'privatePractitioner@example.com'
     | 'privatePractitioner1@example.com'
     | 'privatePractitioner2@example.com'
     | 'privatePractitioner3@example.com'
@@ -66,6 +67,7 @@ export function loginAsPetitioner(
   petitionerUser:
     | 'petitioner@example.com'
     | 'petitioner1@example.com'
+    | 'petitioner9@example.com'
     | 'petitioner2@example.com' = 'petitioner1@example.com',
 ) {
   cyLogin({ email: petitionerUser });

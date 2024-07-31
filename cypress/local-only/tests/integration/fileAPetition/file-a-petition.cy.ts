@@ -34,7 +34,8 @@ describe('File a Petition', () => {
 
   describe('before filing a petition', () => {
     beforeEach(() => {
-      cy.login('petitioner', 'before-filing-a-petition');
+      loginAsPetitioner('petitioner@example.com');
+      cy.visit('before-filing-a-petition');
     });
 
     it('should navigate to dashboard when cancel is clicked', () => {
@@ -46,7 +47,8 @@ describe('File a Petition', () => {
 
   describe('creation form', () => {
     before(() => {
-      cy.login('petitioner', 'file-a-petition/step-1');
+      loginAsPetitioner('petitioner@example.com');
+      cy.visit('file-a-petition/step-1');
     });
 
     it('has a stin file input', () => {
@@ -218,7 +220,8 @@ describe('File a Petition', () => {
   describe('can view case detail', () => {
     before(() => {
       cy.viewport(1200, 900);
-      cy.login('petitioner', `/case-detail/${createdDocketNumber}`);
+      loginAsPetitioner('petitioner@example.com');
+      cy.visit(`/case-detail/${createdDocketNumber}`);
       cy.url().should('include', 'case-detail');
     });
 

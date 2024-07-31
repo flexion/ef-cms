@@ -166,8 +166,8 @@ describe('Document QC Complete', () => {
   it('should have the unserved case in the petition qc assigned', () => {
     cy.get<string>('@UNSERVED_DOCKET_NUMBER').then(unservedDocketNumber => {
       retry(() => {
-        cy.login(
-          'caseServicesSupervisor1',
+        loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
+        cy.visit(
           '/document-qc/section/inbox/selectedSection?section=petitions',
         );
         cy.get('[data-testid="section-work-queue-inbox"]').should('be.visible');

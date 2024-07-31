@@ -6,6 +6,7 @@ import {
   goToMyAccount,
 } from '../../../local-only/support/pages/my-account';
 import { createAPetitioner } from '../../../helpers/accountCreation/create-a-petitioner';
+import { cyLogin } from '../../../helpers/authentication/login-as-helpers';
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 import { logout } from '../../../helpers/authentication/logout';
@@ -37,7 +38,7 @@ describe('Petitioner Updates e-mail', () => {
     const name = faker.person.fullName();
     createAPetitioner({ email, name, password });
     verifyPetitionerAccount({ email });
-    cy.login(username);
+    cyLogin({ email });
     cy.get('[data-testid="account-menu-button"]').click();
     cy.get('[data-testid="my-account-link"]').click();
     const newUsername = `cypress_test_account+new${v4()}`;
@@ -72,14 +73,14 @@ describe('Petitioner Updates e-mail', () => {
     createAPetitioner({ email, name, password });
     verifyPetitionerAccount({ email });
 
-    cy.login(username);
+    cyLogin({ email });
 
     petitionerCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
       const updatedUsername = `cypress_test_account+${v4()}`;
       const updatedEmail = `${updatedUsername}@example.com`;
-      cy.login(username);
+      cyLogin({ email });
       goToMyAccount();
       clickChangeEmail();
       changeEmailTo(updatedEmail);
@@ -99,7 +100,7 @@ describe('Petitioner Updates e-mail', () => {
           'Your email address is verified. You can now log in to DAWSON.',
         );
       cy.url().should('contain', '/login');
-      cy.login(updatedUsername);
+      cyLogin({ email: updatedEmail });
 
       cy.get('[data-testid="my-cases-link"]');
       cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {

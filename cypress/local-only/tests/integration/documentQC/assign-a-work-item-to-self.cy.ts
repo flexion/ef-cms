@@ -1,4 +1,5 @@
 import {
+  loginAsDocketClerk,
   loginAsPetitioner,
   loginAsPetitionsClerk,
 } from '../../../../helpers/authentication/login-as-helpers';
@@ -21,7 +22,8 @@ describe('Work item assignment', () => {
       cy.get(
         `[data-testid="work-item-${docketNumber}"] [data-testid="table-column-work-item-assigned-to"]:contains("Test Petitionsclerk")`,
       ).should('have.length.above', 0);
-      cy.login('docketclerk', '/document-qc/section/inbox');
+      loginAsDocketClerk();
+      cy.visit('/document-qc/section/inbox');
       cy.get('[data-testid="checkbox-select-all-workitems"]').click();
       cy.get('[data-testid="select-work-item"]:checked').then(elm => {
         cy.get('[data-testid="select-work-item"]').should(
