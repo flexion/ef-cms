@@ -1,6 +1,8 @@
+import { loginAsDocketClerk } from '../../../../../../helpers/authentication/login-as-helpers';
+
 describe('Edit Docket Entry - Change Doc Type', function () {
   it('should clear service date input when a new doc type is selected', () => {
-    cy.login('docketclerk');
+    loginAsDocketClerk();
     cy.visit('case-detail/104-19/docket-entry/3/edit-meta'); // TODO 23803: Do not use seed data. Edit a paper filing.
     cy.get(
       '#document-type .select-react-element__input-container input',

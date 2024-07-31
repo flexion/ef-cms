@@ -3,13 +3,14 @@ import {
   PARTY_TYPES,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { faker } from '@faker-js/faker';
+import { loginAsPetitionsClerk1 } from '../authentication/login-as-helpers';
 
 export function createAndServePaperPetitionMultipleParties(
   options = { yearReceived: '2021' },
 ) {
   const name = 'Zofia Olszewska ' + Date.now();
   const spouseName = 'Jaylin Olszewska ' + Date.now();
-  cy.login('petitionsclerk1');
+  loginAsPetitionsClerk1();
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
   cy.get('[data-testid="document-qc-nav-item"]').click();
   cy.get('[data-testid="start-a-petition"]').click();

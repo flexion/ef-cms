@@ -1,4 +1,8 @@
-import { loginAsPetitioner } from '../../../../../../helpers/authentication/login-as-helpers';
+import {
+  loginAsColvinChambers,
+  loginAsDocketClerk1,
+  loginAsPetitioner,
+} from '../../../../../../helpers/authentication/login-as-helpers';
 import { petitionerCreatesElectronicCaseWithSpouse } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 
@@ -8,7 +12,8 @@ describe('Judge`s chambers stamps an order', () => {
     petitionerCreatesElectronicCaseWithSpouse().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
-      cy.login('docketclerk1', `case-detail/${docketNumber}`);
+      loginAsDocketClerk1();
+      cy.visit(`case-detail/${docketNumber}`);
 
       // File Motion for Continuance
       cy.get('[data-testid="case-detail-menu-button"]').click();
@@ -32,7 +37,8 @@ describe('Judge`s chambers stamps an order', () => {
       );
 
       // Apply a stamp
-      cy.login('colvinschambers', `case-detail/${docketNumber}`);
+      loginAsColvinChambers();
+      cy.visit(`case-detail/${docketNumber}`);
       cy.get('[data-testid="document-viewer-link-M006"]').last().click();
       cy.get('[data-testid="apply-stamp"]').click();
       cy.get('[data-testid="status-report-or-stip-decision-due-date"]').click();

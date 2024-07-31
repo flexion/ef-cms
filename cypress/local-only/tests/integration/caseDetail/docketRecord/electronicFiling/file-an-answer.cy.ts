@@ -1,9 +1,11 @@
+import { loginAsIrsPractitioner } from '../../../../../../helpers/authentication/login-as-helpers';
 import { navigateTo as navigateToDashboard } from '../../../../../support/pages/dashboard';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 
 describe('Filing an Answer', function () {
   it('should have a file first IRS document button', () => {
-    cy.login('irspractitioner', '/case-detail/104-18');
+    loginAsIrsPractitioner('irsPractitioner@example.com');
+    cy.visit('/case-detail/104-18');
     cy.get('#button-first-irs-document').click();
   });
 

@@ -3,6 +3,7 @@ import {
   formatNow,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Custom Case Report CSV export', () => {
   beforeEach(() => {
@@ -11,7 +12,8 @@ describe('Custom Case Report CSV export', () => {
 
   it('should download the Custom Case Report data in CSV format', () => {
     createAndServePaperPetition({ yearReceived: '1950' }).then(caseRecord => {
-      cy.login('docketclerk', '/reports/custom-case');
+      loginAsDocketClerk();
+      cy.visit('/reports/custom-case');
       cy.get('[data-testid="export-custom-case-report"]').should('be.disabled');
       cy.get('[data-testid="submit-custom-case-report-button"]').click();
 

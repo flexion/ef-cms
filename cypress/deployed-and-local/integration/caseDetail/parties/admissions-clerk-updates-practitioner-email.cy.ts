@@ -1,7 +1,10 @@
 import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import {
+  cyLogin,
+  loginAsAdmissionsClerk,
+} from '../../../../helpers/authentication/login-as-helpers';
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
-import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../../helpers/authentication/logout';
 import { v4 } from 'uuid';
 
@@ -14,7 +17,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
   it('should not update the practitioner`s email address when the admissions clerk enters one that is already associated with a DAWSON account', () => {
     const practitionerUserName = `cypress_test_account+${v4()}`;
     const practitionerEmail = `${practitionerUserName}@example.com`;
-    cy.login('admissionsclerk1');
+    loginAsAdmissionsClerk();
     cy.get('[data-testid="messages-banner"]');
     cy.get('[data-testid="search-link"]').click();
     cy.get('[data-testid="practitioner-search-tab"]').click();
@@ -98,7 +101,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
   it('should update the practitioner`s email address when the admissions clerk enters one that is NOT already associated with a DAWSON account', () => {
     const practitionerUserName = `cypress_test_account+${v4()}`;
     const practitionerEmail = `${practitionerUserName}@example.com`;
-    cy.login('admissionsclerk1');
+    loginAsAdmissionsClerk();
     cy.get('[data-testid="messages-banner"]');
     cy.get('[data-testid="search-link"]').click();
     cy.get('[data-testid="practitioner-search-tab"]').click();
@@ -149,7 +152,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
         cy.get('[data-testid="open-cases-count"]');
 
         createAndServePaperPetition().then(({ docketNumber }) => {
-          cy.login('admissionsclerk1');
+          loginAsAdmissionsClerk();
           cy.get('[data-testid="messages-banner"]');
           cy.get('[data-testid="docket-number-search-input"]').type(
             docketNumber,
@@ -169,7 +172,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           );
           logout();
 
-          cy.login(practitionerUserName);
+          cyLogin({ email: practitionerUserName });
           cy.get('[data-testid="my-cases-link"]');
           cy.get(`[data-testid="${docketNumber}"]`)
             .contains(docketNumber)
@@ -210,7 +213,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           );
           logout();
 
-          cy.login(practitionerUserName);
+          cyLogin({ email: practitionerUserName });
           cy.task('getEmailVerificationToken', {
             email: practitionerEmail,
           }).then(verificationToken => {
@@ -222,7 +225,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
               'contain.text',
               'Your email address is verified. You can now log in to DAWSON.',
             );
-          cy.login(updatedPractitionerUserName);
+          cyLogin({ email: updatedPractitionerUserName });
           cy.get('[data-testid="my-cases-link"]');
           cy.task('waitForPractitionerEmailUpdate', {
             docketNumber,

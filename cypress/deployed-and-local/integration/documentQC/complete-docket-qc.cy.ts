@@ -3,6 +3,8 @@ import { assertExists, retry } from '../../../helpers/retry';
 import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 import {
   loginAsAdmissionsClerk,
+  loginAsCaseServicesSupervisor,
+  loginAsDocketClerk1,
   loginAsPetitioner,
 } from '../../../helpers/authentication/login-as-helpers';
 import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
@@ -30,8 +32,8 @@ describe('Document QC Complete', () => {
       });
     });
 
-    cy.login('caseServicesSupervisor1');
-    cy.login('docketclerk1');
+    loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
+    loginAsDocketClerk1();
 
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
@@ -68,7 +70,8 @@ describe('Document QC Complete', () => {
       );
 
       retry(() => {
-        cy.login('caseServicesSupervisor1', '/messages/my/inbox');
+        loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
+        cy.visit('/messages/my/inbox');
         cy.get('table.usa-table');
         return assertMessageRecordCountForDocketNumberAndSubjectEscapeHatch(
           docketNumber,
@@ -117,10 +120,8 @@ describe('Document QC Complete', () => {
   });
 
   it('should have the served case document qc assigned and completed', () => {
-    cy.login(
-      'caseServicesSupervisor1',
-      '/document-qc/section/inbox/selectedSection?section=docket',
-    );
+    loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
+    cy.visit('/document-qc/section/inbox/selectedSection?section=docket');
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('[data-testid="checkbox-assign-work-item"]')
@@ -131,10 +132,8 @@ describe('Document QC Complete', () => {
       );
 
       retry(() => {
-        cy.login(
-          'caseServicesSupervisor1',
-          '/document-qc/section/inbox/selectedSection?section=docket',
-        );
+        loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
+        cy.visit('/document-qc/section/inbox/selectedSection?section=docket');
         cy.get('table.usa-table');
         return cy.get('body').then(body => {
           const workItem = body.find(

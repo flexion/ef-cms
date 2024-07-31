@@ -3,6 +3,7 @@ import { createAPetitioner } from '../../../../helpers/accountCreation/create-a-
 import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
+import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../../helpers/authentication/logout';
 import { v4 } from 'uuid';
 import { verifyPasswordRequirements } from '../../../../helpers/authentication/verify-password-requirements';
@@ -219,7 +220,7 @@ describe('Forgot Password', () => {
     createAndServePaperPetition().then(({ docketNumber }) => {
       const practitionerUserName = `cypress_test_account+${v4()}`;
       const practitionerEmail = `${practitionerUserName}@example.com`;
-      cy.login('admissionsclerk1');
+      loginAsAdmissionsClerk();
       cy.get('[data-testid="messages-banner"]');
       cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
       cy.get('[data-testid="search-docket-number"]').click();

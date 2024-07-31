@@ -17,6 +17,7 @@ import {
 } from '../../../support/pages/dashboard';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
+  loginAsAdc,
   loginAsDocketClerk,
   loginAsPetitionsClerk,
 } from '../../../../helpers/authentication/login-as-helpers';
@@ -65,7 +66,7 @@ describe('Messages', () => {
 
     describe('ADC views messages', () => {
       it('should be able to filter messages', () => {
-        cy.login('adc');
+        loginAsAdc();
         getCaseStatusFilter();
         selectsCaseStatusFilterNew();
         messagesShouldBeFiltered();
@@ -690,7 +691,7 @@ function sendMessagesToCompletedTab(DOCKET_CLERK_ID: string) {
     cy.get('[data-testid="success-alert"]').should('exist');
   }
 
-  cy.login('docketclerk');
+  loginAsDocketClerk();
   cy.get('[data-testid="all-messages-checkbox"]').click();
   cy.get('[data-testid="message-batch-mark-as-complete"]').click();
   cy.get('[data-testid="message-detail-success-alert"]').should('exist');

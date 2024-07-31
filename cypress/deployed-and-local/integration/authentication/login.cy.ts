@@ -1,6 +1,7 @@
 import { createAPetitioner } from '../../../helpers/accountCreation/create-a-petitioner';
 import { createAndServePaperPetition } from '../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
+import { loginAsAdmissionsClerk } from '../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../helpers/authentication/logout';
 import { v4 } from 'uuid';
 
@@ -65,7 +66,7 @@ describe('login', () => {
     const practitionerEmail = `${practitionerUserName}@example.com`;
 
     createAndServePaperPetition().then(({ docketNumber }) => {
-      cy.login('admissionsclerk1');
+      loginAsAdmissionsClerk();
       cy.get('[data-testid="messages-banner"]');
       cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
       cy.get('[data-testid="search-docket-number"]').click();
