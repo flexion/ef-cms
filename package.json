@@ -268,7 +268,7 @@
     "@types/uuid": "10.0.0",
     "@types/websocket": "1.0.10",
     "@typescript-eslint/eslint-plugin": "7.17.0",
-    "@typescript-eslint/parser": "^8.0.0",
+    "@typescript-eslint/parser": "7.17.0",
     "@vendia/serverless-express": "4.12.6",
     "ajv": "8.17.1",
     "artillery": "2.0.18",
