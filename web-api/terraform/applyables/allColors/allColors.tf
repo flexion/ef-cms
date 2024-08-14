@@ -209,3 +209,11 @@ module "rds" {
     module.tunnel.tunnel_security_group_id
   ]
 }
+
+module "vpn" {
+  source = "../../modules/vpn"
+  environment       = var.environment
+  vpc_id = module.vpc_east.vpc_id
+  subnet_id = module.vpc_east.public_subnet
+  public_key_name = var.tunnel_key_name
+}

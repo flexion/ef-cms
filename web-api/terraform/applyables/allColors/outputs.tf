@@ -77,3 +77,15 @@ output east_security_group_id {
 output tunnel_ip {
   value = module.tunnel.tunnel_ip
 }
+
+output "ec2_instance_dns" {
+  value = module.vpn.ec2_instance_dns
+}
+
+output "ec2_instance_ip" {
+  value = module.vpn.ec2_instance_ip
+}
+
+output "connection_string" {
+  value = module.vpn.connection_string
+}
