@@ -34,6 +34,13 @@ resource "aws_security_group" "postgres" {
     security_groups = var.security_group_ids
   }
 
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = var.security_group_cidr_blocks
+  }
+
   egress {
     from_port   = 0
     to_port     = 0

@@ -26,3 +26,7 @@ variable "subnet_group_name" {
 variable "security_group_ids" {
   type = list(string)
 }
+
+variable "security_group_cidr_blocks" {
+  type = list(string)
+}

@@ -189,6 +189,35 @@ resource "aws_db_subnet_group" "group" {
   subnet_ids = [module.vpc_east.subnet_a_id, module.vpc_east.subnet_b_id]
 }
 
+resource "aws_route" "west_to_east_private_a" {
+  route_table_id            = module.vpc_west.private_route_table_id
+  destination_cidr_block    = "10.0.4.0/24"
+  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
+  provider = aws.us-west-1
+}
+
+resource "aws_route" "west_to_east_private_b" {
+  route_table_id            = module.vpc_west.private_route_table_id
+  destination_cidr_block    = "10.0.5.0/24"
+  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
+  provider = aws.us-west-1
+}
+
+
+resource "aws_route" "east_to_west_private_a" {
+  route_table_id            = module.vpc_east.private_route_table_id
+  destination_cidr_block    = "10.1.4.0/24"
+  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
+  provider = aws.us-east-1
+}
+
+resource "aws_route" "east_to_west_private_b" {
+  route_table_id            = module.vpc_east.private_route_table_id
+  destination_cidr_block    = "10.1.5.0/24"
+  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
+  provider = aws.us-east-1
+}
+
 module "tunnel" {
   source            = "../../modules/tunnel"
   environment       = var.environment
@@ -202,6 +231,7 @@ module "rds" {
   environment       = var.environment
   postgres_user     = var.postgres_user
   postgres_password = var.postgres_password
+  security_group_cidr_blocks = ["10.1.4.0/24", "10.1.5.0/24"]
   vpc_id = module.vpc_east.vpc_id
   subnet_group_name = aws_db_subnet_group.group.name
   security_group_ids = [
