@@ -1,5 +1,4 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import {
   UnknownAuthUser,
   isAuthUser,
@@ -14,9 +13,7 @@ export const logUserPerformanceDataInteractor = async (
   },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  if (!isAuthUser(authorizedUser)) {
-    throw new UnauthorizedError('Unauthorized to log performance data');
-  }
+  if (!isAuthUser(authorizedUser)) return;
 
   const { email } = authorizedUser;
   await applicationContext.getPersistenceGateway().saveSystemPerformanceData({
