@@ -81,7 +81,7 @@ const getTotalAverageApiGatewayRequests = async (
       const totalRequests = calculateTotalSum(datapoints, 'Sum');
       const secondsInMonth = 30 * 24 * 60 * 60;
 
-       // Requests/second
+      // Requests/second
       return totalRequests / secondsInMonth;
     },
   );
@@ -213,15 +213,3 @@ const regions = ['us-east-1', 'us-west-2'];
     totalAverageLambdaEvents,
   );
 })();
-
-Total Average API Gateway Requests per Second (last month) across regions for exp2: 2102.5
-Total Average DynamoDB Monthly Transaction Volume (last 3 months) across regions for exp2: 3282735
-Total Average Lambda Events per Month (last 3 months) across regions for exp2: 1905.8055555555557
-
-Total Average API Gateway Requests per Second (last month) across regions for exp2: 0.00973418209876543
-Total Average DynamoDB Monthly Transaction Volume (last 3 months) across regions for exp2: 218885
-Total Average Lambda Events per Month (last 3 months) across regions for exp2: 22870
-
-Total Average API Gateway Requests per Second (last month) across regions for test: 0.2634656635802469
-Total Average DynamoDB Monthly Transaction Volume (last 3 months) across regions for test: 25975043.333333332
-Total Average Lambda Events per Month (last 3 months) across regions for test: 700935
