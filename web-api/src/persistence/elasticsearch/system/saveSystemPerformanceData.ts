@@ -1,5 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { systemPerformanceLogsIndex } from 'web-api/elasticsearch/system-performance-logs-mappings';
 
 export const saveSystemPerformanceData = async ({
   applicationContext,
@@ -19,6 +20,6 @@ export const saveSystemPerformanceData = async ({
       ...performanceData,
       date: createISODateString(),
     },
-    index: 'squence-performance-logs',
+    index: systemPerformanceLogsIndex,
   });
 };
