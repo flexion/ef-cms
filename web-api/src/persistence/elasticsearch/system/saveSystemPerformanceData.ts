@@ -1,10 +1,5 @@
-import {
-  MetricDatum,
-  PutMetricDataCommand,
-  PutMetricDataCommandInput,
-  StandardUnit,
-} from '@aws-sdk/client-cloudwatch';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 
 export const saveSystemPerformanceData = async ({
   applicationContext,
@@ -18,34 +13,12 @@ export const saveSystemPerformanceData = async ({
     email: string;
   };
 }) => {
-  const { stage } = applicationContext.getEnvironment();
-
-  const metricData: MetricDatum[] = [
-    {
-      Dimensions: [
-        { Name: 'SequenceName', Value: performanceData.sequenceName },
-      ],
-      MetricName: 'SequenceDuration',
-      Unit: 'Seconds',
-      Value: performanceData.duration,
+  const client = applicationContext.getSearchPerformanceClient();
+  await client.index({
+    body: {
+      ...performanceData,
+      date: createISODateString(),
     },
-    ...performanceData.actionPerformanceArray.map(action => ({
-      Dimensions: [
-        { Name: 'SequenceName', Value: performanceData.sequenceName },
-        { Name: 'ActionName', Value: action.actionName },
-      ],
-      MetricName: 'ActionPerformance',
-      Unit: 'Seconds' as StandardUnit,
-      Value: action.duration,
-    })),
-  ];
-
-  const params: PutMetricDataCommandInput = {
-    MetricData: metricData,
-    Namespace: `System-Performance-Log-${stage}`,
-  };
-
-  const command = new PutMetricDataCommand(params);
-
-  console.log('command', command);
+    index: 'squence-performance-logs',
+  });
 };

@@ -80,6 +80,7 @@ import sass from 'sass';
 
 let sqsCache: SQSClient;
 let searchClientCache: Client;
+let searchPerformanceClientCache: Client;
 
 const entitiesByName = {
   Case,
@@ -276,6 +277,31 @@ export const createApplicationContext = (
         }
       }
       return searchClientCache;
+    },
+    getSearchPerformanceClient: () => {
+      if (!searchPerformanceClientCache) {
+        if (
+          environment.stage === 'local' ||
+          !environment.elasticsearchPerformanceEndpoint
+        ) {
+          searchPerformanceClientCache = {
+            index: (...args) =>
+              console.log('**SYSTEM PERFORMANCE LOG: ', ...args),
+          } as Client;
+        } else {
+          searchPerformanceClientCache = new Client({
+            ...AwsSigv4Signer({
+              getCredentials: () => {
+                const credentialsProvider = defaultProvider();
+                return credentialsProvider();
+              },
+              region: 'us-east-1',
+            }),
+            node: `https://${environment.elasticsearchPerformanceEndpoint}:443`,
+          });
+        }
+      }
+      return searchPerformanceClientCache;
     },
     getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
     getStorageClient,
