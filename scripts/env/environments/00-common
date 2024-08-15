@@ -12,6 +12,11 @@ ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
   --region "us-east-1" \
   --query 'DomainStatus.Endpoint' \
   --output text)
+ELASTICSEARCH_PERFOMANCE_ENDPOINT=$(aws es describe-elasticsearch-domain \
+  --domain-name "performance-logs-${ENV}" \
+  --region "us-east-1" \
+  --query 'DomainStatus.Endpoint' \
+  --output text)
 COGNITO_USER_POOL=$(aws cognito-idp list-user-pools \
   --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" \
   --max-results 30 \
@@ -46,6 +51,7 @@ IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   echo "DAWSON_ENV='${ENV}'"
   echo "DYNAMODB_TABLE_NAME='${SOURCE_TABLE}'"
   echo "ELASTICSEARCH_ENDPOINT='${ELASTICSEARCH_ENDPOINT}'"
+  echo "ELASTICSEARCH_PERFOMANCE_ENDPOINT='${ELASTICSEARCH_PERFOMANCE_ENDPOINT}'"
   echo "ELASTICSEARCH_INFO_ENDPOINT='${ELASTICSEARCH_INFO_ENDPOINT}'"
   echo "EMAIL_CHANGE_VERIFICATION_TEMPLATE='email_change_verification_${ENV}'"
   echo "EMAIL_DOCUMENT_SERVED_TEMPLATE='document_served_${ENV}'"
