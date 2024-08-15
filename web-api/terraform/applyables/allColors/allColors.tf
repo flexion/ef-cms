@@ -65,6 +65,14 @@ module "ui-public-www-redirect" {
   viewer_protocol_policy = var.viewer_protocol_policy
 }
 
+module "performance-logs-cluster" {
+  source                 = "../../modules/performance-logs"
+  environment            = var.environment
+  es_volume_size         = var.es_volume_size
+  es_instance_type       = var.es_instance_type
+  es_instance_count      = var.es_instance_count
+}
+
 module "dynamsoft_us_east" {
   source = "../../modules/dynamsoft"
   count  = var.is_dynamsoft_enabled
