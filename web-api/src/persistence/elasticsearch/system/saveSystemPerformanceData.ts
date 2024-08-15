@@ -20,7 +20,6 @@ export const saveSystemPerformanceData = async ({
 }) => {
   const { stage } = applicationContext.getEnvironment();
 
-  const cloudwatchClient = applicationContext.getCloudWatchClient();
   const metricData: MetricDatum[] = [
     {
       Dimensions: [
@@ -48,5 +47,5 @@ export const saveSystemPerformanceData = async ({
 
   const command = new PutMetricDataCommand(params);
 
-  await cloudwatchClient.send(command);
+  console.log('command', command);
 };
