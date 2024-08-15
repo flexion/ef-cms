@@ -1,10 +1,11 @@
-import {
-  MetricDatum,
-  PutMetricDataCommand,
-  PutMetricDataCommandInput,
-  StandardUnit,
-} from '@aws-sdk/client-cloudwatch';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+
+type PerformanceMeasurement = {
+  date: string;
+  duration: number;
+  metricName: string;
+};
 
 export const saveSystemPerformanceData = async ({
   applicationContext,
@@ -18,35 +19,31 @@ export const saveSystemPerformanceData = async ({
     email: string;
   };
 }) => {
-  const { stage } = applicationContext.getEnvironment();
+  const client = applicationContext.getInfoSearchClient();
+  const date = createISODateString();
 
-  const cloudwatchClient = applicationContext.getCloudWatchClient();
-  const metricData: MetricDatum[] = [
+  const performanceMesurements: PerformanceMeasurement[] = [
     {
-      Dimensions: [
-        { Name: 'SequenceName', Value: performanceData.sequenceName },
-      ],
-      MetricName: 'SequenceDuration',
-      Unit: 'Seconds',
-      Value: performanceData.duration,
+      date,
+      duration: performanceData.duration,
+      metricName: performanceData.sequenceName,
     },
-    ...performanceData.actionPerformanceArray.map(action => ({
-      Dimensions: [
-        { Name: 'SequenceName', Value: performanceData.sequenceName },
-        { Name: 'ActionName', Value: action.actionName },
-      ],
-      MetricName: 'ActionPerformance',
-      Unit: 'Seconds' as StandardUnit,
-      Value: action.duration,
+    ...performanceData.actionPerformanceArray.map(actionData => ({
+      date,
+      duration: actionData.duration,
+      metricName: actionData.actionName,
     })),
   ];
 
-  const params: PutMetricDataCommandInput = {
-    MetricData: metricData,
-    Namespace: `System-Performance-Log-${stage}`,
-  };
-
-  const command = new PutMetricDataCommand(params);
-
-  await cloudwatchClient.send(command);
+  await Promise.all(
+    // TODO 10432: Can we store these with a single call?
+    performanceMesurements.map(async measurement => {
+      await client.index({
+        body: {
+          ...measurement,
+        },
+        index: 'system-performance-logs',
+      });
+    }),
+  );
 };
