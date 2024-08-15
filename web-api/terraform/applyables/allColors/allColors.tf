@@ -189,6 +189,13 @@ resource "aws_db_subnet_group" "group" {
   subnet_ids = [module.vpc_east.subnet_a_id, module.vpc_east.subnet_b_id]
 }
 
+
+resource "aws_db_subnet_group" "group_west" {
+  name       = "${var.environment}-group"
+  subnet_ids = [module.vpc_west.subnet_a_id, module.vpc_west.subnet_b_id]
+  provider = aws.us-west-1
+}
+
 resource "aws_route" "west_to_east_private_a" {
   route_table_id            = module.vpc_west.private_route_table_id
   destination_cidr_block    = "10.0.4.0/24"
@@ -231,13 +238,32 @@ module "rds" {
   environment       = var.environment
   postgres_user     = var.postgres_user
   postgres_password = var.postgres_password
+  db_name = "${var.environment}_dawson"
   security_group_cidr_blocks = ["10.1.4.0/24", "10.1.5.0/24"]
   vpc_id = module.vpc_east.vpc_id
   subnet_group_name = aws_db_subnet_group.group.name
   security_group_ids = [
     aws_security_group.east_security_group.id, 
-    module.tunnel.tunnel_security_group_id
+    # module.tunnel.tunnel_security_group_id
   ]
+}
+
+module "rds_replica" {
+  source            = "../../modules/rds"
+  environment       = var.environment
+  postgres_user     = null
+  postgres_password = null
+  security_group_cidr_blocks = ["10.0.4.0/24", "10.0.5.0/24"]
+  vpc_id = module.vpc_west.vpc_id
+  subnet_group_name = aws_db_subnet_group.group_west.name
+  security_group_ids = [
+    aws_security_group.west_security_group.id, 
+    # module.tunnel.tunnel_security_group_id
+  ]
+  replicate_source_db = module.rds.identifier
+  providers = {
+    aws = aws.us-west-1
+  }
 }
 
 module "vpn" {

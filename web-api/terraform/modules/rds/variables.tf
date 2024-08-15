@@ -30,3 +30,13 @@ variable "security_group_ids" {
 variable "security_group_cidr_blocks" {
   type = list(string)
 }
+
+variable "replicate_source_db" {
+  type = string
+  default = null
+}
+
+variable "db_name" {
+  type = string
+  default = null
+}

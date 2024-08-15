@@ -3,7 +3,7 @@ resource "aws_db_instance" "postgres" {
   engine               = "postgres"
   engine_version       = "16.3"
   instance_class       = var.instance_size
-  db_name              = "${var.environment}_dawson"
+  db_name              = var.db_name
   username             = var.postgres_user
   password             = var.postgres_password
   parameter_group_name = aws_db_parameter_group.postgres.name
@@ -12,6 +12,7 @@ resource "aws_db_instance" "postgres" {
   skip_final_snapshot = true
   publicly_accessible = false
   apply_immediately = true
+  replicate_source_db = var.replicate_source_db
 }
 
 resource "aws_db_parameter_group" "postgres" {
