@@ -148,6 +148,10 @@ jobs:
           command: |
             ./web-api/setup-elasticsearch-index.sh $ENV
       - run:
+          name: Setup System Performance Elasticsearch Index Settings
+          command: |
+            ./web-api/setup-system-performance-elasticsearch-index.sh $ENV
+      - run:
           name: Test Users Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
