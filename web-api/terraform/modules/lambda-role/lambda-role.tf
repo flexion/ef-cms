@@ -170,7 +170,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
             ],
             "Resource": [
                 "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/efcms-search-${var.environment}-*",
-                "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/info"
+								"arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/performance-logs-${var.environment}"
             ],
             "Effect": "Allow"
         },
