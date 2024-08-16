@@ -80,7 +80,7 @@ if [ -z "${CIRCLE_BRANCH}" ]; then
   popd
 fi
 
-INFO_ELASTICSEARCH_DOMAIN=$(aws es describe-elasticsearch-domain \
+ELASTICSEARCH_INFO_ENDPOINT=$(aws es describe-elasticsearch-domain \
   --domain-name "info" \
   --region us-east-1 \
   --query 'DomainStatus.Endpoint' \
@@ -121,7 +121,7 @@ export TF_VAR_zone_name=$ZONE_NAME
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
-export TF_VAR_info_elasticsearch_domain=$INFO_ELASTICSEARCH_DOMAIN
+export TF_VAR_elasticsearch_info_endpoint=$ELASTICSEARCH_INFO_ENDPOINT
 export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
 export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_deployment_timestamp=$DEPLOYMENT_TIMESTAMP
