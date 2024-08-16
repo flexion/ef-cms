@@ -1706,13 +1706,13 @@ export const presenter = {
   providers: {} as { applicationContext: ClientApplicationContext; router: {} },
   sequences: Object.entries(presenterSequences).reduce(
     (acc, [sequenceName, sequence]) => {
-      const SYSTEM_PERFORMANCE_BLACKLIST: string[] = [
+      const SYSTEM_PERFORMANCE_DENYLIST: string[] = [
         'handleIdleLogoutSequence',
         'broadcastIdleStatusActiveSequence',
         'resetHeaderAccordionsSequence',
       ];
 
-      if (SYSTEM_PERFORMANCE_BLACKLIST.includes(sequenceName)) return acc;
+      if (SYSTEM_PERFORMANCE_DENYLIST.includes(sequenceName)) return acc;
 
       if (!Array.isArray(sequence))
         throw new Error('Cerebral sequence is not an array');

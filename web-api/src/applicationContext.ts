@@ -51,6 +51,7 @@ import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
+import { getInfoSearchClient } from '@web-api/persistence/elasticsearch/getInfoSearchClient';
 import { getNotificationClient } from '@web-api/notifications/getNotificationClient';
 import { getNotificationService } from '@web-api/notifications/getNotificationService';
 import { getPersistenceGateway } from './getPersistenceGateway';
@@ -73,14 +74,12 @@ import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSet
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
-
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
 
 let sqsCache: SQSClient;
 let searchClientCache: Client;
-let searchClientInfoCache: Client;
 
 const entitiesByName = {
   Case,
@@ -189,29 +188,7 @@ export const createApplicationContext = (
     },
     getEnvironment,
     getHttpClient: () => axios,
-    getInfoSearchClient: () => {
-      if (searchClientInfoCache) return searchClientInfoCache;
-      if (environment.stage === 'local') {
-        searchClientInfoCache = {
-          index(...args) {
-            console.log('System Performance Log: ', ...args);
-          },
-        } as Client;
-      } else {
-        searchClientCache = new Client({
-          ...AwsSigv4Signer({
-            getCredentials: () => {
-              const credentialsProvider = defaultProvider();
-              return credentialsProvider();
-            },
-            region: 'us-east-1',
-          }),
-          node: `https://${environment.elasticsearchInfoEndpoint}:443`,
-        });
-      }
-
-      return searchClientCache;
-    },
+    getInfoSearchClient,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMessageGateway: () => ({
       sendEmailEventToQueue: async ({ applicationContext, emailParams }) => {

@@ -7,7 +7,7 @@ export const logUserPerformanceDataInteractor = (
     duration: number;
     actionPerformanceArray: { actionName: string; duration: number }[];
   },
-) => {
+): Promise<void> => {
   return post({
     applicationContext,
     body: { performanceData },

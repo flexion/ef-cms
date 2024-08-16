@@ -6,6 +6,9 @@ export const systemPerformanceLogsMappings = {
     duration: {
       type: 'integer',
     },
+    environment: {
+      type: 'keyword',
+    },
     metricName: {
       type: 'keyword',
     },

@@ -1,5 +1,3 @@
-import { DateTime } from 'luxon';
-
 export const performanceMeasurementEndAction = ({
   applicationContext,
   props,
@@ -14,9 +12,8 @@ export const performanceMeasurementEndAction = ({
   if (!sequenceName || !performanceMeasurementStart || !actionPerformanceArray)
     return;
 
-  const performanceMeasurementEnd = DateTime.now().toMillis();
-  const durationInSeconds =
-    (performanceMeasurementEnd - performanceMeasurementStart) / 1000;
+  const performanceMeasurementEnd = Date.now();
+  const duration = performanceMeasurementEnd - performanceMeasurementStart;
 
   const RESULTS: {
     sequenceName: string;
@@ -24,11 +21,12 @@ export const performanceMeasurementEndAction = ({
     actionPerformanceArray: { actionName: string; duration: number }[];
   } = {
     actionPerformanceArray,
-    duration: durationInSeconds,
+    duration,
     sequenceName,
   };
 
-  applicationContext
+  // TODO 10432 Wrap this in a try catch so the user never knows it happens.
+  void applicationContext
     .getUseCases()
     .logUserPerformanceDataInteractor(applicationContext, RESULTS);
 };

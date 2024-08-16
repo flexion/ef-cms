@@ -1,10 +1,12 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { environment } from '@web-api/environment';
 
 type PerformanceMeasurement = {
   date: string;
   duration: number;
   metricName: string;
+  environment: string;
 };
 
 export const saveSystemPerformanceData = async ({
@@ -26,11 +28,13 @@ export const saveSystemPerformanceData = async ({
     {
       date,
       duration: performanceData.duration,
+      environment: environment.stage,
       metricName: performanceData.sequenceName,
     },
     ...performanceData.actionPerformanceArray.map(actionData => ({
       date,
       duration: actionData.duration,
+      environment: environment.stage,
       metricName: actionData.actionName,
     })),
   ];
@@ -39,9 +43,7 @@ export const saveSystemPerformanceData = async ({
     // TODO 10432: Can we store these with a single call?
     performanceMesurements.map(async measurement => {
       await client.index({
-        body: {
-          ...measurement,
-        },
+        body: measurement,
         index: 'system-performance-logs',
       });
     }),
