@@ -8,11 +8,23 @@ exports.handler = async () =>
     secretsManagerClient: secretsManager,
   });
 
-async function getReportData() {
+async function getReportData(): Promise<string> {
   return await new Promise(resolve => resolve('John is the BEST!!!!'));
 }
 
-async function SequencePerformanceReport({ httpClient, secretsManagerClient }) {
+type SequencePerformanceReportParams = {
+  httpClient: { post: (url: string, body: any, options: any) => Promise<void> };
+  secretsManagerClient: {
+    getSecretValue: (params: { SecretId: string }) => {
+      promise: () => Promise<{ SecretString: string }>;
+    };
+  };
+};
+
+async function SequencePerformanceReport({
+  httpClient,
+  secretsManagerClient,
+}: SequencePerformanceReportParams) {
   const { STAGE } = process.env;
   if (!STAGE) return;
 
