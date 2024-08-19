@@ -13,7 +13,10 @@ async function getReportData() {
 }
 
 async function SequencePerformanceReport({ httpClient, secretsManagerClient }) {
-  const secretName = 'SLACK_WEBHOOK_URL_exp5';
+  const { STAGE } = process.env;
+  if (!STAGE) return;
+
+  const secretName = `SLACK_WEBHOOK_URL_${STAGE}`;
   const SLACK_WEBHOOK_URL = await secretsManagerClient
     .getSecretValue({ SecretId: secretName })
     .promise()
