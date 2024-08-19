@@ -119,4 +119,5 @@ module "sequence_performance_report_cron" {
   source         = "../../modules/sequence-performance-report-cron"
   environment    = var.environment
   dns_domain     = var.dns_domain
+  aws_region     = var.aws_region
 }
