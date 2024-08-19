@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const axios = require('axios');
 const secretsManager = new AWS.SecretsManager({ region: 'us-east-1' });
-
+//web-api/src/lambdas
 exports.handler = async () =>
   await SequencePerformanceReport({
     httpClient: axios,
