@@ -25,7 +25,7 @@ function formatReprtData(REPORT_DATA: SequenceMetric[]): string {
   const REPORT_STRING: string = REPORT_DATA.reduce(
     (acc, currentMetric, index) => {
       const { duration, sequenceName } = currentMetric;
-      acc += `${index + 1}.\t${sequenceName} (${duration} seconds)\n`;
+      acc += `\t${index + 1}.\t${sequenceName} (${duration} seconds)\n`;
       return acc;
     },
     '',
