@@ -3,7 +3,6 @@ import { Client } from '@opensearch-project/opensearch';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
 import { environment } from '@web-api/environment';
 
-let searchClientCache: Client;
 let searchClientInfoCache: Client;
 
 export const getInfoSearchClient = () => {
@@ -11,18 +10,15 @@ export const getInfoSearchClient = () => {
   if (environment.stage === 'local') {
     searchClientInfoCache = getLocalInfoSearchClient();
   } else {
-    searchClientCache = getDeployedInfoSearchClient();
+    searchClientInfoCache = getDeployedInfoSearchClient();
   }
 
-  return searchClientCache;
+  return searchClientInfoCache;
 };
 
-// TODO 10432 This is a little noisy when running locally.
 export const getLocalInfoSearchClient = (): Client => {
   return {
-    index(...args) {
-      console.log('System Performance Log: ', ...args);
-    },
+    index() {},
   } as Client;
 };
 
