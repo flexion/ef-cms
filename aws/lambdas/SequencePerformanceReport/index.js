@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const axios = require('axios');
-const secretsManager = new AWS.SecretsManager();
+const secretsManager = new AWS.SecretsManager({ region: 'us-east-1' });
 
 exports.handler = async () =>
   await SequencePerformanceReport({
@@ -9,15 +9,20 @@ exports.handler = async () =>
   });
 
 async function getReportData() {
-  return await new Promise(resolve => resolve('John is TESTING'));
+  return await new Promise(resolve => resolve('John is the BEST!!!!'));
 }
 
 async function SequencePerformanceReport({ httpClient, secretsManagerClient }) {
-  const secretName = 'SLACK_WEBHOOK_URL';
+  const secretName = 'SLACK_WEBHOOK_URL_exp5';
   const SLACK_WEBHOOK_URL = await secretsManagerClient
     .getSecretValue({ SecretId: secretName })
     .promise()
-    .catch(() => null);
+    .then(data => JSON.parse(data.SecretString))
+    .then(secrets => secrets[secretName])
+    .catch(error => {
+      console.log('**ERROR GETTING SECRET -> ', error);
+      return error;
+    });
 
   if (!SLACK_WEBHOOK_URL) return;
 
@@ -29,6 +34,8 @@ async function SequencePerformanceReport({ httpClient, secretsManagerClient }) {
     },
   };
 
-  console.log('GOING TO POST REPORT TO SLACK');
-  await httpClient.post(SLACK_WEBHOOK_URL, BODY, OPTIONS).catch(() => null);
+  await httpClient.post(SLACK_WEBHOOK_URL, BODY, OPTIONS).catch(error => {
+    console.log('**ERROR POSTING REPORT TO SLACK -> ', error);
+    return error;
+  });
 }

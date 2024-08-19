@@ -72,6 +72,15 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
+                "secretsmanager:GetSecretValue"
+            ],
+            "Resource": [
+                "arn:aws:secretsmanager:us-east-1:${data.aws_caller_identity.current.account_id}:secret:SLACK_WEBHOOK_URL_${var.environment}*"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
                 "cognito-idp:AdminCreateUser",
                 "cognito-idp:AdminDisableUser",
                 "cognito-idp:AdminGetUser",
@@ -170,7 +179,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
             ],
             "Resource": [
                 "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/efcms-search-${var.environment}-*",
-                "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/info"
+                "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/info*"
             ],
             "Effect": "Allow"
         },
