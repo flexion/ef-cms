@@ -1,6 +1,15 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const performanceMeasurementEndAction = ({
+export type SequencePerformance = {
+  sequenceName: string;
+  duration: number;
+  actionPerformanceArray: {
+    actionName: string;
+    duration: number;
+  }[];
+};
+
+export const performanceMeasurementEndAction = async ({
   applicationContext,
   get,
   props,
@@ -24,18 +33,21 @@ export const performanceMeasurementEndAction = ({
   const performanceMeasurementEnd = Date.now();
   const duration = performanceMeasurementEnd - performanceMeasurementStart;
 
-  const RESULTS: {
-    sequenceName: string;
-    duration: number;
-    actionPerformanceArray: { actionName: string; duration: number }[];
-  } = {
+  const sequencePerformance: SequencePerformance = {
     actionPerformanceArray,
     duration,
     sequenceName,
   };
+  applicationContext
+    .getPerformanceMonitor()
+    .addPerformanceMetric({ sequencePerformance });
 
-  // TODO 10432 Wrap this in a try catch so the user never knows it happens.
-  void applicationContext
-    .getUseCases()
-    .logUserPerformanceDataInteractor(applicationContext, RESULTS);
+  try {
+    await applicationContext.getPerformanceMonitor().drainPerformanceMetrics({
+      applicationContext,
+    });
+  } catch (e) {
+    // The user should never receive information about errors when capturing performance fails. Always swallow error.
+    console.error('Error posting performance');
+  }
 };

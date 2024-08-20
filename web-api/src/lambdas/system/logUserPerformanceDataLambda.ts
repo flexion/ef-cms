@@ -6,13 +6,11 @@ export const logUserPerformanceDataLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { performanceData } = JSON.parse(event.body);
-
     return await applicationContext
       .getUseCases()
       .logUserPerformanceDataInteractor(
         applicationContext,
-        performanceData,
+        JSON.parse(event.body),
         authorizedUser,
       );
   });

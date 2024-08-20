@@ -18,6 +18,7 @@ export const getInfoSearchClient = () => {
 
 export const getLocalInfoSearchClient = (): Client => {
   return {
+    bulk() {},
     index() {},
   } as Client;
 };

@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 import { ActionError } from './errors/ActionError';
 import { ClientApplicationContext } from '../applicationContext';
-import { DateTime } from 'luxon';
 import { GatewayTimeoutError } from './errors/GatewayTimeoutError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
 import { NotFoundError } from './errors/NotFoundError';
@@ -1667,7 +1666,7 @@ function wrapActionsWithPerformanceLogic(structure) {
       }
 
       const actionName = structure?.name;
-      const startTime: number = DateTime.now().toMillis();
+      const startTime: number = Date.now();
       const result = structure(...args);
       if (result instanceof Promise) {
         return result.then(actionResults => {
@@ -1694,11 +1693,11 @@ const logActionDuration = ({
   args: any;
   startTime: number;
 }) => {
-  const endTime: number = DateTime.now().toMillis();
+  const endTime: number = Date.now();
   if (actionName)
     args[0].props['actionPerformanceArray'].push({
       actionName,
-      duration: (endTime - startTime) / 1000,
+      duration: endTime - startTime,
     });
 };
 

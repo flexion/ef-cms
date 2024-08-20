@@ -214,6 +214,7 @@ import { getPaperServicePdfUrlInteractor } from '@shared/proxies/trialSessions/g
 import { getPdfFromUrl } from '@web-client/persistence/s3/getPdfFromUrl';
 import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/document/getPdfFromUrlInteractor';
 import { getPendingMotionDocketEntriesForCurrentJudgeInteractor } from '@shared/proxies/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeProxy';
+import { getPerformanceMonitor } from '@web-client/presenter/utilities/performanceMonitor';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
 import { getPractitionerDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getPractitionerDocumentDownloadUrlProxy';
 import { getPractitionerDocumentInteractor } from '../../shared/src/proxies/getPractitionerDocumentProxy';
@@ -699,6 +700,7 @@ const applicationContext = {
     const pdfLib = import('pdf-lib');
     return pdfLib;
   },
+  getPerformanceMonitor,
   getPersistenceGateway: () => {
     return {
       getChambersSections,
