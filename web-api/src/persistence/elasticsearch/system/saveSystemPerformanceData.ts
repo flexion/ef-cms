@@ -3,8 +3,9 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 export type PerformanceMeasurement = {
   date: string;
   duration: number;
-  metricName: string;
+  eventName: string;
   environment: string;
+  category: 'sequence' | 'action';
 };
 
 export const saveSystemPerformanceData = async ({
@@ -16,8 +17,14 @@ export const saveSystemPerformanceData = async ({
 }) => {
   const client = applicationContext.getInfoSearchClient();
 
+  const body: any[] = [];
+  performanceData.forEach(perfData => {
+    body.push({ index: {} }); // When bulk adding entries you first specify the command, then the data
+    body.push(perfData);
+  });
+
   await client.bulk({
-    body: performanceData,
+    body,
     index: 'system-performance-logs',
   });
 };

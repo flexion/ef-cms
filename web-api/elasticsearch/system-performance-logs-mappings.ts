@@ -1,5 +1,8 @@
 export const systemPerformanceLogsMappings = {
   properties: {
+    category: {
+      type: 'keyword',
+    },
     date: {
       type: 'date',
     },
@@ -9,7 +12,7 @@ export const systemPerformanceLogsMappings = {
     environment: {
       type: 'keyword',
     },
-    metricName: {
+    eventName: {
       type: 'keyword',
     },
   },

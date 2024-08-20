@@ -21,11 +21,13 @@ export const logUserPerformanceDataInteractor = async (
   const measurements: PerformanceMeasurement[] = [];
   Object.entries(performanceData).forEach(([actionName, durations]) => {
     durations.forEach(duration => {
+      const category = actionName.includes('Sequence') ? 'sequence' : 'action';
       measurements.push({
+        category,
         date,
         duration,
         environment: environment.stage,
-        metricName: actionName,
+        eventName: actionName,
       });
     });
   });
