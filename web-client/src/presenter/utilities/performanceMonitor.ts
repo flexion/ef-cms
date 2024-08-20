@@ -40,7 +40,6 @@ class PerformanceMonitor {
             actionPerformance.duration,
           ]);
     });
-    console.log(this.performanceInfo);
   }
 
   async drainPerformanceMetrics({
@@ -50,15 +49,12 @@ class PerformanceMonitor {
   }): Promise<void> {
     const now = Date.now();
     if (now - this.lastTimeDrained > this.PERFORMANCE_DRAIN_INTERVAL) {
+      const perfInfo = this.performanceInfo;
+      this.performanceInfo = {};
+      this.lastTimeDrained = Date.now();
       await applicationContext
         .getUseCases()
-        .logUserPerformanceDataInteractor(
-          applicationContext,
-          this.performanceInfo,
-        );
-      this.lastTimeDrained = Date.now();
-
-      this.performanceInfo = {};
+        .logUserPerformanceDataInteractor(applicationContext, perfInfo);
     }
   }
 }
