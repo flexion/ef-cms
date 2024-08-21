@@ -9,3 +9,7 @@ variable "environment" {
 variable "dns_domain" {
   type = string
 }
+
+variable "elasticsearch_info_endpoint" {
+  type = string
+}

@@ -63,6 +63,12 @@ fi
 # exit on any failure
 set -eo pipefail
 
+ELASTICSEARCH_INFO_ENDPOINT=$(aws es describe-elasticsearch-domain \
+  --domain-name "info" \
+  --region "us-east-1" \
+  --query 'DomainStatus.Endpoint' \
+  --output text)
+
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
   DESTINATION_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
 
@@ -85,6 +91,7 @@ export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_zone_name=$ZONE_NAME
 export TF_VAR_active_ses_ruleset=$ACTIVE_SES_RULESET
 export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
+export TF_VAR_elasticsearch_info_endpoint=$ELASTICSEARCH_INFO_ENDPOINT
 export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY
 export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
 export TF_VAR_es_instance_count=$ES_INSTANCE_COUNT

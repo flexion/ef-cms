@@ -116,8 +116,9 @@ module "ui-healthcheck" {
 }
 
 module "sequence_performance_report_cron" {
-  source         = "../../modules/sequence-performance-report-cron"
-  environment    = var.environment
-  dns_domain     = var.dns_domain
-  aws_region     = var.aws_region
+  source                        = "../../modules/sequence-performance-report-cron"
+  environment                   = var.environment
+  dns_domain                    = var.dns_domain
+  aws_region                    = var.aws_region
+	elasticsearch_info_endpoint   = var.elasticsearch_info_endpoint
 }

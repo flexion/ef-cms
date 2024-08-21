@@ -82,3 +82,7 @@ variable "viewer_protocol_policy" {
   default = "redirect-to-https"
 }
 
+variable "elasticsearch_info_endpoint" {
+  type = string
+}
+

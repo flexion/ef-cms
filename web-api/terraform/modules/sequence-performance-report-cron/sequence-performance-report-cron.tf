@@ -7,7 +7,8 @@ module "sequence_performance_report_lambda_role" {
 
 resource "terraform_data" "locals" {
   input = {
-    STAGE = var.environment
+    STAGE                        = var.environment
+    ELASTICSEARCH_INFO_ENDPOINT  = var.elasticsearch_info_endpoint
   }
 }
 
