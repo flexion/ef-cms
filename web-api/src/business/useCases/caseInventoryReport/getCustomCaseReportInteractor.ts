@@ -67,6 +67,8 @@ export const getCustomCaseReportInteractor = async (
     throw new UnauthorizedError('Unauthorized for case inventory report');
   }
 
+  applicationContext.logger.info('YO WE IN HERE');
+
   params.caseStatuses = params.caseStatuses || [];
   params.caseTypes = params.caseTypes || [];
   params.judges = params.judges || [];

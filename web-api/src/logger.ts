@@ -50,7 +50,7 @@ export const expressLogger = (req, res, next) => {
         statusCode: res.statusCode,
       },
     });
-    logger.clearContext();
+    // logger.clearContext();
   };
 
   return next();
