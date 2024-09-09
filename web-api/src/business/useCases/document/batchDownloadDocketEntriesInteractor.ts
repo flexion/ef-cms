@@ -15,6 +15,9 @@ export type DownloadDocketEntryRequestType = {
   clientConnectionId: string;
   docketNumber: string;
   printableDocketRecordFileId?: string;
+  index: number;
+  totalNumberOfBatches: number;
+  uuid: string;
 };
 
 export const batchDownloadDocketEntriesInteractor = async (
@@ -55,26 +58,32 @@ const batchDownloadDocketEntriesHelper = async (
     clientConnectionId,
     docketNumber,
     documentsSelectedForDownload,
+    index,
     printableDocketRecordFileId,
+    totalNumberOfBatches,
+    uuid,
   }: DownloadDocketEntryRequestType,
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  if (
-    !isAuthorized(
-      authorizedUser,
-      ROLE_PERMISSIONS.BATCH_DOWNLOAD_CASE_DOCUMENTS,
-    )
-  ) {
-    throw new UnauthorizedError('Unauthorized');
-  }
+  // if (
+  //   !isAuthorized(
+  //     authorizedUser,
+  //     ROLE_PERMISSIONS.BATCH_DOWNLOAD_CASE_DOCUMENTS,
+  //   )
+  // ) {
+  //   throw new UnauthorizedError('Unauthorized');
+  // }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     clientConnectionId,
     message: {
-      action: 'batch_download_progress',
+      action: 'docket_entries_batch_download_progress',
       filesCompleted: 0,
+      index,
       totalFiles: documentsSelectedForDownload.length,
+      totalNumberOfBatches,
+      uuid,
     },
     userId: authorizedUser.userId,
   });
@@ -92,7 +101,7 @@ const batchDownloadDocketEntriesHelper = async (
 
   const { caseCaption, isSealed: isCaseSealed } = caseToBatch;
   const caseTitle = Case.getCaseTitle(caseCaption);
-  const caseFolder = `${docketNumber}, ${caseTitle}`;
+  const caseFolder = `${uuid}-${index} ${docketNumber}, ${caseTitle}`;
   const zipName = `${caseFolder}.zip`;
   const documentsToZip: {
     key: string;
@@ -141,9 +150,11 @@ const batchDownloadDocketEntriesHelper = async (
       applicationContext,
       clientConnectionId,
       message: {
-        action: 'batch_download_progress',
+        action: 'docket_entries_batch_download_progress',
         filesCompleted: progressData.filesCompleted,
+        index,
         totalFiles: progressData.totalFiles,
+        uuid,
       },
       userId: authorizedUser.userId,
     });
@@ -169,8 +180,11 @@ const batchDownloadDocketEntriesHelper = async (
     applicationContext,
     clientConnectionId,
     message: {
-      action: 'batch_download_ready',
+      action: 'docket_entries_batch_download_ready',
+      index,
+      totalNumberOfBatches,
       url,
+      uuid,
     },
     userId: authorizedUser.userId,
   });

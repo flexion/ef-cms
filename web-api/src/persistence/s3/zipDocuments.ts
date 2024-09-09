@@ -24,6 +24,7 @@ export async function zipDocuments(
     outputZipName: string;
   },
 ): Promise<void> {
+  const startTime = Date.now();
   const passThrough = new PassThrough({ highWaterMark: 1024 * 1024 * 100 });
 
   const upload = new Upload({
@@ -59,49 +60,60 @@ export async function zipDocuments(
     }
   });
 
-  for (let index = 0; index < documents.length; index++) {
-    const document = documents[index];
+  let filesCompleted = 0;
 
-    const response = await applicationContext.getStorageClient().getObject({
-      Bucket: document.useTempBucket
-        ? applicationContext.environment.tempDocumentsBucketName
-        : applicationContext.environment.documentsBucketName,
-      Key: document.key,
-    });
-    if (!response.Body) {
-      throw new Error(
-        `Unable to get document (${document.key}) from persistence.`,
-      );
-    }
-
-    // Transform s3 getobject into a stream of data that can be piped into the zip processor
-    const bodyStream: ReadableStream<Uint8Array> =
-      response.Body.transformToWebStream();
-    const reader = bodyStream.getReader();
-    const compressedPdfStream = new AsyncZipDeflate(document.filePathInZip);
-    zip.add(compressedPdfStream);
-
-    let continueReading = true;
-    while (continueReading) {
-      const unzippedChunk = await reader.read();
-      const nextChunk = unzippedChunk.value || new Uint8Array();
-      continueReading = !unzippedChunk.done;
-      compressedPdfStream.push(nextChunk, unzippedChunk.done);
-      while (passThrough.readableLength > 1024 * 1024 * 10) {
-        // Wait for the buffer to be drained, before downloading more files
-        await new Promise(resolve => setTimeout(resolve, 10));
-      }
-    }
-    reader.releaseLock();
-
-    if (onProgress) {
-      await onProgress({
-        filesCompleted: index + 1,
-        totalFiles: documents.length,
+  await Promise.all(
+    documents.map(async document => {
+      const response = await applicationContext.getStorageClient().getObject({
+        Bucket: document.useTempBucket
+          ? applicationContext.environment.tempDocumentsBucketName
+          : applicationContext.environment.documentsBucketName,
+        Key: document.key,
       });
-    }
-  }
+
+      if (!response.Body) {
+        throw new Error(
+          `Unable to get document (${document.key}) from persistence.`,
+        );
+      }
+
+      // Transform s3 getobject into a stream of data that can be piped into the zip processor
+      const bodyStream: ReadableStream<Uint8Array> =
+        response.Body.transformToWebStream();
+      const reader = bodyStream.getReader();
+      const compressedPdfStream = new AsyncZipDeflate(document.filePathInZip);
+      zip.add(compressedPdfStream);
+
+      let continueReading = true;
+      while (continueReading) {
+        const unzippedChunk = await reader.read();
+        const nextChunk = unzippedChunk.value || new Uint8Array();
+        continueReading = !unzippedChunk.done;
+        compressedPdfStream.push(nextChunk, unzippedChunk.done);
+
+        while (passThrough.readableLength > 1024 * 1024 * 10) {
+          // Wait for the buffer to be drained, before downloading more files
+          await new Promise(resolve => setTimeout(resolve, 10));
+        }
+      }
+      reader.releaseLock();
+
+      filesCompleted += 1;
+
+      if (onProgress) {
+        await onProgress({
+          filesCompleted,
+          totalFiles: documents.length,
+        });
+      }
+    }),
+  );
 
   zip.end();
+
   await uploadPromise;
+
+  const endTime = Date.now();
+  const total = (endTime - startTime) / 1000;
+  console.log(`Total Time: ${total} seconds`);
 }
