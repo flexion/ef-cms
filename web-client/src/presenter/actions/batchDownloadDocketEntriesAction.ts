@@ -45,8 +45,6 @@ export const batchDownloadDocketEntriesAction = async ({
           totalNumberOfBatches: batchedDocumentIds.length,
           uuid,
         });
-
-      // await new Promise(resolve => setTimeout(() => resolve(null), 2000));
     }
 
     return path.success();
