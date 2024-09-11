@@ -67,14 +67,14 @@ const batchDownloadDocketEntriesHelper = async (
   }: DownloadDocketEntryRequestType,
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  // if (
-  //   !isAuthorized(
-  //     authorizedUser,
-  //     ROLE_PERMISSIONS.BATCH_DOWNLOAD_CASE_DOCUMENTS,
-  //   )
-  // ) {
-  //   throw new UnauthorizedError('Unauthorized');
-  // }
+  if (
+    !isAuthorized(
+      authorizedUser,
+      ROLE_PERMISSIONS.BATCH_DOWNLOAD_CASE_DOCUMENTS,
+    )
+  ) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
