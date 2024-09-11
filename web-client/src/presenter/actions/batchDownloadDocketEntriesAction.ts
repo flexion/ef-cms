@@ -21,7 +21,7 @@ export const batchDownloadDocketEntriesAction = async ({
       docketRecordFilter,
     });
 
-  const batchSize = 1;
+  const batchSize = 100;
   const batchedDocumentIds: string[][] = [];
   const uuid = applicationContext.getUniqueId();
 
@@ -30,19 +30,23 @@ export const batchDownloadDocketEntriesAction = async ({
     batchedDocumentIds.push(batchSlice);
   }
 
+  const totalNumberOfFiles = props.fileId
+    ? filteredDocumentsIds.length + 1
+    : filteredDocumentsIds.length;
+
   try {
     for (let index = 0; index < batchedDocumentIds.length; index++) {
       const batch = batchedDocumentIds[index];
-      await applicationContext
+      applicationContext
         .getUseCases()
         .batchDownloadDocketEntriesInteractor(applicationContext, {
           clientConnectionId,
           docketNumber,
           documentsSelectedForDownload: batch,
-
           index,
           printableDocketRecordFileId: !index ? props.fileId : undefined,
           totalNumberOfBatches: batchedDocumentIds.length,
+          totalNumberOfFiles,
           uuid,
         });
     }

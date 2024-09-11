@@ -17,6 +17,7 @@ export type DownloadDocketEntryRequestType = {
   printableDocketRecordFileId?: string;
   index: number;
   totalNumberOfBatches: number;
+  totalNumberOfFiles: number;
   uuid: string;
 };
 
@@ -61,6 +62,7 @@ const batchDownloadDocketEntriesHelper = async (
     index,
     printableDocketRecordFileId,
     totalNumberOfBatches,
+    totalNumberOfFiles,
     uuid,
   }: DownloadDocketEntryRequestType,
   authorizedUser: UnknownAuthUser,
@@ -81,7 +83,7 @@ const batchDownloadDocketEntriesHelper = async (
       action: 'docket_entries_batch_download_progress',
       filesCompleted: 0,
       index,
-      totalFiles: documentsSelectedForDownload.length,
+      totalFiles: totalNumberOfFiles,
       totalNumberOfBatches,
       uuid,
     },
@@ -153,7 +155,7 @@ const batchDownloadDocketEntriesHelper = async (
         action: 'docket_entries_batch_download_progress',
         filesCompleted: progressData.filesCompleted,
         index,
-        totalFiles: progressData.totalFiles,
+        totalFiles: totalNumberOfFiles,
         uuid,
       },
       userId: authorizedUser.userId,
