@@ -1,9 +1,10 @@
-import { updateDocketEntriesBatchDownloadCompleteBatchAction } from '@web-client/presenter/actions/BatchDownload/DocketEntries/updateDocketEntriesBatchDownloadCompleteBatchAction';
+import { mergeDocketEntriesBatchesAction } from '@web-client/presenter/actions/BatchDownload/DocketEntries/mergeDocketEntriesBatchesAction';
+import { singleDocketEntriesBatchCompleteAction } from '@web-client/presenter/actions/BatchDownload/DocketEntries/singleDocketEntriesBatchCompleteAction';
 
 export const updateDocketEntriesBatchDownloadDownloadSequence = [
-  updateDocketEntriesBatchDownloadCompleteBatchAction,
+  singleDocketEntriesBatchCompleteAction,
   {
-    batchComplete: [],
+    batchComplete: [mergeDocketEntriesBatchesAction],
     batchIncomplete: [],
   },
 ];
