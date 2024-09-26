@@ -1,6 +1,10 @@
 import { getDbWriter } from '../../../../database';
 import { messages } from './fixtures/messages';
-import { workItems } from './fixtures/workItems';
+import { work_items } from './fixtures/work_items';
+
+function camelToSnake(camelStr) {
+  return camelStr.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
+}
 
 export const seed = async () => {
   await getDbWriter(writer =>
@@ -13,9 +17,9 @@ export const seed = async () => {
 
   await getDbWriter(writer =>
     writer
-      .insertInto('workItem')
-      .values(workItems)
-      .onConflict(oc => oc.column('workItemId').doNothing()) // ensure doesn't fail if exists
+      .insertInto('work_item')
+      .values(work_items)
+      .onConflict(oc => oc.column('work_item_id').doNothing()) // ensure doesn't fail if exists
       .execute(),
   );
 };

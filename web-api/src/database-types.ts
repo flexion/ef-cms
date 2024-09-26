@@ -3,7 +3,7 @@ import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 export interface Database {
   message: MessageTable;
   case: CaseTable;
-  workItem: WorkItemTable;
+  work_item: WorkItemTable;
 }
 
 export interface MessageTable {
@@ -50,35 +50,35 @@ export type NewCaseKysely = Insertable<CaseTable>;
 export type UpdateCaseKysely = Updateable<CaseTable>;
 
 export interface WorkItemTable {
-  workItemId: string;
-  assigneeId?: string;
-  assigneeName?: string;
-  associatedJudge: string;
-  associatedJudgeId?: string;
-  caseIsInProgress?: boolean;
-  caseStatus: string;
-  caseTitle?: string;
-  completedAt?: string;
-  completedBy?: string;
-  completedByUserId?: string;
-  completedMessage?: string;
-  createdAt: string;
-  docketEntry: any;
-  docketNumber: string;
-  docketNumberWithSuffix?: string;
-  hideFromPendingMessages?: boolean;
-  highPriority?: boolean;
-  inProgress?: boolean;
-  isInitializeCase?: boolean;
-  isRead?: boolean;
-  leadDocketNumber?: string;
+  work_item_id: string;
+  assignee_id?: string;
+  assignee_name?: string;
+  associated_judge: string;
+  associated_judge_id?: string;
+  case_is_in_progress?: boolean;
+  case_status: string;
+  case_title?: string;
+  completed_at?: string;
+  completed_by?: string;
+  completed_by_user_id?: string;
+  completed_message?: string;
+  created_at: string;
+  docket_entry: any;
+  docket_number: string;
+  docket_number_with_suffix?: string;
+  hide_from_pending_messages?: boolean;
+  high_priority?: boolean;
+  in_progress?: boolean;
+  is_initialize_case?: boolean;
+  is_read?: boolean;
+  lead_docket_number?: string;
   section: string;
-  sentBy: string;
-  sentBySection?: string;
-  sentByUserId?: string;
-  trialDate?: string;
-  trialLocation?: string;
-  updatedAt: string;
+  sent_by: string;
+  sent_by_section?: string;
+  sent_by_user_id?: string;
+  trial_date?: string;
+  trial_location?: string;
+  updated_at: string;
 }
 
 export type WorkItemKysely = Selectable<WorkItemTable>;
