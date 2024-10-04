@@ -5,7 +5,7 @@ What is the bigger problem
   - Difficulty in knowing if your validation changes break existing data?
 
 # 1. Proactive Detection
-## Generate a fingerprint of validation rules. Run validation when fingerprint changes.
+## (Yes) Generate a fingerprint of validation rules. Run validation when fingerprint changes.
  Strategy: Have a script which can scan a directory looking for entities, when an entity is found generate a hash of its validation rules and compare it with its previous validation rules hash, if a difference is detected in validation rules then run validation on all entities of that type in the DB. Fail the pipeline if validation does not pass.
 
 Pros
@@ -21,7 +21,7 @@ Cons
 - (Simple Fix) Validation rules are not static in all entities. getValidationRules() can return different schemas.
 - (Very complex Fix) Not all entities have a specific way to get all of them from the DB. For instance there is no way to get all CaseNotes in the DB.
 
-## Contract Tests
+## (No) Contract Tests
 Strategy: Create a wide range of entities touching the edge cases of entities that should always pass validation
 
 Pros
@@ -31,7 +31,7 @@ Cons
 - Requires us to have all entities in varied combinations being tested. Anything not within the tested examples will slip through the cracks.
 - Does not solve the problem of forgetting to update migration scripts as what if we forget to add more test cases to the contract tests?
 
-## Utility to validate the whole database or a portion of the database
+## (Yes) Utility to validate the whole database or a portion of the database
 Strategy: Create individual scripts or processes that allows a devloper to scan a database and run all entities through validation to see what is and is not valid. 
 
 Pros
@@ -42,15 +42,17 @@ Cons
 - Slow if validating the whole DB
 - You need to remember to run the utility
 
+## (No) Have schema version numbers on each entity
 
 # 2. Better Team Awareness
-## Creating Folders for DB entities vs. non DB entities
+## (Yes) Creating Folders for persisted entities vs. non DB entities
 
-## When an entitiy file is changed send a message to the developer to go check if they need a migration.
+## (No) When an entitiy file is changed send a message to the developer to go check if they need a migration.
 
+## (No) Require that PRs with changes to entities have documentation that the dev knows they are changing validation rules
 
 # 3. Reactive Handling of Invalid Entities
-## Logging when an entity is invalid
+## (YES)Logging when an entity is invalid
 Strategy: Continue validating inside of interactor but log when an entity is invalid. Look over logs of invalid data to see what entities in the DB are invalid.
 
 Pros
