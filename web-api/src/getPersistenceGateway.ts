@@ -9,7 +9,6 @@ import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { caseAdvancedSearch } from './persistence/elasticsearch/caseAdvancedSearch';
 import { casePublicSearch as casePublicSearchPersistence } from './persistence/elasticsearch/casePublicSearch';
 import { createCase } from './persistence/dynamo/cases/createCase';
-import { createCaseDeadline } from './persistence/dynamo/caseDeadlines/createCaseDeadline';
 import { createCaseTrialSortMappingRecords } from './persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { createChangeOfAddressJob } from './persistence/dynamo/jobs/ChangeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
@@ -26,7 +25,6 @@ import { createTrialSession } from './persistence/dynamo/trialSessions/createTri
 import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
 import { createUserRecords } from './persistence/dynamo/users/createUserRecords';
 import { decrementJobCounter } from './persistence/dynamo/trialSessions/decrementJobCounter';
-import { deleteCaseDeadline } from './persistence/dynamo/caseDeadlines/deleteCaseDeadline';
 import { deleteCaseTrialSortMappingRecords } from './persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { deleteDocketEntry } from './persistence/dynamo/documents/deleteDocketEntry';
 import { deleteDocketEntryWorksheetRecord } from '@web-api/persistence/dynamo/pendingMotion/deleteDocketEntryWorksheetRecord';
@@ -57,12 +55,9 @@ import { getAllWebSocketConnections } from './persistence/dynamo/notifications/g
 import { getBlockedCases } from './persistence/elasticsearch/getBlockedCases';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
 import { getCaseByDocketNumber } from './persistence/dynamo/cases/getCaseByDocketNumber';
-import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange';
-import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInventoryReport';
 import { getCaseMetadataByDocketNumber } from './persistence/dynamo/cases/getCaseMetadataByDocketNumber';
 import { getCaseMetadataWithCounsel } from './persistence/dynamo/cases/getCaseMetadataWithCounsel';
-import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
 import { getCasesByDocketNumbers } from './persistence/dynamo/cases/getCasesByDocketNumbers';
 import { getCasesByFilters } from './persistence/elasticsearch/getCasesByFilters';
 import { getCasesByLeadDocketNumber } from './persistence/dynamo/cases/getCasesByLeadDocketNumber';
@@ -147,9 +142,7 @@ import { setStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTa
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
 import { updateCase } from './persistence/dynamo/cases/updateCase';
-import { updateCaseCorrespondence } from './persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
-import { updateCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/updateCaseWorksheet';
 import { updateDocketEntry } from './persistence/dynamo/documents/updateDocketEntry';
 import { updateDocketEntryPendingServiceStatus } from './persistence/dynamo/documents/updateDocketEntryPendingServiceStatus';
 import { updateDocketEntryProcessingStatus } from './persistence/dynamo/documents/updateDocketEntryProcessingStatus';
@@ -213,7 +206,6 @@ const gatewayMethods = {
     bulkDeleteRecords,
     bulkIndexRecords,
     createCase,
-    createCaseDeadline,
     createCaseTrialSortMappingRecords,
     createJobStatus,
     createNewPetitionerUser,
@@ -242,9 +234,7 @@ const gatewayMethods = {
     setTrialSessionJobStatusForCase,
     setTrialSessionProcessingStatus,
     updateCase,
-    updateCaseCorrespondence,
     updateCaseHearing,
-    updateCaseWorksheet,
     updateDocketEntry,
     updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
@@ -266,7 +256,6 @@ const gatewayMethods = {
   createChangeOfAddressJob,
   createLock,
   decrementJobCounter,
-  deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocketEntryWorksheetRecord,
@@ -289,12 +278,9 @@ const gatewayMethods = {
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
-  getCaseDeadlinesByDateRange,
-  getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
   getCaseMetadataByDocketNumber,
   getCaseMetadataWithCounsel,
-  getCaseWorksheetsByDocketNumber,
   getCasesByDocketNumbers,
   getCasesByFilters,
   getCasesByLeadDocketNumber,
