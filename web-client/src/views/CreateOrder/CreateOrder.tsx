@@ -8,11 +8,11 @@ import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
-import { TextEditor } from './TextEditor';
+import { TextEditor2 } from '@web-client/views/CreateOrder/TextEditor2';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useRef } from 'react';
 
 export const CreateOrder = connect(
   {
@@ -51,6 +51,8 @@ export const CreateOrder = connect(
   }) {
     const { pageTitle } = createOrderHelper;
 
+    const quillRef = useRef();
+
     return (
       <>
         <CaseDetailHeader />
@@ -74,7 +76,6 @@ export const CreateOrder = connect(
                 Edit Title
               </Button>
             </h1>
-
             <Tabs
               bind="createOrderTab"
               className="tab-border tab-button-h2"
@@ -103,7 +104,23 @@ export const CreateOrder = connect(
                   omitFormGroupClass
                   errorText={validationErrors.documentContents}
                 >
-                  <TextEditor
+                  <TextEditor2
+                    defaultValue={editorDelta}
+                    ref={quillRef}
+                    onEditorDeltaChange={delta =>
+                      updateFormValueSequence({
+                        key: 'editorDelta',
+                        value: delta,
+                      })
+                    }
+                    onHtmlChange={html =>
+                      updateFormValueSequence({ key: 'richText', value: html })
+                    }
+                    onTextChange={e => {
+                      // console.log(e);
+                    }}
+                  />
+                  {/* <TextEditor
                     defaultValue={richText}
                     editorDelta={editorDelta}
                     updateFormValueSequence={v => {
@@ -114,7 +131,7 @@ export const CreateOrder = connect(
                       validateCourtOrderSequence();
                     }}
                     updateScreenMetadataSequence={updateScreenMetadataSequence}
-                  />
+                  /> */}
                 </FormGroup>
               </Tab>
               <Tab id="tab-preview" tabName="preview" title="Preview">
