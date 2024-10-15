@@ -51,8 +51,6 @@ export const CreateOrder = connect(
   }) {
     const { pageTitle } = createOrderHelper;
 
-    const quillRef = useRef();
-
     return (
       <>
         <CaseDetailHeader />
@@ -106,7 +104,6 @@ export const CreateOrder = connect(
                 >
                   <TextEditor2
                     defaultValue={editorDelta}
-                    ref={quillRef}
                     onEditorDeltaChange={delta =>
                       updateFormValueSequence({
                         key: 'editorDelta',
@@ -116,9 +113,6 @@ export const CreateOrder = connect(
                     onHtmlChange={html =>
                       updateFormValueSequence({ key: 'richText', value: html })
                     }
-                    onTextChange={e => {
-                      // console.log(e);
-                    }}
                   />
                   {/* <TextEditor
                     defaultValue={richText}

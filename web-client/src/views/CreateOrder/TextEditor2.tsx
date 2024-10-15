@@ -1,36 +1,44 @@
 import 'quill/dist/quill.snow.css';
+import { Delta } from 'quill/core';
 import Quill from 'quill';
-import React, { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 // Editor is an uncontrolled React component
-export const TextEditor2 = forwardRef(
-  (
-    { defaultValue, onEditorDeltaChange, onHtmlChange, onTextChange, readOnly },
-    ref,
-  ) => {
-    const containerRef = useRef(null);
-    const defaultValueRef = useRef(defaultValue);
-    const onTextChangeRef = useRef(onTextChange);
+export const TextEditor2 = ({
+  defaultValue,
+  onEditorDeltaChange,
+  onHtmlChange,
+}: {
+  defaultValue: Delta;
+  onEditorDeltaChange: (delta: Delta) => void;
+  onHtmlChange: (html: string) => {};
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
 
-    useLayoutEffect(() => {
-      onTextChangeRef.current = onTextChange;
-    });
-
-    useEffect(() => {
-      ref.current?.enable(!readOnly);
-    }, [ref, readOnly]);
-
-    useEffect(() => {
+  useEffect(() => {
+    if (containerRef.current) {
       const container = containerRef.current;
       const editorContainer = container.appendChild(
         container.ownerDocument.createElement('div'),
       );
-      const quill = new Quill(editorContainer, { theme: 'snow' });
+      const quill = new Quill(editorContainer, {
+        modules: {
+          toolbar: [
+            [{ size: ['small', false, 'large', 'huge'] }],
+            ['bold', 'italic', 'underline'],
+            [
+              { list: 'bullet' },
+              { list: 'ordered' },
+              { indent: '-1' },
+              { indent: '+1' },
+            ],
+          ],
+        },
+        theme: 'snow',
+      });
 
-      ref.current = quill;
-
-      if (defaultValueRef.current) {
-        quill.setContents(defaultValueRef.current);
+      if (defaultValue) {
+        quill.setContents(defaultValue);
       }
 
       quill.on(Quill.events.TEXT_CHANGE, () =>
@@ -53,15 +61,16 @@ export const TextEditor2 = forwardRef(
         //   console.log('semantic html: ', semanticHtML);
         // }
       });
+    }
 
-      return () => {
-        ref.current = null;
-        container.innerHTML = '';
-      };
-    }, [ref]);
+    return () => {
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
+      }
+    };
+  }, [containerRef]);
 
-    return <div ref={containerRef}></div>;
-  },
-);
+  return <div ref={containerRef}></div>;
+};
 
 TextEditor2.displayName = 'Editor2';
