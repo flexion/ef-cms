@@ -27,7 +27,11 @@ resource "aws_cloudwatch_log_resource_policy" "allow_elasticsearch_to_write_logs
         "logs:PutLogEventsBatch",
         "logs:CreateLogStream"
       ],
-      "Resource": "arn:aws:logs:*"
+      "Resource": [
+        "${aws_cloudwatch_log_group.elasticsearch_application_logs.arn}",
+        "${aws_cloudwatch_log_group.elasticsearch_index_slow_logs.arn}",
+        "${aws_cloudwatch_log_group.elasticsearch_search_slow_logs.arn}"
+      ]
     }
   ]
 }
@@ -37,6 +41,10 @@ CONFIG
 resource "aws_opensearch_domain" "efcms-search" {
   domain_name           = var.domain_name
   engine_version        = "OpenSearch_2.11"
+
+  depends_on = [
+    aws_cloudwatch_log_resource_policy.allow_elasticsearch_to_write_logs
+  ]
 
   cluster_config {
     instance_type  = var.es_instance_type
