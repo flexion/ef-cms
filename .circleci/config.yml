@@ -879,13 +879,13 @@ only-prod: &only-prod
   filters:
     branches:
       only:
-        - prod
+        - experimental4
 
 only-test: &only-test
   filters:
     branches:
       only:
-        - test
+        - experimental3
 
 only-deployed-lower-environments: &only-deployed-lower-environments
   filters:
