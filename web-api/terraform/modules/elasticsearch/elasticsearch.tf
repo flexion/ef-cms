@@ -27,11 +27,7 @@ resource "aws_cloudwatch_log_resource_policy" "allow_elasticsearch_to_write_logs
         "logs:PutLogEventsBatch",
         "logs:CreateLogStream"
       ],
-      "Resource": [
-        "${aws_cloudwatch_log_group.elasticsearch_application_logs.arn}",
-        "${aws_cloudwatch_log_group.elasticsearch_index_slow_logs.arn}",
-        "${aws_cloudwatch_log_group.elasticsearch_search_slow_logs.arn}"
-      ]
+      "Resource": "*"
     }
   ]
 }
