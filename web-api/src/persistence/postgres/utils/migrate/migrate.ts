@@ -50,14 +50,30 @@ migrateToLatest(process.argv[2]).catch;
 // eslint-disable-next-line spellcheck/spell-checker
 /*
 DB Now
-0001-init
-0002-init-indexes
+0001-init 1st
+0002-init-indexes 2nd
+293474924-init-indexes 3rd
+nov5-init-indexes 4th
+nov3-init-indexes 5th
 
+0003-add-message-body.expand.ts
+0004-add-something.expand.ts
+0003-add-message-body.contract.ts
+0004-add-something.contract.ts
+
+0001-init.expand
+0002-init-indexes.expand
+0003-add-message-body.expand.ts
+0004-add-something.expand.ts
+0003-add-message-body.contract.ts
+0004-add-something.contract.ts
 
 In Repo
-0001-init
-0002-init-indexes
+0001-init.expand
+0002-init-indexes.exapand
 0003-add-message-body.expand.ts
 0003-remove-message-message.contract.ts
+0004-add-something.expand.ts
+0004-remove-something.contract.ts
 
 */

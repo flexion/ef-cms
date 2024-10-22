@@ -2,6 +2,11 @@
 
 https://www.tim-wellhausen.de/papers/ExpandAndContract/ExpandAndContract.html
 
+Hard rules:
+- Always Expand & Contract 
+- Up, should do what you want aka changes
+- Down, always revert back to previous working state
+
 ## Circle Flow
 - Expand
 - Deployment

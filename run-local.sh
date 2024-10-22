@@ -55,7 +55,8 @@ else
   fi
 fi
 
-npm run migration:postgres
+npm run migration:postgres:expand
+npm run migration:postgres:contract
 npm run seed:postgres
 
 echo "Seeding cognito-local users"
