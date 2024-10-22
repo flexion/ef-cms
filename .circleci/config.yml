@@ -664,7 +664,7 @@ jobs:
               --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
-              --data "{\"branch\":\"prod\", \"parameters\":{ \
+              --data "{\"branch\":\"experimental4\", \"parameters\":{ \
                 \"run_build_and_deploy_with_context\":false, \
                 \"run_glue_to_lower_env\":true, \
                 \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
