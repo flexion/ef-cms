@@ -4,9 +4,10 @@ import { NewMessageKysely, UpdateMessageKysely } from '@web-api/database-types';
 import { RawMessage } from '@shared/business/entities/Message';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
-function pickFields(message) {
+function pickFields(message): NewMessageKysely {
   return {
     attachments: JSON.stringify(message.attachments),
+    body: message.message,
     completedAt: message.completedAt,
     completedBy: message.completedBy,
     completedBySection: message.completedBySection,
@@ -20,7 +21,6 @@ function pickFields(message) {
     isCompleted: message.isCompleted,
     isRead: message.isRead,
     isRepliedTo: message.isRepliedTo,
-    message: message.message,
     messageId: message.messageId,
     parentMessageId: message.parentMessageId,
     subject: message.subject,
@@ -60,6 +60,7 @@ export function messageResultEntity(message) {
       caseTitle: Case.getCaseTitle(message.caption || ''),
       completedAt: message.completedAt?.toISOString(),
       createdAt: message.createdAt.toISOString(),
+      message: message.body,
       trialDate: message.trialDate?.toISOString(),
     }),
   );

@@ -21,7 +21,10 @@ async function migrateToLatest(migrationType: string) {
     const migrations = await migrator.getMigrations();
 
     for (const migration of migrations) {
-      if (migration.name.includes(`.${migrationType}`)) {
+      if (
+        migration.name.includes(`.${migrationType}`) &&
+        migration.executedAt === undefined
+      ) {
         const { error, results } = await migrator.migrateTo(migration.name);
         results?.forEach(it => {
           if (it.status === 'Success') {

@@ -21,7 +21,7 @@ export interface MessageTable {
   isRead: boolean;
   isRepliedTo: boolean;
   leadDocketNumber?: string;
-  message: string;
+  body: string;
   messageId: string;
   parentMessageId: string;
   subject: string;

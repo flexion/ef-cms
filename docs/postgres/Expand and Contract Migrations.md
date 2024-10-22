@@ -22,14 +22,13 @@ Hard rules:
 
 ## Renaming field that is fully in Postgres (message.message -> message.body)
 - Expand & Contract
-  - Add a migration that adds a new field called body
-  - Update seed data(Fixtures) so that message.message is now message.body
-  - Update the mapper so that message.body
-  - (OPTIONAL) Update business entity Message.ts to have .body instead of .message
-  - Write a script to copy fields from Message.message to Message.body
-  - After deployment has finished run the script
-  - Deploy
-  - Run a migration to drop Message.message column
+  - Add an expand migration that adds a new field called body
+  - Add a contract migration that removes message field 
+  - In database-types.ts, change MessageTable.message to be MessageTable.body
+  - Update seed data (fixtures) so that message.message is now message.body in
+  - Update the mapper so that Message.message = message.body from DB
+  - (OPTIONAL) Update business entity Message.ts to have Message.body instead of Messge.message
+  - Deploy changes
 
 ## Dropping a field that is fully in Postgres
 - Update Mapper

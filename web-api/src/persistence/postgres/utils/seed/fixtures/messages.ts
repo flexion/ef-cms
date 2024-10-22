@@ -1,10 +1,11 @@
 import { NewMessageKysely } from '@web-api/database-types';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 
-/* eslint-disable @miovision/disallow-date/no-new-date */
 export const messages: NewMessageKysely[] = [
   {
     attachments: JSON.stringify([]),
-    createdAt: new Date('2020-06-05T18:02:25.280Z'),
+    body: 'hello!',
+    createdAt: calculateDate({ dateString: '2020-06-05T18:02:25.280Z' }),
     docketNumber: '105-20',
     from: 'Test Petitionsclerk',
     fromSection: 'petitions',
@@ -12,7 +13,6 @@ export const messages: NewMessageKysely[] = [
     isCompleted: false,
     isRead: false,
     isRepliedTo: false,
-    message: 'hello!',
     messageId: 'eb0a139a-8951-4de1-8b83-f02a27504105',
     parentMessageId: 'eb0a139a-8951-4de1-8b83-f02a27504105',
     subject: 'message to myself',
@@ -26,7 +26,8 @@ export const messages: NewMessageKysely[] = [
         documentId: '4796a931-14fb-43e6-948f-d2b67ce4c1cb',
       },
     ]),
-    createdAt: new Date('2023-06-02T21:15:50.105Z'),
+    body: 'Could you please review this?',
+    createdAt: calculateDate({ dateString: '2023-06-02T21:15:50.105Z' }),
     docketNumber: '103-20',
     from: 'Test Admissions Clerk',
     fromSection: 'admissions',
@@ -34,7 +35,6 @@ export const messages: NewMessageKysely[] = [
     isCompleted: false,
     isRead: false,
     isRepliedTo: false,
-    message: 'Could you please review this?',
     messageId: '1d4c1fd9-5265-4e46-894f-b8426d3a6836',
     parentMessageId: '1d4c1fd9-5265-4e46-894f-b8426d3a6836',
     subject: 'Administrative Record',
@@ -48,7 +48,8 @@ export const messages: NewMessageKysely[] = [
         documentId: '8ed9bad9-db58-43c8-b03f-c2e3ad92995f',
       },
     ]),
-    createdAt: new Date('2020-08-18T18:07:36.333Z'),
+    body: 'Test message with deleted document.',
+    createdAt: calculateDate({ dateString: '2020-08-18T18:07:36.333Z' }),
     docketNumber: '104-19',
     from: 'Test Docketclerk',
     fromSection: 'docket',
@@ -56,7 +57,6 @@ export const messages: NewMessageKysely[] = [
     isCompleted: false,
     isRead: false,
     isRepliedTo: false,
-    message: 'Test message with deleted document.',
     messageId: '2d1191d3-4597-454a-a2b2-84e267ccf01e',
     parentMessageId: '2d1191d3-4597-454a-a2b2-84e267ccf01e',
     subject: 'Order',
