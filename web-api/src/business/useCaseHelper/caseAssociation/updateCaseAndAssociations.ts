@@ -8,7 +8,10 @@ import { PrivatePractitioner } from '../../../../../shared/src/business/entities
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { createCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/createCaseDeadline';
+import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
+import { updateCaseCorrespondence } from '@web-api/persistence/postgres/correspondence/updateCaseCorrespondence';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
 import diff from 'diff-arrays-of-objects';
@@ -120,6 +123,7 @@ const updateCaseMessages = async ({
  * @returns {Array<function>} the persistence functions required to complete this action
  */
 const updateCorrespondence = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   applicationContext,
   caseToUpdate,
   oldCase,
@@ -149,13 +153,10 @@ const updateCorrespondence = ({
   return validCorrespondence.map(
     correspondence =>
       function updateCorrespondence_cb() {
-        return applicationContext
-          .getPersistenceGateway()
-          .updateCaseCorrespondence({
-            applicationContext,
-            correspondence,
-            docketNumber: caseToUpdate.docketNumber,
-          });
+        return updateCaseCorrespondence({
+          correspondence,
+          docketNumber: caseToUpdate.docketNumber,
+        });
       },
   );
 };
@@ -382,16 +383,9 @@ const updateCaseWorkItems = async ({
   );
 };
 
-/**
- * Identifies user case mappings which require updates and issues persistence calls
- * @param {object} args the arguments for updating the case
- * @param {object} args.applicationContext the application context
- * @param {object} args.caseToUpdate the case with its updated document data
- * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
- * @returns {Array<function>} the persistence functions required to complete this action
- */
 const updateCaseDeadlines = async ({
-  applicationContext,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  applicationContext, // cannot remove till remaining RELATED_CASE_OPERATIONS functions no longer use applicationContext
   caseToUpdate,
   oldCase,
 }) => {
@@ -399,26 +393,20 @@ const updateCaseDeadlines = async ({
     return [];
   }
 
-  const deadlines = await applicationContext
-    .getPersistenceGateway()
-    .getCaseDeadlinesByDocketNumber({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-    });
+  const deadlines = await getCaseDeadlinesByDocketNumber({
+    docketNumber: caseToUpdate.docketNumber,
+  });
 
   deadlines.forEach(caseDeadline => {
     caseDeadline.associatedJudge = caseToUpdate.associatedJudge;
     caseDeadline.associatedJudgeId = caseToUpdate.associatedJudgeId;
   });
-  const validCaseDeadlines = CaseDeadline.validateRawCollection(deadlines, {
-    applicationContext,
-  });
+  const validCaseDeadlines = CaseDeadline.validateRawCollection(deadlines);
 
   return validCaseDeadlines.map(
     caseDeadline =>
       function updateCaseDeadlines_cb() {
-        return applicationContext.getPersistenceGateway().createCaseDeadline({
-          applicationContext,
+        return createCaseDeadline({
           caseDeadline,
         });
       },
