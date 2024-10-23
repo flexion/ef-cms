@@ -235,11 +235,11 @@ jobs:
               npm run start:migration -- $ENV
             fi
       - run:
-          name: Run Postgres Migration
+          name: Run Migration Postgres Expand
           command: |
             OUTPUT_ONLY=true npm run deploy:allColors $ENV
             POSTGRES_HOST=$(cat ./web-api/terraform/applyables/allColors/output.json | jq -r '.rds_host_name.value')
-            POSTGRES_HOST=$POSTGRES_HOST POSTGRES_USER=$POSTGRES_USER NODE_ENV=production npm run migration:postgres
+            POSTGRES_HOST=$POSTGRES_HOST POSTGRES_USER=$POSTGRES_USER NODE_ENV=production npm run migration:postgres:expand
       - run:
           name: Enable Check Migration Status Cron
           command: |
@@ -555,6 +555,12 @@ jobs:
             if [ $MIGRATE_FLAG == true ]; then
               npm run migration:cleanup -- $ENV
             fi
+      - run:
+          name: Run Migration Postgres Contract
+          command: |
+            OUTPUT_ONLY=true npm run deploy:allColors $ENV
+            POSTGRES_HOST=$(cat ./web-api/terraform/applyables/allColors/output.json | jq -r '.rds_host_name.value')
+            POSTGRES_HOST=$POSTGRES_HOST POSTGRES_USER=$POSTGRES_USER NODE_ENV=production npm run migration:postgres:contract
 
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
