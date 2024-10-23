@@ -1,0 +1,55 @@
+<mxfile host="65bd71144e">
+    <diagram id="Lxun0BaanxL01t6XbsJt" name="Page-1">
+        <mxGraphModel dx="1244" dy="666" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="6" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" parent="1" vertex="1">
+                    <mxGeometry x="130" y="300" width="150" height="360" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="passive" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="175" y="320" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" parent="1" vertex="1">
+                    <mxGeometry x="655" y="290" width="150" height="360" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="active" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="700" y="310" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" parent="1" vertex="1">
+                    <mxGeometry x="340" y="300" width="155" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="{&lt;br&gt;body: &quot;hell&quot;,&lt;br&gt;message: &quot;hello&quot;&lt;br&gt;}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="355" y="340" width="125" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="You are here" style="shape=flexArrow;endArrow=classic;html=1;width=11;endSize=5.85;fillColor=#a20025;strokeColor=#6F0000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="380" y="90" as="sourcePoint"/>
+                        <mxPoint x="379.5" y="190" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="379.5" y="150"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="14" value=".message" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="667.5" y="390" width="125" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value=".body" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="130" y="370" width="125" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="Deploy" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="210" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="Switch Colors" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="470" y="210" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="Contract" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="640" y="210" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="Expand" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="145" y="210" width="120" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
