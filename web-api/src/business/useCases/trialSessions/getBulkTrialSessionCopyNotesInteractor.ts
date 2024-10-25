@@ -37,7 +37,7 @@ export const getBulkTrialSessionCopyNotesInteractor = (
           userId,
         })
         .then(trialSessionWorkingCopy => ({
-          sessionNotes: trialSessionWorkingCopy?.sessionNotes || '',
+          sessionNotes: trialSessionWorkingCopy?.sessionNotes,
           trialSessionId,
         }));
     },

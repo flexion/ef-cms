@@ -103,7 +103,7 @@ export const trialSessionsHelper = (
       startDate: filters.startDate,
     });
 
-  let filteredTrialSessions: TrialSessionInfoDTO[] = [];
+  let filteredTrialSessions: ExtendedTrialSessionInfoDTO[] = [];
   if (!endDateErrorMessage && !startDateErrorMessage) {
     filteredTrialSessions = filterAndSortTrialSessions({
       filters,
@@ -141,9 +141,9 @@ const filterAndSortTrialSessions = ({
   filters,
   trialSessions,
 }: {
-  trialSessions: TrialSessionInfoDTO[];
+  trialSessions: ExtendedTrialSessionInfoDTO[];
   filters: TrialSessionsFilters;
-}): TrialSessionInfoDTO[] => {
+}): ExtendedTrialSessionInfoDTO[] => {
   //
   return trialSessions
     .filter(trialSession => {
@@ -215,11 +215,15 @@ const filterAndSortTrialSessions = ({
     });
 };
 
+export type ExtendedTrialSessionInfoDTO = TrialSessionInfoDTO & {
+  sessionNotes: string;
+};
+
 const formatTrialSessions = ({
   judgeAssociatedToUser,
   trialSessions,
 }: {
-  trialSessions: TrialSessionInfoDTO[];
+  trialSessions: ExtendedTrialSessionInfoDTO[];
   judgeAssociatedToUser?: RawUser;
 }): (TrialSessionRow | TrialSessionWeek)[] => {
   const trialSessionRows: TrialSessionRow[] = trialSessions.map(
@@ -263,6 +267,7 @@ const formatTrialSessions = ({
         formattedStartDate,
         judge,
         proceedingType: trialSession.proceedingType,
+        sessionNotes: trialSession.sessionNotes,
         sessionStatus: trialSession.sessionStatus,
         sessionType: trialSession.sessionType,
         showAlertForNOTTReminder,
@@ -319,6 +324,7 @@ type TrialSessionRow = {
   formattedStartDate: string; //MM/DD/YYYY
   formattedEstimatedEndDate: string;
   swingSession: boolean;
+  sessionNotes: string;
   userIsAssignedToSession: boolean;
   trialLocation: string;
   proceedingType: string;

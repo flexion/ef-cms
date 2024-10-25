@@ -87,24 +87,6 @@ export const TrialSessionsTable = connect(
                   );
                 }
                 if (isTrialSessionRow(row)) {
-                  const additionalRow =
-                    row.sessionType === 'Special' ? (
-                      <tr className="special-sessions-row">
-                        <td colSpan={100}>
-                          <div className="special-session">
-                            <span className="text-semibold">
-                              Special Session Notes:{' '}
-                              {
-                                trialSessionsPage
-                                  .specialTrialSessionCopyNotesObject[
-                                  row.trialSessionId
-                                ]
-                              }
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                    ) : null;
                   return (
                     <tbody key={row.trialSessionId}>
                       <React.Fragment>
@@ -157,7 +139,17 @@ export const TrialSessionsTable = connect(
                             <td>{row.sessionStatus}</td>
                           )}
                         </tr>
-                        {additionalRow}
+                        {row.sessionNotes && (
+                          <tr className="special-sessions-row">
+                            <td colSpan={100}>
+                              <div className="special-session">
+                                <span className="text-semibold">
+                                  Special Session Notes: {row.sessionNotes}
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
                       </React.Fragment>
                     </tbody>
                   );

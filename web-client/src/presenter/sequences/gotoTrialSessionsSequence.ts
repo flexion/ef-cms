@@ -9,7 +9,6 @@ import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { parallel } from 'cerebral/factories';
 import { resetTrialSessionsFiltersAction } from '@web-client/presenter/actions/TrialSession/resetTrialSessionsFiltersAction';
 import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
-import { setBulkSpecialTrialSessionCopyNotesAction } from '../actions/TrialSession/setBulkSpecialTrialSessionCopyNotesAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setTrialSessionsFiltersAction } from '@web-client/presenter/actions/TrialSession/setTrialSessionsFiltersAction';
@@ -27,15 +26,15 @@ export const gotoTrialSessionsSequence =
     parallel([
       [getJudgeForCurrentUserAction, setJudgeUserAction],
       [getNotificationsAction, setNotificationsAction],
-      [getTrialSessionsAction, setTrialSessionsPageAction],
+      [
+        getTrialSessionsAction,
+        getBulkSpecialTrialSessionCopyNotesAction,
+        setTrialSessionsPageAction,
+      ],
       [
         getUsersInSectionAction({ section: 'judge' }),
         setAllAndCurrentJudgesAction,
       ],
     ]),
-    [
-      getBulkSpecialTrialSessionCopyNotesAction,
-      setBulkSpecialTrialSessionCopyNotesAction,
-    ],
     setupCurrentPageAction('TrialSessions'),
   ]) as unknown as (props: ActionProps<Partial<TrialSessionsFilters>>) => void;
