@@ -125,7 +125,7 @@ import React from 'react';
 /**
  * Instantiates the Cerebral app with React
  */
-const app = {
+export const cerebralAppWrapper = {
   initialize: async applicationContext => {
     const scannerSourceName = await applicationContext
       .getUseCases()
@@ -312,5 +312,3 @@ const app = {
     router.initialize(cerebralApp, wrappedRoute);
   },
 };
-
-export { app };

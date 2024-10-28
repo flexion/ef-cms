@@ -25,7 +25,7 @@ const replaceHtmlFile = liveReload => {
 };
 
 esbuildHelper({
-  entryPoint: 'index.ts',
+  entryPoint: 'index.tsx',
   indexName: 'index.html',
   outdir: 'dist',
   reloadServerPort: 37527,
