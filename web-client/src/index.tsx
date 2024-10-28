@@ -1,12 +1,12 @@
+import { CerebralApp } from '@web-client/app';
 import {
   Outlet,
   RouterProvider,
   createRootRoute,
   createRoute,
   createRouter,
+  useNavigate,
 } from '@tanstack/react-router';
-import { applicationContext } from '@web-client/applicationContext';
-import { cerebralAppWrapper } from '@web-client/app';
 import { createRoot } from 'react-dom/client';
 import React from 'react';
 
@@ -17,44 +17,37 @@ const rootRoute = createRootRoute({
 function RootComponent() {
   return (
     <>
-      {/* <div className="p-2 flex gap-2 text-lg border-b">
-        <Link
-          activeOptions={{ exact: true }}
-          activeProps={{
-            className: 'font-bold',
-          }}
-          to="/old"
-        >
-          Old
-        </Link>{' '}
-        <Link
-          activeProps={{
-            className: 'font-bold',
-          }}
-          to="/new"
-        >
-          New
-        </Link>{' '}
-      </div> */}
       <Outlet />
     </>
   );
 }
 
-const oldRoute = createRoute({
-  beforeLoad: () => {
-    console.log('beforee load');
-  },
+const cerebralRoute = createRoute({
+  component: CerebralApp,
   getParentRoute: () => rootRoute,
-  onEnter: async () => {
-    console.log('On Enter');
-    await cerebralAppWrapper.initialize(applicationContext);
-  },
-  path: '/old',
+  path: '/',
+});
+
+const catchAllRoute = createRoute({
+  component: CerebralApp,
+  getParentRoute: () => rootRoute,
+  path: '*',
 });
 
 const newComponent = () => {
-  return <div>Welcome to the new App</div>;
+  const navigate = useNavigate();
+  return (
+    <div>
+      <div>New</div>
+      <button
+        onClick={() => {
+          void navigate({ to: '/trial-sessions' });
+        }}
+      >
+        Navigate to trial-sessions old!
+      </button>
+    </div>
+  );
 };
 const newRoute = createRoute({
   component: newComponent,
@@ -62,7 +55,34 @@ const newRoute = createRoute({
   path: '/new',
 });
 
-const routeTree = rootRoute.addChildren([oldRoute, newRoute]);
+const dogComponent = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div>
+      <div>Dog</div>
+      <button
+        onClick={() => {
+          void navigate({ to: '/new' });
+        }}
+      >
+        Navigate now!
+      </button>
+    </div>
+  );
+};
+const dogRoute = createRoute({
+  component: dogComponent,
+  getParentRoute: () => rootRoute,
+  path: '/dog',
+});
+
+const routeTree = rootRoute.addChildren([
+  cerebralRoute,
+  newRoute,
+  dogRoute,
+  catchAllRoute,
+]);
 
 const router = createRouter({
   defaultPreload: 'intent',

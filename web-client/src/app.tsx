@@ -32,8 +32,8 @@ import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 
 //if you see a console error saying could not get icon, make sure the prefix matches the import (eg fas should be imported from free-solid-svg-icons)
 import { ITestableWindow } from '../../cypress/helpers/ITestableWindow';
+import { applicationContext } from '@web-client/applicationContext';
 import { config, library } from '@fortawesome/fontawesome-svg-core';
-import { createRoot } from 'react-dom/client';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
@@ -120,17 +120,14 @@ import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
 import { withAppContextDecorator } from './withAppContext';
 import App from 'cerebral';
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 
-/**
- * Instantiates the Cerebral app with React
- */
-export const cerebralAppWrapper = {
-  initialize: async applicationContext => {
-    const scannerSourceName = await applicationContext
+export const CerebralApp = () => {
+  const cerebralApp = useMemo(() => {
+    const scannerSourceName = applicationContext
       .getUseCases()
       .getItemInteractor(applicationContext, { key: 'scannerSourceName' });
-    const scanMode = await applicationContext
+    const scanMode = applicationContext
       .getUseCases()
       .getItemInteractor(applicationContext, { key: 'scanMode' });
     presenter.state.scanner.scannerSourceName = scannerSourceName;
@@ -259,56 +256,58 @@ export const cerebralAppWrapper = {
     });
     presenter.providers.socket = { start, stop };
 
-    const cerebralApp = App(presenter, {
+    const app = App(presenter, {
       returnSequencePromise: true,
     });
+    initializeSocketProvider(app, applicationContext);
 
     // Expose Cerebral for testing
     if (process.env.ENV === 'local' || process.env.ENV === 'test') {
-      (window as unknown as ITestableWindow).cerebral = cerebralApp;
+      (window as unknown as ITestableWindow).cerebral = app;
     }
 
     applicationContext.setForceRefreshCallback(async () => {
-      await cerebralApp.getSequence('handleAppHasUpdatedSequence')();
+      await app.getSequence('handleAppHasUpdatedSequence')();
     });
+    return app;
+  }, []);
 
-    const container = window.document.querySelector('#app');
-    const root = createRoot(container);
-
-    root.render(
-      <Container app={cerebralApp}>
-        <>
-          <IdleActivityMonitor />
-          <AppInstanceManager />
-          <GlobalModalWrapper />
-        </>
-        <AppComponent />
-
-        {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
-      </Container>,
-    );
-
-    await cerebralApp.getSequence('initAppSequence')();
-
-    initializeSocketProvider(cerebralApp, applicationContext);
-
-    /*
-    This is a decorated added to fix race conditions in our UI related to changing routes.
-    We use riot-router and it works by using an event listener to the window object when
-    the push state occurs, which can cause two of our routes to run in parallel.
-    This causes our UI to get into bad states where the url in the browser says /case-detail, but
-    we are actually viewing the trial-session page.  These race conditions also cause our integration tests
-    and smoke tests to become very flaky.
-    */
-    let processQueue = Promise.resolve();
-    const wrappedRoute = (path, cb) => {
-      route(path, function () {
-        return (processQueue = processQueue.then(() => {
-          // eslint-disable-next-line promise/no-callback-in-promise
-          return cb(...arguments);
-        }));
-      });
+  useEffect(() => {
+    const runAsyncCerebralInit = async () => {
+      await cerebralApp.getSequence('initAppSequence')();
+      /*
+      This is a decorated added to fix race conditions in our UI related to changing routes.
+      We use riot-router and it works by using an event listener to the window object when
+      the push state occurs, which can cause two of our routes to run in parallel.
+      This causes our UI to get into bad states where the url in the browser says /case-detail, but
+      we are actually viewing the trial-session page.  These race conditions also cause our integration tests
+      and smoke tests to become very flaky.
+      */
+      let processQueue = Promise.resolve();
+      const wrappedRoute = (path, cb) => {
+        route(path, function () {
+          return (processQueue = processQueue.then(() => {
+            // eslint-disable-next-line promise/no-callback-in-promise
+            return cb(...arguments);
+          }));
+        });
+      };
+      router.initialize(cerebralApp, wrappedRoute);
     };
-    router.initialize(cerebralApp, wrappedRoute);
-  },
+
+    void runAsyncCerebralInit();
+  }, [cerebralApp]);
+
+  return (
+    <Container app={cerebralApp}>
+      <>
+        <IdleActivityMonitor />
+        <AppInstanceManager />
+        <GlobalModalWrapper />
+      </>
+      <AppComponent />
+
+      {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
+    </Container>
+  );
 };

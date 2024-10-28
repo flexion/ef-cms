@@ -36,6 +36,7 @@ export const TrialSessions = connect(
     return (
       <>
         <BigHeader text="Trial Sessions" />
+        <a href="/new">Move over to the new site</a>
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />

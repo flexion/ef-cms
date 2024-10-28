@@ -1,3 +1,5 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+
 /**
  *
  *
@@ -7,11 +9,10 @@
  * @returns {object} the item
  */
 export const getItemInteractor = (
-  applicationContext: any, // any until we refactor the client
+  applicationContext: ClientApplicationContext, // any until we refactor the client
   { key }: { key: string },
 ) => {
   return applicationContext.getPersistenceGateway().getItem({
-    applicationContext,
     key,
   });
 };
