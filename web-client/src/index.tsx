@@ -1,4 +1,3 @@
-import { CerebralApp } from '@web-client/app';
 import {
   Outlet,
   RouterProvider,
@@ -7,7 +6,9 @@ import {
   createRouter,
   useNavigate,
 } from '@tanstack/react-router';
+// import { applicationContext } from '@web-client/applicationContext';
 import { createRoot } from 'react-dom/client';
+// import { get, getCurrentUserToken } from '@shared/proxies/requests';
 import React from 'react';
 
 const rootRoute = createRootRoute({
@@ -22,23 +23,34 @@ function RootComponent() {
   );
 }
 
-const cerebralRoute = createRoute({
-  component: CerebralApp,
-  getParentRoute: () => rootRoute,
-  path: '/',
-});
+// const cerebralRoute = createRoute({
+//   component: CerebralApp,
+//   getParentRoute: () => rootRoute,
+//   path: '/',
+// });
 
-const catchAllRoute = createRoute({
-  component: CerebralApp,
+const catchAllRouteInFile = createRoute({
   getParentRoute: () => rootRoute,
   path: '*',
-});
+}).lazy(() => import('@web-client/app').then(app => app.catchAllRoute));
 
 const newComponent = () => {
   const navigate = useNavigate();
   return (
     <div>
       <div>New</div>
+      <button
+        onClick={async () => {
+          // console.log('token: ', getCurrentUserToken());
+          // const response = await get({
+          //   applicationContext,
+          //   endpoint: '/trial-sessions',
+          // });
+          // console.log('response', response);
+        }}
+      >
+        Fetch trial sessions
+      </button>
       <button
         onClick={() => {
           void navigate({ to: '/trial-sessions' });
@@ -78,10 +90,10 @@ const dogRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([
-  cerebralRoute,
+  // cerebralRoute,
   newRoute,
   dogRoute,
-  catchAllRoute,
+  catchAllRouteInFile,
 ]);
 
 const router = createRouter({

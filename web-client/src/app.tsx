@@ -34,6 +34,7 @@ import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 import { ITestableWindow } from '../../cypress/helpers/ITestableWindow';
 import { applicationContext } from '@web-client/applicationContext';
 import { config, library } from '@fortawesome/fontawesome-svg-core';
+import { createLazyRoute } from '@tanstack/react-router';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
@@ -121,6 +122,7 @@ import { socketRouter } from './providers/socketRouter';
 import { withAppContextDecorator } from './withAppContext';
 import App from 'cerebral';
 import React, { useEffect, useMemo } from 'react';
+console.log('CerebralApp loaded');
 
 export const CerebralApp = () => {
   const cerebralApp = useMemo(() => {
@@ -311,3 +313,7 @@ export const CerebralApp = () => {
     </Container>
   );
 };
+
+export const catchAllRoute = createLazyRoute('/*')({
+  component: CerebralApp,
+});

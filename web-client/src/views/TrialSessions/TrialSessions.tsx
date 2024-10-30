@@ -16,6 +16,7 @@ import { TrialSessionsTable } from './TrialSessionsTable';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 
 export const TrialSessions = connect(
@@ -33,10 +34,18 @@ export const TrialSessions = connect(
     trialSessionsHelper,
     trialSessionsPageFilters,
   }) {
+    const navigate = useNavigate();
     return (
       <>
         <BigHeader text="Trial Sessions" />
         <a href="/new">Move over to the new site</a>
+        <button
+          onClick={() => {
+            void navigate({ to: '/new' });
+          }}
+        >
+          useNavigate
+        </button>
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
