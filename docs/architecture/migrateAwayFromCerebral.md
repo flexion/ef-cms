@@ -4,4 +4,11 @@
   - should not use global state
 
 # Tanstack Router
-  - 
+  - Allows progressive updates by route
+  - enables lazy loading to not include the entire old application
+  - Can have file based routing(magic bonus stuff if we want it.)
+
+
+## To do MVP
+  - Share identity tokens across apps, refresh the identity token at same interval.
+  - Allow tan stack router to share context on if a user is logged in.
