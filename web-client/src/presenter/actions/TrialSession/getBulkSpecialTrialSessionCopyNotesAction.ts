@@ -1,7 +1,8 @@
 import {
   SpecialTrialSession,
   TrialSessionWorkingCopyNotes,
-} from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
+} from '@web-api/business/useCases/trialSessions/getBulkTrialSessionCopyNotesInteractor';
+
 const getSpecialTrialSessions = trialSessions =>
   trialSessions
     .filter(trialSession => trialSession.sessionType === 'Special')

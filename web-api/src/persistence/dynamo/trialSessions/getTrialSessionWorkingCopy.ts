@@ -1,5 +1,5 @@
 import { TDynamoRecord } from '../dynamoTypes';
-import { TrialSessionWorkingCopyNotes } from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
+import { TrialSessionWorkingCopyNotes } from '@web-api/business/useCases/trialSessions/getBulkTrialSessionCopyNotesInteractor';
 import { batchGet } from '../../dynamodbClientService';
 import { get } from '../../dynamodbClientService';
 

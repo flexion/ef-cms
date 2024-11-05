@@ -1,7 +1,7 @@
 import {
   SpecialTrialSession,
   TrialSessionWorkingCopyNotes,
-} from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
+} from '@web-api/business/useCases/trialSessions/getBulkTrialSessionCopyNotesInteractor';
 import { post } from '../requests';
 
 export const getBulkSpecialTrialSessionCopyNotesInteractor = (

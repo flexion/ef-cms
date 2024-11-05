@@ -3,13 +3,23 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import {
-  SpecialTrialSession,
-  SpecialTrialSessionKey,
-  TrialSessionWorkingCopyNotes,
-} from '@shared/business/entities/trialSessions/SpeciailTrialSessions';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+
+export interface SpecialTrialSession {
+  userId: string;
+  trialSessionId: string;
+}
+
+export interface SpecialTrialSessionKey {
+  pk: string;
+  sk: string;
+}
+
+export interface TrialSessionWorkingCopyNotes {
+  sessionNotes: string;
+  trialSessionId: string;
+}
 
 export const getBulkTrialSessionCopyNotesInteractor = async (
   applicationContext: ServerApplicationContext,
