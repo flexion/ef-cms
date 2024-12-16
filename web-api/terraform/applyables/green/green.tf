@@ -82,6 +82,7 @@ resource "terraform_data" "locals" {
     POSTGRES_READ_HOST                 = data.terraform_remote_state.remote.outputs.rds_host_name_west
     POSTGRES_USER                      = data.terraform_remote_state.remote.outputs.postgres_user
     DATABASE_NAME                      = data.terraform_remote_state.remote.outputs.database_name
+    RDS_STREAM_ARN                     = data.terraform_remote_state.remote.outputs.rds_stream_arn
   }
 }
 
@@ -165,6 +166,8 @@ module "api-east-green" {
   create_health_check_cron = 1
   create_streams           = 1
   stream_arn               = data.aws_dynamodb_table.green_dynamo_table.stream_arn
+  rds_create_streams       = 1
+  rds_stream_arn           = data.terraform_remote_state.remote.outputs.rds_stream_arn
   web_acl_arn              = data.terraform_remote_state.remote.outputs.east_web_acl_arn
   enable_health_checks     = var.enable_health_checks
   health_check_id          = data.terraform_remote_state.remote.outputs.aws_route53_health_check_failover_east_id
@@ -203,6 +206,8 @@ module "api-west-green" {
   create_streams           = 0
   pool_arn                 = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_arn
   stream_arn               = ""
+  rds_create_streams       = 0
+  rds_stream_arn           = ""
   web_acl_arn              = data.terraform_remote_state.remote.outputs.west_web_acl_arn
   create_triggers          = 0
   enable_health_checks     = var.enable_health_checks

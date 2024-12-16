@@ -49,6 +49,18 @@ resource "aws_rds_cluster_instance" "cluster_instance" {
   }
 }
 
+resource "aws_kms_key" "postgres_key" {
+  description = "AWS KMS Key to encrypt Database Activity Stream"
+}
+
+resource "aws_rds_cluster_activity_stream" "postgres_activity_stream" {
+  resource_arn = aws_rds_cluster.postgres.arn
+  mode         = "async"
+  kms_key_id   = aws_kms_key.postgres_key.key_id
+
+  depends_on = [aws_rds_cluster_instance.cluster_instance]
+}
+
 resource "aws_rds_cluster" "west_replica" {
   provider                            = aws.us-west-1
   cluster_identifier                  = "${var.environment}-dawson-replica"

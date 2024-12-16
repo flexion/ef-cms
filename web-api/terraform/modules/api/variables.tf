@@ -51,6 +51,14 @@ variable "stream_arn" {
   type = string
 }
 
+variable "rds_create_streams" {
+  type = number
+}
+
+variable "rds_stream_arn" {
+  type = string
+}
+
 variable "create_triggers" {
   type    = number
   default = 1

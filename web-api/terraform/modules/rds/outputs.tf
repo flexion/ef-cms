@@ -13,3 +13,7 @@ output "database_name" {
 output "postgres_user" {
     value = aws_iam_user.rds_user_dawson.name
 }
+
+output "rds_stream_arn" {
+    value = aws_rds_cluster_activity_stream.postgres_activity_stream.arn
+}
