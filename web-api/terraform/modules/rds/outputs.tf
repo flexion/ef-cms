@@ -15,5 +15,5 @@ output "postgres_user" {
 }
 
 output "rds_stream_arn" {
-    value = aws_rds_cluster_activity_stream.postgres_activity_stream.arn
+    value = aws_kinesis_stream.postgres_kinesis_stream.arn
 }
