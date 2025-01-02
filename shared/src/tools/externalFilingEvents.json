@@ -355,8 +355,8 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Report",
-      "documentType": "Report",
+      "documentTitle": "Export Report",
+      "documentType": "Export Report",
       "category": "Miscellaneous",
       "eventCode": "RTP",
       "scenario": "Standard",
