@@ -2,6 +2,7 @@ version: '3.9'
 services:
   dawson-db:
     image: postgres
+    command: -c config_file=/etc/postgresql.conf
     restart: always
     container_name: dawson-db
     ports:
@@ -11,6 +12,7 @@ services:
       PGDATA: /data/postgres
     volumes:
       - dawson-db:/data/postgres
+      - ./postgresql.conf:/etc/postgresql.conf
 
 volumes:
   dawson-db:
