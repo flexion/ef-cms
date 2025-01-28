@@ -1,6 +1,6 @@
 import { CaseStatusChange } from '@shared/business/entities/cases/Case';
 import { convertRawCaseToDbRow } from '@web-api/persistence/postgres/cases/mapper';
-import { getDbWriter } from '@web-api/database';
+import { getDbWriter, transactionManager } from '@web-api/database';
 import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
 import { upsertPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/upsertPetitionersOnCase';
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
@@ -11,16 +11,31 @@ export const updateCase = async ({
 }: {
   caseToUpdate: RawCase;
 }): Promise<RawCase> => {
-  const updatedCase = await getDbWriter(
-    writer =>
-      writer
-        .updateTable('dwCase')
-        .set(convertRawCaseToDbRow(caseToUpdate))
-        .where('docketNumber', '=', caseToUpdate.docketNumber)
-        .returningAll()
-        .executeTakeFirst(),
-    'dwCase',
-  );
+  const { updatedCase } = await transactionManager(async () => {
+    const updatedCase = await getDbWriter(
+      writer =>
+        writer
+          .updateTable('dwCase')
+          .set(convertRawCaseToDbRow(caseToUpdate))
+          .where('docketNumber', '=', caseToUpdate.docketNumber)
+          .returningAll()
+          .executeTakeFirst(),
+      'dwCase',
+    );
+    await getDbWriter(
+      writer =>
+        writer
+          .updateTable('dwCase')
+          .set(convertRawCaseToDbRow(caseToUpdate))
+          .where('docketNumber', '=', caseToUpdate.docketNumber)
+          .returningAll()
+          .executeTakeFirst(),
+      'dwCase',
+    );
+    return { updatedCase };
+  });
+
+  console.log('updatedCase', updatedCase);
 
   // Because we used to have nested objects in our case records, we upserted everything.
   // Now, with separate tables, we need to update these separate tables as well.
@@ -42,9 +57,9 @@ export const updateCase = async ({
     });
   }
 
-  if (!updatedCase) {
-    throw new Error('could not update the case');
-  }
+  // if (!updatedCase) {
+  //   throw new Error('could not update the case');
+  // }
 
   return caseToUpdate;
 };

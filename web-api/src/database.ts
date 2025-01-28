@@ -171,22 +171,70 @@ export async function getDbWriter<T>(
 
   // Check if this entity type should send SQS notifications
   if (result) {
-    try {
-      // Construct the SQS message
-      const message = {
-        timestamp: formatNow(),
-        payload: result,
-        type: tableName,
-      };
+    SQS_RESULTS.push({ payload: result, tableName });
+    // try {
+    //   // Construct the SQS message
+    //   const message = {
+    //     timestamp: formatNow(),
+    //     payload: result,
+    //     type: tableName,
+    //   };
 
-      console.log('getDbWriter message', message);
+    //   console.log('getDbWriter message', message);
 
-      // Send the message to SQS
-      await opensearchGateway().queueWork({ message });
-    } catch (err) {
-      console.error('Failed to send SQS message', err);
-    }
+    //   // Send the message to SQS
+    //   await opensearchGateway().queueWork({ message });
+    // } catch (err) {
+    //   console.error('Failed to send SQS message', err);
+    // }
   }
 
+  return result;
+}
+
+const SQS_RESULTS: { payload: any; tableName: string }[] = [];
+
+async function sendSQSMessage(payload: any, tableName: string) {
+  try {
+    // Construct the SQS message
+    const message = {
+      timestamp: formatNow(),
+      payload,
+      type: tableName,
+    };
+
+    console.log('getDbWriter message', message);
+
+    // Send the message to SQS
+    await opensearchGateway().queueWork({ message });
+  } catch (err) {
+    console.error('Failed to send SQS message', err);
+  }
+}
+// TODO: pass in a parameter to getDbWriter so that getDbWriter knows whether to add to SQS_RESULTS
+// or to directly send message
+export async function transactionManager<T>(cb: () => Promise<T>): Promise<T> {
+  await getDbWriter(writer =>
+    writer.executeQuery(CompiledQuery.raw('BEGIN TRANSACTION')),
+  );
+  let result;
+  try {
+    result = await cb();
+    await getDbWriter(writer =>
+      writer.executeQuery(CompiledQuery.raw('COMMIT')),
+    );
+  } catch (error) {
+    SQS_RESULTS.length = 0;
+    await getDbWriter(writer =>
+      writer.executeQuery(CompiledQuery.raw('ROLLBACK')),
+    );
+
+    throw error;
+  }
+  for (const data of SQS_RESULTS) {
+    console.log(data);
+    await sendSQSMessage(data.payload, data.tableName);
+  }
+  SQS_RESULTS.length = 0;
   return result;
 }
