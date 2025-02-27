@@ -106,7 +106,7 @@ else
   SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/Dynamic%20Web%20TWAIN%20SDK%2018.5/Resources"
 fi
 
-DEPLOYMENT_TIMESTAMP=$(date "+%s")
+DEPLOYMENT_TIMESTAMP=1740580752
 
 export TF_VAR_all_colors_tfstate_bucket=$BUCKET
 export TF_VAR_all_colors_tfstate_key=$ALL_COLORS_KEY
