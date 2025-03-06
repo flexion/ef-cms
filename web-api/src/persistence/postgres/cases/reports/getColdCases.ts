@@ -13,6 +13,7 @@ import {
 import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
 import { sql } from 'kysely';
+import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 
 export async function getColdCases() {
   const coldCaseLookBackDate = calculateDate({
@@ -55,9 +56,10 @@ export async function getColdCases() {
         'c.caseType',
         'c.createdAt',
         'c.docketNumber',
-        'c.docketNumberSuffix',
+        'c.caseType',
         'c.leadDocketNumber',
         'c.preferredTrialCity',
+        'c.procedureType',
       ])
       // Sub-select #1: most recent filingDate
       .select(eb =>
@@ -84,16 +86,7 @@ export async function getColdCases() {
 
   const results = rawResults.map(result => {
     return {
-      caseType: result.caseType,
-      createdAt: formatDateString(
-        result.createdAt.toISOString(),
-        FORMATS.MMDDYYYY,
-      ),
-      docketNumber: result.docketNumber,
-      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
-        docketNumber: result.docketNumber,
-        docketNumberSuffix: result.docketNumberSuffix,
-      }),
+      ...rawCaseEntity(result),
       eventCode: result.mostRecentEventCode,
       filingDate: result.mostRecentFilingDate?.toISOString(),
       leadDocketNumber: result.leadDocketNumber,

@@ -33,7 +33,7 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
         'c.associatedJudgeId',
         'c.caption',
         'c.docketNumber',
-        'c.docketNumberSuffix',
+        'c.caseType',
         'c.status',
         'c.leadDocketNumber',
         'c.trialDate',
@@ -42,6 +42,7 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
         'd.eventCode',
         'd.filingDate',
         'd.pending',
+        'c.procedureType',
       ])
       .execute(),
   );

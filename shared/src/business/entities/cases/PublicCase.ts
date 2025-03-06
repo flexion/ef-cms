@@ -10,6 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { Case, isSealedCase } from './Case';
 import joi from 'joi';
+import { getDocketNumberSuffix } from '@shared/business/utilities/getDocketNumberSuffix';
 
 export class PublicCase extends JoiValidationEntity {
   public entityName: string;
@@ -53,7 +54,10 @@ export class PublicCase extends JoiValidationEntity {
     this.caseCaption = rawCase.caseCaption;
     this.createdAt = rawCase.createdAt;
     this.docketNumber = rawCase.docketNumber;
-    this.docketNumberSuffix = rawCase.docketNumberSuffix;
+    this.docketNumberSuffix = getDocketNumberSuffix({
+      caseType: rawCase.caseType,
+      procedureType: rawCase.procedureType,
+    }) || undefined;
     this.docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
       docketNumber: this.docketNumber,
       docketNumberSuffix: this.docketNumberSuffix,

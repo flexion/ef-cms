@@ -5,6 +5,7 @@ import {
   calculateDate,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
+import { getDocketNumberSuffix } from '@shared/business/utilities/getDocketNumberSuffix';
 import { CaseKysely } from '@web-api/database-types';
 import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 
@@ -27,7 +28,6 @@ export const DW_CASE_COLUMNS = [
   'createdAt',
   'damages',
   'docketNumber',
-  'docketNumberSuffix',
   'filingType',
   'hasPendingItems',
   'hasVerifiedIrsNotice',
@@ -157,7 +157,6 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
       : calculateDate({ dateString: formatNow() }), // Is this what we want?
     damages: rawCase.damages,
     docketNumber: rawCase.docketNumber,
-    docketNumberSuffix: rawCase.docketNumberSuffix,
     docketEntries: JSON.stringify(rawCase.docketEntries),
     filingType: rawCase.filingType,
     hasPendingItems: rawCase.hasPendingItems,
@@ -220,16 +219,19 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
 };
 
 export const rawCaseEntity = (caseRecord: any): RawCase => {
+  const docketNumberSuffix = getDocketNumberSuffix(caseRecord);
   return {
     ...caseRecord,
+    docketNumberSuffix,
+    docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+      docketNumber: caseRecord.docketNumber,
+      docketNumberSuffix,
+    }),
     automaticBlockedDate: caseRecord.automaticBlockedDate?.toISOString(),
     blockedDate: caseRecord.blockedDate?.toISOString(),
     caseCaption: caseRecord.caption,
     closedDate: caseRecord.closedDate?.toISOString(),
     createdAt: caseRecord.createdAt?.toISOString(),
-    docketNumberWithSuffix:
-      caseRecord.docketNumber +
-      (caseRecord.docketNumberSuffix ? caseRecord.docketNumberSuffix : ''),
     hearings: caseRecord.hearings || [],
     irsNoticeDate: caseRecord.irsNoticeDate?.toISOString(),
     noticeOfTrialDate: caseRecord.noticeOfTrialDate?.toISOString(),
@@ -259,10 +261,6 @@ export const indexCaseEntity = ({
     entityName: 'Case',
     caseCaption: caseRecord.caption,
     docketNumber: caseRecord.docketNumber,
-    docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
-      docketNumber: caseRecord.docketNumber,
-      docketNumberSuffix: caseRecord.docketNumberSuffix,
-    }),
     isSealed: caseRecord.isSealed,
     petitioners: petitioners || [],
     receivedAt:

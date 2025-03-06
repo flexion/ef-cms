@@ -1,5 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
+import { getDocketNumberSuffix } from '@shared/business/utilities/getDocketNumberSuffix';
 
 // An entity for case details for a case a user does not have access to
 export class RestrictedCase extends JoiValidationEntity {
@@ -13,7 +14,11 @@ export class RestrictedCase extends JoiValidationEntity {
   constructor(rawCase: any) {
     super('RestrictedCase');
     this.docketNumber = rawCase.docketNumber;
-    this.docketNumberSuffix = rawCase.docketNumberSuffix;
+    this.docketNumberSuffix =
+      getDocketNumberSuffix({
+        caseType: rawCase.caseType,
+        procedureType: rawCase.procedureType,
+      }) || undefined;
     this.isPaper = rawCase.isPaper;
     this.isSealed = rawCase.isSealed;
     this.leadDocketNumber = rawCase.leadDocketNumber;

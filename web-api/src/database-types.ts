@@ -65,7 +65,6 @@ export interface CaseTable {
   createdAt: Date;
   damages?: number;
   docketNumber: string;
-  docketNumberSuffix?: string;
   docketEntries?: ColumnType<
     { docketEntryId: string; docketNumber: string }[],
     string,

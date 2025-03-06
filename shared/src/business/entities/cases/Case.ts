@@ -1027,7 +1027,7 @@ export class Case extends JoiValidationEntity {
     docketNumberSuffix,
   }: {
     docketNumber: string;
-    docketNumberSuffix: string | undefined;
+    docketNumberSuffix: string | undefined | null;
   }): string {
     return docketNumber + (docketNumberSuffix || '');
   }

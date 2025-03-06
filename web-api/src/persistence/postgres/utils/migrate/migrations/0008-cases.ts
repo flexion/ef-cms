@@ -60,6 +60,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('trialSessionId', 'varchar')
     .addColumn('trialTime', 'varchar')
     .addColumn('useSameAsPrimary', 'boolean')
+    .dropColumn('docketNumberSuffix')
     .execute();
 }
 
