@@ -138,6 +138,7 @@ export const NonstandardForm = connect(
               id={`${namespace}free-text`}
               name={`${namespace}freeText`}
               type="text"
+              data-testid="nonstandard-form-free-text-input"
               value={get(form, `${namespace}freeText`, '')}
               onBlur={() => {
                 validateSequence();

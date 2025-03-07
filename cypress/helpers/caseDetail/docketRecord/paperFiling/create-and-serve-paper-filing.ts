@@ -4,12 +4,14 @@ export function createAndServePaperFiling({
   dateReceived,
   documentType,
   isPaperCase = true,
+  freeText,
 }: {
   documentType: string;
   dateReceived: string;
   isPaperCase?: boolean;
+  freeText?: string;
 }) {
-  fillPaperFilingForm({ dateReceived, documentType });
+  fillPaperFilingForm({ dateReceived, documentType, freeText });
 
   cy.get('[data-testid="save-and-serve"]').click();
   cy.get('[data-testid="modal-button-confirm"]').click();

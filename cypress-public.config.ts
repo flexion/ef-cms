@@ -8,6 +8,7 @@ export default defineConfig({
   defaultCommandTimeout: 60000,
   e2e: {
     baseUrl: 'http://localhost:5678',
+    experimentalStudio: true,
     setupNodeEvents(on) {
       on('task', {
         modifyDeployedDateTextFile(deployedDate) {

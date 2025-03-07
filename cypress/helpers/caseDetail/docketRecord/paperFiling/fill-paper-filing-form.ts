@@ -4,9 +4,11 @@ import { selectTypeaheadInput } from '../../../components/typeAhead/select-typea
 export function fillPaperFilingForm({
   dateReceived,
   documentType,
+  freeText,
 }: {
   documentType: string;
   dateReceived: string;
+  freeText?: string;
 }) {
   cy.get('[data-testid="case-detail-menu-button"]').click();
   cy.get('[data-testid="menu-button-add-paper-filing"]').click();
@@ -17,6 +19,9 @@ export function fillPaperFilingForm({
   cy.get('[data-testid="filed-by-option"]').click();
   cy.get('[data-testid="objections-No"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
+
+  if (freeText)
+    cy.get('[data-testid=nonstandard-form-free-text-input]').type(freeText);
 
   attachFile({
     filePath: '../../helpers/file/sample.pdf',
