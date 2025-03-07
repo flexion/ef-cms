@@ -55,6 +55,7 @@ export const DraftDocumentViewer = connect(
                           viewerDraftDocumentToDisplay: draftDocument,
                         });
                       }}
+                      data-testid={`draft-document-id-${draftDocument.docketEntryId}`}
                     >
                       <div className="grid-row margin-left-205">
                         <div
