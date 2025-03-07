@@ -11,10 +11,15 @@ export function createOrderAndDecision(contents = 'this is a test order') {
   cy.get('[data-testid="success-alert"]');
 }
 
-export function createOrder({
-  contents = 'this is a test order',
-  title = 'a title',
-}) {
+export function createOrder(
+  {
+    contents = 'this is a test order',
+    title = 'a title',
+  }: Partial<{ contents: string; title: string }> = {
+    contents: 'this is a test order',
+    title: 'a title',
+  },
+): Cypress.Chainable<{ docketEntryId: string }> {
   cy.get('[data-testid="case-detail-menu-button"]').click();
   cy.get('[data-testid="menu-button-create-order"]').click();
   cy.get('[data-testid="event-code-select"]').select('O');
@@ -27,6 +32,18 @@ export function createOrder({
   cy.get('[data-testid="sign-pdf-canvas"]').click();
   cy.get('[data-testid="save-signature-button"]').click();
   cy.get('[data-testid="success-alert"]');
+
+  return cy
+    .url()
+    .should('include', 'docketEntryId')
+    .then(url => {
+      const urlParams = new URLSearchParams(new URL(url).search);
+      const docketEntryId = urlParams.get('docketEntryId');
+      if (!docketEntryId) {
+        throw new Error('Unable to get docketEntryId from URL');
+      }
+      return cy.wrap({ docketEntryId });
+    });
 }
 
 export function addOrderToDocketEntry() {

@@ -1,3 +1,5 @@
+import { createOrder } from 'cypress/helpers/caseDetail/docketRecord/courtIssuedFiling/create-order-and-decision';
+import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 import { navigateToDashboard } from 'cypress/local-only/support/pages/maintenance';
 import {
   searchForOrderByJudge,
@@ -24,5 +26,16 @@ describe('Order Search', () => {
           .should('have.text', wantedLegacyJudge);
       });
     });
+  });
+
+  it.only('should do lots of stuff', () => {
+    createAndServePaperPetition().then(({ docketNumber: _2 }) => {
+      // Docket clerk creates a draft order (should not be viewable to the public)
+      createOrder().then(({ docketEntryId: _1 }) => {});
+    });
+    // Docket clerk creates and serves an order (should be viewable to the public)
+    // Docket clerk creates and serves a motion (should be viewable to the public)
+    // Docket clerk creates a transcript but does not serve it (transcripts are unservable, should not be viewable to the public)
+    // Docket clerk creates and serves a Stipulated Decision (should not be viewable to the public)
   });
 });
