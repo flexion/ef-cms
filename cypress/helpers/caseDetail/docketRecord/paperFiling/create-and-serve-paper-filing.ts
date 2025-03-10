@@ -20,6 +20,8 @@ export function createAndServePaperFiling({
   }
   cy.get('[data-testid="success-alert"]');
 
+
+  // Zach look here! This fails. When creating a paper filing we do not get the docketEntry in the URL
   return cy
     .url()
     .should('include', 'docketEntryId')
