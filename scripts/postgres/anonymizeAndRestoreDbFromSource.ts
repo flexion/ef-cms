@@ -18,37 +18,41 @@ const scriptConfig: ScriptConfig = {
     'restoreDbFromSource - Replaces the target database with a dump of the source database',
   environment: {
     sourceEnv: 'ENV',
-    targetAccountId: 'TARGET_ACCOUNT_ID',
-    targetEnv: 'TARGET_ENV',
+    postgresMasterUsername: 'POSTGRES_MASTER_USERNAME',
+    postgresMasterPassword: 'POSTGRES_MASTER_PASSWORD',
+    // targetAccountId: 'TARGET_ACCOUNT_ID',
+    // targetEnv: 'TARGET_ENV',
   },
   requireActiveAwsSession: true,
 };
 
 async function main() {
-  const { sourceEnv, targetAccountId, targetEnv } = parseArgsAndEnvVars(
-    scriptConfig,
-  ) as { sourceEnv: string; targetAccountId: string; targetEnv: string };
-  const targetRoleArn = `arn:aws:iam::${targetAccountId}:role/restore_role_${targetEnv}`;
+  const { sourceEnv, postgresMasterUsername, postgresMasterPassword } =
+    parseArgsAndEnvVars(scriptConfig) as {
+      sourceEnv: string;
+      postgresMasterUsername: string;
+      postgresMasterPassword: string;
+    };
+  // const targetRoleArn = `arn:aws:iam::${targetAccountId}:role/restore_role_${targetEnv}`;
 
-  const { targetAccessKeyId, targetSecretAccessKey, targetSessionToken } =
-    await getTargetAccountCredentials({ targetRoleArn });
+  // const { targetAccessKeyId, targetSecretAccessKey, targetSessionToken } =
+  //   await getTargetAccountCredentials({ targetRoleArn });
 
   const sourceRdsClient = new RDSClient({ region: 'us-east-1' });
-  const targetRdsClient = new RDSClient({
-    credentials: {
-      accessKeyId: targetAccessKeyId,
-      accountId: targetAccountId,
-      secretAccessKey: targetSecretAccessKey,
-      sessionToken: targetSessionToken,
-    },
-    region: 'us-east-1',
-  });
+  // const targetRdsClient = new RDSClient({
+  //   credentials: {
+  //     accessKeyId: targetAccessKeyId,
+  //     accountId: targetAccountId,
+  //     secretAccessKey: targetSecretAccessKey,
+  //     sessionToken: targetSessionToken,
+  //   },
+  //   region: 'us-east-1',
+  // });
 
   const {
     dbName: sourceDbname,
     host: sourceHost,
     port: sourcePort,
-    username: sourceUsername,
   } = await describeRDSInstance({
     environment: sourceEnv,
     rdsClient: sourceRdsClient,
@@ -59,50 +63,41 @@ async function main() {
   // run our sql script on the temp db
   // backup and restore from the temp db to the target db
 
-  const sourceSigner = new Signer({
-    hostname: sourceHost,
-    port: sourcePort,
-    region: 'us-east-1',
-    username: sourceUsername,
-  });
-
-  const sourcePassword = await sourceSigner.getAuthToken();
-
   const tempDbname = await createTempDatabase({
     host: sourceHost,
     port: sourcePort,
-    username: sourceUsername,
-    password: sourcePassword,
+    username: postgresMasterUsername,
+    password: postgresMasterPassword,
   });
 
   await cloneDatabase({
     host: sourceHost,
     port: sourcePort,
-    username: sourceUsername,
-    password: sourcePassword,
+    masterUsername: postgresMasterUsername,
+    masterPassword: postgresMasterPassword,
     sourceDb: sourceDbname,
     tempDb: tempDbname,
   });
 
   await anonymizeData({
     host: sourceHost,
-    username: sourceUsername,
+    username: postgresMasterUsername,
     dbName: tempDbname,
     port: sourcePort,
-    password: sourcePassword,
+    password: postgresMasterPassword,
     scriptPath: 'scripts/anonymizeEmails.sql',
   });
 
-  const {
-    dbName: targetDbname,
-    host: targetHost,
-    port: targetPort,
-    username: targetUsername,
-  } = await describeRDSInstance({
-    environment: targetEnv,
-    rdsClient: targetRdsClient,
-    useWriter: true,
-  });
+  // const {
+  //   dbName: targetDbname,
+  //   host: targetHost,
+  //   port: targetPort,
+  //   username: targetUsername,
+  // } = await describeRDSInstance({
+  //   environment: targetEnv,
+  //   rdsClient: targetRdsClient,
+  //   useWriter: true,
+  // });
 
   const backUpFileName = 'dawson.dump';
   await createDbBackup({
@@ -110,23 +105,20 @@ async function main() {
     dbName: tempDbname,
     host: sourceHost,
     port: sourcePort,
-    username: sourceUsername,
-    password: sourcePassword,
+    username: postgresMasterUsername,
+    password: postgresMasterPassword,
   });
 
-  const sanitizedFileName = `sanitized-${backUpFileName}`;
-  // replaceEmailAddresses(backUpFileName, sanitizedFileName);
-
   await restoreFromBackup({
-    backUpFileName: sanitizedFileName,
-    dbName: targetDbname,
-    host: targetHost,
-    port: targetPort,
-    targetAccessKeyId,
-    targetAccountId,
-    targetSecretAccessKey,
-    targetSessionToken,
-    username: targetUsername,
+    backUpFileName,
+    dbName: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    // targetAccessKeyId,
+    // targetAccountId,
+    // targetSecretAccessKey,
+    // targetSessionToken,
+    username: 'postgres',
   });
 }
 void main();
@@ -155,7 +147,7 @@ async function describeRDSInstance({
   const host = useWriter ? dbCluster.Endpoint : dbCluster.ReaderEndpoint;
   const port = dbCluster.Port;
   const dbName = dbCluster.DatabaseName;
-  const username = `${environment}_dawson`;
+  const username = `${environment}-dawson`;
 
   if (!host || !port || !dbName) {
     throw new Error('Source configuration was not found');
@@ -190,7 +182,7 @@ async function createTempDatabase({
         `--host=${host}`,
         `--port=${port}`,
         `--username=${username}`,
-        `--dbname=${dbName}`,
+        `--dbname=postgres`,
         '--command',
         sql,
       ],
@@ -215,53 +207,65 @@ async function createTempDatabase({
 async function cloneDatabase({
   host,
   port,
-  username,
-  password,
+  masterUsername,
+  masterPassword,
   sourceDb,
   tempDb,
 }: {
   host: string;
   port: number;
-  username: string;
-  password: string;
+  masterUsername: string;
+  masterPassword: string;
   sourceDb: string;
   tempDb: string;
 }) {
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<void>(resolve => {
     const dump = spawn(
       'pg_dump',
       [
         `--host=${host}`,
         `--port=${port}`,
-        `--username=${username}`,
+        `--username=${masterUsername}`,
         `--dbname=${sourceDb}`,
+        `--format=c`,
+        '--verbose',
+        '--no-owner',
+        '--no-privileges',
       ],
-      { env: { ...process.env, PGPASSWORD: password } },
+      { env: { ...process.env, PGPASSWORD: masterPassword }, stdio: 'pipe' },
     );
 
     const restore = spawn(
-      'psql',
+      'pg_restore',
       [
         `--host=${host}`,
         `--port=${port}`,
-        `--username=${username}`,
+        `--username=${masterUsername}`,
         `--dbname=${tempDb}`,
+        `--format=c`,
+        '--verbose',
+        '--no-owner',
+        '--no-privileges',
       ],
-      { env: { ...process.env, PGPASSWORD: password } },
+      { env: { ...process.env, PGPASSWORD: masterPassword }, stdio: 'pipe' },
     );
 
     dump.stdout.pipe(restore.stdin);
 
     dump.stderr.on('data', data => console.error('pg_dump:', data.toString()));
-    restore.stderr.on('data', data => console.error('psql:', data.toString()));
+    restore.stderr.on('data', data =>
+      console.error('pg_restore:', data.toString()),
+    );
 
     restore.on('close', code => {
-      if (code === 0) {
-        console.log(`Database successfully cloned to ${tempDb}`);
-        resolve();
+      if (code) {
+        console.log(
+          `DB ${tempDb} may have been restored with errors. Check output for errors. Exit code: ${code}`,
+        );
       } else {
-        reject(new Error(`Restore failed with exit code ${code}`));
+        console.log(`Successfully restored DB ${tempDb}`);
       }
+      resolve(undefined);
     });
   });
 }
@@ -382,10 +386,10 @@ async function restoreFromBackup({
   dbName,
   host,
   port,
-  targetAccessKeyId,
-  targetAccountId,
-  targetSecretAccessKey,
-  targetSessionToken,
+  // targetAccessKeyId,
+  // targetAccountId,
+  // targetSecretAccessKey,
+  // targetSessionToken,
   username,
 }: {
   host: string;
@@ -393,24 +397,25 @@ async function restoreFromBackup({
   port: number;
   dbName: string;
   backUpFileName: string;
-  targetAccessKeyId: string;
-  targetAccountId: string;
-  targetSecretAccessKey: string;
-  targetSessionToken: string;
+  // targetAccessKeyId: string;
+  // targetAccountId: string;
+  // targetSecretAccessKey: string;
+  // targetSessionToken: string;
 }): Promise<void> {
-  const targetSigner = new Signer({
-    credentials: {
-      accessKeyId: targetAccessKeyId,
-      accountId: targetAccountId,
-      secretAccessKey: targetSecretAccessKey,
-      sessionToken: targetSessionToken,
-    },
-    hostname: host,
-    port,
-    region: 'us-east-1',
-    username,
-  });
-  const targetPassword = await targetSigner.getAuthToken();
+  // const targetSigner = new Signer({
+  //   credentials: {
+  //     accessKeyId: targetAccessKeyId,
+  //     accountId: targetAccountId,
+  //     secretAccessKey: targetSecretAccessKey,
+  //     sessionToken: targetSessionToken,
+  //   },
+  //   hostname: host,
+  //   port,
+  //   region: 'us-east-1',
+  //   username,
+  // });
+  // const targetPassword = await targetSigner.getAuthToken();
+  const targetPassword = 'example';
 
   // pg_restore --clean only drops tables that exist in the source dump, so we drop all target tables before calling pg_restore.
   // We could drop the whole target db or the schema, but then we would have to deal with stricter permissions.
