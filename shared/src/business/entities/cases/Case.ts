@@ -142,9 +142,9 @@ export class Case extends JoiValidationEntity {
   public docketEntries: any[];
   public isSealed?: boolean;
   public hearings: any[];
-  public privatePractitioners?: any[];
+  public privatePractitioners: any[];
   public initialCaption?: string;
-  public irsPractitioners?: any[];
+  public irsPractitioners: any[];
   public statistics?: any[];
   public correspondence: any[];
   public archivedCorrespondences?: any[];
@@ -188,9 +188,10 @@ export class Case extends JoiValidationEntity {
     this.assignHearings({
       rawCase,
     });
-    this.assignPractitioners({
-      rawCase,
-    });
+
+    this.privatePractitioners = this.getPrivatePractitioners(rawCase);
+    this.irsPractitioners = this.getIrsPractitioners(rawCase);
+
     this.assignFieldsForAllUsers({
       rawCase,
     });
@@ -903,22 +904,26 @@ export class Case extends JoiValidationEntity {
     }
   }
 
-  assignPractitioners({ rawCase }) {
-    if (Array.isArray(rawCase.privatePractitioners)) {
-      this.privatePractitioners = rawCase.privatePractitioners.map(
-        practitioner => new PrivatePractitioner(practitioner),
-      );
-    } else {
-      this.privatePractitioners = [];
-    }
+  private getPrivatePractitioners(rawCase: {
+    privatePractitioners: any[];
+  }): PrivatePractitioner[] {
+    if (!Array.isArray(rawCase.privatePractitioners)) return [];
 
-    if (Array.isArray(rawCase.irsPractitioners)) {
-      this.irsPractitioners = rawCase.irsPractitioners.map(
-        practitioner => new IrsPractitioner(practitioner),
-      );
-    } else {
-      this.irsPractitioners = [];
-    }
+    const { privatePractitioners } = rawCase;
+    return privatePractitioners.map(practitioner => {
+      return new PrivatePractitioner(practitioner);
+    });
+  }
+
+  private getIrsPractitioners(rawCase: {
+    irsPractitioners: any[];
+  }): IrsPractitioner[] {
+    if (!Array.isArray(rawCase.irsPractitioners)) return [];
+
+    const { irsPractitioners } = rawCase;
+    return irsPractitioners.map(irsPractitioner => {
+      return new IrsPractitioner(irsPractitioner);
+    });
   }
 
   private assignStatistics({ rawCase }) {
