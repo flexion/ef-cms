@@ -16,7 +16,7 @@ export const stampDocumentForService = async ({
     eventCode: string;
     serviceStamp: string;
   };
-}) => {
+}): Promise<Uint8Array> => {
   let serviceStampType = 'Served';
 
   if (documentToStamp.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {

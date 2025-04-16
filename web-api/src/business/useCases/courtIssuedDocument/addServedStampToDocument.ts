@@ -1,3 +1,5 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 const TEXT_SIZE = 14;
 export const PADDING = 3;
 
@@ -54,7 +56,11 @@ export const addServedStampToDocument = async ({
   serviceStampText = `SERVED ${applicationContext
     .getUtilities()
     .formatNow('MMDDYY')}`,
-}) => {
+}: {
+  applicationContext: ServerApplicationContext;
+  pdfData: Uint8Array;
+  serviceStampText?: string;
+}): Promise<Uint8Array> => {
   const { degrees, rgb } = await applicationContext.getPdfLib();
 
   const { pdfDoc, textFont } = await applicationContext
