@@ -25,8 +25,9 @@ export const scrapePdfContents = async ({
         includeMarkedContent: false,
       });
 
-      let lastY = null,
-        pageText = '';
+      let lastY: number | null = null;
+      let pageText: string = '';
+
       // should be a TextItem when includeMarkedContent is false
       for (const item of pageTextContent.items as TextItem[]) {
         if (lastY === item.transform[5] || !lastY) {
