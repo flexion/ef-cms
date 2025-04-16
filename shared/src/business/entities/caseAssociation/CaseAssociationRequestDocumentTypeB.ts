@@ -13,7 +13,7 @@ export class CaseAssociationRequestDocumentTypeB extends CaseAssociationRequestD
   public documentTitleTemplate: string;
   public documentType: string;
   public eventCode: string;
-  public filers?: string[];
+  public filers: string[];
   public hasSupportingDocuments?: boolean;
   public objections: string;
   public partyIrsPractitioner?: boolean;
@@ -37,7 +37,7 @@ export class CaseAssociationRequestDocumentTypeB extends CaseAssociationRequestD
     this.partyPrivatePractitioner = rawProps.partyPrivatePractitioner;
     this.partyIrsPractitioner = rawProps.partyIrsPractitioner;
     this.primaryDocumentFile = rawProps.primaryDocumentFile;
-    this.filers = rawProps.filers || [];
+    this.filers = Array.isArray(rawProps.filers) ? rawProps.filers : [];
     this.scenario = rawProps.scenario;
     this.supportingDocuments = rawProps.supportingDocuments;
 
@@ -59,22 +59,20 @@ export class CaseAssociationRequestDocumentTypeB extends CaseAssociationRequestD
     return CaseAssociationRequestDocumentTypeB.VALIDATION_RULES;
   }
 
-  getDocumentTitle = petitioners => {
-    let petitionerNames;
+  getDocumentTitle = (
+    petitioners: { contactId: string; name: string }[],
+  ): string => {
     if (this.partyIrsPractitioner) {
-      petitionerNames = 'Respondent';
-    } else {
-      const petitionerNamesArray = this.filers?.map(
-        contactId => petitioners.find(p => p.contactId === contactId).name,
-      );
-
-      if (petitionerNamesArray.length > 1) {
-        petitionerNames = 'Petrs. ';
-      } else {
-        petitionerNames = 'Petr. ';
-      }
-      petitionerNames += petitionerNamesArray.join(' & ');
+      return replaceBracketed(this.documentTitleTemplate, 'Respondent');
     }
+
+    const petitionerNamesArray = this.filers.map(contactId => {
+      const filerPetitioner = petitioners.find(p => p.contactId === contactId);
+      return filerPetitioner?.name;
+    });
+
+    const prefix = petitionerNamesArray.length > 1 ? 'Petrs.' : 'Petr.';
+    const petitionerNames = `${prefix} ${petitionerNamesArray.join(' & ')}`;
 
     return replaceBracketed(this.documentTitleTemplate, petitionerNames);
   };
