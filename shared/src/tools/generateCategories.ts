@@ -15,67 +15,79 @@ Usage: node generateCategories.js [internal/external] spreadsheet.csv > output.j
 
 const type = process.argv[2];
 
-const files = [];
+const files: string[] = [];
 process.argv.forEach((val, index) => {
   if (index > 2) {
     files.push(val);
   }
 });
 
-let exportColumns;
-let csvColumns;
-if (type === 'internal') {
-  exportColumns = [
-    'documentTitle',
-    'documentType',
-    'category',
-    'eventCode',
-    'scenario',
-    'labelPreviousDocument',
-    'labelFreeText',
-    'labelFreeText2',
-    'ordinalField',
-  ];
-  csvColumns = [
-    'documentTitle',
-    'documentType',
-    'category',
-    'respondent-ignore',
-    'practitioner-ignore',
-    'petitioner-ignore',
-    'eventCode',
-    'scenario',
-    'variations-ignore',
-    'labelPreviousDocument',
-    'labelFreeText',
-    'labelFreeText2',
-    'ordinalField',
-  ];
-} else if (type === 'external') {
-  exportColumns = [
-    'documentTitle',
-    'documentType',
-    'category',
-    'eventCode',
-    'scenario',
-    'labelPreviousDocument',
-    'labelFreeText',
-    'ordinalField',
-  ];
-  csvColumns = [
-    'documentTitle',
-    'documentType',
-    'category',
-    'respondent-ignore',
-    'practitioner-ignore',
-    'petitioner-ignore',
-    'eventCode',
-    'scenario',
-    'labelPreviousDocument',
-    'labelFreeText',
-    'ordinalField',
-  ];
+const INTERNAL_EXPORT_COLUMNS = [
+  'documentTitle',
+  'documentType',
+  'category',
+  'eventCode',
+  'scenario',
+  'labelPreviousDocument',
+  'labelFreeText',
+  'labelFreeText2',
+  'ordinalField',
+];
+
+const EXTERNAL_EXPORT_COLUMNS = [
+  'documentTitle',
+  'documentType',
+  'category',
+  'eventCode',
+  'scenario',
+  'labelPreviousDocument',
+  'labelFreeText',
+  'ordinalField',
+];
+
+function getExportColumns(type: string): string[] | undefined {
+  if (type === 'internal') return INTERNAL_EXPORT_COLUMNS;
+  if (type === 'external') return EXTERNAL_EXPORT_COLUMNS;
+  return;
 }
+
+const exportColumns: string[] | undefined = getExportColumns(type);
+
+const INTERNAL_CSV_COLUMNS = [
+  'documentTitle',
+  'documentType',
+  'category',
+  'respondent-ignore',
+  'practitioner-ignore',
+  'petitioner-ignore',
+  'eventCode',
+  'scenario',
+  'variations-ignore',
+  'labelPreviousDocument',
+  'labelFreeText',
+  'labelFreeText2',
+  'ordinalField',
+];
+const EXTERNAL_CSV_COLUMNS = [
+  'documentTitle',
+  'documentType',
+  'category',
+  'respondent-ignore',
+  'practitioner-ignore',
+  'petitioner-ignore',
+  'eventCode',
+  'scenario',
+  'labelPreviousDocument',
+  'labelFreeText',
+  'ordinalField',
+];
+
+function getCsvColumns(type: string): string[] | undefined {
+  if (type === 'internal') return INTERNAL_CSV_COLUMNS;
+  if (type === 'external') return EXTERNAL_CSV_COLUMNS;
+  return;
+}
+const csvColumns: string[] | undefined = getCsvColumns(type);
 
 const csvOptions = getCsvOptions(csvColumns);
 
@@ -107,12 +119,13 @@ const presortCategory = (sortedCategory, categoryName) => {
   if (!firstEntries) {
     return sortedCategory;
   }
-  let resortedEntries = [];
-
-  resortedEntries = firstEntries.map(title => {
-    const [foundObj] = remove(sortedCategory, m => {
-      return m.documentTitle.toLowerCase() === title.toLowerCase();
-    });
+  const resortedEntries = firstEntries.map(title => {
+    const [foundObj] = remove(
+      sortedCategory,
+      (m: { documentTitle: string }) => {
+        return m.documentTitle.toLowerCase() === title.toLowerCase();
+      },
+    );
     return foundObj;
   });
 
@@ -131,15 +144,15 @@ const main = () => {
   }
   const data = fs.readFileSync(files[0], 'utf8');
 
-  const output = [];
-  const result = {};
+  const output: { category: string }[] = [];
+  const result: { [key: string]: { category: string }[] } = {};
   const sortedResult = {};
 
   const stream = parse(data, csvOptions);
 
   stream.on('readable', gatherRecords(exportColumns, output));
   stream.on('end', () => {
-    output.forEach(el => {
+    output.forEach((el: { category: string }) => {
       if (el.category.length === 0) {
         return;
       }
