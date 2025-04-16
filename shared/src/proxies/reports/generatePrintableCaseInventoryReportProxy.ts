@@ -1,6 +1,11 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { asyncSyncHandler, get } from '../requests';
 
+interface PrintableCaseInventoryReportResult {
+  fileId: string;
+  url: string;
+}
+
 /**
  * generatePrintableCaseInventoryReportInteractor
  *
@@ -8,7 +13,7 @@ import { asyncSyncHandler, get } from '../requests';
  * @param {object} providers the providers object
  * @param {string} providers.associatedJudge the judge to filter by
  * @param {string} providers.status the status to filter by
- * @returns {Promise<*>} the promise of the api call
+ * @returns {Promise<PrintableCaseInventoryReportResult>} the promise of the api call
  */
 export const generatePrintableCaseInventoryReportInteractor = (
   applicationContext: ClientApplicationContext,
@@ -19,18 +24,15 @@ export const generatePrintableCaseInventoryReportInteractor = (
     associatedJudge?: string;
     status?: string;
   },
-) => {
-  return asyncSyncHandler(
+): Promise<PrintableCaseInventoryReportResult> => {
+  return asyncSyncHandler<PrintableCaseInventoryReportResult>(
     applicationContext,
-    async asyncSyncId =>
+    async (asyncSyncId: string) =>
       await get({
         applicationContext,
         asyncSyncId,
         endpoint: '/async/reports/printable-case-inventory-report',
         params: { associatedJudge, status },
       }),
-  ) as Promise<{
-    fileId: string;
-    url: string;
-  }>;
+  );
 };

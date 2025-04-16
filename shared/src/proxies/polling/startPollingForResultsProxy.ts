@@ -6,7 +6,7 @@ export const startPollingForResultsInteractor = async (
   expirationTimestamp: number,
   resolver,
   attemptNumber = 1,
-) => {
+): Promise<void> => {
   const WAIT_TIME = attemptNumber < 10 ? 1500 : 5000;
   await applicationContext.getUtilities().sleep(WAIT_TIME);
   return await get({

@@ -1,4 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { AxiosRequestConfig } from 'axios';
 import moize from 'moize';
 
 let token: string = '';
@@ -18,13 +19,21 @@ export const setCurrentUserToken = (newToken: string) => {
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response data
  */
-export const head = async ({ applicationContext, endpoint, params }) => {
+export const head = async ({
+  applicationContext,
+  endpoint,
+  params,
+}: {
+  applicationContext: ClientApplicationContext;
+  endpoint: string;
+  params?: any;
+}) => {
   return await applicationContext
     .getHttpClient()
     .head(`${applicationContext.getBaseUrl()}${endpoint}`, {
       headers: getDefaultHeaders(getCurrentUserToken()),
       params,
-    })
+    } as AxiosRequestConfig)
     .then(response => response.data);
 };
 
@@ -71,6 +80,11 @@ export const getResponse = ({
   asyncSyncId,
   endpoint,
   params,
+}: {
+  applicationContext: ClientApplicationContext;
+  asyncSyncId?: string;
+  endpoint: string;
+  params?: any;
 }) => {
   return applicationContext
     .getHttpClient()
@@ -111,6 +125,13 @@ export const post = async ({
   endpoint,
   headers = {},
   options = {},
+}: {
+  applicationContext: ClientApplicationContext;
+  asyncSyncId?: string;
+  body?: { [key: string]: any };
+  endpoint: string;
+  headers?: { [key: string]: any };
+  options?: { [key: string]: any };
 }) => {
   getMemoized.clear();
   return await applicationContext
@@ -126,11 +147,11 @@ export const post = async ({
     .then(response => response.data);
 };
 
-export const asyncSyncHandler = (
-  applicationContext,
-  request,
+export const asyncSyncHandler = <T>(
+  applicationContext: ClientApplicationContext,
+  request: (asyncSyncId: string) => Promise<T>,
   asyncSyncId = applicationContext.getUniqueId(),
-) => {
+): Promise<T> => {
   getMemoized.clear();
 
   return new Promise((resolve, reject) => {
@@ -143,10 +164,10 @@ export const asyncSyncHandler = (
       }
     };
 
-    request(asyncSyncId);
+    void request(asyncSyncId);
 
     const expirationTimestamp = Math.floor(Date.now() / 1000) + 16 * 60;
-    applicationContext
+    void applicationContext
       .getUseCases()
       .startPollingForResultsInteractor(
         applicationContext,
@@ -172,6 +193,11 @@ export const put = async ({
   asyncSyncId = undefined,
   body,
   endpoint,
+}: {
+  applicationContext: ClientApplicationContext;
+  asyncSyncId?: string;
+  body?: { [key: string]: any };
+  endpoint: string;
 }) => {
   getMemoized.clear();
   const res = await applicationContext
@@ -202,10 +228,10 @@ export const remove = async ({
   options = {},
   params = {},
 }: {
-  applicationContext: any;
+  applicationContext: ClientApplicationContext;
   endpoint: string;
-  options?: any;
-  params?: any;
+  options?: { [key: string]: any };
+  params?: { [key: string]: any };
 }) => {
   getMemoized.clear();
   return await applicationContext
@@ -218,7 +244,7 @@ export const remove = async ({
     .then(response => response.data);
 };
 
-const getDefaultHeaders = userToken => {
+const getDefaultHeaders = (userToken: string) => {
   const authorization = userToken ? `Bearer ${userToken}` : undefined;
 
   const authorizationHeaderObject = {};
