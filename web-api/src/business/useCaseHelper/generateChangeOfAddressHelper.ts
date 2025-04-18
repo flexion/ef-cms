@@ -13,6 +13,9 @@ import { TUserContact } from '@web-api/business/useCases/user/generateChangeOfAd
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { UserContact } from '@shared/business/entities/User';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 /**
  * generateChangeOfAddressHelper
@@ -63,7 +66,9 @@ export const generateChangeOfAddressHelper = async ({
     });
 
     const practitionerName = updatedName || user.name;
-    const practitionerObject = caseEntity.privatePractitioners
+    const practitionerObject = (
+      caseEntity.privatePractitioners as PrivatePractitioner[]
+    )
       .concat(caseEntity.irsPractitioners)
       .find(practitioner => practitioner.userId === user.userId);
 
@@ -73,7 +78,7 @@ export const generateChangeOfAddressHelper = async ({
       );
     }
 
-    const oldData = clone(practitionerObject.contact);
+    const oldData = clone(practitionerObject.contact!);
 
     // This updates the case by reference!
     practitionerObject.contact = contactInfo;
@@ -180,12 +185,12 @@ const prepareToGenerateAndServeDocketEntry = async ({
   practitionerName,
   user,
 }: {
-  applicationContext: any;
-  caseEntity: any;
-  newData: any;
-  oldData: any;
-  practitionerName: any;
-  user: any;
+  applicationContext: ServerApplicationContext;
+  caseEntity: Case;
+  newData: TUserContact;
+  oldData: UserContact;
+  practitionerName: string;
+  user: RawPractitioner;
   authorizedUser: AuthUser;
 }) => {
   const documentType = applicationContext
@@ -199,7 +204,7 @@ const prepareToGenerateAndServeDocketEntry = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  const docketMeta = {} as any;
+  const docketMeta = {} as Partial<DocketEntry>;
   if (user.role === ROLES.privatePractitioner) {
     docketMeta.privatePractitioners = [
       {

@@ -23,6 +23,7 @@ export type UserContact = {
   phone: string;
   postalCode: string;
   state: string;
+  email?: string;
 };
 
 export class User extends JoiValidationEntity {

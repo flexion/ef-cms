@@ -13,6 +13,7 @@ export type TUserContact = {
   phone: string;
   postalCode: string;
   state: string;
+  name: string;
 };
 
 /**

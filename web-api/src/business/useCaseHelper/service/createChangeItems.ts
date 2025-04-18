@@ -12,6 +12,9 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { addCoverToPdf } from '../../useCases/addCoverToPdf';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { UserContact } from '@shared/business/entities/User';
+import { TUserContact } from '@web-api/business/useCases/user/generateChangeOfAddress';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 
 /**
  * This function isolates task of generating the Docket Entry
@@ -185,16 +188,27 @@ export const generateAndServeDocketEntry = async ({
   user,
 }: {
   applicationContext: ServerApplicationContext;
-  barNumber: any;
-  caseEntity: any;
-  contactName: any;
-  docketMeta: any;
-  documentType: any;
-  newData: any;
-  oldData: any;
-  privatePractitionersRepresentingContact: any;
-  servedParties: any;
-  user: any;
+  barNumber: string;
+  caseEntity: Case;
+  contactName?: string;
+  docketMeta: Partial<DocketEntry>;
+  documentType: {
+    documentType: string;
+    eventCode: string;
+    title: string;
+  };
+  newData: TUserContact;
+  oldData: UserContact;
+  privatePractitionersRepresentingContact?: boolean;
+  servedParties: {
+    all: any[];
+    paper: any[];
+    electronic: Array<{
+      email: string;
+      name: string;
+    }>;
+  };
+  user: RawPractitioner;
   authorizedUser: AuthUser;
 }) => {
   const partyWithPaperService = caseEntity.hasPartyWithServiceType(

@@ -9,19 +9,31 @@ import { union } from 'lodash';
  * @param {object} providers.oldData the old contact information
  * @returns {object} diff object with old and new values for each changed field
  */
-export const getAddressPhoneDiff = ({ newData, oldData }) => {
-  const diff = {};
-  const fields = union(Object.keys(newData), Object.keys(oldData));
+export const getAddressPhoneDiff = <T extends object, U extends object>({
+  newData,
+  oldData,
+}: {
+  newData: T;
+  oldData: U;
+}): Record<keyof T | keyof U, any> => {
+  const diff = {} as Record<keyof T | keyof U, any>;
+
+  const fields: (keyof T | keyof U)[] = union<keyof T | keyof U>(
+    Object.keys(newData) as Array<keyof T>,
+    Object.keys(oldData) as Array<keyof U>,
+  );
+
   fields.forEach(key => {
-    const oldValue = oldData[key];
-    const newValue = newData[key];
+    const newValue = (newData as any)[key];
+    const oldValue = (oldData as any)[key];
     if (oldValue !== newValue) {
       diff[key] = {
-        newData: newData[key],
-        oldData: oldData[key],
+        newData: newValue,
+        oldData: oldValue,
       };
     }
   });
+
   return diff;
 };
 
@@ -34,19 +46,25 @@ export const getAddressPhoneDiff = ({ newData, oldData }) => {
  * @param {object} providers.oldData the old contact information
  * @returns {string} documentType for the address / phone change scenario
  */
-export const getDocumentTypeForAddressChange = ({
+export const getDocumentTypeForAddressChange = <
+  T extends object,
+  U extends object,
+>({
   diff,
   newData,
   oldData,
 }: {
-  diff?: any;
-  newData: any;
-  oldData: any;
-}) => {
-  let documentType;
-
+  diff?: Record<keyof T | keyof U, any>;
+  newData: T;
+  oldData: U;
+}):
+  | {
+      documentType: string;
+      eventCode: string;
+      title: string;
+    }
+  | undefined => {
   const initialDiff = diff || getAddressPhoneDiff({ newData, oldData });
-
   const addressFields = [
     'country',
     'countryType',
@@ -58,29 +76,30 @@ export const getDocumentTypeForAddressChange = ({
     'postalCode',
   ];
 
-  const isAddressChange = Object.keys(initialDiff).some(field =>
+  const isAddressChange: boolean = Object.keys(initialDiff).some(field =>
     addressFields.includes(field),
   );
-  const isPhoneChange = !!initialDiff.phone;
-  const isEmailChange = newData.email && newData.email !== oldData.email;
+  const isPhoneChange: boolean = !!initialDiff['phone'];
+  const isEmailChange: boolean =
+    newData['email'] && newData['email'] !== oldData['email'];
 
   if (isEmailChange) {
-    documentType = NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
+    return NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
       e => e.eventCode === 'NOCE',
     );
   } else if (isAddressChange && !isPhoneChange) {
-    documentType = NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
+    return NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
       e => e.eventCode === 'NCA',
     );
   } else if (isPhoneChange && !isAddressChange) {
-    documentType = NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
+    return NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
       e => e.eventCode === 'NCP',
     );
   } else if (isAddressChange && isPhoneChange) {
-    documentType = NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
+    return NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
       e => e.eventCode === 'NCAP',
     );
   }
 
-  return documentType;
+  return;
 };
