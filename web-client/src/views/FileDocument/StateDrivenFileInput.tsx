@@ -6,10 +6,15 @@ import {
   genericOnValidationErrorHandler,
   validateFileOnSelect,
 } from '@web-client/views/FileHandlingHelpers/fileValidation';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
+
+const props = cerebralProps as unknown as {
+  updateFormValueSequence: string;
+  validationSequence: string;
+};
 
 type StateDriveFileInputProps = {
   'aria-describedby': string;
@@ -29,8 +34,12 @@ const deps = {
   setIsLoadingSequence: sequences.setIsLoadingSequence,
   setIsNotLoadingSequence: sequences.setIsNotLoadingSequence,
   showFileUploadErrorModalSequence: sequences.showFileUploadErrorModalSequence,
-  updateFormValueSequence: sequences[props.updateFormValueSequence],
-  validationSequence: sequences[props.validationSequence],
+  updateFormValueSequence: sequences[props.updateFormValueSequence] as (props: {
+    key: string;
+    property?: string;
+    value: any;
+  }) => void,
+  validationSequence: sequences[props.validationSequence] as () => void,
 };
 
 export const StateDrivenFileInput = connect<
@@ -57,7 +66,8 @@ export const StateDrivenFileInput = connect<
   }) {
     let inputRef;
 
-    const fileOnForm = file || form[fileInputName] || form.existingFileName;
+    const fileOnForm: File | string =
+      file || form[fileInputName] || form.existingFileName;
 
     // Setting the filename here so that we can display it before validation
     // finishes, otherwise a slow machine might have slight lag and allow the user
@@ -144,7 +154,7 @@ export const StateDrivenFileInput = connect<
             </span>
             <span className="mr-1">
               {fileOnForm
-                ? fileOnForm.name || form.existingFileName
+                ? (fileOnForm as File).name || (form.existingFileName as string)
                 : selectedFilename}
             </span>
             <Button
