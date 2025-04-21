@@ -15,7 +15,9 @@ export const submitPublicOrderAdvancedSearchAction = async ({
   get,
   store,
 }: ActionProps<{}, ClientPublicApplicationContext>) => {
-  const searchParams = clone(get(state.advancedSearchForm.orderSearch));
+  const searchParams: { docketNumber: string } = clone(
+    get(state.advancedSearchForm.orderSearch),
+  );
 
   if (searchParams.docketNumber) {
     searchParams.docketNumber = trimDocketNumberSearch(
@@ -32,7 +34,8 @@ export const submitPublicOrderAdvancedSearchAction = async ({
       });
     return { searchResults };
   } catch (err: any) {
-    if (err.responseCode === 429) {
+    const ERROR: { responseCode: number } = err;
+    if (ERROR.responseCode === 429) {
       store.set(state.alertError, applicationContext.getConstants().ERROR_429);
       return { searchResults: [] };
     } else {
