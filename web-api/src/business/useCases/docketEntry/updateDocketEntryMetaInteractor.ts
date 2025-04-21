@@ -20,9 +20,9 @@ export const updateDocketEntryMeta = async (
   {
     docketEntryMeta,
     docketNumber,
-  }: { docketEntryMeta: any; docketNumber: string },
+  }: { docketEntryMeta: Partial<RawDocketEntry>; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawCase> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
@@ -93,18 +93,18 @@ export const updateDocketEntryMeta = async (
     servedPartiesCode: docketEntryMeta.servedPartiesCode,
     serviceDate: docketEntryMeta.serviceDate,
     trialLocation: docketEntryMeta.trialLocation,
-  };
+  } as const;
 
   const servedAtUpdated =
     editableFields.servedAt &&
     editableFields.servedAt !== originalDocketEntry.servedAt;
   const filingDateUpdated: boolean =
-    editableFields.filingDate &&
+    !!editableFields.filingDate &&
     editableFields.filingDate !== originalDocketEntry.filingDate;
 
   const entryRequiresCoverSheet =
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
-      editableFields.eventCode,
+      editableFields.eventCode as string,
     );
   const originalEntryRequiresCoversheet =
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(

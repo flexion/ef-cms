@@ -14,7 +14,7 @@ export const updateDocketEntryMetaAction = async ({
   path,
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
-  const docketRecordEntry = get(state.form);
+  const docketRecordEntry: Partial<RawDocketEntry> = get(state.form);
 
   try {
     await applicationContext
@@ -23,11 +23,13 @@ export const updateDocketEntryMetaAction = async ({
         docketEntryMeta: docketRecordEntry,
         docketNumber,
       });
+
     return path.success();
-  } catch (err) {
+  } catch (err: any) {
+    const ERROR: Error = err;
     return path.error({
       alertError: {
-        message: err.message,
+        message: ERROR.message,
         title: 'Error',
         scrollToErrorNotification: true,
       },
