@@ -1,11 +1,11 @@
+import { DOCKET_NUMBER_SUFFIXES } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const trimDocketNumberSearch = (applicationContext, searchTerm = '') => {
+export const trimDocketNumberSearch = (searchTerm: string = ''): string => {
   if (searchTerm === '') {
     return '';
   }
 
-  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
   const suffixes = Object.values(DOCKET_NUMBER_SUFFIXES).join('|');
   const docketNumberMatcher = new RegExp(
     `^(\\d{3,6}-\\d{2})(${suffixes})?$`,
@@ -23,12 +23,9 @@ export const trimDocketNumberSearch = (applicationContext, searchTerm = '') => {
  * @param {object} providers.get the cerebral get function used for getting state.header.searchTerm
  * @returns {object} the docketNumber provided in the search term
  */
-export const setDocketNumberFromSearchAction = ({
-  applicationContext,
-  get,
-}: ActionProps) => {
+export const setDocketNumberFromSearchAction = ({ get }: ActionProps) => {
   const searchTerm = get(state.header.searchTerm);
-  const docketNumber = trimDocketNumberSearch(applicationContext, searchTerm);
+  const docketNumber = trimDocketNumberSearch(searchTerm);
   return {
     docketNumber,
   };

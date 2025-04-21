@@ -16,11 +16,13 @@ export const submitPublicOpinionAdvancedSearchAction = async ({
   get,
   store,
 }: ActionProps<{}, ClientPublicApplicationContext>) => {
-  const searchParams = clone(get(state.advancedSearchForm.opinionSearch));
+  const searchParams: {
+    docketNumber: string;
+    opinionTypes: { [key: string]: boolean }[];
+  } = clone(get(state.advancedSearchForm.opinionSearch));
 
   if (searchParams.docketNumber) {
     searchParams.docketNumber = trimDocketNumberSearch(
-      applicationContext,
       searchParams.docketNumber,
     );
   }
@@ -41,11 +43,12 @@ export const submitPublicOpinionAdvancedSearchAction = async ({
 
     return { searchResults };
   } catch (err: any) {
-    if (err.responseCode === 429) {
+    const ERROR: Error | { responseCode: number } = err;
+    if ('responseCode' in ERROR && ERROR.responseCode === 429) {
       store.set(state.alertError, applicationContext.getConstants().ERROR_429);
       return { searchResults: [] };
     } else {
-      throw err;
+      throw ERROR;
     }
   }
 };

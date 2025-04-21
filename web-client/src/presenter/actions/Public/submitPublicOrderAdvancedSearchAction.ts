@@ -21,7 +21,6 @@ export const submitPublicOrderAdvancedSearchAction = async ({
 
   if (searchParams.docketNumber) {
     searchParams.docketNumber = trimDocketNumberSearch(
-      applicationContext,
       searchParams.docketNumber,
     );
   }

@@ -618,7 +618,7 @@ tryCatchDecorator(allUseCases);
 const appConstants = deepFreeze({
   ...getConstants(),
   ERROR_429,
-}) as ReturnType<typeof getConstants>;
+}) as ReturnType<typeof getConstants> & { ERROR_429: typeof ERROR_429 };
 
 const applicationContext = {
   convertBlobToUInt8Array: async blob => {

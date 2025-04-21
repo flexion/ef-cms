@@ -8,13 +8,9 @@ import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
  * @param {object} providers.get the cerebral get function
  * @returns {object} the docketNumber provided in the search term
  */
-export const setDocketNumberFromModalSearchAction = ({
-  applicationContext,
-  get,
-}: ActionProps) => {
+export const setDocketNumberFromModalSearchAction = ({ get }: ActionProps) => {
   const searchTerm = get(state.modal.searchTerm);
-  const docketNumber =
-    searchTerm && trimDocketNumberSearch(applicationContext, searchTerm);
+  const docketNumber = searchTerm && trimDocketNumberSearch(searchTerm);
   return {
     docketNumber,
   };

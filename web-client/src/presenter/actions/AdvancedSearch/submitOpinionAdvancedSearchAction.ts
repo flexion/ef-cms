@@ -18,7 +18,6 @@ export const submitOpinionAdvancedSearchAction = async ({
 
   if (searchParams.docketNumber) {
     searchParams.docketNumber = trimDocketNumberSearch(
-      applicationContext,
       searchParams.docketNumber,
     );
   }

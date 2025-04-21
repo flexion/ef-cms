@@ -9,13 +9,12 @@ import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
  * @returns {object} the docketNumber provided in the search form
  */
 export const setDocketNumberFromAdvancedSearchAction = ({
-  applicationContext,
   get,
 }: ActionProps) => {
   const searchTerm = get(
     state.advancedSearchForm.caseSearchByDocketNumber.docketNumber,
   );
-  const docketNumber = trimDocketNumberSearch(applicationContext, searchTerm);
+  const docketNumber = trimDocketNumberSearch(searchTerm);
   return {
     docketNumber,
   };
