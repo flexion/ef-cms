@@ -1,3 +1,4 @@
+import { RawPublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
 import { get } from './requests';
 import { omit } from 'lodash';
 
@@ -12,7 +13,7 @@ import { omit } from 'lodash';
 export const opinionPublicSearchInteractor = (
   applicationContext,
   { searchParams },
-) => {
+): Promise<RawPublicDocumentSearchResult[]> => {
   const opinionTypesQuery = searchParams.opinionTypes.join(',');
 
   return get({
