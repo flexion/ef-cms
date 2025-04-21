@@ -16,4 +16,4 @@ export const getUniqueId = (): string => {
 export const ERROR_429 = {
   message: 'Please wait 1 minute before trying your search again',
   title: 'Search is experiencing high traffic',
-};
+} as const;

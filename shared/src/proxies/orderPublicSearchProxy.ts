@@ -1,3 +1,4 @@
+import { RawPublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
 import { get } from './requests';
 
 /**
@@ -11,7 +12,7 @@ import { get } from './requests';
 export const orderPublicSearchInteractor = (
   applicationContext,
   { searchParams },
-) => {
+): Promise<RawPublicDocumentSearchResult[]> => {
   return get({
     applicationContext,
     endpoint: '/public-api/order-search',

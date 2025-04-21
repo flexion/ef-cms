@@ -7,7 +7,7 @@
 export const openPractitionerDocumentDownloadUrlAction = async ({
   applicationContext,
   props,
-}: ActionProps) => {
+}: ActionProps<{ barNumber: string; practitionerDocumentFileId: string }>) => {
   const { barNumber, practitionerDocumentFileId } = props;
 
   try {
@@ -19,7 +19,8 @@ export const openPractitionerDocumentDownloadUrlAction = async ({
       });
 
     applicationContext.getUtilities().openUrlInNewTab({ url });
-  } catch (err) {
-    throw new Error(`Unable to open document. ${err.message}`);
+  } catch (_err: any) {
+    const ERROR: Error = _err;
+    throw new Error(`Unable to open document. ${ERROR.message}`);
   }
 };

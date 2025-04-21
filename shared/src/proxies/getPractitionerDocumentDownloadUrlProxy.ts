@@ -13,7 +13,7 @@ import { get } from './requests';
 export const getPractitionerDocumentDownloadUrlInteractor = (
   applicationContext,
   { barNumber, practitionerDocumentFileId },
-) => {
+): Promise<{ url: string }> => {
   return get({
     applicationContext,
     endpoint: `/practitioner-documents/${barNumber}/${practitionerDocumentFileId}/document-download-url`,

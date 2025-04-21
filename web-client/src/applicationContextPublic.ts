@@ -132,7 +132,7 @@ const allUseCases = {
 };
 tryCatchDecorator(allUseCases);
 
-const frozenConstants = deepFreeze({
+const unfrozenConstants = {
   ADVANCED_SEARCH_OPINION_TYPES,
   ADVANCED_SEARCH_OPINION_TYPES_LIST,
   ADVANCED_SEARCH_TABS,
@@ -165,7 +165,11 @@ const frozenConstants = deepFreeze({
   US_STATES,
   US_STATES_OTHER,
   USER_ROLES: ROLES,
-});
+} as const;
+
+const frozenConstants = deepFreeze(
+  unfrozenConstants,
+) as typeof unfrozenConstants;
 
 let forceRefreshCallback: () => {};
 

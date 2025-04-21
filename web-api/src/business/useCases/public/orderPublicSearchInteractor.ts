@@ -1,13 +1,13 @@
-import { DocumentSearch } from '../../../../../shared/src/business/entities/documents/DocumentSearch';
-import {
-  FORMATS,
-  formatNow,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import {
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { PublicDocumentSearchResult } from '../../../../../shared/src/business/entities/documents/PublicDocumentSearchResult';
+} from '@shared/business/entities/EntityConstants';
+import {
+  PublicDocumentSearchResult,
+  RawPublicDocumentSearchResult,
+} from '@shared/business/entities/documents/PublicDocumentSearchResult';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { omit } from 'lodash';
 
@@ -30,7 +30,7 @@ export const orderPublicSearchInteractor = async (
     keyword: string;
     startDate: string;
   },
-) => {
+): Promise<RawPublicDocumentSearchResult[]> => {
   const orderSearch = new DocumentSearch({
     caseTitleOrPetitioner,
     dateRange,
