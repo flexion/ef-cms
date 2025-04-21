@@ -9,7 +9,7 @@ export const openCaseDocumentDownloadUrlAction = async ({
   docketNumber: string;
   isForIFrame?: boolean;
   isPublic?: boolean;
-  useSameTab: boolean;
+  useSameTab?: boolean;
 }>) => {
   const {
     docketEntryId,
