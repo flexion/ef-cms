@@ -4,7 +4,13 @@ export const openCaseDocumentDownloadUrlAction = async ({
   applicationContext,
   props,
   store,
-}: ActionProps) => {
+}: ActionProps<{
+  docketEntryId: string;
+  docketNumber: string;
+  isForIFrame?: boolean;
+  isPublic?: boolean;
+  useSameTab: boolean;
+}>) => {
   const {
     docketEntryId,
     docketNumber,
@@ -13,7 +19,7 @@ export const openCaseDocumentDownloadUrlAction = async ({
     useSameTab,
   } = props;
 
-  let url;
+  let url: string;
   try {
     ({ url } = await applicationContext
       .getUseCases()
@@ -22,8 +28,9 @@ export const openCaseDocumentDownloadUrlAction = async ({
         isPublic,
         key: docketEntryId,
       }));
-  } catch (err) {
-    throw new Error(`Unable to open document. ${err.message}`);
+  } catch (err: any) {
+    const ERROR: Error = err;
+    throw new Error(`Unable to open document. ${ERROR.message}`);
   }
 
   if (!isForIFrame && !useSameTab) {
