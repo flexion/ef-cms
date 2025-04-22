@@ -14,7 +14,16 @@ export const submitOrderAdvancedSearchAction = async ({
   get,
   store,
 }: ActionProps) => {
-  const searchParams = clone(get(state.advancedSearchForm.orderSearch));
+  const searchParams = clone<{
+    caseTitleOrPetitioner: string;
+    dateRange: string;
+    docketNumber: string;
+    endDate: string;
+    from: string;
+    judge: string;
+    keyword: string;
+    startDate: string;
+  }>(get(state.advancedSearchForm.orderSearch));
 
   if (searchParams.docketNumber) {
     searchParams.docketNumber = trimDocketNumberSearch(
@@ -30,11 +39,12 @@ export const submitOrderAdvancedSearchAction = async ({
       });
     return { searchResults };
   } catch (err: any) {
-    if (err.responseCode === 429) {
+    const ERROR: { responseCode: number } = err;
+    if (ERROR.responseCode === 429) {
       store.set(state.alertError, applicationContext.getConstants().ERROR_429);
       return { searchResults: [] };
     } else {
-      throw err;
+      throw ERROR;
     }
   }
 };

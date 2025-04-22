@@ -1,3 +1,4 @@
+import { RawInternalDocumentSearchResult } from '@shared/business/entities/documents/InternalDocumentSearchResult';
 import { get } from './requests';
 
 /**
@@ -11,7 +12,7 @@ import { get } from './requests';
 export const orderAdvancedSearchInteractor = (
   applicationContext,
   { searchParams },
-) => {
+): Promise<RawInternalDocumentSearchResult[]> => {
   return get({
     applicationContext,
     endpoint: '/case-documents/order-search',

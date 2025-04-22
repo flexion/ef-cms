@@ -1,6 +1,9 @@
 import { DocumentSearch } from '../../business/entities/documents/DocumentSearch';
 import { FORMATS, formatNow } from '../../business/utilities/DateHandler';
-import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
+import {
+  InternalDocumentSearchResult,
+  RawInternalDocumentSearchResult,
+} from '../entities/documents/InternalDocumentSearchResult';
 import {
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
@@ -38,7 +41,7 @@ export const orderAdvancedSearchInteractor = async (
     startDate: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawInternalDocumentSearchResult[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
     throw new UnauthorizedError('Unauthorized');
   }
