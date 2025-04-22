@@ -14,7 +14,7 @@ export const strikeDocketEntryAction = async ({
   path,
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
-  const { docketEntryId } = get(state.form);
+  const { docketEntryId } = get(state.form) as { docketEntryId: string };
 
   try {
     await applicationContext
@@ -23,15 +23,17 @@ export const strikeDocketEntryAction = async ({
         docketEntryId,
         docketNumber,
       });
+
     return path.success({
       alertSuccess: {
         message: 'Docket entry has been stricken.',
       },
     });
-  } catch (err) {
+  } catch (err: any) {
+    const ERROR: Error = err;
     return path.error({
       alertError: {
-        message: err.message,
+        message: ERROR.message,
         title: 'Error',
       },
     });

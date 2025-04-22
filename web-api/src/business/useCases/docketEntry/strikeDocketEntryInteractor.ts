@@ -12,9 +12,12 @@ export const strikeDocketEntryInteractor = async (
   {
     docketEntryId,
     docketNumber,
-  }: { docketEntryId: string; docketNumber: string },
+  }: {
+    docketEntryId: string;
+    docketNumber: string;
+  },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawCase> => {
   const hasPermission = isAuthorized(
     authorizedUser,
     ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY,

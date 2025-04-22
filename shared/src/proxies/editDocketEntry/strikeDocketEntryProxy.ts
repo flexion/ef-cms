@@ -11,8 +11,14 @@ import { put } from '../requests';
  */
 export const strikeDocketEntryInteractor = (
   applicationContext,
-  { docketEntryId, docketNumber },
-) => {
+  {
+    docketEntryId,
+    docketNumber,
+  }: {
+    docketEntryId: string;
+    docketNumber: string;
+  },
+): Promise<RawCase> => {
   return put({
     applicationContext,
     endpoint: `/case-documents/${docketNumber}/${docketEntryId}/strike`,
