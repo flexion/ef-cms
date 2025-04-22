@@ -5,7 +5,13 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const updateCaseModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  caseStatusOptions: string[];
+  showAssociatedJudgeOptions;
+  showCalendaredAlert;
+  showCaseStatusDropdown;
+  showNewStatusOption;
+} => {
   const caseDetail = get(state.caseDetail);
   const {
     STATUS_TYPES,

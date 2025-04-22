@@ -17,12 +17,11 @@ export const docketClerkUpdatesCaseStatusTo = (
 
     await cerebralTest.runSequence('openUpdateCaseModalSequence');
 
-    const updateCaseModalHelper = runCompute(
-      withAppContextDecorator(updateCaseModalHelperComputed) as any,
-      {
-        state: cerebralTest.getState(),
-      },
-    );
+    const updateCaseModalHelper = runCompute<
+      ReturnType<typeof updateCaseModalHelperComputed>
+    >(withAppContextDecorator(updateCaseModalHelperComputed) as any, {
+      state: cerebralTest.getState(),
+    });
 
     expect(updateCaseModalHelper.caseStatusOptions).toContain(
       caseStatusToUpdateTo,
