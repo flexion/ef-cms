@@ -1,6 +1,6 @@
 import { DocumentSearch } from '../../business/entities/documents/DocumentSearch';
 import { FORMATS, formatNow } from '../utilities/DateHandler';
-import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
+import { InternalDocumentSearchResult, RawInternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
 import { MAX_SEARCH_RESULTS } from '../../business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
@@ -33,7 +33,7 @@ export const opinionAdvancedSearchInteractor = async (
     startDate: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawInternalDocumentSearchResult[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
     throw new UnauthorizedError('Unauthorized');
   }

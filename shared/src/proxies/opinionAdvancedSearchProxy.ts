@@ -1,3 +1,4 @@
+import { RawInternalDocumentSearchResult } from '@shared/business/entities/documents/InternalDocumentSearchResult';
 import { get } from './requests';
 import { omit } from 'lodash';
 
@@ -11,8 +12,21 @@ import { omit } from 'lodash';
  */
 export const opinionAdvancedSearchInteractor = (
   applicationContext,
-  { searchParams },
-) => {
+  {
+    searchParams,
+  }: {
+    searchParams: {
+      caseTitleOrPetitioner: string;
+      dateRange: string;
+      docketNumber: string;
+      endDate: string;
+      judge: string;
+      keyword: string;
+      opinionTypes: string[];
+      startDate: string;
+    };
+  },
+): Promise<RawInternalDocumentSearchResult[]> => {
   const opinionTypesQuery = searchParams.opinionTypes.join(',');
 
   return get({
