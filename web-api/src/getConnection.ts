@@ -6,16 +6,25 @@ import { environment } from './environment';
 import fs from 'fs';
 
 let dbInstance: Promise<Kysely<Database>> | null = null;
+let lastTokenTime: number | null = null;
+
+// how to test???
 export async function getConnection<T>({
   cb,
 }: {
-  cb: (r: Kysely<Database>) => T;
+  cb: (r: Kysely<Database>) => T | Promise<T>;
 }): Promise<T> {
-  if (!dbInstance) {
+  const now = Date.now();
+  const tokenTooOld =
+    lastTokenTime === null || now - lastTokenTime > 14 * 60 * 1000; // 14 minutes vs. 15 min token expiration
+
+  if (!dbInstance || tokenTooOld) {
     dbInstance = establishConnection();
+    lastTokenTime = now;
   }
-  const awaitedInstance = await dbInstance;
-  return await cb(awaitedInstance);
+
+  const awaited = await dbInstance;
+  return cb(awaited);
 }
 
 async function establishConnection(): Promise<Kysely<Database>> {
