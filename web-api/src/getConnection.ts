@@ -6,36 +6,61 @@ import { environment } from './environment';
 import fs from 'fs';
 
 let dbInstance: Promise<Kysely<Database>> | null = null;
+let currentPgPool: Pool | null = null;
+
 export async function getConnection<T>({
   cb,
 }: {
-  cb: (r: Kysely<Database>) => T;
+  cb: (r: Kysely<Database>) => T | Promise<T>;
 }): Promise<T> {
-  if (!dbInstance) {
+  const isHealthy = currentPgPool
+    ? await isConnectionAlive(currentPgPool)
+    : false;
+
+  if (!dbInstance || !isHealthy) {
     dbInstance = establishConnection();
   }
+
   const awaitedInstance = await dbInstance;
   return await cb(awaitedInstance);
 }
 
 async function establishConnection(): Promise<Kysely<Database>> {
   const token = await getToken();
-  return connect({
+
+  const poolConfig = {
     ...getPool(),
     password: token,
-  });
-}
+  };
 
-export function connect(pool) {
+  const pgPool = new Pool(poolConfig);
+  currentPgPool = pgPool;
+
   return new Kysely<Database>({
-    dialect: new PostgresDialect({
-      pool: new Pool({ ...pool }),
-    }),
+    dialect: new PostgresDialect({ pool: pgPool }),
     plugins: [new CamelCasePlugin()],
   });
 }
 
-async function generateRDSAuthToken() {
+async function isConnectionAlive(pool: Pool): Promise<boolean> {
+  let client;
+  try {
+    client = await pool.connect();
+
+    const connected = (client as any)._connected;
+    const ending = (client as any)._ending;
+
+    return connected && !ending;
+  } catch (err) {
+    return false;
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
+}
+
+async function generateRDSAuthToken(): Promise<string> {
   const signer = new Signer({
     hostname: environment.rds.pool.host,
     port: 5432,
@@ -43,17 +68,14 @@ async function generateRDSAuthToken() {
     username: environment.rds.pool.user,
   });
 
-  const token = await signer.getAuthToken();
-
-  return token;
+  return signer.getAuthToken();
 }
 
-async function getToken() {
+async function getToken(): Promise<string> {
   if (environment.nodeEnv !== 'production') {
     return environment.rds.pool.password;
   }
-
-  return await generateRDSAuthToken();
+  return generateRDSAuthToken();
 }
 
 let pool: PoolConfig;
