@@ -1,6 +1,6 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { ALLOWLIST_FEATURE_FLAGS_POSTGRES } from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -9,6 +9,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const getDownloadPolicyUrlInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -19,12 +20,10 @@ export const getDownloadPolicyUrlInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseData = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseData = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   if (!caseData.docketNumber && !caseData.entityName) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
@@ -58,11 +57,12 @@ export const getDownloadPolicyUrlInteractor = async (
 
     const featureFlags = await applicationContext
       .getUseCases()
-      .getAllFeatureFlagsInteractor(applicationContext);
+      .getAllFeatureFlagsFromPostgresInteractor(applicationContext);
 
     const documentVisibilityChangeDate =
       featureFlags[
-        ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+        ALLOWLIST_FEATURE_FLAGS_POSTGRES.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE
+          .key
       ];
 
     if (

@@ -1,8 +1,12 @@
-import { NewFeatureFlagKysely } from '@web-api/database-types';
+import { NewFeatureFlagTableKysely } from '@web-api/persistence/postgres/featureFlag/schema';
 
-export const featureFlags: NewFeatureFlagKysely[] = [
+export const featureFlags: NewFeatureFlagTableKysely[] = [
   {
     name: 'chief-judge-name',
     value: { current: 'Maurice B. Foley' },
+  },
+  {
+    name: 'document-visibility-policy-change-date',
+    value: { current: '2023-05-01' },
   },
 ];

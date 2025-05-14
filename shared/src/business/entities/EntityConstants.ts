@@ -87,9 +87,6 @@ export const PARTY_VIEW_TABS = {
 };
 
 export const ALLOWLIST_FEATURE_FLAGS = {
-  DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE: {
-    key: 'document-visibility-policy-change-date',
-  },
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
@@ -110,6 +107,9 @@ export const ALLOWLIST_FEATURE_FLAGS_POSTGRES = {
   CHIEF_JUDGE_NAME: {
     key: 'chief-judge-name',
   },
+  DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE: {
+    key: 'document-visibility-policy-change-date',
+  },
 };
 
 type PostgresFeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS_POSTGRES;
@@ -128,7 +128,7 @@ export const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
   SI_PAPER: 'Paper',
-};
+} as const;
 
 export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',
@@ -1205,7 +1205,7 @@ export const ALL_STATE_OPTIONS = {
   Other: 'Other',
 };
 
-export type AbbrevatedStates =
+export type AbbreviatedStates =
   | keyof typeof US_STATES
   | keyof typeof US_STATES_OTHER;
 
@@ -1809,6 +1809,9 @@ export const TROUBLESHOOTING_INFO = {
   FILE_UPLOAD_TROUBLESHOOTING_LINK:
     'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };
+
+export const MAX_NUMBER_DEFICIENCY_STATISTICS = 12;
+export const MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES = 10;
 
 export const MOTION_ORDER_RESPONSE_OPTIONS = {
   issueOrderOptions: {
