@@ -8,24 +8,54 @@ export type PdfGenerationResult = {
 };
 
 export const handler = async event => {
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY_MS = 100;
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
   let browser: Browser;
+
   console.log('PDF Investigation: About to get chromium browser');
   logLambdaStats();
-  try {
-    browser = await getChromiumBrowser();
-  } catch (err) {
-    console.log('PDF Investigation: launch error');
-    logLambdaStats();
-    throw err;
+
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      console.log(
+        `PDF Investigation: Attempt ${attempt} to get chromium browser`,
+      );
+      logLambdaStats();
+
+      browser = await getChromiumBrowser();
+
+      console.log(
+        `PDF Investigation: chromium browser launched on attempt ${attempt}`,
+      );
+      break;
+    } catch (err) {
+      console.error(
+        `PDF Investigation: attempt ${attempt} failed with error:`,
+        err,
+      );
+
+      logLambdaStats();
+      if (attempt < MAX_RETRIES) {
+        console.log(
+          `PDF Investigation: Retrying after ${RETRY_DELAY_MS * Math.pow(2, attempt - 1)}ms`,
+        );
+        await delay(RETRY_DELAY_MS * Math.pow(2, attempt - 1));
+      } else {
+        throw new Error('Failed to launch chromium after multiple attempts.');
+      }
+    }
   }
+
   logLambdaStats();
   console.log('PDF Investigation: About to generate pdf from html');
 
   const results = await applicationContext
     .getUseCaseHelpers()
-    .generatePdfFromHtmlHelper(applicationContext, event, browser);
+    .generatePdfFromHtmlHelper(applicationContext, event, browser!);
 
-  const pages = await browser.pages();
+  const pages = await browser!.pages();
   await Promise.all(pages.map(p => p.close()));
 
   console.log(
