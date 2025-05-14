@@ -12,7 +12,7 @@ export const handler = async event => {
   const RETRY_DELAY_MS = 100;
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-  let browser: Browser;
+  let browser: Browser | null = null;
 
   console.log('PDF Investigation: About to get chromium browser');
   logLambdaStats();
@@ -36,16 +36,16 @@ export const handler = async event => {
         err,
       );
 
+      browser = null;
+
       logLambdaStats();
-      if (attempt < MAX_RETRIES) {
-        console.log(
-          `PDF Investigation: Retrying after ${RETRY_DELAY_MS * Math.pow(2, attempt - 1)}ms`,
-        );
-        await delay(RETRY_DELAY_MS * Math.pow(2, attempt - 1));
-      } else {
-        throw new Error('Failed to launch chromium after multiple attempts.');
-      }
+
+      await delay(RETRY_DELAY_MS * Math.pow(2, attempt - 1));
     }
+  }
+
+  if (!browser) {
+    throw new Error('Failed to launch chromium after multiple attempts.');
   }
 
   logLambdaStats();
@@ -53,9 +53,9 @@ export const handler = async event => {
 
   const results = await applicationContext
     .getUseCaseHelpers()
-    .generatePdfFromHtmlHelper(applicationContext, event, browser!);
+    .generatePdfFromHtmlHelper(applicationContext, event, browser);
 
-  const pages = await browser!.pages();
+  const pages = await browser.pages();
   await Promise.all(pages.map(p => p.close()));
 
   console.log(
@@ -75,29 +75,4 @@ export const handler = async event => {
   });
 
   return { tempId };
-};
-
-export const changeOfAddressHandler = async event => {
-  const { Records } = event;
-  const { body } = Records[0];
-  const eventBody = JSON.parse(body);
-
-  applicationContext.logger.info(
-    `processing job "change-of-address-job|${eventBody.jobId}", task for case ${eventBody.docketNumber}`,
-  );
-
-  await applicationContext.getUseCaseHelpers().generateChangeOfAddressHelper({
-    applicationContext,
-    authorizedUser: eventBody.requestUser,
-    bypassDocketEntry: eventBody.bypassDocketEntry,
-    contactInfo: eventBody.contactInfo,
-    docketNumber: eventBody.docketNumber,
-    firmName: eventBody.firmName,
-    jobId: eventBody.jobId,
-    requestUserId: eventBody.requestUserId,
-    updatedEmail: eventBody.updatedEmail,
-    updatedName: eventBody.updatedName,
-    user: eventBody.user,
-    websocketMessagePrefix: eventBody.websocketMessagePrefix,
-  });
 };
