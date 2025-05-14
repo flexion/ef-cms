@@ -345,6 +345,10 @@ jobs:
             if [ "$MIGRATE_FLAG" == "true" ]; then
               ./web-api/enable-deploying-dynamo-stream-trigger.sh
             fi
+      - run:
+          name: migrate Feature flags from dynamo to postgres
+          command: |
+            ./scripts/run-once-scripts/migrate-feature-flags-dynamo-to-postgres.ts
 
   disable-reindex-cron:
     docker:
