@@ -177,8 +177,10 @@ module "api-east-green" {
   prod_env_account_id  = var.prod_env_account_id
 
   # lambda to handle bounced service email notifications
-  create_bounce_handler = 1
+  create_bounce_handler    = 1
+  route_53_regional_weight = 100
 }
+
 module "api-west-green" {
   source              = "../../modules/api"
   lambda_role_arn     = module.lambda_role_green.role_arn
@@ -217,7 +219,8 @@ module "api-west-green" {
   prod_env_account_id  = var.prod_env_account_id
 
   # lambda to handle bounced service email notifications
-  create_bounce_handler = 0
+  create_bounce_handler    = 0
+  route_53_regional_weight = 0
 }
 
 module "worker-east-green" {
