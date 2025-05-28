@@ -1,5 +1,41 @@
-import { createReadStream, writeFileSync } from 'fs';
+import { getDbReader } from '@web-api/database';
+import { createReadStream, readFileSync, writeFileSync } from 'fs';
 import readline from 'readline';
+
+function getCaseDeadlinesInDynamo() {
+  const ids: string[] = [];
+
+  const rl = readline.createInterface({
+    input: createReadStream('/Users/jimbo/Documents/allDynamoRecords.txt'),
+    crlfDelay: Infinity,
+  });
+
+  rl.on('line', line => {
+    const obj = JSON.parse(line);
+    if (obj.sk.startsWith('case-deadline')) {
+      ids.push(obj.caseDeadlineId);
+    }
+  });
+
+  rl.on('close', () => {
+    console.log('Done!');
+    writeFileSync('./caseDeadlineIds.json', JSON.stringify(ids));
+  });
+}
+
+async function getCaseDeadlineIdsNotInPostgres() {
+  const dynamoIds = JSON.parse(readFileSync('./caseDeadlineIds.json', 'utf-8'));
+  const postgresIds = (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwCaseDeadline')
+        .select('caseDeadlineId')
+        .where('caseDeadlineId', 'not in', dynamoIds)
+        .execute(),
+    )
+  ).map(cd => cd.caseDeadlineId);
+  console.log(postgresIds);
+}
 
 const objectsThatShouldNotBeInDynamo = [
   {
