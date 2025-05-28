@@ -1,71 +1,76 @@
 import { createReadStream, writeFileSync } from 'fs';
 import readline from 'readline';
 
-const objectsThatShouldNotBeInDynamo = [
-  {
-    pk: 'case',
-    sk: 'correspondence',
-  },
-  {
-    pk: 'case',
-    sk: 'case-deadline',
-  },
-  // We did not delete pk case-deadline at all.
-  // This should have no effect in app code, but it is best to remove anyhow.
-  {
-    pk: 'case-deadline',
-    sk: 'case-deadline',
-  },
-  {
-    pk: 'user-case-note',
-    sk: 'user',
-  },
-  {
-    pk: 'case',
-    sk: 'case-worksheet',
-  },
-  {
-    pk: 'section-outbox',
-    sk: '',
-  },
-  {
-    pk: 'user-outbox',
-    sk: '',
-  },
-  {
-    pk: 'case',
-    sk: 'work-item',
-  },
-];
-
-const lookupTable = {};
-
-for (const obj of objectsThatShouldNotBeInDynamo) {
-  lookupTable[obj.pk + '|' + obj.sk + '|'] = true;
-}
-
-const uniqueKeysMap: Map<string, number> = new Map();
 const thingsToDelete: any[] = [];
+let scanCount = 0;
 
 const rl = readline.createInterface({
-  input: createReadStream('/Users/jimbo/Documents/allDynamoRecords.txt'),
+  input: createReadStream(
+    '/Users/zacharyrogers/Documents/allTestDynamoRecords.txt',
+  ),
   crlfDelay: Infinity,
 });
 
 rl.on('line', line => {
   const obj = JSON.parse(line);
-  const pkPrefix = obj.pk.split('|')[0] + '|';
-  const skPrefix = obj.pk.split('|')[0] + '|';
-  const lookupKey = pkPrefix + skPrefix;
-  if (lookupTable[lookupKey]) {
-    const currentCount = uniqueKeysMap.get(lookupKey) || 0;
-    uniqueKeysMap.set(lookupKey, currentCount + 1);
+  if (isDeletableDynamoRecord(obj)) {
     thingsToDelete.push(obj);
   }
+  if (scanCount % 100000) {
+    console.log('Scan count: ', scanCount);
+  }
+  scanCount++;
 });
 
 rl.on('close', () => {
   console.log('Done!');
-  console.log(uniqueKeysMap);
-  writeFileSync('./idsOfThingsInDynamo.json', JSON.stringify(thingsToDelete));
+  console.log(`Deleting ${thingsToDelete.length} things`);
+  writeFileSync(
+    './thingsToDeleteInDynamo.json',
+    JSON.stringify(thingsToDelete),
+  );
+  // Delete them
 });
+
+function isDeletableDynamoRecord(obj) {
+  if (isCorrespondence(obj)) {
+    return true;
+  }
+  if (isCaseDeadline(obj)) {
+    return true;
+  }
+  if (isUserCaseNote(obj)) {
+    return true;
+  }
+  if (isCaseWorkSheet(obj)) {
+    return true;
+  }
+  if (isCaseMessage(obj)) {
+    return true;
+  }
+  if (isWorkItem(obj)) {
+    return true;
+  }
+  return false;
+}
+
+function isCorrespondence(obj) {
+  return obj.sk.startsWith('correspondence|');
+}
+function isCaseDeadline(obj) {
+  return obj.sk.startsWith('case-deadline|');
+}
+function isUserCaseNote(obj) {
+  return obj.pk.startsWith('user-case-note|');
+}
+function isCaseWorkSheet(obj) {
+  return obj.sk.startsWith('case-worksheet|');
+}
+function isCaseMessage(obj) {
+  return (
+    obj.pk.startsWith('section-outbox') || obj.pk.startsWith('user-outbox|')
+  );
+}
+function isWorkItem(obj) {
+  return obj.sk.startsWith('work-item|');
+}
