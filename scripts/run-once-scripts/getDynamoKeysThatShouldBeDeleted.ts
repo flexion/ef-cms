@@ -55,10 +55,11 @@ rl.on('line', line => {
   const obj = JSON.parse(line);
   const pkPrefix = obj.pk.split('|')[0] + '|';
   const skPrefix = obj.pk.split('|')[0] + '|';
-  const key = pkPrefix + skPrefix;
-  if (lookupTable[key]) {
-    const currentCount = uniqueKeysMap.get(key) || 0;
-    uniqueKeysMap.set(key, currentCount + 1);
+  const lookupKey = pkPrefix + skPrefix;
+  const loggingKey = obj.pk + '_' + obj.sk;
+  if (lookupTable[lookupKey]) {
+    const currentCount = uniqueKeysMap.get(loggingKey) || 0;
+    uniqueKeysMap.set(loggingKey, currentCount + 1);
   }
 });
 
