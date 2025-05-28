@@ -1,4 +1,4 @@
-import { createReadStream } from 'fs';
+import { createReadStream, writeFileSync } from 'fs';
 import readline from 'readline';
 
 const objectsThatShouldNotBeInDynamo = [
@@ -45,6 +45,7 @@ for (const obj of objectsThatShouldNotBeInDynamo) {
 }
 
 const uniqueKeysMap: Map<string, number> = new Map();
+const ids: string[] = [];
 
 const rl = readline.createInterface({
   input: createReadStream('/Users/jimbo/Documents/allDynamoRecords.txt'),
@@ -56,14 +57,15 @@ rl.on('line', line => {
   const pkPrefix = obj.pk.split('|')[0] + '|';
   const skPrefix = obj.pk.split('|')[0] + '|';
   const lookupKey = pkPrefix + skPrefix;
-  const loggingKey = obj.pk + '_' + obj.sk;
   if (lookupTable[lookupKey]) {
-    const currentCount = uniqueKeysMap.get(loggingKey) || 0;
-    uniqueKeysMap.set(loggingKey, currentCount + 1);
+    const currentCount = uniqueKeysMap.get(lookupKey) || 0;
+    uniqueKeysMap.set(lookupKey, currentCount + 1);
+    ids.push(obj.pk + '_' + obj.sk);
   }
 });
 
 rl.on('close', () => {
   console.log('Done!');
   console.log(uniqueKeysMap);
+  writeFileSync('./idsOfThingsInDynamo.json', JSON.stringify(ids));
 });
