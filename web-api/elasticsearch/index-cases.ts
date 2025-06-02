@@ -32,6 +32,15 @@ export const indexOpenSearchCase = async ({
   for (const caseRecord of cases) {
     // Recommend further optimization so we are not mocking a DynamoDB record after cases are in Postgres
     // Just done this way because bulkIndexRecords expects Dynamo records
+    if (caseRecord.correspondence) {
+      caseRecord.correspondence = [];
+    }
+    if (caseRecord.archivedCorrespondences) {
+      caseRecord.archivedCorrespondences = [];
+    }
+    if (caseRecord.hearings) {
+      caseRecord.hearings = [];
+    }
     const marshalledCase = marshall(
       transformNullToUndefined({
         ...caseRecord,

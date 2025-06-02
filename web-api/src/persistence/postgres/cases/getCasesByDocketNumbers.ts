@@ -3,7 +3,7 @@ import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { applicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
 import { NotFoundError } from '@web-api/errors/errors';
-import { getDocketEntryOnCase } from '@web-api/persistence/dynamo/cases/getDocketEntryOnCase';
+// import { getDocketEntryOnCase } from '@web-api/persistence/dynamo/cases/getDocketEntryOnCase';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
@@ -18,7 +18,12 @@ export async function getCasesByDocketNumbers({
   docketNumbers,
 }: {
   docketNumbers: string[];
-}): Promise<Omit<RawCase, 'consolidatedCases'>[]> {
+}): Promise<
+  Omit<
+    RawCase,
+    'consolidatedCases' | 'docketEntries' | 'archivedDocketEntries'
+  >[]
+> {
   if (isEmpty(docketNumbers)) {
     return [];
   }
@@ -36,13 +41,13 @@ async function getAllCaseData({
   const [
     cases,
     practitionerInfo,
-    docketEntriesFromDb,
+    // docketEntriesFromDb,
     caseCorrespondences,
     hearings,
   ] = await Promise.all([
     getCasesMetadata(docketNumbers),
     getPractitioners(docketNumbers, applicationContext),
-    getDocketEntries(docketNumbers, applicationContext),
+    // getDocketEntries(docketNumbers, applicationContext),
     getCaseCorrespondenceByDocketNumber(docketNumbers),
     getHearings(docketNumbers),
   ]);
@@ -63,8 +68,8 @@ async function getAllCaseData({
         docketNumber: c.docketNumber,
         docketNumberSuffix: c.docketNumberSuffix,
       }),
-      docketEntries: [],
-      archivedDocketEntries: [],
+      // docketEntries: [],
+      // archivedDocketEntries: [],
       irsPractitioners: [],
       privatePractitioners: [],
       correspondence: [],
@@ -72,13 +77,13 @@ async function getAllCaseData({
       hearings: [],
     });
   });
-  docketEntriesFromDb.forEach(docketEntryInfo => {
-    const caseInfo = caseMap.get(docketEntryInfo.docketNumber)!;
-    caseMap.set(docketEntryInfo.docketNumber, {
-      ...caseInfo,
-      docketEntries: docketEntryInfo.docketEntries,
-    });
-  });
+  // docketEntriesFromDb.forEach(docketEntryInfo => {
+  //   const caseInfo = caseMap.get(docketEntryInfo.docketNumber)!;
+  //   caseMap.set(docketEntryInfo.docketNumber, {
+  //     ...caseInfo,
+  //     docketEntries: docketEntryInfo.docketEntries,
+  //   });
+  // });
   practitionerInfo.forEach(info => {
     const caseInfo = caseMap.get(info.docketNumber)!;
     caseMap.set(info.docketNumber, {
@@ -115,12 +120,12 @@ function sortCaseFields({
   docketNumbers: string[];
 }): EnrichedCaseRow[] {
   cases.forEach(c => {
-    const [docketEntries, archivedDocketEntries] = partition(
-      c.docketEntries,
-      docketEntry => !docketEntry.archived,
-    );
-    c.docketEntries = sortBy(docketEntries, 'createdAt');
-    c.archivedDocketEntries = sortBy(archivedDocketEntries, 'createdAt');
+    // const [docketEntries, archivedDocketEntries] = partition(
+    //   c.docketEntries,
+    //   docketEntry => !docketEntry.archived,
+    // );
+    // c.docketEntries = sortBy(docketEntries, 'createdAt');
+    // c.archivedDocketEntries = sortBy(archivedDocketEntries, 'createdAt');
 
     const [correspondence, archivedCorrespondences] = partition(
       c.correspondence,
@@ -144,7 +149,7 @@ function sortCaseFields({
 
 function convertDbCaseToRawCase(
   dbCase: EnrichedCaseRow,
-): Omit<RawCase, 'consolidatedCases'> {
+): Omit<RawCase, 'consolidatedCases' | 'docketEntries' | 'archivedDocketEntries'> {
   const appCase = {
     ...fromKyselyCase(dbCase),
     correspondence: dbCase.correspondence.map(cc =>
@@ -202,21 +207,21 @@ async function getPractitioners(
   return practitionerInfo;
 }
 
-async function getDocketEntries(
-  docketNumbers: string[],
-  applicationContext,
-): Promise<{ docketNumber: string; docketEntries: RawDocketEntry[] }[]> {
-  const docketEntryInfo = await Promise.all(
-    docketNumbers.map(async docketNumber => {
-      const docketEntries = await getDocketEntryOnCase({
-        applicationContext,
-        docketNumber,
-      });
-      return { docketNumber, docketEntries };
-    }),
-  );
-  return docketEntryInfo;
-}
+// async function getDocketEntries(
+//   docketNumbers: string[],
+//   applicationContext,
+// ): Promise<{ docketNumber: string; docketEntries: RawDocketEntry[] }[]> {
+//   const docketEntryInfo = await Promise.all(
+//     docketNumbers.map(async docketNumber => {
+//       const docketEntries = await getDocketEntryOnCase({
+//         applicationContext,
+//         docketNumber,
+//       });
+//       return { docketNumber, docketEntries };
+//     }),
+//   );
+//   return docketEntryInfo;
+// }
 
 async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
   const correspondence = await getDbReader(reader =>
@@ -256,8 +261,8 @@ async function getHearings(
 
 type EnrichedCaseRow = CaseKysely & {
   docketNumberWithSuffix: string;
-  docketEntries: RawDocketEntry[];
-  archivedDocketEntries: RawDocketEntry[];
+  // docketEntries: RawDocketEntry[];
+  // archivedDocketEntries: RawDocketEntry[];
   irsPractitioners: RawPractitioner[];
   privatePractitioners: RawPractitioner[];
   correspondence: CaseCorrespondenceKysely[];

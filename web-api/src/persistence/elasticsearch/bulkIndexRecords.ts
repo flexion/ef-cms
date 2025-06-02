@@ -12,11 +12,8 @@ export const bulkIndexRecords = async ({
 }) => {
   const searchClient = applicationContext.getSearchClient();
 
-  const CHUNK_SIZE = 50;
-  const chunkOfRecords = chunk(
-    records,
-    Number(process.env.ES_CHUNK_SIZE) || CHUNK_SIZE,
-  );
+  const CHUNK_SIZE = 100;
+  const chunkOfRecords = chunk(records, CHUNK_SIZE);
 
   const failedRecords = [];
 
@@ -67,14 +64,9 @@ export const bulkIndexRecords = async ({
           body,
           refresh: false,
         });
-        if (response.errors) {
-          response.items.forEach((action, i) => {
-            const operation = Object.keys(action)[0];
-            if (action[operation].error) {
-              const record = body[i * 2 + 1];
-              failedRecords.push(record);
-            }
-          });
+        if (response.body.errors || response.statusCode != 200) {
+          console.error('Failed request: ', response.meta.request);
+          throw new Error('Error indexing records');
         }
       }
     }),
