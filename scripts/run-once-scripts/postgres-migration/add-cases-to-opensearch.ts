@@ -40,7 +40,7 @@ let totalItems = 0;
 
 async function main() {
   let offset = 0;
-  const casesToUpsert = await getCasesToUpsert(offset);
+  let casesToUpsert = await getCasesToUpsert(offset);
 
   while (!isEmpty(casesToUpsert)) {
     const message = {
@@ -52,6 +52,7 @@ async function main() {
     totalItems += casesToUpsert.length;
     console.log(`Total cases upserted so far: ${totalItems}`);
     offset += casePageSize;
+    casesToUpsert = await getCasesToUpsert(offset);
   }
   console.log('Done upserting cases');
 }
