@@ -49,7 +49,7 @@ async function main() {
       timestamp: Date.now(),
     };
     await indexOpenSearchCase({ message });
-    totalItems += casePageSize;
+    totalItems += casesToUpsert.length;
     console.log(`Total cases upserted so far: ${totalItems}`);
     offset += casePageSize;
   }

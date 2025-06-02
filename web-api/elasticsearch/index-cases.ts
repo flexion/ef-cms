@@ -9,8 +9,8 @@ import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRe
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { getLogger } from 'aws-xray-sdk';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
-import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { flattenDeep, isArray } from 'lodash';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const transformOpenSearchCase = (
   caseData: CaseKysely | CaseKysely[],
@@ -24,19 +24,12 @@ export const indexOpenSearchCase = async ({
 }: {
   message: OpenSearchSyncMessage;
 }): Promise<void> => {
-  for (const docketNumber of isArray(message.payload)
+  const docketNumbers = isArray(message.payload)
     ? message.payload
-    : [message.payload]) {
-    const caseRecord = await getCaseMetadataWithCounsel({
-      applicationContext,
-      docketNumber,
-    });
-
-    if (!caseRecord) {
-      getLogger().error(`Could not index case ${docketNumber}: not found!`);
-      continue;
-    }
-
+    : [message.payload];
+  const cases = await getCasesByDocketNumbers({ docketNumbers });
+  const caseRecords: IDynamoDBRecord[] = [];
+  for (const caseRecord of cases) {
     // Recommend further optimization so we are not mocking a DynamoDB record after cases are in Postgres
     // Just done this way because bulkIndexRecords expects Dynamo records
     const marshalledCase = marshall(
@@ -48,7 +41,6 @@ export const indexOpenSearchCase = async ({
       }),
       { removeUndefinedValues: true },
     );
-    const caseRecords: IDynamoDBRecord[] = [];
 
     caseRecords.push({
       dynamodb: {
@@ -83,20 +75,16 @@ export const indexOpenSearchCase = async ({
       },
       eventName: 'MODIFY',
     });
+  }
+  const { failedRecords } = await bulkIndexRecords({
+    applicationContext,
+    records: flattenDeep(caseRecords),
+  });
 
-    const { failedRecords } = await bulkIndexRecords({
-      applicationContext,
-      records: flattenDeep(caseRecords),
+  if (failedRecords.length > 0) {
+    getLogger().error('the case or docket entry records that failed to index', {
+      failedRecords,
     });
-
-    if (failedRecords.length > 0) {
-      getLogger().error(
-        'the case or docket entry records that failed to index',
-        {
-          failedRecords,
-        },
-      );
-      throw new Error('failed to index case entry or docket entry records');
-    }
+    throw new Error('failed to index case entry or docket entry records');
   }
 };
