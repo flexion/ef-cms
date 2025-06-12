@@ -1,8 +1,9 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
-  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 import {
   DOCKET_SECTION,
@@ -21,24 +22,21 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
-import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
-  const deleteCaseTrialSortMappingRecords = jest.mocked(
-    deleteCaseTrialSortMappingRecordsMock,
-  );
 
   const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
   let mockLock;
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  const getUserById = getUserByIdMock as jest.Mock;
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   beforeAll(() => {
     applicationContext
@@ -91,9 +89,7 @@ describe('completeDocketEntryQCInteractor', () => {
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
 
@@ -148,7 +144,7 @@ describe('completeDocketEntryQCInteractor', () => {
     ).resolves.not.toThrow();
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('serves the document for electronic-only parties if a notice of docket change is generated', async () => {
@@ -161,7 +157,7 @@ describe('completeDocketEntryQCInteractor', () => {
     );
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toBeUndefined();
     expect(result.paperServiceParties.length).toEqual(0);
   });
@@ -472,7 +468,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
   });
@@ -503,7 +499,7 @@ describe('completeDocketEntryQCInteractor', () => {
     );
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
   });
@@ -522,7 +518,7 @@ describe('completeDocketEntryQCInteractor', () => {
     );
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual(undefined);
     expect(result.paperServiceParties.length).toEqual(0);
   });
@@ -558,7 +554,7 @@ describe('completeDocketEntryQCInteractor', () => {
     );
 
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.docketEntries[0],
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries[0],
     ).toMatchObject({
       documentTitle: 'My Edited Document',
       documentType: 'Notice of Change of Address',
@@ -578,7 +574,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
   });
 
-  it('updates automaticBlocked on a case and all associated case trial sort mappings if pending is true', async () => {
+  it('updates automaticBlocked on a case if pending is true', async () => {
     expect(caseRecord.automaticBlocked).toBeFalsy();
 
     const { caseDetail } = await completeDocketEntryQCInteractor(
@@ -595,7 +591,6 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).toHaveBeenCalled();
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
     expect(caseDetail.automaticBlocked).toBeTruthy();
   });
 

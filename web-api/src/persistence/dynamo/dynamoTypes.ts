@@ -57,8 +57,3 @@ export type TrialSessionPaperPdfRecord = TDynamoRecord<{
   fileId: string;
   title: string;
 }>;
-
-export type AccountConfirmationRecord = TDynamoRecord<{
-  userId: string;
-  confirmationCode: string;
-}>;

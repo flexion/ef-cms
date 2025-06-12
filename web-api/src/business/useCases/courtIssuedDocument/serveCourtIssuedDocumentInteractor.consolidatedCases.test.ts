@@ -1,5 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-
+import '@web-api/persistence/postgres/users/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
@@ -20,12 +20,14 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
 import { v4 as uuidv4 } from 'uuid';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { Case } from '@shared/business/entities/cases/Case';
-
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const mockPdfUrl = 'www.example.com';
   const mockWorkItem = {
     docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -37,6 +39,7 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );
+  const getUserById = getUserByIdMock as jest.Mock;
 
   const mockDocketEntryWithWorkItem = {
     docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
@@ -63,9 +66,7 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(1);
@@ -107,24 +108,35 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
       };
     });
 
-    getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-      switch (docketNumber) {
-        case MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber:
-          return {
-            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-            docketEntries: leadCaseDocketEntries,
-          };
-        case MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber:
-          return {
-            ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-            docketEntries: consolidatedCase1DocketEntries,
-          };
-        default:
-          return {
-            ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
-            docketEntries: [],
-          };
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+      docketEntries: leadCaseDocketEntries,
+    } as any);
+    getCasesByDocketNumbers.mockImplementation(({ docketNumbers }) => {
+      function getMockedCase(docketNumber: string) {
+        switch (docketNumber) {
+          case MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber:
+            return {
+              ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+              docketEntries: leadCaseDocketEntries,
+            };
+          case MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber:
+            return {
+              ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+              docketEntries: consolidatedCase1DocketEntries,
+            };
+          default:
+            return {
+              ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
+              docketEntries: [],
+            };
+        }
       }
+      return Promise.resolve(
+        docketNumbers.map(
+          docketNumber => getMockedCase(docketNumber) as RawCase,
+        ),
+      );
     });
   });
 
@@ -208,42 +220,38 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
   });
 
   it('should log the failure to call updateDocketEntryPendingServiceStatus in the finally block', async () => {
-    const expectedErrorString = 'expected error';
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+      docketEntries: leadCaseDocketEntries,
+    } as any);
 
-    getCaseByDocketNumber
-      .mockResolvedValueOnce({
+    getCasesByDocketNumbers.mockResolvedValue([
+      {
         ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
         docketEntries: leadCaseDocketEntries,
-      })
-      .mockResolvedValueOnce({
-        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-        docketEntries: leadCaseDocketEntries,
-      })
-      .mockRejectedValueOnce(new Error(expectedErrorString));
+      } as any,
+    ]);
 
     const innerError = new Error('something else');
 
     applicationContext
       .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus.mockImplementationOnce(() => {})
+      .updateDocketEntryPendingServiceStatus.mockResolvedValueOnce(undefined)
       .mockRejectedValueOnce(innerError);
 
-    await expect(
-      serveCourtIssuedDocumentInteractor(
-        applicationContext,
-        {
-          clientConnectionId,
-          docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-          docketNumbers: [
-            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-            MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-          ],
-          subjectCaseDocketNumber:
-            MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow(expectedErrorString);
+    await serveCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId,
+        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+        docketNumbers: [
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
     expect(applicationContext.logger.error.mock.calls[0][1]).toEqual(

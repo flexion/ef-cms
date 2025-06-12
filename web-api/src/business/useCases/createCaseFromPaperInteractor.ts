@@ -1,16 +1,15 @@
-import { Case, CaseStatusChange } from '@shared/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { PaperPetition } from '@shared/business/entities/cases/PaperPetition';
-import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { RawUser } from '@shared/business/entities/User';
+import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -18,17 +17,14 @@ import {
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
-import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
-import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
-import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -94,7 +90,7 @@ const createCaseMetadata = async (
     petitionMetadata: CreatedCaseType;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
-    user: UserRecord;
+    user: User;
   },
   authorizedUser: AuthUser,
 ) => {
@@ -318,20 +314,19 @@ export const createCaseFromPaperInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   await acquireLock({
     applicationContext,
     authorizedUser,
     identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
-    retries: 10,
+    retries: 25,
     waitTime: 500,
   });
 
   let caseToAdd: Case;
   let workItem: WorkItem;
+
   try {
     ({ caseToAdd, workItem } = await createCaseMetadata(
       applicationContext,
@@ -354,20 +349,6 @@ export const createCaseFromPaperInteractor = async (
     });
   }
   setServiceIndicatorsForPetitionersOnCase(caseToAdd);
-
-  await createPetitionersOnCase({
-    docketNumber: caseToAdd.docketNumber,
-    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
-  });
-
-  caseToAdd.statistics?.forEach(statistic =>
-    createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
-  );
-
-  await upsertCaseStatusUpdates({
-    docketNumber: caseToAdd.docketNumber,
-    statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],
-  });
 
   await upsertWorkItems({
     workItems: [workItem.validate().toRawObject()],

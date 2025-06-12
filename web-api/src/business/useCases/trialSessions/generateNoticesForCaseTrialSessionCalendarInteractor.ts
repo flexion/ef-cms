@@ -13,6 +13,7 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  * serves a notice of trial session and standing pretrial document on electronic
@@ -171,19 +172,16 @@ const setNoticeForCase = async ({
     noticeOfTrialIssuedWithClinicLetter = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
-        applicationContext,
         firstPdf: noticeOfTrialIssued,
         secondPdf: clinicLetter,
       });
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
       document: noticeOfTrialIssuedWithClinicLetter,
       key: newNoticeOfTrialIssuedDocketEntryId,
     });
   } else {
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
       document: noticeOfTrialIssued,
       key: newNoticeOfTrialIssuedDocketEntryId,
     });
@@ -258,7 +256,6 @@ const setNoticeForCase = async ({
   const newStandingPretrialDocketEntryId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: standingPretrialFile,
     key: newStandingPretrialDocketEntryId,
   });
@@ -325,7 +322,6 @@ const setNoticeForCase = async ({
     const pdfData = await newPdfDoc.save();
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
       document: pdfData,
       key: `${jobId}-${docketNumber}`,
       useTempBucket: true,
@@ -361,10 +357,7 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
     return;
   }
 
-  const user = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
-    userId,
-  });
+  const user = await getUserById({ userId });
 
   await applicationContext
     .getPersistenceGateway()

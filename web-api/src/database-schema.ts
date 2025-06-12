@@ -16,21 +16,9 @@ import {
   DW_CASE_DEADLINE_COLUMNS,
 } from '@web-api/persistence/postgres/caseDeadlines/schema';
 import {
-  PetitionerOnCaseTable,
-  DW_PETITIONERS_ON_CASE_COLUMNS,
-} from '@web-api/persistence/postgres/cases/parties/schema';
-import {
   CaseTable,
-  CaseStatusUpdateTable,
   DW_CASE_COLUMNS,
-  DW_CASE_STATUS_UPDATES_COLUMNS,
 } from '@web-api/persistence/postgres/cases/schema';
-import {
-  CaseStatisticTable,
-  StatisticPenaltyTable,
-  DW_CASE_STATISTIC_COLUMNS,
-  DW_STATISTIC_PENALTY_COLUMNS,
-} from '@web-api/persistence/postgres/cases/statistics/schema';
 import {
   CaseWorksheetTable,
   DW_CASE_WORKSHEET_COLUMNS,
@@ -47,6 +35,32 @@ import {
   WorkItemTable,
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
+import {
+  DW_MINUTE_SHEET_COLUMNS,
+  MinuteSheetTable,
+} from '@web-api/persistence/postgres/minuteSheets/schema';
+import {
+  DW_USER_COLUMNS,
+  DW_USER_CONFIRMATION_CODE_COLUMNS,
+  DW_USER_ON_CASE_COLUMNS,
+  DW_USER_ON_CASE_PENDING_COLUMNS,
+  UserTable,
+  UserConfirmationCodeTable,
+  UserOnCaseTable,
+  UserOnCasePendingTable,
+} from '@web-api/persistence/postgres/users/schema';
+import {
+  DW_PRACTITIONER_COLUMNS,
+  PractitionerTable,
+} from '@web-api/persistence/postgres/practitioners/schema';
+import {
+  indexOpenSearchUser,
+  transformOpenSearchUser,
+} from '../elasticsearch/index-users';
+import {
+  indexOpenSearchUserOnCase,
+  transformOpenSearchUserOnCase,
+} from '../elasticsearch/index-user-on-case';
 
 const DEFAULT = {};
 
@@ -54,15 +68,17 @@ interface DatabaseSchemaType {
   dwCase: DatabaseTableMetadata<CaseTable>;
   dwCaseCorrespondence: DatabaseTableMetadata<CaseCorrespondenceTable>;
   dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
-  dwCaseStatistic: DatabaseTableMetadata<CaseStatisticTable>;
-  dwCaseStatusUpdate: DatabaseTableMetadata<CaseStatusUpdateTable>;
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
+  dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
-  dwPetitionerOnCase: DatabaseTableMetadata<PetitionerOnCaseTable>;
-  dwStatisticPenalty: DatabaseTableMetadata<StatisticPenaltyTable>;
+  dwPractitioner: DatabaseTableMetadata<PractitionerTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
+  dwUser: DatabaseTableMetadata<UserTable>;
+  dwUserConfirmationCode: DatabaseTableMetadata<UserConfirmationCodeTable>;
+  dwUserOnCase: DatabaseTableMetadata<UserOnCaseTable>;
+  dwUserOnCasePending: DatabaseTableMetadata<UserOnCasePendingTable>;
 }
 
 // transformOpenSearchMessage takes in a message--a result from the DB--and gets it into the right format to pass into the queue
@@ -93,14 +109,6 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as CaseDeadlineTable,
     columns: DW_CASE_DEADLINE_COLUMNS,
   },
-  dwCaseStatistic: {
-    table: DEFAULT as CaseStatisticTable,
-    columns: DW_CASE_STATISTIC_COLUMNS,
-  },
-  dwCaseStatusUpdate: {
-    table: DEFAULT as CaseStatusUpdateTable,
-    columns: DW_CASE_STATUS_UPDATES_COLUMNS,
-  },
   dwCaseWorksheet: {
     table: DEFAULT as CaseWorksheetTable,
     columns: DW_CASE_WORKSHEET_COLUMNS,
@@ -113,13 +121,9 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as MessageTable,
     columns: DW_MESSAGE_COLUMNS,
   },
-  dwPetitionerOnCase: {
-    table: DEFAULT as PetitionerOnCaseTable,
-    columns: DW_PETITIONERS_ON_CASE_COLUMNS,
-  },
-  dwStatisticPenalty: {
-    table: DEFAULT as StatisticPenaltyTable,
-    columns: DW_STATISTIC_PENALTY_COLUMNS,
+  dwMinuteSheet: {
+    table: DEFAULT as MinuteSheetTable,
+    columns: DW_MINUTE_SHEET_COLUMNS,
   },
   dwUserCaseNote: {
     table: DEFAULT as UserCaseNoteTable,
@@ -128,6 +132,30 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwWorkItem: {
     table: DEFAULT as WorkItemTable,
     columns: DW_WORK_ITEM_COLUMNS,
+  },
+  dwUser: {
+    table: DEFAULT as UserTable,
+    columns: DW_USER_COLUMNS,
+    indexOpenSearchMessage: indexOpenSearchUser,
+    transformOpenSearchMessage: transformOpenSearchUser,
+  },
+  dwPractitioner: {
+    table: DEFAULT as PractitionerTable,
+    columns: DW_PRACTITIONER_COLUMNS,
+  },
+  dwUserConfirmationCode: {
+    table: DEFAULT as UserConfirmationCodeTable,
+    columns: DW_USER_CONFIRMATION_CODE_COLUMNS,
+  },
+  dwUserOnCase: {
+    table: DEFAULT as UserOnCaseTable,
+    columns: DW_USER_ON_CASE_COLUMNS,
+    indexOpenSearchMessage: indexOpenSearchUserOnCase,
+    transformOpenSearchMessage: transformOpenSearchUserOnCase,
+  },
+  dwUserOnCasePending: {
+    table: DEFAULT as UserOnCasePendingTable,
+    columns: DW_USER_ON_CASE_PENDING_COLUMNS,
   },
 };
 

@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
@@ -12,22 +13,25 @@ import { docketClerkUser, judgeUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
   const mockClientConnectionId = 'ABC123';
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );
+  const getUserById = getUserByIdMock as jest.Mock;
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
 
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    getCasesByDocketNumbers.mockResolvedValue([MOCK_CASE]);
 
     fileAndServeDocumentOnOneCase.mockImplementation(
       ({ caseEntity }) => caseEntity,
@@ -265,6 +269,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
       ],
     });
+
+    getCasesByDocketNumbers.mockResolvedValue([
+      { ...MOCK_CASE, docketNumber: '200-21' },
+      { ...MOCK_CASE, docketNumber: '300-33' },
+    ]);
 
     await serveCourtIssuedDocumentInteractor(
       applicationContext,

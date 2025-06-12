@@ -1,8 +1,12 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 import {
   DOCKET_SECTION,
@@ -21,19 +25,22 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );
+  const getUserById = getUserByIdMock as jest.Mock;
   const mockDocketEntryId = '50107716-6d08-4693-bfd5-a07a4e6eadce';
   const mockServedDocketEntryId = '08ecbf7e-b316-46bb-9a66-b7474823d202';
   const mockWorkItemId = 'a956aa05-19cb-4fc3-ba10-d97c1c567c12';
@@ -91,11 +98,12 @@ describe('editPaperFilingInteractor', () => {
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
+    fileAndServeDocumentOnOneCase.mockImplementation(
+      ({ caseEntity }) => caseEntity,
+    );
   });
 
   describe('Save For Later or Serve Agnostic', () => {
@@ -240,7 +248,7 @@ describe('editPaperFilingInteractor', () => {
 
         expect(getCaseByDocketNumber).toHaveBeenCalled();
         expect(upsertWorkItems).toHaveBeenCalled();
-        expect(updateCase).toHaveBeenCalled();
+        expect(updateCaseAndAssociations).toHaveBeenCalled();
         expect(
           applicationContext.getUseCaseHelpers().countPagesInDocument,
         ).not.toHaveBeenCalled();
@@ -317,10 +325,6 @@ describe('editPaperFilingInteractor', () => {
     describe('Single Docketing', () => {
       describe('Happy Path', () => {
         it('should update only allowed editable fields on a docket entry document', async () => {
-          fileAndServeDocumentOnOneCase.mockImplementation(
-            ({ caseEntity }) => caseEntity,
-          );
-
           await editPaperFilingInteractor(
             applicationContext,
             {
@@ -476,6 +480,18 @@ describe('editPaperFilingInteractor', () => {
             leadDocketNumber: caseRecord.docketNumber,
           });
           const mockConsolidatedGroupDocketNumbers = ['101-23', '101-24'];
+          getCasesByDocketNumbers.mockResolvedValue([
+            {
+              ...caseRecord,
+              docketNumber: '101-23',
+              leadDocketNumber: caseRecord.docketNumber,
+            },
+            {
+              ...caseRecord,
+              docketNumber: '101-24',
+              leadDocketNumber: caseRecord.docketNumber,
+            },
+          ]);
 
           await editPaperFilingInteractor(
             applicationContext,
@@ -519,6 +535,18 @@ describe('editPaperFilingInteractor', () => {
               ],
             }),
           );
+          getCasesByDocketNumbers.mockResolvedValue([
+            {
+              ...caseRecord,
+              docketNumber: '101-23',
+              leadDocketNumber: caseRecord.docketNumber,
+            },
+            {
+              ...caseRecord,
+              docketNumber: '101-24',
+              leadDocketNumber: caseRecord.docketNumber,
+            },
+          ]);
           applicationContext
             .getUseCaseHelpers()
             .fileAndServeDocumentOnOneCase.mockImplementation(
@@ -639,16 +667,16 @@ describe('editPaperFilingInteractor', () => {
       describe('Sad Path', () => {
         it('should throw an error when a docket number included in the request is NOT a member of the consolidated group', async () => {
           const nonConsolidatedDocketNumber = '101-19';
-          getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-            if (docketNumber === caseRecord.docketNumber) {
-              return {
-                ...caseRecord,
-                leadDocketNumber: caseRecord.docketNumber,
-              };
-            } else if (docketNumber === nonConsolidatedDocketNumber) {
-              return { leadDocketNumber: undefined };
-            }
+          getCaseByDocketNumber.mockResolvedValue({
+            ...caseRecord,
+            leadDocketNumber: caseRecord.docketNumber,
           });
+          getCasesByDocketNumbers.mockResolvedValue([
+            {
+              ...caseRecord,
+              leadDocketNumber: undefined,
+            },
+          ]);
 
           await expect(
             editPaperFilingInteractor(
@@ -672,6 +700,12 @@ describe('editPaperFilingInteractor', () => {
             ...caseRecord,
             leadDocketNumber: undefined,
           });
+          getCasesByDocketNumbers.mockResolvedValue([
+            {
+              ...caseRecord,
+              leadDocketNumber: undefined,
+            },
+          ]);
 
           await expect(
             editPaperFilingInteractor(

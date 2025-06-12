@@ -1,12 +1,14 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -34,9 +36,11 @@ const submitCaseAssociationRequest = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getPractitionerById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
 
   const isPrivatePractitioner =
     authorizedUser.role === ROLES.privatePractitioner;
@@ -50,7 +54,7 @@ const submitCaseAssociationRequest = async (
         authorizedUser,
         docketNumber,
         representing: filers,
-        user,
+        user: user.toRawObject() as RawPractitioner,
       });
   } else if (isIrsPractitioner) {
     return await applicationContext
@@ -59,7 +63,7 @@ const submitCaseAssociationRequest = async (
         applicationContext,
         authorizedUser,
         docketNumber,
-        user,
+        user: user.toRawObject() as RawPractitioner,
       });
   }
 };

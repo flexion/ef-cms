@@ -9,9 +9,8 @@ import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
-import { getCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/getCaseStatistics';
-import { getCaseStatusHistory } from '@web-api/persistence/postgres/cases/getCaseStatusHistory';
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { getPractitionersByDocketNumber } from '@web-api/persistence/postgres/practitioners/getPractitionersByDocketNumber';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
@@ -25,7 +24,14 @@ export const getCaseByDocketNumber = async ({
   user?: UnknownAuthUser;
 }): Promise<RawCase> => {
   // These case items are no longer in dynamoDB
-  const SK_FILTER_OUT = ['work-item', 'correspondence', 'case'];
+  const SK_FILTER_OUT = [
+    'work-item',
+    'correspondence',
+    'case',
+    'irsPractitioner',
+    'privatePractitioner',
+    'inactivePractitioner',
+  ];
 
   const dbCaseMetadata = await getCaseMetadataByDocketNumber({
     docketNumber,
@@ -34,32 +40,26 @@ export const getCaseByDocketNumber = async ({
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
 
-  const [
-    caseStatusHistory,
-    caseCorrespondences,
-    statisticsWithPenalties,
-    workItems,
-    caseItemsRaw,
-  ] = await Promise.all([
-    getCaseStatusHistory({ docketNumber }),
-    getCaseCorrespondenceByDocketNumber({
-      docketNumber,
-    }),
-    getCaseStatistics({ docketNumber }),
-    getWorkItemsByDocketNumber({
-      docketNumber,
-    }),
-    queryFull({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `case|${docketNumber}`,
-      },
-      KeyConditionExpression: '#pk = :pk',
-      applicationContext,
-    }),
-  ]);
+  const [caseCorrespondences, workItems, practitioners, caseItemsRaw] =
+    await Promise.all([
+      getCaseCorrespondenceByDocketNumber({
+        docketNumber,
+      }),
+      getWorkItemsByDocketNumber({
+        docketNumber,
+      }),
+      getPractitionersByDocketNumber({ docketNumber }),
+      queryFull({
+        ExpressionAttributeNames: {
+          '#pk': 'pk',
+        },
+        ExpressionAttributeValues: {
+          ':pk': `case|${docketNumber}`,
+        },
+        KeyConditionExpression: '#pk = :pk',
+        applicationContext,
+      }),
+    ]);
 
   const caseItems = caseItemsRaw.filter(
     item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
@@ -71,7 +71,6 @@ export const getCaseByDocketNumber = async ({
   >[] = [];
   if (includeConsolidatedCases) {
     consolidatedCases = await getCasesMetadataWithCounselByLeadDocketNumber({
-      applicationContext,
       leadDocketNumber: dbCaseMetadata.leadDocketNumber!,
     });
     if (user) {
@@ -86,10 +85,8 @@ export const getCaseByDocketNumber = async ({
       ...caseItems,
       {
         ...dbCaseMetadata,
-        caseStatusHistory,
         pk: `case|${dbCaseMetadata.docketNumber}`,
         sk: `case|${dbCaseMetadata.docketNumber}`,
-        statistics: Object.values(statisticsWithPenalties),
       },
       ...caseCorrespondences.map(correspondenceItem => ({
         ...correspondenceItem,
@@ -100,6 +97,16 @@ export const getCaseByDocketNumber = async ({
         ...workItem,
         pk: `case|${docketNumber}`,
         sk: `work-item|${workItem.workItemId}`,
+      })),
+      ...practitioners.irsPractitioners.map(irsPractitionerItem => ({
+        ...irsPractitionerItem,
+        pk: `case|${docketNumber}`,
+        sk: `irsPractitioner|${irsPractitionerItem.userId}`,
+      })),
+      ...practitioners.privatePractitioners.map(privatePractitionerItem => ({
+        ...privatePractitionerItem,
+        pk: `case|${docketNumber}`,
+        sk: `privatePractitioner|${privatePractitionerItem.userId}`,
       })),
     ]),
     consolidatedCases: consolidatedCases.map(

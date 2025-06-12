@@ -1,38 +1,44 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../entities/EntityConstants';
-import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_LOCK } from '../../test/mockLock';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { applicationContext } from '../test/createTestApplicationContext';
-import { getPetitionerById } from '../entities/cases/Case';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getPetitionerById } from '@shared/business/entities/cases/Case';
 import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { removePetitionerAndUpdateCaptionInteractor } from './removePetitionerAndUpdateCaptionInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { disassociateUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+
+const deleteUserFromCase = deleteUserFromCaseMock as jest.Mock;
 
 describe('removePetitionerAndUpdateCaptionInteractor', () => {
   let mockCase;
   let petitionerToRemove;
   let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
 
@@ -65,9 +71,7 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
 
     getCaseByDocketNumber.mockImplementation(() => mockCase);
 
-    applicationContext
-      .getPersistenceGateway()
-      .deleteUserFromCase.mockImplementation(() => null);
+    deleteUserFromCase.mockImplementation(() => null);
   });
 
   it('should throw an unauthorized error when the current user does not have permission to edit petitioners', async () => {
@@ -145,10 +149,9 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     expect(
       getPetitionerById(caseToUpdate, petitionerToRemove.contactId),
     ).toBeUndefined();
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase.mock
-        .calls[0][0].userId,
-    ).toEqual(petitionerToRemove.contactId);
+    expect(deleteUserFromCase.mock.calls[0][0].userId).toEqual(
+      petitionerToRemove.contactId,
+    );
   });
 
   it('should remove practitioner from case when they only represented the removed petitioner', async () => {
@@ -178,14 +181,12 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
         .calls[0][0];
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase.mock
-        .calls[0][0].userId,
-    ).toEqual(mockPrivatePractitioner.userId);
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase.mock
-        .calls[1][0].userId,
-    ).toEqual(petitionerToRemove.contactId);
+    expect(deleteUserFromCase.mock.calls[0][0].userId).toEqual(
+      mockPrivatePractitioner.userId,
+    );
+    expect(deleteUserFromCase.mock.calls[1][0].userId).toEqual(
+      petitionerToRemove.contactId,
+    );
 
     expect(caseToUpdate.privatePractitioners.length).toEqual(0);
   });
@@ -203,9 +204,9 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase.mock.calls[0][0].caseToUpdate.caseCaption).toEqual(
-      mockUpdatedCaption,
-    );
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.caseCaption,
+    ).toEqual(mockUpdatedCaption);
   });
 
   it('should remove the petitioner from the representing id of the privatePractitioner', async () => {
@@ -249,8 +250,8 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     );
 
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.privatePractitioners?.[0]
-        .representing,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+        .privatePractitioners?.[0].representing,
     ).toEqual([otherPetitioner.contactId]);
   });
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {

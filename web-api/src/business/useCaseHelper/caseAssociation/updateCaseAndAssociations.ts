@@ -11,7 +11,6 @@ import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
-import { updateCase } from '@web-api/persistence/postgres/cases/updateCase';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { isEmpty } from 'lodash';
@@ -19,6 +18,10 @@ import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCor
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import diff from 'diff-arrays-of-objects';
+import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+import { disassociateUserFromCase } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
+import { settlePromises } from '@web-api/utilities/settlePromises';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
 /**
  * Identifies docket entries which have been updated and issues persistence calls
@@ -84,8 +87,6 @@ const updateCaseMessages = async ({
   oldCase,
 }) => {
   const messageUpdatesNecessary =
-    oldCase.status !== caseToUpdate.status ||
-    oldCase.caseCaption !== caseToUpdate.caseCaption ||
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix;
 
   if (!messageUpdatesNecessary) {
@@ -199,6 +200,7 @@ const updateHearings = ({ applicationContext, caseToUpdate, oldCase }) => {
  * @returns {Array<function>} the persistence functions required to complete this action
  */
 const updateIrsPractitioners = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   applicationContext,
   caseToUpdate,
   oldCase,
@@ -225,45 +227,29 @@ const updateIrsPractitioners = ({
 
   const deletePractitionerFunctions = deletedIrsPractitioners.map(
     practitioner =>
-      function deleteIrsPractitioner_cb() {
-        return applicationContext
-          .getPersistenceGateway()
-          .removeIrsPractitionerOnCase({
-            applicationContext,
-            docketNumber: caseToUpdate.docketNumber,
-            userId: practitioner.userId,
-          });
+      async function deleteIrsPractitioner_cb() {
+        return await disassociateUserFromCase({
+          docketNumber: caseToUpdate.docketNumber,
+          userId: practitioner.userId,
+        });
       },
   );
 
   const updatePractitionerFunctions = validIrsPractitioners.map(
     practitioner =>
-      function updateIrsPractitioners_cb() {
-        return applicationContext
-          .getPersistenceGateway()
-          .updateIrsPractitionerOnCase({
-            applicationContext,
-            docketNumber: caseToUpdate.docketNumber,
-            leadDocketNumber: caseToUpdate.leadDocketNumber,
-            practitioner,
-            userId: practitioner.userId,
-          });
+      async function updateIrsPractitioners_cb() {
+        return await associateUserWithCase({
+          docketNumber: caseToUpdate.docketNumber,
+          userId: practitioner.userId,
+        });
       },
   );
 
   return [...deletePractitionerFunctions, ...updatePractitionerFunctions];
 };
 
-/**
- * Identifies private practitioners to be updated or removed, and issues persistence calls
- * where needed
- * @param {object} args the arguments for updating the case
- * @param {object} args.applicationContext the application context
- * @param {object} args.caseToUpdate the case with its updated private practitioner data
- * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
- * @returns {Array<function>} the persistence functions required to complete this action
- */
 const updatePrivatePractitioners = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   applicationContext,
   caseToUpdate,
   oldCase,
@@ -294,29 +280,21 @@ const updatePrivatePractitioners = ({
 
   const deletePractitionerFunctions = deletedPrivatePractitioners.map(
     practitioner =>
-      function deletePrivatePractitioner_cb() {
-        return applicationContext
-          .getPersistenceGateway()
-          .removePrivatePractitionerOnCase({
-            applicationContext,
-            docketNumber: caseToUpdate.docketNumber,
-            userId: practitioner.userId,
-          });
+      async function deletePrivatePractitioner_cb() {
+        return await disassociateUserFromCase({
+          docketNumber: caseToUpdate.docketNumber,
+          userId: practitioner.userId,
+        });
       },
   );
 
   const updatePractitionerFunctions = validPrivatePractitioners.map(
     practitioner =>
-      function updatePrivatePractitioner_cb() {
-        return applicationContext
-          .getPersistenceGateway()
-          .updatePrivatePractitionerOnCase({
-            applicationContext,
-            docketNumber: caseToUpdate.docketNumber,
-            leadDocketNumber: caseToUpdate.leadDocketNumber,
-            practitioner,
-            userId: practitioner.userId,
-          });
+      async function updatePrivatePractitioner_cb() {
+        return await associateUserWithCase({
+          docketNumber: caseToUpdate.docketNumber,
+          userId: practitioner.userId,
+        });
       },
   );
 
@@ -445,14 +423,15 @@ export const updateCaseAndAssociations = async ({
   // wait for all validation tasks to complete and for callbacks to be generated
   const persistenceCallbacks = (await Promise.all(validationRequests)).flat();
 
+  // Persist primary case data first to ensure no errors
+  await upsertCases([validNewRawCaseEntity]);
+
+  // Then persist related data
   // all validation has passed, so now execute all persistence callbacks from results
   const persistenceRequests = persistenceCallbacks.map(persistFn => {
-    persistFn();
+    return persistFn();
   });
+  await settlePromises(persistenceRequests);
 
-  await Promise.all(persistenceRequests);
-
-  return updateCase({
-    caseToUpdate: validNewRawCaseEntity,
-  });
+  return validNewRawCaseEntity;
 };

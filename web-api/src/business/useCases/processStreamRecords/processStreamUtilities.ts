@@ -76,11 +76,32 @@ export const partitionRecords = (
       record.dynamodb.NewImage.entityName.S === 'CaseWorksheet',
   );
 
-  const [caseCorrespondenceRecords, otherRecords] = partition(
+  const [caseCorrespondenceRecords, nonCaseCorrespondenceRecords] = partition(
     nonCaseWorksheetRecords,
     record =>
       record.dynamodb?.NewImage?.entityName &&
-      record.dynamodb.NewImage.entityName.S == 'Correspondence',
+      record.dynamodb.NewImage.entityName.S === 'Correspondence',
+  );
+  const [userRecords, nonUserRecords] = partition(
+    nonCaseCorrespondenceRecords,
+    record =>
+      record.dynamodb?.NewImage?.entityName &&
+      (record.dynamodb.NewImage.entityName.S === 'User' ||
+        record.dynamodb.NewImage.entityName.S === 'Practitioner'),
+  );
+
+  const [userOnCasePendingRecords, nonUserOnCasePendingRecords] = partition(
+    nonUserRecords,
+    record =>
+      record.dynamodb?.NewImage?.sk &&
+      record.dynamodb.NewImage.sk.S?.startsWith('pending-case|'),
+  );
+
+  const [userOnCaseRecords, otherRecords] = partition(
+    nonUserOnCasePendingRecords,
+    record =>
+      record.dynamodb?.NewImage?.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'UserCase',
   );
 
   return {
@@ -95,6 +116,9 @@ export const partitionRecords = (
     practitionerMappingRecords,
     removeRecords,
     userCaseNoteRecords,
+    userOnCasePendingRecords,
+    userOnCaseRecords,
+    userRecords,
     workItemRecords,
   };
 };

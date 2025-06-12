@@ -7,9 +7,9 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { deletePetitionerOnCase } from '@web-api/persistence/postgres/cases/parties/deletePetitionerOnCase';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { disassociateUserFromCase } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
 
 /**
  * used to remove a petitioner from a case
@@ -63,7 +63,6 @@ export const removePetitionerAndUpdateCaption = async (
   caseEntity = await applicationContext
     .getUseCaseHelpers()
     .removeCounselFromRemovedPetitioner({
-      applicationContext,
       authorizedUser,
       caseEntity,
       petitionerContactId,
@@ -71,8 +70,7 @@ export const removePetitionerAndUpdateCaption = async (
 
   caseEntity.removePetitioner(petitionerContactId);
 
-  await applicationContext.getPersistenceGateway().deleteUserFromCase({
-    applicationContext,
+  await disassociateUserFromCase({
     docketNumber,
     userId: petitionerContactId,
   });
@@ -86,11 +84,6 @@ export const removePetitionerAndUpdateCaption = async (
       authorizedUser,
       caseToUpdate: caseEntity,
     });
-
-  await deletePetitionerOnCase({
-    contactId: petitionerContactId,
-    docketNumber,
-  });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

@@ -3,13 +3,13 @@ import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserFactory } from '@shared/business/entities/factories/UserFactory';
-import { getCasesByEmailTotal } from '@web-api/persistence/postgres/cases/reports/getCasesByEmailTotal';
+import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+import { getCasesByEmailTotal } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 
 async function disableIsUserUpdatingFlag({
-  applicationContext,
   user,
 }: {
-  applicationContext: ServerApplicationContext;
   user: RawUser | RawPractitioner;
 }): Promise<void> {
   const userFactory = new UserFactory(user);
@@ -18,10 +18,7 @@ async function disableIsUserUpdatingFlag({
   user.isUpdatingInformation = false;
   const userEntity = new UserClass(user);
 
-  await applicationContext.getPersistenceGateway().updateUser({
-    applicationContext,
-    user: userEntity.validate().toRawObject(),
-  });
+  await updateUser({ userToUpdate: userEntity.validate().toRawObject() });
 }
 
 export const queueEmailUpdateAssociatedCasesWorker = async (
@@ -29,15 +26,12 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
   { user }: { user: RawUser | RawPractitioner },
   authorizedUser: AuthUser,
 ): Promise<void> => {
-  const docketNumbersByUser = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({
-      applicationContext,
-      userId: user.userId,
-    });
+  const docketNumbersByUser = await getDocketNumbersByUser({
+    userId: user.userId,
+  });
 
   if (!docketNumbersByUser.length) {
-    await disableIsUserUpdatingFlag({ applicationContext, user });
+    await disableIsUserUpdatingFlag({ user });
     return;
   }
 
@@ -52,13 +46,12 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
   await waitUntilAllExpectedCasesAreUpdatedWithEmail({
     applicationContext,
     userEmail: user.email!,
-    userRole: user.role,
   })
     .catch(error =>
       console.error(`ERROR CHECKING COUNT OF UPDATED CASES -> ${error}`),
     )
     .finally(async () => {
-      await disableIsUserUpdatingFlag({ applicationContext, user });
+      await disableIsUserUpdatingFlag({ user });
     });
 };
 
@@ -72,26 +65,21 @@ async function waitUntilAllExpectedCasesAreUpdatedWithEmail({
   applicationContext,
   iteration = 0,
   userEmail,
-  userRole,
 }: {
   applicationContext: ServerApplicationContext;
   iteration?: number;
   userEmail: string;
-  userRole: string;
 }): Promise<void> {
   await applicationContext.getUtilities().sleep(WAIT_TIMEOUT);
 
-  const docketNumbersByUser = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({
-      applicationContext,
-      userId: userEmail,
-    });
+  const docketNumbersByUser = await getDocketNumbersByUser({
+    userId: userEmail,
+  });
   const expectedCount = docketNumbersByUser.length;
 
   const actualCount = await getCasesByEmailTotal({
+    applicationContext,
     email: userEmail,
-    role: userRole,
   });
 
   if (actualCount >= expectedCount) return;
@@ -100,6 +88,5 @@ async function waitUntilAllExpectedCasesAreUpdatedWithEmail({
     applicationContext,
     iteration: iteration + 1,
     userEmail,
-    userRole,
   });
 }

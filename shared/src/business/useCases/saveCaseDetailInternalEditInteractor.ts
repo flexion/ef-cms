@@ -15,6 +15,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { isEmpty } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  * saveCaseDetailInternalEdit
@@ -33,9 +34,7 @@ export const saveCaseDetailInternalEdit = async (
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   if (!caseToUpdate || docketNumber !== caseToUpdate.docketNumber) {
     throw new UnprocessableEntityError();
@@ -97,9 +96,11 @@ export const saveCaseDetailInternalEdit = async (
     const primaryContactId = originalCaseEntity.getContactPrimary().contactId;
 
     caseEntityWithFormEdits.updatePetitioner({
-      ...caseToUpdate.contactPrimary,
-      contactId: primaryContactId,
-      contactType: CONTACT_TYPES.primary,
+      updatedPetitioner: {
+        ...caseToUpdate.contactPrimary,
+        contactId: primaryContactId,
+        contactType: CONTACT_TYPES.primary,
+      },
     });
   }
 
@@ -108,9 +109,11 @@ export const saveCaseDetailInternalEdit = async (
       caseEntityWithFormEdits.getContactSecondary()?.contactId;
 
     caseEntityWithFormEdits.updatePetitioner({
-      ...caseToUpdate.contactSecondary,
-      contactId: secondaryContactId,
-      contactType: CONTACT_TYPES.secondary,
+      updatedPetitioner: {
+        ...caseToUpdate.contactSecondary,
+        contactId: secondaryContactId,
+        contactType: CONTACT_TYPES.secondary,
+      },
     });
   } else if (originalCaseEntity.getContactSecondary()) {
     const originalSecondaryContactId =
@@ -119,7 +122,6 @@ export const saveCaseDetailInternalEdit = async (
     await applicationContext
       .getUseCaseHelpers()
       .removeCounselFromRemovedPetitioner({
-        applicationContext,
         authorizedUser,
         caseEntity: caseEntityWithFormEdits,
         petitionerContactId: originalSecondaryContactId,
@@ -145,8 +147,8 @@ export const saveCaseDetailInternalEdit = async (
     const workItemEntity = new WorkItem(
       {
         ...initializeCaseWorkItem,
-        assigneeId: user.userId,
-        assigneeName: user.name,
+        assigneeId: user?.userId,
+        assigneeName: user?.name,
         caseIsInProgress: true,
         trialDate: caseEntity.trialDate,
         trialLocation: caseEntity.trialLocation,

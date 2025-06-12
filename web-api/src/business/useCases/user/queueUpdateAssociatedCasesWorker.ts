@@ -1,22 +1,21 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
-import { RawPractitioner } from '../../../../../shared/src/business/entities/Practitioner';
-import { RawUser } from '../../../../../shared/src/business/entities/User';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const queueUpdateAssociatedCasesWorker = async (
   applicationContext: ServerApplicationContext,
   { user }: { user: RawUser | RawPractitioner },
   authorizedUser: AuthUser,
 ): Promise<void> => {
-  const docketNumbersAssociatedWithUser = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({
-      applicationContext,
-      userId: user.userId,
-    });
+  const docketNumbersAssociatedWithUser = await getDocketNumbersByUser({
+    userId: user.userId,
+  });
 
-  await Promise.all(
+  await settlePromises(
     docketNumbersAssociatedWithUser.map(docketNumber =>
       applicationContext.getWorkerGateway().queueWork(applicationContext, {
         message: {

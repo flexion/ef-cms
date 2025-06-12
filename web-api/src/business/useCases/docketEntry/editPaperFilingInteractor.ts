@@ -23,6 +23,9 @@ import {
   withLocking,
 } from '@web-api/business/useCaseHelper/acquireLock';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -111,9 +114,7 @@ const saveForLaterStrategy = async ({
   docketEntryEntity: DocketEntry;
   authorizedUser: AuthUser;
 }) => {
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   const updatedDocketEntryEntity = await updateDocketEntry({
     applicationContext,
@@ -167,14 +168,9 @@ const multiDocketServeStrategy = async ({
     documentMetadata: request.documentMetadata,
   });
 
-  const consolidatedCaseRecords = await Promise.all(
-    request.consolidatedGroupDocketNumbers!.map(consolidatedGroupDocketNumber =>
-      getCaseByDocketNumber({
-        applicationContext,
-        docketNumber: consolidatedGroupDocketNumber,
-      }),
-    ),
-  );
+  const consolidatedCaseRecords = await getCasesByDocketNumbers({
+    docketNumbers: request.consolidatedGroupDocketNumbers!,
+  });
 
   const consolidatedCaseEntities = consolidatedCaseRecords.map(
     consolidatedCase => new Case(consolidatedCase, { authorizedUser }),
@@ -264,9 +260,7 @@ const serveDocketEntry = async ({
     });
 
   try {
-    const user = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({ applicationContext, userId });
+    const user = await getUserById({ userId });
 
     const updatedDocketEntry = await updateDocketEntry({
       applicationContext,
@@ -277,7 +271,7 @@ const serveDocketEntry = async ({
       userId: user.userId,
     });
 
-    caseEntitiesToFileOn = await Promise.all(
+    caseEntitiesToFileOn = await settlePromises(
       caseEntitiesToFileOn.map(aCase =>
         fileAndServeDocumentOnOneCase({
           caseEntity: aCase,

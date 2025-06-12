@@ -13,6 +13,9 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { omit } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  *
@@ -69,19 +72,16 @@ export const fileCourtIssuedDocketEntry = async (
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   const isUnservable = DocketEntry.isUnservable(documentMeta);
 
-  await Promise.all(
-    [subjectDocketNumber, ...docketNumbers].map(async docketNumber => {
-      const caseToUpdate = await getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+  const casesToUpdate = await getCasesByDocketNumbers({
+    docketNumbers: [subjectDocketNumber, ...docketNumbers],
+  });
 
+  await settlePromises(
+    casesToUpdate.map(async caseToUpdate => {
       const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const docketEntryEntity = new DocketEntry(
@@ -93,7 +93,10 @@ export const fileCourtIssuedDocketEntry = async (
           documentTitle: documentMeta.generatedDocumentTitle,
           documentType: documentMeta.documentType,
           draftOrderState: null,
-          editState: JSON.stringify({ ...documentMeta, docketNumber }),
+          editState: JSON.stringify({
+            ...documentMeta,
+            docketNumber: caseToUpdate.docketNumber,
+          }),
           eventCode: documentMeta.eventCode,
           filingDate: documentMeta.filingDate,
           freeText: documentMeta.freeText,
@@ -155,7 +158,7 @@ export const fileCourtIssuedDocketEntry = async (
       workItem.assignToUser({
         assigneeId: user.userId,
         assigneeName: user.name,
-        section: user.section,
+        section: user.section!,
         sentBy: user.name,
         sentBySection: user.section,
         sentByUserId: user.userId,
@@ -177,7 +180,7 @@ export const fileCourtIssuedDocketEntry = async (
         }),
       );
 
-      return Promise.all(saveItems);
+      return settlePromises(saveItems);
     }),
   );
 

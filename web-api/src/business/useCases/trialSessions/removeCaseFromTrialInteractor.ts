@@ -76,23 +76,13 @@ export const removeCaseFromTrial = async (
     });
 
     await setPriorityOnAllWorkItems({
-      docketNumber: caseEntity.docketNumber,
+      docketNumbers: [caseEntity.docketNumber],
       highPriority: false,
     });
 
-    if (caseEntity.isReadyForTrial()) {
-      await applicationContext
-        .getPersistenceGateway()
-        .createCaseTrialSortMappingRecords({
-          applicationContext,
-          caseSortTags: caseEntity.generateTrialSortTags(),
-          docketNumber: caseEntity.docketNumber,
-        });
-    }
-
     await applicationContext
       .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+      .updateCaseAutomaticBlock({ caseEntity });
   } else {
     caseEntity.removeFromHearing(trialSessionId);
   }

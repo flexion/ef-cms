@@ -1,0 +1,103 @@
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { Practitioner } from '@shared/business/entities/Practitioner';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { RawUser } from '@shared/business/entities/User';
+import {
+  formatDateString,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
+import {
+  NewPractitionerKysely,
+  UpdatePractitionerKysely,
+} from '@web-api/persistence/postgres/practitioners/schema';
+import { contactInfo } from '@web-api/persistence/postgres/users/mapper';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { DW_PRACTITIONER_COLUMNS } from '@web-api/persistence/postgres/practitioners/schema';
+import { DW_USER_COLUMNS } from '@web-api/persistence/postgres/users/schema';
+
+export function pickPractitionerFields(user) {
+  return {
+    additionalPhone: user.additionalPhone,
+    admissionsDate: user.admissionsDate,
+    admissionsStatus: user.admissionsStatus,
+    barNumber: user.barNumber, // 10495: Note that this field was previously all upper-case
+    birthYear: user.birthYear,
+    confirmEmail: user.confirmEmail,
+    firmName: user.firmName,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    middleName: user.middleName,
+    originalBarState: user.originalBarState,
+    practitionerId: user.practitionerId,
+    practiceType: user.practiceType,
+    practitionerNotes: user.practitionerNotes,
+    practitionerType: user.practitionerType,
+    serviceIndicator: user.serviceIndicator,
+    suffix: user.suffix,
+    updatedEmail: user.updatedEmail,
+    userId: user.userId,
+    address1: user.address1,
+    address2: user.address2,
+    address3: user.address3,
+    city: user.city,
+    country: user.country,
+    countryType: user.countryType,
+    email: user.email, // 10495: Note that this field was previously trimmed and all lower-case
+    isUpdatingInformation: user.isUpdatingInformation,
+    name: user.name, // 10495: Note that this field was previously all upper-case
+    phone: user.phone,
+    postalCode: user.postalCode,
+    role: user.role,
+    section: user.section,
+    state: user.state,
+  };
+}
+
+export function toKyselyUpdatePractitioner(
+  user: RawUser,
+): UpdatePractitionerKysely {
+  return pickPractitionerFields(user);
+}
+
+export function toKyselyUpdatePractitioners(
+  users: RawUser[],
+): UpdatePractitionerKysely[] {
+  return users.map(pickPractitionerFields);
+}
+
+export function toKyselyNewPractitioners(
+  users: RawUser[],
+): NewPractitionerKysely[] {
+  return users.map(pickPractitionerFields);
+}
+
+export function toKyselyNewPractitioner(user: RawUser): NewPractitionerKysely {
+  return pickPractitionerFields(user);
+}
+
+export function practitionerEntity(practitioner): Practitioner {
+  return new Practitioner(transformPractitionerData(practitioner));
+}
+
+export function irsPractitionerEntity(practitioner): IrsPractitioner {
+  return new IrsPractitioner(transformPractitionerData(practitioner));
+}
+
+export function privatePractitionerEntity(practitioner): PrivatePractitioner {
+  return new PrivatePractitioner(transformPractitionerData(practitioner));
+}
+
+function transformPractitionerData(practitioner) {
+  return transformNullToUndefined({
+    ...practitioner,
+    contact: contactInfo(practitioner),
+    admissionsDate: formatDateString(
+      practitioner.admissionsDate?.toISOString(),
+      FORMATS.YYYYMMDD,
+    ),
+  });
+}
+
+export const PRACTITIONER_ONLY_FIELDS = DW_PRACTITIONER_COLUMNS.filter(
+  x => !(DW_USER_COLUMNS as string[]).includes(x),
+);

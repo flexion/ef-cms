@@ -1,6 +1,7 @@
 import {
   CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
+  INTERNAL_ROLES,
   JudgeTitle,
   ROLES,
   Role,
@@ -43,7 +44,7 @@ export class User extends JoiValidationEntity {
   public judgePhoneNumber?: string;
 
   constructor(rawUser, { filtered = false } = {}) {
-    super('User');
+    super(User.ENTITY_NAME);
 
     if (!filtered) {
       this.pendingEmailVerificationToken =
@@ -68,6 +69,8 @@ export class User extends JoiValidationEntity {
 
     this.section = rawUser.section;
   }
+
+  static ENTITY_NAME = 'User';
 
   setContactInformation(rawUser) {
     if ([ROLES.judge, ROLES.legacyJudge].includes(rawUser.role)) {
@@ -133,7 +136,9 @@ export class User extends JoiValidationEntity {
   static VALIDATION_RULES = {
     contact: joi.object().keys(User.USER_CONTACT_VALIDATION_RULES).optional(),
     email: JoiValidationConstants.EMAIL.optional(),
-    entityName: JoiValidationConstants.STRING.valid('User').required(),
+    entityName: JoiValidationConstants.STRING.valid(
+      User.ENTITY_NAME,
+    ).required(),
     isSeniorJudge: joi.when('role', {
       is: ROLES.judge,
       otherwise: joi.optional().allow(null),
@@ -190,20 +195,7 @@ export class User extends JoiValidationEntity {
   }
 
   static isInternalUser(role?: Role): boolean {
-    const internalRoles: (Role | undefined)[] = [
-      ROLES.adc,
-      ROLES.admissionsClerk,
-      ROLES.chambers,
-      ROLES.clerkOfCourt,
-      ROLES.caseServicesSupervisor,
-      ROLES.docketClerk,
-      ROLES.floater,
-      ROLES.general,
-      ROLES.judge,
-      ROLES.petitionsClerk,
-      ROLES.reportersOffice,
-      ROLES.trialClerk,
-    ];
+    const internalRoles: (Role | undefined)[] = Object.values(INTERNAL_ROLES);
 
     return internalRoles.includes(role);
   }

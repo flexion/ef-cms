@@ -8,10 +8,12 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * updateCounselOnCase
@@ -31,7 +33,7 @@ const updateCounselOnCase = async (
     userId,
   }: { docketNumber: string; userData: any; userId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawCase> => {
   const editableFields = {
     representing: userData.representing,
     serviceIndicator: userData.serviceIndicator,
@@ -43,21 +45,22 @@ const updateCounselOnCase = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const practitionerToUpdate = await getPractitionerById({
+    userId,
+  });
+
+  if (!practitionerToUpdate) {
+    throw new NotFoundError(`Could not find user ${userId}`);
+  }
+
   const caseToUpdate = await getCaseByDocketNumber({
     applicationContext,
     docketNumber,
   });
 
-  const userToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({
-      applicationContext,
-      userId,
-    });
-
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-  if (userToUpdate.role === ROLES.privatePractitioner) {
+  if (practitionerToUpdate.role === ROLES.privatePractitioner) {
     caseEntity.updatePrivatePractitioner({
       userId,
       ...editableFields,
@@ -75,7 +78,7 @@ const updateCounselOnCase = async (
           : SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
       }
     });
-  } else if (userToUpdate.role === ROLES.irsPractitioner) {
+  } else if (practitionerToUpdate.role === ROLES.irsPractitioner) {
     caseEntity.updateIrsPractitioner({
       serviceIndicator: editableFields.serviceIndicator,
       userId,
@@ -84,13 +87,11 @@ const updateCounselOnCase = async (
     throw new Error('User is not a practitioner');
   }
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    applicationContext,
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

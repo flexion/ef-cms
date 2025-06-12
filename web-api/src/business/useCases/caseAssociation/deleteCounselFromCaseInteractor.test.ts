@@ -1,5 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CONTACT_TYPES,
   ROLES,
@@ -19,14 +23,17 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { disassociateUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('deleteCounselFromCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  const getUserById = getUserByIdMock as jest.Mock;
+  const deleteUserFromCase = deleteUserFromCaseMock as jest.Mock;
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   const mockPrivatePractitioners = [
     {
@@ -87,16 +94,14 @@ describe('deleteCounselFromCaseInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(({ userId }) => {
-        const allUsers = [
-          ...mockPrivatePractitioners,
-          ...mockIrsPractitioners,
-          ...mockPetitioners,
-        ];
-        return allUsers.find(user => user.userId === userId);
-      });
+    getUserById.mockImplementation(({ userId }) => {
+      const allUsers = [
+        ...mockPrivatePractitioners,
+        ...mockIrsPractitioners,
+        ...mockPetitioners,
+      ];
+      return allUsers.find(user => user.userId === userId);
+    });
 
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
       ...MOCK_CASE,
@@ -171,10 +176,8 @@ describe('deleteCounselFromCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase,
-    ).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(deleteUserFromCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('should remove the irs practitioner with the given userId from the case', async () => {
@@ -187,10 +190,8 @@ describe('deleteCounselFromCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase,
-    ).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(deleteUserFromCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('should throw an error when the user is NOT a private practitioner or irs practitioner', async () => {

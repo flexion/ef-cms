@@ -2,25 +2,15 @@ import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { User } from '@shared/business/entities/User';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
-/**
- * getWorkItem
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.assigneeId the id of the user to assign the work item to
- * @param {string} providers.assigneeName the name of the user to assign the work item to
- * @param {string} providers.workItemId the id of the work item to assign
- */
 export const assignWorkItemsInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     assigneeId,
     assigneeName,
@@ -38,17 +28,13 @@ export const assignWorkItemsInteractor = async (
     throw new UnauthorizedError('Unauthorized to assign work item');
   }
 
-  const user = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
+  const user = await getUserById({
     userId: authorizedUser.userId,
   });
 
-  const userBeingAssigned = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({
-      applicationContext,
-      userId: assigneeId,
-    });
+  const userBeingAssigned = await getUserById({
+    userId: assigneeId,
+  });
 
   let workItemEntity;
   if (!workItem && workItemId) {
@@ -62,9 +48,11 @@ export const assignWorkItemsInteractor = async (
     workItemEntity = new WorkItem(workItem);
   }
 
-  const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
+  const userIsCaseServices = User.isCaseServicesUser({
+    section: user.section!,
+  });
   const userBeingAssignedIsCaseServices = User.isCaseServicesUser({
-    section: userBeingAssigned.section,
+    section: userBeingAssigned.section!,
   });
 
   const assignedByCaseServicesUser =

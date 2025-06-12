@@ -2,6 +2,9 @@ import { InvalidRequest, NotFoundError } from '@web-api/errors/errors';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { User } from '@shared/business/entities/User';
+import { getUserConfirmationCode } from '@web-api/persistence/postgres/users/getUserConfirmationCode';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 export const confirmSignUpInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -11,12 +14,11 @@ export const confirmSignUpInteractor = async (
     userId,
   }: { confirmationCode: string; userId: string; email: string },
 ): Promise<void> => {
-  const accountConfirmationCode = await applicationContext
-    .getPersistenceGateway()
-    .getAccountConfirmationCode(applicationContext, { userId });
+  const logger = getDawsonLogger();
+  const accountConfirmationCode = await getUserConfirmationCode({ userId });
 
   if (accountConfirmationCode !== confirmationCode) {
-    applicationContext.logger.info('User did not confirm account within 24hr', {
+    logger.info('User did not confirm account within 24hr', {
       email,
     });
     throw new InvalidRequest('Confirmation code expired');
@@ -60,10 +62,7 @@ const createPetitionerUser = async (
     userId,
   });
 
-  await applicationContext.getPersistenceGateway().persistUser({
-    applicationContext,
-    user: userEntity.validate().toRawObject(),
-  });
+  await upsertUsers([userEntity.validate().toRawObject()]);
 
   return userEntity.validate().toRawObject();
 };
