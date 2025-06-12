@@ -1,3 +1,4 @@
+import { createTrialSession } from '@web-api/persistence/postgres/trialSessions/createTrialSession';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 
@@ -13,12 +14,9 @@ export const createTrialSessionAndWorkingCopy = async ({
   applicationContext,
   trialSessionToAdd,
 }) => {
-  const createdTrialSession = await applicationContext
-    .getPersistenceGateway()
-    .createTrialSession({
-      applicationContext,
-      trialSession: trialSessionToAdd.validate().toRawObject(),
-    });
+  const createdTrialSession = await createTrialSession(
+    trialSessionToAdd.validate().toRawObject(),
+  );
 
   if (trialSessionToAdd.judge && trialSessionToAdd.judge.userId) {
     const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({

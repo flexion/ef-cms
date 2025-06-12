@@ -61,6 +61,10 @@ import {
   indexOpenSearchUserOnCase,
   transformOpenSearchUserOnCase,
 } from '../elasticsearch/index-user-on-case';
+import {
+  DW_TRIAL_SESSION_COLUMNS,
+  TrialSessionTable,
+} from './persistence/postgres/trialSessions/schema';
 
 const DEFAULT = {};
 
@@ -70,15 +74,16 @@ interface DatabaseSchemaType {
   dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
-  dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
+  dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
   dwPractitioner: DatabaseTableMetadata<PractitionerTable>;
-  dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
-  dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
+  dwTrialSession: DatabaseTableMetadata<TrialSessionTable>;
   dwUser: DatabaseTableMetadata<UserTable>;
+  dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwUserConfirmationCode: DatabaseTableMetadata<UserConfirmationCodeTable>;
   dwUserOnCase: DatabaseTableMetadata<UserOnCaseTable>;
   dwUserOnCasePending: DatabaseTableMetadata<UserOnCasePendingTable>;
+  dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
 }
 
 // transformOpenSearchMessage takes in a message--a result from the DB--and gets it into the right format to pass into the queue
@@ -138,6 +143,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
     columns: DW_USER_COLUMNS,
     indexOpenSearchMessage: indexOpenSearchUser,
     transformOpenSearchMessage: transformOpenSearchUser,
+  },
+  dwTrialSession: {
+    table: DEFAULT as TrialSessionTable,
+    columns: DW_TRIAL_SESSION_COLUMNS,
   },
   dwPractitioner: {
     table: DEFAULT as PractitionerTable,
