@@ -1,11 +1,10 @@
 import {
-  CASE_STATUS_TYPES,
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -32,6 +31,11 @@ export const fileExternalDocument = async (
   }
 
   const user = await getUserById({ userId: authorizedUser.userId });
+  if (!user) {
+    throw new NotFoundError(
+      `Unable to find user with userId ${authorizedUser.userId}`,
+    );
+  }
 
   const { docketNumber } = documentMetadata;
   const workItems: WorkItem[] = [];
@@ -125,8 +129,6 @@ export const fileExternalDocument = async (
       let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const servedParties = aggregatePartiesForService(caseEntity);
-      const highPriorityWorkItem =
-        caseEntity.status === CASE_STATUS_TYPES.calendared;
 
       for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
         if (docketEntryId && metadata) {
@@ -146,33 +148,22 @@ export const fileExternalDocument = async (
           );
 
           docketEntryEntity.setFiledBy(user);
-
           docketEntryEntity.validate();
 
           const workItem = new WorkItem({
             assigneeId: null,
             assigneeName: null,
-            associatedJudge: caseToUpdate.associatedJudge,
-            associatedJudgeId: caseToUpdate.associatedJudgeId,
-            caseStatus: caseToUpdate.status,
-            caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
             docketEntry: {
               ...docketEntryEntity.toRawObject(),
               createdAt: docketEntryEntity.createdAt,
             },
             docketNumber: caseToUpdate.docketNumber,
-            docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-            highPriority: highPriorityWorkItem,
-            leadDocketNumber: caseToUpdate.leadDocketNumber,
             section: DOCKET_SECTION,
             sentBy: user.name,
             sentByUserId: user.userId,
-            trialDate: caseEntity.trialDate,
-            trialLocation: caseEntity.trialLocation,
           }).validate();
 
           docketEntryEntity.setWorkItem(workItem);
-
           workItems.push(workItem);
           caseEntity.addDocketEntry(docketEntryEntity);
 
@@ -203,7 +194,7 @@ export const fileExternalDocument = async (
         applicationContext,
         authorizedUser,
         caseToUpdate: caseEntity,
-        includeCorrespondenceAndWorkItems: false,
+        includeCorrespondence: false,
       });
 
       const rawCaseEntity = caseEntity.toRawObject();

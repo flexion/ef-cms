@@ -44,6 +44,12 @@ export const fileCourtIssuedDocketEntry = async (
   if (!hasPermission) {
     throw new UnauthorizedError('Unauthorized');
   }
+  const user = await getUserById({ userId: authorizedUser.userId });
+  if (!user) {
+    throw new NotFoundError(
+      `Unable to find user with userId ${authorizedUser.userId}`,
+    );
+  }
 
   const { docketEntryId } = documentMeta;
 
@@ -71,8 +77,6 @@ export const fileCourtIssuedDocketEntry = async (
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
-
-  const user = await getUserById({ userId: authorizedUser.userId });
 
   const isUnservable = DocketEntry.isUnservable(documentMeta);
 
@@ -114,30 +118,19 @@ export const fileCourtIssuedDocketEntry = async (
 
       docketEntryEntity.setFiledBy(user);
 
-      const workItem = new WorkItem(
-        {
-          assigneeId: null,
-          assigneeName: null,
-          associatedJudge: caseEntity.associatedJudge,
-          associatedJudgeId: caseEntity.associatedJudgeId,
-          caseStatus: caseEntity.status,
-          caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-          docketEntry: {
-            ...docketEntryEntity.toRawObject(),
-            createdAt: docketEntryEntity.createdAt,
-          },
-          docketNumber: caseEntity.docketNumber,
-          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-          hideFromPendingMessages: true,
-          inProgress: true,
-          section: DOCKET_SECTION,
-          sentBy: user.name,
-          sentByUserId: user.userId,
-          trialDate: caseEntity.trialDate,
-          trialLocation: caseEntity.trialLocation,
+      const workItem = new WorkItem({
+        assigneeId: null,
+        assigneeName: null,
+        docketEntry: {
+          ...docketEntryEntity.toRawObject(),
+          createdAt: docketEntryEntity.createdAt,
         },
-        { caseEntity },
-      );
+        docketNumber: caseEntity.docketNumber,
+        inProgress: true,
+        section: DOCKET_SECTION,
+        sentBy: user.name,
+        sentByUserId: user.userId,
+      });
 
       if (isUnservable) {
         workItem.setAsCompleted({ message: 'completed', user });

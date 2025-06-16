@@ -10,7 +10,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
@@ -43,6 +43,13 @@ export const addPaperFiling = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const user = await getUserById({ userId: authorizedUser.userId });
+  if (!user) {
+    throw new NotFoundError(
+      `Unable to find user with userId ${authorizedUser.userId}`,
+    );
+  }
+
   if (!docketEntryId) {
     throw new Error('Did not receive a docketEntryId');
   }
@@ -68,8 +75,6 @@ export const addPaperFiling = async (
 
   const docketRecordEditState =
     documentMetadata.isFileAttached === false ? documentMetadata : {};
-
-  const user = await getUserById({ userId: authorizedUser.userId });
 
   const caseEntities: Case[] = [];
   let filedByFromLeadCase;
@@ -108,31 +113,21 @@ export const addPaperFiling = async (
       docketEntryEntity.filedBy = filedByFromLeadCase;
     }
 
-    const workItem = new WorkItem(
-      {
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        associatedJudge: caseEntity.associatedJudge,
-        associatedJudgeId: caseEntity.associatedJudgeId,
-        caseStatus: caseEntity.status,
-        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
-        docketNumber: caseEntity.docketNumber,
-        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        inProgress: isSavingForLater,
-        isRead: user.role !== ROLES.privatePractitioner,
-        section: user.section,
-        sentBy: user.name,
-        sentBySection: user.section,
-        sentByUserId: user.userId,
-        trialDate: caseEntity.trialDate,
-        trialLocation: caseEntity.trialLocation,
+    const workItem = new WorkItem({
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      docketEntry: {
+        ...docketEntryEntity.toRawObject(),
+        createdAt: docketEntryEntity.createdAt,
       },
-      { caseEntity },
-    );
+      docketNumber: caseEntity.docketNumber,
+      inProgress: isSavingForLater,
+      isRead: user.role !== ROLES.privatePractitioner,
+      section: user.section,
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
+    });
 
     if (isReadyForService) {
       workItem.setAsCompleted({
