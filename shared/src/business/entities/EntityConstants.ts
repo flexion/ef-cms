@@ -1128,6 +1128,7 @@ export const ROLES = {
   privatePractitioner: 'privatePractitioner',
   reportersOffice: 'reportersOffice',
   trialClerk: 'trialclerk',
+  zendesk: 'zendesk',
 } as const;
 export type Role = (typeof ROLES)[keyof typeof ROLES];
 
