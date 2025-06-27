@@ -66,6 +66,18 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute();
 
   await db.schema
+    .createTable('dwPractitionerDocuments')
+    .addColumn('barNumber', 'varchar', col => col.primaryKey())
+    .addColumn('practitionerDocumentFileId', 'varchar', col => col.notNull())
+    .addColumn('categoryName', 'varchar')
+    .addColumn('categoryType', 'varchar')
+    .addColumn('description', 'varchar')
+    .addColumn('fileName', 'varchar')
+    .addColumn('location', 'varchar')
+    .addColumn('uploadDate', 'timestamptz', col => col.notNull())
+    .execute();
+
+  await db.schema
     .createTable('dwUserConfirmationCode')
     .addColumn('id', 'varchar', col => col.primaryKey())
     .addColumn('userId', 'varchar', col => col.notNull())
@@ -132,6 +144,11 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute();
 
   await db.schema
+    .createIndex('idx_practitioner_documents_practitionerDocumentFileId')
+    .on('dwPractitionerDocuments')
+    .column('practitionerDocumentFileId')
+    .execute();
+  await db.schema
     .createIndex('idx_user_confirmation_code_userId')
     .on('dwUserConfirmationCode')
     .column('userId')
@@ -158,6 +175,7 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable('dwUserOnCasePending').execute();
   await db.schema.dropTable('dwUserOnCase').execute();
   await db.schema.dropTable('dwUserConfirmationCode').execute();
+  await db.schema.dropTable('dwPractitionerDocuments').execute();
   await db.schema.dropTable('dwPractitioner').execute();
   await db.schema.dropTable('dwUser').execute();
 }

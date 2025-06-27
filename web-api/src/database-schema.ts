@@ -61,6 +61,10 @@ import {
   indexOpenSearchUserOnCase,
   transformOpenSearchUserOnCase,
 } from '../elasticsearch/index-user-on-case';
+import {
+  DW_PRACTITIONER_DOCUMENT_COLUMNS,
+  PractitionerDocumentTable,
+} from '@web-api/persistence/postgres/practitionerDocuments/schema';
 
 const DEFAULT = {};
 
@@ -73,6 +77,7 @@ interface DatabaseSchemaType {
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwPractitioner: DatabaseTableMetadata<PractitionerTable>;
+  dwPractitionerDocuments: DatabaseTableMetadata<PractitionerDocumentTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
   dwUser: DatabaseTableMetadata<UserTable>;
@@ -142,6 +147,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwPractitioner: {
     table: DEFAULT as PractitionerTable,
     columns: DW_PRACTITIONER_COLUMNS,
+  },
+  dwPractitionerDocuments: {
+    table: DEFAULT as PractitionerDocumentTable,
+    columns: DW_PRACTITIONER_DOCUMENT_COLUMNS,
   },
   dwUserConfirmationCode: {
     table: DEFAULT as UserConfirmationCodeTable,

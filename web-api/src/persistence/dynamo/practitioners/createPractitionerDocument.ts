@@ -1,3 +1,4 @@
+import { RawPractitionerDocument } from '@shared/business/entities/PractitionerDocument';
 import * as client from '../../dynamodbClientService';
 
 export const createPractitionerDocument = async ({

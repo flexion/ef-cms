@@ -33,7 +33,6 @@ export const getPractitionerDocumentDownloadUrlInteractor = async (
   const practitionerDocument = await applicationContext
     .getPersistenceGateway()
     .getPractitionerDocumentByFileId({
-      applicationContext,
       barNumber,
       fileId: practitionerDocumentFileId,
     });
