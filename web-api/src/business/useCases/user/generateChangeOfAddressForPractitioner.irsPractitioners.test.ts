@@ -20,8 +20,8 @@ jest.mock('../addCoversheetInteractor', () => ({
   }),
 }));
 
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const getCasesForUser = getCasesForUserMock as jest.Mock;
+const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 
 describe('generateChangeOfAddress', () => {
   const { docketNumber } = MOCK_CASE;
@@ -76,7 +76,7 @@ describe('generateChangeOfAddress', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .setChangeOfAddressCaseAsDone.mockReturnValue({ remaining: 0 });
+      .setChangeOfAddressCaseAsDone.mockResolvedValue([{ remaining: 0 }]);
 
     applicationContext
       .getUtilities()
@@ -96,6 +96,7 @@ describe('generateChangeOfAddress', () => {
         address1: '23456 Main St',
       } as any,
       firmName: 'my firm',
+      oldUser: mockIrsPractitioner,
       requestUserId: 'abc',
       updatedEmail: 'new@exaple.com',
       updatedName: 'rich',
@@ -127,6 +128,7 @@ describe('generateChangeOfAddress', () => {
         address1: '23456 Main St',
       } as any,
       firmName: 'my firm',
+      oldUser: mockIrsPractitioner,
       requestUserId: 'abc',
       updatedEmail: 'new@exaple.com',
       updatedName: 'rich',
@@ -152,6 +154,7 @@ describe('generateChangeOfAddress', () => {
         address1: '234 Main St',
       } as any,
       firmName: 'my firm',
+      oldUser: mockIrsPractitioner,
       requestUserId: 'abc',
       updatedEmail: 'new@exaple.com',
       updatedName: 'rich',
@@ -190,6 +193,7 @@ describe('generateChangeOfAddress', () => {
         address1: '234 Main St',
       } as any,
       firmName: 'my firm',
+      oldUser: mockIrsPractitioner,
       requestUserId: 'abc',
       updatedEmail: 'new@exaple.com',
       updatedName: 'rich',
@@ -217,6 +221,7 @@ describe('generateChangeOfAddress', () => {
         address1: '234 Main St',
       } as any,
       firmName: 'my firm',
+      oldUser: mockIrsPractitioner,
       requestUserId: 'abc',
       updatedEmail: 'new@exaple.com',
       updatedName: 'rich',
@@ -248,6 +253,7 @@ describe('generateChangeOfAddress', () => {
         address1: '234 Main St',
       } as any,
       firmName: 'my firm',
+      oldUser: mockIrsPractitioner,
       requestUserId: 'abc',
       updatedEmail: 'new@exaple.com',
       updatedName: 'rich',

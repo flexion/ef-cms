@@ -11,14 +11,15 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { isEmpty } from 'lodash';
+import { isEmpty, omit } from 'lodash';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import diff from 'diff-arrays-of-objects';
-import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 import { disassociateUserFromCase } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+import { upsertUserOnCaseRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCaseRecords';
 
 /**
  * Identifies docket entries which have been updated and issues persistence calls
@@ -29,19 +30,18 @@ import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
  * @returns {Array<function>} the persistence functions required to complete this action
  */
 const updateCaseDocketEntries = ({
-  applicationContext,
   authorizedUser,
   caseToUpdate,
   oldCase,
 }: {
-  applicationContext: ServerApplicationContext;
   authorizedUser: UnknownAuthUser;
   caseToUpdate: any;
   oldCase: any;
 }) => {
+  // We are not comparing work item changes as we do not save the work item on the docket entry in persistence
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
-    oldCase.docketEntries,
-    caseToUpdate.docketEntries,
+    oldCase.docketEntries.map(d => omit(d, 'workItem')),
+    caseToUpdate.docketEntries.map(d => omit(d, 'workItem')),
     'docketEntryId',
   );
 
@@ -49,8 +49,8 @@ const updateCaseDocketEntries = ({
     added: addedArchivedDocketEntries,
     updated: updatedArchivedDocketEntries,
   } = diff(
-    oldCase.archivedDocketEntries,
-    caseToUpdate.archivedDocketEntries,
+    oldCase.archivedDocketEntries.map(d => omit(d, 'workItem')),
+    caseToUpdate.archivedDocketEntries.map(d => omit(d, 'workItem')),
     'docketEntryId',
   );
 
@@ -64,17 +64,7 @@ const updateCaseDocketEntries = ({
     { authorizedUser, petitioners: caseToUpdate.petitioners },
   );
 
-  return validDocketEntries.map(
-    doc =>
-      function updateCaseDocketEntries_cb() {
-        return applicationContext.getPersistenceGateway().updateDocketEntry({
-          applicationContext,
-          docketEntryId: doc.docketEntryId,
-          docketNumber: caseToUpdate.docketNumber,
-          document: doc,
-        });
-      },
-  );
+  return [() => upsertDocketEntries(validDocketEntries)];
 };
 
 const updateCaseMessages = async ({
@@ -205,7 +195,6 @@ const updateIrsPractitioners = ({
   const {
     added: addedIrsPractitioners,
     removed: deletedIrsPractitioners,
-    same: unchangedIrsPractitioners,
     updated: updatedIrsPractitioners,
   } = diff(oldCase.irsPractitioners, caseToUpdate.irsPractitioners, 'userId');
 
@@ -213,10 +202,6 @@ const updateIrsPractitioners = ({
     ...addedIrsPractitioners,
     ...updatedIrsPractitioners,
   ];
-
-  if (caseToUpdate.leadDocketNumber && unchangedIrsPractitioners.length) {
-    currentIrsPractitioners.push(...unchangedIrsPractitioners);
-  }
 
   const validIrsPractitioners = IrsPractitioner.validateRawCollection(
     currentIrsPractitioners,
@@ -232,17 +217,53 @@ const updateIrsPractitioners = ({
       },
   );
 
-  const updatePractitionerFunctions = validIrsPractitioners.map(
-    practitioner =>
-      async function updateIrsPractitioners_cb() {
-        return await associateUserWithCase({
+  const irsPractitionersToUpdate = validIrsPractitioners.map(irs => ({
+    docketNumber: caseToUpdate.docketNumber,
+    userId: irs.userId,
+    serviceIndicator: irs.serviceIndicator,
+  }));
+
+  return [
+    ...deletePractitionerFunctions,
+    () => upsertUserOnCaseRecords(irsPractitionersToUpdate),
+  ];
+};
+
+const updatePetitioners = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  const {
+    added: addedPetitioners,
+    removed: deletedPetitioners,
+    updated: updatedPetitioners,
+  } = diff(oldCase.petitioners, caseToUpdate.petitioners, 'contactId');
+
+  const currentPetitioners = [...addedPetitioners, ...updatedPetitioners];
+
+  const deletePetitionersFunctions = deletedPetitioners.map(
+    petitioner =>
+      async function deletePetitioner_cb() {
+        return await disassociateUserFromCase({
           docketNumber: caseToUpdate.docketNumber,
-          userId: practitioner.userId,
+          userId: petitioner.userId,
         });
       },
   );
 
-  return [...deletePractitionerFunctions, ...updatePractitionerFunctions];
+  const petitionersToUpdate = currentPetitioners.map(petitioner => ({
+    docketNumber: caseToUpdate.docketNumber,
+    userId: petitioner.userId,
+    representing: petitioner.representing,
+    serviceIndicator: petitioner.serviceIndicator,
+  }));
+
+  return [
+    ...deletePetitionersFunctions,
+    () => upsertUserOnCaseRecords(petitionersToUpdate),
+  ];
 };
 
 const updatePrivatePractitioners = ({
@@ -254,7 +275,6 @@ const updatePrivatePractitioners = ({
   const {
     added: addedPrivatePractitioners,
     removed: deletedPrivatePractitioners,
-    same: unchangedPrivatePractitioners,
     updated: updatedPrivatePractitioners,
   } = diff(
     oldCase.privatePractitioners,
@@ -266,10 +286,6 @@ const updatePrivatePractitioners = ({
     ...addedPrivatePractitioners,
     ...updatedPrivatePractitioners,
   ];
-
-  if (caseToUpdate.leadDocketNumber && unchangedPrivatePractitioners.length) {
-    currentPrivatePractitioners.push(...unchangedPrivatePractitioners);
-  }
 
   const validPrivatePractitioners = PrivatePractitioner.validateRawCollection(
     currentPrivatePractitioners,
@@ -285,17 +301,19 @@ const updatePrivatePractitioners = ({
       },
   );
 
-  const updatePractitionerFunctions = validPrivatePractitioners.map(
-    practitioner =>
-      async function updatePrivatePractitioner_cb() {
-        return await associateUserWithCase({
-          docketNumber: caseToUpdate.docketNumber,
-          userId: practitioner.userId,
-        });
-      },
+  const privatePractitionersToUpdate = validPrivatePractitioners.map(
+    privateP => ({
+      docketNumber: caseToUpdate.docketNumber,
+      userId: privateP.userId,
+      representing: privateP.representing,
+      serviceIndicator: privateP.serviceIndicator,
+    }),
   );
 
-  return [...deletePractitionerFunctions, ...updatePractitionerFunctions];
+  return [
+    ...deletePractitionerFunctions,
+    () => upsertUserOnCaseRecords(privatePractitionersToUpdate),
+  ];
 };
 
 const updateCaseDeadlines = async ({
@@ -364,6 +382,7 @@ export const updateCaseAndAssociations = async ({
     updateHearings,
     updateIrsPractitioners,
     updatePrivatePractitioners,
+    updatePetitioners,
   ];
 
   if (includeCorrespondence) {

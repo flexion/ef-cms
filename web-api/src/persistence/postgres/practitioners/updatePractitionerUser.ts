@@ -1,7 +1,6 @@
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { applicationContext } from '@web-api/applicationContext';
 import { updateUser } from '../users/updateUser';
-import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
 
 export const updatePractitionerUser = async ({
   user,
@@ -17,9 +16,9 @@ export const updatePractitionerUser = async ({
     });
   }
 
-  await updatePractitioner({ practitionerToUpdate: user });
-
-  return await updateUser({
+  await updateUser({
     userToUpdate: user,
   });
+
+  return user;
 };

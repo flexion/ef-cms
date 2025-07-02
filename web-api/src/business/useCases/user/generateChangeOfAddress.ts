@@ -4,6 +4,9 @@ import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCasesForUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 
 export type TUserContact = {
   address1: string;
@@ -38,6 +41,7 @@ const generateChangeOfAddressForPractitioner = async ({
   bypassDocketEntry = false,
   contactInfo,
   firmName,
+  oldUser,
   requestUserId,
   updatedEmail,
   updatedName,
@@ -48,6 +52,7 @@ const generateChangeOfAddressForPractitioner = async ({
   bypassDocketEntry?: boolean;
   contactInfo: TUserContact;
   firmName: string;
+  oldUser: RawPractitioner | RawPrivatePractitioner | RawIrsPractitioner;
   requestUserId?: string;
   updatedEmail?: string;
   updatedName?: string;
@@ -87,7 +92,6 @@ const generateChangeOfAddressForPractitioner = async ({
   const jobId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().createChangeOfAddressJob({
-    applicationContext,
     docketNumbers: associatedUserCases.map(caseInfo => caseInfo.docketNumber),
     jobId,
   });
@@ -104,6 +108,7 @@ const generateChangeOfAddressForPractitioner = async ({
           docketNumber: caseInfo.docketNumber,
           firmName,
           jobId,
+          oldUser,
           requestUser: {
             ...authorizedUser,
             token: undefined,
@@ -129,8 +134,8 @@ const generateChangeOfAddressForPractitioner = async ({
             bypassDocketEntry,
             contactInfo,
             docketNumber: caseInfo.docketNumber,
-            firmName,
             jobId,
+            oldUser,
             requestUserId,
             updatedEmail,
             updatedName,

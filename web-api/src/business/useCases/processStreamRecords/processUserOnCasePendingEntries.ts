@@ -17,16 +17,19 @@ export const processUserOnCasePendingEntries = async ({
     await upsertUserOnCasePendingRecords(
       userOnCasePendingRecords.map(userOnCasePendingRecord => {
         const record = unmarshall(userOnCasePendingRecord.dynamodb.NewImage);
+        const userId = record.pk.split('|')[1];
+        const docketNumber = record.sk.split('|')[1];
 
         return {
-          userId: record.userId,
-          docketNumber: record.docketNumber,
+          userId,
+          docketNumber,
         };
       }),
     );
   } catch (e) {
     getDawsonLogger().error(
-      `Postgres re-indexing failure: Failed to process userOnCasePending record: ${e}`,
+      `Postgres re-indexing failure: Failed to process userOnCasePending record:`,
+      e,
     );
   }
 };

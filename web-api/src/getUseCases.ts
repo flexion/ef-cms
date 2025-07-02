@@ -139,7 +139,6 @@ import { opinionPublicSearchInteractor } from './business/useCases/public/opinio
 import { orderAdvancedSearchInteractor } from '../../shared/src/business/useCases/orderAdvancedSearchInteractor';
 import { orderPublicSearchInteractor } from './business/useCases/public/orderPublicSearchInteractor';
 import { prioritizeCaseInteractor } from '../../shared/src/business/useCases/prioritizeCaseInteractor';
-import { processStreamRecordsInteractor } from './business/useCases/processStreamRecords/processStreamRecordsInteractor';
 import { queueEmailUpdateAssociatedCasesWorker } from '@web-api/business/useCases/user/queueEmailUpdateAssociatedCasesWorker';
 import { queueUpdateAssociatedCasesWorker } from './business/useCases/user/queueUpdateAssociatedCasesWorker';
 import { removeCaseFromTrialInteractor } from './business/useCases/trialSessions/removeCaseFromTrialInteractor';
@@ -197,7 +196,7 @@ import { updateQcCompleteForTrialInteractor } from '../../shared/src/business/us
 import { updateTrialSessionInteractor } from './business/useCases/trialSessions/updateTrialSessionInteractor';
 import { updateTrialSessionWorkingCopyInteractor } from './business/useCases/trialSessions/updateTrialSessionWorkingCopyInteractor';
 import { updateUserCaseNoteInteractor } from './business/useCases/caseNote/updateUserCaseNoteInteractor';
-import { updateUserContactInformationInteractor } from './business/useCases/user/updateUserContactInformationInteractor';
+import { updatePractitionerContactInformationInteractor } from './business/useCases/user/updatePractitionerContactInformationInteractor';
 import { updateUserPendingEmailInteractor } from './business/useCases/user/updateUserPendingEmailInteractor';
 import { validatePdfInteractor } from './business/useCases/pdf/validatePdfInteractor';
 import { verifyPendingCaseForUserInteractor } from './business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor';
@@ -345,7 +344,6 @@ const useCases = {
   orderAdvancedSearchInteractor,
   orderPublicSearchInteractor,
   prioritizeCaseInteractor,
-  processStreamRecordsInteractor,
   queueEmailUpdateAssociatedCasesWorker,
   queueUpdateAssociatedCasesWorker,
   removeCaseFromTrialInteractor,
@@ -403,7 +401,7 @@ const useCases = {
   updateTrialSessionInteractor,
   updateTrialSessionWorkingCopyInteractor,
   updateUserCaseNoteInteractor,
-  updateUserContactInformationInteractor,
+  updatePractitionerContactInformationInteractor,
   updateUserPendingEmailInteractor,
   validatePdfInteractor,
   verifyPendingCaseForUserInteractor,

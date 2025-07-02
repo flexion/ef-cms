@@ -47,10 +47,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('practitionerId', 'varchar', col => col.primaryKey())
     .addColumn('userId', 'varchar', col => col.unique())
     .addColumn('additionalPhone', 'varchar')
-    .addColumn('admissionsDate', 'timestamptz')
+    .addColumn('admissionsDate', 'timestamptz', col => col.notNull())
     .addColumn('admissionsStatus', 'varchar')
     .addColumn('barNumber', 'varchar', col => col.notNull())
-    .addColumn('birthYear', 'int2')
+    .addColumn('birthYear', 'int2', col => col.notNull())
     .addColumn('confirmEmail', 'varchar')
     .addColumn('firmName', 'varchar')
     .addColumn('firstName', 'varchar')
@@ -60,7 +60,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('practiceType', 'varchar')
     .addColumn('practitionerNotes', 'text')
     .addColumn('practitionerType', 'varchar')
-    .addColumn('serviceIndicator', 'varchar', col => col.notNull())
     .addColumn('suffix', 'varchar')
     .addColumn('updatedEmail', 'varchar')
     .execute();
@@ -70,7 +69,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('id', 'varchar', col => col.primaryKey())
     .addColumn('userId', 'varchar', col => col.notNull())
     .addColumn('confirmationCode', 'varchar', col => col.notNull())
-    .addColumn('expiresAt', 'timestamptz', col => col.notNull())
+    .addColumn('ttl', 'bigint', col => col.notNull())
     .execute();
 
   await db.schema
@@ -78,7 +77,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('userId', 'varchar', col => col.notNull())
     .addColumn('docketNumber', 'varchar', col => col.notNull())
     .addColumn('representing', 'jsonb')
-    .addColumn('entityName', 'varchar')
+    .addColumn('serviceIndicator', 'varchar')
     .addPrimaryKeyConstraint('pkUserOnCase', ['docketNumber', 'userId'])
     .execute();
 
@@ -137,20 +136,25 @@ export async function up(db: Kysely<any>): Promise<void> {
     .column('userId')
     .execute();
   await db.schema
-    .createIndex('idx_user_confirmation_code_expiresAt')
+    .createIndex('idx_user_confirmation_code_ttl')
     .on('dwUserConfirmationCode')
-    .column('expiresAt')
+    .column('ttl')
+    .execute();
+  await db.schema
+    .createIndex('idx_user_confirmation_code_confirmationCode')
+    .on('dwUserConfirmationCode')
+    .column('confirmationCode')
     .execute();
 
+  await db.schema
+    .createIndex('idx_user_on_case_docketNumber')
+    .on('dwUserOnCase')
+    .column('docketNumber')
+    .execute();
   await db.schema
     .createIndex('idx_user_on_case_userId_docketNumber')
     .on('dwUserOnCase')
     .columns(['userId', 'docketNumber'])
-    .execute();
-  await db.schema
-    .createIndex('idx_user_on_case_docketNumber_entityName')
-    .on('dwUserOnCase')
-    .columns(['docketNumber', 'entityName'])
     .execute();
 }
 

@@ -27,10 +27,8 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { User } from '@shared/business/entities/User';
-import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+import { RawUser } from '@shared/business/entities/User';
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
-import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
@@ -40,20 +38,18 @@ const addPetitionDocketEntryToCase = ({
   docketEntryEntity,
   user,
 }) => {
-  const workItemEntity = new WorkItem(
-    {
-      assigneeId: null,
-      assigneeName: null,
-      docketEntry: {
-        ...docketEntryEntity.toRawObject(),
-        createdAt: docketEntryEntity.createdAt,
-      },
-      docketNumber: caseToAdd.docketNumber,
-      section: PETITIONS_SECTION,
-      sentBy: user.name,
-      sentByUserId: user.userId,
-    }
-  );
+  const workItemEntity = new WorkItem({
+    assigneeId: null,
+    assigneeName: null,
+    docketEntry: {
+      ...docketEntryEntity.toRawObject(),
+      createdAt: docketEntryEntity.createdAt,
+    },
+    docketNumber: caseToAdd.docketNumber,
+    section: PETITIONS_SECTION,
+    sentBy: user.name,
+    sentByUserId: user.userId,
+  });
 
   docketEntryEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocketEntry(docketEntryEntity);
@@ -83,7 +79,7 @@ const createCaseMetadata = async (
       | PrivatePractitioner
       | IrsPractitioner[];
     stinFileId: string;
-    user: User | Practitioner | PrivatePractitioner | IrsPractitioner;
+    user: RawUser;
   },
   authorizedUser: AuthUser,
 ) => {
@@ -288,10 +284,7 @@ export const createCaseInteractor = async (
 
   const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
 
-  let privatePractitioners:
-    | Practitioner
-    | PrivatePractitioner
-    | IrsPractitioner[] = [];
+  let privatePractitioners: PrivatePractitioner[] = [];
   if (user.role === ROLES.privatePractitioner) {
     const practitionerUser = (await getPractitionerById({
       userId: user.userId,
@@ -352,17 +345,9 @@ export const createCaseInteractor = async (
     });
   }
 
-  const caseAssociationUpdates = [
-    upsertWorkItems({
-      workItems: [workItem.validate().toRawObject()],
-    }),
-    associateUserWithCase({
-      docketNumber: caseToAdd.docketNumber,
-      userId: user.userId,
-    }),
-  ];
-
-  await settlePromises(caseAssociationUpdates);
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
+  });
 
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,

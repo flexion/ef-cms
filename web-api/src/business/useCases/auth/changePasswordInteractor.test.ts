@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   ChallengeNameType,
@@ -12,9 +13,9 @@ import {
   ROLES,
   Role,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   changePasswordInteractor,
   updateUserPendingEmailRecord,
@@ -363,7 +364,7 @@ describe('updateUserPendingEmailRecord', () => {
     const updateUserCalls = updateUser.mock.calls;
     expect(updateUserCalls.length).toEqual(1);
     expect(updateUserCalls[0][0].userToUpdate).toMatchObject({
-      isUpdatingInformation: false,
+      isUpdatingInformation: undefined,
     });
   });
 });

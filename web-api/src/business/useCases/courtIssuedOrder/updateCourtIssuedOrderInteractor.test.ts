@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 jest.mock(
@@ -132,8 +133,6 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('should throw an error if document is not found', async () => {
-    getUserById.mockResolvedValue(undefined);
-
     await expect(
       updateCourtIssuedOrderInteractor(
         applicationContext,

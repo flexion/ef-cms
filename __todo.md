@@ -45,26 +45,18 @@ does not belong in the persistence layer. -- Waiting on Jim Lerza to confirm bus
 - [x] Update Mocks to include all functions (solo)
 - [x] Index all where clauses (good for solo work)
 - [x] Confirm Confirmation Codes Working as Expected
-- [ ] getCasesByEmailTotal, figure out what to do with this, will it all be in opensearch or postgres
-- [ ] Fix representing for associateUserWithCase
-- [ ] Implement TTL on Confirmation Codes
-- [ ] Update api tests (Andy will tackle first half)
-- [ ] Update shared tests (Andy will look at shared)
-- [ ] Update legacy client integration tests (Kaitlyn will look at legacy client integration)
-- [ ] Update cypress e2e tests (Kaitlyn will tackle first half)
-- [ ] Parking lot with devs and Tenille Wednesday 5/14 concerning the `pending-case` sk
-
-## Todo part 2
-
-- [ ] Get Green PR and All Tests Pass
-- [ ] Push to Experimental Environment (Smoke Tests)
-- [ ] Write a Deletion Script to Remove DynamoDB Records (One Time)
+- [x] getCasesByEmailTotal, figure out what to do with this, will it all be in opensearch or postgres
+- [x] Update updateUser/upsertUsers to always check for practitioner role and persist practitioner data if applicable
+      - Make a single function(or close to one) function for updating user. Consolidate
+- [x] Consider doing the same when fetching user data
+- [x] resolve issue regarding joining userOnCase with practitioner since practitioners may be petitioners on a case
+- [x] getCasesByDocketNumbers we need to think about efficiency
+- [x] Do a performance pass
+- [x] Implement TTL on Confirmation Codes
 - [ ] Test Deletion Script on Deployed Environment
-- [ ] Update DynamoDB DrawIO Entity Map
 - [ ] Update ERD for new tables
-- [ ] Do we really need optional fields for...
-  - [ ] practitioner.admissions_data
-  - [ ] many other practitioner fields
+- [ ] Do a full migration on local computer
+- [ ] Need to consider that during the first migration we will not have the users in postgres so Opensearch sync will need to check both dynamo and postgres. aka indexOpenSearchUserOnCase -> getUserById will not work.
 
 ## Odd dynamo functions that need to be reimplemented with postgres
 

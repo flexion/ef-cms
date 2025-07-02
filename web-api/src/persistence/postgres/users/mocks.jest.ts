@@ -31,10 +31,6 @@ jest.mock('@web-api/persistence/postgres/users/getAllUsersByRole', () =>
   mockFactory('getAllUsersByRole'),
 );
 
-jest.mock('@web-api/persistence/postgres/users/getUserByEmail', () =>
-  mockFactory('getUserByEmail'),
-);
-
 jest.mock('@web-api/persistence/postgres/users/getUserById', () =>
   mockFactory('getUserById'),
 );
@@ -44,21 +40,16 @@ jest.mock(
   () => mockFactory('getUserByIdOnceAllUpdatesComplete'),
 );
 
-jest.mock(
-  '@web-api/persistence/postgres/users/getUserByIdWithPractitioner',
-  () => mockFactory('getUserByIdWithPractitioner'),
-);
-
 jest.mock('@web-api/persistence/postgres/users/getUserConfirmationCode', () =>
   mockFactory('getUserConfirmationCode'),
 );
 
-jest.mock('@web-api/persistence/postgres/users/getUsersById', () =>
-  mockFactory('getUsersById'),
+jest.mock('@web-api/persistence/postgres/users/getUserRecordsById', () =>
+  mockFactory('getUserRecordsById'),
 );
 
-jest.mock('@web-api/persistence/postgres/users/getUsersInSection', () =>
-  mockFactory('getUsersInSection'),
+jest.mock('@web-api/persistence/postgres/users/getUsersInSections', () =>
+  mockFactory('getUsersInSections'),
 );
 
 jest.mock(
@@ -70,8 +61,8 @@ jest.mock('@web-api/persistence/postgres/users/updateUser', () =>
   mockFactory('updateUser'),
 );
 
-jest.mock('@web-api/persistence/postgres/users/upsertUsers', () =>
-  mockFactory('upsertUsers'),
+jest.mock('@web-api/persistence/postgres/users/upsertUserRecords', () =>
+  mockFactory('upsertUserRecords'),
 );
 
 jest.mock(

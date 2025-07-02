@@ -5,28 +5,18 @@ import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createCase } from '@web-api/persistence/postgres/cases/createCase';
-import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { upsertUserOnCaseRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCaseRecords';
+import { Contact } from '@shared/business/entities/contacts/Contact';
 
-/**
- * createCaseDocketEntries
- *
- * @param {object} providers the providers object
- * @param {Array<object>} providers.docketEntries a list of docket entries
- * @param {object} providers.docketNumber the docket number
- * @returns {Array<Promise>} promises which resolve upon creation of all docket entries
- */
-const createCaseDocketEntries = ({
-  applicationContext,
+const createCaseDocketEntries = async ({
   authorizedUser,
   docketEntries,
-  docketNumber,
   petitioners,
 }: {
-  applicationContext: ServerApplicationContext;
   authorizedUser: AuthUser;
   docketEntries: any;
-  docketNumber: string;
   petitioners: any;
 }) => {
   const validDocketEntries = DocketEntry.validateRawCollection(docketEntries, {
@@ -34,42 +24,52 @@ const createCaseDocketEntries = ({
     petitioners,
   });
 
-  return validDocketEntries.map(doc =>
-    applicationContext.getPersistenceGateway().updateDocketEntry({
-      applicationContext,
-      docketEntryId: doc.docketEntryId,
-      docketNumber,
-      document: doc,
-    }),
-  );
+  await upsertDocketEntries(validDocketEntries);
 };
 
-const connectIrsPractitioners = ({ docketNumber, irsPractitioners }) => {
+const connectIrsPractitioners = async ({ docketNumber, irsPractitioners }) => {
   const validIrsPractitioners =
     IrsPractitioner.validateRawCollection(irsPractitioners);
 
-  return validIrsPractitioners.map(
-    async practitioner =>
-      await associateUserWithCase({
-        docketNumber,
-        userId: practitioner.userId,
-      }),
+  await upsertUserOnCaseRecords(
+    validIrsPractitioners.map(irs => ({
+      docketNumber,
+      userId: irs.userId,
+      serviceIndicator: irs.serviceIndicator,
+    })),
   );
 };
 
-const connectPrivatePractitioners = ({
+const connectPrivatePractitioners = async ({
   docketNumber,
   privatePractitioners,
 }) => {
   const validPrivatePractitioners =
     PrivatePractitioner.validateRawCollection(privatePractitioners);
 
-  return validPrivatePractitioners.map(
-    async practitioner =>
-      await associateUserWithCase({
-        docketNumber,
-        userId: practitioner.userId,
-      }),
+  await upsertUserOnCaseRecords(
+    validPrivatePractitioners.map(privatePractitioner => ({
+      docketNumber,
+      userId: privatePractitioner.userId,
+      serviceIndicator: privatePractitioner.serviceIndicator,
+      representing: privatePractitioner.representing,
+    })),
+  );
+};
+
+const connectPetitioners = async ({
+  docketNumber,
+  petitioners,
+}: {
+  docketNumber: string;
+  petitioners: Contact[];
+}) => {
+  await upsertUserOnCaseRecords(
+    petitioners.map(petitioner => ({
+      docketNumber,
+      userId: petitioner.contactId,
+      serviceIndicator: petitioner.serviceIndicator,
+    })),
   );
 };
 
@@ -82,7 +82,6 @@ const connectPrivatePractitioners = ({
  * @returns {Promise} which resolves when case and associations have been created
  */
 export const createCaseAndAssociations = async ({
-  applicationContext,
   authorizedUser,
   caseToCreate,
 }: {
@@ -103,26 +102,29 @@ export const createCaseAndAssociations = async ({
     docketNumber,
     irsPractitioners,
     privatePractitioners,
+    petitioners,
   } = validRawCaseEntity;
 
   const requests = [
     createCase({
       caseToCreate,
     }),
-    ...createCaseDocketEntries({
-      applicationContext,
+    createCaseDocketEntries({
       authorizedUser,
       docketEntries,
-      docketNumber,
       petitioners: caseToCreate.petitioners,
     }),
-    ...connectIrsPractitioners({
+    connectIrsPractitioners({
       docketNumber,
       irsPractitioners,
     }),
-    ...connectPrivatePractitioners({
+    connectPrivatePractitioners({
       docketNumber,
       privatePractitioners,
+    }),
+    connectPetitioners({
+      docketNumber,
+      petitioners,
     }),
   ];
 

@@ -8,11 +8,12 @@ import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyn
 import { getLogger } from 'aws-xray-sdk';
 import { flattenDeep, isArray } from 'lodash';
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { getUserByIdWithPractitioner } from '@web-api/persistence/postgres/users/getUserByIdWithPractitioner';
 import { UserOnCaseKysely } from '@web-api/persistence/postgres/users/schema';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { NotFoundError } from '@web-api/errors/errors';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { getUserByIdDynamo } from '@web-api/persistence/dynamo/getUserByIdDynamo';
 
 export const transformOpenSearchUserOnCase = (
   userOnCaseData: UserOnCaseKysely | UserOnCaseKysely[],
@@ -35,7 +36,16 @@ export const indexOpenSearchUserOnCase = async ({
   for (const { userId, docketNumber } of isArray(message.payload)
     ? message.payload
     : [message.payload]) {
-    const userRecord = await getUserByIdWithPractitioner({ userId });
+    let userRecord;
+
+    try {
+      userRecord = await getUserById({ userId });
+      if (!userRecord) {
+        throw new Error('Unable to find user in postgres');
+      }
+    } catch (e) {
+      userRecord = await getUserByIdDynamo({ userId });
+    }
 
     if (!userRecord) {
       throw new NotFoundError(`Could not find user ${userId}`);

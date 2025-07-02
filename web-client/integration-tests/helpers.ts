@@ -40,9 +40,7 @@ import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
 import qs from 'qs';
 import riotRoute from 'riot-route';
-import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
-import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
-import { NotFoundError } from '@web-api/errors/errors';
+import { getDbReader } from '@web-api/database';
 
 const applicationContext = clientApplicationContext as any;
 
@@ -140,29 +138,23 @@ export const getCaseMessagesForCase = cerebralTest => {
   });
 };
 
-export const getConnectionsByUserId = userId => {
-  return client.query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `user|${userId}`,
-      ':prefix': 'connection',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    applicationContext,
-  });
-};
+export const getConnectionsByUserId = async userId =>
+  await getDbReader(reader =>
+    reader
+      .selectFrom('dwConnection')
+      .where('userId', '=', userId)
+      .selectAll()
+      .execute(),
+  );
 
-export const getConnection = connectionId => {
-  return client.get({
-    Key: {
-      pk: `connection|${connectionId}`,
-      sk: `connection|${connectionId}`,
-    },
-    applicationContext,
-  });
+export const getConnection = async connectionId => {
+  return await getDbReader(reader =>
+    reader
+      .selectFrom('dwConnection')
+      .where('connectionId', '=', connectionId)
+      .selectAll()
+      .execute(),
+  );
 };
 
 export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
@@ -196,18 +188,6 @@ export const setChiefJudgeNameFlagValue = newJudgeName => {
     },
     applicationContext,
   });
-};
-
-export const setJudgeTitle = async (judgeUserId, newJudgeTitle) => {
-  const judge = await getUserById({ userId: judgeUserId });
-  if (!judge) {
-    throw new NotFoundError(
-      `Unable to find user with userId ${judgeUserId}`,
-    );
-  }
-  judge.judgeTitle = newJudgeTitle;
-
-  return await updateUser({ userToUpdate: judge });
 };
 
 export const setOrderSearchEnabled = async (isEnabled, keyPrefix) => {
@@ -785,6 +765,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
   cerebralTest.applicationContext = applicationContext;
 
   cerebralTest.setState('constants', applicationContext.getConstants());
+  cerebralTest.setState('clientConnectionId', applicationContext.getUniqueId());
 
   router.initialize(cerebralTest, (route, cb) => {
     routes.push({

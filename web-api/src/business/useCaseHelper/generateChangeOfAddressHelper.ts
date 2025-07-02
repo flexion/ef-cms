@@ -15,8 +15,8 @@ import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
-import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
-import { settlePromises } from '@web-api/utilities/settlePromises';
+import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 
 /**
  * generateChangeOfAddressHelper
@@ -32,7 +32,7 @@ export const generateChangeOfAddressHelper = async ({
   bypassDocketEntry,
   contactInfo,
   docketNumber,
-  firmName,
+  oldUser,
   jobId,
   requestUserId,
   updatedEmail,
@@ -45,7 +45,7 @@ export const generateChangeOfAddressHelper = async ({
   docketNumber: string;
   bypassDocketEntry: boolean;
   contactInfo: TUserContact;
-  firmName: string;
+  oldUser: RawPractitioner | RawPrivatePractitioner | RawIrsPractitioner;
   updatedEmail?: string;
   updatedName?: string;
   jobId: string;
@@ -55,7 +55,6 @@ export const generateChangeOfAddressHelper = async ({
 }) => {
   try {
     const newData = contactInfo;
-
     const userCase = await getCaseByDocketNumber({
       applicationContext,
       docketNumber,
@@ -63,26 +62,15 @@ export const generateChangeOfAddressHelper = async ({
     const caseEntity = new Case(userCase, {
       authorizedUser,
     });
-
-    const practitionerName = updatedName || user.name;
-    const practitionerObject = (caseEntity.privatePractitioners || [])
-      .concat(caseEntity.irsPractitioners)
+    const practitionerObject = caseEntity
+      .privatePractitioners!.concat(caseEntity.irsPractitioners)
       .find(practitioner => practitioner.userId === user.userId);
+    const practitionerName = updatedName || user.name;
+    const oldAddressData = clone(oldUser.contact);
 
-    if (!practitionerObject) {
-      throw new Error(
-        `Could not find user: ${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
-      );
-    }
-
-    const oldData = clone(practitionerObject.contact);
-
-    // This updates the case by reference!
-    practitionerObject.contact = contactInfo;
-    practitionerObject.firmName = firmName;
-    practitionerObject.name = practitionerName;
-
-    if (!oldData.email && updatedEmail) {
+    // This updates the practitioner's email and service indicator for the case
+    // by reference!
+    if (updatedEmail) {
       practitionerObject.serviceIndicator =
         SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
       practitionerObject.email = updatedEmail;
@@ -94,7 +82,7 @@ export const generateChangeOfAddressHelper = async ({
         authorizedUser,
         caseEntity,
         newData,
-        oldData,
+        oldData: oldAddressData,
         practitionerName,
         user,
       });
@@ -122,13 +110,16 @@ export const generateChangeOfAddressHelper = async ({
     userId: requestUserId || user.userId,
   });
 
-  const updatedJob = await applicationContext
+  const [updatedJob] = await applicationContext
     .getPersistenceGateway()
-    .setChangeOfAddressCaseAsDone({ applicationContext, docketNumber, jobId });
-
+    .setChangeOfAddressCaseAsDone(jobId);
   const isDoneProcessing = updatedJob.remaining === 0;
 
   if (isDoneProcessing) {
+    await applicationContext
+      .getPersistenceGateway()
+      .deleteChangeOfAddressCaseRecord(jobId);
+
     applicationContext.logger.info(
       `"change-of-address-job|${jobId}" job finished`,
     );
@@ -141,10 +132,7 @@ export const generateChangeOfAddressHelper = async ({
 
       const rawUserEntity = userEntity.validate().toRawObject();
 
-      await settlePromises([
-        updatePractitioner({ practitionerToUpdate: rawUserEntity }),
-        updateUser({ userToUpdate: rawUserEntity }),
-      ]);
+      await updateUser({ userToUpdate: rawUserEntity });
     }
 
     const CONTACT_UPDATE_COMPLETE_ACTION:
@@ -215,7 +203,7 @@ const prepareToGenerateAndServeDocketEntry = async ({
   }
 
   newData.name = practitionerName;
-  const { changeOfAddressDocketEntry } = await generateAndServeDocketEntry({
+  await generateAndServeDocketEntry({
     applicationContext,
     authorizedUser,
     caseEntity,
@@ -227,6 +215,4 @@ const prepareToGenerateAndServeDocketEntry = async ({
     servedParties,
     user,
   });
-
-  caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
 };
