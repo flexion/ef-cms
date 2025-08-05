@@ -13,7 +13,7 @@ import { isEmpty } from 'lodash';
 
 const scriptConfig: ScriptConfig = {
   description:
-    'delete-case-notes - Delete from dynamodb CaseNote entities that have been migrated to postes',
+    'delete-case-notes - Delete from dynamodb CaseNote entities that have been migrated to postgres',
   environment: {
     env: 'ENV',
     sourceTable: 'SOURCE_TABLE',
